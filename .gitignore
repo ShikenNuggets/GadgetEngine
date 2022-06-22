@@ -30,3 +30,16 @@
 *.exe
 *.out
 *.app
+/.vs
+/Build
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
