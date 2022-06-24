@@ -1,0 +1,3 @@
+[submodule "SDK/SDL2"]
+	path = SDK/SDL2
+	url = https://github.com/ShikenNuggets/SDL
