@@ -8,13 +8,13 @@ workspace "GadgetEngine"
 	}
 
 externalproject "SDL2"
-	location "SDK/SDL2/VisualC/SDL"
+	location "SDK/SDL/VisualC/SDL"
 	filename "SDL"
 	kind "SharedLib"
 	language "C++"
 	
 externalproject "SDL2main"
-	location "SDK/SDL2/VisualC/SDLmain"
+	location "SDK/SDL/VisualC/SDLmain"
 	filename "SDLmain"
 	kind "SharedLib"
 	language "C++"
@@ -41,7 +41,7 @@ project "GadgetEngine"
 	{
 		"%{prj.name}/",
 		"SDK/include",
-		"SDK/SDL2/include",
+		"SDK/SDL/include",
 	}
 	
 	libdirs
@@ -104,7 +104,7 @@ project "Game"
 		"%{prj.name}/",
 		"GadgetEngine/",
 		"SDK/include/",
-		"SDK/SDL2/include/",
+		"SDK/SDL/include/",
 	}
 	
 	libdirs
@@ -145,7 +145,8 @@ project "Game"
 		
 		prebuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.*\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
 		}
 		
 	filter "configurations:Debug"

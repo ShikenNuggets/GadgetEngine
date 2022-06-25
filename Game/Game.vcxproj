@@ -60,7 +60,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -78,7 +78,8 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PreBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.*" "$(TargetDir)" /y /E /d</Command>
+      <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -86,7 +87,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -107,7 +108,8 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PreBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.*" "$(TargetDir)" /y /E /d</Command>
+      <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
