@@ -7,6 +7,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Gadget.h" />
     <ClInclude Include="Math\Angle.h">
       <Filter>Math</Filter>
     </ClInclude>
