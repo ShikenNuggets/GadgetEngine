@@ -6,6 +6,8 @@ workspace "GadgetEngine"
 		"Debug",
 		"Release"
 	}
+	
+	startproject "Game"
 
 externalproject "SDL2"
 	location "SDK/SDL/VisualC/SDL"
