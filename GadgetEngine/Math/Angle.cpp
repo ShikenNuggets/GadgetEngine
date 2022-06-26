@@ -179,11 +179,3 @@ bool Radian::operator >=(const Degree& d_) const{ return angle >= d_.ToRadians()
 bool Radian::operator <=(float a_) const{ return angle <= a_; }
 bool Radian::operator <=(const Radian& r_) const{ return *this <= r_.GetAngle(); }
 bool Radian::operator <=(const Degree& d_) const{ return angle <= d_.ToRadians(); }
-
-//----------ANGLE----------//
-
-Angle::Angle(float a) : Degree(a){}
-
-Angle::Angle(Degree d) : Degree(d){}
-
-Angle::Angle(Radian r) : Degree(r){}

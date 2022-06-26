@@ -7,11 +7,12 @@ namespace Gadget{
 	//Forward declarations
 	class Degree;
 	class Radian;
-	class Angle;
+
+	typedef Degree Angle; //Change this if you want to use Radians by default
 
 	class Degree{
 	public:
-		Degree(float angle_);
+		Degree(float angle_ = 0.0f);
 		explicit Degree(const Radian& r_);
 		Degree& operator =(float a_);
 		Degree& operator =(Radian& r_);
@@ -84,7 +85,7 @@ namespace Gadget{
 
 	class Radian{
 	public:
-		Radian(float angle_);
+		Radian(float angle_ = 0.0f);
 		explicit Radian(const Degree& d);
 		Radian& operator =(float a_);
 		Radian& operator =(Degree& r_);
@@ -153,13 +154,6 @@ namespace Gadget{
 
 	private:
 		float angle;
-	};
-
-	class Angle : Degree{
-	public:
-		Angle(float a);
-		Angle(Degree d);
-		Angle(Radian r);
 	};
 }
 
