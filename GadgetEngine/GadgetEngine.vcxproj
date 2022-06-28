@@ -100,12 +100,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Math\Angle.h" />
     <ClInclude Include="Math\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Math\Angle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

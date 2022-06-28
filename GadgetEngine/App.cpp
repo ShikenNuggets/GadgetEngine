@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 App* App::instance = nullptr;
@@ -32,7 +34,7 @@ void App::Run(){
 	bool isRunning = true;
 	while(isRunning){
 		//Main game loop
-		std::cout << "Game engine is running, press enter to exit." << std::endl;
+		Debug::Log("Game engine is running, press enter to exit.", Debug::Verbose);
 		std::cin.get();
 		break;
 	}
