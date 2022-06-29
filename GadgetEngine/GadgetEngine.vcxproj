@@ -100,6 +100,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Concurrency\SpinLock.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Math\Angle.h" />
@@ -107,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Concurrency\SpinLock.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Math\Angle.cpp" />
   </ItemGroup>
