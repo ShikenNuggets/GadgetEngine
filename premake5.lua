@@ -17,31 +17,50 @@ project "SDL2"
 	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
 	objdir ("Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
 
+	defines { "DLL_EXPORT" }
+
+	files
+	{
+		"SDK/SDL/include/begin_code.h",
+		"SDK/SDL/include/end_code.h"
+	}
+
 	files
 	{
 		"SDK/SDL/include/**.h",
 		"SDK/SDL/src/**.c",
-		"SDK/SDL/src/**.h"
+		"SDK/SDL/src/**.h",
+		"SDK/SDL/src/**.cpp",
+		"SDK/SDL/src/**.hpp"
 	}
 
 	removefiles "SDK/SDL/include/SDL_config_**.h"
 
 	removefiles "SDK/SDL/src/**/android/**"
+	removefiles "SDK/SDL/src/**/arm/**"
 	removefiles "SDK/SDL/src/**/bsd/**"
+	removefiles "SDK/SDL/src/**/cocoa/**"
+	removefiles "SDK/SDL/src/**/darwin/**"
 	removefiles "SDK/SDL/src/**/emscripten/**"
+	removefiles "SDK/SDL/src/**/haiku/**"
 	removefiles "SDK/SDL/src/**/iphoneos/**"
 	removefiles "SDK/SDL/src/**/linux/**"
+	removefiles "SDK/SDL/src/**/macosx/**"
+	removefiles "SDK/SDL/src/**/nacl/**"
 	removefiles "SDK/SDL/src/**/ngage/**"
 	removefiles "SDK/SDL/src/**/os2/**"
+	removefiles "SDK/SDL/src/**/pandora/**"
 	removefiles "SDK/SDL/src/**/ps2/**"
 	removefiles "SDK/SDL/src/**/psp/**"
 	removefiles "SDK/SDL/src/**/pthread/**"
 	removefiles "SDK/SDL/src/**/qnx/**"
+	removefiles "SDK/SDL/src/**/raspberry/**"
 	removefiles "SDK/SDL/src/**/riscos/**"
 	removefiles "SDK/SDL/src/**/steam/**"
 	removefiles "SDK/SDL/src/**/unix/**"
 	removefiles "SDK/SDL/src/**/vita/**"
 	removefiles "SDK/SDL/src/**/windows/**"
+	removefiles "SDK/SDL/src/**/winrt/**"
 
 	removefiles "SDK/SDL/src/audio/SDL_audio_resampler_filter.h"
 	removefiles "SDK/SDL/src/audio/aaudio/**"
@@ -88,8 +107,70 @@ project "SDL2"
 
 	removefiles "SDK/SDL/src/events/imKStoUCS.c"
 
-	removefiles "SDK/SDLsrc/filesystem/dummy/**"
+	removefiles "SDK/SDL/src/filesystem/dummy/**"
 
+	removefiles "SDK/SDL/src/events/imKStoUCS.h"
+
+	removefiles "SDK/SDL/src/events/scancodes_**.h"
+
+	removefiles "SDK/SDL/src/file/cocoa/**"
+
+	removefiles "SDK/SDL/src/power/uikit/**"
+
+	removefiles "SDK/SDL/src/render/direct3d11/SDL_render_winrt.h"
+
+	removefiles "SDK/SDL/src/render/metal/**"
+	removefiles "SDK/SDL/src/render/opengles/**"
+	removefiles "SDK/SDL/src/render/vitagxm/**"
+
+	removefiles "SDK/SDL/src/sensor/coremotion/**"
+	removefiles "SDK/SDL/src/sensor/windows/**"
+
+	removefiles "SDK/SDL/src/stdlib/SDL_vacopy.h"
+
+	removefiles "SDK/SDL/src/thread/stdcpp/**"
+	removefiles "SDK/SDL/src/thread/windows/**"
+
+	removefiles "SDK/SDL/video/SDL_rect_impl.h"
+	removefiles "SDK/SDL/src/video/directfb/**"
+	removefiles "SDK/SDL/src/video/khronos/EGL/**"
+	removefiles "SDK/SDL/src/video/khronos/GLES2/**"
+	removefiles "SDK/SDL/src/video/khronos/KHR/**"
+	removefiles "SDK/SDL/src/video/kmsdrm/**"
+	removefiles "SDK/SDL/src/video/offscreen/**"
+	removefiles "SDK/SDL/src/video/uikit/**"
+	removefiles "SDK/SDL/src/video/vivante/**"
+	removefiles "SDK/SDL/src/video/wayland/**"
+	removefiles "SDK/SDL/src/video/x11/**"
+	removefiles "SDK/SDL/src/video/yuv2rgb/yuv_rgb_lsx_func.h"
+
+	removefiles "SDK/SDL/src/joystick/hidapi/SDL_hidapi_steam.c"
+
+	removefiles "SDK/SDL/src/loadso/**"
+
+	removefiles "SDK/SDL/src/locale/**"
+
+	removefiles "SDK/SDL/src/misc/dummy/**"
+
+	removefiles "SDK/SDL/src/render/direct3d11/SDL_render_winrt.cpp"
+
+	removefiles "SDK/SDL/src/sensor/dummy/SDL_dummysensor.c"
+
+	removefiles "SDK/SDL/src/test/**"
+
+	removefiles "SDK/SDL/src/thread/generic/SDL_sysmutex.c"
+	removefiles "SDK/SDL/src/thread/generic/SDL_syssem.c"
+	removefiles "SDK/SDL/src/thread/generic/SDL_systhread.c"
+	removefiles "SDK/SDL/src/thread/generic/SDL_systls.c"
+
+	removefiles "SDK/SDL/src/timer/dummy/SDL_systimer.c"
+
+	files
+	{
+		"SDK/SDL/src/locale/SDL_locale.c",
+		"SDK/SDL/src/locale/SDL_syslocale.h"
+	}
+	
 	includedirs
 	{
 		"SDK/SDL/include/"
@@ -105,34 +186,68 @@ project "SDL2"
 
 	filter "system:windows"
 		systemversion "latest"
+		
+		defines { "_WINDOWS" }
+
 		files
 		{
 			"SDK/SDL/include/SDL_config_windows.h",
-			"SDK/SDL/src/audio/directsound/**",
-			"SDK/SDL/src/audio/wasapi/**",
-			"SDK/SDL/src/audio/winmm/**",
-			"SDK/SDL/src/core/windows/**",
-			"SDK/SDL/src/main/windows/**",
-			"SDK/SDL/src/hidapi/windows/**",
-			"SDK/SDL/src/joystick/windows/**",
-			"SDK/SDL/src/loadso/windows/**",
-			"SDK/SDL/src/locale/windows/**",
-			"SDK/SDL/src/main/windows/**",
-			"SDK/SDL/src/misc/windows/**",
-			"SDK/SDL/src/power/windows/**",
-			"SDK/SDL/src/sensor/windows/**",
-			"SDK/SDL/src/thread/windows/**",
-			"SDK/SDL/src/timer/windows/**",
-			"SDK/SDL/src/video/windows/**"
+			"SDK/SDL/src/audio/directsound/**.c",
+			"SDK/SDL/src/audio/directsound/**.h",
+			"SDK/SDL/src/audio/wasapi/**.c",
+			"SDK/SDL/src/audio/wasapi/**.h",
+			"SDK/SDL/src/audio/winmm/**.c",
+			"SDK/SDL/src/audio/winmm/**.h",
+			"SDK/SDL/src/core/windows/**.c",
+			"SDK/SDL/src/core/windows/**.h",
+			"SDK/SDL/src/filesystem/windows/**.c",
+			"SDK/SDL/src/filesystem/windows/**.h",
+			"SDK/SDL/src/haptic/windows/**.c",
+			"SDK/SDL/src/haptic/windows/**.h",
+			"SDK/SDL/src/hidapi/windows/**.c",
+			"SDK/SDL/src/hidapi/windows/**.h",
+			"SDK/SDL/src/joystick/windows/**.c",
+			"SDK/SDL/src/joystick/windows/**.h",
+			"SDK/SDL/src/loadso/windows/**.c",
+			"SDK/SDL/src/loadso/windows/**.h",
+			"SDK/SDL/src/locale/windows/**.c",
+			"SDK/SDL/src/locale/windows/**.h",
+			"SDK/SDL/src/misc/windows/**.c",
+			"SDK/SDL/src/misc/windows/**.h",
+			"SDK/SDL/src/power/windows/**.c",
+			"SDK/SDL/src/power/windows/**.h",
+			"SDK/SDL/src/sensor/windows/**.c",
+			"SDK/SDL/src/sensor/windows/**.h",
+			"SDK/SDL/src/thread/windows/**.c",
+			"SDK/SDL/src/thread/windows/**.h",
+			"SDK/SDL/src/timer/windows/**.c",
+			"SDK/SDL/src/timer/windows/**.h",
+			"SDK/SDL/src/video/windows/**.c",
+			"SDK/SDL/src/video/windows/**.h",
+			"SDK/SDL/src/events/scancodes_windows.h",
+			"SDK/SDL/src/sensor/windows/**.c",
+			"SDK/SDL/src/sensor/windows/**.h"
+		}
+
+		removefiles
+		{
+			"SDK/SDL/src/audio/wasapi/SDL_wasapi_winrt.cpp",
+			"SDK/SDL/src/thread/generic/SDL_sysmutex_c.h",
+			"SDK/SDL/src/thread/generic/SDL_systhread_c.h",
+			"SDK/SDL/src/hidapi/windows/hid.c"
 		}
 		
 	filter "configurations:Debug"
 		symbols "On"
+
+		defines { "_DEBUG" }
 		
 	filter "configurations:Release"
 		symbols "On"
 		optimize "On"
 		
+		defines { "NDEBUG" }
+
 		flags
 		{
 			"LinkTimeOptimization",
