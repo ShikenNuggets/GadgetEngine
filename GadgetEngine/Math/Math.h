@@ -3,6 +3,8 @@
 
 #include <limits>
 
+#include "Debug.h"
+
 namespace Gadget{
 	class Math{
 	public:
@@ -22,6 +24,15 @@ namespace Gadget{
 
 		static inline constexpr bool IsNearZero(const float s){ return s <= NearZero && s >= -NearZero; }
 		static inline constexpr bool Near(const float a, const float b){ return IsNearZero(a - b); }
+
+		static inline constexpr float SafeDivide(const float a_, const float b_){
+			if(Math::IsNearZero(b_)){
+				Debug::Log("Attempted to divide " + std::to_string(a_) + " by zero! Returning 0...", Debug::Warning);
+				return 0;
+			}
+
+			return a_ / b_;
+		}
 
 		//Delete unwanted compiler-generated constructors, destructors, and assignment operators
 		Math() = delete;

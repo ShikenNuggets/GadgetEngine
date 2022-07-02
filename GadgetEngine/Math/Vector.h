@@ -25,13 +25,7 @@ namespace Gadget{
 		inline Vector2 operator -(const Vector2& v_) const{ return Vector2(x - v_.x, y - v_.y); }
 		inline Vector2 operator *(float s_) const{ return Vector2(x * s_, y * s_); }
 
-		inline Vector2 operator /(float s_) const{
-			if(Math::IsNearZero(s_)){
-				return Vector2::Zero();
-			}
-
-			return Vector2(x / s_, y / s_);
-		}
+		inline Vector2 operator /(float s_) const{ return Vector2(Math::SafeDivide(x, s_), Math::SafeDivide(y, s_)); }
 
 		inline friend Vector2 operator *(float s_, const Vector2& v_){ return v_ * s_; }
 
@@ -74,13 +68,7 @@ namespace Gadget{
 		inline Vector3 operator -(const Vector3& v_) const{ return Vector3(x - v_.x, y - v_.y, z - v_.z); }
 		inline Vector3 operator *(float s_) const{ return Vector3(x * s_, y * s_, z * s_); }
 
-		inline Vector3 operator /(float s_) const{
-			if(Math::IsNearZero(s_)){
-				return Vector3::Zero();
-			}
-
-			return Vector3(x / s_, y / s_, z / s_);
-		}
+		inline Vector3 operator /(float s_) const{ return Vector3(Math::SafeDivide(x, s_), Math::SafeDivide(y, s_), Math::SafeDivide(z, s_)); }
 
 		inline friend Vector3 operator *(float s_, const Vector3& v_){ return v_ * s_; }
 
@@ -144,13 +132,7 @@ namespace Gadget{
 		inline Vector4 operator -(const Vector4& v_) const{ return Vector4(x - v_.x, y - v_.y, z - v_.z, w - v_.w); }
 		inline Vector4 operator *(float s_) const{ return Vector4(x * s_, y * s_, z * s_, w * s_); }
 
-		inline Vector4 operator /(float s_) const{
-			if(Math::IsNearZero(s_)){
-				return Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-			}
-
-			return Vector4(x / s_, y / s_, z / s_, w / s_);
-		}
+		inline Vector4 operator /(float s_) const{ return Vector4(Math::SafeDivide(x, s_), Math::SafeDivide(y, s_), Math::SafeDivide(z, s_), Math::SafeDivide(w, s_)); }
 
 		inline friend Vector4 operator *(float s_, const Vector4& v_){ return v_ * s_; }
 
