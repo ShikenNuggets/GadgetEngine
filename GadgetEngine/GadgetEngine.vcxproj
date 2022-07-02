@@ -105,6 +105,7 @@
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Math\Angle.h" />
     <ClInclude Include="Math\Math.h" />
+    <ClInclude Include="Math\Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
