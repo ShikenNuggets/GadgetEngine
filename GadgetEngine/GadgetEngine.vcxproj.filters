@@ -21,6 +21,9 @@
     <ClInclude Include="Math\Math.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
     <ClInclude Include="Math\Vector.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -32,6 +35,15 @@
     </ClCompile>
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Math\Angle.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Matrix2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Matrix3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Matrix4.cpp">
       <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>

@@ -29,19 +29,19 @@ namespace Gadget{
 
 		inline friend Vector2 operator *(float s_, const Vector2& v_){ return v_ * s_; }
 
-		inline constexpr void operator +=(const Vector2& v_){ *this = *this + v_; }
-		inline constexpr void operator -=(const Vector2& v_){ *this = *this - v_; }
-		inline constexpr void operator *=(float s_){ *this = *this * s_; }
-		inline constexpr void operator /=(float s_){ *this = *this / s_; }
+		inline void operator +=(const Vector2& v_){ *this = *this + v_; }
+		inline void operator -=(const Vector2& v_){ *this = *this - v_; }
+		inline void operator *=(float s_){ *this = *this * s_; }
+		inline void operator /=(float s_){ *this = *this / s_; }
 
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y); }
 		static inline constexpr float SquaredMagnitude(const Vector2& v_){ return v_.SquaredMagnitude(); }
-		inline constexpr float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
-		static inline constexpr float Magnitude(const Vector2& v_){ return v_.Magnitude(); }
+		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
+		static inline float Magnitude(const Vector2& v_){ return v_.Magnitude(); }
 		inline Vector2 Normalized() const{ return *this / Magnitude(); }
-		inline constexpr void Normalize(){ *this = Normalized(); }
+		inline void Normalize(){ *this = Normalized(); }
 		static inline Vector2 Normalized(const Vector2& v_){ return v_.Normalized(); }
-		static inline constexpr float Dot(const Vector2& a_, const Vector2& b_){ return (a_.x * b_.x) + (a_.y * b_.y); }
+		static inline float Dot(const Vector2& a_, const Vector2& b_){ return (a_.x * b_.x) + (a_.y * b_.y); }
 		static inline Vector2 Hadamard(const Vector2& a_, const Vector2& b_){ return Vector2(a_.x * b_.x, a_.y * b_.y); }
 
 		inline std::string ToString() const{ return std::to_string(x) + ", " + std::to_string(y); }
@@ -72,19 +72,19 @@ namespace Gadget{
 
 		inline friend Vector3 operator *(float s_, const Vector3& v_){ return v_ * s_; }
 
-		inline constexpr void operator +=(const Vector2& v_){ *this = *this + v_; }
-		inline constexpr void operator +=(const Vector3& v_){ *this = *this + v_; }
-		inline constexpr void operator -=(const Vector2& v_){ *this = *this - v_; }
-		inline constexpr void operator -=(const Vector3& v_){ *this = *this - v_; }
-		inline constexpr void operator *=(float s_){ *this = *this * s_; }
-		inline constexpr void operator /=(float s_){ *this = *this / s_; }
+		inline void operator +=(const Vector2& v_){ *this = *this + v_; }
+		inline void operator +=(const Vector3& v_){ *this = *this + v_; }
+		inline void operator -=(const Vector2& v_){ *this = *this - v_; }
+		inline void operator -=(const Vector3& v_){ *this = *this - v_; }
+		inline void operator *=(float s_){ *this = *this * s_; }
+		inline void operator /=(float s_){ *this = *this / s_; }
 
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y) + (z * z); }
 		static inline constexpr float SquaredMagnitude(const Vector3& v_){ return v_.SquaredMagnitude(); }
-		inline constexpr float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
-		static inline constexpr float Magnitude(const Vector3& v_){ return v_.Magnitude(); }
+		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
+		static inline float Magnitude(const Vector3& v_){ return v_.Magnitude(); }
 		inline Vector3 Normalized() const{ return *this / Magnitude(); }
-		inline constexpr void Normalize(){ *this = Normalized(); }
+		inline void Normalize(){ *this = Normalized(); }
 		static inline Vector3 Normalized(const Vector3& v_){ return v_.Normalized(); }
 		static inline constexpr float Dot(const Vector3& a_, const Vector3& b_){ return(a_.x * b_.x + a_.y * b_.y + a_.z * b_.z); }
 		static inline Vector3 Hadamard(const Vector3& a_, const Vector3& b_){ return Vector3(a_.x * b_.x, a_.y * b_.y, a_.z * b_.z); }
@@ -136,21 +136,21 @@ namespace Gadget{
 
 		inline friend Vector4 operator *(float s_, const Vector4& v_){ return v_ * s_; }
 
-		inline constexpr void operator +=(const Vector2& v_){ *this = *this + v_; }
-		inline constexpr void operator +=(const Vector3& v_){ *this = *this + v_; }
-		inline constexpr void operator +=(const Vector4& v_){ *this = *this + v_; }
-		inline constexpr void operator -=(const Vector2& v_){ *this = *this - v_; }
-		inline constexpr void operator -=(const Vector3& v_){ *this = *this - v_; }
-		inline constexpr void operator -=(const Vector4& v_){ *this = *this - v_; }
-		inline constexpr void operator *=(float s_){ *this = *this * s_; }
-		inline constexpr void operator /=(float s_){ *this = *this / s_; }
+		inline void operator +=(const Vector2& v_){ *this = *this + v_; }
+		inline void operator +=(const Vector3& v_){ *this = *this + v_; }
+		inline void operator +=(const Vector4& v_){ *this = *this + v_; }
+		inline void operator -=(const Vector2& v_){ *this = *this - v_; }
+		inline void operator -=(const Vector3& v_){ *this = *this - v_; }
+		inline void operator -=(const Vector4& v_){ *this = *this - v_; }
+		inline void operator *=(float s_){ *this = *this * s_; }
+		inline void operator /=(float s_){ *this = *this / s_; }
 
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y) + (z * z) + (w * w); }
 		static inline constexpr float SquaredMagnitude(const Vector4& v_){ return v_.SquaredMagnitude(); }
-		inline constexpr float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
+		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
 		static inline float Magnitude(const Vector4& v_){ return v_.Magnitude(); }
 		inline Vector4 Normalized() const{ return *this / Magnitude(); }
-		inline constexpr void Normalize(){ *this = Normalized(); }
+		inline void Normalize(){ *this = Normalized(); }
 		static inline Vector4 Normalized(const Vector4& v_){ return v_.Normalized(); }
 		static inline constexpr float Dot(const Vector4& a_, const Vector4& b_){ return (a_.x * b_.x) + (a_.y * b_.y) + (a_.z * b_.z) + (a_.w * a_.w); }
 		static inline Vector4 Hadamard(const Vector4& a_, const Vector4& b_){ return Vector4(a_.x * b_.x, a_.y * b_.y, a_.z * b_.z, a_.w * b_.w); }
