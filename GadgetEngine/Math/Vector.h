@@ -48,6 +48,7 @@ namespace Gadget{
 		inline constexpr void Normalize(){ *this = Normalized(); }
 		static inline Vector2 Normalized(const Vector2& v_){ return v_.Normalized(); }
 		static inline constexpr float Dot(const Vector2& a_, const Vector2& b_){ return (a_.x * b_.x) + (a_.y * b_.y); }
+		static inline Vector2 Hadamard(const Vector2& a_, const Vector2& b_){ return Vector2(a_.x * b_.x, a_.y * b_.y); }
 
 		inline std::string ToString() const{ return std::to_string(x) + ", " + std::to_string(y); }
 
@@ -98,6 +99,7 @@ namespace Gadget{
 		inline constexpr void Normalize(){ *this = Normalized(); }
 		static inline Vector3 Normalized(const Vector3& v_){ return v_.Normalized(); }
 		static inline constexpr float Dot(const Vector3& a_, const Vector3& b_){ return(a_.x * b_.x + a_.y * b_.y + a_.z * b_.z); }
+		static inline Vector3 Hadamard(const Vector3& a_, const Vector3& b_){ return Vector3(a_.x * b_.x, a_.y * b_.y, a_.z * b_.z); }
 
 		static inline Vector3 Cross(const Vector3& a_, const Vector3& b_){
 			return Vector3(	a_.y * b_.z - a_.z * b_.y,
@@ -169,6 +171,7 @@ namespace Gadget{
 		inline constexpr void Normalize(){ *this = Normalized(); }
 		static inline Vector4 Normalized(const Vector4& v_){ return v_.Normalized(); }
 		static inline constexpr float Dot(const Vector4& a_, const Vector4& b_){ return (a_.x * b_.x) + (a_.y * b_.y) + (a_.z * b_.z) + (a_.w * a_.w); }
+		static inline Vector4 Hadamard(const Vector4& a_, const Vector4& b_){ return Vector4(a_.x * b_.x, a_.y * b_.y, a_.z * b_.z, a_.w * b_.w); }
 
 		inline std::string ToString() const{ return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w); }
 
