@@ -20,7 +20,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
+    <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
@@ -29,7 +29,6 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -59,36 +58,29 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>DLL_EXPORT;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>..\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\Build\SDL2\Debug\SDL2.lib</ImportLibrary>
-      <ModuleDefinitionFile>../SDL/src/hidapi/windows/ddk_build/hidapi.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>DLL_EXPORT;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
     </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>..\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -96,7 +88,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\Build\SDL2\Release\SDL2.lib</ImportLibrary>
-      <ModuleDefinitionFile>../SDL/src/hidapi/windows/ddk_build/hidapi.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -188,6 +179,7 @@
     <ClInclude Include="..\SDL\src\SDL_list.h" />
     <ClInclude Include="..\SDL\src\SDL_log_c.h" />
     <ClInclude Include="..\SDL\src\audio\SDL_audio_c.h" />
+    <ClInclude Include="..\SDL\src\audio\SDL_audio_resampler_filter.h" />
     <ClInclude Include="..\SDL\src\audio\SDL_audiodev_c.h" />
     <ClInclude Include="..\SDL\src\audio\SDL_sysaudio.h" />
     <ClInclude Include="..\SDL\src\audio\SDL_wave.h" />
@@ -215,23 +207,18 @@
     <ClInclude Include="..\SDL\src\events\SDL_windowevents_c.h" />
     <ClInclude Include="..\SDL\src\events\blank_cursor.h" />
     <ClInclude Include="..\SDL\src\events\default_cursor.h" />
-    <ClInclude Include="..\SDL\src\events\imKStoUCS.h" />
-    <ClInclude Include="..\SDL\src\events\scancodes_ascii.h" />
-    <ClInclude Include="..\SDL\src\events\scancodes_darwin.h" />
-    <ClInclude Include="..\SDL\src\events\scancodes_linux.h" />
     <ClInclude Include="..\SDL\src\events\scancodes_windows.h" />
-    <ClInclude Include="..\SDL\src\events\scancodes_xfree86.h" />
-    <ClInclude Include="..\SDL\src\file\cocoa\SDL_rwopsbundlesupport.h" />
     <ClInclude Include="..\SDL\src\haptic\SDL_haptic_c.h" />
     <ClInclude Include="..\SDL\src\haptic\SDL_syshaptic.h" />
-    <ClInclude Include="..\SDL\src\haptic\darwin\SDL_syshaptic_c.h" />
+    <ClInclude Include="..\SDL\src\haptic\windows\SDL_dinputhaptic_c.h" />
+    <ClInclude Include="..\SDL\src\haptic\windows\SDL_windowshaptic_c.h" />
+    <ClInclude Include="..\SDL\src\haptic\windows\SDL_xinputhaptic_c.h" />
     <ClInclude Include="..\SDL\src\hidapi\SDL_hidapi_c.h" />
     <ClInclude Include="..\SDL\src\hidapi\hidapi\hidapi.h" />
     <ClInclude Include="..\SDL\src\joystick\SDL_gamecontrollerdb.h" />
     <ClInclude Include="..\SDL\src\joystick\SDL_joystick_c.h" />
     <ClInclude Include="..\SDL\src\joystick\SDL_sysjoystick.h" />
     <ClInclude Include="..\SDL\src\joystick\controller_type.h" />
-    <ClInclude Include="..\SDL\src\joystick\darwin\SDL_iokitjoystick_c.h" />
     <ClInclude Include="..\SDL\src\joystick\hidapi\SDL_hidapi_rumble.h" />
     <ClInclude Include="..\SDL\src\joystick\hidapi\SDL_hidapijoystick_c.h" />
     <ClInclude Include="..\SDL\src\joystick\usb_ids.h" />
@@ -245,22 +232,14 @@
     <ClInclude Include="..\SDL\src\locale\SDL_syslocale.h" />
     <ClInclude Include="..\SDL\src\misc\SDL_sysurl.h" />
     <ClInclude Include="..\SDL\src\power\SDL_syspower.h" />
-    <ClInclude Include="..\SDL\src\power\uikit\SDL_syspower.h" />
     <ClInclude Include="..\SDL\src\render\SDL_d3dmath.h" />
     <ClInclude Include="..\SDL\src\render\SDL_sysrender.h" />
     <ClInclude Include="..\SDL\src\render\SDL_yuv_sw_c.h" />
     <ClInclude Include="..\SDL\src\render\direct3d\SDL_shaders_d3d.h" />
-    <ClInclude Include="..\SDL\src\render\direct3d11\SDL_render_winrt.h" />
     <ClInclude Include="..\SDL\src\render\direct3d11\SDL_shaders_d3d11.h" />
     <ClInclude Include="..\SDL\src\render\direct3d12\SDL_shaders_d3d12.h" />
-    <ClInclude Include="..\SDL\src\render\metal\SDL_shaders_metal_ios.h" />
-    <ClInclude Include="..\SDL\src\render\metal\SDL_shaders_metal_iphonesimulator.h" />
-    <ClInclude Include="..\SDL\src\render\metal\SDL_shaders_metal_osx.h" />
-    <ClInclude Include="..\SDL\src\render\metal\SDL_shaders_metal_tvos.h" />
-    <ClInclude Include="..\SDL\src\render\metal\SDL_shaders_metal_tvsimulator.h" />
     <ClInclude Include="..\SDL\src\render\opengl\SDL_glfuncs.h" />
     <ClInclude Include="..\SDL\src\render\opengl\SDL_shaders_gl.h" />
-    <ClInclude Include="..\SDL\src\render\opengles\SDL_glesfuncs.h" />
     <ClInclude Include="..\SDL\src\render\opengles2\SDL_gles2funcs.h" />
     <ClInclude Include="..\SDL\src\render\opengles2\SDL_shaders_gles2.h" />
     <ClInclude Include="..\SDL\src\render\software\SDL_blendfillrect.h" />
@@ -272,23 +251,13 @@
     <ClInclude Include="..\SDL\src\render\software\SDL_render_sw_c.h" />
     <ClInclude Include="..\SDL\src\render\software\SDL_rotate.h" />
     <ClInclude Include="..\SDL\src\render\software\SDL_triangle.h" />
-    <ClInclude Include="..\SDL\src\render\vitagxm\SDL_render_vita_gxm_memory.h" />
-    <ClInclude Include="..\SDL\src\render\vitagxm\SDL_render_vita_gxm_shaders.h" />
-    <ClInclude Include="..\SDL\src\render\vitagxm\SDL_render_vita_gxm_tools.h" />
-    <ClInclude Include="..\SDL\src\render\vitagxm\SDL_render_vita_gxm_types.h" />
     <ClInclude Include="..\SDL\src\sensor\SDL_sensor_c.h" />
     <ClInclude Include="..\SDL\src\sensor\SDL_syssensor.h" />
-    <ClInclude Include="..\SDL\src\sensor\coremotion\SDL_coremotionsensor.h" />
-    <ClInclude Include="..\SDL\src\sensor\dummy\SDL_dummysensor.h" />
     <ClInclude Include="..\SDL\src\sensor\windows\SDL_windowssensor.h" />
     <ClInclude Include="..\SDL\src\stdlib\SDL_vacopy.h" />
     <ClInclude Include="..\SDL\src\thread\SDL_systhread.h" />
     <ClInclude Include="..\SDL\src\thread\SDL_thread_c.h" />
     <ClInclude Include="..\SDL\src\thread\generic\SDL_syscond_c.h" />
-    <ClInclude Include="..\SDL\src\thread\generic\SDL_sysmutex_c.h" />
-    <ClInclude Include="..\SDL\src\thread\generic\SDL_systhread_c.h" />
-    <ClInclude Include="..\SDL\src\thread\stdcpp\SDL_sysmutex_c.h" />
-    <ClInclude Include="..\SDL\src\thread\stdcpp\SDL_systhread_c.h" />
     <ClInclude Include="..\SDL\src\thread\windows\SDL_sysmutex_c.h" />
     <ClInclude Include="..\SDL\src\thread\windows\SDL_systhread_c.h" />
     <ClInclude Include="..\SDL\src\timer\SDL_timer_c.h" />
@@ -305,59 +274,15 @@
     <ClInclude Include="..\SDL\src\video\SDL_sysvideo.h" />
     <ClInclude Include="..\SDL\src\video\SDL_vulkan_internal.h" />
     <ClInclude Include="..\SDL\src\video\SDL_yuv_c.h" />
-    <ClInclude Include="..\SDL\src\video\arm\pixman-arm-asm.h" />
-    <ClInclude Include="..\SDL\src\video\arm\pixman-arm-neon-asm.h" />
-    <ClInclude Include="..\SDL\src\video\arm\pixman-arm-simd-asm.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoaclipboard.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoaevents.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoakeyboard.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoamessagebox.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoametalview.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoamodes.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoamouse.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoaopengl.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoaopengles.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoashape.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoavideo.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoavulkan.h" />
-    <ClInclude Include="..\SDL\src\video\cocoa\SDL_cocoawindow.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_WM.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_dyn.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_events.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_modes.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_mouse.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_opengl.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_render.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_shape.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_video.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_vulkan.h" />
-    <ClInclude Include="..\SDL\src\video\directfb\SDL_DirectFB_window.h" />
     <ClInclude Include="..\SDL\src\video\dummy\SDL_nullevents_c.h" />
     <ClInclude Include="..\SDL\src\video\dummy\SDL_nullframebuffer_c.h" />
     <ClInclude Include="..\SDL\src\video\dummy\SDL_nullvideo.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_BApp.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_BWin.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bclipboard.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bevents.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bframebuffer.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bkeyboard.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bmessagebox.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bmodes.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bopengl.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bvideo.h" />
-    <ClInclude Include="..\SDL\src\video\haiku\SDL_bwindow.h" />
-    <ClInclude Include="..\SDL\src\video\khronos\EGL\egl.h" />
-    <ClInclude Include="..\SDL\src\video\khronos\EGL\eglext.h" />
-    <ClInclude Include="..\SDL\src\video\khronos\EGL\eglplatform.h" />
-    <ClInclude Include="..\SDL\src\video\khronos\GLES2\gl2.h" />
-    <ClInclude Include="..\SDL\src\video\khronos\GLES2\gl2ext.h" />
-    <ClInclude Include="..\SDL\src\video\khronos\GLES2\gl2platform.h" />
-    <ClInclude Include="..\SDL\src\video\khronos\KHR\khrplatform.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vk_icd.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vk_layer.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vk_platform.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vk_sdk_platform.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan.h" />
+    <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan.hpp" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_android.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_beta.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_core.h" />
@@ -373,58 +298,6 @@
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_xcb.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_xlib.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_xlib_xrandr.h" />
-    <ClInclude Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmdyn.h" />
-    <ClInclude Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmevents.h" />
-    <ClInclude Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmmouse.h" />
-    <ClInclude Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmopengles.h" />
-    <ClInclude Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmsym.h" />
-    <ClInclude Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmvideo.h" />
-    <ClInclude Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmvulkan.h" />
-    <ClInclude Include="..\SDL\src\video\nacl\SDL_naclevents_c.h" />
-    <ClInclude Include="..\SDL\src\video\nacl\SDL_naclopengles.h" />
-    <ClInclude Include="..\SDL\src\video\nacl\SDL_naclvideo.h" />
-    <ClInclude Include="..\SDL\src\video\nacl\SDL_naclwindow.h" />
-    <ClInclude Include="..\SDL\src\video\offscreen\SDL_offscreenevents_c.h" />
-    <ClInclude Include="..\SDL\src\video\offscreen\SDL_offscreenframebuffer_c.h" />
-    <ClInclude Include="..\SDL\src\video\offscreen\SDL_offscreenopengl.h" />
-    <ClInclude Include="..\SDL\src\video\offscreen\SDL_offscreenvideo.h" />
-    <ClInclude Include="..\SDL\src\video\offscreen\SDL_offscreenwindow.h" />
-    <ClInclude Include="..\SDL\src\video\pandora\SDL_pandora.h" />
-    <ClInclude Include="..\SDL\src\video\pandora\SDL_pandora_events.h" />
-    <ClInclude Include="..\SDL\src\video\raspberry\SDL_rpievents_c.h" />
-    <ClInclude Include="..\SDL\src\video\raspberry\SDL_rpimouse.h" />
-    <ClInclude Include="..\SDL\src\video\raspberry\SDL_rpiopengles.h" />
-    <ClInclude Include="..\SDL\src\video\raspberry\SDL_rpivideo.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitappdelegate.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitclipboard.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitevents.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitmessagebox.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitmetalview.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitmodes.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitopengles.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitopenglview.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitvideo.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitview.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitviewcontroller.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitvulkan.h" />
-    <ClInclude Include="..\SDL\src\video\uikit\SDL_uikitwindow.h" />
-    <ClInclude Include="..\SDL\src\video\vivante\SDL_vivanteopengles.h" />
-    <ClInclude Include="..\SDL\src\video\vivante\SDL_vivanteplatform.h" />
-    <ClInclude Include="..\SDL\src\video\vivante\SDL_vivantevideo.h" />
-    <ClInclude Include="..\SDL\src\video\vivante\SDL_vivantevulkan.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandclipboard.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylanddatamanager.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylanddyn.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandevents_c.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandkeyboard.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandmessagebox.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandmouse.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandopengles.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandsym.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandtouch.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandvideo.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandvulkan.h" />
-    <ClInclude Include="..\SDL\src\video\wayland\SDL_waylandwindow.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_msctf.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_vkeys.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowsclipboard.h" />
@@ -442,31 +315,6 @@
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowsvulkan.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowswindow.h" />
     <ClInclude Include="..\SDL\src\video\windows\wmmsg.h" />
-    <ClInclude Include="..\SDL\src\video\winrt\SDL_winrtevents_c.h" />
-    <ClInclude Include="..\SDL\src\video\winrt\SDL_winrtgamebar_cpp.h" />
-    <ClInclude Include="..\SDL\src\video\winrt\SDL_winrtmessagebox.h" />
-    <ClInclude Include="..\SDL\src\video\winrt\SDL_winrtmouse_c.h" />
-    <ClInclude Include="..\SDL\src\video\winrt\SDL_winrtopengles.h" />
-    <ClInclude Include="..\SDL\src\video\winrt\SDL_winrtvideo_cpp.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11clipboard.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11dyn.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11events.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11framebuffer.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11keyboard.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11messagebox.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11modes.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11mouse.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11opengl.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11opengles.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11shape.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11sym.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11touch.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11video.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11vulkan.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11window.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11xfixes.h" />
-    <ClInclude Include="..\SDL\src\video\x11\SDL_x11xinput2.h" />
-    <ClInclude Include="..\SDL\src\video\x11\edid.h" />
     <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb.h" />
     <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_lsx_func.h" />
     <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_sse_func.h" />
@@ -494,7 +342,6 @@
     <ClCompile Include="..\SDL\src\audio\dummy\SDL_dummyaudio.c" />
     <ClCompile Include="..\SDL\src\audio\wasapi\SDL_wasapi.c" />
     <ClCompile Include="..\SDL\src\audio\wasapi\SDL_wasapi_win32.c" />
-    <ClCompile Include="..\SDL\src\audio\wasapi\SDL_wasapi_winrt.cpp" />
     <ClCompile Include="..\SDL\src\audio\winmm\SDL_winmm.c" />
     <ClCompile Include="..\SDL\src\core\windows\SDL_hid.c" />
     <ClCompile Include="..\SDL\src\core\windows\SDL_windows.c" />
@@ -512,22 +359,16 @@
     <ClCompile Include="..\SDL\src\events\SDL_touch.c" />
     <ClCompile Include="..\SDL\src\events\SDL_windowevents.c" />
     <ClCompile Include="..\SDL\src\file\SDL_rwops.c" />
-    <ClCompile Include="..\SDL\src\filesystem\dummy\SDL_sysfilesystem.c" />
-    <ClCompile Include="..\SDL\src\filesystem\nacl\SDL_sysfilesystem.c">
-      <ObjectFileName>$(IntDir)\SDL_sysfilesystem1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="..\SDL\src\filesystem\windows\SDL_sysfilesystem.c" />
     <ClCompile Include="..\SDL\src\haptic\SDL_haptic.c" />
-    <ClCompile Include="..\SDL\src\haptic\darwin\SDL_syshaptic.c" />
-    <ClCompile Include="..\SDL\src\haptic\dummy\SDL_syshaptic.c">
-      <ObjectFileName>$(IntDir)\SDL_syshaptic1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="..\SDL\src\haptic\dummy\SDL_syshaptic.c" />
+    <ClCompile Include="..\SDL\src\haptic\windows\SDL_dinputhaptic.c" />
+    <ClCompile Include="..\SDL\src\haptic\windows\SDL_windowshaptic.c" />
+    <ClCompile Include="..\SDL\src\haptic\windows\SDL_xinputhaptic.c" />
     <ClCompile Include="..\SDL\src\hidapi\SDL_hidapi.c" />
-    <ClCompile Include="..\SDL\src\hidapi\windows\hid.c" />
     <ClCompile Include="..\SDL\src\joystick\SDL_gamecontroller.c" />
     <ClCompile Include="..\SDL\src\joystick\SDL_joystick.c" />
     <ClCompile Include="..\SDL\src\joystick\controller_type.c" />
-    <ClCompile Include="..\SDL\src\joystick\darwin\SDL_iokitjoystick.c" />
-    <ClCompile Include="..\SDL\src\joystick\dummy\SDL_sysjoystick.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_gamecube.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_luna.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_ps4.c" />
@@ -566,35 +407,13 @@
     <ClCompile Include="..\SDL\src\libm\s_scalbn.c" />
     <ClCompile Include="..\SDL\src\libm\s_sin.c" />
     <ClCompile Include="..\SDL\src\libm\s_tan.c" />
-    <ClCompile Include="..\SDL\src\loadso\dlopen\SDL_sysloadso.c" />
-    <ClCompile Include="..\SDL\src\loadso\dummy\SDL_sysloadso.c">
-      <ObjectFileName>$(IntDir)\SDL_sysloadso1.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\SDL\src\loadso\windows\SDL_sysloadso.c">
-      <ObjectFileName>$(IntDir)\SDL_sysloadso2.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="..\SDL\src\loadso\windows\SDL_sysloadso.c" />
     <ClCompile Include="..\SDL\src\locale\SDL_locale.c" />
-    <ClCompile Include="..\SDL\src\locale\dummy\SDL_syslocale.c" />
-    <ClCompile Include="..\SDL\src\locale\windows\SDL_syslocale.c">
-      <ObjectFileName>$(IntDir)\SDL_syslocale1.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\SDL\src\locale\winrt\SDL_syslocale.c">
-      <ObjectFileName>$(IntDir)\SDL_syslocale2.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\SDL\src\main\windows\SDL_windows_main.c" />
+    <ClCompile Include="..\SDL\src\locale\windows\SDL_syslocale.c" />
     <ClCompile Include="..\SDL\src\misc\SDL_url.c" />
-    <ClCompile Include="..\SDL\src\misc\dummy\SDL_sysurl.c" />
-    <ClCompile Include="..\SDL\src\misc\windows\SDL_sysurl.c">
-      <ObjectFileName>$(IntDir)\SDL_sysurl1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="..\SDL\src\misc\windows\SDL_sysurl.c" />
     <ClCompile Include="..\SDL\src\power\SDL_power.c" />
-    <ClCompile Include="..\SDL\src\power\haiku\SDL_syspower.c" />
-    <ClCompile Include="..\SDL\src\power\macosx\SDL_syspower.c">
-      <ObjectFileName>$(IntDir)\SDL_syspower1.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\SDL\src\power\windows\SDL_syspower.c">
-      <ObjectFileName>$(IntDir)\SDL_syspower2.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="..\SDL\src\power\windows\SDL_syspower.c" />
     <ClCompile Include="..\SDL\src\render\SDL_d3dmath.c" />
     <ClCompile Include="..\SDL\src\render\SDL_render.c" />
     <ClCompile Include="..\SDL\src\render\SDL_yuv_sw.c" />
@@ -606,7 +425,6 @@
     <ClCompile Include="..\SDL\src\render\direct3d12\SDL_shaders_d3d12.c" />
     <ClCompile Include="..\SDL\src\render\opengl\SDL_render_gl.c" />
     <ClCompile Include="..\SDL\src\render\opengl\SDL_shaders_gl.c" />
-    <ClCompile Include="..\SDL\src\render\opengles\SDL_render_gles.c" />
     <ClCompile Include="..\SDL\src\render\opengles2\SDL_render_gles2.c" />
     <ClCompile Include="..\SDL\src\render\opengles2\SDL_shaders_gles2.c" />
     <ClCompile Include="..\SDL\src\render\software\SDL_blendfillrect.c" />
@@ -617,11 +435,7 @@
     <ClCompile Include="..\SDL\src\render\software\SDL_render_sw.c" />
     <ClCompile Include="..\SDL\src\render\software\SDL_rotate.c" />
     <ClCompile Include="..\SDL\src\render\software\SDL_triangle.c" />
-    <ClCompile Include="..\SDL\src\render\vitagxm\SDL_render_vita_gxm.c" />
-    <ClCompile Include="..\SDL\src\render\vitagxm\SDL_render_vita_gxm_memory.c" />
-    <ClCompile Include="..\SDL\src\render\vitagxm\SDL_render_vita_gxm_tools.c" />
     <ClCompile Include="..\SDL\src\sensor\SDL_sensor.c" />
-    <ClCompile Include="..\SDL\src\sensor\dummy\SDL_dummysensor.c" />
     <ClCompile Include="..\SDL\src\sensor\windows\SDL_windowssensor.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_crc32.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_getenv.c" />
@@ -633,49 +447,15 @@
     <ClCompile Include="..\SDL\src\stdlib\SDL_stdlib.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_string.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_strtokr.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_assert.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_common.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_compare.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_crc32.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_font.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_fuzzer.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_harness.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_imageBlit.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_imageBlitBlend.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_imageFace.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_imagePrimitives.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_imagePrimitivesBlend.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_log.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_md5.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_memory.c" />
-    <ClCompile Include="..\SDL\src\test\SDL_test_random.c" />
     <ClCompile Include="..\SDL\src\thread\SDL_thread.c" />
     <ClCompile Include="..\SDL\src\thread\generic\SDL_syscond.c" />
-    <ClCompile Include="..\SDL\src\thread\generic\SDL_sysmutex.c" />
-    <ClCompile Include="..\SDL\src\thread\generic\SDL_syssem.c" />
-    <ClCompile Include="..\SDL\src\thread\generic\SDL_systhread.c" />
-    <ClCompile Include="..\SDL\src\thread\generic\SDL_systls.c" />
     <ClCompile Include="..\SDL\src\thread\windows\SDL_syscond_cv.c" />
-    <ClCompile Include="..\SDL\src\thread\windows\SDL_sysmutex.c">
-      <ObjectFileName>$(IntDir)\SDL_sysmutex1.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\SDL\src\thread\windows\SDL_syssem.c">
-      <ObjectFileName>$(IntDir)\SDL_syssem1.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\SDL\src\thread\windows\SDL_systhread.c">
-      <ObjectFileName>$(IntDir)\SDL_systhread1.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\SDL\src\thread\windows\SDL_systls.c">
-      <ObjectFileName>$(IntDir)\SDL_systls1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="..\SDL\src\thread\windows\SDL_sysmutex.c" />
+    <ClCompile Include="..\SDL\src\thread\windows\SDL_syssem.c" />
+    <ClCompile Include="..\SDL\src\thread\windows\SDL_systhread.c" />
+    <ClCompile Include="..\SDL\src\thread\windows\SDL_systls.c" />
     <ClCompile Include="..\SDL\src\timer\SDL_timer.c" />
-    <ClCompile Include="..\SDL\src\timer\dummy\SDL_systimer.c" />
-    <ClCompile Include="..\SDL\src\timer\haiku\SDL_systimer.c">
-      <ObjectFileName>$(IntDir)\SDL_systimer1.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\SDL\src\timer\windows\SDL_systimer.c">
-      <ObjectFileName>$(IntDir)\SDL_systimer2.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="..\SDL\src\timer\windows\SDL_systimer.c" />
     <ClCompile Include="..\SDL\src\video\SDL_RLEaccel.c" />
     <ClCompile Include="..\SDL\src\video\SDL_blit.c" />
     <ClCompile Include="..\SDL\src\video\SDL_blit_0.c" />
@@ -697,58 +477,9 @@
     <ClCompile Include="..\SDL\src\video\SDL_video.c" />
     <ClCompile Include="..\SDL\src\video\SDL_vulkan_utils.c" />
     <ClCompile Include="..\SDL\src\video\SDL_yuv.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_WM.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_dyn.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_events.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_modes.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_mouse.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_opengl.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_render.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_shape.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_video.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_vulkan.c" />
-    <ClCompile Include="..\SDL\src\video\directfb\SDL_DirectFB_window.c" />
     <ClCompile Include="..\SDL\src\video\dummy\SDL_nullevents.c" />
     <ClCompile Include="..\SDL\src\video\dummy\SDL_nullframebuffer.c" />
     <ClCompile Include="..\SDL\src\video\dummy\SDL_nullvideo.c" />
-    <ClCompile Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmdyn.c" />
-    <ClCompile Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmevents.c" />
-    <ClCompile Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmmouse.c" />
-    <ClCompile Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmopengles.c" />
-    <ClCompile Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmvideo.c" />
-    <ClCompile Include="..\SDL\src\video\kmsdrm\SDL_kmsdrmvulkan.c" />
-    <ClCompile Include="..\SDL\src\video\nacl\SDL_naclevents.c" />
-    <ClCompile Include="..\SDL\src\video\nacl\SDL_naclglue.c" />
-    <ClCompile Include="..\SDL\src\video\nacl\SDL_naclopengles.c" />
-    <ClCompile Include="..\SDL\src\video\nacl\SDL_naclvideo.c" />
-    <ClCompile Include="..\SDL\src\video\nacl\SDL_naclwindow.c" />
-    <ClCompile Include="..\SDL\src\video\offscreen\SDL_offscreenevents.c" />
-    <ClCompile Include="..\SDL\src\video\offscreen\SDL_offscreenframebuffer.c" />
-    <ClCompile Include="..\SDL\src\video\offscreen\SDL_offscreenopengl.c" />
-    <ClCompile Include="..\SDL\src\video\offscreen\SDL_offscreenvideo.c" />
-    <ClCompile Include="..\SDL\src\video\offscreen\SDL_offscreenwindow.c" />
-    <ClCompile Include="..\SDL\src\video\pandora\SDL_pandora.c" />
-    <ClCompile Include="..\SDL\src\video\pandora\SDL_pandora_events.c" />
-    <ClCompile Include="..\SDL\src\video\raspberry\SDL_rpievents.c" />
-    <ClCompile Include="..\SDL\src\video\raspberry\SDL_rpimouse.c" />
-    <ClCompile Include="..\SDL\src\video\raspberry\SDL_rpiopengles.c" />
-    <ClCompile Include="..\SDL\src\video\raspberry\SDL_rpivideo.c" />
-    <ClCompile Include="..\SDL\src\video\vivante\SDL_vivanteopengles.c" />
-    <ClCompile Include="..\SDL\src\video\vivante\SDL_vivanteplatform.c" />
-    <ClCompile Include="..\SDL\src\video\vivante\SDL_vivantevideo.c" />
-    <ClCompile Include="..\SDL\src\video\vivante\SDL_vivantevulkan.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandclipboard.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylanddatamanager.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylanddyn.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandevents.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandkeyboard.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandmessagebox.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandmouse.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandopengles.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandtouch.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandvideo.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandvulkan.c" />
-    <ClCompile Include="..\SDL\src\video\wayland\SDL_waylandwindow.c" />
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowsclipboard.c" />
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowsevents.c" />
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowsframebuffer.c" />
@@ -762,39 +493,7 @@
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowsvideo.c" />
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowsvulkan.c" />
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowswindow.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11clipboard.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11dyn.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11events.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11framebuffer.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11keyboard.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11messagebox.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11modes.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11mouse.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11opengl.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11opengles.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11shape.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11touch.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11video.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11vulkan.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11window.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11xfixes.c" />
-    <ClCompile Include="..\SDL\src\video\x11\SDL_x11xinput2.c" />
-    <ClCompile Include="..\SDL\src\video\x11\edid-parse.c" />
     <ClCompile Include="..\SDL\src\video\yuv2rgb\yuv_rgb.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\SDL\src\hidapi\windows\Makefile-manual" />
-    <None Include="..\SDL\src\hidapi\windows\Makefile.am" />
-    <None Include="..\SDL\src\hidapi\windows\Makefile.mingw" />
-    <None Include="..\SDL\src\hidapi\windows\ddk_build\hidapi.def" />
-    <None Include="..\SDL\src\hidapi\windows\ddk_build\makefile" />
-    <None Include="..\SDL\src\hidapi\windows\ddk_build\sources" />
-    <None Include="..\SDL\src\hidapi\windows\hidapi.sln" />
-    <None Include="..\SDL\src\hidapi\windows\hidapi.vcproj" />
-    <None Include="..\SDL\src\hidapi\windows\hidtest.vcproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\SDL\src\main\windows\version.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
