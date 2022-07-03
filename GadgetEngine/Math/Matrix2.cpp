@@ -66,14 +66,14 @@ Matrix2 Matrix2::operator *(float s_) const{
 }
 
 Matrix2 Matrix2::operator *(const Matrix2& m_) const{
-	Matrix2 result = Matrix2(0.0f);
-	result[0] = (m[0] * m_[0]) + (m[2] * m_[1]);
-	result[2] = (m[0] * m_[2]) + (m[2] * m_[3]);
-	
-	result[1] = (m[1] * m_[0]) + (m[3] * m_[1]);
-	result[3] = (m[1] * m_[2]) + (m[3] * m_[3]);
-	
-	return result;
+	return Matrix2(
+		//COLUMN 1
+		Math::Dot2D(/*A*/ m[0], m[2], /*B*/ m_[0], m_[1]),
+		Math::Dot2D(/*A*/ m[1], m[3], /*B*/ m_[0], m_[1]),
+		//COLUMN 2
+		Math::Dot2D(/*A*/ m[0], m[2], /*B*/ m_[2], m_[3]),
+		Math::Dot2D(/*A*/ m[1], m[3], /*B*/ m_[2], m_[3])
+	);
 }
 
 Matrix2 Matrix2::operator /(const float s) const{

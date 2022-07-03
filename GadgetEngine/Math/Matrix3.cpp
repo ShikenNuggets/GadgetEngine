@@ -75,20 +75,20 @@ Matrix3 Matrix3::operator *(float s_) const{
 }
 
 Matrix3 Matrix3::operator *(const Matrix3& m_) const{
-	Matrix3 result = Matrix3(0.0f);
-	result[0] = (m[0] * m_[0]) + (m[3] * m_[1]) + (m[6] * m_[2]);
-	result[3] = (m[0] * m_[3]) + (m[3] * m_[4]) + (m[6] * m_[6]);
-	result[6] = (m[0] * m_[6]) + (m[3] * m_[7]) + (m[6] * m_[8]);
-
-	result[1] = (m[1] * m_[0]) + (m[4] * m_[1]) + (m[7] * m_[2]);
-	result[4] = (m[1] * m_[3]) + (m[4] * m_[4]) + (m[7] * m_[6]);
-	result[7] = (m[1] * m_[6]) + (m[4] * m_[7]) + (m[7] * m_[8]);
-
-	result[2] = (m[2] * m_[0]) + (m[5] * m_[1]) + (m[8] * m_[2]);
-	result[5] = (m[2] * m_[3]) + (m[5] * m_[4]) + (m[8] * m_[6]);
-	result[8] = (m[2] * m_[6]) + (m[5] * m_[7]) + (m[8] * m_[8]);
-
-	return result;
+	return Matrix3(
+		//COLUMN 1
+		Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[0], m_[1], m_[2]),
+		Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[0], m_[1], m_[2]),
+		Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[0], m_[1], m_[2]),
+		//COLUMN 2
+		Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[3], m_[4], m_[5]),
+		Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[3], m_[4], m_[5]),
+		Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[3], m_[4], m_[5]),
+		//COLUMN 3
+		Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[6], m_[7], m_[8]),
+		Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[6], m_[7], m_[8]),
+		Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[6], m_[7], m_[8])
+	);
 }
 
 Matrix3 Matrix3::operator /(float s_) const{
