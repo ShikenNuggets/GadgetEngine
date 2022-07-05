@@ -4,6 +4,7 @@
 #include <limits>
 
 #include "Debug.h"
+#include "Math/Angle.h"
 
 namespace Gadget{
 	class Math{
@@ -34,9 +35,35 @@ namespace Gadget{
 			return a_ / b_;
 		}
 
+		static inline float Abs(float value_){ return abs(value_); }
+
 		static inline constexpr float Dot2D(float aa_, float ab_, float ba_, float bb_){ return (aa_ * ba_) + (ab_ * bb_); }
 		static inline constexpr float Dot3D(float aa_, float ab_, float ac_, float ba_, float bb_, float bc_){ return (aa_ * ba_) + (ab_ * bb_) + (ac_ * bc_); }
 		static inline constexpr float Dot4D(float aa_, float ab_, float ac_, float ad_, float ba_, float bb_, float bc_, float bd_){ return (aa_ * ba_) + (ab_ * bb_) + (ac_ * bc_) + (ad_ * bd_); }
+
+		template <class T>
+		static inline constexpr T Clamp(T min_, T max_, T value_){
+			if(value_ < min_){
+				return min_;
+			}else if(value_ > max_){
+				return max_;
+			}
+
+			return value_;
+		}
+
+		static inline float Sin(Angle angle_){ return SinR(angle_.ToRadians()); }
+		static inline float Cos(Angle angle_){ return CosR(angle_.ToRadians()); }
+		static inline float Tan(Angle angle_){ return TanR(angle_.ToRadians()); }
+
+		static inline float SinR(Radian radian_){ static_cast<float>(sin(radian_.Get())); }
+		static inline float CosR(Radian radian_){ static_cast<float>(cos(radian_.Get())); }
+		static inline float TanR(Radian radian_){ static_cast<float>(tan(radian_.Get())); }
+
+		static inline Angle Asin(float sin_){ return Radian(static_cast<float>(asin(sin_))).ToDegrees(); }
+		static inline Angle Acos(float cos_){ return Radian(static_cast<float>(acos(Clamp(-1.0f, 1.0f, cos_)))).ToDegrees(); }
+		static inline Angle Atan(float tan_){ return Radian(static_cast<float>(atan(tan_))).ToDegrees(); }
+		static inline Angle Atan2(float a_, float b_){ return Radian(static_cast<float>(atan2(a_, b_))).ToDegrees(); }
 
 		//Delete unwanted compiler-generated constructors, destructors, and assignment operators
 		Math() = delete;

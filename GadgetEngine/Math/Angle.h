@@ -1,8 +1,6 @@
 #ifndef GADGET_ANGLE_H
 #define GADGET_ANGLE_H
 
-#include "Math.h"
-
 namespace Gadget{
 	//Forward declarations
 	class Degree;
@@ -18,8 +16,9 @@ namespace Gadget{
 		Degree& operator =(Radian& r_);
 
 		Radian ToRadians() const;
+		float ToRadiansValue() const;
 
-		float GetAngle() const{ return angle; }
+		float Get() const{ return angle; }
 
 		Degree operator -() const;
 		Degree operator +(float a_) const;
@@ -91,8 +90,9 @@ namespace Gadget{
 		Radian& operator =(Degree& r_);
 
 		Degree ToDegrees() const;
+		float ToDegreesValue() const;
 
-		float GetAngle() const{ return angle; }
+		float Get() const{ return angle; }
 
 		Radian operator -() const;
 		Radian operator +(float a_) const;
