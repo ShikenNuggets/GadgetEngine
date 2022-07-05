@@ -56,9 +56,9 @@ namespace Gadget{
 		static inline float Cos(Angle angle_){ return CosR(angle_.ToRadians()); }
 		static inline float Tan(Angle angle_){ return TanR(angle_.ToRadians()); }
 
-		static inline float SinR(Radian radian_){ static_cast<float>(sin(radian_.Get())); }
-		static inline float CosR(Radian radian_){ static_cast<float>(cos(radian_.Get())); }
-		static inline float TanR(Radian radian_){ static_cast<float>(tan(radian_.Get())); }
+		static inline float SinR(Radian radian_){ return static_cast<float>(sin(radian_.Get())); }
+		static inline float CosR(Radian radian_){ return static_cast<float>(cos(radian_.Get())); }
+		static inline float TanR(Radian radian_){ return static_cast<float>(tan(radian_.Get())); }
 
 		static inline Angle Asin(float sin_){ return Radian(static_cast<float>(asin(sin_))).ToDegrees(); }
 		static inline Angle Acos(float cos_){ return Radian(static_cast<float>(acos(Clamp(-1.0f, 1.0f, cos_)))).ToDegrees(); }

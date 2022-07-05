@@ -18,7 +18,7 @@ namespace Gadget{
 		Radian ToRadians() const;
 		float ToRadiansValue() const;
 
-		float Get() const{ return angle; }
+		constexpr float Get() const{ return angle; }
 
 		Degree operator -() const;
 		Degree operator +(float a_) const;
@@ -78,6 +78,8 @@ namespace Gadget{
 		inline friend bool operator >=(float a_, const Degree& d_)	{ return d_ >= a_; }
 		inline friend bool operator <=(float a_, const Degree& d_)	{ return d_ <= a_; }
 
+		constexpr operator float() const;
+
 	private:
 		float angle;
 	};
@@ -92,7 +94,7 @@ namespace Gadget{
 		Degree ToDegrees() const;
 		float ToDegreesValue() const;
 
-		float Get() const{ return angle; }
+		constexpr float Get() const{ return angle; }
 
 		Radian operator -() const;
 		Radian operator +(float a_) const;
@@ -151,6 +153,8 @@ namespace Gadget{
 		inline friend bool operator <(float a_, const Radian& d_)	{ return d_ < a_; }
 		inline friend bool operator >=(float a_, const Radian& d_)	{ return d_ >= a_; }
 		inline friend bool operator <=(float a_, const Radian& d_)	{ return d_ <= a_; }
+
+		constexpr operator float() const;
 
 	private:
 		float angle;
