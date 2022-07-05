@@ -73,18 +73,9 @@ Matrix4x3 Matrix4x3::operator *(float s_) const{
 
 Vector3 Matrix4x3::operator *(const Vector3& v_) const{
 	return Vector3(
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, 1.0f)
-	);
-}
-
-Vector4 Matrix4x3::operator *(const Vector4& v_) const{
-	return Vector4(
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ v_.x, v_.y, v_.z, v_.w)
+		Math::Dot4D(/*A*/ m[0], m[3], m[6], m[9], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		Math::Dot4D(/*A*/ m[1], m[4], m[7], m[10], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		Math::Dot4D(/*A*/ m[2], m[5], m[8], m[11], /*B*/ v_.x, v_.y, v_.z, 1.0f)
 	);
 }
 

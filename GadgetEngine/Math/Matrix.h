@@ -221,7 +221,6 @@ namespace Gadget{
 		Matrix4x3 operator -(const Matrix4x3& m_) const;
 		Matrix4x3 operator *(float s_) const;
 		Vector3 operator *(const Vector3& v_) const;
-		Vector4 operator *(const Vector4& v_) const;
 		Matrix4x3 operator /(float s_) const;
 		void operator +=(const Matrix4x3& m_);
 		void operator -=(const Matrix4x3& m_);
