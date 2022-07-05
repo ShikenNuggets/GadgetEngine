@@ -25,17 +25,24 @@ Matrix4::Matrix4(float fill_) : m(){
 }
 
 Matrix4::Matrix4(const Matrix2& m_){
-	this->m[0] = m_[0];	this->m[4] = m_[2];	this->m[8] = 0.0f;	this->m[12] = 0.0f;
-	this->m[1] = m_[1];	this->m[5] = m_[3];	this->m[9] = 0.0f;	this->m[13] = 0.0f;
-	this->m[2] = 0.0f;	this->m[6] = 0.0f;	this->m[10] = 1.0f;	this->m[14] = 0.0f;
-	this->m[3] = 0.0f;	this->m[7] = 0.0f;	this->m[11] = 0.0f;	this->m[15] = 1.0f;
+	m[0] = m_[0];	m[4] = m_[2];	m[8] = 0.0f;	m[12] = 0.0f;
+	m[1] = m_[1];	m[5] = m_[3];	m[9] = 0.0f;	m[13] = 0.0f;
+	m[2] = 0.0f;	m[6] = 0.0f;	m[10] = 1.0f;	m[14] = 0.0f;
+	m[3] = 0.0f;	m[7] = 0.0f;	m[11] = 0.0f;	m[15] = 1.0f;
 }
 
 Matrix4::Matrix4(const Matrix3& m_){
-	this->m[0] = m_[0];	this->m[4] = m_[3];	this->m[8] = m_[6];		this->m[12] = 0.0f;
-	this->m[1] = m_[1];	this->m[5] = m_[4];	this->m[9] = m_[7];		this->m[13] = 0.0f;
-	this->m[2] = m_[2];	this->m[6] = m_[5];	this->m[10] = m_[8];	this->m[14] = 0.0f;
-	this->m[3] = 0.0f;	this->m[7] = 0.0f;	this->m[11] = 0.0f;		this->m[15] = 1.0f;
+	m[0] = m_[0];	m[4] = m_[3];	m[8] = m_[6];	m[12] = 0.0f;
+	m[1] = m_[1];	m[5] = m_[4];	m[9] = m_[7];	m[13] = 0.0f;
+	m[2] = m_[2];	m[6] = m_[5];	m[10] = m_[8];	m[14] = 0.0f;
+	m[3] = 0.0f;	m[7] = 0.0f;	m[11] = 0.0f;	m[15] = 1.0f;
+}
+
+Matrix4::Matrix4(const Matrix4x3& m_){
+	m[0] = m_[0];	m[4] = m_[3];	m[8] = m_[6];	m[12] = m_[9];
+	m[1] = m_[1];	m[5] = m_[4];	m[9] = m_[7];	m[13] = m_[10];
+	m[2] = m_[2];	m[6] = m_[5];	m[10] = m_[8];	m[14] = m_[11];
+	m[3] = 0.0f;	m[7] = 0.0f;	m[11] = 0.0f;	m[15] = 1.0f;
 }
 
 constexpr float Matrix4::operator [](int i_) const{
@@ -269,15 +276,15 @@ Matrix4 Matrix4::Scale(const Vector3& v_){
 					0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-Vector3 Matrix4::GetTranslation(){
+Vector3 Matrix4::GetTranslation() const{
 	return Vector3(m[12], m[13], m[14]);
 }
 
-//Quaternion Matrix4::GetRotation(){
+//Quaternion Matrix4::GetRotation() const{
 //	return ToQuaternion();
 //}
 
-Vector3 Matrix4::GetScale(){
+Vector3 Matrix4::GetScale() const{
 	return Vector3(m[0], m[5], m[10]);
 }
 
@@ -337,14 +344,7 @@ Matrix4 Matrix4::ViewportNDC(int w_, int h_){
 }
 
 Matrix2 Matrix4::ToMatrix2() const{
-	Matrix2 m_ = Matrix2::Identity();
-
-	m_[0] = m[0];
-	m_[1] = m[1];
-	m_[2] = m[3];
-	m_[3] = m[4];
-
-	return m_;
+	return Matrix2(*this);
 }
 
 Matrix2 Matrix4::ToMatrix2(const Matrix4& m_){
@@ -352,32 +352,24 @@ Matrix2 Matrix4::ToMatrix2(const Matrix4& m_){
 }
 
 Matrix3 Matrix4::ToMatrix3() const{
-	Matrix3 m_ = Matrix3::Identity();
-
-	m_[0] = m[0];
-	m_[1] = m[1];
-	m_[2] = m[2];
-	m_[3] = m[4];
-	m_[4] = m[5];
-	m_[5] = m[6];
-	m_[6] = m[8];
-	m_[7] = m[9];
-	m_[8] = m[10];
-
-	return m_;
+	return Matrix3(*this);
 }
 
 Matrix3 Matrix4::ToMatrix3(const Matrix4& m_){
 	return m_.ToMatrix3();
 }
 
+Matrix4x3 Matrix4::ToMatrix4x3() const{
+	return Matrix4x3(*this);
+}
+
+Matrix4x3 Matrix4::ToMatrix4x3(const Matrix4& m_){
+	return m_.ToMatrix4x3();
+}
+
 std::string Matrix4::ToString() const{
-	std::string mString;
-
-	mString =	std::to_string(m[0]) + ", " + std::to_string(m[4]) + ", " + std::to_string(m[8]) + ", " + std::to_string(m[12]) + ",\n" +
-				std::to_string(m[1]) + ", " + std::to_string(m[5]) + ", " + std::to_string(m[9]) + ", " + std::to_string(m[13]) + ",\n" +
-				std::to_string(m[2]) + ", " + std::to_string(m[6]) + ", " + std::to_string(m[10]) + ", " + std::to_string(m[14]) + ",\n" + 
-				std::to_string(m[3]) + ", " + std::to_string(m[7]) + ", " + std::to_string(m[11]) + ", " + std::to_string(m[15]);
-
-	return mString;
+	return	std::to_string(m[0]) + ", " + std::to_string(m[4]) + ", " + std::to_string(m[8]) + ", " + std::to_string(m[12]) + ",\n" +
+			std::to_string(m[1]) + ", " + std::to_string(m[5]) + ", " + std::to_string(m[9]) + ", " + std::to_string(m[13]) + ",\n" +
+			std::to_string(m[2]) + ", " + std::to_string(m[6]) + ", " + std::to_string(m[10]) + ", " + std::to_string(m[14]) + ",\n" + 
+			std::to_string(m[3]) + ", " + std::to_string(m[7]) + ", " + std::to_string(m[11]) + ", " + std::to_string(m[15]);
 }

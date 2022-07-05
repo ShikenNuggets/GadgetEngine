@@ -22,15 +22,18 @@ Matrix2::Matrix2(float fill_) : m(){
 }
 
 Matrix2::Matrix2(const Matrix3& m_){
-	//These numbers look wrong. This is intentional.
-	this->m[0] = m_[0]; this->m[2] = m_[2];
-	this->m[1] = m_[1]; this->m[3] = m_[3];
+	m[0] = m_[0];	m[2] = m_[3];
+	m[1] = m_[1];	m[3] = m_[4];
 }
 
 Matrix2::Matrix2(const Matrix4& m_){
-	//These numbers look wrong. This is intentional.
-	this->m[0] = m_[0]; this->m[2] = m_[4];
-	this->m[1] = m_[1]; this->m[3] = m_[5];
+	m[0] = m_[0];	m[2] = m_[4];
+	m[1] = m_[1];	m[3] = m_[5];
+}
+
+Matrix2::Matrix2(const Matrix4x3& m_){
+	m[0] = m_[0];	m[2] = m_[3];
+	m[1] = m_[1];	m[3] = m_[4];
 }
 
 constexpr float Matrix2::operator [](int i_) const{
@@ -108,10 +111,16 @@ Matrix2 Matrix2::Transpose(const Matrix2& m_){
 	return m_.Transpose();
 }
 
-Matrix2 Matrix2::Inverse() const{
-	float det = m[0] * m[3] - m[2] * m[1];
+constexpr float Matrix2::Determinant() const{
+	return (m[0] * m[3]) - (m[2] * m[1]);
+}
 
-	float invdet = Math::SafeDivide(1.0f, det);
+constexpr float Matrix2::Determinant(const Matrix2& m_){
+	return m_.Determinant();
+}
+
+Matrix2 Matrix2::Inverse() const{
+	float invdet = Math::SafeDivide(1.0f, Determinant());
 
 	return Matrix2(	m[3] * invdet, -m[1] * invdet,
 					-m[2] * invdet, m[0] * invdet);
@@ -122,14 +131,7 @@ Matrix2 Matrix2::Inverse(const Matrix2& m_){
 }
 
 Matrix3 Matrix2::ToMatrix3() const{
-	Matrix3 m_ = Matrix3::Identity();
-
-	m_[0] = m[0];
-	m_[1] = m[1];
-	m_[3] = m[2];
-	m_[4] = m[3];
-	
-	return m_;
+	return Matrix3(*this);
 }
 
 Matrix3 Matrix2::ToMatrix3(const Matrix2& m_){
@@ -137,25 +139,22 @@ Matrix3 Matrix2::ToMatrix3(const Matrix2& m_){
 }
 
 Matrix4 Matrix2::ToMatrix4() const{
-	Matrix4 m_ = Matrix4::Identity();
-
-	m_[0] = m[0];
-	m_[1] = m[1];
-	m_[4] = m[2];
-	m_[5] = m[3];
-
-	return m_;
+	return Matrix4(*this);
 }
 
 Matrix4 Matrix2::ToMatrix4(const Matrix2& m_){
 	return m_.ToMatrix4();
 }
 
+Matrix4x3 Matrix2::ToMatrix4x3() const{
+	return Matrix4x3(*this);
+}
+
+Matrix4x3 Matrix2::ToMatrix4x3(const Matrix2& m_){
+	return m_.ToMatrix4x3();
+}
+
 std::string Matrix2::ToString() const{
-	std::string mString;
-
-	mString =	std::to_string(m[0]) + ", " + std::to_string(m[2]) + ",\n" +
-				std::to_string(m[1]) + ", " + std::to_string(m[3]);
-
-	return mString;
+	return	std::to_string(m[0]) + ", " + std::to_string(m[2]) + ",\n" +
+			std::to_string(m[1]) + ", " + std::to_string(m[3]);
 }

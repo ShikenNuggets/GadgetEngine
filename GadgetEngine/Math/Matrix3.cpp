@@ -20,17 +20,22 @@ Matrix3::Matrix3(const float fillValue) : m(){
 	}
 }
 
-
 Matrix3::Matrix3(const Matrix2& m_){
-	this->m[0] = m_[0]; this->m[1] = m_[1]; this->m[2] = 0.0f;
-	this->m[3] = m_[2]; this->m[4] = m_[3]; this->m[5] = 0.0f;
-	this->m[6] = 0.0f;  this->m[7] = 0.0f;	this->m[8] = 1.0f;
+	m[0] = m_[0];	m[1] = m_[1];	m[2] = 0.0f;
+	m[3] = m_[2];	m[4] = m_[3];	m[5] = 0.0f;
+	m[6] = 0.0f;	m[7] = 0.0f;	m[8] = 1.0f;
 }
 
 Matrix3::Matrix3(const Matrix4& m_){
-	this->m[0] = m_[0]; this->m[1] = m_[1]; this->m[2] = m_[2];
-	this->m[3] = m_[4]; this->m[4] = m_[5]; this->m[5] = m_[6];
-	this->m[6] = m_[8]; this->m[7] = m_[9]; this->m[8] = m_[10];
+	m[0] = m_[0];	m[1] = m_[1];	m[2] = m_[2];
+	m[3] = m_[4];	m[4] = m_[5];	m[5] = m_[6];
+	m[6] = m_[8];	m[7] = m_[9];	m[8] = m_[10];
+}
+
+Matrix3::Matrix3(const Matrix4x3& m_){
+	m[0] = m_[0];	m[1] = m_[1];	m[2] = m_[2];
+	m[3] = m_[3];	m[4] = m_[4];	m[5] = m_[5];
+	m[6] = m_[6];	m[7] = m_[7];	m[8] = m_[8];
 }
 
 Matrix3& Matrix3::operator =(const Matrix4& m_){
@@ -123,26 +128,30 @@ Matrix3 Matrix3::Transpose(const Matrix3& m_){
 	return m_.Transpose();
 }
 
+constexpr float Matrix3::Determinant() const{
+	return	m[0] * (m[4] * m[8] - m[7] * m[5]) -
+			m[1] * (m[3] * m[8] - m[5] * m[6]) +
+			m[2] * (m[3] * m[7] - m[4] * m[6]);
+}
+
+constexpr float Matrix3::Determinant(const Matrix3& m_){
+	return m_.Determinant();
+}
+
 Matrix3 Matrix3::Inverse() const{
-	float det =	m[0] * (m[4] * m[8] - m[7] * m[5]) -
-				m[1] * (m[3] * m[8] - m[5] * m[6]) +
-				m[2] * (m[3] * m[7] - m[4] * m[6]);
+	float invdet = Math::SafeDivide(1.0f, Determinant());
 
-	float invdet = Math::SafeDivide(1.0f, det);
-
-	Matrix3 inverse = Matrix3::Identity();
-
-	inverse[0] = (m[4] * m[8] - m[7] * m[5]) * invdet;
-	inverse[1] = (m[2] * m[7] - m[1] * m[8]) * invdet;
-	inverse[2] = (m[1] * m[5] - m[2] * m[4]) * invdet;
-	inverse[3] = (m[5] * m[6] - m[3] * m[8]) * invdet;
-	inverse[4] = (m[0] * m[8] - m[2] * m[6]) * invdet;
-	inverse[5] = (m[3] * m[2] - m[0] * m[5]) * invdet;
-	inverse[6] = (m[3] * m[7] - m[6] * m[4]) * invdet;
-	inverse[7] = (m[6] * m[1] - m[0] * m[7]) * invdet;
-	inverse[8] = (m[0] * m[4] - m[3] * m[1]) * invdet;
-
-	return inverse;
+	return Matrix3(
+		(m[4] * m[8] - m[7] * m[5]) * invdet,
+		(m[2] * m[7] - m[1] * m[8]) * invdet,
+		(m[1] * m[5] - m[2] * m[4]) * invdet,
+		(m[5] * m[6] - m[3] * m[8]) * invdet,
+		(m[0] * m[8] - m[2] * m[6]) * invdet,
+		(m[3] * m[2] - m[0] * m[5]) * invdet,
+		(m[3] * m[7] - m[6] * m[4]) * invdet,
+		(m[6] * m[1] - m[0] * m[7]) * invdet,
+		(m[0] * m[4] - m[3] * m[1]) * invdet
+	);
 }
 
 Matrix3 Matrix3::Inverse(const Matrix3& m_){
@@ -150,14 +159,7 @@ Matrix3 Matrix3::Inverse(const Matrix3& m_){
 }
 
 Matrix2 Matrix3::ToMatrix2() const{
-	Matrix2 m_ = Matrix2::Identity();
-
-	m_[0] = m[0];
-	m_[1] = m[1];
-	m_[2] = m[3];
-	m_[3] = m[4];
-
-	return m_;
+	return Matrix2(*this);
 }
 
 Matrix2 Matrix3::ToMatrix2(const Matrix3& m_){
@@ -165,31 +167,23 @@ Matrix2 Matrix3::ToMatrix2(const Matrix3& m_){
 }
 
 Matrix4 Matrix3::ToMatrix4() const{
-	Matrix4 m_ = Matrix4::Identity();
-
-	m_[0] = m[0];
-	m_[1] = m[1];
-	m_[2] = m[2];
-	m_[4] = m[3];
-	m_[5] = m[4];
-	m_[6] = m[5];
-	m_[8] = m[6];
-	m_[9] = m[7];
-	m_[10] = m[8];
-
-	return m_;
+	return Matrix4(*this);
 }
 
 Matrix4 Matrix3::ToMatrix4(const Matrix3& m_){
 	return m_.ToMatrix4();
 }
 
+Matrix4x3 Matrix3::ToMatrix4x3() const{
+	return Matrix4x3(*this);
+}
+
+Matrix4x3 Matrix3::ToMatrix4x3(const Matrix3& m_){
+	return m_.ToMatrix4x3();
+}
+
 std::string Matrix3::ToString() const{
-	std::string mString;
-
-	mString =	std::to_string(m[0]) + ", " + std::to_string(m[3]) + ", " + std::to_string(m[6]) + ",\n" +
-				std::to_string(m[1]) + ", " + std::to_string(m[4]) + ", " + std::to_string(m[7]) + ",\n" +
-				std::to_string(m[2]) + ", " + std::to_string(m[5]) + ", " + std::to_string(m[8]);
-
-	return mString;
+	return	std::to_string(m[0]) + ", " + std::to_string(m[3]) + ", " + std::to_string(m[6]) + ",\n" +
+			std::to_string(m[1]) + ", " + std::to_string(m[4]) + ", " + std::to_string(m[7]) + ",\n" +
+			std::to_string(m[2]) + ", " + std::to_string(m[5]) + ", " + std::to_string(m[8]);
 }

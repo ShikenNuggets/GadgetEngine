@@ -46,5 +46,8 @@
     <ClCompile Include="Math\Matrix4.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Math\Matrix4x3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
