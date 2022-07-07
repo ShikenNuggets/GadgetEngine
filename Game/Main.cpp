@@ -11,7 +11,7 @@ int main(int argc, char* argv[]){
 		_ASSERT(false);
 	}
 
-#ifdef _DEBUG
+#ifdef GADGET_DEBUG
 	Gadget::App::DeleteInstance();
 	std::cout << "The program is now complete." << std::endl;
 #endif //_DEBUG

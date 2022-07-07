@@ -110,6 +110,7 @@
     <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector.h" />
+    <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Random.h" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +124,7 @@
     <ClCompile Include="Math\Matrix4.cpp" />
     <ClCompile Include="Math\Matrix4x3.cpp" />
     <ClCompile Include="Math\Quaternion.cpp" />
+    <ClCompile Include="Memory\StackAllocator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

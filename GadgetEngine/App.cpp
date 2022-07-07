@@ -10,21 +10,21 @@ using namespace Gadget;
 App* App::instance = nullptr;
 
 App* App::GetInstance(){
-	if (instance == nullptr){
+	if(instance == nullptr){
 		instance = new App();
 	}
 
 	return instance;
 }
 
-#ifdef _DEBUG
+#ifdef GADGET_DEBUG
 void App::DeleteInstance(){
-	if (instance != nullptr){
+	if(instance != nullptr){
 		delete instance;
 		instance = nullptr;
 	}
 }
-#endif //_DEBUG
+#endif //GADGET_DEBUG
 
 void App::Initialize(){
 	Random::SetSeed();

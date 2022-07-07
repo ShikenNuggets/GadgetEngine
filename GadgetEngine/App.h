@@ -5,9 +5,9 @@ namespace Gadget{
 	public:
 		static App* GetInstance();
 
-		#ifdef _DEBUG
+		#ifdef GADGET_DEBUG
 		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
-		#endif //_DEBUG
+		#endif //GADGET_DEBUG
 
 		void Run();
 
