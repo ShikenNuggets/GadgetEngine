@@ -10,7 +10,7 @@ using namespace Gadget;
 
 Degree::Degree(float angle_) : angle(angle_){}
 
-Degree::Degree(const Radian& r){
+Degree::Degree(const Radian& r) : angle(0.0f){
 	*this = r.ToDegrees();
 }
 

@@ -104,6 +104,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Math\Angle.h" />
+    <ClInclude Include="Math\Euler.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Quaternion.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="Concurrency\SpinLock.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Math\Angle.cpp" />
+    <ClCompile Include="Math\Euler.cpp" />
     <ClCompile Include="Math\Matrix2.cpp" />
     <ClCompile Include="Math\Matrix3.cpp" />
     <ClCompile Include="Math\Matrix4.cpp" />

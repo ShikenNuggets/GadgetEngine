@@ -8,7 +8,7 @@ Matrix2::Matrix2() : m(){
 	*this = Identity();
 }
 
-Matrix2::Matrix2(float x1_, float x2_, float y1_, float y2_){
+Matrix2::Matrix2(float x1_, float x2_, float y1_, float y2_) : m(){
 	m[0] = x1_;
 	m[1] = x2_;
 	m[2] = y1_;
@@ -21,17 +21,17 @@ Matrix2::Matrix2(float fill_) : m(){
 	}
 }
 
-Matrix2::Matrix2(const Matrix3& m_){
+Matrix2::Matrix2(const Matrix3& m_) : m(){
 	m[0] = m_[0];	m[2] = m_[3];
 	m[1] = m_[1];	m[3] = m_[4];
 }
 
-Matrix2::Matrix2(const Matrix4& m_){
+Matrix2::Matrix2(const Matrix4& m_) : m(){
 	m[0] = m_[0];	m[2] = m_[4];
 	m[1] = m_[1];	m[3] = m_[5];
 }
 
-Matrix2::Matrix2(const Matrix4x3& m_){
+Matrix2::Matrix2(const Matrix4x3& m_) : m(){
 	m[0] = m_[0];	m[2] = m_[3];
 	m[1] = m_[1];	m[3] = m_[4];
 }

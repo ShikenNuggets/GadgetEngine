@@ -10,7 +10,7 @@ Matrix3::Matrix3() : m(){
 
 Matrix3::Matrix3(	float x1_, float x2_, float x3_,
 					float y1_, float y2_, float y3_,
-					float z1_, float z2_, float z3_){
+					float z1_, float z2_, float z3_) : m(){
 	m[0] = x1_; m[3] = y1_; m[6] = z1_;
 	m[1] = x2_; m[4] = y2_; m[7] = z2_;
 	m[2] = x3_; m[5] = y3_; m[8] = z3_;
@@ -22,19 +22,19 @@ Matrix3::Matrix3(const float fillValue) : m(){
 	}
 }
 
-Matrix3::Matrix3(const Matrix2& m_){
+Matrix3::Matrix3(const Matrix2& m_) : m(){
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = 0.0f;
 	m[3] = m_[2];	m[4] = m_[3];	m[5] = 0.0f;
 	m[6] = 0.0f;	m[7] = 0.0f;	m[8] = 1.0f;
 }
 
-Matrix3::Matrix3(const Matrix4& m_){
+Matrix3::Matrix3(const Matrix4& m_) : m(){
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = m_[2];
 	m[3] = m_[4];	m[4] = m_[5];	m[5] = m_[6];
 	m[6] = m_[8];	m[7] = m_[9];	m[8] = m_[10];
 }
 
-Matrix3::Matrix3(const Matrix4x3& m_){
+Matrix3::Matrix3(const Matrix4x3& m_) : m(){
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = m_[2];
 	m[3] = m_[3];	m[4] = m_[4];	m[5] = m_[5];
 	m[6] = m_[6];	m[7] = m_[7];	m[8] = m_[8];
@@ -182,6 +182,24 @@ Matrix4x3 Matrix3::ToMatrix4x3() const{
 
 Matrix4x3 Matrix3::ToMatrix4x3(const Matrix3& m_){
 	return m_.ToMatrix4x3();
+}
+
+Euler Matrix3::ToEuler() const{
+	Angle heading = Angle(0.0f);
+	Angle attitude = Math::Asin(m[1]);
+	Angle bank = Angle(0.0f);
+
+	if(m[1] >= 0.99f){
+		heading = Math::Atan2(m[6], m[8]);
+	}else if(m[1] <= -0.99f){
+		heading = Math::Atan2(m[6], m[8]);
+	}else{
+		heading = Math::Atan2(-m[2], m[0]);
+		attitude = Math::Asin(m[1]);
+		bank = Math::Atan2(-m[7], m[4]);
+	}
+
+	return Euler(bank, heading, attitude);
 }
 
 Quaternion Matrix3::ToQuaternion() const{

@@ -18,6 +18,9 @@
     <ClInclude Include="Math\Angle.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Euler.h">
+      <Filter>Math</Filter>
+    </ClInclude>
     <ClInclude Include="Math\Math.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -38,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Math\Angle.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Euler.cpp">
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Math\Matrix2.cpp">

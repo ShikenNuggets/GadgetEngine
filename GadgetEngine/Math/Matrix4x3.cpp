@@ -1,5 +1,7 @@
 #include "Matrix.h"
 
+#include "Quaternion.h"
+
 using namespace Gadget;
 
 Matrix4x3::Matrix4x3(){
@@ -119,7 +121,7 @@ Matrix4x3 Matrix4x3::Translate(const Vector3& v_){
 }
 
 Matrix4x3 Matrix4x3::Rotate(float angle_, const Vector3& v_){
-	//TODO - This implementation is convenient but not particularly efficient
+	//TODO - This is convenient but not particularly efficient
 	return Matrix4::Rotate(angle_, v_).ToMatrix4x3();
 }
 
@@ -134,10 +136,10 @@ Vector3 Matrix4x3::GetTranslation() const{
 	return Vector3(m[9], m[10], m[11]);
 }
 
-//Quaternion Matrix4x3::GetRotation() const{
-//	//TODO - This implementation is convenient but not particularly efficient
-//	return ToMatrix4().GetRotation();
-//}
+Quaternion Matrix4x3::GetRotation() const{
+	//TODO - This is convenient but not particularly efficient
+	return ToMatrix4().GetRotation();
+}
 
 Vector3 Matrix4x3::GetScale() const{
 	return Vector3(m[0], m[4], m[8]);
@@ -165,6 +167,14 @@ Matrix4 Matrix4x3::ToMatrix4() const{
 
 Matrix4 Matrix4x3::ToMatrix4(const Matrix4x3& m_){
 	return m_.ToMatrix4();
+}
+
+Euler Matrix4x3::ToEuler() const{
+	return Matrix3(*this).ToEuler();
+}
+
+Quaternion Matrix4x3::ToQuaternion() const{
+	return Matrix3(*this).ToQuaternion();
 }
 
 std::string Matrix4x3::ToString() const{

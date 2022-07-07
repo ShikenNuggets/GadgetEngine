@@ -2,6 +2,7 @@
 #define GADGET_MATRIX_H
 
 #include "Vector.h"
+#include "Euler.h"
 
 namespace Gadget{
 	class Matrix2;
@@ -110,6 +111,7 @@ namespace Gadget{
 		Matrix4x3 ToMatrix4x3() const;
 		static Matrix4x3 ToMatrix4x3(const Matrix3& m_);
 
+		Euler ToEuler() const;
 		Quaternion ToQuaternion() const;
 
 		std::string ToString() const;
@@ -176,7 +178,7 @@ namespace Gadget{
 		static Matrix4 Scale(const Vector3& v_);
 
 		Vector3 GetTranslation() const;
-		//Quaternion GetRotation() const;
+		Quaternion GetRotation() const;
 		Vector3 GetScale() const;
 
 		static Matrix4 LookAt(float eyeX, float eyeY, float eyeZ, float atX, float atY, float atZ, float upX, float upY, float upZ);
@@ -193,6 +195,9 @@ namespace Gadget{
 		static Matrix3 ToMatrix3(const Matrix4& m_);
 		Matrix4x3 ToMatrix4x3() const;
 		static Matrix4x3 ToMatrix4x3(const Matrix4& m_);
+
+		Euler ToEuler() const;
+		Quaternion ToQuaternion() const;
 
 		std::string ToString() const;
 
@@ -250,7 +255,7 @@ namespace Gadget{
 		static Matrix4x3 Scale(const Vector3& v_);
 
 		Vector3 GetTranslation() const;
-		//Quaternion GetRotation() const;
+		Quaternion GetRotation() const;
 		Vector3 GetScale() const;
 
 		Matrix2 ToMatrix2() const;
@@ -259,6 +264,9 @@ namespace Gadget{
 		static Matrix3 ToMatrix3(const Matrix4x3& m_);
 		Matrix4 ToMatrix4() const;
 		static Matrix4 ToMatrix4(const Matrix4x3& m_);
+
+		Euler ToEuler() const;
+		Quaternion ToQuaternion() const;
 
 		std::string ToString() const;
 

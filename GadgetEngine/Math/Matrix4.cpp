@@ -1,6 +1,7 @@
 #include "Matrix.h"
 
 #include "Math.h"
+#include "Quaternion.h"
 
 using namespace Gadget;
 
@@ -11,7 +12,7 @@ Matrix4::Matrix4() : m(){
 Matrix4::Matrix4(	float x1_, float x2_, float x3_, float x4_,
 					float y1_, float y2_, float y3_, float y4_,
 					float z1_, float z2_, float z3_, float z4_,
-					float w1_, float w2_, float w3_, float w4_){
+					float w1_, float w2_, float w3_, float w4_) : m(){
 	m[0] = x1_; m[4] = y1_; m[8] = z1_;  m[12] = w1_;
 	m[1] = x2_; m[5] = y2_; m[9] = z2_;  m[13] = w2_;
 	m[2] = x3_; m[6] = y3_; m[10] = z3_; m[14] = w3_;
@@ -24,21 +25,21 @@ Matrix4::Matrix4(float fill_) : m(){
 	}
 }
 
-Matrix4::Matrix4(const Matrix2& m_){
+Matrix4::Matrix4(const Matrix2& m_) : m(){
 	m[0] = m_[0];	m[4] = m_[2];	m[8] = 0.0f;	m[12] = 0.0f;
 	m[1] = m_[1];	m[5] = m_[3];	m[9] = 0.0f;	m[13] = 0.0f;
 	m[2] = 0.0f;	m[6] = 0.0f;	m[10] = 1.0f;	m[14] = 0.0f;
 	m[3] = 0.0f;	m[7] = 0.0f;	m[11] = 0.0f;	m[15] = 1.0f;
 }
 
-Matrix4::Matrix4(const Matrix3& m_){
+Matrix4::Matrix4(const Matrix3& m_) : m(){
 	m[0] = m_[0];	m[4] = m_[3];	m[8] = m_[6];	m[12] = 0.0f;
 	m[1] = m_[1];	m[5] = m_[4];	m[9] = m_[7];	m[13] = 0.0f;
 	m[2] = m_[2];	m[6] = m_[5];	m[10] = m_[8];	m[14] = 0.0f;
 	m[3] = 0.0f;	m[7] = 0.0f;	m[11] = 0.0f;	m[15] = 1.0f;
 }
 
-Matrix4::Matrix4(const Matrix4x3& m_){
+Matrix4::Matrix4(const Matrix4x3& m_) : m(){
 	m[0] = m_[0];	m[4] = m_[3];	m[8] = m_[6];	m[12] = m_[9];
 	m[1] = m_[1];	m[5] = m_[4];	m[9] = m_[7];	m[13] = m_[10];
 	m[2] = m_[2];	m[6] = m_[5];	m[10] = m_[8];	m[14] = m_[11];
@@ -280,9 +281,9 @@ Vector3 Matrix4::GetTranslation() const{
 	return Vector3(m[12], m[13], m[14]);
 }
 
-//Quaternion Matrix4::GetRotation() const{
-//	return ToQuaternion();
-//}
+Quaternion Matrix4::GetRotation() const{
+	return ToQuaternion();
+}
 
 Vector3 Matrix4::GetScale() const{
 	return Vector3(m[0], m[5], m[10]);
@@ -365,6 +366,14 @@ Matrix4x3 Matrix4::ToMatrix4x3() const{
 
 Matrix4x3 Matrix4::ToMatrix4x3(const Matrix4& m_){
 	return m_.ToMatrix4x3();
+}
+
+Euler Matrix4::ToEuler() const{
+	return Matrix3(*this).ToEuler();
+}
+
+Quaternion Matrix4::ToQuaternion() const{
+	return Matrix3(*this).ToQuaternion();
 }
 
 std::string Matrix4::ToString() const{
