@@ -24,6 +24,9 @@
     <ClInclude Include="Math\Math.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Math\MathObjects.h">
+      <Filter>Math</Filter>
+    </ClInclude>
     <ClInclude Include="Math\Matrix.h">
       <Filter>Math</Filter>
     </ClInclude>
