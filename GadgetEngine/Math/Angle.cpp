@@ -192,4 +192,4 @@ bool Radian::operator <=(float a_) const{ return angle <= a_; }
 bool Radian::operator <=(const Radian& r_) const{ return *this <= r_.Get(); }
 bool Radian::operator <=(const Degree& d_) const{ return angle <= d_.ToRadians(); }
 
-constexpr Radian::operator float() const { return Get(); }
+constexpr Radian::operator float() const{ return Get(); }

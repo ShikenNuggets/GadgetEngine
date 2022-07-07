@@ -8,6 +8,7 @@ namespace Gadget{
 	class Matrix3;
 	class Matrix4;
 	class Matrix4x3;
+	class Quaternion;
 
 	//Column Major Order
 	//[0][2]
@@ -108,6 +109,8 @@ namespace Gadget{
 		static Matrix4 ToMatrix4(const Matrix3& m_);
 		Matrix4x3 ToMatrix4x3() const;
 		static Matrix4x3 ToMatrix4x3(const Matrix3& m_);
+
+		Quaternion ToQuaternion() const;
 
 		std::string ToString() const;
 

@@ -81,21 +81,25 @@ Quaternion Quaternion::Normalized(const Quaternion& q_){
 	return q_ / Magnitude(q_);
 }
 
+Quaternion Quaternion::Conjugate() const{
+	return Quaternion(w, -x, -y, -z);
+}
+
 Quaternion Quaternion::Inverse() const{
-	const Quaternion conjugate = Quaternion(w, -x, -y, -z);
+	const Quaternion conjugate = Conjugate();
 	return conjugate / conjugate.SquaredMagnitude();
 }
 
-Quaternion Quaternion::Rotate(const float angle_, const Vector3& axis_){
+Quaternion Quaternion::Rotate(Angle angle_, const Vector3& axis_){
 	return Quaternion(
-		Math::CosR(Math::DegreesToRadians(angle_) / 2.0f),
-		Math::SinR(Math::DegreesToRadians(angle_) / 2.0f) * axis_.x,
-		Math::SinR(Math::DegreesToRadians(angle_) / 2.0f) * axis_.y,
-		Math::SinR(Math::DegreesToRadians(angle_) / 2.0f) * axis_.z
+		Math::CosR(angle_.ToRadians() / 2.0f),
+		axis_.x * Math::SinR(angle_.ToRadians() / 2.0f),
+		axis_.y * Math::SinR(angle_.ToRadians() / 2.0f),
+		axis_.z * Math::SinR(angle_.ToRadians() / 2.0f)
 	);
 }
 
-float Quaternion::GetRotationAngle(const Quaternion& q_){
+Angle Quaternion::GetRotationAngle(const Quaternion& q_){
 	return Math::Acos(q_.w) * 2.0f;
 }
 
@@ -114,12 +118,12 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 
 	Angle rotAngle = Math::Acos(dot);
 	Vector3 rotAxis = Vector3::Cross(Vector3::Forward(), forwardVector).Normalized();
-	return Quaternion::Rotate(rotAngle, rotAxis);
+	return Quaternion::Rotate(rotAngle.Get(), rotAxis);
 }
 
 Vector3 Quaternion::GetRotationAxis(const Quaternion& q_){
 	Vector3 v = Vector3(q_.x, q_.y, q_.z);
-	return v / Math::SinR(Math::DegreesToRadians(GetRotationAngle(q_) / 2.0f));
+	return v / Math::SinR((GetRotationAngle(q_) / 2.0f).ToRadians());
 }
 
 Quaternion Quaternion::Lerp(const Quaternion& q1_, const Quaternion& q2_, float t_){
@@ -141,6 +145,7 @@ Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float
 	const float sinTheta = Math::Sin(theta);
 
 	//Do a regular interpolation if theta is too small
+	//TODO - This cutoff is somewhat arbitrary and I don't know how it was chosen, or how necessary it really is
 	if(theta < 0.001f || sinTheta < 0.001f){
 		return Lerp(q1, q2, t_);
 	}
@@ -162,23 +167,23 @@ Matrix3 Quaternion::ToMatrix3(const Quaternion& q_){
 Matrix4 Quaternion::ToMatrix4() const{
 	//TODO - Validate this
 	//squared w,x,y,z
-	float qw = w * w;
-	float qx = x * x;
-	float qy = y * y;
-	float qz = z * z;
+	const float w2 = w * w;
+	const float x2 = x * x;
+	const float y2 = y * y;
+	const float z2 = z * z;
 
-	Matrix4 mat = mat.Identity();
-	mat[0] = 1 - 2 * qy - 2 * qz;
+	Matrix4 mat = Matrix4::Identity();
+	mat[0] = 1 - 2 * y2 - 2 * z2;
 	mat[4] = 2 * x * y - 2 * z * w ;
 	mat[8] = 2 * x * z + 2 * y * w;
 
 	mat[1] = 2 * x * y + 2 * z * w;
-	mat[5] = 1 - 2 * qx - 2 * qz;
+	mat[5] = 1 - 2 * x2 - 2 * z2;
 	mat[9] = 2 * y * z  - 2 * x * w;
 
 	mat[2] = 2 * x * z - 2 * y * w;
 	mat[6] = 2 * y * z + 2 * x * w;
-	mat[10] = 1 - 2 * qx - 2 * qy;
+	mat[10] = 1 - 2 * x2 - 2 * y2;
 	return mat;
 }
 

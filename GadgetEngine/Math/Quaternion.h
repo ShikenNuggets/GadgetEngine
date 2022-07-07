@@ -34,11 +34,12 @@ namespace Gadget{
 		Quaternion Normalized() const;
 		void Normalize();
 		static Quaternion Normalized(const Quaternion& q_);
+		Quaternion Conjugate() const;
 		Quaternion Inverse() const;
 		static constexpr float Dot(const Quaternion& a_, const Quaternion& b_);
 
-		static Quaternion Rotate(float angle_, const Vector3& axis_);
-		static float GetRotationAngle(const Quaternion& q_);
+		static Quaternion Rotate(Angle angle_, const Vector3& axis_);
+		static Angle GetRotationAngle(const Quaternion& q_);
 		static Vector3 GetRotationAxis(const Quaternion& q_);
 		static Quaternion LookAt(const Vector3& source_, const Vector3& destination_);
 

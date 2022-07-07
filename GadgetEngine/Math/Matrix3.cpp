@@ -1,5 +1,7 @@
 #include "Matrix.h"
 
+#include "Quaternion.h"
+
 using namespace Gadget;
 
 Matrix3::Matrix3() : m(){
@@ -180,6 +182,36 @@ Matrix4x3 Matrix3::ToMatrix4x3() const{
 
 Matrix4x3 Matrix3::ToMatrix4x3(const Matrix3& m_){
 	return m_.ToMatrix4x3();
+}
+
+Quaternion Matrix3::ToQuaternion() const{
+	//TODO - This feels inefficient
+	Quaternion q = Quaternion(
+		Math::Sqrt(std::max(0.0f, 1.0f + m[0] + m[4] + m[8])) / 2.0f,
+		Math::Sqrt(std::max(0.0f, 1.0f + m[0] - m[4] - m[8])) / 2.0f,
+		Math::Sqrt(std::max(0.0f, 1.0f - m[0] + m[4] - m[8])) / 2.0f,
+		Math::Sqrt(std::max(0.0f, 1.0f - m[0] - m[4] + m[8])) / 2.0f
+	);
+
+	if(m[5] - m[7] != 0.0f){
+		q.x = std::copysign(q.x, m[5] - m[7]);
+	}else{
+		q.x = 0.0f;
+	}
+
+	if(m[6] - m[2] != 0.0f){
+		q.y = std::copysign(q.y, m[6] - m[2]);
+	}else{
+		q.y = 0.0f;
+	}
+
+	if(m[1] - m[3] != 0.0f){
+		q.z = std::copysign(q.z, m[1] - m[3]);
+	}else{
+		q.z = 0.0f;
+	}
+
+	return Quaternion(q.w, q.x, q.y, q.z).Normalized();
 }
 
 std::string Matrix3::ToString() const{
