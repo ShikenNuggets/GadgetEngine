@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Debug.h"
+#include "Random.h"
 
 using namespace Gadget;
 
@@ -26,6 +27,7 @@ void App::DeleteInstance(){
 #endif //_DEBUG
 
 void App::Initialize(){
+	Random::SetSeed();
 }
 
 void App::Run(){
