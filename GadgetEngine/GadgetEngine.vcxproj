@@ -110,6 +110,7 @@
     <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector.h" />
+    <ClInclude Include="Memory\AlignedAllocator.h" />
     <ClInclude Include="Memory\DoubleStackAllocator.h" />
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
