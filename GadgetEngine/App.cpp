@@ -9,6 +9,10 @@ using namespace Gadget;
 
 App* App::instance = nullptr;
 
+App::App() : singleFrameAllocator(1024){}
+
+App::~App(){}
+
 App* App::GetInstance(){
 	if(instance == nullptr){
 		instance = new App();
@@ -36,8 +40,19 @@ void App::Run(){
 	bool isRunning = true;
 	while(isRunning){
 		//Main game loop
+
+		singleFrameAllocator.Clear();
+
 		Debug::Log("Game engine is running, press enter to exit.", Debug::Verbose);
 		std::cin.get();
 		break;
 	}
+}
+
+void* App::AllocateSingleFrameMemory(size_t bytes_){
+	if(bytes_ == 0 || !singleFrameAllocator.CanAllocate(bytes_)){
+		return nullptr;
+	}
+
+	return singleFrameAllocator.Allocate(bytes_);
 }

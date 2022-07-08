@@ -1,5 +1,7 @@
 #ifndef GADGET_APP_H
 
+#include "Memory/StackAllocator.h"
+
 namespace Gadget{
 	class App{
 	public:
@@ -11,11 +13,17 @@ namespace Gadget{
 
 		void Run();
 
+		//Allocate memory that will free itself at the end of the frame
+		//Do not cache this pointer beyond the frame boundary!!!
+		void* AllocateSingleFrameMemory(size_t bytes_);
+
 	private:
 		static App* instance;
 
-		App(){}
-		~App(){}
+		StackAllocator singleFrameAllocator;
+
+		App();
+		~App();
 
 		void Initialize();
 	};
