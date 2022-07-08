@@ -42,6 +42,9 @@
     <ClInclude Include="Memory\DoubleStackAllocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Memory\PoolAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
     <ClInclude Include="Memory\StackAllocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
