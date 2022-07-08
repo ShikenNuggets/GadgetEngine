@@ -9,7 +9,7 @@ using namespace Gadget;
 
 App* App::instance = nullptr;
 
-App::App() : singleFrameAllocator(1024){}
+App::App() : singleFrameAllocator(1024), twoFrameAllocator(1024){}
 
 App::~App(){}
 
@@ -41,7 +41,12 @@ void App::Run(){
 	while(isRunning){
 		//Main game loop
 
+		//Clear single frame and two frame allocators
+		//This must be the first thing that happens every frame
 		singleFrameAllocator.Clear();
+
+		twoFrameAllocator.SwapBuffers();
+		twoFrameAllocator.CurrentBuffer().Clear();
 
 		Debug::Log("Game engine is running, press enter to exit.", Debug::Verbose);
 		std::cin.get();
@@ -55,4 +60,12 @@ void* App::AllocateSingleFrameMemory(size_t bytes_){
 	}
 
 	return singleFrameAllocator.Allocate(bytes_);
+}
+
+void* App::AllocateTwoFrameMemory(size_t bytes_){
+	if(bytes_ == 0 || !twoFrameAllocator.CurrentBuffer().CanAllocate(bytes_)){
+		return nullptr;
+	}
+
+	return twoFrameAllocator.CurrentBuffer().Allocate(bytes_);
 }
