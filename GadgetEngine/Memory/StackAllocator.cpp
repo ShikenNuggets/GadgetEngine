@@ -52,6 +52,7 @@ void* StackAllocator::Allocate(size_t bytes_){
 void StackAllocator::FreeToMarker(Marker marker_){
 	_ASSERT(!markers.empty()); //Tried to free unallocated memory
 	_ASSERT(marker_ <= GetMarker()); //Tried to free unallocated memory
+	_ASSERT(marker_ < size); //Tried to free memory outside of the stack
 
 	while(GetMarker() > marker_){
 		#ifdef GADGET_DEBUG
@@ -76,7 +77,7 @@ void StackAllocator::Clear(){
 
 	#ifdef GADGET_DEBUG
 		//Fill the unused memory with garbage so we can detect memory corruption more easily
-		memset(GetTopPtr(), 0xDD, size);
+		memset(base, 0xDD, size);
 	#endif //GADGET_DEBUG
 }
 
@@ -87,6 +88,7 @@ void* StackAllocator::GetTopPtr() const{
 void* StackAllocator::GetMarkerPtr(Marker marker_) const{
 	_ASSERT(!markers.empty()); //Tried to get unallocated memory
 	_ASSERT(marker_ <= GetMarker()); //Tried to get unallocated memory
+	_ASSERT(marker_ < size); //Tried to get memory outside of the stack
 
 	if(marker_ <= GetMarker()){
 		return base;

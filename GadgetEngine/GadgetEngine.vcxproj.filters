@@ -39,6 +39,9 @@
     <ClInclude Include="Math\Vector.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Memory\DoubleStackAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
     <ClInclude Include="Memory\StackAllocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="Math\Quaternion.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\DoubleStackAllocator.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
     <ClCompile Include="Memory\StackAllocator.cpp">
       <Filter>Memory</Filter>
