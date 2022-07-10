@@ -11,6 +11,7 @@ project "SDL2"
 	location "_prj/"
 	kind "SharedLib"
 	language "C++"
+	warnings "Off"
 
 	targetdir ("../Build/%{prj.name}/%{cfg.buildcfg}/") 
 	objdir ("../Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
@@ -155,6 +156,7 @@ project "SDL2main"
 	location "_prj"
 	kind "StaticLib"
 	language "C++"
+	warnings "Off"
 
 	targetdir ("../Build/%{prj.name}/%{cfg.buildcfg}/") 
 	objdir ("../Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
