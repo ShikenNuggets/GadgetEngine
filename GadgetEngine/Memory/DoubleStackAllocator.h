@@ -35,6 +35,12 @@ namespace Gadget{
 
 		void* GetLowerMarkerPtr(LowerMarker marker_) const;
 		void* GetUpperMarkerPtr(UpperMarker marker_) const;
+
+		//Delete unwanted compiler-generated copy/move constructors and assignment operators
+		DoubleStackAllocator(const DoubleStackAllocator&) = delete;
+		DoubleStackAllocator(DoubleStackAllocator&&) = delete;
+		DoubleStackAllocator& operator=(const DoubleStackAllocator&) = delete;
+		DoubleStackAllocator& operator=(DoubleStackAllocator&&) = delete;
 	};
 }
 

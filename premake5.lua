@@ -29,6 +29,7 @@ project "GadgetEngine"
 	location "GadgetEngine"
 	kind "StaticLib"
 	language "C++"
+	warnings "Extra"
 	
 	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
 	objdir ("Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
@@ -67,6 +68,8 @@ project "GadgetEngine"
 		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
+		staticruntime "On"
+		runtime "Release"
 		
 		defines
 		{
@@ -89,6 +92,7 @@ project "GadgetEngine"
 project "Game"
 	location "Game"
 	language "C++"
+	warnings "Extra"
 	dpiawareness "HighPerMonitor"
 	
 	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
@@ -139,6 +143,8 @@ project "Game"
 		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
+		staticruntime "On"
+		runtime "Release"
 		
 		defines
 		{

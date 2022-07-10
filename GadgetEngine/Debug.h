@@ -19,7 +19,7 @@ namespace Gadget{
 	private:
 		static constexpr LogType logLevel = LogType::Verbose;
 
-		static std::string Debug::GetFileNameFromPath(const std::string& path_); //Helper function, TODO - Move this to a filesystem class or something
+		static std::string GetFileNameFromPath(const std::string& path_); //Helper function, TODO - Move this to a filesystem class or something
 	};
 }
 

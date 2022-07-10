@@ -71,12 +71,12 @@ Quaternion Euler::ToQuaternion() const{
 	float s2 = Math::SinR(attitude / 2.0f);
 	float s3 = Math::SinR(bank / 2.0f);
 
-	float w = c1 * c2 * c3 - s1 * s2 * s3;
-	float x = s1 * s2 * c3 + c1 * c2 * s3;
-	float y = s1 * c2 * c3 + c1 * s2 * s3;
-	float z = c1 * s2 * c3 - s1 * c2 * s3;
+	float newW = c1 * c2 * c3 - s1 * s2 * s3;
+	float newX = s1 * s2 * c3 + c1 * c2 * s3;
+	float newY = s1 * c2 * c3 + c1 * s2 * s3;
+	float newZ = c1 * s2 * c3 - s1 * c2 * s3;
 
-	return Quaternion(w, x, y, z).Normalized();
+	return Quaternion(newW, newX, newY, newZ).Normalized();
 }
 
 Quaternion Euler::ToQuaternion(const Euler& e_){

@@ -36,19 +36,19 @@ Matrix2::Matrix2(const Matrix4x3& m_) : m(){
 	m[1] = m_[1];	m[3] = m_[4];
 }
 
-constexpr float Matrix2::operator [](int i_) const{
-	_ASSERT(i_ > 0 || i_ < mat2Size);
+constexpr float Matrix2::operator [](unsigned int i_) const{
+	_ASSERT(i_ < mat2Size);
 	return m[i_];
 }
 
-constexpr float& Matrix2::operator [](int i_){
-	_ASSERT(i_ > 0 || i_ < mat2Size);
+constexpr float& Matrix2::operator [](unsigned int i_){
+	_ASSERT(i_ < mat2Size);
 	return m[i_];
 }
 
 Matrix2 Matrix2::operator +(const Matrix2& m_) const{
 	Matrix2 result = Matrix2(0.0f);
-	for(int i = 0; i < mat2Size; i++){
+	for(unsigned int i = 0; i < mat2Size; i++){
 		result[i] = m[i] + m_[i];
 	}
 

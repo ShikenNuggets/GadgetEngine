@@ -167,7 +167,7 @@ Matrix3 Quaternion::ToMatrix3(const Quaternion& q_){
 Matrix4 Quaternion::ToMatrix4() const{
 	//TODO - Validate this
 	//squared w,x,y,z
-	const float w2 = w * w;
+	//const float w2 = w * w;
 	const float x2 = x * x;
 	const float y2 = y * y;
 	const float z2 = z * z;

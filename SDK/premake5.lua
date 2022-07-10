@@ -102,6 +102,8 @@ project "SDL2"
 
 	filter "system:windows"
 		systemversion "latest"
+		staticruntime "On"
+		runtime "Release"
 		
 		defines { "_WINDOWS" }
 
@@ -143,13 +145,11 @@ project "SDL2"
 		
 	filter "configurations:Debug"
 		symbols "Default"
-
 		defines { "_DEBUG" }
 		
 	filter "configurations:Release"
 		symbols "On"
 		optimize "Speed"
-		
 		defines { "NDEBUG" }
 
 project "SDL2main"
@@ -178,7 +178,9 @@ project "SDL2main"
 
 	filter "system:windows"
 		systemversion "latest"
+		staticruntime "On"
+		runtime "Release"
 		
 	filter "configurations:Debug"
-		
+
 	filter "configurations:Release"

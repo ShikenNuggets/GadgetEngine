@@ -23,8 +23,8 @@ namespace Gadget{
 		explicit Matrix2(const Matrix4& m_);
 		explicit Matrix2(const Matrix4x3& m_);
 
-		constexpr float operator [](int i_) const; //This allows us to get elements
-		constexpr float& operator [](int i_); //This allows us to set elements
+		constexpr float operator [](unsigned int i_) const; //This allows us to get elements
+		constexpr float& operator [](unsigned int i_); //This allows us to set elements
 
 		Matrix2 operator +(const Matrix2& m_) const;
 		Matrix2 operator -(const Matrix2& m_) const;
@@ -79,8 +79,8 @@ namespace Gadget{
 
 		Matrix3& operator =(const Matrix4& m_);
 
-		constexpr float operator [](int i_) const; //This allows us to get elements
-		constexpr float& operator [](int i_); //This allows us to set elements
+		constexpr float operator [](unsigned int i_) const; //This allows us to get elements
+		constexpr float& operator [](unsigned int i_); //This allows us to set elements
 
 		Matrix3 operator +(const Matrix3& m_) const;
 		Matrix3 operator -(const Matrix3& m_) const;
@@ -138,8 +138,8 @@ namespace Gadget{
 		explicit Matrix4(const Matrix3& m_);
 		explicit Matrix4(const Matrix4x3& m_);
 
-		constexpr float operator [](int i_) const; //This allows us to get elements
-		constexpr float& operator [](int i_); //This allows us to set elements
+		constexpr float operator [](unsigned int i_) const; //This allows us to get elements
+		constexpr float& operator [](unsigned int i_); //This allows us to set elements
 
 		Matrix4 operator +(const Matrix4& m_) const;
 		Matrix4 operator -(const Matrix4& m_) const;
@@ -222,8 +222,8 @@ namespace Gadget{
 		explicit Matrix4x3(const Matrix3& m_);
 		explicit Matrix4x3(const Matrix4& m_);
 
-		constexpr float operator [](int i_) const; //This allows us to get elements
-		constexpr float& operator [](int i_); //This allows us to set elements
+		constexpr float operator [](unsigned int i_) const; //This allows us to get elements
+		constexpr float& operator [](unsigned int i_); //This allows us to set elements
 
 		Matrix4x3 operator +(const Matrix4x3& m_) const;
 		Matrix4x3 operator -(const Matrix4x3& m_) const;

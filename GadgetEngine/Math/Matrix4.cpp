@@ -46,19 +46,19 @@ Matrix4::Matrix4(const Matrix4x3& m_) : m(){
 	m[3] = 0.0f;	m[7] = 0.0f;	m[11] = 0.0f;	m[15] = 1.0f;
 }
 
-constexpr float Matrix4::operator [](int i_) const{
-	_ASSERT(i_ > 0 || i_ < mat4Size);
+constexpr float Matrix4::operator [](unsigned int i_) const{
+	_ASSERT(i_ < mat4Size);
 	return m[i_];
 }
 
-constexpr float& Matrix4::operator [](int i_){
-	_ASSERT(i_ > 0 || i_ < mat4Size);
+constexpr float& Matrix4::operator [](unsigned int i_){
+	_ASSERT(i_ < mat4Size);
 	return m[i_];
 }
 
 Matrix4 Matrix4::operator +(const Matrix4& m_) const{
 	Matrix4 result = Matrix4(0.0f);
-	for(int i = 0; i < mat4Size; i++){
+	for(unsigned int i = 0; i < mat4Size; i++){
 		result[i] = m[i] + m_[i];
 	}
 
@@ -67,7 +67,7 @@ Matrix4 Matrix4::operator +(const Matrix4& m_) const{
 
 Matrix4 Matrix4::operator -(const Matrix4& m_) const{
 	Matrix4 result = Matrix4(0.0f);
-	for(int i = 0; i < mat4Size; i++){
+	for(unsigned int i = 0; i < mat4Size; i++){
 		result[i] = m[i] - m_[i];
 	}
 

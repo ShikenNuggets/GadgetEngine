@@ -31,6 +31,12 @@ namespace Gadget{
 		~App();
 
 		void Initialize();
+
+		//Delete unwanted compiler-generated copy/move constructors and assignment operators
+		App(const App&) = delete;
+		App(App&&) = delete;
+		App& operator=(const App&) = delete;
+		App& operator=(App&&) = delete;
 	};
 }
 

@@ -47,19 +47,19 @@ Matrix3& Matrix3::operator =(const Matrix4& m_){
 	return *this;
 }
 
-constexpr float Matrix3::operator [](int i_) const{
-	_ASSERT(i_ > 0 || i_ < mat3Size);
+constexpr float Matrix3::operator [](unsigned int i_) const{
+	_ASSERT(i_ < mat3Size);
 	return m[i_];
 }
 
-constexpr float& Matrix3::operator [](int i_){
-	_ASSERT(i_ > 0 || i_ < mat3Size);
+constexpr float& Matrix3::operator [](unsigned int i_){
+	_ASSERT(i_ < mat3Size);
 	return m[i_];
 }
 
 Matrix3 Matrix3::operator +(const Matrix3& m_) const{
 	Matrix3 result = Matrix3(0.0f);
-	for(int i = 0; i < mat3Size; i++){
+	for(unsigned int i = 0; i < mat3Size; i++){
 		result[i] = m[i] + m_[i];
 	}
 

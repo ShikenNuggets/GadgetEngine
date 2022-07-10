@@ -41,19 +41,19 @@ Matrix4x3::Matrix4x3(const Matrix4& m_){
 	m[2] = m_[2];	m[5] = m_[6];	m[8] = m_[10];	m[11] = m_[14];
 }
 
-constexpr float Matrix4x3::operator [](int i_) const{
-	_ASSERT(i_ > 0 || i_ < mat4x3Size); //TODO - Custom assert macro
+constexpr float Matrix4x3::operator [](unsigned int i_) const{
+	_ASSERT(i_ < mat4x3Size); //TODO - Custom assert macro
 	return m[i_];
 }
 
-constexpr float& Matrix4x3::operator [](int i_){
-	_ASSERT(i_ > 0 || i_ < mat4x3Size); //TODO - Custom assert macro
+constexpr float& Matrix4x3::operator [](unsigned int i_){
+	_ASSERT(i_ < mat4x3Size); //TODO - Custom assert macro
 	return m[i_];
 }
 
 Matrix4x3 Matrix4x3::operator +(const Matrix4x3& m_) const{
 	Matrix4x3 result = Matrix4x3(0.0f);
-	for(int i = 0; i < mat4x3Size; i++){
+	for(unsigned int i = 0; i < mat4x3Size; i++){
 		result[i] = m[i] + m_[i];
 	}
 
@@ -62,7 +62,7 @@ Matrix4x3 Matrix4x3::operator +(const Matrix4x3& m_) const{
 
 Matrix4x3 Matrix4x3::operator -(const Matrix4x3& m_) const{
 	Matrix4x3 result = Matrix4x3(0.0f);
-	for(int i = 0; i < mat4x3Size; i++){
+	for(unsigned int i = 0; i < mat4x3Size; i++){
 		result[i] = m[i] - m_[i];
 	}
 

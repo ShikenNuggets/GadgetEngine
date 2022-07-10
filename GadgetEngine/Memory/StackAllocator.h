@@ -25,6 +25,12 @@ namespace Gadget{
 
 		void* GetTopPtr() const;
 		void* GetMarkerPtr(Marker marker_) const;
+
+		//Delete unwanted compiler-generated copy/move constructors and assignment operators
+		StackAllocator(const StackAllocator&) = delete;
+		StackAllocator(StackAllocator&&) = delete;
+		StackAllocator& operator=(const StackAllocator&) = delete;
+		StackAllocator& operator=(StackAllocator&&) = delete;
 	};
 
 	class DoubleBufferedStackAllocator{
@@ -45,6 +51,12 @@ namespace Gadget{
 
 		uint8_t currentStack;
 		StackAllocator stacks[numStacks];
+
+		//Delete unwanted compiler-generated copy/move constructors and assignment operators
+		DoubleBufferedStackAllocator(const DoubleBufferedStackAllocator&) = delete;
+		DoubleBufferedStackAllocator(DoubleBufferedStackAllocator&&) = delete;
+		DoubleBufferedStackAllocator& operator=(const DoubleBufferedStackAllocator&) = delete;
+		DoubleBufferedStackAllocator& operator=(DoubleBufferedStackAllocator&&) = delete;
 	};
 }
 
