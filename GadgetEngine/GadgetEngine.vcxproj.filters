@@ -10,6 +10,9 @@
     <Filter Include="Memory">
       <UniqueIdentifier>{BE94DDC2-AA36-0899-93F1-1BED7F328FE9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
@@ -52,6 +55,12 @@
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="Random.h" />
+    <ClInclude Include="Utils\Hash.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StringID.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -85,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="Memory\StackAllocator.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StringID.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -115,6 +115,8 @@
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="Utils\Hash.h" />
+    <ClInclude Include="Utils\StringID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -129,6 +131,7 @@
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Memory\DoubleStackAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
+    <ClCompile Include="Utils\StringID.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
