@@ -19,25 +19,22 @@ namespace Gadget{
 		Angle y;
 		Angle z;
 
-		explicit Euler(Angle x_ = 0.0f, Angle y_ = 0.0f, Angle z_ = 0.0f);
-		explicit Euler(const Vector3& v_);
+		explicit constexpr Euler(Angle x_ = 0.0f, Angle y_ = 0.0f, Angle z_ = 0.0f);
+		explicit constexpr Euler(const Vector3& v_);
 
-		Euler operator -() const;
-		Euler operator +(const Euler& e_) const;
-		Euler operator -(const Euler& e_) const;
-		Euler operator *(float f) const;
-		Euler operator /(float f) const;
-		void operator +=(const Euler& e_);
-		void operator -=(const Euler& e_);
-		void operator *=(float f);
-		void operator /=(float f);
+		constexpr Euler operator -() const;
+		constexpr Euler operator +(const Euler& e_) const;
+		constexpr Euler operator -(const Euler& e_) const;
+		constexpr Euler operator *(float f) const;
+		constexpr Euler operator /(float f) const;
+		constexpr void operator +=(const Euler& e_);
+		constexpr void operator -=(const Euler& e_);
+		constexpr void operator *=(float f);
+		constexpr void operator /=(float f);
 
-		Matrix3 ToMatrix3() const;
-		static Matrix3 ToMatrix3(const Euler& e_);
-		Matrix4 ToMatrix4() const;
-		static Matrix4 ToMatrix4(const Euler& e_);
+		constexpr Matrix3 ToMatrix3() const;
+		constexpr Matrix4 ToMatrix4() const;
 		Quaternion ToQuaternion() const;
-		static Quaternion ToQuaternion(const Euler& e_);
 
 		std::string ToString() const;
 	};

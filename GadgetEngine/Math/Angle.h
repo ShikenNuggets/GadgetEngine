@@ -6,77 +6,77 @@ namespace Gadget{
 	class Degree;
 	class Radian;
 
-	typedef Degree Angle; //Change this if you want to use Radians by default
+	typedef Degree Angle; //Changing this will break everything but will allow you to use Radians by default if you desire
 
 	class Degree{
 	public:
-		Degree(float angle_ = 0.0f);
-		explicit Degree(const Radian& r_);
-		Degree& operator =(float a_);
-		Degree& operator =(Radian& r_);
+		constexpr Degree(float angle_ = 0.0f);
+		explicit constexpr Degree(const Radian& r_);
+		constexpr Degree& operator =(float a_);
+		constexpr Degree& operator =(Radian& r_);
 
-		Radian ToRadians() const;
-		float ToRadiansValue() const;
+		constexpr Radian ToRadians() const;
+		constexpr float ToRadiansValue() const;
 
 		constexpr float Get() const{ return angle; }
 
-		Degree operator -() const;
-		Degree operator +(float a_) const;
-		Degree operator +(const Radian& r_) const;
-		Degree operator +(const Degree& d_) const;
-		Degree operator -(float a_) const;
-		Degree operator -(const Radian& r_) const;
-		Degree operator -(const Degree& d_) const;
-		Degree operator *(float a_) const;
-		Degree operator *(const Radian& r_) const;
-		Degree operator *(const Degree& d_) const;
-		Degree operator /(float a_) const;
-		Degree operator /(const Radian& r_) const;
-		Degree operator /(const Degree& d_) const;
+		constexpr Degree operator -() const;
+		constexpr Degree operator +(float a_) const;
+		constexpr Degree operator +(const Radian& r_) const;
+		constexpr Degree operator +(const Degree& d_) const;
+		constexpr Degree operator -(float a_) const;
+		constexpr Degree operator -(const Radian& r_) const;
+		constexpr Degree operator -(const Degree& d_) const;
+		constexpr Degree operator *(float a_) const;
+		constexpr Degree operator *(const Radian& r_) const;
+		constexpr Degree operator *(const Degree& d_) const;
+		constexpr Degree operator /(float a_) const;
+		constexpr Degree operator /(const Radian& r_) const;
+		constexpr Degree operator /(const Degree& d_) const;
 
-		inline friend Degree operator +(float a_, const Degree& d_){ return d_ + a_; }
-		inline friend Degree operator -(float a_, const Degree& d_){ return d_ - a_; }
-		inline friend Degree operator *(float a_, const Degree& d_){ return d_ * a_; }
-		inline friend Degree operator /(float a_, const Degree& d_){ return d_ / a_; }
+		inline friend constexpr Degree operator +(float a_, const Degree& d_){ return d_ + a_; }
+		inline friend constexpr Degree operator -(float a_, const Degree& d_){ return d_ - a_; }
+		inline friend constexpr Degree operator *(float a_, const Degree& d_){ return d_ * a_; }
+		inline friend constexpr Degree operator /(float a_, const Degree& d_){ return d_ / a_; }
 
-		void operator +=(float a_);
-		void operator +=(const Radian& r_);
-		void operator +=(const Degree& d_);
-		void operator -=(float a_);
-		void operator -=(const Radian& r_);
-		void operator -=(const Degree& d_);
-		void operator *=(float a_);
-		void operator *=(const Radian& r_);
-		void operator *=(const Degree& d_);
-		void operator /=(float a_);
-		void operator /=(const Radian& r_);
-		void operator /=(const Degree& d_);
+		constexpr void operator +=(float a_);
+		constexpr void operator +=(const Radian& r_);
+		constexpr void operator +=(const Degree& d_);
+		constexpr void operator -=(float a_);
+		constexpr void operator -=(const Radian& r_);
+		constexpr void operator -=(const Degree& d_);
+		constexpr void operator *=(float a_);
+		constexpr void operator *=(const Radian& r_);
+		constexpr void operator *=(const Degree& d_);
+		constexpr void operator /=(float a_);
+		constexpr void operator /=(const Radian& r_);
+		constexpr void operator /=(const Degree& d_);
 
-		bool operator ==(float a_) const;
-		bool operator ==(const Radian& r_) const;
-		bool operator ==(const Degree& d_) const;
-		bool operator !=(float a_) const;
-		bool operator !=(const Radian& r_) const;
-		bool operator !=(const Degree& d_) const;
-		bool operator >(float a_) const;
-		bool operator >(const Radian& r_) const;
-		bool operator >(const Degree& d_) const;
-		bool operator <(float a_) const;
-		bool operator <(const Radian& r_) const;
-		bool operator <(const Degree& d_) const;
-		bool operator >=(float a_) const;
-		bool operator >=(const Radian& r_) const;
-		bool operator >=(const Degree& d_) const;
-		bool operator <=(float a_) const;
-		bool operator <=(const Radian& r_) const;
-		bool operator <=(const Degree& d_) const;
+		constexpr bool operator ==(float a_) const;
+		constexpr bool operator ==(const Radian& r_) const;
+		constexpr bool operator ==(const Degree& d_) const;
+		constexpr bool operator !=(float a_) const;
+		constexpr bool operator !=(const Radian& r_) const;
+		constexpr bool operator !=(const Degree& d_) const;
+		constexpr bool operator >(float a_) const;
+		constexpr bool operator >(const Radian& r_) const;
+		constexpr bool operator >(const Degree& d_) const;
+		constexpr bool operator <(float a_) const;
+		constexpr bool operator <(const Radian& r_) const;
+		constexpr bool operator <(const Degree& d_) const;
+		constexpr bool operator >=(float a_) const;
+		constexpr bool operator >=(const Radian& r_) const;
+		constexpr bool operator >=(const Degree& d_) const;
+		constexpr bool operator <=(float a_) const;
+		constexpr bool operator <=(const Radian& r_) const;
+		constexpr bool operator <=(const Degree& d_) const;
 
-		inline friend bool operator ==(float a_, const Degree& d_)	{ return d_ == a_; }
-		inline friend bool operator !=(float a_, const Degree& d_)	{ return d_ != a_; }
-		inline friend bool operator >(float a_, const Degree& d_)	{ return d_ > a_; }
-		inline friend bool operator <(float a_, const Degree& d_)	{ return d_ < a_; }
-		inline friend bool operator >=(float a_, const Degree& d_)	{ return d_ >= a_; }
-		inline friend bool operator <=(float a_, const Degree& d_)	{ return d_ <= a_; }
+		inline friend constexpr bool operator ==(float a_, const Degree& d_)	{ return d_ == a_; }
+		inline friend constexpr bool operator !=(float a_, const Degree& d_)	{ return d_ != a_; }
+		inline friend constexpr bool operator >(float a_, const Degree& d_)		{ return d_ > a_; }
+		inline friend constexpr bool operator <(float a_, const Degree& d_)		{ return d_ < a_; }
+		inline friend constexpr bool operator >=(float a_, const Degree& d_)	{ return d_ >= a_; }
+		inline friend constexpr bool operator <=(float a_, const Degree& d_)	{ return d_ <= a_; }
 
 		constexpr operator float() const;
 
@@ -86,73 +86,73 @@ namespace Gadget{
 
 	class Radian{
 	public:
-		Radian(float angle_ = 0.0f);
-		explicit Radian(const Degree& d);
-		Radian& operator =(float a_);
-		Radian& operator =(Degree& r_);
+		constexpr Radian(float angle_ = 0.0f);
+		explicit constexpr Radian(const Degree& d);
+		constexpr Radian& operator =(float a_);
+		constexpr Radian& operator =(Degree& r_);
 
-		Degree ToDegrees() const;
-		float ToDegreesValue() const;
+		constexpr Degree ToDegrees() const;
+		constexpr float ToDegreesValue() const;
 
 		constexpr float Get() const{ return angle; }
 
-		Radian operator -() const;
-		Radian operator +(float a_) const;
-		Radian operator +(const Radian& r_) const;
-		Radian operator +(const Degree& d_) const;
-		Radian operator -(float a_) const;
-		Radian operator -(const Radian& r_) const;
-		Radian operator -(const Degree& d_) const;
-		Radian operator *(float a_) const;
-		Radian operator *(const Radian& r_) const;
-		Radian operator *(const Degree& d_) const;
-		Radian operator /(float a_) const;
-		Radian operator /(const Radian& r_) const;
-		Radian operator /(const Degree& d_) const;
+		constexpr Radian operator -() const;
+		constexpr Radian operator +(float a_) const;
+		constexpr Radian operator +(const Radian& r_) const;
+		constexpr Radian operator +(const Degree& d_) const;
+		constexpr Radian operator -(float a_) const;
+		constexpr Radian operator -(const Radian& r_) const;
+		constexpr Radian operator -(const Degree& d_) const;
+		constexpr Radian operator *(float a_) const;
+		constexpr Radian operator *(const Radian& r_) const;
+		constexpr Radian operator *(const Degree& d_) const;
+		constexpr Radian operator /(float a_) const;
+		constexpr Radian operator /(const Radian& r_) const;
+		constexpr Radian operator /(const Degree& d_) const;
 
-		inline friend Radian operator +(float a_, const Radian& d_) { return d_ + a_; }
-		inline friend Radian operator -(float a_, const Radian& d_) { return d_ - a_; }
-		inline friend Radian operator *(float a_, const Radian& d_) { return d_ * a_; }
-		inline friend Radian operator /(float a_, const Radian& d_) { return d_ / a_; }
+		inline friend constexpr Radian operator +(float a_, const Radian& d_){ return d_ + a_; }
+		inline friend constexpr Radian operator -(float a_, const Radian& d_){ return d_ - a_; }
+		inline friend constexpr Radian operator *(float a_, const Radian& d_){ return d_ * a_; }
+		inline friend constexpr Radian operator /(float a_, const Radian& d_){ return d_ / a_; }
 
-		void operator +=(float a_);
-		void operator +=(const Radian& r_);
-		void operator +=(const Degree& d_);
-		void operator -=(float a_);
-		void operator -=(const Radian& r_);
-		void operator -=(const Degree& d_);
-		void operator *=(float a_);
-		void operator *=(const Radian& r_);
-		void operator *=(const Degree& d_);
-		void operator /=(float a_);
-		void operator /=(const Radian& r_);
-		void operator /=(const Degree& d_);
+		constexpr void operator +=(float a_);
+		constexpr void operator +=(const Radian& r_);
+		constexpr void operator +=(const Degree& d_);
+		constexpr void operator -=(float a_);
+		constexpr void operator -=(const Radian& r_);
+		constexpr void operator -=(const Degree& d_);
+		constexpr void operator *=(float a_);
+		constexpr void operator *=(const Radian& r_);
+		constexpr void operator *=(const Degree& d_);
+		constexpr void operator /=(float a_);
+		constexpr void operator /=(const Radian& r_);
+		constexpr void operator /=(const Degree& d_);
 
-		bool operator ==(float a_) const;
-		bool operator ==(const Radian& r_) const;
-		bool operator ==(const Degree& d_) const;
-		bool operator !=(float a_) const;
-		bool operator !=(const Radian& r_) const;
-		bool operator !=(const Degree& d_) const;
-		bool operator >(float a_) const;
-		bool operator >(const Radian& r_) const;
-		bool operator >(const Degree& d_) const;
-		bool operator <(float a_) const;
-		bool operator <(const Radian& r_) const;
-		bool operator <(const Degree& d_) const;
-		bool operator >=(float a_) const;
-		bool operator >=(const Radian& r_) const;
-		bool operator >=(const Degree& d_) const;
-		bool operator <=(float a_) const;
-		bool operator <=(const Radian& r_) const;
-		bool operator <=(const Degree& d_) const;
+		constexpr bool operator ==(float a_) const;
+		constexpr bool operator ==(const Radian& r_) const;
+		constexpr bool operator ==(const Degree& d_) const;
+		constexpr bool operator !=(float a_) const;
+		constexpr bool operator !=(const Radian& r_) const;
+		constexpr bool operator !=(const Degree& d_) const;
+		constexpr bool operator >(float a_) const;
+		constexpr bool operator >(const Radian& r_) const;
+		constexpr bool operator >(const Degree& d_) const;
+		constexpr bool operator <(float a_) const;
+		constexpr bool operator <(const Radian& r_) const;
+		constexpr bool operator <(const Degree& d_) const;
+		constexpr bool operator >=(float a_) const;
+		constexpr bool operator >=(const Radian& r_) const;
+		constexpr bool operator >=(const Degree& d_) const;
+		constexpr bool operator <=(float a_) const;
+		constexpr bool operator <=(const Radian& r_) const;
+		constexpr bool operator <=(const Degree& d_) const;
 
-		inline friend bool operator ==(float a_, const Radian& d_)	{ return d_ == a_; }
-		inline friend bool operator !=(float a_, const Radian& d_)	{ return d_ != a_; }
-		inline friend bool operator >(float a_, const Radian& d_)	{ return d_ > a_; }
-		inline friend bool operator <(float a_, const Radian& d_)	{ return d_ < a_; }
-		inline friend bool operator >=(float a_, const Radian& d_)	{ return d_ >= a_; }
-		inline friend bool operator <=(float a_, const Radian& d_)	{ return d_ <= a_; }
+		inline friend constexpr bool operator ==(float a_, const Radian& d_)	{ return d_ == a_; }
+		inline friend constexpr bool operator !=(float a_, const Radian& d_)	{ return d_ != a_; }
+		inline friend constexpr bool operator >(float a_, const Radian& d_)		{ return d_ > a_; }
+		inline friend constexpr bool operator <(float a_, const Radian& d_)		{ return d_ < a_; }
+		inline friend constexpr bool operator >=(float a_, const Radian& d_)	{ return d_ >= a_; }
+		inline friend constexpr bool operator <=(float a_, const Radian& d_)	{ return d_ <= a_; }
 
 		constexpr operator float() const;
 

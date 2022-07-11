@@ -8,54 +8,46 @@
 
 using namespace Gadget;
 
-Euler::Euler(Angle x_, Angle y_, Angle z_) : x(x_), y(y_), z(z_){}
+constexpr Euler::Euler(Angle x_, Angle y_, Angle z_) : x(x_), y(y_), z(z_){}
 
-Euler::Euler(const Vector3& v_) : x(v_.x), y(v_.y), z(v_.z){}
+constexpr Euler::Euler(const Vector3& v_) : x(v_.x), y(v_.y), z(v_.z){}
 
-Euler Euler::operator -() const{
+constexpr Euler Euler::operator -() const{
 	return Euler(-x, -y, -z);
 }
 
-Euler Euler::operator +(const Euler& e_) const{
+constexpr Euler Euler::operator +(const Euler& e_) const{
 	return Euler(x + e_.x, y + e_.y, z + e_.z);
 }
 
-Euler Euler::operator -(const Euler& e_) const{
+constexpr Euler Euler::operator -(const Euler& e_) const{
 	return Euler(x - e_.x, y - e_.y, z - e_.z);
 }
 
-Euler Euler::operator *(float f_) const{
+constexpr Euler Euler::operator *(float f_) const{
 	return Euler(x * f_, y * f_, z * f_);
 }
 
-Euler Euler::operator /(float f_) const{
+constexpr Euler Euler::operator /(float f_) const{
 	return Euler(Math::SafeDivide(x, f_), Math::SafeDivide(y, f_));
 }
 
-void Euler::operator +=(const Euler& e_){ *this = *this + e_; }
+constexpr void Euler::operator +=(const Euler& e_){ *this = *this + e_; }
 
-void Euler::operator -=(const Euler& e_){ *this = *this - e_; }
+constexpr void Euler::operator -=(const Euler& e_){ *this = *this - e_; }
 
-void Euler::operator *=(float f_){ *this = *this * f_; }
+constexpr void Euler::operator *=(float f_){ *this = *this * f_; }
 
-void Euler::operator /=(float f_){ *this = *this / f_; }
+constexpr void Euler::operator /=(float f_){ *this = *this / f_; }
 
-Matrix3 Euler::ToMatrix3() const{
+constexpr Matrix3 Euler::ToMatrix3() const{
 	return Matrix3(ToMatrix4());
 }
 
-Matrix3 Euler::ToMatrix3(const Euler& e_){
-	return Matrix3(e_.ToMatrix4());
-}
-
-Matrix4 Euler::ToMatrix4() const{
+constexpr Matrix4 Euler::ToMatrix4() const{
 	return	Matrix4::Rotate(y, Vector3(0.0f, 1.0f, 0.0f)) *
 			Matrix4::Rotate(z, Vector3(0.0f, 0.0f, 1.0f)) * 
 			Matrix4::Rotate(x, Vector3(1.0f, 0.0f, 0.0f));
-}
-
-Matrix4 Euler::ToMatrix4(const Euler& e_){
-	return e_.ToMatrix4();
 }
 
 Quaternion Euler::ToQuaternion() const{
@@ -77,10 +69,6 @@ Quaternion Euler::ToQuaternion() const{
 	float newZ = c1 * s2 * c3 - s1 * c2 * s3;
 
 	return Quaternion(newW, newX, newY, newZ).Normalized();
-}
-
-Quaternion Euler::ToQuaternion(const Euler& e_){
-	return e_.ToQuaternion();
 }
 
 std::string Euler::ToString() const{

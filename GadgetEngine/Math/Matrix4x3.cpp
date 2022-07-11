@@ -4,38 +4,38 @@
 
 using namespace Gadget;
 
-Matrix4x3::Matrix4x3(){
+constexpr Matrix4x3::Matrix4x3() : m(){
 	*this = Identity();
 }
 
-Matrix4x3::Matrix4x3(float x1_, float x2_, float x3_,
+constexpr Matrix4x3::Matrix4x3(float x1_, float x2_, float x3_,
 				float y1_, float y2_, float y3_,
 				float z1_, float z2_, float z3_,
-				float w1_, float w2_, float w3_){
+				float w1_, float w2_, float w3_) : m(){
 	m[0] = x1_; m[3] = y1_; m[6] = z1_; m[9] = w1_;
 	m[1] = x2_; m[4] = y2_; m[7] = z2_; m[10] = w2_;
 	m[2] = x3_; m[5] = y3_; m[8] = z3_; m[11] = w3_;
 }
 
-Matrix4x3::Matrix4x3(float fill_){
+constexpr Matrix4x3::Matrix4x3(float fill_) : m(){
 	for(int i = 0; i < mat4x3Size; i++){
 		m[i] = fill_;
 	}
 }
 
-Matrix4x3::Matrix4x3(const Matrix2& m_){
+constexpr Matrix4x3::Matrix4x3(const Matrix2& m_) : m(){
 	m[0] = m_[0];	m[3] = m_[2];	m[6] = 0.0f;	m[9] = 0.0f;
 	m[1] = m_[1];	m[4] = m_[3];	m[7] = 0.0f;	m[10] = 0.0f;
 	m[2] = 0.0f;	m[5] = 0.0f;	m[8] = 1.0f;	m[11] = 0.0f;
 }
 
-Matrix4x3::Matrix4x3(const Matrix3& m_){
+constexpr Matrix4x3::Matrix4x3(const Matrix3& m_) : m(){
 	m[0] = m_[0];	m[3] = m_[3];	m[6] = m_[6];	m[9] = 0.0f;
 	m[1] = m_[1];	m[4] = m_[4];	m[7] = m_[7];	m[10] = 0.0f;
 	m[2] = m_[2];	m[5] = m_[5];	m[8] = m_[8];	m[11] = 0.0f;
 }
 
-Matrix4x3::Matrix4x3(const Matrix4& m_){
+constexpr Matrix4x3::Matrix4x3(const Matrix4& m_) : m(){
 	m[0] = m_[0];	m[3] = m_[4];	m[6] = m_[8];	m[9] = m_[12];
 	m[1] = m_[1];	m[4] = m_[5];	m[7] = m_[9];	m[10] = m_[13];
 	m[2] = m_[2];	m[5] = m_[6];	m[8] = m_[10];	m[11] = m_[14];
@@ -51,7 +51,7 @@ constexpr float& Matrix4x3::operator [](unsigned int i_){
 	return m[i_];
 }
 
-Matrix4x3 Matrix4x3::operator +(const Matrix4x3& m_) const{
+constexpr Matrix4x3 Matrix4x3::operator +(const Matrix4x3& m_) const{
 	Matrix4x3 result = Matrix4x3(0.0f);
 	for(unsigned int i = 0; i < mat4x3Size; i++){
 		result[i] = m[i] + m_[i];
@@ -60,7 +60,7 @@ Matrix4x3 Matrix4x3::operator +(const Matrix4x3& m_) const{
 	return result;
 }
 
-Matrix4x3 Matrix4x3::operator -(const Matrix4x3& m_) const{
+constexpr Matrix4x3 Matrix4x3::operator -(const Matrix4x3& m_) const{
 	Matrix4x3 result = Matrix4x3(0.0f);
 	for(unsigned int i = 0; i < mat4x3Size; i++){
 		result[i] = m[i] - m_[i];
@@ -69,11 +69,11 @@ Matrix4x3 Matrix4x3::operator -(const Matrix4x3& m_) const{
 	return result;
 }
 
-Matrix4x3 Matrix4x3::operator *(float s_) const{
+constexpr Matrix4x3 Matrix4x3::operator *(float s_) const{
 	return Matrix4x3(m[0] * s_, m[1] * s_, m[2] * s_, m[3] * s_, m[4] * s_, m[5] * s_, m[6] * s_, m[7] * s_, m[8] * s_, m[9] * s_, m[10] * s_, m[11] * s_);
 }
 
-Vector3 Matrix4x3::operator *(const Vector3& v_) const{
+constexpr Vector3 Matrix4x3::operator *(const Vector3& v_) const{
 	return Vector3(
 		Math::Dot4D(/*A*/ m[0], m[3], m[6], m[9], /*B*/ v_.x, v_.y, v_.z, 1.0f),
 		Math::Dot4D(/*A*/ m[1], m[4], m[7], m[10], /*B*/ v_.x, v_.y, v_.z, 1.0f),
@@ -81,7 +81,7 @@ Vector3 Matrix4x3::operator *(const Vector3& v_) const{
 	);
 }
 
-Matrix4x3 Matrix4x3::operator /(const float s) const{
+constexpr Matrix4x3 Matrix4x3::operator /(const float s) const{
 	return Matrix4x3(
 		Math::SafeDivide(m[0], s),
 		Math::SafeDivide(m[1], s),
@@ -98,41 +98,20 @@ Matrix4x3 Matrix4x3::operator /(const float s) const{
 	);
 }
 
-void Matrix4x3::operator +=(const Matrix4x3& m_){ *this = *this + m_; }
-void Matrix4x3::operator -=(const Matrix4x3& m_){ *this = *this - m_; }
-void Matrix4x3::operator *=(float s_){ *this = *this * s_; }
-void Matrix4x3::operator /=(float s_){ *this = *this / s_; }
+constexpr void Matrix4x3::operator +=(const Matrix4x3& m_){ *this = *this + m_; }
+constexpr void Matrix4x3::operator -=(const Matrix4x3& m_){ *this = *this - m_; }
+constexpr void Matrix4x3::operator *=(float s_){ *this = *this * s_; }
+constexpr void Matrix4x3::operator /=(float s_){ *this = *this / s_; }
 
 constexpr Matrix4x3::operator float*(){ return static_cast<float*>(&m[0]); }
 constexpr Matrix4x3::operator const float*() const{ return static_cast<const float*>(&m[0]); }
-
-Matrix4x3 Matrix4x3::Identity(){
-	return Matrix4x3(1.0f, 0.0f, 0.0f,
-					0.0f, 1.0f, 0.0f,
-					0.0f, 0.0f, 1.0f,
-					0.0f, 0.0f, 0.0f);
-}
-
-Matrix4x3 Matrix4x3::Translate(const Vector3& v_){
-	return Matrix4x3(1.0f, 0.0f, 0.0f,
-					0.0f, 1.0f, 0.0f,
-					0.0f, 0.0f, 1.0f,
-					v_.x, v_.y, v_.z);
-}
 
 Matrix4x3 Matrix4x3::Rotate(float angle_, const Vector3& v_){
 	//TODO - This is convenient but not particularly efficient
 	return Matrix4::Rotate(angle_, v_).ToMatrix4x3();
 }
 
-Matrix4x3 Matrix4x3::Scale(const Vector3& v_){
-	return Matrix4x3(v_.x, 0.0f, 0.0f,
-					0.0f, v_.y, 0.0f,
-					0.0f, 0.0f, v_.z,
-					0.0f, 0.0f, 0.0f);
-}
-
-Vector3 Matrix4x3::GetTranslation() const{
+constexpr Vector3 Matrix4x3::GetTranslation() const{
 	return Vector3(m[9], m[10], m[11]);
 }
 
@@ -141,32 +120,20 @@ Quaternion Matrix4x3::GetRotation() const{
 	return ToMatrix4().GetRotation();
 }
 
-Vector3 Matrix4x3::GetScale() const{
+constexpr Vector3 Matrix4x3::GetScale() const{
 	return Vector3(m[0], m[4], m[8]);
 }
 
-Matrix2 Matrix4x3::ToMatrix2() const{
+constexpr Matrix2 Matrix4x3::ToMatrix2() const{
 	return Matrix2(*this);
 }
 
-Matrix2 Matrix4x3::ToMatrix2(const Matrix4x3& m_){
-	return m_.ToMatrix2();
-}
-
-Matrix3 Matrix4x3::ToMatrix3() const{
+constexpr Matrix3 Matrix4x3::ToMatrix3() const{
 	return Matrix3(*this);
 }
 
-Matrix3 Matrix4x3::ToMatrix3(const Matrix4x3& m_){
-	return m_.ToMatrix3();
-}
-
-Matrix4 Matrix4x3::ToMatrix4() const{
+constexpr Matrix4 Matrix4x3::ToMatrix4() const{
 	return Matrix4(*this);
-}
-
-Matrix4 Matrix4x3::ToMatrix4(const Matrix4x3& m_){
-	return m_.ToMatrix4();
 }
 
 Euler Matrix4x3::ToEuler() const{

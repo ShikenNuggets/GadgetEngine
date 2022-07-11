@@ -6,17 +6,17 @@
 
 using namespace Gadget;
 
-Quaternion::Quaternion(float w_, float x_, float y_, float z_) : w(w_), x(x_), y(y_), z(z_){}
+constexpr Quaternion::Quaternion(float w_, float x_, float y_, float z_) : w(w_), x(x_), y(y_), z(z_){}
 
-Quaternion::Quaternion(const float w_, const Vector3& v_) : w(w_), x(v_.x), y(v_.y), z(v_.z){}
+constexpr Quaternion::Quaternion(const float w_, const Vector3& v_) : w(w_), x(v_.x), y(v_.y), z(v_.z){}
 
-Quaternion::Quaternion(const Vector4& v_) : w(v_.w), x(v_.x), y(v_.y), z(v_.z){}
+constexpr Quaternion::Quaternion(const Vector4& v_) : w(v_.w), x(v_.x), y(v_.y), z(v_.z){}
 
-Quaternion Quaternion::operator +(const Quaternion& q_) const{
+constexpr Quaternion Quaternion::operator +(const Quaternion& q_) const{
 	return Quaternion(w + q_.w, x + q_.x, y + q_.y, z + q_.z);
 }
 
-Quaternion Quaternion::operator *(const Quaternion& q_) const{
+constexpr Quaternion Quaternion::operator *(const Quaternion& q_) const{
 	return Quaternion(
 		-x * q_.x - y * q_.y - z * q_.z + w * q_.w,
 		x * q_.w + y * q_.z - z * q_.y + w * q_.x,
@@ -25,48 +25,36 @@ Quaternion Quaternion::operator *(const Quaternion& q_) const{
 	);
 }
 
-Quaternion Quaternion::operator *(float f_) const{
+constexpr Quaternion Quaternion::operator *(float f_) const{
 	return Quaternion(w * f_, x * f_, y * f_, z * f_);
 }
 
-Quaternion Quaternion::operator /(float f_) const{
+constexpr Quaternion Quaternion::operator /(float f_) const{
 	return Quaternion(Math::SafeDivide(w, f_), Math::SafeDivide(x, f_), Math::SafeDivide(y, f_), Math::SafeDivide(z, f_));
 }
 
-void Quaternion::operator +=(const Quaternion& q_){
+constexpr void Quaternion::operator +=(const Quaternion& q_){
 	*this = *this + q_;
 }
 
-void Quaternion::operator *=(const Quaternion& q_){
+constexpr void Quaternion::operator *=(const Quaternion& q_){
 	*this = *this * q_;
 }
 
-void Quaternion::operator *=(float f_){
+constexpr void Quaternion::operator *=(float f_){
 	*this = *this * f_;
 }
 
-void Quaternion::operator /=(float f_){
+constexpr void Quaternion::operator /=(float f_){
 	*this = *this / f_;
-}
-
-constexpr float Quaternion::Dot(const Quaternion& a_, const Quaternion& b_){
-	return Math::Dot4D(/*A*/ a_.w, a_.x, a_.y, a_.z, /*B*/ b_.w, b_.x, b_.y, b_.z);
 }
 
 constexpr float Quaternion::SquaredMagnitude() const{
 	return (w * w) + (x * x) + (y * y) + (z * z);
 }
 
-constexpr float Quaternion::SquaredMagnitude(const Quaternion& q_){
-	return q_.SquaredMagnitude();
-}
-
 float Quaternion::Magnitude() const{
 	return Math::Sqrt(SquaredMagnitude());
-}
-
-float Quaternion::Magnitude(const Quaternion& q_){
-	return q_.Magnitude();
 }
 
 Quaternion Quaternion::Normalized() const{
@@ -77,15 +65,11 @@ void Quaternion::Normalize(){
 	*this = Normalized();
 }
 
-Quaternion Quaternion::Normalized(const Quaternion& q_){
-	return q_ / Magnitude(q_);
-}
-
-Quaternion Quaternion::Conjugate() const{
+constexpr Quaternion Quaternion::Conjugate() const{
 	return Quaternion(w, -x, -y, -z);
 }
 
-Quaternion Quaternion::Inverse() const{
+constexpr Quaternion Quaternion::Inverse() const{
 	const Quaternion conjugate = Conjugate();
 	return conjugate / conjugate.SquaredMagnitude();
 }
@@ -101,6 +85,11 @@ Quaternion Quaternion::Rotate(Angle angle_, const Vector3& axis_){
 
 Angle Quaternion::GetRotationAngle(const Quaternion& q_){
 	return Math::Acos(q_.w) * 2.0f;
+}
+
+Vector3 Quaternion::GetRotationAxis(const Quaternion& q_){
+	Vector3 v = Vector3(q_.x, q_.y, q_.z);
+	return v / Math::SinR((GetRotationAngle(q_) / 2.0f).ToRadians());
 }
 
 Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination_){
@@ -121,13 +110,8 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 	return Quaternion::Rotate(rotAngle.Get(), rotAxis);
 }
 
-Vector3 Quaternion::GetRotationAxis(const Quaternion& q_){
-	Vector3 v = Vector3(q_.x, q_.y, q_.z);
-	return v / Math::SinR((GetRotationAngle(q_) / 2.0f).ToRadians());
-}
-
 Quaternion Quaternion::Lerp(const Quaternion& q1_, const Quaternion& q2_, float t_){
-	return Quaternion::Normalized((q1_ * (1 - t_) + q2_ * t_));
+	return (q1_ * (1 - t_) + q2_ * t_).Normalized();
 }
 
 Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float t_){
@@ -156,15 +140,11 @@ Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float
 	return qA + qB;
 }
 
-Matrix3 Quaternion::ToMatrix3() const{
+constexpr Matrix3 Quaternion::ToMatrix3() const{
 	return Matrix3(ToMatrix4());
 }
 
-Matrix3 Quaternion::ToMatrix3(const Quaternion& q_){
-	return q_.ToMatrix3();
-}
-
-Matrix4 Quaternion::ToMatrix4() const{
+constexpr Matrix4 Quaternion::ToMatrix4() const{
 	//TODO - Validate this
 	//squared w,x,y,z
 	//const float w2 = w * w;
@@ -187,41 +167,35 @@ Matrix4 Quaternion::ToMatrix4() const{
 	return mat;
 }
 
-Matrix4 Quaternion::ToMatrix4(const Quaternion& q_){
-	return q_.ToMatrix4();
-}
+Euler Quaternion::ToEuler() const{
+	float heading = 0.0f;
+	float attitude = 0.0f;
+	float bank = 0.0f;
 
-//Euler Quaternion::ToEuler() const{
-//	float heading, attitude, bank;
-//
-//	float sqw = w * w;
-//	float sqx = x * x;
-//	float sqy = y * y;
-//	float sqz = z * z;
-//	float unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-//	float test = x * y + z * w;
-//
-//	if (test > 0.499f * unit) { // singularity at north pole
-//		heading = 2.0f * atan2(x, w);
-//		attitude = Math::PI / 2.0f;
-//		bank = 0.0f;
-//		return Euler(Math::ConvertToDegrees(bank), Math::ConvertToDegrees(heading), Math::ConvertToDegrees(attitude));
-//	}
-//	if (test < -0.499f * unit) { // singularity at south pole
-//		heading = -2.0f * atan2(x, w);
-//		attitude = -Math::PI / 2.0f;
-//		bank = 0.0f;
-//		return Euler(Math::ConvertToDegrees(bank), Math::ConvertToDegrees(heading), Math::ConvertToDegrees(attitude));
-//	}
-//	heading = atan2(2.0f * y * w - 2.0f * x * z, sqx - sqy - sqz + sqw);
-//	attitude = asin(2.0f * test / unit);
-//	bank = atan2(2.0f * x * w - 2.0f * y * z, -sqx + sqy - sqz + sqw);
-//	return Euler(Math::ConvertToDegrees(bank), Math::ConvertToDegrees(heading), Math::ConvertToDegrees(attitude));\
-//}
-//
-//Euler Quaternion::ToEuler(const Quaternion& q_){
-//	return q_.ToEuler();
-//}
+	float sqw = w * w;
+	float sqx = x * x;
+	float sqy = y * y;
+	float sqz = z * z;
+	float unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+	float test = (x * y) + (z * w);
+
+	if(test > 0.499f * unit){ // singularity at north pole
+		heading = 2.0f * atan2(x, w);
+		attitude = Math::Pi / 2.0f;
+		bank = 0.0f;
+		return Euler(Math::RadiansToDegrees(bank), Math::RadiansToDegrees(heading), Math::RadiansToDegrees(attitude));
+	}else if (test < -0.499f * unit) { // singularity at south pole
+		heading = -2.0f * atan2(x, w);
+		attitude = -Math::Pi / 2.0f;
+		bank = 0.0f;
+		return Euler(Math::RadiansToDegrees(bank), Math::RadiansToDegrees(heading), Math::RadiansToDegrees(attitude));
+	}
+
+	heading = atan2(2.0f * y * w - 2.0f * x * z, sqx - sqy - sqz + sqw);
+	attitude = asin(2.0f * test / unit);
+	bank = atan2(2.0f * x * w - 2.0f * y * z, -sqx + sqy - sqz + sqw);
+	return Euler(Math::RadiansToDegrees(bank), Math::RadiansToDegrees(heading), Math::RadiansToDegrees(attitude));
+}
 
 std::string Quaternion::ToString() const{
 	return std::string(std::to_string(w) + ", (" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")");
