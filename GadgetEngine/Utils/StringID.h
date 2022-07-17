@@ -13,15 +13,15 @@ namespace Gadget{
 
 		static std::unordered_map<uint32_t, std::string> stringIdTable; //TODO - Replace this with a custom hash table with a constexpr Find function (would allow us to intern strings at compile time)
 
-		static StringID InternString(const std::string& str_); //TODO - Once this is constexpr, connect it to a user-defined literal
+		static StringID InternString(const std::string& str_); //TODO - Once this can be constexpr, connect it to a user-defined literal
 		static std::string GetStringFromID(StringID id_);
 
-		bool operator ==(StringID a_) const;
-		bool operator !=(StringID a_) const;
-		bool operator >(StringID a_) const;
-		bool operator <(StringID a_) const;
-		bool operator >=(StringID a_) const;
-		bool operator <=(StringID a_) const;
+		constexpr inline bool operator ==(StringID a_) const{ return id == a_.id; }
+		constexpr inline bool operator !=(StringID a_) const{ return id != a_.id; }
+		constexpr inline bool operator >(StringID a_) const{ return id > a_.id; }
+		constexpr inline bool operator <(StringID a_) const{ return id < a_.id; }
+		constexpr inline bool operator >=(StringID a_) const{ return id >= a_.id; }
+		constexpr inline bool operator <=(StringID a_) const{ return id <= a_.id; }
 	};
 }
 

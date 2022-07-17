@@ -30,10 +30,3 @@ std::string StringID::GetStringFromID(StringID id_){
 
 	return "";
 }
-
-bool StringID::operator ==(StringID a_) const{ return id == a_.id; }
-bool StringID::operator !=(StringID a_) const{ return id != a_.id; }
-bool StringID::operator >(StringID a_) const{ return id > a_.id; }
-bool StringID::operator <(StringID a_) const{ return id < a_.id; }
-bool StringID::operator >=(StringID a_) const{ return id >= a_.id; }
-bool StringID::operator <=(StringID a_) const{ return id <= a_.id; }
