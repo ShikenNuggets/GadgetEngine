@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "Config.h"
 #include "Debug.h"
 #include "Random.h"
 
@@ -31,6 +32,7 @@ void App::DeleteInstance(){
 #endif //GADGET_DEBUG
 
 void App::Initialize(){
+	Config::GetInstance(); //Init Config
 	Random::SetSeed();
 }
 
