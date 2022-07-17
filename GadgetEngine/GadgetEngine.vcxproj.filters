@@ -19,8 +19,10 @@
     <ClInclude Include="Concurrency\SpinLock.h">
       <Filter>Concurrency</Filter>
     </ClInclude>
+    <ClInclude Include="Config.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="LocManager.h" />
     <ClInclude Include="Math\Angle.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -67,7 +69,9 @@
     <ClCompile Include="Concurrency\SpinLock.cpp">
       <Filter>Concurrency</Filter>
     </ClCompile>
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="LocManager.cpp" />
     <ClCompile Include="Math\Angle.cpp">
       <Filter>Math</Filter>
     </ClCompile>

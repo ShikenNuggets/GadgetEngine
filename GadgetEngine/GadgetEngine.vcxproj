@@ -101,8 +101,10 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Concurrency\SpinLock.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="LocManager.h" />
     <ClInclude Include="Math\Angle.h" />
     <ClInclude Include="Math\Euler.h" />
     <ClInclude Include="Math\Math.h" />
@@ -121,7 +123,9 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Concurrency\SpinLock.cpp" />
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="LocManager.cpp" />
     <ClCompile Include="Math\Angle.cpp" />
     <ClCompile Include="Math\Euler.cpp" />
     <ClCompile Include="Math\Matrix2.cpp" />
