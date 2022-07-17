@@ -4,7 +4,7 @@
 #include <SDL.h>
 #pragma warning(default : 26819)
 
-#include <App.h>
+#include <Gadget.h>
 
 int main(int argc, char* argv[]){
 	if(argc > 0){

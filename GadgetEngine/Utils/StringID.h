@@ -6,7 +6,7 @@
 
 namespace Gadget{
 	struct StringID{
-		uint32_t id;
+		const uint32_t id;
 
 		explicit constexpr StringID(uint32_t id_);
 		std::string GetString() const;
@@ -16,12 +16,12 @@ namespace Gadget{
 		static StringID InternString(const std::string& str_); //TODO - Once this is constexpr, connect it to a user-defined literal
 		static std::string GetStringFromID(StringID id_);
 
-		constexpr bool operator ==(StringID a_) const;
-		constexpr bool operator !=(StringID a_) const;
-		constexpr bool operator >(StringID a_) const;
-		constexpr bool operator <(StringID a_) const;
-		constexpr bool operator >=(StringID a_) const;
-		constexpr bool operator <=(StringID a_) const;
+		bool operator ==(StringID a_) const;
+		bool operator !=(StringID a_) const;
+		bool operator >(StringID a_) const;
+		bool operator <(StringID a_) const;
+		bool operator >=(StringID a_) const;
+		bool operator <=(StringID a_) const;
 	};
 }
 

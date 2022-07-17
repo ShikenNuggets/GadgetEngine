@@ -4,6 +4,8 @@
 
 using namespace Gadget;
 
+Config* Config::instance = nullptr;
+
 Config::Config() : floatOptions(), stringOptions(){
 	LocManager* locMan = LocManager::GetInstance(); //Initialize Localization Manager
 	locMan->AddLanguage(StringID::InternString("ENG")); //TODO - Pull this from a config file

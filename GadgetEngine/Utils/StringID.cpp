@@ -24,16 +24,16 @@ StringID StringID::InternString(const std::string& str_){
 
 std::string StringID::GetStringFromID(StringID id_){
 	auto find = stringIdTable.find(id_.id);
-	if(find == stringIdTable.end()){
+	if(find != stringIdTable.end()){
 		return find->second;
 	}
 
 	return "";
 }
 
-constexpr bool StringID::operator ==(StringID id_) const{ return id == id_.id; }
-constexpr bool StringID::operator !=(StringID a_) const{ return id != a_.id; }
-constexpr bool StringID::operator >(StringID a_) const{ return id > a_.id; }
-constexpr bool StringID::operator <(StringID a_) const{ return id < a_.id; }
-constexpr bool StringID::operator >=(StringID a_) const{ return id >= a_.id; }
-constexpr bool StringID::operator <=(StringID a_) const{ return id <= a_.id; }
+bool StringID::operator ==(StringID a_) const{ return id == a_.id; }
+bool StringID::operator !=(StringID a_) const{ return id != a_.id; }
+bool StringID::operator >(StringID a_) const{ return id > a_.id; }
+bool StringID::operator <(StringID a_) const{ return id < a_.id; }
+bool StringID::operator >=(StringID a_) const{ return id >= a_.id; }
+bool StringID::operator <=(StringID a_) const{ return id <= a_.id; }
