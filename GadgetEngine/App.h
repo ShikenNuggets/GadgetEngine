@@ -1,5 +1,6 @@
 #ifndef GADGET_APP_H
 
+#include "Window.h"
 #include "Memory/StackAllocator.h"
 
 namespace Gadget{
@@ -24,6 +25,7 @@ namespace Gadget{
 	private:
 		static App* instance;
 
+		Window* window; //TODO - Smart pointer
 		StackAllocator singleFrameAllocator;
 		DoubleBufferedStackAllocator twoFrameAllocator;
 

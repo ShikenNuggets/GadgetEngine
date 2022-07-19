@@ -23,8 +23,8 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 		case LogType::Error:
 			finalMessage = "ERROR: ";
 			break;
-		case LogType::Critical:
-			finalMessage = "CRITICAL ERROR: ";
+		case LogType::FatalError:
+			finalMessage = "FATAL ERROR: ";
 			break;
 		default:
 			break;

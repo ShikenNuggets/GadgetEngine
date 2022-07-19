@@ -5,14 +5,18 @@
 #include "Config.h"
 #include "Debug.h"
 #include "Random.h"
+#include "Platform/Windows/Win32_Window.h"
 
 using namespace Gadget;
 
 App* App::instance = nullptr;
 
-App::App() : singleFrameAllocator(1024), twoFrameAllocator(1024){}
+App::App() : window(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){}
 
-App::~App(){}
+App::~App(){
+	delete window;
+	window = nullptr;
+}
 
 App* App::GetInstance(){
 	if(instance == nullptr){
@@ -34,6 +38,10 @@ void App::DeleteInstance(){
 void App::Initialize(){
 	Config::GetInstance(); //Init Config
 	Random::SetSeed();
+
+	#ifdef GADGET_PLATFORM_WIN32
+	window = new Win32_Window(800, 600);
+	#endif //GADGET_PLATFORM_WIN32
 }
 
 void App::Run(){

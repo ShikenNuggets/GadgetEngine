@@ -11,7 +11,7 @@ namespace Gadget{
 			Info		= 1,
 			Warning		= 2,
 			Error		= 3,
-			Critical	= 4
+			FatalError	= 4
 		};
 
 		static void Log(const std::string& message_, LogType type_ = LogType::Info, const std::string& fileName_ = "", int lineNumber = 0);
