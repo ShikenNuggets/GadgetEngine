@@ -4,6 +4,9 @@
     <Filter Include="Concurrency">
       <UniqueIdentifier>{700FC23E-DCC4-3A34-65B9-340BD16D3138}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{3A8963B1-262B-8E87-0FE6-A1DBFB2615D8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
     </Filter>
@@ -27,6 +30,18 @@
     </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Events\AppEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\KeyEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\MouseEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="LocManager.h" />
     <ClInclude Include="Math\Angle.h">

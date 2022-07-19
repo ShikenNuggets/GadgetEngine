@@ -1,5 +1,6 @@
 #include "StringID.h"
 
+#include "Debug.h"
 #include "Hash.h"
 
 using namespace Gadget;
@@ -17,6 +18,8 @@ StringID StringID::InternString(const std::string& str_){
 
 	if(stringIdTable.find(id.id) == stringIdTable.end()){
 		stringIdTable[id.id] = str_;
+	}else{
+		Debug::Log("The following string was interned multiple times. Avoid re-internment to improve performance. String was: " + str_, Debug::LogType::Warning);
 	}
 
 	return id;
