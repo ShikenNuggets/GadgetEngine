@@ -58,9 +58,8 @@ void App::Run(){
 		twoFrameAllocator.SwapBuffers();
 		twoFrameAllocator.CurrentBuffer().Clear();
 
-		Debug::Log("Game engine is running, press enter to exit.", Debug::Verbose);
-		std::cin.get();
-		break;
+		//Regular update follows
+		window->Update();
 	}
 }
 

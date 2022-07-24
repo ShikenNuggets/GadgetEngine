@@ -29,3 +29,23 @@ Win32_Window::~Win32_Window(){
 }
 
 SDL_Window* Win32_Window::GetSDLWindow() const{ return sdlWindow; }
+
+void Win32_Window::Update(){
+	SDL_Event e;
+	while(SDL_PollEvent(&e) != 0){
+		if(e.type == SDL_QUIT){
+			//TODO - WindowCloseEvent
+			return;
+		}
+
+		if(e.type == SDL_WINDOWEVENT){
+			switch(e.window.event){
+				case SDL_WINDOWEVENT_SIZE_CHANGED:
+					//TODO - Fire WindowResizedEvent
+					break;
+				default:
+					break;
+			}
+		}
+	}
+}

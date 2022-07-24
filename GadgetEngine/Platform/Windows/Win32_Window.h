@@ -13,6 +13,8 @@ namespace Gadget{
 
 		SDL_Window* GetSDLWindow() const;
 
+		virtual void Update() override;
+
 	private:
 		SDL_Window* sdlWindow;
 	};
