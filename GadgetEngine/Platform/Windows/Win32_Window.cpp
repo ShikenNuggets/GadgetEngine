@@ -1,6 +1,8 @@
 #include "Win32_Window.h"
 
 #include "Debug.h"
+#include "Events/AppEvent.h"
+#include "Events/EventHandler.h"
 
 using namespace Gadget;
 
@@ -34,7 +36,7 @@ void Win32_Window::Update(){
 	SDL_Event e;
 	while(SDL_PollEvent(&e) != 0){
 		if(e.type == SDL_QUIT){
-			//TODO - WindowCloseEvent
+			EventHandler::GetInstance()->HandleEvent(WindowCloseEvent());
 			return;
 		}
 

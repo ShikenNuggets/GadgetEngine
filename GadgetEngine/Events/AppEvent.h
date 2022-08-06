@@ -22,6 +22,7 @@ namespace Gadget{
 	};
 
 	class WindowCloseEvent : public Event{
+	public:
 		WindowCloseEvent() : Event(StringID::InternString("WindowCloseEvent")){}
 
 		static constexpr EventType Type(){ return EventType::WindowClose; }

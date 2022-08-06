@@ -11,7 +11,9 @@ namespace Gadget{
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		KeyPressed, KeyReleased,
 		MouseMoved, MouseScroll,
-		MouseButtonPressed, MouseButtonReleased
+		MouseButtonPressed, MouseButtonReleased,
+
+		Count //DO NOT PUT ANYTHING AFTER THIS
 	};
 
 	class Event{

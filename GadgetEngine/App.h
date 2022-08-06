@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Window.h"
+#include "Events/Event.h"
 #include "Memory/StackAllocator.h"
 
 namespace Gadget{
@@ -24,9 +25,12 @@ namespace Gadget{
 		//Only use this data for THIS frame or NEXT frame
 		void* AllocateTwoFrameMemory(size_t bytes_);
 
+		static void OnEvent(const Event& e_);
+
 	private:
 		static App* instance;
 
+		bool isRunning;
 		std::unique_ptr<Window> window;
 		StackAllocator singleFrameAllocator;
 		DoubleBufferedStackAllocator twoFrameAllocator;

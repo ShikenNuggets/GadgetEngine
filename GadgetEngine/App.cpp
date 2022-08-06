@@ -7,11 +7,15 @@
 #include "Random.h"
 #include "Platform/Windows/Win32_Window.h"
 
+#include "Events/EventHandler.h"
+
 using namespace Gadget;
 
 App* App::instance = nullptr;
 
-App::App() : window(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){}
+App::App() : isRunning(true), window(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
+}
 
 App::~App(){
 	window.reset(); //This isn't strictly necessary
@@ -46,7 +50,6 @@ void App::Initialize(){
 void App::Run(){
 	Initialize();
 
-	bool isRunning = true;
 	while(isRunning){
 		//Main game loop
 
@@ -59,6 +62,12 @@ void App::Run(){
 
 		//Regular update follows
 		window->Update();
+	}
+}
+
+void App::OnEvent(const Event& e_){
+	if(e_.GetEventType() == EventType::WindowClose){
+		GetInstance()->isRunning = false;
 	}
 }
 

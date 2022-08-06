@@ -105,6 +105,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Events\AppEvent.h" />
     <ClInclude Include="Events\Event.h" />
+    <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Events\KeyEvent.h" />
     <ClInclude Include="Events\MouseEvent.h" />
     <ClInclude Include="Gadget.h" />
@@ -132,6 +133,7 @@
     <ClCompile Include="Concurrency\SpinLock.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="LocManager.cpp" />
     <ClCompile Include="Math\Angle.cpp" />
     <ClCompile Include="Math\Euler.cpp" />
