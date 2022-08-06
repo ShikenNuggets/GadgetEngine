@@ -14,8 +14,7 @@ App* App::instance = nullptr;
 App::App() : window(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){}
 
 App::~App(){
-	delete window;
-	window = nullptr;
+	window.reset(); //This isn't strictly necessary
 }
 
 App* App::GetInstance(){
@@ -40,7 +39,7 @@ void App::Initialize(){
 	Random::SetSeed();
 
 	#ifdef GADGET_PLATFORM_WIN32
-	window = new Win32_Window(800, 600);
+	window = std::make_unique<Win32_Window>(800, 600);
 	#endif //GADGET_PLATFORM_WIN32
 }
 

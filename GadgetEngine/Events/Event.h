@@ -31,6 +31,7 @@ namespace Gadget{
 		friend class EventDispatcher;
 	};
 
+	//TODO - Not sure how I feel about this whole thing
 	class EventDispatcher{
 		template <class T>
 		using EventFn = std::function<bool>(T&);
