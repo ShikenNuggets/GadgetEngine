@@ -3,6 +3,7 @@
 #include "Debug.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
+#include "Events/KeyEvent.h"
 
 using namespace Gadget;
 
@@ -35,19 +36,57 @@ SDL_Window* Win32_Window::GetSDLWindow() const{ return sdlWindow; }
 void Win32_Window::Update(){
 	SDL_Event e;
 	while(SDL_PollEvent(&e) != 0){
+		switch(e.type){
+			case SDL_QUIT:
+				EventHandler::GetInstance()->HandleEvent(WindowCloseEvent());
+				return;
+			case SDL_WINDOWEVENT:
+				HandleWindowEvent(e);
+				break;
+			case SDL_KEYDOWN:
+				HandleKeyDownEvent(e);
+				break;
+			case SDL_KEYUP:
+				HandleKeyUpEvent(e);
+				break;
+			default:
+				break;
+		}
+
 		if(e.type == SDL_QUIT){
 			EventHandler::GetInstance()->HandleEvent(WindowCloseEvent());
 			return;
-		}
+		}else if(e.type == SDL_WINDOWEVENT){
+			int w = 0, h = 0;
 
-		if(e.type == SDL_WINDOWEVENT){
 			switch(e.window.event){
 				case SDL_WINDOWEVENT_SIZE_CHANGED:
-					//TODO - Fire WindowResizedEvent
+					SDL_GetWindowSize(sdlWindow, &w, &h);
+					EventHandler::GetInstance()->HandleEvent(WindowResizedEvent(w, h));
 					break;
 				default:
 					break;
 			}
 		}
 	}
+}
+
+void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
+	int w = 0, h = 0;
+	switch(e_.window.event){
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
+			SDL_GetWindowSize(sdlWindow, &w, &h);
+			EventHandler::GetInstance()->HandleEvent(WindowResizedEvent(w, h));
+			break;
+		default:
+			break;
+	}
+}
+
+void Win32_Window::HandleKeyDownEvent(const SDL_Event& e_){
+	EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(e_.key.keysym.sym)); //TODO - We probably shouldn't rely on SDL_Keycodes
+}
+
+void Win32_Window::HandleKeyUpEvent(const SDL_Event& e_){
+	EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(e_.key.keysym.sym)); //TODO - We probably shouldn't rely on SDL_Keycodes
 }
