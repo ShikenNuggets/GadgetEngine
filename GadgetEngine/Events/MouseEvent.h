@@ -23,19 +23,19 @@ namespace Gadget{
 
 	class MouseScrollEvent : public Event{
 	public:
-		MouseScrollEvent(int xOffset_, int yOffset_) : Event(StringID::InternString("MouseScrollEvent")), xOffset(xOffset_), yOffset(yOffset_){}
+		MouseScrollEvent(float xOffset_, float yOffset_) : Event(StringID::InternString("MouseScrollEvent")), xOffset(xOffset_), yOffset(yOffset_){}
 
 		static constexpr EventType Type(){ return EventType::MouseScroll; }
 		virtual EventType GetEventType() const override{ return Type(); }
 
-		inline int GetXOffset() const{ return xOffset; }
-		inline int GetYOffset() const{ return yOffset; }
+		inline float GetXOffset() const{ return xOffset; }
+		inline float GetYOffset() const{ return yOffset; }
 
 		virtual std::string ToString() const override{ return StringID::GetStringFromID(name) + ": " + std::to_string(xOffset) + ", " + std::to_string(yOffset); }
 
 	private:
-		int xOffset;
-		int yOffset;
+		float xOffset;
+		float yOffset;
 	};
 
 	class MouseButtonEvent : public Event{

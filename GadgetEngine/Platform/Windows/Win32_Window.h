@@ -19,8 +19,6 @@ namespace Gadget{
 		SDL_Window* sdlWindow;
 
 		void HandleWindowEvent(const SDL_Event& e_);
-		void HandleKeyDownEvent(const SDL_Event& e_);
-		void HandleKeyUpEvent(const SDL_Event& e_);
 	};
 }
 

@@ -4,6 +4,7 @@
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Events/KeyEvent.h"
+#include "Events/MouseEvent.h"
 
 using namespace Gadget;
 
@@ -44,10 +45,22 @@ void Win32_Window::Update(){
 				HandleWindowEvent(e);
 				break;
 			case SDL_KEYDOWN:
-				HandleKeyDownEvent(e);
+				EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(e.key.keysym.sym)); //TODO - We probably shouldn't rely on SDL_Keycodes
 				break;
 			case SDL_KEYUP:
-				HandleKeyUpEvent(e);
+				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(e.key.keysym.sym)); //TODO - We probably shouldn't rely on SDL_Keycodes
+				break;
+			case SDL_MOUSEMOTION:
+				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(e.motion.xrel, e.motion.yrel)); //TODO - Not sure if relative motion is the ideal approach here
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				EventHandler::GetInstance()->HandleEvent(MouseButtonPressedEvent(e.button.button));
+				break;
+			case SDL_MOUSEBUTTONUP:
+				EventHandler::GetInstance()->HandleEvent(MouseButtonReleasedEvent(e.button.button));
+				break;
+			case SDL_MOUSEWHEEL:
+				EventHandler::GetInstance()->HandleEvent(MouseScrollEvent(e.wheel.preciseX, e.wheel.preciseY));
 				break;
 			default:
 				break;
@@ -81,12 +94,4 @@ void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 		default:
 			break;
 	}
-}
-
-void Win32_Window::HandleKeyDownEvent(const SDL_Event& e_){
-	EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(e_.key.keysym.sym)); //TODO - We probably shouldn't rely on SDL_Keycodes
-}
-
-void Win32_Window::HandleKeyUpEvent(const SDL_Event& e_){
-	EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(e_.key.keysym.sym)); //TODO - We probably shouldn't rely on SDL_Keycodes
 }
