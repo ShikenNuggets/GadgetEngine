@@ -92,6 +92,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Window.h" />
+    <ClInclude Include="Core\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -137,5 +138,6 @@
     <ClCompile Include="Utils\StringID.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Time.cpp" />
   </ItemGroup>
 </Project>

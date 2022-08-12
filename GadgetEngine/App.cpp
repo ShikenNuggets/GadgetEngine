@@ -5,6 +5,7 @@
 #include "Config.h"
 #include "Debug.h"
 #include "Random.h"
+#include "Core/Time.h"
 #include "Platform/Windows/Win32_Window.h"
 
 #include "Events/EventHandler.h"
@@ -18,7 +19,7 @@ App::App() : isRunning(true), window(nullptr), singleFrameAllocator(1024), twoFr
 }
 
 App::~App(){
-	window.reset(); //This isn't strictly necessary
+	window.reset();
 }
 
 App* App::GetInstance(){
@@ -41,6 +42,7 @@ void App::DeleteInstance(){
 void App::Initialize(){
 	Config::GetInstance(); //Init Config
 	Random::SetSeed();
+	Time::GetInstance();
 
 	#ifdef GADGET_PLATFORM_WIN32
 	window = std::make_unique<Win32_Window>(800, 600);
@@ -50,6 +52,7 @@ void App::Initialize(){
 void App::Run(){
 	Initialize();
 
+	Time::GetInstance()->Start();
 	while(isRunning){
 		//Main game loop
 
@@ -62,6 +65,9 @@ void App::Run(){
 
 		//Regular update follows
 		window->Update();
+
+		//After everything else is done, sleep for the appropriate amount of time (if necessary)
+		Time::GetInstance()->Delay();
 	}
 }
 

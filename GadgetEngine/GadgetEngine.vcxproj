@@ -124,6 +124,7 @@
     <ClInclude Include="Platform\Windows\Win32_Window.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ScreenCoordinate.h" />
+    <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Utils\Hash.h" />
     <ClInclude Include="Utils\StringID.h" />
     <ClInclude Include="Window.h" />
@@ -145,6 +146,7 @@
     <ClCompile Include="Memory\DoubleStackAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Window.cpp" />
+    <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Utils\StringID.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
