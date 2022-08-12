@@ -23,6 +23,7 @@ namespace Gadget{
 
 		static std::unordered_map<uint64_t, const char*> stringIdTable;
 
+		//DON'T USE THIS DIRECTLY, USE THE SID() MACRO
 		static StringID InternString(StringID sid_, const char* str_);
 		static const char* GetStringFromID(StringID id_);
 	};
