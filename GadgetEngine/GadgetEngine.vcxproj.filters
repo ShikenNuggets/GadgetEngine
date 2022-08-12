@@ -4,6 +4,9 @@
     <Filter Include="Concurrency">
       <UniqueIdentifier>{700FC23E-DCC4-3A34-65B9-340BD16D3138}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Events">
       <UniqueIdentifier>{3A8963B1-262B-8E87-0FE6-A1DBFB2615D8}</UniqueIdentifier>
     </Filter>
@@ -29,6 +32,9 @@
       <Filter>Concurrency</Filter>
     </ClInclude>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Core\Time.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Events\AppEvent.h">
       <Filter>Events</Filter>
@@ -92,7 +98,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Window.h" />
-    <ClInclude Include="Core\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -100,6 +105,9 @@
       <Filter>Concurrency</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Core\Time.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Events</Filter>
@@ -138,6 +146,5 @@
     <ClCompile Include="Utils\StringID.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Time.cpp" />
   </ItemGroup>
 </Project>

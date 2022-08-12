@@ -8,7 +8,7 @@ Config* Config::instance = nullptr;
 
 Config::Config() : floatOptions(), stringOptions(){
 	LocManager* locMan = LocManager::GetInstance(); //Initialize Localization Manager
-	locMan->AddLanguage(StringID::InternString("ENG")); //TODO - Pull this from a config file
+	locMan->AddLanguage(SID("ENG")); //TODO - Pull this from a config file
 
 	//TODO - Load string/float options from config file
 }
@@ -47,5 +47,5 @@ StringID Config::GetOptionsString(StringID key_) const{
 		return find->second;
 	}
 
-	return StringID::InternString("");
+	return SID("");
 }

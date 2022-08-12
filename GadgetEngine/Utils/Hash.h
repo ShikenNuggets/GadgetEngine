@@ -8,11 +8,11 @@ namespace Gadget{
 	public:
 		//Shamelessly copied from SDL2 (SDL_crc32.c)
 		//Pasted here so it can be constexpr
-		static inline constexpr uint32_t CRC32(const void* data_, size_t len_){
+		static inline constexpr uint32_t CRC32(const char* data_, size_t len_){
 			uint32_t crc = 0;
 
 			for(size_t i = 0; i < len_; i++){
-				crc = crc32_for_byte((uint8_t)crc ^ ((const uint8_t*)data_)[i]) ^ crc >> 8;
+				crc = crc32_for_byte(crc ^ (data_)[i]) ^ crc >> 8;
 			}
 
 			return crc;

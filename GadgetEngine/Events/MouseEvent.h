@@ -6,7 +6,7 @@
 namespace Gadget{
 	class MouseMovedEvent : public Event{
 	public:
-		MouseMovedEvent(int x_, int y_) : Event(StringID::InternString("MouseMovedEvent")), x(x_), y(y_){}
+		MouseMovedEvent(int x_, int y_) : Event(SID("MouseMovedEvent")), x(x_), y(y_){}
 
 		static constexpr EventType Type(){ return EventType::MouseMoved; }
 		virtual EventType GetEventType() const override{ return Type(); }
@@ -23,7 +23,7 @@ namespace Gadget{
 
 	class MouseScrollEvent : public Event{
 	public:
-		MouseScrollEvent(float xOffset_, float yOffset_) : Event(StringID::InternString("MouseScrollEvent")), xOffset(xOffset_), yOffset(yOffset_){}
+		MouseScrollEvent(float xOffset_, float yOffset_) : Event(SID("MouseScrollEvent")), xOffset(xOffset_), yOffset(yOffset_){}
 
 		static constexpr EventType Type(){ return EventType::MouseScroll; }
 		virtual EventType GetEventType() const override{ return Type(); }
@@ -50,7 +50,7 @@ namespace Gadget{
 
 	class MouseButtonPressedEvent : public MouseButtonEvent{
 	public:
-		MouseButtonPressedEvent(int button_) : MouseButtonEvent(button_, StringID::InternString("MouseButtonPressedEvent")){}
+		MouseButtonPressedEvent(int button_) : MouseButtonEvent(button_, SID("MouseButtonPressedEvent")){}
 
 		static constexpr EventType Type(){ return EventType::MouseButtonPressed; }
 		virtual EventType GetEventType() const override{ return Type(); }
@@ -60,7 +60,7 @@ namespace Gadget{
 
 	class MouseButtonReleasedEvent : public MouseButtonEvent{
 	public:
-		MouseButtonReleasedEvent(int button_) : MouseButtonEvent(button_, StringID::InternString("MouseButtonReleasedEvent")){}
+		MouseButtonReleasedEvent(int button_) : MouseButtonEvent(button_, SID("MouseButtonReleasedEvent")){}
 
 		static constexpr EventType Type(){ return EventType::MouseButtonReleased; }
 		virtual EventType GetEventType() const override{ return Type(); }

@@ -6,7 +6,7 @@
 namespace Gadget{
 	class WindowResizedEvent : public Event{
 	public:
-		WindowResizedEvent(int width_, int height_) : Event(StringID::InternString("WindowResizedEvent")), width(width_), height(height_){}
+		WindowResizedEvent(int width_, int height_) : Event(SID("WindowResizedEvent")), width(width_), height(height_){}
 
 		static constexpr EventType Type(){ return EventType::WindowResize; }
 		virtual EventType GetEventType() const override{ return Type(); }
@@ -23,7 +23,7 @@ namespace Gadget{
 
 	class WindowCloseEvent : public Event{
 	public:
-		WindowCloseEvent() : Event(StringID::InternString("WindowCloseEvent")){}
+		WindowCloseEvent() : Event(SID("WindowCloseEvent")){}
 
 		static constexpr EventType Type(){ return EventType::WindowClose; }
 		virtual EventType GetEventType() const override{ return Type(); }

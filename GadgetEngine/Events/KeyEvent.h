@@ -15,7 +15,7 @@ namespace Gadget{
 
 	class KeyPressedEvent : public KeyEvent{
 	public:
-		KeyPressedEvent(int keycode_) : KeyEvent(keycode_, StringID::InternString("KeyPressedEvent")), repeatCount(0){}
+		KeyPressedEvent(int keycode_) : KeyEvent(keycode_, SID("KeyPressedEvent")), repeatCount(0){}
 
 		static constexpr EventType Type(){ return EventType::KeyPressed; }
 		virtual EventType GetEventType() const override{ return Type(); }
@@ -28,7 +28,7 @@ namespace Gadget{
 
 	class KeyReleasedEvent : public KeyEvent{
 	public:
-		KeyReleasedEvent(int keycode_) : KeyEvent(keycode_, StringID::InternString("KeyReleasedEvent")){}
+		KeyReleasedEvent(int keycode_) : KeyEvent(keycode_, SID("KeyReleasedEvent")){}
 
 		static constexpr EventType Type(){ return EventType::KeyReleased; }
 		virtual EventType GetEventType() const override{ return Type(); }
