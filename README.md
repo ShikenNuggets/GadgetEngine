@@ -9,14 +9,14 @@ Currently relies on SDL2 so I can focus on the engine itself, but I'm hoping to 
 
 | Minimum Viable Product (in no particular order) |  |
 |-------------------------------------------------------------|--|
-| Could theoretically be used to make a non-trivial game | *Nope* |
-| Proper Memory Management  | *In Progress* |
-| Efficient Strings (hashed string IDs) | *In Progress* |
+| Could theoretically be used to make a non-trivial game | *No* |
+| Proper Memory Management  |  |
+| Efficient Strings (hashed string IDs) | ✓ |
 | Fully Support UTF-8 Encoding  |  |
 | Engine Configuration (config files, console commands, etc)  |  |
 | Asset Management (at runtime + tool for engine users)  |  |
 | HID Input (gamepads, keyboard, mouse, etc) |  |
-| Debug Tools (logging, drawing, menus, console commands, etc) | *In Progress* |
+| Debug Tools (logging, drawing, menus, console commands, etc) |  |
 | Basic 3D Rendering with OpenGL (geometry, lighting/shadows, etc)  |  |
 | Basic Skeletal Animation  |  |
 | Collision Detection |  |
