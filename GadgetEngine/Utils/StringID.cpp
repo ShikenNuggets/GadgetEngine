@@ -1,35 +1,9 @@
 #include "StringID.h"
 
-#include "Debug.h"
-#include "Hash.h"
-
 using namespace Gadget;
 
-std::unordered_map<uint32_t, std::string> StringID::stringIdTable;
-
-constexpr StringID::StringID(uint32_t id_) : id(id_){}
+IDTable StringID::stringIdTable;
 
 std::string StringID::GetString() const{
 	return GetStringFromID(*this);
-}
-
-StringID StringID::InternString(const std::string& str_){
-	StringID id = StringID(Hash::CRC32(str_.data(), str_.length()));
-
-	if(stringIdTable.find(id.id) == stringIdTable.end()){
-		stringIdTable[id.id] = str_;
-	}else{
-		Debug::Log("The following string was interned multiple times. Avoid re-internment to improve performance. String was: " + str_, Debug::LogType::Warning);
-	}
-
-	return id;
-}
-
-std::string StringID::GetStringFromID(StringID id_){
-	auto find = stringIdTable.find(id_.id);
-	if(find != stringIdTable.end()){
-		return find->second;
-	}
-
-	return "";
 }

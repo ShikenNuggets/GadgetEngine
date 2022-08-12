@@ -65,6 +65,20 @@ namespace Gadget{
 		static inline Angle Atan(float tan_){ return Radian(static_cast<float>(atan(tan_))).ToDegrees(); }
 		static inline Angle Atan2(float a_, float b_){ return Radian(static_cast<float>(atan2(a_, b_))).ToDegrees(); }
 
+		static inline constexpr bool IsPrime(uint64_t num_){
+			if(num_ == 0 || num_ == 1){
+				return false;
+			}
+
+			for(int i = 2; i <= num_ / 2; i++){
+				if(num_ % i == 0){
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		//Delete unwanted compiler-generated constructors, destructors, and assignment operators
 		Math() = delete;
 		Math(const Math&) = delete;

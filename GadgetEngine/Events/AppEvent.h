@@ -14,7 +14,7 @@ namespace Gadget{
 		inline int GetWidth() const{ return width; }
 		inline int GetHeight() const{ return height; }
 
-		virtual std::string ToString() const override{ return StringID::GetStringFromID(name) + ": " + std::to_string(width) + ", " + std::to_string(height); }
+		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(width) + ", " + std::to_string(height); }
 
 	private:
 		int width;

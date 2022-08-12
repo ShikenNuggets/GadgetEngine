@@ -20,7 +20,7 @@ namespace Gadget{
 		static constexpr EventType Type(){ return EventType::KeyPressed; }
 		virtual EventType GetEventType() const override{ return Type(); }
 
-		virtual std::string ToString() const override{ return StringID::GetStringFromID(name) + ": " + std::to_string(keycode) + " (" + std::to_string(repeatCount) + " repeats)"; }
+		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(keycode) + " (" + std::to_string(repeatCount) + " repeats)"; }
 
 	private:
 		int repeatCount;
@@ -33,7 +33,7 @@ namespace Gadget{
 		static constexpr EventType Type(){ return EventType::KeyReleased; }
 		virtual EventType GetEventType() const override{ return Type(); }
 
-		virtual std::string ToString() const override{ return StringID::GetStringFromID(name) + ": " + std::to_string(keycode); }
+		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(keycode); }
 	};
 }
 

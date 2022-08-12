@@ -18,6 +18,8 @@ namespace Gadget{
 			return crc;
 		}
 
+		//TODO - We need a 64 bit hashing function (CRC64? MD5? idk)
+
 	private:
 		//Shamelessly copied from SDL2 (SDL_crc32.c)
 		//Pasted here so it can be constexpr

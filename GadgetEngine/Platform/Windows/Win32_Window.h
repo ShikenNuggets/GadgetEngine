@@ -1,7 +1,9 @@
 #ifndef GADGET_WIN32_WINDOW_H
 #define GADGET_WIN32_WINDOW_H
 
+#pragma warning(disable : 26819) //Kill unfixable warning from SDL2
 #include <SDL.h>
+#pragma warning(default : 26819)
 
 #include "Window.h"
 
