@@ -26,7 +26,8 @@ namespace Gadget{
 		inline int GetHeight() const{ return size.y; }
 		inline ScreenCoordinate GetSize() const{ return size; }
 
-		virtual void Update() = 0;
+		virtual void HandleEvents() = 0;
+		virtual void SwapBuffers() = 0;
 
 	protected:
 		ScreenCoordinate size;

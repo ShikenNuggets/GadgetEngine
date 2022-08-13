@@ -15,10 +15,12 @@ namespace Gadget{
 
 		SDL_Window* GetSDLWindow() const; //Avoid using the SDL_Window directly outside of this class - ideally create a new getter if you need something
 
-		virtual void Update() override;
+		virtual void HandleEvents() override;
+		virtual void SwapBuffers() override;
 
 	private:
 		SDL_Window* sdlWindow;
+		SDL_GLContext glContext;
 
 		void HandleWindowEvent(const SDL_Event& e_);
 	};

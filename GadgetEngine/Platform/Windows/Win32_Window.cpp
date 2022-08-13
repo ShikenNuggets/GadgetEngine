@@ -1,5 +1,7 @@
 #include "Win32_Window.h"
 
+#include <glad/glad.h>
+
 #include "Debug.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
@@ -8,11 +10,16 @@
 
 using namespace Gadget;
 
-Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_){
+Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr), glContext(nullptr){
 	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
 		Debug::Log("SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error
 	}
+
+	//TODO - There's a lot of OpenGL specific code in here. Ideally the window and the rendering context are as separate as possible
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
 
 	Uint32 windowFlag = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 	sdlWindow = SDL_CreateWindow("GadgetEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, windowFlag);
@@ -20,6 +27,20 @@ Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_){
 		Debug::Log("Window could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error
 	}
+
+	glContext = SDL_GL_CreateContext(sdlWindow);
+	if(glContext == nullptr){
+		Debug::Log("OpenGL context could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
+		//TODO - Handle Fatal Error
+	}
+
+	if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)){
+		Debug::Log("Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
+		//TODO - Handle Fatal Error
+	}
+
+	glViewport(0, 0, GetWidth(), GetHeight());
+	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 }
 
 Win32_Window::~Win32_Window(){
@@ -34,7 +55,7 @@ Win32_Window::~Win32_Window(){
 
 SDL_Window* Win32_Window::GetSDLWindow() const{ return sdlWindow; }
 
-void Win32_Window::Update(){
+void Win32_Window::HandleEvents(){
 	SDL_Event e;
 	while(SDL_PollEvent(&e) != 0){
 		switch(e.type){
@@ -82,6 +103,11 @@ void Win32_Window::Update(){
 			}
 		}
 	}
+}
+
+void Win32_Window::SwapBuffers(){
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(sdlWindow);
 }
 
 void Win32_Window::HandleWindowEvent(const SDL_Event& e_){

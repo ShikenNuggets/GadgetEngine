@@ -64,7 +64,9 @@ void App::Run(){
 		twoFrameAllocator.CurrentBuffer().Clear();
 
 		//Regular update follows
-		window->Update();
+		window->HandleEvents();
+
+		window->SwapBuffers();
 
 		//After everything else is done, sleep for the appropriate amount of time (if necessary)
 		Time::GetInstance()->Delay();
