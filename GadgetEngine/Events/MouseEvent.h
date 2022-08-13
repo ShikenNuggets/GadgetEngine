@@ -2,23 +2,24 @@
 #define GADGET_MOUSE_EVENT_H
 
 #include "Event.h"
+#include "Input/InputEnums.h"
 
 namespace Gadget{
 	class MouseMovedEvent : public Event{
 	public:
-		MouseMovedEvent(int x_, int y_) : Event(SID("MouseMovedEvent")), x(x_), y(y_){}
+		MouseMovedEvent(float x_, float y_) : Event(SID("MouseMovedEvent")), x(x_), y(y_){}
 
 		static constexpr EventType Type(){ return EventType::MouseMoved; }
 		virtual EventType GetEventType() const override{ return Type(); }
 
-		inline int GetX() const{ return x; }
-		inline int GetY() const{ return y; }
+		inline float GetX() const{ return x; }
+		inline float GetY() const{ return y; }
 
 		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(x) + ", " + std::to_string(y); }
 
 	private:
-		int x;
-		int y;
+		float x;
+		float y;
 	};
 
 	class MouseScrollEvent : public Event{
@@ -40,32 +41,32 @@ namespace Gadget{
 
 	class MouseButtonEvent : public Event{
 	public:
-		inline int GetButton() const{ return button; }
+		inline ButtonID GetButton() const{ return button; }
 
 	protected:
-		MouseButtonEvent(int button_, StringID name_) : Event(name_), button(button_){}
+		MouseButtonEvent(ButtonID button_, StringID name_) : Event(name_), button(button_){}
 
-		int button;
+		ButtonID button;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent{
 	public:
-		MouseButtonPressedEvent(int button_) : MouseButtonEvent(button_, SID("MouseButtonPressedEvent")){}
+		MouseButtonPressedEvent(ButtonID button_) : MouseButtonEvent(button_, SID("MouseButtonPressedEvent")){}
 
 		static constexpr EventType Type(){ return EventType::MouseButtonPressed; }
 		virtual EventType GetEventType() const override{ return Type(); }
 
-		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(button); }
+		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string((int)button); }
 	};
 
 	class MouseButtonReleasedEvent : public MouseButtonEvent{
 	public:
-		MouseButtonReleasedEvent(int button_) : MouseButtonEvent(button_, SID("MouseButtonReleasedEvent")){}
+		MouseButtonReleasedEvent(ButtonID button_) : MouseButtonEvent(button_, SID("MouseButtonReleasedEvent")){}
 
 		static constexpr EventType Type(){ return EventType::MouseButtonReleased; }
 		virtual EventType GetEventType() const override{ return Type(); }
 
-		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(button); }
+		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string((int)button); }
 	};
 }
 

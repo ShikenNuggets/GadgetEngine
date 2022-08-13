@@ -10,6 +10,9 @@
     <Filter Include="Events">
       <UniqueIdentifier>{3A8963B1-262B-8E87-0FE6-A1DBFB2615D8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
     </Filter>
@@ -52,6 +55,15 @@
       <Filter>Events</Filter>
     </ClInclude>
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Input\Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputEnums.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputType.h">
+      <Filter>Input</Filter>
+    </ClInclude>
     <ClInclude Include="LocManager.h" />
     <ClInclude Include="Math\Angle.h">
       <Filter>Math</Filter>
@@ -86,6 +98,9 @@
     <ClInclude Include="Memory\StackAllocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Windows\Win32_Utils.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="Platform\Windows\Win32_Window.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -111,6 +126,9 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Input.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="LocManager.cpp" />
     <ClCompile Include="Math\Angle.cpp">
@@ -139,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="Memory\StackAllocator.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\Win32_Utils.cpp">
+      <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Platform\Windows\Win32_Window.cpp">
       <Filter>Platform\Windows</Filter>

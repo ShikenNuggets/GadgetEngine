@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "Random.h"
 #include "Core/Time.h"
+#include "Input/Input.h"
 #include "Platform/Windows/Win32_Window.h"
 
 #include "Events/EventHandler.h"
@@ -43,6 +44,7 @@ void App::Initialize(){
 	Config::GetInstance(); //Init Config
 	Random::SetSeed();
 	Time::GetInstance();
+	Input::GetInstance();
 
 	#ifdef GADGET_PLATFORM_WIN32
 	window = std::make_unique<Win32_Window>(800, 600);
@@ -65,6 +67,8 @@ void App::Run(){
 
 		//Regular update follows
 		window->HandleEvents();
+
+		Input::GetInstance()->ProcessInputs();
 
 		window->SwapBuffers();
 

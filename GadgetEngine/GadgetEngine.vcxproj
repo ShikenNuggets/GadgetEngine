@@ -110,6 +110,9 @@
     <ClInclude Include="Events\KeyEvent.h" />
     <ClInclude Include="Events\MouseEvent.h" />
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Input\Input.h" />
+    <ClInclude Include="Input\InputEnums.h" />
+    <ClInclude Include="Input\InputType.h" />
     <ClInclude Include="LocManager.h" />
     <ClInclude Include="Math\Angle.h" />
     <ClInclude Include="Math\Euler.h" />
@@ -122,6 +125,7 @@
     <ClInclude Include="Memory\DoubleStackAllocator.h" />
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
+    <ClInclude Include="Platform\Windows\Win32_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_Window.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ScreenCoordinate.h" />
@@ -136,6 +140,7 @@
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
+    <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="LocManager.cpp" />
     <ClCompile Include="Math\Angle.cpp" />
     <ClCompile Include="Math\Euler.cpp" />
@@ -146,6 +151,7 @@
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Memory\DoubleStackAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
+    <ClCompile Include="Platform\Windows\Win32_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Window.cpp" />
     <ClCompile Include="Utils\StringID.cpp" />
   </ItemGroup>

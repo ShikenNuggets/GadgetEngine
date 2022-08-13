@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 #include "Debug.h"
+#include "Win32_Utils.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Events/KeyEvent.h"
@@ -17,9 +18,20 @@ Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr),
 	}
 
 	//TODO - There's a lot of OpenGL specific code in here. Ideally the window and the rendering context are as separate as possible
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+	if(SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1) != 0){
+		Debug::Log("Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
+		//TODO - Handle Fatal Error
+	}
+
+	if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) != 0){
+		Debug::Log("Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
+		//TODO - Handle Fatal Error
+	}
+
+	if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6) != 0){
+		Debug::Log("Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
+		//TODO - Handle Fatal Error
+	}
 
 	Uint32 windowFlag = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 	sdlWindow = SDL_CreateWindow("GadgetEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, windowFlag);
@@ -66,19 +78,19 @@ void Win32_Window::HandleEvents(){
 				HandleWindowEvent(e);
 				break;
 			case SDL_KEYDOWN:
-				EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(e.key.keysym.sym)); //TODO - We probably shouldn't rely on SDL_Keycodes
+				EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(Win32_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
 				break;
 			case SDL_KEYUP:
-				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(e.key.keysym.sym)); //TODO - We probably shouldn't rely on SDL_Keycodes
+				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(Win32_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
 				break;
 			case SDL_MOUSEMOTION:
-				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(e.motion.xrel, e.motion.yrel)); //TODO - Not sure if relative motion is the ideal approach here
+				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(static_cast<float>(e.motion.xrel) / GetWidth(), static_cast<float>(e.motion.yrel) / GetHeight()));
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				EventHandler::GetInstance()->HandleEvent(MouseButtonPressedEvent(e.button.button));
+				EventHandler::GetInstance()->HandleEvent(MouseButtonPressedEvent(Win32_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));
 				break;
 			case SDL_MOUSEBUTTONUP:
-				EventHandler::GetInstance()->HandleEvent(MouseButtonReleasedEvent(e.button.button));
+				EventHandler::GetInstance()->HandleEvent(MouseButtonReleasedEvent(Win32_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));
 				break;
 			case SDL_MOUSEWHEEL:
 				EventHandler::GetInstance()->HandleEvent(MouseScrollEvent(e.wheel.preciseX, e.wheel.preciseY));
