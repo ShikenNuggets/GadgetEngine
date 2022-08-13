@@ -7,6 +7,30 @@ workspace "LIBS"
 		"Release"
 	}
 
+project "Glad"
+	location "_prj/"
+	kind "StaticLib"
+	language "C"
+
+	targetdir ("../Build/%{prj.name}/%{cfg.buildcfg}/") 
+	objdir ("../Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
+
+	files
+	{
+		"Glad/include/**.h",
+		"Glad/src/**.c"
+	}
+
+	includedirs
+	{
+		"Glad/include/"	
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		staticruntime "On"
+		runtime "Release"
+
 project "SDL2"
 	location "_prj/"
 	kind "SharedLib"

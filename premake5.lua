@@ -9,6 +9,12 @@ workspace "GadgetEngine"
 	
 	startproject "Game"
 
+externalproject "Glad"
+	location "SDK/_prj"
+	filename "Glad"
+	kind "StaticLib"
+	language "C"
+
 externalproject "SDL2"
 	location "SDK/_prj"
 	filename "SDL2"
@@ -44,6 +50,7 @@ project "GadgetEngine"
 	{
 		"%{prj.name}/",
 		"SDK/include",
+		"SDK/Glad/include",
 		"SDK/SDL/include",
 	}
 	
@@ -55,6 +62,7 @@ project "GadgetEngine"
 	
 	dependson
 	{
+		"Glad",
 		"SDL2",
 		"SDL2main",
 	}
@@ -110,12 +118,14 @@ project "Game"
 		"%{prj.name}/",
 		"GadgetEngine/",
 		"SDK/include/",
+		"SDK/Glad/include",
 		"SDK/SDL/include/",
 	}
 	
 	libdirs
 	{
 		"Build/GadgetEngine/%{cfg.buildcfg}/",
+		"Build/Glad/%{cfg.buildcfg}/",
 		"Build/SDL2/%{cfg.buildcfg}/",
 		"Build/SDL2main/%{cfg.buildcfg}/",
 	}
@@ -123,6 +133,7 @@ project "Game"
 	links
 	{
 		"GadgetEngine.lib",
+		"Glad.lib",
 		"SDL2.lib",
 		"SDL2main.lib",
 	}
@@ -130,6 +141,7 @@ project "Game"
 	dependson
 	{
 		"GadgetEngine",
+		"Glad",
 		"SDL2",
 		"SDL2main",
 	}
