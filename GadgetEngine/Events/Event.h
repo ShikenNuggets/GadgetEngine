@@ -28,32 +28,6 @@ namespace Gadget{
 	protected:
 		StringID name;
 		bool handled;
-
-	private:
-		friend class EventDispatcher;
-	};
-
-	//TODO - Not sure how I feel about this whole thing
-	class EventDispatcher{
-		template <class T>
-		using EventFn = std::function<bool>(T&);
-
-	public:
-		EventDispatcher(Event& event_) : m_event(event_){}
-
-		template<class T>
-		bool Dispatch(EventFn<T> func_){
-			static_assert(m_event.GetEventType() == T::GetStaticType());
-			if(m_event.GetEventType() == T::Type()){
-				m_event.handled = func(*(T*)&m_event);
-				return true;
-			}
-
-			return false;
-		}
-
-	private:
-		Event& m_event;
 	};
 }
 
