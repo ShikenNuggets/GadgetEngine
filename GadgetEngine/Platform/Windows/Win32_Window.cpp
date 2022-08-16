@@ -8,10 +8,11 @@
 #include "Events/EventHandler.h"
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
+#include "Input/GamepadEvent.h"
 
 using namespace Gadget;
 
-Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr), glContext(nullptr){
+Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr), glContext(nullptr), joysticks(){
 	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
 		Debug::Log("SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error
@@ -53,6 +54,12 @@ Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr),
 
 	glViewport(0, 0, GetWidth(), GetHeight());
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
+
+	//This is enabled by default but it's good to be explicit
+	if(SDL_JoystickEventState(SDL_ENABLE) != 1){
+		Debug::Log("Joystick events could not be enabled! SDL Error: " + std::string(SDL_GetError()), Debug::FatalError, __FILE__, __LINE__);
+		//TODO - Handle Fatal Error
+	}
 }
 
 Win32_Window::~Win32_Window(){
@@ -68,6 +75,10 @@ Win32_Window::~Win32_Window(){
 SDL_Window* Win32_Window::GetSDLWindow() const{ return sdlWindow; }
 
 void Win32_Window::HandleEvents(){
+	//Variables that will be used in the switch
+	SDL_Joystick* joystick = nullptr;
+	AxisID joystickAxis = AxisID::None;
+
 	SDL_Event e;
 	while(SDL_PollEvent(&e) != 0){
 		switch(e.type){
@@ -94,6 +105,29 @@ void Win32_Window::HandleEvents(){
 				break;
 			case SDL_MOUSEWHEEL:
 				EventHandler::GetInstance()->HandleEvent(MouseScrollEvent(e.wheel.preciseX, e.wheel.preciseY));
+				break;
+			case SDL_JOYDEVICEADDED:
+				joystick = SDL_JoystickOpen(e.jdevice.which);
+				joysticks.push_back(joystick);
+				Debug::Log("Gamepad " + std::to_string(e.jdevice.which) + " connected.");
+				break;
+			case SDL_JOYDEVICEREMOVED:
+				RemoveJoystick(e.jdevice.which);
+				Debug::Log("Gamepad " + std::to_string(e.jdevice.which) + " disconnected.");
+				break;
+			case SDL_JOYAXISMOTION:
+				joystickAxis = Win32_Utils::ConvertSDLJoystickAxisToAxisID(e.jaxis.axis);
+				EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e.jaxis.which, joystickAxis, e.jaxis.value));
+				//TODO - Trigger button events here as well
+				break;
+			case SDL_JOYBUTTONDOWN:
+				EventHandler::GetInstance()->HandleEvent(GamepadButtonPressedEvent(e.jbutton.which, Win32_Utils::ConvertSDLJoystickButtonToButtonID(e.jbutton.button)));
+				break;
+			case SDL_JOYBUTTONUP:
+				EventHandler::GetInstance()->HandleEvent(GamepadButtonReleasedEvent(e.jbutton.which, Win32_Utils::ConvertSDLJoystickButtonToButtonID(e.jbutton.button)));
+				break;
+			case SDL_JOYHATMOTION:
+				HandleHatMotionEvent(e);
 				break;
 			default:
 				break;
@@ -132,4 +166,53 @@ void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 		default:
 			break;
 	}
+}
+
+//TODO - Trigger button events here as well
+void Win32_Window::HandleHatMotionEvent(const SDL_Event& e_){
+	if(e_.jhat.hat != 0){
+		return; //TODO - Handling for multiple hats, for now we'll just ignore them
+	}
+
+	float xAxis = 0.0f;
+	float yAxis = 0.0f;
+
+	if(e_.jhat.value & SDL_HAT_UP){
+		yAxis = 1.0f;
+	}else if(e_.jhat.value & SDL_HAT_DOWN){
+		yAxis = -1.0f;
+	}
+	
+	if(e_.jhat.value & SDL_HAT_RIGHT){
+		xAxis = 1.0f;
+	}else if(e_.jhat.value & SDL_HAT_LEFT){
+		xAxis = -1.0f;
+	}
+
+	EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e_.jhat.which, AxisID::Gamepad_DPad_Horizontal, xAxis));
+	EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e_.jhat.which, AxisID::Gamepad_DPad_Vertical, yAxis));
+}
+
+//TODO - I'm honestly not really sure that this is correct, the documentation is a little vague on all this. Validate this
+void Win32_Window::RemoveJoystick(Sint32 instanceID_){
+	int index = -1;
+	for(int i = 0; i < joysticks.size(); i++){
+		if(joysticks[i] == nullptr){
+			continue;
+		}
+
+		auto result = SDL_JoystickInstanceID(joysticks[i]);
+		if(result < 0){
+			Debug::Log("Could not query Joystick Instance ID for joystick " + std::to_string(i) + "! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
+			continue;
+		}
+
+		if(result == instanceID_){
+			index = i;
+			break;
+		}
+	}
+
+	SDL_JoystickClose(joysticks[index]);
+	joysticks[index] = nullptr;
 }

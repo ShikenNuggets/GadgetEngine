@@ -13,6 +13,9 @@ namespace Gadget{
 	public:
 		static ButtonID ConvertSDLKeycodeToButtonID(SDL_Keycode key_);
 		static ButtonID ConvertSDLMouseButtonToButtonID(Uint8 button_);
+
+		static ButtonID ConvertSDLJoystickButtonToButtonID(Uint8 button_);
+		static AxisID ConvertSDLJoystickAxisToAxisID(Uint8 axis_);
 	};
 }
 

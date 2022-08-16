@@ -55,6 +55,9 @@
       <Filter>Events</Filter>
     </ClInclude>
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Input\GamepadEvent.h">
+      <Filter>Input</Filter>
+    </ClInclude>
     <ClInclude Include="Input\Input.h">
       <Filter>Input</Filter>
     </ClInclude>

@@ -110,6 +110,7 @@
     <ClInclude Include="Events\KeyEvent.h" />
     <ClInclude Include="Events\MouseEvent.h" />
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Input\GamepadEvent.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\InputEnums.h" />
     <ClInclude Include="Input\InputType.h" />

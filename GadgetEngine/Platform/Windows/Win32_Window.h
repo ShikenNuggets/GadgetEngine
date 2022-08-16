@@ -1,6 +1,8 @@
 #ifndef GADGET_WIN32_WINDOW_H
 #define GADGET_WIN32_WINDOW_H
 
+#include <vector>
+
 #pragma warning(disable : 26819) //Kill unfixable warning from SDL2
 #include <SDL.h>
 #pragma warning(default : 26819)
@@ -21,8 +23,12 @@ namespace Gadget{
 	private:
 		SDL_Window* sdlWindow;
 		SDL_GLContext glContext;
+		std::vector<SDL_Joystick*> joysticks;
 
 		void HandleWindowEvent(const SDL_Event& e_);
+		void HandleHatMotionEvent(const SDL_Event& e_);
+
+		void RemoveJoystick(Sint32 instanceID_);
 	};
 }
 

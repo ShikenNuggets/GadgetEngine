@@ -524,3 +524,62 @@ ButtonID Win32_Utils::ConvertSDLMouseButtonToButtonID(Uint8 button_){
 
 	return ButtonID::None;
 }
+
+//TODO - This function needs to be a lot more sophisticated to handle other types of controllers correctly (most notably PlayStation controllers)
+//For now we'll just assume XInput mappings
+ButtonID Win32_Utils::ConvertSDLJoystickButtonToButtonID(Uint8 button_){
+	switch(button_){
+		case 0:
+			return ButtonID::Gamepad_Face_Down;
+		case 1:
+			return ButtonID::Gamepad_Face_Right;
+		case 2:
+			return ButtonID::Gamepad_Face_Left;
+		case 3:
+			return ButtonID::Gamepad_Face_Up;
+		case 4:
+			return ButtonID::Gamepad_Shoulder_Left1;
+		case 5:
+			return ButtonID::Gamepad_Shoulder_Right1;
+		case 6:
+			return ButtonID::Gamepad_Start;
+		case 7:
+			return ButtonID::Gamepad_Select;
+		case 8:
+			return ButtonID::Gamepad_AnalogClick_Left;
+		case 9:
+			return ButtonID::Gamepad_AnalogClick_Right;
+		case 10:
+			return ButtonID::Gamepad_Home;
+		default:
+			Debug::Log("Unsupported gamepad button index: " + std::to_string(button_), Debug::Error, __FILE__, __LINE__);
+			break;
+	}
+
+	return ButtonID::None;
+}
+
+//TODO - This function needs to be a lot more sophisticated to handle other types of controllers correctly (most notably PlayStation controllers)
+//For now we'll just assume XInput mappings
+AxisID Win32_Utils::ConvertSDLJoystickAxisToAxisID(Uint8 axis_){
+	switch(axis_){
+		case 0:
+			return AxisID::Gamepad_LeftStick_Horizontal;
+		case 1:
+			return AxisID::Gamepad_LeftStick_Vertical;
+		case 2:
+			return AxisID::Gamepad_RightStick_Horizontal;
+		case 3:
+			return AxisID::Gamepad_RightStick_Vertical;
+		case 4:
+			return AxisID::Gamepad_LeftTrigger;
+		case 5:
+			return AxisID::Gamepad_RightTrigger;
+		default:
+			Debug::Log("Unsupported gamepad axis index: " + std::to_string(axis_), Debug::Error, __FILE__, __LINE__);
+			break;
+	}
+
+	Debug::Log("AXIS: " + std::to_string(axis_));
+	return AxisID::None;
+}

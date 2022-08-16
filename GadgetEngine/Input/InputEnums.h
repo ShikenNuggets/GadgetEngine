@@ -298,6 +298,8 @@ namespace Gadget{
 		Gamepad_RightStick_Vertical,
 		Gamepad_LeftTrigger,
 		Gamepad_RightTrigger,
+		Gamepad_DPad_Horizontal,
+		Gamepad_DPad_Vertical,
 
 		//Mouse
 		Mouse_Move_Horizontal,

@@ -12,6 +12,7 @@ namespace Gadget{
 		KeyPressed, KeyReleased,
 		MouseMoved, MouseScroll,
 		MouseButtonPressed, MouseButtonReleased,
+		GamepadAxis, GamepadButtonPressed, GamepadButtonReleased,
 
 		Count //DO NOT PUT ANYTHING AFTER THIS
 	};
