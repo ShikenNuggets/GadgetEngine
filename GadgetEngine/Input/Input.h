@@ -18,9 +18,16 @@ namespace Gadget{
 		#endif //GADGET_DEBUG
 
 		bool GetButtonDown(ButtonID id_) const;
+		bool GetButtonDown(StringID buttonName_) const;
 		bool GetButtonHeld(ButtonID id_) const;
+		bool GetButtonHeld(StringID buttonName_) const;
 		bool GetButtonUp(ButtonID id_) const;
+		bool GetButtonUp(StringID buttonName_) const;
 		float GetAxis(AxisID id_) const;
+		float GetAxis(StringID axisName_) const;
+
+		void DefineButton(const Button&& button_);
+		void DefineAxis(const Axis&& axis_);
 
 		void ProcessInputs();
 
@@ -39,6 +46,9 @@ namespace Gadget{
 		std::set<ButtonID> buttonsHeld;
 		std::set<ButtonID> buttonsUp;
 		std::map<AxisID, float> axes;
+
+		std::vector<Button> definedButtons;
+		std::vector<Axis> definedAxes;
 
 		//Delete unwanted compiler-generated copy/move constructors and assignment operators
 		Input(const Input&) = delete;

@@ -3,12 +3,13 @@
 #include "Events/EventHandler.h"
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
+#include "Math/Math.h"
 
 using namespace Gadget;
 
 Input* Input::instance = nullptr;
 
-Input::Input() : buttonEvents(), axisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(){
+Input::Input() : buttonEvents(), axisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), definedButtons(), definedAxes(){
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, OnEvent);
@@ -16,8 +17,12 @@ Input::Input() : buttonEvents(), axisEvents(), buttonsDown(), buttonsUp(), butto
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonReleased, OnEvent);
 
+	//These reserve values are somewhat arbitrary, adjust as you see fit
 	buttonEvents.reserve(256);
 	axisEvents.reserve(256);
+
+	definedButtons.reserve(32);
+	definedAxes.reserve(16);
 }
 
 Input::~Input(){}
@@ -43,12 +48,65 @@ bool Input::GetButtonDown(ButtonID id_) const{
 	return buttonsDown.find(id_) != buttonsDown.end();
 }
 
+bool Input::GetButtonDown(StringID buttonName_) const{
+	for(const auto& b : definedButtons){
+		if(b.GetName() == buttonName_){
+			for(const auto& id : b.GetButtonIDs()){
+				if(GetButtonDown(id)){
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
+
+	Debug::Log("Tried to query undefined button [" + buttonName_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
+	return false;
+}
+
 bool Input::GetButtonUp(ButtonID id_) const{
 	return buttonsUp.find(id_) != buttonsUp.end();
 }
 
+//TODO - This is almost identical to the GetButtonDown function, maybe there's a better way to reuse code here?
+bool Input::GetButtonUp(StringID buttonName_) const{
+	for(const auto& b : definedButtons){
+		if(b.GetName() == buttonName_){
+			for(const auto& id : b.GetButtonIDs()){
+				if(GetButtonUp(id)){
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
+
+	Debug::Log("Tried to query undefined button [" + buttonName_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
+	return false;
+}
+
 bool Input::GetButtonHeld(ButtonID id_) const{
 	return buttonsHeld.find(id_) != buttonsHeld.end();
+}
+
+//TODO - This is almost identical to the GetButtonDown and GetButtonUp functions, maybe there's a better way to reuse code here?
+bool Input::GetButtonHeld(StringID buttonName_) const{
+	for(const auto& b : definedButtons){
+		if(b.GetName() == buttonName_){
+			for(const auto& id : b.GetButtonIDs()){
+				if(GetButtonHeld(id)){
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
+
+	Debug::Log("Tried to query undefined button [" + buttonName_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
+	return false;
 }
 
 float Input::GetAxis(AxisID id_) const{
@@ -60,8 +118,45 @@ float Input::GetAxis(AxisID id_) const{
 	return 0.0f;
 }
 
+float Input::GetAxis(StringID axisName_) const{
+	for(const auto& a : definedAxes){
+		if(a.GetName() == axisName_){
+			float totalAxisValue = 0.0f;
+			for(const auto& id : a.GetAxisIDs()){
+				totalAxisValue += GetAxis(id);
+			}
+
+			return Math::Clamp(-1.0f, 1.0f, totalAxisValue);
+		}
+	}
+
+	Debug::Log("Tried to query undefined axis [" + axisName_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
+	return 0.0f;
+}
+
+void Input::DefineButton(const Button&& button_){
+	_ASSERT(!button_.GetButtonIDs().empty()); //Creating a Defined Button with no button IDs
+	if(button_.GetButtonIDs().empty()){
+		Debug::Log("Attempted to define a button [" + button_.GetName().GetString() + "] with no button IDs set!", Debug::Warning, __FILE__, __LINE__);
+		return;
+	}
+
+	definedButtons.push_back(button_);
+}
+
+void Input::DefineAxis(const Axis&& axis_){
+	_ASSERT(!axis_.GetAxisIDs().empty()); //Creating a Defined Axis with no axis IDs
+	if(axis_.GetAxisIDs().empty()){
+		Debug::Log("Attempted to define an axis [" + axis_.GetName().GetString() + "] with no button IDs set!", Debug::Warning, __FILE__, __LINE__);
+		return;
+	}
+
+	definedAxes.push_back(axis_);
+}
+
 //Note - The implementation here could have some weirdness when pressing the same button multiple times/shifting an axis a lot on a single frame
 //I only expect this to be an issue on frames with major lag spikes, which ideally the high-level parts of the input system/game will be somewhat resilient to
+//TODO - This doesn't handle key repeats correctly
 void Input::ProcessInputs(){
 	buttonsDown.clear();
 	buttonsUp.clear();
@@ -75,6 +170,7 @@ void Input::ProcessInputs(){
 			buttonsUp.insert(b.GetButtonID());
 		}
 	}
+	buttonEvents.clear();
 
 	for(const auto& a : axisEvents){
 		if(axes.find(a.GetAxisID()) != axes.end()){
@@ -83,6 +179,7 @@ void Input::ProcessInputs(){
 			axes.insert(std::make_pair(a.GetAxisID(), a.Value()));
 		}
 	}
+	axisEvents.clear();
 }
 
 void Input::OnEvent(const Event& e_){

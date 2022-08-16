@@ -2,6 +2,7 @@
 #define GADGET_INPUT_TYPE_H
 
 #include "InputEnums.h"
+#include "Utils/StringID.h"
 
 namespace Gadget{
 	class RawButton{
@@ -26,6 +27,54 @@ namespace Gadget{
 	private:
 		const AxisID axisID;
 		const float value;
+	};
+
+	class Button{
+	public:
+		Button(StringID name_) : name(name_), buttonIDs(){}
+
+		Button(StringID name_, ButtonID buttonID_) : name(name_), buttonIDs(){
+			buttonIDs.insert(buttonID_);
+		}
+
+		Button(StringID name_, const std::set<ButtonID>&& buttonIDs_) : name(name_), buttonIDs(buttonIDs_){}
+
+		StringID GetName() const{ return name; }
+		const std::set<ButtonID>& GetButtonIDs() const{ return buttonIDs; }
+
+		void AddButtonID(ButtonID id_){ buttonIDs.insert(id_); }
+
+		void RemoveButtonID(ButtonID id_){
+			_ASSERT(buttonIDs.find(id_) != buttonIDs.end()); //Tried erasing a button ID that's not in the set
+			buttonIDs.erase(id_);
+		}
+
+	private:
+		StringID name;
+		std::set<ButtonID> buttonIDs;
+	};
+
+	class Axis{
+	public:
+		Axis(StringID name_, AxisID axisID_) : name(name_), axisIDs(){
+			axisIDs.insert(axisID_);
+		}
+
+		Axis(StringID name_, const std::set<AxisID>&& axisIDs_) : name(name_), axisIDs(axisIDs_){}
+
+		StringID GetName() const{ return name; }
+		const std::set<AxisID>& GetAxisIDs() const{ return axisIDs; }
+
+		void AddAxisID(AxisID id_){ axisIDs.insert(id_); }
+
+		void RemoveAxisID(AxisID id_){
+			_ASSERT(axisIDs.find(id_) != axisIDs.end()); //Tried erasing an axis ID that's not in the set
+			axisIDs.erase(id_);
+		}
+
+	private:
+		StringID name;
+		std::set<AxisID> axisIDs;
 	};
 }
 
