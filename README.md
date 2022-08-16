@@ -15,7 +15,7 @@ Currently relies on SDL2 so I can focus on the engine itself, but I'm hoping to 
 | Fully Support UTF-8 Encoding  |  |
 | Engine Configuration (config files, console commands, etc)  |  |
 | Asset Management (at runtime + tool for engine users)  |  |
-| HID Input (gamepads, keyboard, mouse, etc) |  |
+| HID Input (gamepads, keyboard, mouse, etc) | ✓ |
 | Debug Tools (logging, drawing, menus, console commands, etc) |  |
 | Basic 3D Rendering with OpenGL (geometry, lighting/shadows, etc)  |  |
 | Basic Skeletal Animation  |  |
