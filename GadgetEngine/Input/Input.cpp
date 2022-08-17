@@ -1,8 +1,9 @@
 #include "Input.h"
 
+#include "GamepadEvent.h"
+#include "KeyEvent.h"
+#include "MouseEvent.h"
 #include "Events/EventHandler.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
 #include "Math/Math.h"
 
 using namespace Gadget;

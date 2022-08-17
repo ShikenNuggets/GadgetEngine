@@ -1,8 +1,8 @@
 #ifndef GADGET_MOUSE_EVENT_H
 #define GADGET_MOUSE_EVENT_H
 
-#include "Event.h"
-#include "Input/InputEnums.h"
+#include "InputEnums.h"
+#include "Events/Event.h"
 
 namespace Gadget{
 	class MouseMovedEvent : public Event{

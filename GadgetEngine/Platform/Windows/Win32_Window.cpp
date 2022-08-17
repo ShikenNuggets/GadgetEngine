@@ -6,8 +6,8 @@
 #include "Win32_Utils.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
+#include "Input/KeyEvent.h"
+#include "Input/MouseEvent.h"
 #include "Input/GamepadEvent.h"
 
 using namespace Gadget;

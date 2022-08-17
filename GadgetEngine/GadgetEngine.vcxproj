@@ -107,13 +107,13 @@
     <ClInclude Include="Events\AppEvent.h" />
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Events\EventHandler.h" />
-    <ClInclude Include="Events\KeyEvent.h" />
-    <ClInclude Include="Events\MouseEvent.h" />
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Input\GamepadEvent.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\InputEnums.h" />
     <ClInclude Include="Input\InputType.h" />
+    <ClInclude Include="Input\KeyEvent.h" />
+    <ClInclude Include="Input\MouseEvent.h" />
     <ClInclude Include="LocManager.h" />
     <ClInclude Include="Math\Angle.h" />
     <ClInclude Include="Math\Euler.h" />
