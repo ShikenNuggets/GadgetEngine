@@ -29,6 +29,8 @@ namespace Gadget{
 		const float value;
 	};
 
+	//Action that requires a single button
+	//If ANY of the buttonIDs is up/held/down, the Button is
 	class Button{
 	public:
 		Button(StringID name_) : name(name_), buttonIDs(){}
@@ -52,6 +54,35 @@ namespace Gadget{
 	private:
 		StringID name;
 		std::set<ButtonID> buttonIDs;
+	};
+
+	//Action that requires multiple buttons
+	//If ALL of the buttonIDs are down/held and ANY are down, the MultiButton is down
+	//If ALL of the buttonIDs are held, the MultiButton is held
+	//If the MultiButton was previously down and ANY of the buttonIDs are up, the MultiButton is up
+	class MultiButton{
+	public:
+		MultiButton(StringID name_) : name(name_), buttonIDs(){}
+
+		MultiButton(StringID name_, ButtonID buttonID_) : name(name_), buttonIDs(){
+			buttonIDs.push_back(buttonID_);
+		}
+
+		MultiButton(StringID name_, const std::vector<ButtonID>&& buttonIDs_) : name(name_), buttonIDs(buttonIDs_){}
+
+		StringID GetName() const{ return name; }
+		const std::vector<ButtonID>& GetButtonIDs() const{ return buttonIDs; }
+
+		void AddButtonID(ButtonID id_){ buttonIDs.push_back(id_); }
+
+		void RemoveButtonID(ButtonID id_){
+			_ASSERT(buttonIDs.find(id_) != buttonIDs.end()); //Tried erasing a button ID that's not in the vector
+			buttonIDs.erase(std::remove(buttonIDs.begin(), buttonIDs.end(), id_));
+		}
+
+	private:
+		StringID name;
+		std::vector<ButtonID> buttonIDs;
 	};
 
 	struct ButtonAxis{

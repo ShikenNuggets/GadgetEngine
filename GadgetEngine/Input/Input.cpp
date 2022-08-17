@@ -154,6 +154,64 @@ float Input::GetAxis(StringID axisName_) const{
 	return 0.0f;
 }
 
+bool Input::GetMultiButtonDown(StringID multiButton_) const{
+	for(const auto& mb : definedMultiButtons){
+		if(mb.GetName() == multiButton_){
+			bool anyDownThisFrame = false;
+
+			for(const auto& id : mb.GetButtonIDs()){
+				if(GetButtonDown(id)){
+					anyDownThisFrame = true;
+					continue;
+				}
+
+				if(!GetButtonHeld(id)){
+					return false; //All button IDs must be either down or held
+				}
+			}
+
+			return anyDownThisFrame;
+		}
+	}
+
+	Debug::Log("Tried to query undefined MultiButton [" + multiButton_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
+	return false;
+}
+
+bool Input::GetMultiButtonUp(StringID multiButton_) const{
+	for(const auto& mb : definedMultiButtons){
+		if(mb.GetName() == multiButton_){
+			for(const auto& id : mb.GetButtonIDs()){
+				if(GetButtonUp(id)){
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
+
+	Debug::Log("Tried to query undefined MultiButton [" + multiButton_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
+	return false;
+}
+
+bool Input::GetMultiButtonHeld(StringID multiButton_) const{
+	for(const auto& mb : definedMultiButtons){
+		if(mb.GetName() == multiButton_){
+			for(const auto& id : mb.GetButtonIDs()){
+				if(!GetButtonDown(id) || !GetButtonHeld(id)){
+					return false; //All button IDs must be either down or held
+				}
+			}
+
+			return true;
+		}
+	}
+
+	Debug::Log("Tried to query undefined MultiButton [" + multiButton_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
+	return false;
+}
+
 void Input::DefineButton(const Button&& button_){
 	_ASSERT(!button_.GetButtonIDs().empty()); //Creating a Defined Button with no button IDs
 	if(button_.GetButtonIDs().empty()){
@@ -172,6 +230,16 @@ void Input::DefineAxis(const Axis&& axis_){
 	}
 
 	definedAxes.push_back(axis_);
+}
+
+void Input::DefineMultiButton(const MultiButton&& multiButton_){
+	_ASSERT(!multiButton_.GetButtonIDs().empty()); //Creating a Defined Button with no button IDs
+	if(multiButton_.GetButtonIDs().empty()){
+		Debug::Log("Attempted to define a MultiButton [" + multiButton_.GetName().GetString() + "] with no button IDs set!", Debug::Warning, __FILE__, __LINE__);
+		return;
+	}
+
+	definedMultiButtons.push_back(multiButton_);
 }
 
 //Note - The implementation here could have some weirdness when pressing the same button multiple times/shifting an axis a lot on a single frame
