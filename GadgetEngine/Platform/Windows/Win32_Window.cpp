@@ -78,6 +78,7 @@ void Win32_Window::HandleEvents(){
 	//Variables that will be used in the switch
 	SDL_Joystick* joystick = nullptr;
 	AxisID joystickAxis = AxisID::None;
+	float range = 0.0f;
 
 	SDL_Event e;
 	while(SDL_PollEvent(&e) != 0){
@@ -117,7 +118,8 @@ void Win32_Window::HandleEvents(){
 				break;
 			case SDL_JOYAXISMOTION:
 				joystickAxis = Win32_Utils::ConvertSDLJoystickAxisToAxisID(e.jaxis.axis);
-				EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e.jaxis.which, joystickAxis, e.jaxis.value));
+				range = static_cast<float>(e.jaxis.value) / static_cast<float>(std::numeric_limits<int16_t>::max()); //Convert the quantized value we get from SDL to a float between -1 and 1
+				EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e.jaxis.which, joystickAxis, range));
 				//TODO - Trigger button events here as well
 				break;
 			case SDL_JOYBUTTONDOWN:
