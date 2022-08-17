@@ -127,6 +127,16 @@ float Input::GetAxis(StringID axisName_) const{
 				totalAxisValue += GetAxis(id);
 			}
 
+			for(const auto& b : a.GetButtonAxisIDs()){
+				if(GetButtonHeld(b.negative)){
+					totalAxisValue -= 1.0f;
+				}
+
+				if(GetButtonHeld(b.positive)){
+					totalAxisValue += 1.0f;
+				}
+			}
+
 			return Math::Clamp(-1.0f, 1.0f, totalAxisValue);
 		}
 	}

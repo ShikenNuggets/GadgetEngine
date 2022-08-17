@@ -54,16 +54,29 @@ namespace Gadget{
 		std::set<ButtonID> buttonIDs;
 	};
 
+	struct ButtonAxis{
+		constexpr ButtonAxis(ButtonID negative_, ButtonID positive_) : negative(negative_), positive(positive_){}
+
+		ButtonID negative;
+		ButtonID positive;
+	};
+
 	class Axis{
 	public:
-		Axis(StringID name_, AxisID axisID_) : name(name_), axisIDs(){
+		Axis(StringID name_, AxisID axisID_) : name(name_), axisIDs(), buttonAxisIDs(){
 			axisIDs.insert(axisID_);
 		}
 
-		Axis(StringID name_, const std::set<AxisID>&& axisIDs_) : name(name_), axisIDs(axisIDs_){}
+		Axis(StringID name_, const ButtonAxis& buttonAxis_) : name(name_), axisIDs(), buttonAxisIDs(){
+			buttonAxisIDs.push_back(buttonAxis_);
+		}
+
+		Axis(StringID name_, const std::set<AxisID>&& axisIDs_) : name(name_), axisIDs(axisIDs_), buttonAxisIDs(){}
+		Axis(StringID name_, const std::vector<ButtonAxis>&& buttonAxisIDs_) : name(name_), axisIDs(), buttonAxisIDs(buttonAxisIDs_){}
 
 		StringID GetName() const{ return name; }
 		const std::set<AxisID>& GetAxisIDs() const{ return axisIDs; }
+		const std::vector<ButtonAxis>& GetButtonAxisIDs() const{ return buttonAxisIDs; }
 
 		void AddAxisID(AxisID id_){ axisIDs.insert(id_); }
 
@@ -75,6 +88,7 @@ namespace Gadget{
 	private:
 		StringID name;
 		std::set<AxisID> axisIDs;
+		std::vector<ButtonAxis> buttonAxisIDs;
 	};
 }
 
