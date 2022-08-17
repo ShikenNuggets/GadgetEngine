@@ -143,7 +143,7 @@ float Input::GetAxis(StringID axisName_) const{
 			}
 
 			if(a.IsInverted()){
-				totalAxisValue *= 1.0f;
+				totalAxisValue *= -1.0f;
 			}
 
 			return Math::Clamp(-1.0f, 1.0f, totalAxisValue);
