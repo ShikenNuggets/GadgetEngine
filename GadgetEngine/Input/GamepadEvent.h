@@ -31,6 +31,7 @@ namespace Gadget{
 	};
 
 	class GamepadButtonEvent : public GamepadEvent{
+	public:
 		inline ButtonID GetButton() const{ return button; }
 
 	protected:

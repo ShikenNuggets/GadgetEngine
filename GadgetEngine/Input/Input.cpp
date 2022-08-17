@@ -205,6 +205,15 @@ void Input::OnEvent(const Event& e_){
 		case EventType::MouseButtonReleased:
 			GetInstance()->buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonReleasedEvent&>(e_).GetButton(), false));
 			break;
+		case EventType::GamepadAxis:
+			GetInstance()->axisEvents.push_back(RawAxis(dynamic_cast<const GamepadAxisEvent&>(e_).GetAxisIndex(), dynamic_cast<const GamepadAxisEvent&>(e_).GetValue()));
+			break;
+		case EventType::GamepadButtonPressed:
+			GetInstance()->buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), true));
+			break;
+		case EventType::GamepadButtonReleased:
+			GetInstance()->buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), false));
+			break;
 		default:
 			Debug::Log("Unhandled Event Type [" + e_.GetName().GetString() + "] in Input!", Debug::Error, __FILE__, __LINE__);
 			break;
