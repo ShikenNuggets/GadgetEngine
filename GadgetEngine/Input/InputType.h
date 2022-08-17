@@ -63,20 +63,21 @@ namespace Gadget{
 
 	class Axis{
 	public:
-		Axis(StringID name_, AxisID axisID_) : name(name_), axisIDs(), buttonAxisIDs(){
+		Axis(StringID name_, AxisID axisID_, float deadzone_ = 0.05f) : name(name_), axisIDs(), buttonAxisIDs(), deadzone(deadzone_){
 			axisIDs.insert(axisID_);
 		}
 
-		Axis(StringID name_, const ButtonAxis& buttonAxis_) : name(name_), axisIDs(), buttonAxisIDs(){
+		Axis(StringID name_, const ButtonAxis& buttonAxis_, float deadzone_ = 0.05f) : name(name_), axisIDs(), buttonAxisIDs(), deadzone(deadzone_){
 			buttonAxisIDs.push_back(buttonAxis_);
 		}
 
-		Axis(StringID name_, const std::set<AxisID>&& axisIDs_) : name(name_), axisIDs(axisIDs_), buttonAxisIDs(){}
-		Axis(StringID name_, const std::vector<ButtonAxis>&& buttonAxisIDs_) : name(name_), axisIDs(), buttonAxisIDs(buttonAxisIDs_){}
+		Axis(StringID name_, const std::set<AxisID>&& axisIDs_, float deadzone_ = 0.05f) : name(name_), axisIDs(axisIDs_), buttonAxisIDs(), deadzone(deadzone_){}
+		Axis(StringID name_, const std::vector<ButtonAxis>&& buttonAxisIDs_, float deadzone_ = 0.05f) : name(name_), axisIDs(), buttonAxisIDs(buttonAxisIDs_), deadzone(deadzone_){}
 
 		StringID GetName() const{ return name; }
 		const std::set<AxisID>& GetAxisIDs() const{ return axisIDs; }
 		const std::vector<ButtonAxis>& GetButtonAxisIDs() const{ return buttonAxisIDs; }
+		float GetDeadZone() const{ return deadzone; }
 
 		void AddAxisID(AxisID id_){ axisIDs.insert(id_); }
 
@@ -89,6 +90,8 @@ namespace Gadget{
 		StringID name;
 		std::set<AxisID> axisIDs;
 		std::vector<ButtonAxis> buttonAxisIDs;
+
+		float deadzone;
 	};
 }
 

@@ -137,6 +137,11 @@ float Input::GetAxis(StringID axisName_) const{
 				}
 			}
 
+			totalAxisValue = Math::Clamp(-1.0f, 1.0f, totalAxisValue);
+			if(Math::Abs(totalAxisValue) < a.GetDeadZone()){
+				return 0.0f;
+			}
+
 			return Math::Clamp(-1.0f, 1.0f, totalAxisValue);
 		}
 	}
