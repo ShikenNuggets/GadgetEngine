@@ -1,6 +1,8 @@
 #ifndef GADGET_INPUT_TYPE_H
 #define GADGET_INPUT_TYPE_H
 
+#include <set>
+
 #include "InputEnums.h"
 #include "Utils/StringID.h"
 

@@ -1,7 +1,7 @@
 #ifndef GADGET_INPUT_GESTURE_H
 #define GADGET_INPUT_GESTURE_H
 
-#include "Input/InputEnums.h"
+#include "InputType.h"
 #include "Utils/StringID.h"
 
 namespace Gadget{
@@ -24,8 +24,7 @@ namespace Gadget{
 
 	class ButtonMashGesture : public InputGesture{
 	public:
-		ButtonMashGesture(StringID name_, ButtonID button_, int requiredPresses_ = 25, float maxAllowedTime_ = 0.25f);
-		ButtonMashGesture(StringID name_, std::vector<ButtonID> buttonIDs_, int requiredPresses_ = 25, float maxAllowedTime_ = 0.25f);
+		ButtonMashGesture(StringID gestureName_, StringID buttonName_, int requiredPresses_ = 25, float maxAllowedTime_ = 0.25f);
 
 		virtual bool IsGestureValid() const override;
 		virtual bool IsGestureComplete() const override;
@@ -36,7 +35,7 @@ namespace Gadget{
 		virtual void Reset() override;
 
 	private:
-		std::vector<ButtonID> buttonIDs;
+		StringID buttonName;
 		int requiredPresses;
 		int currentPresses;
 		float lastButtonDownEvent;
@@ -44,8 +43,7 @@ namespace Gadget{
 
 	class ButtonSequenceGesture : public InputGesture{
 	public:
-		ButtonSequenceGesture(StringID name_, std::vector<ButtonID> sequence_, float maxAllowedTime_ = 1.0f);
-		ButtonSequenceGesture(StringID name_, std::vector<std::vector<ButtonID>> sequences_, float maxAllowedTime_ = 1.0f);
+		ButtonSequenceGesture(StringID gestureName_, std::vector<StringID> sequence_, float maxAllowedTime_ = 1.0f);
 
 		virtual bool IsGestureValid() const override;
 		virtual bool IsGestureComplete() const override;
@@ -54,9 +52,34 @@ namespace Gadget{
 		virtual void Reset() override;
 
 	private:
-		std::vector<std::vector<ButtonID>> buttonIDs; //A list (vector) of sequences (vector)
+		std::vector<StringID> buttonNames;
 		float startTime;
 		size_t currentButtonIndex;
+	};
+
+	class CircularRotationGesture : public InputGesture{
+	public:
+		enum class Rotations{
+			UpLeft,
+			UpRight,
+			DownLeft,
+			DownRight
+		};
+
+		CircularRotationGesture(StringID gestureName_, StringID horizontalAxisName_, StringID verticalAxisName_, std::vector<Rotations> rotations_, float maxAllowedTime_ = 1.0f);
+
+		virtual bool IsGestureValid() const override;
+		virtual bool IsGestureComplete() const override;
+
+		virtual void Update() override;
+		virtual void Reset() override;
+
+	private:
+		StringID horizontal;
+		StringID vertical;
+		std::vector<Rotations> rotations;
+		float startTime;
+		size_t currentRotationIndex;
 	};
 }
 
