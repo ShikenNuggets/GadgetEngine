@@ -46,6 +46,10 @@ void App::Initialize(){
 	Time::GetInstance();
 	Input::GetInstance();
 
+	#ifdef GADGET_RELEASE
+	Debug::SetLogVerbosity(Debug::Warning);
+	#endif // GADGET_RELEASE
+
 	#ifdef GADGET_PLATFORM_WIN32
 	window = std::make_unique<Win32_Window>(800, 600);
 	#endif //GADGET_PLATFORM_WIN32

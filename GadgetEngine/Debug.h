@@ -16,8 +16,11 @@ namespace Gadget{
 
 		static void Log(const std::string& message_, LogType type_ = LogType::Info, const std::string& fileName_ = "", int lineNumber = 0);
 
+		static LogType GetLogVerbosity();
+		static void SetLogVerbosity(LogType type_);
+
 	private:
-		static constexpr LogType logLevel = LogType::Verbose;
+		static LogType logLevel;
 
 		static std::string GetFileNameFromPath(const std::string& path_); //Helper function, TODO - Move this to a filesystem class or something
 	};

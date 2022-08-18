@@ -4,6 +4,8 @@
 
 using namespace Gadget;
 
+Debug::LogType Debug::logLevel = Debug::Verbose;
+
 void Debug::Log(const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
 	if(type_ < logLevel){
 		return; //Ignore log messages below the current log level
@@ -41,6 +43,10 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 
 	std::cout << finalMessage << std::endl;
 }
+
+Debug::LogType Debug::GetLogVerbosity(){ return logLevel; }
+
+void Debug::SetLogVerbosity(Debug::LogType type_){ logLevel = type_; }
 
 std::string Debug::GetFileNameFromPath(const std::string& path_){
 	char sep = '/';
