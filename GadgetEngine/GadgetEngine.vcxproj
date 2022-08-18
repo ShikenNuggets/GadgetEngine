@@ -111,6 +111,7 @@
     <ClInclude Include="Input\GamepadEvent.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\InputEnums.h" />
+    <ClInclude Include="Input\InputGesture.h" />
     <ClInclude Include="Input\InputType.h" />
     <ClInclude Include="Input\KeyEvent.h" />
     <ClInclude Include="Input\MouseEvent.h" />
@@ -142,6 +143,7 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Input\Input.cpp" />
+    <ClCompile Include="Input\InputGesture.cpp" />
     <ClCompile Include="LocManager.cpp" />
     <ClCompile Include="Math\Angle.cpp" />
     <ClCompile Include="Math\Euler.cpp" />
