@@ -85,5 +85,9 @@ float Time::RealDeltaTime() const{
 }
 
 float Time::PureDeltaTime() const{
-	return static_cast<float>((currentTicks - previousTicks).count()) / 1000.0f;
+	return MsToSecondsFloat(currentTicks - previousTicks);
+}
+
+float Time::TimeSinceStartup() const{
+	return MsToSecondsFloat(currentTicks - startTime);
 }

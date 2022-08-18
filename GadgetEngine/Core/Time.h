@@ -20,6 +20,12 @@ namespace Gadget{
 		float RealDeltaTime() const;
 		float PureDeltaTime() const;
 
+		float TimeSinceStartup() const;
+
+		static constexpr float MsToSecondsFloat(const std::chrono::milliseconds& ms_){
+			return static_cast<float>(ms_.count()) / 1000.0f;
+		}
+
 	private:
 		static Time* instance;
 
