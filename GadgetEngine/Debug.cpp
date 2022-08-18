@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Core/FileSystem.h"
+
 using namespace Gadget;
 
 Debug::LogType Debug::logLevel = Debug::Verbose;
@@ -43,6 +45,7 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	}
 
 	std::cout << finalMessage << std::endl;
+	FileSystem::WriteToFile("log.txt", finalMessage + "\n");
 }
 
 void Debug::Log(StringID channel_, const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
