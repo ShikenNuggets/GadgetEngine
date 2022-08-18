@@ -35,6 +35,9 @@
       <Filter>Concurrency</Filter>
     </ClInclude>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Core\FileSystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Time.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -126,6 +129,9 @@
       <Filter>Concurrency</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Core\FileSystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Time.cpp">
       <Filter>Core</Filter>
     </ClCompile>
