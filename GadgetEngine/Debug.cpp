@@ -5,6 +5,7 @@
 using namespace Gadget;
 
 Debug::LogType Debug::logLevel = Debug::Verbose;
+std::set<StringID> Debug::logChannelFilter = std::set<StringID>();
 
 void Debug::Log(const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
 	if(type_ < logLevel){
@@ -44,9 +45,23 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	std::cout << finalMessage << std::endl;
 }
 
+void Debug::Log(StringID channel_, const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
+	if(logChannelFilter.empty() || logChannelFilter.find(channel_) != logChannelFilter.end()){
+		Debug::Log("[" + channel_.GetString() + "] " + message_, type_, fileName_, lineNumber_); //Only print if there is no filter set or if this channel is in the filter list
+	}
+}
+
 Debug::LogType Debug::GetLogVerbosity(){ return logLevel; }
 
 void Debug::SetLogVerbosity(Debug::LogType type_){ logLevel = type_; }
+
+void Debug::AddFilter(StringID id_){
+	logChannelFilter.insert(id_);
+}
+
+void Debug::ResetFilter(){
+	logChannelFilter.clear();
+}
 
 std::string Debug::GetFileNameFromPath(const std::string& path_){
 	char sep = '/';
