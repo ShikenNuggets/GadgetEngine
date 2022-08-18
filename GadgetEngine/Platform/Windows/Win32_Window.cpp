@@ -116,6 +116,8 @@ void Win32_Window::HandleEvents(){
 				RemoveJoystick(e.jdevice.which);
 				Debug::Log("Gamepad " + std::to_string(e.jdevice.which) + " disconnected.");
 				break;
+			//TODO - None of the following joystick events know or care WHICH joystick is being used
+			//For a singleplayer game this doesn't really matter but this is a HUGE problem for splitscreen
 			case SDL_JOYAXISMOTION:
 				joystickAxis = Win32_Utils::ConvertSDLJoystickAxisToAxisID(e.jaxis.axis);
 				range = static_cast<float>(e.jaxis.value) / static_cast<float>(std::numeric_limits<int16_t>::max()); //Convert the quantized value we get from SDL to a float between -1 and 1

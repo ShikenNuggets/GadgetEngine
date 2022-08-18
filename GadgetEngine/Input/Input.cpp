@@ -212,17 +212,6 @@ bool Input::GetMultiButtonHeld(StringID multiButton_) const{
 	return false;
 }
 
-bool Input::GetGestureComplete(StringID gesture_) const{
-	for(const auto& g : gestures){
-		if(g.get()->GetName() == gesture_){
-			return g.get()->IsGestureComplete();
-		}
-	}
-
-	Debug::Log("Tried to query undefined gesture [" + gesture_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
-	return false;
-}
-
 void Input::DefineButton(const Button&& button_){
 	_ASSERT(!button_.GetButtonIDs().empty()); //Creating a Defined Button with no button IDs
 	if(button_.GetButtonIDs().empty()){
@@ -251,10 +240,6 @@ void Input::DefineMultiButton(const MultiButton&& multiButton_){
 	}
 
 	definedMultiButtons.push_back(multiButton_);
-}
-
-void Input::DefineGesture(const std::shared_ptr<InputGesture>& gesture_){
-	gestures.push_back(gesture_);
 }
 
 //Note - The implementation here could have some weirdness when pressing the same button multiple times/shifting an axis a lot on a single frame

@@ -34,12 +34,9 @@ namespace Gadget{
 		bool GetMultiButtonUp(StringID multiButton_) const;
 		bool GetMultiButtonHeld(StringID multiButton_) const;
 
-		bool GetGestureComplete(StringID gesture_) const;
-
 		void DefineButton(const Button&& button_);
 		void DefineAxis(const Axis&& axis_);
 		void DefineMultiButton(const MultiButton&& multiButton_);
-		void DefineGesture(const std::shared_ptr<InputGesture>& gesture_);
 
 		void ProcessInputs();
 
@@ -62,7 +59,6 @@ namespace Gadget{
 		std::vector<Button> definedButtons;
 		std::vector<Axis> definedAxes;
 		std::vector<MultiButton> definedMultiButtons;
-		std::vector<std::shared_ptr<InputGesture>> gestures;
 
 		//Delete unwanted compiler-generated copy/move constructors and assignment operators
 		Input(const Input&) = delete;
