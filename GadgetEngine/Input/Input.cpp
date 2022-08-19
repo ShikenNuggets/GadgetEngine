@@ -244,7 +244,6 @@ void Input::DefineMultiButton(const MultiButton&& multiButton_){
 
 //Note - The implementation here could have some weirdness when pressing the same button multiple times/shifting an axis a lot on a single frame
 //I only expect this to be an issue on frames with major lag spikes, which ideally the high-level parts of the input system/game will be somewhat resilient to
-//TODO - This doesn't handle key repeats correctly
 void Input::ProcessInputs(){
 	buttonsDown.clear();
 	buttonsUp.clear();
