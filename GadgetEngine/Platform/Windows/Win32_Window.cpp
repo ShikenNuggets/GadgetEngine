@@ -12,7 +12,7 @@
 
 using namespace Gadget;
 
-Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr), glContext(nullptr), joysticks(){
+Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr), joysticks(){
 	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
 		Debug::Log("SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error
@@ -40,20 +40,6 @@ Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr),
 		Debug::Log("Window could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error
 	}
-
-	glContext = SDL_GL_CreateContext(sdlWindow);
-	if(glContext == nullptr){
-		Debug::Log("OpenGL context could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
-	}
-
-	if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)){
-		Debug::Log("Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
-	}
-
-	glViewport(0, 0, GetWidth(), GetHeight());
-	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 
 	//This is enabled by default but it's good to be explicit
 	if(SDL_JoystickEventState(SDL_ENABLE) != 1){

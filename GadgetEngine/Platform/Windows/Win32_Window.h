@@ -22,7 +22,6 @@ namespace Gadget{
 
 	private:
 		SDL_Window* sdlWindow;
-		SDL_GLContext glContext;
 		std::vector<SDL_Joystick*> joysticks;
 
 		void HandleWindowEvent(const SDL_Event& e_);

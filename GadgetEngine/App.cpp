@@ -7,7 +7,7 @@
 #include "Random.h"
 #include "Core/Time.h"
 #include "Input/Input.h"
-#include "Platform/Windows/Win32_Window.h"
+#include "Platform/Windows/Win32_Renderer.h"
 
 #include "Events/EventHandler.h"
 
@@ -15,12 +15,12 @@ using namespace Gadget;
 
 App* App::instance = nullptr;
 
-App::App() : isRunning(true), window(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
+App::App() : isRunning(true), renderer(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
 }
 
 App::~App(){
-	window.reset();
+	renderer.reset();
 }
 
 App* App::GetInstance(){
@@ -51,7 +51,7 @@ void App::Initialize(){
 	#endif // GADGET_RELEASE
 
 	#ifdef GADGET_PLATFORM_WIN32
-	window = std::make_unique<Win32_Window>(800, 600);
+	renderer = std::make_unique<Win32_Renderer>(800, 600);
 	#endif //GADGET_PLATFORM_WIN32
 }
 
@@ -70,11 +70,11 @@ void App::Run(){
 		twoFrameAllocator.CurrentBuffer().Clear();
 
 		//Regular update follows
-		window->HandleEvents();
+		renderer->GetWindow().lock()->HandleEvents();
 
 		Input::GetInstance()->ProcessInputs();
 
-		window->SwapBuffers();
+		renderer->Render();
 
 		//After everything else is done, sleep for the appropriate amount of time (if necessary)
 		Time::GetInstance()->Delay();

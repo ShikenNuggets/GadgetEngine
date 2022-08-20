@@ -4,6 +4,7 @@
 
 #include "Window.h"
 #include "Events/Event.h"
+#include "Graphics/Renderer.h"
 #include "Memory/StackAllocator.h"
 
 namespace Gadget{
@@ -31,7 +32,7 @@ namespace Gadget{
 		static App* instance;
 
 		bool isRunning;
-		std::unique_ptr<Window> window;
+		std::unique_ptr<Renderer> renderer;
 		StackAllocator singleFrameAllocator;
 		DoubleBufferedStackAllocator twoFrameAllocator;
 

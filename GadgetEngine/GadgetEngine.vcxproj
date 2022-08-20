@@ -109,6 +109,8 @@
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Graphics\Color.h" />
+    <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Input\GamepadEvent.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\InputEnums.h" />
@@ -128,6 +130,7 @@
     <ClInclude Include="Memory\DoubleStackAllocator.h" />
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
+    <ClInclude Include="Platform\Windows\Win32_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_Window.h" />
     <ClInclude Include="Random.h" />
@@ -156,6 +159,7 @@
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Memory\DoubleStackAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
+    <ClCompile Include="Platform\Windows\Win32_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Window.cpp" />
     <ClCompile Include="Utils\StringID.cpp" />

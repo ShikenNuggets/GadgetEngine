@@ -10,6 +10,9 @@
     <Filter Include="Events">
       <UniqueIdentifier>{3A8963B1-262B-8E87-0FE6-A1DBFB2615D8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
     </Filter>
@@ -52,6 +55,12 @@
       <Filter>Events</Filter>
     </ClInclude>
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Graphics\Color.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Renderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Input\GamepadEvent.h">
       <Filter>Input</Filter>
     </ClInclude>
@@ -106,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="Memory\StackAllocator.h">
       <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\Win32_Renderer.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\Win32_Utils.h">
       <Filter>Platform\Windows</Filter>
@@ -172,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="Memory\StackAllocator.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\Win32_Renderer.cpp">
+      <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Platform\Windows\Win32_Utils.cpp">
       <Filter>Platform\Windows</Filter>
