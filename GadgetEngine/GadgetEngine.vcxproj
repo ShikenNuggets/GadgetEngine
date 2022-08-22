@@ -111,6 +111,7 @@
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Graphics\Color.h" />
     <ClInclude Include="Graphics\Renderer.h" />
+    <ClInclude Include="Graphics\ViewportRect.h" />
     <ClInclude Include="Input\GamepadEvent.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\InputEnums.h" />

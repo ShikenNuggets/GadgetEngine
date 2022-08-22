@@ -25,7 +25,7 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(){
 	SetWindingOrder(currentWindingOrder);
 	SetCullFace(currentCullFace);
 
-	glViewport(0, 0, window->GetWidth(), window->GetHeight());
+	SetViewportRect(ViewportRect::Fullscreen);
 	SetClearColor(Color::DarkGray());
 
 	ClearScreen();
@@ -46,6 +46,19 @@ void Win32_Renderer::ClearScreen(){
 
 void Win32_Renderer::SetClearColor(const Color& color_){
 	glClearColor(color_.r, color_.g, color_.b, color_.a);
+}
+
+void Win32_Renderer::SetViewportRect(const Rect& rect_){
+	//Invalid window rect
+	_ASSERT(rect_.x >= 0.0f && rect.x <= 1.0f);
+	_ASSERT(rect_.y >= 0.0f && rect.y <= 1.0f);
+	_ASSERT(rect_.w >= 0.0f && rect.w <= 1.0f);
+	_ASSERT(rect_.h >= 0.0f && rect.h <= 1.0f);
+
+	glViewport(static_cast<GLint>(window->GetWidth() * rect_.x),
+				static_cast<GLint>(window->GetHeight() * rect_.y),
+				static_cast<GLsizei>(window->GetWidth() * rect_.w),
+				static_cast<GLsizei>(window->GetHeight() * rect_.h));
 }
 
 void Win32_Renderer::SetWindingOrder(WindingOrder order_){

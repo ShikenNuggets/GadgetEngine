@@ -1,7 +1,9 @@
 #ifndef GADGET_WIN32_RENDERER_H
 #define GADGET_WIN32_RENDERER_H
 
+#pragma warning(disable : 26819) //Kill unfixable warning from SDL2
 #include <SDL.h>
+#pragma warning(default : 26819)
 
 #include "Graphics/Renderer.h"
 
@@ -15,6 +17,8 @@ namespace Gadget{
 		virtual void Render() override;
 		virtual void ClearScreen() override;
 		virtual void SetClearColor(const Color& color_) override;
+		virtual void SetViewportRect(const Rect& rect_) override;
+
 		virtual void SetWindingOrder(WindingOrder order_) override;
 		virtual void SetCullFace(CullFace cullFace_) override;
 
