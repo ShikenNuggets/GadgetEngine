@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 
 #include "Graphics/Shader.h"
+#include "Math/Matrix.h"
 
 namespace Gadget{
 	class GL_Shader : public Shader{
@@ -15,6 +16,8 @@ namespace Gadget{
 		GLuint GetShaderProgram();
 		virtual void Bind() override;
 		virtual void Unbind() override;
+
+		void BindMatrix4(StringID uniformName_, const Matrix4& mat4_);
 
 	private:
 		GLuint shader;

@@ -77,6 +77,10 @@ void Win32_Renderer::Render(){
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
+	shader->BindMatrix4(SID("projectionMatrix"), Matrix4::Perspective(45.0f, 1.33f, 0.1f, 100.0f));
+	shader->BindMatrix4(SID("viewMatrix"), Matrix4::LookAt(Vector3(4.0f, 3.0f, 3.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f)));
+	shader->BindMatrix4(SID("modelMatrix"), Matrix4::Identity());
+
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	glDisableVertexAttribArray(0);

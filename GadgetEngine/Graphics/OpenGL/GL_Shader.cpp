@@ -8,9 +8,11 @@ using namespace Gadget;
 constexpr char* vertCode = 
 "#version 460 core \n \
 layout(location = 0) in vec3 vertPos; \n \
+uniform mat4 projectionMatrix; \n \
+uniform mat4 viewMatrix; \n \
+uniform mat4 modelMatrix; \n \
 void main(){ \n \
-	gl_Position.xyz = vertPos; \n \
-	gl_Position.w = 1.0; \n \
+	gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * vec4(vertPos, 1.0f); \n \
 }";
 
 constexpr char* fragCode = 
@@ -70,7 +72,7 @@ GL_Shader::~GL_Shader(){
 }
 
 GLuint GL_Shader::GetShaderProgram(){
-	return GLuint();
+	return shader;
 }
 
 void GL_Shader::Bind(){
@@ -79,6 +81,11 @@ void GL_Shader::Bind(){
 
 void GL_Shader::Unbind(){
 	glUseProgram(0);
+}
+
+void GL_Shader::BindMatrix4(StringID uniformName_, const Matrix4& mat4_){
+	GLuint uniformID = glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str()); //TODO - This function is fairly expensive, cache the value from it
+	glUniformMatrix4fv(uniformID, 1, GL_FALSE, mat4_);
 }
 
 std::string GL_Shader::GetShaderLog(GLuint shader_){
