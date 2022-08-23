@@ -152,6 +152,8 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Window.h" />
+    <ClInclude Include="Resource\ResourceManager.h" />
+    <ClInclude Include="Resource\Resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -221,5 +223,6 @@
     <ClCompile Include="Utils\StringID.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\ResourceManager.cpp" />
   </ItemGroup>
 </Project>

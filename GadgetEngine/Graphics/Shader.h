@@ -1,8 +1,10 @@
 #ifndef GADGET_SHADER_H
 #define GADGET_SHADER_H
 
+#include "Resource/Resource.h"
+
 namespace Gadget{
-	class Shader{
+	class Shader : public Resource{
 	public:
 		Shader(){}
 		virtual ~Shader(){}

@@ -139,6 +139,8 @@
     <ClInclude Include="Platform\Windows\Win32_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_Window.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="Resource\Resource.h" />
+    <ClInclude Include="Resource\ResourceManager.h" />
     <ClInclude Include="ScreenCoordinate.h" />
     <ClInclude Include="Utils\Hash.h" />
     <ClInclude Include="Utils\StringID.h" />
@@ -169,6 +171,7 @@
     <ClCompile Include="Platform\Windows\Win32_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Window.cpp" />
+    <ClCompile Include="Resource\ResourceManager.cpp" />
     <ClCompile Include="Utils\StringID.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

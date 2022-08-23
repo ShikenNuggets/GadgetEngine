@@ -4,6 +4,7 @@
 
 #include "Win32_Window.h"
 #include "Debug.h"
+#include "Resource/ResourceManager.h"
 
 using namespace Gadget;
 
@@ -59,7 +60,7 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), meshInfo(nullptr), 
 
 	meshInfo->Unbind();
 
-	shader = new GL_Shader();
+	shader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("DefaultShader"));
 }
 
 Win32_Renderer::~Win32_Renderer(){

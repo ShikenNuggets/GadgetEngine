@@ -1,28 +1,23 @@
 #include "GL_Shader.h"
 
 #include "Debug.h"
+#include "Core/FileSystem.h"
 
 using namespace Gadget;
 
-//TODO - Obviously load these from files instead
-constexpr char* vertCode = 
-"#version 460 core \n \
-layout(location = 0) in vec3 vertPos; \n \
-uniform mat4 projectionMatrix; \n \
-uniform mat4 viewMatrix; \n \
-uniform mat4 modelMatrix; \n \
-void main(){ \n \
-	gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * vec4(vertPos, 1.0f); \n \
-}";
+GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_) : Shader(), shader(0){
+	std::string vertCodeStr = FileSystem::ReadFileToString(vertPath_);
+	if(vertCodeStr.empty()){
+		Debug::Log("Could not load vertex shader code from [" + vertPath_ + "]!", Debug::FatalError, __FILE__, __LINE__);
+		//TODO - Handle fatal error
+	}
 
-constexpr char* fragCode = 
-"#version 460 core \n \
-out vec3 color; \n \
-void main(){ \n \
-	color = vec3(1.0f, 0.0f, 0.0f); \n \
-}";
+	std::string fragCodeStr = FileSystem::ReadFileToString(fragPath_);
+	if(fragCodeStr.empty()){
+		Debug::Log("Could not load fragment shader code from [" + fragPath_ + "]!", Debug::FatalError, __FILE__, __LINE__);
+		//TODO - Handle fatal error
+	}
 
-GL_Shader::GL_Shader() : Shader(), shader(0){
 	GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -31,6 +26,8 @@ GL_Shader::GL_Shader() : Shader(), shader(0){
 		//TODO - Handle fatal error
 	}
 
+	const char* vertCode = vertCodeStr.c_str();
+	const char* fragCode = fragCodeStr.c_str();
 	glShaderSource(vertShader, 1, &vertCode, nullptr);
 	glShaderSource(fragShader, 1, &fragCode, nullptr);
 

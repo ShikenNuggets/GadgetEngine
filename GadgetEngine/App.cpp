@@ -6,10 +6,10 @@
 #include "Debug.h"
 #include "Random.h"
 #include "Core/Time.h"
+#include "Events/EventHandler.h"
 #include "Input/Input.h"
 #include "Platform/Windows/Win32_Renderer.h"
-
-#include "Events/EventHandler.h"
+#include "Resource/ResourceManager.h"
 
 using namespace Gadget;
 
@@ -33,6 +33,13 @@ App* App::GetInstance(){
 
 #ifdef GADGET_DEBUG
 void App::DeleteInstance(){
+	instance->renderer.reset(nullptr);
+
+	Input::DeleteInstance();
+	Time::DeleteInstance();
+	Config::DeleteInstance();
+	ResourceManager::DeleteInstance();
+
 	if(instance != nullptr){
 		delete instance;
 		instance = nullptr;
@@ -41,6 +48,7 @@ void App::DeleteInstance(){
 #endif //GADGET_DEBUG
 
 void App::Initialize(){
+	ResourceManager::GetInstance();
 	Config::GetInstance(); //Init Config
 	Random::SetSeed();
 	Time::GetInstance();
