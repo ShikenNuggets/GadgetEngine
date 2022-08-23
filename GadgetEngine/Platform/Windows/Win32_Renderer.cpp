@@ -7,7 +7,7 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), meshInfo(nullptr), shader(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr);
@@ -30,13 +30,60 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(){
 
 	ClearScreen();
 	window->SwapBuffers();
+
+	#ifdef GADGET_DEBUG
+	if(glDebugMessageCallback){
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback((GLDEBUGPROC)Win32_Renderer::GLDebugCallback, nullptr);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
+	}else{
+		Debug::Log(SID("RENDER"), "Could not set up OpenGL debug callback, OpenGL issues will not be logged!", Debug::Warning, __FILE__, __LINE__);
+	}
+	#endif // GADGET_DEBUG
+
+	//TRIANGLE RENDERING
+	//TODO - Obviously get rid of this code Soon(TM)
+	meshInfo = new GL_MeshInfo();
+	meshInfo->Bind();
+
+	static constexpr GLfloat triangleVerts[] = {
+		-1.0f, -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		0.0f,  1.0f, 0.0f,
+	};
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVerts), triangleVerts, GL_STATIC_DRAW);
+
+	meshInfo->Unbind();
+
+	shader = new GL_Shader();
 }
 
 Win32_Renderer::~Win32_Renderer(){
+	delete meshInfo;
+	meshInfo = nullptr;
+
+	SDL_GL_DeleteContext(glContext);
+
 	window.reset();
 }
 
 void Win32_Renderer::Render(){
+	ClearScreen();
+
+	//TRIANGLE RENDERING
+	//TODO - Obviously get rid of this code Soon(TM)
+	meshInfo->Bind();
+	shader->Bind();
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glDisableVertexAttribArray(0);
+	shader->Unbind();
+	meshInfo->Unbind();
+
+	//Do this only at the end
 	window.get()->SwapBuffers();
 }
 
@@ -92,6 +139,86 @@ void Win32_Renderer::SetCullFace(CullFace cullFace_){
 			break;
 		default:
 			Debug::Log(SID("[RENDER]"), "Unsupported cull face [" + std::to_string((int)currentCullFace) + "]!", Debug::Error, __FILE__, __LINE__);
+			break;
+	}
+}
+
+void __stdcall Win32_Renderer::GLDebugCallback(GLenum source_, GLenum type_, GLuint id_, GLenum severity_, GLsizei, const GLchar* message_, const void*){
+	//Suppress useless messages
+	switch(id_){
+		case 131185: //Buffer object will use VIDEO memory - Irrelevant
+			return;
+		default:
+			break;
+	}
+
+	std::string finalMessage;
+
+	switch(source_){
+		case GL_DEBUG_SOURCE_API:
+			finalMessage += ("API ");
+			break;
+		case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+			finalMessage += ("Window System ");
+			break;
+		case GL_DEBUG_SOURCE_THIRD_PARTY:
+			finalMessage += ("Third Party ");
+			break;
+		case GL_DEBUG_SOURCE_APPLICATION:
+			finalMessage += ("Application ");
+			break;
+		case GL_DEBUG_SOURCE_OTHER:
+			break;
+		default:
+			break;
+	}
+
+	switch(type_){
+		case GL_DEBUG_TYPE_ERROR:
+			finalMessage += ("Error ");
+			break;
+		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+			finalMessage += ("Deprecated Behaviour ");
+			break;
+		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+			finalMessage += ("Undefined Behaviour ");
+			break;
+		case GL_DEBUG_TYPE_PORTABILITY:
+			finalMessage += ("Portability ");
+			break;
+		case GL_DEBUG_TYPE_PERFORMANCE:
+			finalMessage += ("Performance ");
+			break;
+		case GL_DEBUG_TYPE_MARKER:
+			finalMessage += ("Marker ");
+			break;
+		case GL_DEBUG_TYPE_PUSH_GROUP:
+			finalMessage += ("Push Group ");
+			break;
+		case GL_DEBUG_TYPE_POP_GROUP:
+			finalMessage += ("Pop Group ");
+			break;
+		case GL_DEBUG_TYPE_OTHER:
+			//Intentional Fallthrough
+		default:
+			finalMessage += ("Other ");
+			break;
+	}
+
+	finalMessage += std::to_string(id_) + ": " + message_;
+
+	switch(severity_){
+		case GL_DEBUG_SEVERITY_HIGH:
+			Debug::Log(SID("OPENGL"), finalMessage, Debug::Error);
+			break;
+		case GL_DEBUG_SEVERITY_MEDIUM:
+			Debug::Log(SID("OPENGL"), finalMessage, Debug::Warning);
+			break;
+		case GL_DEBUG_SEVERITY_LOW:
+			Debug::Log(SID("OPENGL"), finalMessage, Debug::Warning);
+			break;
+		case GL_DEBUG_SEVERITY_NOTIFICATION:
+			Debug::Log(SID("OPENGL"), finalMessage, Debug::Verbose);
 			break;
 	}
 }

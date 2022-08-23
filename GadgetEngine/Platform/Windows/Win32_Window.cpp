@@ -144,7 +144,6 @@ void Win32_Window::HandleEvents(){
 }
 
 void Win32_Window::SwapBuffers(){
-	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapWindow(sdlWindow);
 }
 

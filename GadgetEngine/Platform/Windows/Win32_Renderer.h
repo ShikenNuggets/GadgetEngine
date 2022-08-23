@@ -6,6 +6,8 @@
 #pragma warning(default : 26819)
 
 #include "Graphics/Renderer.h"
+#include "Graphics/OpenGL/GL_MeshInfo.h"
+#include "Graphics/OpenGL/GL_Shader.h"
 
 namespace Gadget{
 	//OpenGL Renderer for Windows
@@ -22,8 +24,12 @@ namespace Gadget{
 		virtual void SetWindingOrder(WindingOrder order_) override;
 		virtual void SetCullFace(CullFace cullFace_) override;
 
+		static void __stdcall GLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
+
 	protected:
 		SDL_GLContext glContext;
+		GL_MeshInfo* meshInfo;
+		GL_Shader* shader;
 	};
 }
 
