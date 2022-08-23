@@ -81,8 +81,11 @@ void GL_Shader::Unbind(){
 }
 
 void GL_Shader::BindMatrix4(StringID uniformName_, const Matrix4& mat4_){
-	GLuint uniformID = glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str()); //TODO - This function is fairly expensive, cache the value from it
-	glUniformMatrix4fv(uniformID, 1, GL_FALSE, mat4_);
+	if(uniforms.find(uniformName_) == uniforms.end()){
+		uniforms.insert(std::make_pair(uniformName_, glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str())));
+	}
+
+	glUniformMatrix4fv(uniforms[uniformName_], 1, GL_FALSE, mat4_);
 }
 
 std::string GL_Shader::GetShaderLog(GLuint shader_){

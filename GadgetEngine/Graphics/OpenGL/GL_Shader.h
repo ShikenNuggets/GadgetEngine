@@ -1,7 +1,9 @@
 #ifndef GADGET_GL_SHADER_H
 #define GADGET_GL_SHADER_H
 
+#include <map>
 #include <string>
+
 #include <glad/glad.h>
 
 #include "Graphics/Shader.h"
@@ -21,6 +23,7 @@ namespace Gadget{
 
 	private:
 		GLuint shader;
+		std::map<StringID, GLuint> uniforms;
 
 		std::string GetShaderLog(GLuint shader_);
 	};
