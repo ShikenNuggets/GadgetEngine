@@ -31,6 +31,9 @@
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{ED6CDF9B-D939-3AA7-0253-284FEE7E6F35}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
     </Filter>
@@ -144,6 +147,12 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Random.h" />
+    <ClInclude Include="Resource\Resource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\ResourceManager.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
     <ClInclude Include="ScreenCoordinate.h" />
     <ClInclude Include="Utils\Hash.h">
       <Filter>Utils</Filter>
@@ -152,8 +161,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Window.h" />
-    <ClInclude Include="Resource\ResourceManager.h" />
-    <ClInclude Include="Resource\Resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -220,9 +227,11 @@
     <ClCompile Include="Platform\Windows\Win32_Window.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\ResourceManager.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
     <ClCompile Include="Utils\StringID.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Resource\ResourceManager.cpp" />
   </ItemGroup>
 </Project>
