@@ -199,6 +199,7 @@ namespace Gadget{
 		//These could be constexpr, but static constexpr implies inline which is not necessarily desirable here
 		static Matrix4 Orthographic(float left_, float right_, float bottom_, float top_);
 		static Matrix4 Orthographic(float left_, float right_, float bottom_, float top_, float near_, float far_);
+		static Matrix4 Perspective(float fov_, float aspect_, float nearPlane_, float farPlane_);
 		static Matrix4 UnOrtho(const Matrix4& ortho);
 		static Matrix4 ViewportNDC(int w_, int h_);
 

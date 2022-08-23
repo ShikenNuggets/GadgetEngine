@@ -288,6 +288,17 @@ Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float to
 	return ortho;
 }
 
+//TODO - Validate this
+Matrix4 Matrix4::Perspective(float fov_, float aspect_, float nearPlane_, float farPlane_){
+	float cot = 1.0f / Math::Tan(fov_ * 0.5f);
+	//Don't forget, this looks row centric but it really is a column matrix - right-hand rule rules
+	Matrix4 result(cot / aspect_, 0.0f, 0.0f, 0.0f,
+		0.0f, cot, 0.0f, 0.0f,
+		0.0f, 0.0f, (nearPlane_ + farPlane_) / (nearPlane_ - farPlane_), -1.0,
+		0.0, 0.0, (2.0f * nearPlane_ * farPlane_) / (nearPlane_ - farPlane_), 0.0);
+	return result;
+}
+
 //The orthographic projection matrix is linear and affine but nothing else so there is has no inverse
 //Therefore, it is labeled singular or non-invertable.
 //I would still like to back transform from screen space to world space though
