@@ -6,52 +6,9 @@
 
 using namespace Gadget;
 
-constexpr Quaternion::Quaternion(float w_, float x_, float y_, float z_) : w(w_), x(x_), y(y_), z(z_){}
-
 constexpr Quaternion::Quaternion(const float w_, const Vector3& v_) : w(w_), x(v_.x), y(v_.y), z(v_.z){}
 
 constexpr Quaternion::Quaternion(const Vector4& v_) : w(v_.w), x(v_.x), y(v_.y), z(v_.z){}
-
-constexpr Quaternion Quaternion::operator +(const Quaternion& q_) const{
-	return Quaternion(w + q_.w, x + q_.x, y + q_.y, z + q_.z);
-}
-
-constexpr Quaternion Quaternion::operator *(const Quaternion& q_) const{
-	return Quaternion(
-		-x * q_.x - y * q_.y - z * q_.z + w * q_.w,
-		x * q_.w + y * q_.z - z * q_.y + w * q_.x,
-		-x * q_.z + y * q_.w + z * q_.x + w * q_.y,
-		x * q_.y - y * q_.x + z * q_.w + w * q_.z
-	);
-}
-
-constexpr Quaternion Quaternion::operator *(float f_) const{
-	return Quaternion(w * f_, x * f_, y * f_, z * f_);
-}
-
-constexpr Quaternion Quaternion::operator /(float f_) const{
-	return Quaternion(Math::SafeDivide(w, f_), Math::SafeDivide(x, f_), Math::SafeDivide(y, f_), Math::SafeDivide(z, f_));
-}
-
-constexpr void Quaternion::operator +=(const Quaternion& q_){
-	*this = *this + q_;
-}
-
-constexpr void Quaternion::operator *=(const Quaternion& q_){
-	*this = *this * q_;
-}
-
-constexpr void Quaternion::operator *=(float f_){
-	*this = *this * f_;
-}
-
-constexpr void Quaternion::operator /=(float f_){
-	*this = *this / f_;
-}
-
-constexpr float Quaternion::SquaredMagnitude() const{
-	return (w * w) + (x * x) + (y * y) + (z * z);
-}
 
 float Quaternion::Magnitude() const{
 	return Math::Sqrt(SquaredMagnitude());
@@ -63,15 +20,6 @@ Quaternion Quaternion::Normalized() const{
 
 void Quaternion::Normalize(){
 	*this = Normalized();
-}
-
-constexpr Quaternion Quaternion::Conjugate() const{
-	return Quaternion(w, -x, -y, -z);
-}
-
-constexpr Quaternion Quaternion::Inverse() const{
-	const Quaternion conjugate = Conjugate();
-	return conjugate / conjugate.SquaredMagnitude();
 }
 
 Quaternion Quaternion::Rotate(Angle angle_, const Vector3& axis_){
@@ -140,11 +88,11 @@ Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float
 	return qA + qB;
 }
 
-constexpr Matrix3 Quaternion::ToMatrix3() const{
+Matrix3 Quaternion::ToMatrix3() const{
 	return Matrix3(ToMatrix4());
 }
 
-constexpr Matrix4 Quaternion::ToMatrix4() const{
+Matrix4 Quaternion::ToMatrix4() const{
 	//TODO - Validate this
 	//squared w,x,y,z
 	//const float w2 = w * w;

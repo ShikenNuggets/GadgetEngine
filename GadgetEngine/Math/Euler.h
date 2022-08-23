@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Angle.h"
+#include "Math.h"
 
 namespace Gadget{
 	//Forward Declarations
@@ -19,21 +20,21 @@ namespace Gadget{
 		Angle y;
 		Angle z;
 
-		explicit constexpr Euler(Angle x_ = 0.0f, Angle y_ = 0.0f, Angle z_ = 0.0f);
-		explicit constexpr Euler(const Vector3& v_);
+		explicit constexpr Euler(Angle x_ = 0.0f, Angle y_ = 0.0f, Angle z_ = 0.0f) : x(x_), y(y_), z(z_){}
+		explicit Euler(const Vector3& v_);
 
-		constexpr Euler operator -() const;
-		constexpr Euler operator +(const Euler& e_) const;
-		constexpr Euler operator -(const Euler& e_) const;
-		constexpr Euler operator *(float f) const;
-		constexpr Euler operator /(float f) const;
-		constexpr void operator +=(const Euler& e_);
-		constexpr void operator -=(const Euler& e_);
-		constexpr void operator *=(float f);
-		constexpr void operator /=(float f);
+		inline constexpr Euler operator -() const{ return Euler(-x, -y, -z); }
+		inline constexpr Euler operator +(const Euler& e_) const{ return Euler(x + e_.x, y + e_.y, z + e_.z); }
+		inline constexpr Euler operator -(const Euler& e_) const{ return Euler(x - e_.x, y - e_.y, z - e_.z); }
+		inline constexpr Euler operator *(float f_) const{ return Euler(x * f_, y * f_, z * f_); }
+		inline constexpr Euler operator /(float f_) const{ return Euler(Math::SafeDivide(x, f_), Math::SafeDivide(y, f_)); }
+		inline constexpr void operator +=(const Euler& e_){ *this = *this + e_; }
+		inline constexpr void operator -=(const Euler& e_){ *this = *this - e_; }
+		inline constexpr void operator *=(float f_){ *this = *this * f_; }
+		inline constexpr void operator /=(float f_){ *this = *this / f_; }
 
-		constexpr Matrix3 ToMatrix3() const;
-		constexpr Matrix4 ToMatrix4() const;
+		Matrix3 ToMatrix3() const;
+		Matrix4 ToMatrix4() const;
 		Quaternion ToQuaternion() const;
 
 		std::string ToString() const;

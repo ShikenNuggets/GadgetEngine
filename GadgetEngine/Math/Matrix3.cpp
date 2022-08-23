@@ -4,11 +4,11 @@
 
 using namespace Gadget;
 
-constexpr Matrix3::Matrix3() : m(){
+Matrix3::Matrix3() : m(){
 	*this = Identity();
 }
 
-constexpr Matrix3::Matrix3(	float x1_, float x2_, float x3_,
+Matrix3::Matrix3(	float x1_, float x2_, float x3_,
 					float y1_, float y2_, float y3_,
 					float z1_, float z2_, float z3_) : m(){
 	m[0] = x1_; m[3] = y1_; m[6] = z1_;
@@ -16,48 +16,43 @@ constexpr Matrix3::Matrix3(	float x1_, float x2_, float x3_,
 	m[2] = x3_; m[5] = y3_; m[8] = z3_;
 }
 
-constexpr Matrix3::Matrix3(const float fillValue) : m(){
+Matrix3::Matrix3(const float fillValue) : m(){
 	for(int i = 0; i < mat3Size; i++){
 		m[i] = fillValue;
 	}
 }
 
-constexpr Matrix3::Matrix3(const Matrix2& m_) : m(){
+Matrix3::Matrix3(const Matrix2& m_) : m(){
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = 0.0f;
 	m[3] = m_[2];	m[4] = m_[3];	m[5] = 0.0f;
 	m[6] = 0.0f;	m[7] = 0.0f;	m[8] = 1.0f;
 }
 
-constexpr Matrix3::Matrix3(const Matrix4& m_) : m(){
+Matrix3::Matrix3(const Matrix4& m_) : m(){
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = m_[2];
 	m[3] = m_[4];	m[4] = m_[5];	m[5] = m_[6];
 	m[6] = m_[8];	m[7] = m_[9];	m[8] = m_[10];
 }
 
-constexpr Matrix3::Matrix3(const Matrix4x3& m_) : m(){
+Matrix3::Matrix3(const Matrix4x3& m_) : m(){
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = m_[2];
 	m[3] = m_[3];	m[4] = m_[4];	m[5] = m_[5];
 	m[6] = m_[6];	m[7] = m_[7];	m[8] = m_[8];
 }
 
-constexpr Matrix3& Matrix3::operator =(const Matrix4& m_){
+Matrix3& Matrix3::operator =(const Matrix4& m_){
 	this->m[0] = m_[0]; this->m[1] = m_[1]; this->m[2] = m_[2];
 	this->m[3] = m_[4]; this->m[4] = m_[5]; this->m[5] = m_[6];
 	this->m[6] = m_[8]; this->m[7] = m_[9]; this->m[8] = m_[10];
 	return *this;
 }
 
-constexpr float Matrix3::operator [](unsigned int i_) const{
+float& Matrix3::operator [](unsigned int i_){
 	_ASSERT(i_ < mat3Size);
 	return m[i_];
 }
 
-constexpr float& Matrix3::operator [](unsigned int i_){
-	_ASSERT(i_ < mat3Size);
-	return m[i_];
-}
-
-constexpr Matrix3 Matrix3::operator +(const Matrix3& m_) const{
+Matrix3 Matrix3::operator +(const Matrix3& m_) const{
 	Matrix3 result = Matrix3(0.0f);
 	for(unsigned int i = 0; i < mat3Size; i++){
 		result[i] = m[i] + m_[i];
@@ -66,7 +61,7 @@ constexpr Matrix3 Matrix3::operator +(const Matrix3& m_) const{
 	return result;
 }
 
-constexpr Matrix3 Matrix3::operator -(const Matrix3& m_) const{
+Matrix3 Matrix3::operator -(const Matrix3& m_) const{
 	Matrix3 result = Matrix3(0.0f);
 	for(unsigned int i = 0; i < mat3Size; i++){
 		result[i] = m[i] - m_[i];
@@ -75,13 +70,13 @@ constexpr Matrix3 Matrix3::operator -(const Matrix3& m_) const{
 	return result;
 }
 
-constexpr Matrix3 Matrix3::operator *(float s_) const{
+Matrix3 Matrix3::operator *(float s_) const{
 	return Matrix3(	m[0] * s_, m[1] * s_, m[2] * s_,
 					m[3] * s_, m[4] * s_, m[5] * s_,
 					m[6] * s_, m[7] * s_, m[8] * s_);
 }
 
-constexpr Matrix3 Matrix3::operator *(const Matrix3& m_) const{
+Matrix3 Matrix3::operator *(const Matrix3& m_) const{
 	return Matrix3(
 		//COLUMN 1
 		Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[0], m_[1], m_[2]),
@@ -98,35 +93,35 @@ constexpr Matrix3 Matrix3::operator *(const Matrix3& m_) const{
 	);
 }
 
-constexpr Matrix3 Matrix3::operator /(float s_) const{
+Matrix3 Matrix3::operator /(float s_) const{
 	return Matrix3(	Math::SafeDivide(m[0], s_), Math::SafeDivide(m[1], s_), Math::SafeDivide(m[2], s_),
 					Math::SafeDivide(m[3], s_), Math::SafeDivide(m[4], s_), Math::SafeDivide(m[5], s_),
 					Math::SafeDivide(m[6], s_), Math::SafeDivide(m[7], s_), Math::SafeDivide(m[8], s_));
 }
 
-constexpr void Matrix3::operator +=(const Matrix3& m_){ *this = *this + m_; }
-constexpr void Matrix3::operator -=(const Matrix3& m_){ *this = *this - m_; }
-constexpr void Matrix3::operator *=(float s_){ *this = *this * s_; }
-constexpr void Matrix3::operator *=(const Matrix3& m_){ *this = *this * m_; }
-constexpr void Matrix3::operator /=(float s_){ *this = *this / s_; }
+void Matrix3::operator +=(const Matrix3& m_){ *this = *this + m_; }
+void Matrix3::operator -=(const Matrix3& m_){ *this = *this - m_; }
+void Matrix3::operator *=(float s_){ *this = *this * s_; }
+void Matrix3::operator *=(const Matrix3& m_){ *this = *this * m_; }
+void Matrix3::operator /=(float s_){ *this = *this / s_; }
 
-constexpr Matrix3::operator float*(){ return static_cast<float*>(&m[0]); }
+Matrix3::operator float*(){ return static_cast<float*>(&m[0]); }
 
-constexpr Matrix3::operator const float*() const{ return static_cast<const float*>(&m[0]); }
+Matrix3::operator const float*() const{ return static_cast<const float*>(&m[0]); }
 
-constexpr Matrix3 Matrix3::Transpose() const{
+Matrix3 Matrix3::Transpose() const{
 	return Matrix3(	m[0], m[3], m[6],
 					m[1], m[4], m[7],
 					m[2], m[5], m[8]);
 }
 
-constexpr float Matrix3::Determinant() const{
+float Matrix3::Determinant() const{
 	return	m[0] * (m[4] * m[8] - m[7] * m[5]) -
 			m[1] * (m[3] * m[8] - m[5] * m[6]) +
 			m[2] * (m[3] * m[7] - m[4] * m[6]);
 }
 
-constexpr Matrix3 Matrix3::Inverse() const{
+Matrix3 Matrix3::Inverse() const{
 	float invdet = Math::SafeDivide(1.0f, Determinant());
 
 	return Matrix3(
@@ -142,15 +137,15 @@ constexpr Matrix3 Matrix3::Inverse() const{
 	);
 }
 
-constexpr Matrix2 Matrix3::ToMatrix2() const{
+Matrix2 Matrix3::ToMatrix2() const{
 	return Matrix2(*this);
 }
 
-constexpr Matrix4 Matrix3::ToMatrix4() const{
+Matrix4 Matrix3::ToMatrix4() const{
 	return Matrix4(*this);
 }
 
-constexpr Matrix4x3 Matrix3::ToMatrix4x3() const{
+Matrix4x3 Matrix3::ToMatrix4x3() const{
 	return Matrix4x3(*this);
 }
 

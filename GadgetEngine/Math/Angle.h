@@ -10,66 +10,57 @@ namespace Gadget{
 
 	class Degree{
 	public:
-		constexpr Degree(float angle_ = 0.0f);
-		explicit constexpr Degree(const Radian& r_);
-		constexpr Degree& operator =(float a_);
-		constexpr Degree& operator =(Radian& r_);
+		constexpr Degree(float angle_ = 0.0f) : angle(angle_){}
+		explicit Degree(const Radian& r_);
 
-		constexpr Radian ToRadians() const;
-		constexpr float ToRadiansValue() const;
+		inline constexpr Degree& operator =(float a_){
+			*this = Degree(a_);
+			return *this;
+		}
 
-		constexpr float Get() const{ return angle; }
+		Degree& operator =(Radian& r_);
 
-		constexpr Degree operator -() const;
-		constexpr Degree operator +(float a_) const;
-		constexpr Degree operator +(const Radian& r_) const;
-		constexpr Degree operator +(const Degree& d_) const;
-		constexpr Degree operator -(float a_) const;
-		constexpr Degree operator -(const Radian& r_) const;
-		constexpr Degree operator -(const Degree& d_) const;
-		constexpr Degree operator *(float a_) const;
-		constexpr Degree operator *(const Radian& r_) const;
-		constexpr Degree operator *(const Degree& d_) const;
-		constexpr Degree operator /(float a_) const;
-		constexpr Degree operator /(const Radian& r_) const;
-		constexpr Degree operator /(const Degree& d_) const;
+		Radian ToRadians() const;
+		float ToRadiansValue() const;
+
+		inline constexpr float Get() const{ return angle; }
+		inline constexpr operator float() const{ return Get(); }
+
+		inline constexpr Degree operator -() const{ return Degree(-angle); }
+		inline constexpr Degree operator +(float a_) const{ return angle + a_; }
+		inline constexpr Degree operator +(const Degree& d_) const{ return angle + d_.Get(); }
+		inline constexpr Degree operator -(float a_) const{ return angle - a_; }
+		inline constexpr Degree operator -(const Degree& d_) const{ return angle - d_.Get(); }
+		inline constexpr Degree operator *(float a_) const{ return angle * a_; }
+		inline constexpr Degree operator *(const Degree& d_) const{ return angle * d_.Get(); }
+		Degree operator /(float a_) const;
+		Degree operator /(const Degree& d_) const;
 
 		inline friend constexpr Degree operator +(float a_, const Degree& d_){ return d_ + a_; }
 		inline friend constexpr Degree operator -(float a_, const Degree& d_){ return d_ - a_; }
 		inline friend constexpr Degree operator *(float a_, const Degree& d_){ return d_ * a_; }
-		inline friend constexpr Degree operator /(float a_, const Degree& d_){ return d_ / a_; }
+		inline friend Degree operator /(float a_, const Degree& d_){ return d_ / a_; }
+		inline constexpr void operator +=(float a_){ *this = *this + a_; }
+		inline constexpr void operator +=(const Degree& d_){ *this = *this + d_; }
+		inline constexpr void operator -=(float a_){ *this = *this - a_; }
+		inline constexpr void operator -=(const Degree& d_){ *this = *this + d_; }
+		inline constexpr void operator *=(float a_){ *this = *this * a_; }
+		inline constexpr void operator *=(const Degree& d_){ *this = *this * d_; }
+		void operator /=(float a_);
+		void operator /=(const Degree& d_);
 
-		constexpr void operator +=(float a_);
-		constexpr void operator +=(const Radian& r_);
-		constexpr void operator +=(const Degree& d_);
-		constexpr void operator -=(float a_);
-		constexpr void operator -=(const Radian& r_);
-		constexpr void operator -=(const Degree& d_);
-		constexpr void operator *=(float a_);
-		constexpr void operator *=(const Radian& r_);
-		constexpr void operator *=(const Degree& d_);
-		constexpr void operator /=(float a_);
-		constexpr void operator /=(const Radian& r_);
-		constexpr void operator /=(const Degree& d_);
-
-		constexpr bool operator ==(float a_) const;
-		constexpr bool operator ==(const Radian& r_) const;
-		constexpr bool operator ==(const Degree& d_) const;
-		constexpr bool operator !=(float a_) const;
-		constexpr bool operator !=(const Radian& r_) const;
-		constexpr bool operator !=(const Degree& d_) const;
-		constexpr bool operator >(float a_) const;
-		constexpr bool operator >(const Radian& r_) const;
-		constexpr bool operator >(const Degree& d_) const;
-		constexpr bool operator <(float a_) const;
-		constexpr bool operator <(const Radian& r_) const;
-		constexpr bool operator <(const Degree& d_) const;
-		constexpr bool operator >=(float a_) const;
-		constexpr bool operator >=(const Radian& r_) const;
-		constexpr bool operator >=(const Degree& d_) const;
-		constexpr bool operator <=(float a_) const;
-		constexpr bool operator <=(const Radian& r_) const;
-		constexpr bool operator <=(const Degree& d_) const;
+		inline constexpr bool operator ==(float a_) const{ return angle == a_; }
+		inline constexpr bool operator ==(const Degree& d_) const{ return angle == d_.Get(); }
+		inline constexpr bool operator !=(float a_) const{ return angle != a_; }
+		inline constexpr bool operator !=(const Degree& d_) const{ return angle != d_.Get(); }
+		inline constexpr bool operator >(float a_) const{ return angle > a_; }
+		inline constexpr bool operator >(const Degree& d_) const{ return angle > d_.Get(); }
+		inline constexpr bool operator <(float a_) const{ return angle < a_; }
+		inline constexpr bool operator <(const Degree& d_) const{ return angle < d_.Get(); }
+		inline constexpr bool operator >=(float a_) const{ return angle >= a_; }
+		inline constexpr bool operator >=(const Degree& d_) const{ return angle >= d_.Get(); }
+		inline constexpr bool operator <=(float a_) const{ return angle <= a_; }
+		inline constexpr bool operator <=(const Degree& d_) const{ return angle <= d_.Get(); }
 
 		inline friend constexpr bool operator ==(float a_, const Degree& d_)	{ return d_ == a_; }
 		inline friend constexpr bool operator !=(float a_, const Degree& d_)	{ return d_ != a_; }
@@ -78,74 +69,64 @@ namespace Gadget{
 		inline friend constexpr bool operator >=(float a_, const Degree& d_)	{ return d_ >= a_; }
 		inline friend constexpr bool operator <=(float a_, const Degree& d_)	{ return d_ <= a_; }
 
-		constexpr operator float() const;
-
 	private:
 		float angle;
 	};
 
 	class Radian{
 	public:
-		constexpr Radian(float angle_ = 0.0f);
-		explicit constexpr Radian(const Degree& d);
-		constexpr Radian& operator =(float a_);
-		constexpr Radian& operator =(Degree& r_);
+		constexpr Radian(float angle_ = 0.0f) : angle(angle_){}
+		explicit Radian(const Degree& d);
 
-		constexpr Degree ToDegrees() const;
-		constexpr float ToDegreesValue() const;
+		inline constexpr Radian& operator =(float a_){
+			*this = Radian(a_);
+			return *this;
+		}
+		
+		Radian& operator =(Degree& r_);
 
-		constexpr float Get() const{ return angle; }
+		Degree ToDegrees() const;
+		float ToDegreesValue() const;
 
-		constexpr Radian operator -() const;
-		constexpr Radian operator +(float a_) const;
-		constexpr Radian operator +(const Radian& r_) const;
-		constexpr Radian operator +(const Degree& d_) const;
-		constexpr Radian operator -(float a_) const;
-		constexpr Radian operator -(const Radian& r_) const;
-		constexpr Radian operator -(const Degree& d_) const;
-		constexpr Radian operator *(float a_) const;
-		constexpr Radian operator *(const Radian& r_) const;
-		constexpr Radian operator *(const Degree& d_) const;
-		constexpr Radian operator /(float a_) const;
-		constexpr Radian operator /(const Radian& r_) const;
-		constexpr Radian operator /(const Degree& d_) const;
+		inline constexpr float Get() const{ return angle; }
+		inline constexpr operator float() const{ return Get(); }
+
+		inline constexpr Radian operator -() const{ return Radian(-angle); }
+		inline constexpr Radian operator +(float a_) const{ return angle + a_; }
+		inline constexpr Radian operator +(const Radian& r_) const{ return angle + r_.Get(); }
+		inline constexpr Radian operator -(float a_) const{ return angle - a_; }
+		inline constexpr Radian operator -(const Radian& r_) const{ return angle - r_.Get(); }
+		inline constexpr Radian operator *(float a_) const{ return angle * a_; }
+		inline constexpr Radian operator *(const Radian& r_) const{ return angle * r_.Get(); }
+		Radian operator /(float a_) const;
+		Radian operator /(const Radian& r_) const;
 
 		inline friend constexpr Radian operator +(float a_, const Radian& d_){ return d_ + a_; }
 		inline friend constexpr Radian operator -(float a_, const Radian& d_){ return d_ - a_; }
 		inline friend constexpr Radian operator *(float a_, const Radian& d_){ return d_ * a_; }
-		inline friend constexpr Radian operator /(float a_, const Radian& d_){ return d_ / a_; }
+		inline friend Radian operator /(float a_, const Radian& d_){ return d_ / a_; }
 
-		constexpr void operator +=(float a_);
-		constexpr void operator +=(const Radian& r_);
-		constexpr void operator +=(const Degree& d_);
-		constexpr void operator -=(float a_);
-		constexpr void operator -=(const Radian& r_);
-		constexpr void operator -=(const Degree& d_);
-		constexpr void operator *=(float a_);
-		constexpr void operator *=(const Radian& r_);
-		constexpr void operator *=(const Degree& d_);
-		constexpr void operator /=(float a_);
-		constexpr void operator /=(const Radian& r_);
-		constexpr void operator /=(const Degree& d_);
+		inline constexpr void operator +=(float a_){ angle += a_; }
+		inline constexpr void operator +=(const Radian& r_){ angle += r_.Get(); }
+		inline constexpr void operator -=(float a_){ angle -= a_; }
+		inline constexpr void operator -=(const Radian& r_){ angle -= r_.Get(); }
+		inline constexpr void operator *=(float a_){ angle *= a_; }
+		inline constexpr void operator *=(const Radian& r_){ angle *= r_.Get(); }
+		void operator /=(float a_);
+		void operator /=(const Radian& r_);
 
-		constexpr bool operator ==(float a_) const;
-		constexpr bool operator ==(const Radian& r_) const;
-		constexpr bool operator ==(const Degree& d_) const;
-		constexpr bool operator !=(float a_) const;
-		constexpr bool operator !=(const Radian& r_) const;
-		constexpr bool operator !=(const Degree& d_) const;
-		constexpr bool operator >(float a_) const;
-		constexpr bool operator >(const Radian& r_) const;
-		constexpr bool operator >(const Degree& d_) const;
-		constexpr bool operator <(float a_) const;
-		constexpr bool operator <(const Radian& r_) const;
-		constexpr bool operator <(const Degree& d_) const;
-		constexpr bool operator >=(float a_) const;
-		constexpr bool operator >=(const Radian& r_) const;
-		constexpr bool operator >=(const Degree& d_) const;
-		constexpr bool operator <=(float a_) const;
-		constexpr bool operator <=(const Radian& r_) const;
-		constexpr bool operator <=(const Degree& d_) const;
+		inline constexpr bool operator ==(float a_) const{ return angle == a_; }
+		inline constexpr bool operator ==(const Radian& r_) const{ return angle == r_.Get(); }
+		inline constexpr bool operator !=(float a_) const{ return angle != a_; }
+		inline constexpr bool operator !=(const Radian& r_) const{ return angle != r_.Get(); }
+		inline constexpr bool operator >(float a_) const{ return angle > a_; }
+		inline constexpr bool operator >(const Radian& r_) const{ return angle > r_.Get(); }
+		inline constexpr bool operator <(float a_) const{ return angle < a_; }
+		inline constexpr bool operator <(const Radian& r_) const{ return angle < r_.Get(); }
+		inline constexpr bool operator >=(float a_) const{ return angle >= a_; }
+		inline constexpr bool operator >=(const Radian& r_) const{ return angle >= r_.Get(); }
+		inline constexpr bool operator <=(float a_) const{ return angle <= a_; }
+		inline constexpr bool operator <=(const Radian& r_) const{ return angle <= r_.Get(); }
 
 		inline friend constexpr bool operator ==(float a_, const Radian& d_)	{ return d_ == a_; }
 		inline friend constexpr bool operator !=(float a_, const Radian& d_)	{ return d_ != a_; }
@@ -153,8 +134,6 @@ namespace Gadget{
 		inline friend constexpr bool operator <(float a_, const Radian& d_)		{ return d_ < a_; }
 		inline friend constexpr bool operator >=(float a_, const Radian& d_)	{ return d_ >= a_; }
 		inline friend constexpr bool operator <=(float a_, const Radian& d_)	{ return d_ <= a_; }
-
-		constexpr operator float() const;
 
 	private:
 		float angle;

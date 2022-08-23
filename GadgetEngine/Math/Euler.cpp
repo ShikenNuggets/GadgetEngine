@@ -1,6 +1,5 @@
 #include "Euler.h"
 
-#include "Math.h"
 #include "Vector.h"
 #include "Matrix.h"
 #include "Quaternion.h"
@@ -8,43 +7,13 @@
 
 using namespace Gadget;
 
-constexpr Euler::Euler(Angle x_, Angle y_, Angle z_) : x(x_), y(y_), z(z_){}
+Euler::Euler(const Vector3& v_) : x(v_.x), y(v_.y), z(v_.z){}
 
-constexpr Euler::Euler(const Vector3& v_) : x(v_.x), y(v_.y), z(v_.z){}
-
-constexpr Euler Euler::operator -() const{
-	return Euler(-x, -y, -z);
-}
-
-constexpr Euler Euler::operator +(const Euler& e_) const{
-	return Euler(x + e_.x, y + e_.y, z + e_.z);
-}
-
-constexpr Euler Euler::operator -(const Euler& e_) const{
-	return Euler(x - e_.x, y - e_.y, z - e_.z);
-}
-
-constexpr Euler Euler::operator *(float f_) const{
-	return Euler(x * f_, y * f_, z * f_);
-}
-
-constexpr Euler Euler::operator /(float f_) const{
-	return Euler(Math::SafeDivide(x, f_), Math::SafeDivide(y, f_));
-}
-
-constexpr void Euler::operator +=(const Euler& e_){ *this = *this + e_; }
-
-constexpr void Euler::operator -=(const Euler& e_){ *this = *this - e_; }
-
-constexpr void Euler::operator *=(float f_){ *this = *this * f_; }
-
-constexpr void Euler::operator /=(float f_){ *this = *this / f_; }
-
-constexpr Matrix3 Euler::ToMatrix3() const{
+Matrix3 Euler::ToMatrix3() const{
 	return Matrix3(ToMatrix4());
 }
 
-constexpr Matrix4 Euler::ToMatrix4() const{
+Matrix4 Euler::ToMatrix4() const{
 	return	Matrix4::Rotate(y, Vector3(0.0f, 1.0f, 0.0f)) *
 			Matrix4::Rotate(z, Vector3(0.0f, 0.0f, 1.0f)) * 
 			Matrix4::Rotate(x, Vector3(1.0f, 0.0f, 0.0f));
