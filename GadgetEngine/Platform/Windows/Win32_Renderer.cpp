@@ -28,6 +28,10 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), meshInfo(nullptr), 
 	SetViewportRect(ViewportRect::Fullscreen);
 	SetClearColor(Color::DarkGray());
 
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
 	ClearScreen();
 	window->SwapBuffers();
 
@@ -77,7 +81,7 @@ void Win32_Renderer::Render(){
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-	shader->BindMatrix4(SID("projectionMatrix"), Matrix4::Perspective(45.0f, 1.33f, 0.1f, 100.0f));
+	shader->BindMatrix4(SID("projectionMatrix"), Matrix4::Perspective(45.0f, GetAspectRatio(), 0.1f, 100.0f));
 	shader->BindMatrix4(SID("viewMatrix"), Matrix4::LookAt(Vector3(4.0f, 3.0f, 3.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f)));
 	shader->BindMatrix4(SID("modelMatrix"), Matrix4::Identity());
 

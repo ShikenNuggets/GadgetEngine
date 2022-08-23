@@ -35,6 +35,7 @@ namespace Gadget{
 		virtual void SetWindingOrder(WindingOrder order_){ currentWindingOrder = order_; }
 		virtual void SetCullFace(CullFace cullFace_){ currentCullFace = cullFace_; }
 
+		float GetAspectRatio(){ return static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()); }
 		void ResetViewportRect(){ SetViewportRect(ViewportRect::Fullscreen); }
 
 	protected:
