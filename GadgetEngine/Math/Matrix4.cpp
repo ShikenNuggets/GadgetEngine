@@ -138,10 +138,6 @@ constexpr void Matrix4::operator *=(float s_){ *this = *this * s_; }
 constexpr void Matrix4::operator *=(const Matrix4& m_){ *this = *this * m_; }
 constexpr void Matrix4::operator /=(float s_){ *this = *this / s_; }
 
-constexpr Matrix4::operator float*(){ return static_cast<float*>(&m[0]); }
-
-constexpr Matrix4::operator const float*() const{ return static_cast<const float*>(&m[0]); }
-
 constexpr Matrix4 Matrix4::Transpose() const{
 	return Matrix4(	m[0], m[4], m[8], m[12],
 					m[1], m[5], m[9], m[13],

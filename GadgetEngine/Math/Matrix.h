@@ -160,8 +160,8 @@ namespace Gadget{
 			return true;
 		}
 
-		constexpr operator float* ();
-		constexpr operator const float* () const;
+		inline constexpr operator float* (){ return static_cast<float*>(&m[0]); }
+		inline constexpr operator const float* () const{ return static_cast<const float*>(&m[0]); }
 
 		static inline constexpr Matrix4 Identity(){
 			return Matrix4(	1.0f, 0.0f, 0.0f, 0.0f,
