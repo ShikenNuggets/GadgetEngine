@@ -16,10 +16,12 @@ namespace Gadget{
 
 		GLuint GetVAO() const{ return vao; }
 		GLuint GetVBO() const{ return vbo; }
+		GLuint GetEBO() const{ return ebo; }
 
 	private:
-		GLuint vao;
-		GLuint vbo;
+		GLuint vao; //Vertex array object
+		GLuint vbo; //Vertex buffer object
+		GLuint ebo; //Element buffer object
 	};
 }
 

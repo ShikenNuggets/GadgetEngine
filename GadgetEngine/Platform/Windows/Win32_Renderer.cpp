@@ -56,7 +56,10 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), meshInfo(nullptr), 
 		1.0f, -1.0f, 0.0f,
 		0.0f,  1.0f, 0.0f,
 	};
+	static constexpr GLuint triangleIndices[] = { 0, 1, 2 };
+
 	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVerts), triangleVerts, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangleIndices), triangleIndices, GL_STATIC_DRAW);
 
 	meshInfo->Unbind();
 
@@ -86,7 +89,7 @@ void Win32_Renderer::Render(){
 	shader->BindMatrix4(SID("viewMatrix"), Matrix4::LookAt(Vector3(4.0f, 3.0f, 3.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f)));
 	shader->BindMatrix4(SID("modelMatrix"), Matrix4::Identity());
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
 	glDisableVertexAttribArray(0);
 	shader->Unbind();
