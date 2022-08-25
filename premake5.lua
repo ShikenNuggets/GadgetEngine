@@ -163,10 +163,10 @@ project "Game"
 			"GADGET_PLATFORM_WIN32",
 		}
 		
-		prebuildcommands
+		postbuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E",
+			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E",
 			"echo D|xcopy \"$(SolutionDir)Build\\Resources\\\" \"$(TargetDir)\\Resources\\\" /y /E /d",
 		}
 		

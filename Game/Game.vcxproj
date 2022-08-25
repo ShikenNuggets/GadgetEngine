@@ -77,11 +77,11 @@
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
-    <PreBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.dll" "$(TargetDir)" /y /E
+echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.pdb" "$(TargetDir)" /y /E
 echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)\Resources\" /y /E /d</Command>
-    </PreBuildEvent>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -108,11 +108,11 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)\Resources\" /y /E /d
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
-    <PreBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.dll" "$(TargetDir)" /y /E
+echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.pdb" "$(TargetDir)" /y /E
 echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)\Resources\" /y /E /d</Command>
-    </PreBuildEvent>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
