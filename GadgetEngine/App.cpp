@@ -78,6 +78,7 @@ void App::Run(){
 		twoFrameAllocator.CurrentBuffer().Clear();
 
 		//Regular update follows
+		Time::GetInstance()->Update();
 		renderer->GetWindow().lock()->HandleEvents();
 
 		Input::GetInstance()->ProcessInputs();

@@ -13,6 +13,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Loaders">
+      <UniqueIdentifier>{0FA183C1-FB99-A213-24CC-87981024821F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\OpenGL">
       <UniqueIdentifier>{8AE717A8-F672-856C-FF83-08616B8EE16C}</UniqueIdentifier>
     </Filter>
@@ -64,6 +67,12 @@
     <ClInclude Include="Graphics\Color.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Loaders\ObjLoader.h">
+      <Filter>Graphics\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Mesh.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\MeshInfo.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -77,6 +86,9 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Shader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Vertex.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\ViewportRect.h">
@@ -177,6 +189,9 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Loaders\ObjLoader.cpp">
+      <Filter>Graphics\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp">
       <Filter>Graphics\OpenGL</Filter>

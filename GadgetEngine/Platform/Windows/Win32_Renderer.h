@@ -6,6 +6,7 @@
 #pragma warning(default : 26819)
 
 #include "Graphics/Renderer.h"
+#include "Graphics/Mesh.h"
 #include "Graphics/OpenGL/GL_MeshInfo.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 
@@ -28,6 +29,7 @@ namespace Gadget{
 
 	protected:
 		SDL_GLContext glContext;
+		Mesh* mesh;
 		GL_MeshInfo* meshInfo;
 		GL_Shader* shader;
 	};

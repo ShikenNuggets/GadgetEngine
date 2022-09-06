@@ -1,6 +1,8 @@
 #ifndef GADGET_MESH_INFO_H
 #define GADGET_MESH_INFO_H
 
+#include "Mesh.h"
+
 namespace Gadget{
 	class MeshInfo{
 	public:

@@ -4,11 +4,14 @@
 
 #include "Win32_Window.h"
 #include "Debug.h"
+#include "Graphics/Loaders/ObjLoader.h"
 #include "Resource/ResourceManager.h"
+
+#include "Core/Time.h"
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), meshInfo(nullptr), shader(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), mesh(nullptr), meshInfo(nullptr), shader(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr);
@@ -46,23 +49,10 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), meshInfo(nullptr), 
 	}
 	#endif // GADGET_DEBUG
 
-	//TRIANGLE RENDERING
+	//MODEL RENDERING
 	//TODO - Obviously get rid of this code Soon(TM)
-	meshInfo = new GL_MeshInfo();
-	meshInfo->Bind();
-
-	static constexpr GLfloat triangleVerts[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f,  1.0f, 0.0f,
-	};
-	static constexpr GLuint triangleIndices[] = { 0, 1, 2 };
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVerts), triangleVerts, GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangleIndices), triangleIndices, GL_STATIC_DRAW);
-
-	meshInfo->Unbind();
-
+	mesh = ObjLoader::LoadMesh("Resources/cube.obj");
+	meshInfo = new GL_MeshInfo(*mesh);
 	shader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("DefaultShader"));
 }
 
@@ -78,20 +68,22 @@ Win32_Renderer::~Win32_Renderer(){
 void Win32_Renderer::Render(){
 	ClearScreen();
 
-	//TRIANGLE RENDERING
+	//MODEL RENDERING
 	//TODO - Obviously get rid of this code Soon(TM)
 	meshInfo->Bind();
 	shader->Bind();
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	shader->BindMatrix4(SID("projectionMatrix"), Matrix4::Perspective(45.0f, GetAspectRatio(), 0.1f, 100.0f));
-	shader->BindMatrix4(SID("viewMatrix"), Matrix4::LookAt(Vector3(4.0f, 3.0f, 3.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f)));
-	shader->BindMatrix4(SID("modelMatrix"), Matrix4::Identity());
+	shader->BindMatrix4(SID("viewMatrix"), Matrix4::LookAt(Vector3(0.0f, 0.0f, 4.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f)));
 
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+	Matrix4 mm = Matrix4::Identity();
+	mm *= Matrix4::Rotate(Time::GetInstance()->TimeSinceStartup() * 10.0f, Vector3(0.0f, 1.0f, 0.0f));
+	mm *= Matrix4::Rotate(Time::GetInstance()->TimeSinceStartup() * 10.0f, Vector3(1.0f, 0.0f, 0.0f));
 
-	glDisableVertexAttribArray(0);
+	shader->BindMatrix4(SID("modelMatrix"), mm);
+
+	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->vertices.size()), GL_UNSIGNED_INT, nullptr);
+
 	shader->Unbind();
 	meshInfo->Unbind();
 
@@ -140,13 +132,19 @@ void Win32_Renderer::SetCullFace(CullFace cullFace_){
 	Renderer::SetCullFace(cullFace_);
 
 	switch(currentCullFace){
+		case CullFace::None:
+			glDisable(GL_CULL_FACE);
+			break;
 		case CullFace::Back:
+			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
 			break;
 		case CullFace::Front:
+			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
 			break;
 		case CullFace::All:
+			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT_AND_BACK);
 			break;
 		default:

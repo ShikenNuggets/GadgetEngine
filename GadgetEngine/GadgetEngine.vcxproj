@@ -110,11 +110,14 @@
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Graphics\Color.h" />
+    <ClInclude Include="Graphics\Loaders\ObjLoader.h" />
+    <ClInclude Include="Graphics\Mesh.h" />
     <ClInclude Include="Graphics\MeshInfo.h" />
     <ClInclude Include="Graphics\OpenGL\GL_MeshInfo.h" />
     <ClInclude Include="Graphics\OpenGL\GL_Shader.h" />
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Graphics\Shader.h" />
+    <ClInclude Include="Graphics\Vertex.h" />
     <ClInclude Include="Graphics\ViewportRect.h" />
     <ClInclude Include="Input\GamepadEvent.h" />
     <ClInclude Include="Input\Input.h" />
@@ -154,6 +157,7 @@
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
+    <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_Shader.cpp" />
     <ClCompile Include="Input\Input.cpp" />
