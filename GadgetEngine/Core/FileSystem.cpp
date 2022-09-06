@@ -33,6 +33,7 @@ std::vector<std::string> FileSystem::ReadFile(const std::string& filePath_){
 std::string FileSystem::ReadFileToString(const std::string& filePath_){
 	std::string result;
 	std::vector<std::string> fileContents = ReadFile(filePath_);
+	result.reserve(fileContents.size() * 16);
 	for(std::string s : fileContents){
 		result += s + "\n";
 	}
