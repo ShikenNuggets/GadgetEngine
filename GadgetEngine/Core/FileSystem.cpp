@@ -26,6 +26,8 @@ std::vector<std::string> FileSystem::ReadFile(const std::string& filePath_){
 		fileContents.push_back(line);
 	}
 
+	fileContents.shrink_to_fit();
+
 	filestream.close();
 	return fileContents;
 }
@@ -38,6 +40,7 @@ std::string FileSystem::ReadFileToString(const std::string& filePath_){
 		result += s + "\n";
 	}
 
+	result.shrink_to_fit();
 	return result;
 }
 
