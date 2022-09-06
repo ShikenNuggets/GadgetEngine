@@ -67,6 +67,7 @@ Win32_Renderer::~Win32_Renderer(){
 
 void Win32_Renderer::Render(){
 	ClearScreen();
+	SetViewportRect(ViewportRect::Fullscreen);
 
 	//MODEL RENDERING
 	//TODO - Obviously get rid of this code Soon(TM)
@@ -111,6 +112,8 @@ void Win32_Renderer::SetViewportRect(const Rect& rect_){
 				static_cast<GLsizei>(window->GetWidth() * rect_.w),
 				static_cast<GLsizei>(window->GetHeight() * rect_.h));
 }
+
+void Win32_Renderer::OnResize(int, int){}
 
 void Win32_Renderer::SetWindingOrder(WindingOrder order_){
 	Renderer::SetWindingOrder(order_);

@@ -21,6 +21,7 @@ namespace Gadget{
 		virtual void ClearScreen() override;
 		virtual void SetClearColor(const Color& color_) override;
 		virtual void SetViewportRect(const Rect& rect_) override;
+		virtual void OnResize(int newWidth_, int newHeight_) override;
 
 		virtual void SetWindingOrder(WindingOrder order_) override;
 		virtual void SetCullFace(CullFace cullFace_) override;

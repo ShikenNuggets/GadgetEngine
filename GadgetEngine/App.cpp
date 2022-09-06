@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "Random.h"
 #include "Core/Time.h"
+#include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Input/Input.h"
 #include "Platform/Windows/Win32_Renderer.h"
@@ -17,6 +18,7 @@ App* App::instance = nullptr;
 
 App::App() : isRunning(true), renderer(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
 }
 
 App::~App(){
@@ -93,6 +95,9 @@ void App::Run(){
 void App::OnEvent(const Event& e_){
 	if(e_.GetEventType() == EventType::WindowClose){
 		GetInstance()->isRunning = false;
+	}else if(e_.GetEventType() == EventType::WindowResize){
+		auto ev = dynamic_cast<const WindowResizedEvent&>(e_);
+		GetInstance()->renderer->OnResize(ev.GetWidth(), ev.GetHeight());
 	}
 }
 
