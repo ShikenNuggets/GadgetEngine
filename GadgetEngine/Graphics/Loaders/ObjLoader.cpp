@@ -66,30 +66,23 @@ Mesh* ObjLoader::LoadMesh(const std::string& filePath_){
 	indices.reserve(tempIndices.size());
 
 	for(int i = 0; i < tempIndices.size(); i++){
-		vertices.push_back(Vertex(tempPos[tempIndices[i].pos], tempNorm[tempIndices[i].norm], tempTex[tempIndices[i].tex]));
-		indices.push_back(i);
+		int uniqueIndex = -1;
+		for(int j = 0; j < uniqueVerts.size(); j++){
+			if(tempIndices[i] == uniqueVerts[j]){
+				uniqueIndex = j;
+				break;
+			}
+		}
 
-		//TODO - FIX THIS!!!
-		//This logic is for converting the index lists that the OBJ gives us into something graphics APIs/the engine can process
-		//For unclear reasons, this current version gives us an inconsistent winding order
-		//int uniqueIndex = -1;
-		//for(int j = 0; j < uniqueVerts.size(); j++){
-		//	if(tempIndices[i] == uniqueVerts[j]){
-		//		uniqueIndex = j;
-		//		break;
-		//	}
-		//}
-
-		//if(uniqueIndex < 0){
-		//	// < 0 means this is a unique vertex, add it to the list
-		//	uniqueVerts.push_back(tempIndices[i]);
-		//	vertices.push_back(Vertex(tempPos[tempIndices[i].pos], tempNorm[tempIndices[i].norm], tempTex[tempIndices[i].tex]));
-		//	//indices.push_back(i);
-		//	indices.push_back(vertices.size() - 1);
-		//}else{
-		//	//The vertex is already in the list, simply use the index of that vertex
-		//	indices.push_back(uniqueIndex);
-		//}
+		if(uniqueIndex < 0){
+			// < 0 means this is a unique vertex, add it to the list
+			uniqueVerts.push_back(tempIndices[i]);
+			vertices.push_back(Vertex(tempPos[tempIndices[i].pos], tempNorm[tempIndices[i].norm], tempTex[tempIndices[i].tex]));
+			indices.push_back(static_cast<uint32_t>(vertices.size() - 1));
+		}else{
+			//The vertex is already in the list, simply use the index of that vertex
+			indices.push_back(uniqueIndex);
+		}
 	}
 
 	vertices.shrink_to_fit();

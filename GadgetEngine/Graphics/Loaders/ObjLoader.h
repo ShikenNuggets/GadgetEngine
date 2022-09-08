@@ -11,7 +11,7 @@ namespace Gadget{
 		uint32_t norm;
 		uint32_t tex;
 
-		constexpr bool operator ==(const VertIndex& i_) const{ return i_.pos == pos && i_.norm == norm && i_.tex == tex; }
+		inline constexpr bool operator ==(const VertIndex& i_) const{ return i_.pos == pos && i_.norm == norm && i_.tex == tex; }
 	};
 
 	class ObjLoader{

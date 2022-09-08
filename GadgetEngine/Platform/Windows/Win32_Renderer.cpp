@@ -83,7 +83,7 @@ void Win32_Renderer::Render(){
 
 	shader->BindMatrix4(SID("modelMatrix"), mm);
 
-	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->vertices.size()), GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->indices.size()), GL_UNSIGNED_INT, nullptr);
 
 	shader->Unbind();
 	meshInfo->Unbind();
