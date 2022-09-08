@@ -80,7 +80,7 @@
     <PostBuildEvent>
       <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.dll" "$(TargetDir)" /y /E
 echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.pdb" "$(TargetDir)" /y /E
-echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)\Resources\" /y /E /d</Command>
+echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -111,7 +111,7 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)\Resources\" /y /E /d
     <PostBuildEvent>
       <Command>echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.dll" "$(TargetDir)" /y /E
 echo D|xcopy "$(SolutionDir)Build\SDL2\$(Configuration)\*.pdb" "$(TargetDir)" /y /E
-echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)\Resources\" /y /E /d</Command>
+echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
