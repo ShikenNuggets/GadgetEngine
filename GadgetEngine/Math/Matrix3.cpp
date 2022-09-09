@@ -48,7 +48,7 @@ Matrix3& Matrix3::operator =(const Matrix4& m_){
 }
 
 float& Matrix3::operator [](unsigned int i_){
-	_ASSERT(i_ < mat3Size);
+	GADGET_ASSERT(i_ < mat3Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat3Size) + "!");
 	return m[i_];
 }
 

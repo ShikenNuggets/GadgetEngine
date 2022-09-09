@@ -3,21 +3,20 @@
 
 #include <string>
 
+#include "Debug.h"
 #include "ScreenCoordinate.h"
 
 namespace Gadget{
 	class Window{
 	public:
 		Window(int w_, int h_) : size(w_, h_){
-			//Why the hell are you making a zero width / zero height window?
-			_ASSERT(w_ > 0);
-			_ASSERT(h_ > 0);
+			GADGET_ASSERT(w_ > 0, "Tried to make a window with a width of 0!");
+			GADGET_ASSERT(h_ > 0, "Tried to make a window with a height of 0!");
 		}
 
 		Window(const ScreenCoordinate& sc_) : size(sc_){
-			//Why the hell are you making a zero width / zero height window?
-			_ASSERT(w_ > 0);
-			_ASSERT(h_ > 0);
+			GADGET_ASSERT(sc_.x > 0, "Tried to make a window with a width of 0!");
+			GADGET_ASSERT(sc_.y > 0, "Tried to make a window with a height of 0!");
 		}
 
 		virtual ~Window(){}

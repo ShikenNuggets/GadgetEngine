@@ -1,12 +1,14 @@
 #include "StackAllocator.h"
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 StackAllocator::StackAllocator(size_t bytes_) : size(bytes_), base(nullptr), markers(){
-	_ASSERT(bytes_ != 0); //Why the hell are you trying to allocate 0 bytes?
+	GADGET_ASSERT(bytes_ != 0, "Tried to create a 0 byte allocator!");
 
 	base = malloc(bytes_);
-	_ASSERT(base != nullptr); //TODO - Actually handle this, somehow...
+	GADGET_BASIC_ASSERT(base != nullptr); //TODO - Actually handle this, somehow...
 
 	#ifdef GADGET_DEBUG
 		//Fill the memory with garbage so we can detect memory corruption more easily
@@ -32,8 +34,8 @@ bool StackAllocator::CanAllocate(size_t bytesToAllocate_) const{
 }
 
 void* StackAllocator::Allocate(size_t bytes_){
-	_ASSERT(bytes_ > 0); //Why the hell are you trying to allocate 0 bytes?
-	_ASSERT(CanAllocate(bytes_)); //Tried to allocate too much memory
+	GADGET_ASSERT(bytes_ > 0, "Tried to allocate 0 bytes!");
+	GADGET_ASSERT(CanAllocate(bytes_), "Could not allocate " + std::to_string(bytes_) + " bytes!");
 
 	void* ptr = GetTopPtr();
 
@@ -50,9 +52,8 @@ void* StackAllocator::Allocate(size_t bytes_){
 }
 
 void StackAllocator::FreeToMarker(Marker marker_){
-	_ASSERT(!markers.empty()); //Tried to free unallocated memory
-	_ASSERT(marker_ <= GetMarker()); //Tried to free unallocated memory
-	_ASSERT(marker_ < size); //Tried to free memory outside of the stack
+	GADGET_ASSERT(!markers.empty() || marker_ <= GetMarker(), "Tried to free unallocated memory!");
+	GADGET_ASSERT(marker_ < size, "Tried to free memory outside of the stack!");
 
 	while(GetMarker() > marker_){
 		#ifdef GADGET_DEBUG
@@ -67,7 +68,7 @@ void StackAllocator::FreeToMarker(Marker marker_){
 		#endif //GADGET_DEBUG
 	}
 
-	_ASSERT(marker_ == GetMarker()); //Freed with invalid marker
+	GADGET_ASSERT(marker_ == GetMarker(), "Memory freed with an invalid marker!");
 }
 
 void StackAllocator::Clear(){
@@ -86,9 +87,8 @@ void* StackAllocator::GetTopPtr() const{
 }
 
 void* StackAllocator::GetMarkerPtr(Marker marker_) const{
-	_ASSERT(!markers.empty()); //Tried to get unallocated memory
-	_ASSERT(marker_ <= GetMarker()); //Tried to get unallocated memory
-	_ASSERT(marker_ < size); //Tried to get memory outside of the stack
+	GADGET_ASSERT(!markers.empty() || marker_ <= GetMarker(), "Tried to get unallocated memory!");
+	GADGET_ASSERT(marker_ < size, "Tried to get memory outside of the stack!");
 
 	if(marker_ <= GetMarker()){
 		return base;

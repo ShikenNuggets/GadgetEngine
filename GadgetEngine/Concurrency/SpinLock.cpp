@@ -2,6 +2,8 @@
 
 #include <thread>
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 SpinLock::SpinLock() : atomicFlag(){}
@@ -23,11 +25,11 @@ void SpinLock::Release(){
 RaceConditionDetector::RaceConditionDetector() : flag(false){}
 
 void RaceConditionDetector::Acquire(){
-	_ASSERT(!flag); //No one should already have the lock
+	GADGET_ASSERT(!flag, "Race condition detected (lock was re-acquired by another thread)!"); //No one should already have the lock
 	flag = true;
 }
 
 void RaceConditionDetector::Release(){
-	_ASSERT(flag); //Release should only be called after Acquire
+	GADGET_ASSERT(flag, "Tried to release a lock that is not acquired. Possible race condition?"); //Release should only be called after Acquire
 	flag = false;
 }

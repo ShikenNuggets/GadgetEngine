@@ -42,7 +42,7 @@ Matrix4x3::Matrix4x3(const Matrix4& m_) : m(){
 }
 
 float& Matrix4x3::operator [](unsigned int i_){
-	_ASSERT(i_ < mat4x3Size); //TODO - Custom assert macro
+	GADGET_ASSERT(i_ < mat4x3Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat4x3Size) + "!");
 	return m[i_];
 }
 

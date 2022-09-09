@@ -15,7 +15,7 @@ using namespace Gadget;
 Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), mesh(nullptr), meshInfo(nullptr), shader(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
-	_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr);
+	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
 	glContext = SDL_GL_CreateContext(dynamic_cast<Win32_Window*>(window.get())->GetSDLWindow());
 	if(glContext == nullptr){
 		Debug::Log("OpenGL context could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
@@ -110,11 +110,10 @@ void Win32_Renderer::SetClearColor(const Color& color_){
 }
 
 void Win32_Renderer::SetViewportRect(const Rect& rect_){
-	//Invalid window rect
-	_ASSERT(rect_.x >= 0.0f && rect.x <= 1.0f);
-	_ASSERT(rect_.y >= 0.0f && rect.y <= 1.0f);
-	_ASSERT(rect_.w >= 0.0f && rect.w <= 1.0f);
-	_ASSERT(rect_.h >= 0.0f && rect.h <= 1.0f);
+	GADGET_ASSERT(rect_.x >= 0.0f && rect_.x <= 1.0f, "Tried to set invalid viewport rect!");
+	GADGET_ASSERT(rect_.y >= 0.0f && rect_.y <= 1.0f, "Tried to set invalid viewport rect!");
+	GADGET_ASSERT(rect_.w >= 0.0f && rect_.w <= 1.0f, "Tried to set invalid viewport rect!");
+	GADGET_ASSERT(rect_.h >= 0.0f && rect_.h <= 1.0f, "Tried to set invalid viewport rect!");
 
 	glViewport(static_cast<GLint>(window->GetWidth() * rect_.x),
 				static_cast<GLint>(window->GetHeight() * rect_.y),

@@ -3,6 +3,8 @@
 
 #include <stack>
 
+#include "Debug.h"
+
 namespace Gadget{
 	class StackAllocator{
 	public:
@@ -42,7 +44,7 @@ namespace Gadget{
 		}
 
 		StackAllocator& CurrentBuffer(){
-			_ASSERT(currentStack < numStacks);
+			GADGET_BASIC_ASSERT(currentStack < numStacks);
 			return stacks[currentStack];
 		}
 

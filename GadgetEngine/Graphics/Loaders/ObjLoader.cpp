@@ -9,7 +9,7 @@
 using namespace Gadget;
 
 Mesh* ObjLoader::LoadMesh(const std::string& filePath_){
-	_ASSERT(FileSystem::FileExists(filePath_)); //Tried to load a non-existent file!
+	GADGET_ASSERT(FileSystem::FileExists(filePath_), "Tried to load non-existent file [" + filePath_ + "]!");
 	if(!FileSystem::FileExists(filePath_)){
 		Debug::Log(SID("OBJLOADER"), "Tried to load non-existent file [" + filePath_ + "]!", Debug::Error, __FILE__, __LINE__);
 		return nullptr;

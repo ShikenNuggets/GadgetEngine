@@ -25,7 +25,7 @@ namespace Gadget{
 
 		//This allows us to get elements
 		inline constexpr float operator [](unsigned int i_) const{
-			_ASSERT(i_ < mat2Size);
+			GADGET_ASSERT(i_ < mat2Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat2Size) + "!");
 			return m[i_];
 		}
 
@@ -83,7 +83,7 @@ namespace Gadget{
 		Matrix3& operator =(const Matrix4& m_);
 
 		constexpr float operator [](unsigned int i_) const{
-			_ASSERT(i_ < mat3Size);
+			GADGET_ASSERT(i_ < mat3Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat3Size) + "!");
 			return m[i_];
 		}
 
@@ -144,7 +144,7 @@ namespace Gadget{
 		explicit Matrix4(const Matrix4x3& m_);
 
 		constexpr float operator [](unsigned int i_) const{
-			_ASSERT(i_ < mat4Size);
+			GADGET_ASSERT(i_ < mat4Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat4Size) + "!");
 			return m[i_];
 		}
 
@@ -246,7 +246,7 @@ namespace Gadget{
 		explicit Matrix4x3(const Matrix4& m_);
 
 		constexpr float operator [](unsigned int i_) const{
-			_ASSERT(i_ < mat4x3Size);
+			GADGET_ASSERT(i_ < mat4x3Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat4x3Size) + "!");
 			return m[i_];
 		}
 

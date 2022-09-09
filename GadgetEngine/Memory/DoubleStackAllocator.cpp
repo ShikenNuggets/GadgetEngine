@@ -1,12 +1,14 @@
 #include "DoubleStackAllocator.h"
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 DoubleStackAllocator::DoubleStackAllocator(size_t bytes_) : size(bytes_), base(nullptr), lowerMarkers(), upperMarkers(){
-	_ASSERT(bytes_ != 0); //Why the hell are you trying to allocate 0 bytes?
+	GADGET_ASSERT(bytes_ != 0, "Tried to create a 0 byte allocator!");
 
 	base = malloc(bytes_);
-	_ASSERT(base != nullptr); //TODO - Actually handle this, somehow...
+	GADGET_BASIC_ASSERT(base != nullptr); //TODO - Actually handle this, somehow...
 
 	#ifdef GADGET_DEBUG
 		//Fill the memory with garbage so we can detect memory corruption more easily
@@ -40,8 +42,8 @@ bool DoubleStackAllocator::CanAllocate(size_t bytesToAllocate_) const{
 }
 
 void* DoubleStackAllocator::AllocateLower(size_t bytes_){
-	_ASSERT(bytes_ > 0); //Why the hell are you trying to allocate 0 bytes?
-	_ASSERT(CanAllocate(bytes_)); //Tried to allocate too much memory
+	GADGET_ASSERT(bytes_ > 0, "Tried to allocate 0 bytes!");
+	GADGET_ASSERT(CanAllocate(bytes_), "Could not allocate " + std::to_string(bytes_) + " bytes!");
 
 	void* ptr = GetLowerPtr();
 
@@ -58,8 +60,8 @@ void* DoubleStackAllocator::AllocateLower(size_t bytes_){
 }
 
 void* DoubleStackAllocator::AllocateUpper(size_t bytes_){
-	_ASSERT(bytes_ > 0); //Why the hell are you trying to allocate 0 bytes?
-	_ASSERT(CanAllocate(bytes_)); //Tried to allocate too much memory
+	GADGET_ASSERT(bytes_ > 0, "Tried to allocate 0 bytes!");
+	GADGET_ASSERT(CanAllocate(bytes_), "Could not allocate " + std::to_string(bytes_) + " bytes!");
 
 	upperMarkers.push(GetUpperMarker() - bytes_);
 
@@ -74,9 +76,8 @@ void* DoubleStackAllocator::AllocateUpper(size_t bytes_){
 }
 
 void DoubleStackAllocator::FreeLower(LowerMarker marker_){
-	_ASSERT(!lowerMarkers.empty()); //Tried to free unallocated memory
-	_ASSERT(marker_ <= GetLowerMarker()); //Tried to free unallocated memory
-	_ASSERT(marker_ < size); //Tried to free memory outside of the stack
+	GADGET_ASSERT(!lowerMarkers.empty() || marker_ <= GetLowerMarker(), "Tried to free unallocated memory!");
+	GADGET_ASSERT(marker_ < size, "Tried to free memory outside of the stack!");
 
 	while(GetLowerMarker() > marker_){
 		#ifdef GADGET_DEBUG
@@ -92,13 +93,12 @@ void DoubleStackAllocator::FreeLower(LowerMarker marker_){
 		#endif //GADGET_DEBUG
 	}
 
-	_ASSERT(marker_ == GetLowerMarker()); //Freed with invalid marker
+	GADGET_ASSERT(marker_ == GetLowerMarker(), "Memory was freed with an invalid marker!");
 }
 
 void DoubleStackAllocator::FreeUpper(UpperMarker marker_){
-	_ASSERT(!upperMarkers.empty()); //Tried to free unallocated memory
-	_ASSERT(marker_ >= GetLowerMarker()); //Tried to free unallocated memory
-	_ASSERT(marker_ < size); //Tried to free memory outside of the stack
+	GADGET_ASSERT(!upperMarkers.empty() || marker_ >= GetLowerMarker(), "Tried to free unallocated memory!");
+	GADGET_ASSERT(marker_ < size, "Tried to free memory outside of the stack!");
 
 	while(GetUpperMarker() < marker_){
 		#ifdef GADGET_DEBUG
@@ -114,7 +114,7 @@ void DoubleStackAllocator::FreeUpper(UpperMarker marker_){
 		#endif //GADGET_DEBUG
 	}
 
-	_ASSERT(marker_ == GetUpperMarker()); //Freed with invalid marker
+	GADGET_ASSERT(marker_ == GetUpperMarker(), "Memory was freed with an invalid marker!");
 }
 
 void DoubleStackAllocator::Clear(){
@@ -142,9 +142,8 @@ void* DoubleStackAllocator::GetUpperPtr() const{
 }
 
 void* DoubleStackAllocator::GetLowerMarkerPtr(LowerMarker marker_) const{
-	_ASSERT(!lowerMarkers.empty()); //Tried to get unallocated memory
-	_ASSERT(marker_ <= GetLowerMarker()); //Tried to get unallocated memory
-	_ASSERT(marker_ < size); //Tried to get memory outside of the stack
+	GADGET_ASSERT(!lowerMarkers.empty() || marker_ <= GetLowerMarker(), "Tried to get unallocated memory!");
+	GADGET_ASSERT(marker_ < size, "Tried to get memory outside of the stack!");
 
 	if(marker_ <= GetLowerMarker()){
 		return base;
@@ -154,9 +153,8 @@ void* DoubleStackAllocator::GetLowerMarkerPtr(LowerMarker marker_) const{
 }
 
 void* DoubleStackAllocator::GetUpperMarkerPtr(UpperMarker marker_) const{
-	_ASSERT(upperMarkers.empty()); //Tried to get unallocated memory
-	_ASSERT(marker_ >= GetUpperMarker()); //Tried to get unallocated memory
-	_ASSERT(marker_ < size); //Tried to get memory outside of the stack
+	GADGET_ASSERT(upperMarkers.empty() || marker_ >= GetUpperMarker(), "Tried to get unallocated memory!");
+	GADGET_ASSERT(marker_ < size, "Tried to get memory outside of the stack!");
 
 	if(marker_ >= GetUpperMarker()){
 		return (void*)((size_t)base + size);

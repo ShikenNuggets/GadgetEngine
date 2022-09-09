@@ -22,7 +22,7 @@ bool ButtonMashGesture::IsGestureComplete() const{
 }
 
 float ButtonMashGesture::GetPercentComplete() const{
-	_ASSERT(requiredPresses > 0);
+	GADGET_ASSERT(requiredPresses > 0, "Buttom mash gesture with zero required presses exists!");
 	return Math::Clamp(0.0f, 1.0f, static_cast<float>(currentPresses) / static_cast<float>(requiredPresses));
 }
 
@@ -62,7 +62,7 @@ bool ButtonSequenceGesture::IsGestureComplete() const{
 
 //TODO - Pressing the wrong button should reset the gesture
 void ButtonSequenceGesture::Update(){
-	_ASSERT(!buttonNames.empty());
+	GADGET_ASSERT(!buttonNames.empty(), "ButtonSequenceGesture with no button names set exists!");
 
 	if(IsGestureComplete()){
 		return; //The sequence is already complete
@@ -88,7 +88,7 @@ void ButtonSequenceGesture::Reset(){
 
 //---------Circular Rotation Gesture----------//
 CircularRotationGesture::CircularRotationGesture(StringID gestureName_, StringID horizontalAxisName_, StringID verticalAxisName_, std::vector<Rotations> rotations_, float maxAllowedTime_) : InputGesture(gestureName_, maxAllowedTime_), horizontal(horizontalAxisName_), vertical(verticalAxisName_), rotations(rotations_), startTime(0.0f), currentRotationIndex(0){
-	_ASSERT(!rotations.empty());
+	GADGET_ASSERT(!rotations.empty(), "CircularRotationGesture created with no rotations set!");
 }
 
 bool CircularRotationGesture::IsGestureValid() const{
@@ -100,7 +100,7 @@ bool CircularRotationGesture::IsGestureComplete() const{
 }
 
 void CircularRotationGesture::Update(){
-	_ASSERT(!rotations.empty());
+	GADGET_ASSERT(!rotations.empty(), "CircularRotationGesture with no rotations set exists!");
 
 	if(IsGestureComplete()){
 		return;

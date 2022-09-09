@@ -7,7 +7,7 @@ namespace Gadget{
 	class AlignedAllocator{
 		static inline constexpr size_t AlignAddress(size_t address_, size_t align_){
 			const size_t mask = align_ - 1;
-			_ASSERT((align_ & mask) == 0); //Alignment must be power of 2
+			GADGET_BASIC_ASSERT((align_ & mask) == 0); //Alignment must be power of 2
 			return (address_ + mask) & ~mask;
 		}
 
@@ -28,7 +28,7 @@ namespace Gadget{
 			}
 
 			ptrdiff_t shift = alignedMemory - rawMemory;
-			_ASSERT(shift > 0 && shift <= 256);
+			GADGET_BASIC_ASSERT(shift > 0 && shift <= 256);
 
 			alignedMemory[-1] = static_cast<uint8_t>(shift & 0xFF);
 

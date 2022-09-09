@@ -4,6 +4,7 @@
 #include <set>
 
 #include "InputEnums.h"
+#include "Debug.h"
 #include "Utils/StringID.h"
 
 namespace Gadget{
@@ -49,7 +50,7 @@ namespace Gadget{
 		void AddButtonID(ButtonID id_){ buttonIDs.insert(id_); }
 
 		void RemoveButtonID(ButtonID id_){
-			_ASSERT(buttonIDs.find(id_) != buttonIDs.end()); //Tried erasing a button ID that's not in the set
+			GADGET_ASSERT(buttonIDs.find(id_) != buttonIDs.end(), "Tried to remove invalid button ID [" + std::to_string((int)id_) + "]!");
 			buttonIDs.erase(id_);
 		}
 
@@ -78,7 +79,7 @@ namespace Gadget{
 		void AddButtonID(ButtonID id_){ buttonIDs.push_back(id_); }
 
 		void RemoveButtonID(ButtonID id_){
-			_ASSERT(buttonIDs.find(id_) != buttonIDs.end()); //Tried erasing a button ID that's not in the vector
+			GADGET_ASSERT(std::find(buttonIDs.begin(), buttonIDs.end(), id_) != buttonIDs.end(), "Tried to remove invalid button ID [" + std::to_string((int)id_) + "]!");
 			buttonIDs.erase(std::remove(buttonIDs.begin(), buttonIDs.end(), id_));
 		}
 
@@ -116,7 +117,7 @@ namespace Gadget{
 		void AddAxisID(AxisID id_){ axisIDs.insert(id_); }
 
 		void RemoveAxisID(AxisID id_){
-			_ASSERT(axisIDs.find(id_) != axisIDs.end()); //Tried erasing an axis ID that's not in the set
+			GADGET_ASSERT(axisIDs.find(id_) != axisIDs.end(), "Tried to remove invalid axis ID [" + std::to_string((int)id_) + "]!");
 			axisIDs.erase(id_);
 		}
 

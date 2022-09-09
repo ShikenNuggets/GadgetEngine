@@ -1,5 +1,7 @@
 #include "EventHandler.h"
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 EventHandler* EventHandler::instance = nullptr;
@@ -32,7 +34,7 @@ void EventHandler::DeleteInstance(){
 #endif //GADGET_DEBUG
 
 void EventHandler::SetEventCallback(EventType type_, std::function<void(const Event&)> callback_){
-	_ASSERT(eventCallbacks.find(type_) != eventCallbacks.end());
+	GADGET_ASSERT(eventCallbacks.find(type_) != eventCallbacks.end(), "Tried to set event callback of invalid type!");
 
 	eventCallbacks[type_].push_back(callback_);
 }

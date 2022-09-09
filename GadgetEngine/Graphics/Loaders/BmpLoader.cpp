@@ -35,11 +35,11 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 		colorHeader = CreateColorHeader(data);
 
 		//We do not support other color spaces/formats. TODO?
-		_ASSERT(colorHeader.colorSpaceType == BmpColorHeader::SRGBColorSpace);
-		_ASSERT(colorHeader.redMask = BmpColorHeader::RGBARedMask);
-		_ASSERT(colorHeader.greenMask = BmpColorHeader::RGBAGreenMask);
-		_ASSERT(colorHeader.blueMask = BmpColorHeader::RGBABlueMask);
-		_ASSERT(colorHeader.alphaMask = BmpColorHeader::RGBAAlphaMask);
+		GADGET_ASSERT(colorHeader.colorSpaceType == BmpColorHeader::SRGBColorSpace, "Tried to load BMP with invalid color space (only SRGB is supported)!");
+		GADGET_ASSERT(colorHeader.redMask == BmpColorHeader::RGBARedMask, "Tried to load BMP with invalid color format (only RGB and RGBA are supported)!");
+		GADGET_ASSERT(colorHeader.greenMask == BmpColorHeader::RGBAGreenMask, "Tried to load BMP with invalid color format (only RGB and RGBA are supported)!");
+		GADGET_ASSERT(colorHeader.blueMask == BmpColorHeader::RGBABlueMask, "Tried to load BMP with invalid color format (only RGB and RGBA are supported)!");
+		GADGET_ASSERT(colorHeader.alphaMask == BmpColorHeader::RGBAAlphaMask, "Tried to load BMP with invalid color format (only RGB and RGBA are supported)!");
 	}
 
 	std::vector<uint8_t> pixelData;
@@ -70,7 +70,7 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 
 //TODO - These don't consider endianness at all, which could be a problem later
 BmpFileHeader BmpLoader::CreateFileHeader(const std::vector<uint8_t>& data_){
-	_ASSERT(data_.size() > sizeof(BmpFileHeader));
+	GADGET_ASSERT(data_.size() > sizeof(BmpFileHeader), "Invalid BMP data!");
 
 	BmpFileHeader fileHeader{};
 	fileHeader.fileType = MergeBytes(data_[0], data_[1]);
@@ -83,7 +83,7 @@ BmpFileHeader BmpLoader::CreateFileHeader(const std::vector<uint8_t>& data_){
 }
 
 BmpInfoHeader BmpLoader::CreateInfoHeader(const std::vector<uint8_t>& data_){
-	_ASSERT(data_.size() > sizeof(BmpFileHeader) + sizeof(BmpInfoHeader));
+	GADGET_ASSERT(data_.size() > sizeof(BmpFileHeader) + sizeof(BmpInfoHeader), "Invalid BMP data!");
 
 	BmpInfoHeader infoHeader{};
 	infoHeader.size = MergeBytes(data_[14], data_[15], data_[16], data_[17]);
@@ -102,7 +102,7 @@ BmpInfoHeader BmpLoader::CreateInfoHeader(const std::vector<uint8_t>& data_){
 }
 
 BmpColorHeader BmpLoader::CreateColorHeader(const std::vector<uint8_t>& data_){
-	_ASSERT(data_.size() > sizeof(BmpFileHeader) + sizeof(BmpInfoHeader) + sizeof(BmpColorHeader));
+	GADGET_ASSERT(data_.size() > sizeof(BmpFileHeader) + sizeof(BmpInfoHeader) + sizeof(BmpColorHeader), "Invalid BMP data!");
 
 	BmpColorHeader colorHeader{};
 	colorHeader.redMask = MergeBytes(data_[54], data_[55], data_[56], data_[57]);

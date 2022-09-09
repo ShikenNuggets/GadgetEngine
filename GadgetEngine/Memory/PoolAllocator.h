@@ -24,14 +24,14 @@ namespace Gadget{
 		}
 
 		T* Allocate(){
-			_ASSERT(CanAllocate());
+			GADGET_BASIC_ASSERT(CanAllocate());
 			
 			T* ptr = freeElements.front();
 			freeElements.pop_front();
 		}
 
 		void Free(T* ptr_){
-			_ASSERT(ptr_ > base && ptr_ < base + (numElements * sizeof(T))); //Tried to free memory outside of the pool
+			GADGET_ASSERT(ptr_ > base && ptr_ < base + (numElements * sizeof(T)), "Tried to free memory outside of the pool!");
 			freeElements.push_back(ptr_);
 		}
 

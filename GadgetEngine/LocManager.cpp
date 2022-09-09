@@ -1,5 +1,7 @@
 #include "LocManager.h"
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 LocManager* LocManager::instance = nullptr;
@@ -28,12 +30,12 @@ void LocManager::DeleteInstance(){
 #endif //GADGET_DEBUG
 
 StringID LocManager::GetCurrentLanguage() const{
-	_ASSERT(currentLanguage < languages.size());
+	GADGET_ASSERT(currentLanguage < languages.size(), "Current Language set to an invalid value!");
 	return languages[currentLanguage];
 }
 
 void LocManager::AddLanguage(StringID language_){
-	_ASSERT(std::find(languages.begin(), languages.end(), language_) == languages.end()); //Already added this language
+	GADGET_ASSERT(std::find(languages.begin(), languages.end(), language_) == languages.end(), language_.GetString() + "added to the language list multiple times!");
 	languages.push_back(language_);
 }
 
@@ -45,5 +47,5 @@ void LocManager::SetCurrentLanguage(StringID language_){
 		}
 	}
 
-	_ASSERT(false); //Could not find the language you tried to set
+	GADGET_ASSERT(false, "Tried to set language to invalid value [" + language_.GetString() + "]!");
 }

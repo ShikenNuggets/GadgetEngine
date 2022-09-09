@@ -37,7 +37,7 @@ Matrix2::Matrix2(const Matrix4x3& m_) : m(){
 }
 
 float& Matrix2::operator [](unsigned int i_){
-	_ASSERT(i_ < mat2Size);
+	GADGET_ASSERT(i_ < mat2Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat2Size) + "!");
 	return m[i_];
 }
 
