@@ -4,6 +4,12 @@
 
 #include "Core/FileSystem.h"
 
+#ifdef GADGET_PLATFORM_WIN32
+#pragma warning(disable : 26819) //Kill unfixable warning from SDL2
+#include <SDL_messagebox.h>
+#pragma warning(default : 26819)
+#endif //GADGET_PLATFORM_WIN32
+
 using namespace Gadget;
 
 Debug::LogType Debug::logLevel = Debug::Verbose;
@@ -64,6 +70,18 @@ void Debug::AddFilter(StringID id_){
 
 void Debug::ResetFilter(){
 	logChannelFilter.clear();
+}
+
+void Debug::PopupErrorMessage(const std::string& title_, const std::string& message_){
+	Debug::Log(SID("FATAL"), message_, FatalError);
+
+	#ifdef GADGET_PLATFORM_WIN32
+	//Extra spacing at the end to prevent text from getting cut off
+	int status = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title_.c_str(), (message_ + "         \n         ").c_str(), nullptr);
+	if(status != 0){
+		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, __FILENAME__, __LINE__);
+	}
+	#endif //GADGET_PLATFORM_WIN32
 }
 
 std::string Debug::GetFileNameFromPath(const std::string& path_){
