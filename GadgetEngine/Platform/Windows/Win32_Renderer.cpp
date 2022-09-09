@@ -59,13 +59,13 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), mesh(nullptr), mesh
 	texture = BmpLoader::LoadImage("Resources/wall.bmp");
 	textureInfo = new GL_TextureInfo(*texture);
 
-	delete mesh;
 	delete texture;
 }
 
 Win32_Renderer::~Win32_Renderer(){
 	delete textureInfo;
 	delete meshInfo;
+	delete mesh;
 
 	SDL_GL_DeleteContext(glContext);
 
