@@ -1,5 +1,4 @@
 #include "BmpLoader.h"
-#include <queue>
 
 #include "Debug.h"
 #include "Core/FileSystem.h"
@@ -26,6 +25,10 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 	}
 
 	BmpInfoHeader infoHeader = CreateInfoHeader(data);
+	if(infoHeader.compression != 0 && infoHeader.compression != 3){
+		Debug::Log("Tried to load compressed BMP [" + filePath_ + "], but compression is not supported!", Debug::Error, __FILE__, __LINE__);
+		return nullptr;
+	}
 
 	BmpColorHeader colorHeader;
 	if(infoHeader.bitCount == 32){
@@ -42,12 +45,27 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 	std::vector<uint8_t> pixelData;
 	const size_t imgSize = infoHeader.width * infoHeader.height * infoHeader.bitCount / 8;
 	pixelData.reserve(imgSize);
-
-	for(size_t i = 0; i < imgSize; i++){
-		pixelData.push_back(data[fileHeader.offsetData + i]);
+	
+	if(infoHeader.bitCount == 32){
+		//For some reason my BMPs are all BRG instead of RGB...
+		for(size_t i = 0; i < imgSize; i += 4){
+			pixelData.push_back(data[fileHeader.offsetData + i + 2]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 1]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 0]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 3]);
+		}
+	}else if(infoHeader.bitCount == 24){
+		for(size_t i = 0; i < imgSize; i += 3){
+			pixelData.push_back(data[fileHeader.offsetData + i + 2]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 1]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 0]);
+		}
+	}else{
+		Debug::Log("Unsupported bitcount [" + std::to_string(infoHeader.bitCount) + " on BMP[" + filePath_ + "], but compression is not supported!", Debug::Error, __FILE__, __LINE__);
+		return nullptr;
 	}
 
-	return new Texture(infoHeader.width, infoHeader.height, pixelData);
+	return new Texture(infoHeader.width, infoHeader.height, infoHeader.bitCount, pixelData);
 }
 
 //TODO - These don't consider endianness at all, which could be a problem later

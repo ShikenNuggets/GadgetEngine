@@ -1,5 +1,7 @@
 #include "GL_TextureInfo.h"
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), textureID(0){
@@ -13,7 +15,16 @@ GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture_.GetWidth(), texture_.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, texture_.GetPixels().data());
+	int color = GL_RGB;
+	if(texture_.GetBitDepth() == 32){
+		color = GL_RGBA;
+	}else if(texture_.GetBitDepth() == 24){
+		color = GL_RGB; //Redundant but good to be explicit
+	}else{
+		Debug::Log("Invalid bit depth!", Debug::Error, __FILE__, __LINE__);
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, color, texture_.GetWidth(), texture_.GetHeight(), 0, color, GL_UNSIGNED_BYTE, texture_.GetPixels().data());
 	glGenerateMipmap(GL_TEXTURE_2D);
 	Unbind();
 }

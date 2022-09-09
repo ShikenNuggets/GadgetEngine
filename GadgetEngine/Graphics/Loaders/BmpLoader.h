@@ -34,9 +34,9 @@ namespace Gadget{
 
 	struct BmpColorHeader{
 		static constexpr uint32_t SRGBColorSpace = 0x73524742;
-		static constexpr uint32_t RGBARedMask = 0x000000ff;
+		static constexpr uint32_t RGBARedMask = 0x00ff0000;
 		static constexpr uint32_t RGBAGreenMask = 0x0000ff00;
-		static constexpr uint32_t RGBABlueMask = 0x00ff0000;
+		static constexpr uint32_t RGBABlueMask = 0x000000ff;
 		static constexpr uint32_t RGBAAlphaMask = 0xff000000;
 
 		uint32_t redMask;
