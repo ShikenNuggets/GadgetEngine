@@ -67,6 +67,9 @@
     <ClInclude Include="Graphics\Color.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Loaders\BmpLoader.h">
+      <Filter>Graphics\Loaders</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Loaders\ObjLoader.h">
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
@@ -82,10 +85,19 @@
     <ClInclude Include="Graphics\OpenGL\GL_Shader.h">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GL_TextureInfo.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Renderer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Shader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\TextureInfo.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Vertex.h">
@@ -190,6 +202,9 @@
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Events</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Loaders\BmpLoader.cpp">
+      <Filter>Graphics\Loaders</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
     </ClCompile>
@@ -197,6 +212,9 @@
       <Filter>Graphics\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_Shader.cpp">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GL_TextureInfo.cpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Input\Input.cpp">

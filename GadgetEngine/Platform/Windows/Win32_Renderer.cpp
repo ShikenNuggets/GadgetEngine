@@ -4,6 +4,7 @@
 
 #include "Win32_Window.h"
 #include "Debug.h"
+#include "Graphics/Loaders/BmpLoader.h"
 #include "Graphics/Loaders/ObjLoader.h"
 #include "Resource/ResourceManager.h"
 
@@ -54,11 +55,17 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), mesh(nullptr), mesh
 	mesh = ObjLoader::LoadMesh("Resources/cube.obj");
 	meshInfo = new GL_MeshInfo(*mesh);
 	shader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("DefaultShader"));
+
+	texture = BmpLoader::LoadImage("Resources/wall.bmp");
+	textureInfo = new GL_TextureInfo(*texture);
+
+	delete mesh;
+	delete texture;
 }
 
 Win32_Renderer::~Win32_Renderer(){
+	delete textureInfo;
 	delete meshInfo;
-	meshInfo = nullptr;
 
 	SDL_GL_DeleteContext(glContext);
 
@@ -72,6 +79,7 @@ void Win32_Renderer::Render(){
 	//MODEL RENDERING
 	//TODO - Obviously get rid of this code Soon(TM)
 	meshInfo->Bind();
+	textureInfo->Bind();
 	shader->Bind();
 
 	shader->BindMatrix4(SID("projectionMatrix"), Matrix4::Perspective(45.0f, GetAspectRatio(), 0.1f, 100.0f));
@@ -86,6 +94,7 @@ void Win32_Renderer::Render(){
 	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->indices.size()), GL_UNSIGNED_INT, nullptr);
 
 	shader->Unbind();
+	textureInfo->Unbind();
 	meshInfo->Unbind();
 
 	//Do this only at the end

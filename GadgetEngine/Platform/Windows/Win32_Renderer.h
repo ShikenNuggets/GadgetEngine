@@ -7,7 +7,9 @@
 
 #include "Graphics/Renderer.h"
 #include "Graphics/Mesh.h"
+#include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_MeshInfo.h"
+#include "Graphics/OpenGL/GL_TextureInfo.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 
 namespace Gadget{
@@ -31,7 +33,9 @@ namespace Gadget{
 	protected:
 		SDL_GLContext glContext;
 		Mesh* mesh;
+		Texture* texture;
 		GL_MeshInfo* meshInfo;
+		GL_TextureInfo* textureInfo;
 		GL_Shader* shader;
 	};
 }

@@ -44,6 +44,16 @@ std::string FileSystem::ReadFileToString(const std::string& filePath_){
 	return result;
 }
 
+std::vector<uint8_t> FileSystem::ReadBinaryFile(const std::string& filePath_){
+	std::ifstream input(filePath_, std::ios::binary);
+	if(!input.is_open()){
+		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
+		return std::vector<uint8_t>();
+	}
+
+	return std::vector<uint8_t>(std::istreambuf_iterator<char>(input), {});
+}
+
 void FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){
 	std::fstream filestream;
 

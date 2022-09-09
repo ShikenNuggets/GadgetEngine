@@ -8,6 +8,9 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
+out vec2 texCoord;
+
 void main(){
 	gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * vec4(vertPos, 1.0f);
+	texCoord = texCoords;
 }

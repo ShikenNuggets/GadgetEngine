@@ -18,6 +18,7 @@ namespace Gadget{
 
 		static std::vector<std::string> ReadFile(const std::string& filePath_);
 		static std::string ReadFileToString(const std::string& filePath_);
+		static std::vector<uint8_t> ReadBinaryFile(const std::string& filePath_);
 		
 		static void WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_ = WriteType::Append);
 	};
