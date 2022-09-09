@@ -83,6 +83,11 @@ project "GadgetEngine"
 		{
 			"GADGET_PLATFORM_WIN32",
 		}
+
+		fatalwarnings
+		{
+			"4715"
+		}
 		
 	filter "configurations:Debug"
 		defines "GADGET_DEBUG"
@@ -161,6 +166,11 @@ project "Game"
 		defines
 		{
 			"GADGET_PLATFORM_WIN32",
+		}
+
+		fatalwarnings
+		{
+			"4715"
 		}
 		
 		postbuildcommands
