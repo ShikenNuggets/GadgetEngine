@@ -44,7 +44,7 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	finalMessage += message_;
 	if(!fileName_.empty() && lineNumber_ > 0){
 		finalMessage += " (";
-		finalMessage += GetFileNameFromPath(fileName_);
+		finalMessage += FileSystem::GetFileNameFromPath(fileName_);
 		finalMessage += ", ";
 		finalMessage += std::to_string(lineNumber_);
 		finalMessage += ")";
@@ -82,18 +82,4 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, __FILENAME__, __LINE__);
 	}
 	#endif //GADGET_PLATFORM_WIN32
-}
-
-std::string Debug::GetFileNameFromPath(const std::string& path_){
-	char sep = '/';
-
-#ifdef _WIN32
-	sep = '\\';
-#endif
-
-	size_t i = path_.rfind(sep, path_.length());
-	if(i != std::string::npos){
-		return(path_.substr(i + 1, path_.length() - i));
-	}
-	return("");
 }

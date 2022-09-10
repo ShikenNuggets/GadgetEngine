@@ -79,3 +79,18 @@ void FileSystem::WriteToFile(const std::string& filePath_, const std::string& co
 	filestream << content_;
 	filestream.close();
 }
+
+std::string FileSystem::GetFileNameFromPath(const std::string& path_){
+	char sep = '/';
+
+	#ifdef GADGET_PLATFORM_WIN32
+	sep = '\\';
+	#endif
+
+	size_t i = path_.rfind(sep, path_.length());
+	if(i != std::string::npos){
+		return(path_.substr(i + 1, path_.length() - i));
+	}
+
+	return "";
+}

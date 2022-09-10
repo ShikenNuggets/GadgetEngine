@@ -26,7 +26,7 @@ namespace Gadget{
 		~LocManager();
 
 		//Bump this up to a uint16_t if you need to support more than 256 languages
-		//There's ~7k living languages, but I've never seen a game support more than like 25
+		//There's ~7k living languages, but I've never seen a game officially support more than like 25
 		uint8_t currentLanguage;
 
 		std::vector<StringID> languages;
