@@ -1,10 +1,13 @@
 #include "GL_MeshInfo.h"
 
+#include "App.h"
 #include "Graphics/Vertex.h"
 
 using namespace Gadget;
 
 GL_MeshInfo::GL_MeshInfo(const Mesh& mesh_) : MeshInfo(), vao(0), vbo(0), ebo(0){
+	GADGET_ASSERT(App::GetInstance()->GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
+
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ebo);

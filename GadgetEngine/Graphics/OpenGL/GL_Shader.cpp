@@ -1,11 +1,14 @@
 #include "GL_Shader.h"
 
+#include "App.h"
 #include "Debug.h"
 #include "Core/FileSystem.h"
 
 using namespace Gadget;
 
 GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_) : Shader(), shader(0){
+	GADGET_ASSERT(App::GetInstance()->GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
+
 	std::string vertCodeStr = FileSystem::ReadFileToString(vertPath_);
 	if(vertCodeStr.empty()){
 		Debug::Log("Could not load vertex shader code from [" + vertPath_ + "]!", Debug::FatalError, __FILE__, __LINE__);

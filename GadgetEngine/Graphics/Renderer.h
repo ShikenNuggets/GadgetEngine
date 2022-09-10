@@ -11,6 +11,11 @@
 namespace Gadget{
 	class Renderer{
 	public:
+		enum class API{
+			None = 0,
+			OpenGL
+		};
+
 		enum class WindingOrder{
 			Clockwise,
 			CounterClockwise
@@ -23,9 +28,10 @@ namespace Gadget{
 			All
 		};
 
-		Renderer(WindingOrder order_ = WindingOrder::CounterClockwise, CullFace cullface_ = CullFace::Back) : window(nullptr), currentWindingOrder(order_), currentCullFace(cullface_){}
+		Renderer(API renderAPI_, WindingOrder order_ = WindingOrder::CounterClockwise, CullFace cullface_ = CullFace::Back) : renderAPI(renderAPI_), window(nullptr), currentWindingOrder(order_), currentCullFace(cullface_){}
 		virtual ~Renderer(){}
 
+		API GetRenderAPI() const{ return renderAPI; }
 		std::weak_ptr<Window> GetWindow() const{ return window; }
 
 		virtual void Render() = 0;
@@ -42,6 +48,7 @@ namespace Gadget{
 		void ResetViewportRect(){ SetViewportRect(ViewportRect::Fullscreen); }
 
 	protected:
+		const API renderAPI;
 		std::shared_ptr<Window> window;
 		WindingOrder currentWindingOrder;
 		CullFace currentCullFace;

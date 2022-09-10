@@ -28,6 +28,8 @@ namespace Gadget{
 
 		static void OnEvent(const Event& e_);
 
+		Renderer::API GetCurrentRenderAPI() const;
+
 	private:
 		static App* instance;
 

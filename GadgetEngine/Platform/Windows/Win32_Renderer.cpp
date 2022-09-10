@@ -12,7 +12,7 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), mesh(nullptr), meshInfo(nullptr), shader(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nullptr), meshInfo(nullptr), shader(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -49,17 +49,6 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(), mesh(nullptr), mesh
 		Debug::Log(SID("RENDER"), "Could not set up OpenGL debug callback, OpenGL issues will not be logged!", Debug::Warning, __FILE__, __LINE__);
 	}
 	#endif // GADGET_DEBUG
-
-	//MODEL RENDERING
-	//TODO - Obviously get rid of this code Soon(TM)
-	mesh = ObjLoader::LoadMesh("Resources/cube.obj");
-	meshInfo = new GL_MeshInfo(*mesh);
-	shader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("DefaultShader"));
-
-	texture = BmpLoader::LoadImage("Resources/wall.bmp");
-	textureInfo = new GL_TextureInfo(*texture);
-
-	delete texture;
 }
 
 Win32_Renderer::~Win32_Renderer(){
@@ -78,6 +67,18 @@ void Win32_Renderer::Render(){
 
 	//MODEL RENDERING
 	//TODO - Obviously get rid of this code Soon(TM)
+	if(meshInfo == nullptr && textureInfo == nullptr && shader == nullptr){
+		mesh = ObjLoader::LoadMesh("Resources/cube.obj");
+		meshInfo = new GL_MeshInfo(*mesh);
+		shader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("DefaultShader"));
+
+		texture = BmpLoader::LoadImage("Resources/wall.bmp");
+		textureInfo = new GL_TextureInfo(*texture);
+
+		delete texture;
+		texture = nullptr;
+	}
+
 	meshInfo->Bind();
 	textureInfo->Bind();
 	shader->Bind();

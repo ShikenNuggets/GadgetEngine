@@ -96,7 +96,7 @@ void App::OnEvent(const Event& e_){
 	if(e_.GetEventType() == EventType::WindowClose){
 		GetInstance()->isRunning = false;
 	}else if(e_.GetEventType() == EventType::WindowResize){
-		auto ev = dynamic_cast<const WindowResizedEvent&>(e_);
+		auto& ev = dynamic_cast<const WindowResizedEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
 		GetInstance()->renderer->OnResize(ev.GetWidth(), ev.GetHeight());
 	}
 }
@@ -115,4 +115,12 @@ void* App::AllocateTwoFrameMemory(size_t bytes_){
 	}
 
 	return twoFrameAllocator.CurrentBuffer().Allocate(bytes_);
+}
+
+Renderer::API App::GetCurrentRenderAPI() const{
+	if(renderer != nullptr){
+		return renderer->GetRenderAPI();
+	}else{
+		return Renderer::API::None;
+	}
 }
