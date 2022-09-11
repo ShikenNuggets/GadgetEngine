@@ -64,6 +64,9 @@
       <Filter>Events</Filter>
     </ClInclude>
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Graphics\Camera.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Color.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -201,6 +204,9 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Camera.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp">
       <Filter>Graphics\Loaders</Filter>

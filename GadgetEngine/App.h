@@ -29,6 +29,7 @@ namespace Gadget{
 		static void OnEvent(const Event& e_);
 
 		Renderer::API GetCurrentRenderAPI() const;
+		float GetAspectRatio() const{ return renderer->GetAspectRatio(); }
 
 	private:
 		static App* instance;

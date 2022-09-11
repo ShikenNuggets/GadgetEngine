@@ -12,7 +12,7 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nullptr), meshInfo(nullptr), shader(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nullptr), meshInfo(nullptr), textureInfo(nullptr), shader(nullptr), camera(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -67,6 +67,11 @@ void Win32_Renderer::Render(){
 
 	//MODEL RENDERING
 	//TODO - Obviously get rid of this code Soon(TM)
+	if(camera == nullptr){
+		camera = new Camera();
+		camera->CalculateViewMatrix(Vector3(0.0f, 0.0f, 4.0f), Quaternion::Identity());
+	}
+
 	if(meshInfo == nullptr && textureInfo == nullptr && shader == nullptr){
 		mesh = ObjLoader::LoadMesh("Resources/cube.obj");
 		meshInfo = new GL_MeshInfo(*mesh);
@@ -79,12 +84,16 @@ void Win32_Renderer::Render(){
 		texture = nullptr;
 	}
 
+	SetViewportRect(camera->GetViewportRect());
+	Matrix4 view = camera->GetViewMatrix();
+	Matrix4 proj = camera->GetProjectionMatrix();
+
 	meshInfo->Bind();
 	textureInfo->Bind();
 	shader->Bind();
 
-	shader->BindMatrix4(SID("projectionMatrix"), Matrix4::Perspective(45.0f, GetAspectRatio(), 0.1f, 100.0f));
-	shader->BindMatrix4(SID("viewMatrix"), Matrix4::LookAt(Vector3(0.0f, 0.0f, 4.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f)));
+	shader->BindMatrix4(SID("projectionMatrix"), proj);
+	shader->BindMatrix4(SID("viewMatrix"), view);
 
 	Matrix4 mm = Matrix4::Identity();
 	mm *= Matrix4::Rotate(Time::GetInstance()->TimeSinceStartup() * 10.0f, Vector3(0.0f, 1.0f, 0.0f));
@@ -122,7 +131,12 @@ void Win32_Renderer::SetViewportRect(const Rect& rect_){
 				static_cast<GLsizei>(window->GetHeight() * rect_.h));
 }
 
-void Win32_Renderer::OnResize(int, int){}
+void Win32_Renderer::OnResize(int, int){
+	//TODO - This is tied to the hardcoded model rendering code. Obviously we need to handle this differently later
+	if(camera != nullptr){
+		camera->SetAspect(GetAspectRatio());
+	}
+}
 
 void Win32_Renderer::SetWindingOrder(WindingOrder order_){
 	Renderer::SetWindingOrder(order_);

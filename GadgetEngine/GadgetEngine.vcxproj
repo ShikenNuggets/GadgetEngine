@@ -111,6 +111,7 @@
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Graphics\Color.h" />
     <ClInclude Include="Graphics\Loaders\BmpLoader.h" />
     <ClInclude Include="Graphics\Loaders\ObjLoader.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
+    <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp" />

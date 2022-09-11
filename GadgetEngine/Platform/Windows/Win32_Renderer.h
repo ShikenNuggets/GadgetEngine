@@ -6,6 +6,7 @@
 #pragma warning(default : 26819)
 
 #include "Graphics/Renderer.h"
+#include "Graphics/Camera.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_MeshInfo.h"
@@ -37,6 +38,7 @@ namespace Gadget{
 		GL_MeshInfo* meshInfo;
 		GL_TextureInfo* textureInfo;
 		GL_Shader* shader;
+		Camera* camera;
 	};
 }
 

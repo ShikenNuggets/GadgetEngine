@@ -39,7 +39,7 @@ namespace Gadget{
 		virtual void SetClearColor(const Color& color_) = 0;
 		virtual void SetViewportRect(const Rect& rect_) = 0;
 
-		virtual void OnResize(int newWidth_, int newHeight_) = 0;
+		virtual void OnResize(int newWidth_, int newHeight_) = 0; //TODO - Update all camera projection matrices
 
 		virtual void SetWindingOrder(WindingOrder order_){ currentWindingOrder = order_; }
 		virtual void SetCullFace(CullFace cullFace_){ currentCullFace = cullFace_; }
