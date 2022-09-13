@@ -10,21 +10,28 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	GADGET_ASSERT(App::GetInstance()->GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 
 	std::string vertCodeStr = FileSystem::ReadFileToString(vertPath_);
+	GADGET_BASIC_ASSERT(!vertCodeStr.empty());
 	if(vertCodeStr.empty()){
 		Debug::Log("Could not load vertex shader code from [" + vertPath_ + "]!", Debug::FatalError, __FILE__, __LINE__);
 		//TODO - Handle fatal error
 	}
 
 	std::string fragCodeStr = FileSystem::ReadFileToString(fragPath_);
+	GADGET_BASIC_ASSERT(!fragCodeStr.empty());
 	if(fragCodeStr.empty()){
 		Debug::Log("Could not load fragment shader code from [" + fragPath_ + "]!", Debug::FatalError, __FILE__, __LINE__);
 		//TODO - Handle fatal error
 	}
 
 	GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+	GADGET_BASIC_ASSERT(vertShader != 0);
+	if(vertShader == 0){
+		Debug::Log("Can't create a new vertex shader!", Debug::FatalError, __FILE__, __LINE__);
+	}
 
-	if(vertShader == 0 || fragShader == 0){
+	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+	GADGET_BASIC_ASSERT(fragShader != 0);
+	if(fragShader == 0){
 		Debug::Log("Can't create a new shader!", Debug::FatalError, __FILE__, __LINE__);
 		//TODO - Handle fatal error
 	}
@@ -38,6 +45,7 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 
 	glCompileShader(vertShader);
 	glGetShaderiv(vertShader, GL_COMPILE_STATUS, &status);
+	GADGET_BASIC_ASSERT(status != GL_FALSE);
 	if(status == GL_FALSE){
 		Debug::Log("Could not compile Vertex Shader! GL Error: " + GetShaderLog(vertShader), Debug::FatalError, __FILE__, __LINE__);
 		//TODO - Handle fatal error
@@ -45,6 +53,7 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 
 	glCompileShader(fragShader);
 	glGetShaderiv(fragShader, GL_COMPILE_STATUS, &status);
+	GADGET_BASIC_ASSERT(status != GL_FALSE);
 	if(status == GL_FALSE){
 		Debug::Log("Could not compile Fragment Shader! GL Error: " + GetShaderLog(fragShader), Debug::FatalError, __FILE__, __LINE__);
 		//TODO - Handle fatal error
@@ -56,6 +65,7 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 
 	glLinkProgram(shader);
 	glGetProgramiv(shader, GL_LINK_STATUS, &status);
+	GADGET_BASIC_ASSERT(status != GL_FALSE);
 	if(status == GL_FALSE){
 		Debug::Log("Could not link Shader! GL Error: " + GetShaderLog(shader), Debug::FatalError, __FILE__, __LINE__);
 		//TODO - Handle fatal error
@@ -83,12 +93,29 @@ void GL_Shader::Unbind(){
 	glUseProgram(0);
 }
 
-void GL_Shader::BindMatrix4(StringID uniformName_, const Matrix4& mat4_){
-	if(uniforms.find(uniformName_) == uniforms.end()){
-		uniforms.insert(std::make_pair(uniformName_, glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str())));
-	}
+void GL_Shader::BindVector3(StringID uniformName_, const Vector3& vec_){
+	AddUniform(uniformName_);
+	glUniform3fv(uniforms[uniformName_], 1, vec_);
+}
 
+void GL_Shader::BindVector4(StringID uniformName_, const Vector4& vec_){
+	AddUniform(uniformName_);
+	glUniform4fv(uniforms[uniformName_], 1, vec_);
+}
+
+void GL_Shader::BindMatrix3(StringID uniformName_, const Matrix3& mat3_){
+	AddUniform(uniformName_);
+	glUniformMatrix3fv(uniforms[uniformName_], 1, GL_FALSE, mat3_);
+}
+
+void GL_Shader::BindMatrix4(StringID uniformName_, const Matrix4& mat4_){
+	AddUniform(uniformName_);
 	glUniformMatrix4fv(uniforms[uniformName_], 1, GL_FALSE, mat4_);
+}
+
+void GL_Shader::BindColor(StringID uniformName_, const Color& color_){
+	AddUniform(uniformName_);
+	glUniform4fv(uniforms[uniformName_], 1, color_);
 }
 
 std::string GL_Shader::GetShaderLog(GLuint shader_){

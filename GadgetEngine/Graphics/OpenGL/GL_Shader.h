@@ -6,6 +6,7 @@
 
 #include <glad/glad.h>
 
+#include "Graphics/Color.h"
 #include "Graphics/Shader.h"
 #include "Math/Matrix.h"
 
@@ -19,11 +20,22 @@ namespace Gadget{
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
+		void BindVector3(StringID uniformName_, const Vector3& vec_);
+		void BindVector4(StringID uniformName_, const Vector4& vec_);
+		void BindMatrix3(StringID uniformName_, const Matrix3& mat3_);
 		void BindMatrix4(StringID uniformName_, const Matrix4& mat4_);
+		void BindColor(StringID uniformName_, const Color& color_);
 
 	private:
 		GLuint shader;
 		std::map<StringID, GLuint> uniforms;
+
+		inline void AddUniform(StringID uniformName_){
+			if(uniforms.find(uniformName_) == uniforms.end()){
+				GADGET_ASSERT(glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str()) != -1, "Tried to get invalid OpenGL uniform [" + uniformName_.GetString() + "]!");
+				uniforms.insert(std::make_pair(uniformName_, glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str())));
+			}
+		}
 
 		std::string GetShaderLog(GLuint shader_);
 	};

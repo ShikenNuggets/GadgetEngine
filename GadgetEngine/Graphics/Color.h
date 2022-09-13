@@ -18,6 +18,10 @@ namespace Gadget{
 		static inline constexpr Color Brown()	{ return Color(0.4f, 0.2f, 0.0f, 1.0f); }
 		static inline constexpr Color Gray()	{ return Color(0.5f, 0.5f, 0.5f, 1.0f); }
 		static inline constexpr Color DarkGray(){ return Color(0.2f, 0.2f, 0.2f, 1.0f); }
+
+		//These allow us to pass this as an array to legacy code or things like OpenGL very easily
+		inline constexpr operator const float* () const{ return static_cast<const float*>(&r); }
+		inline constexpr operator float* (){ return static_cast<float*>(&r); }
 	};
 }
 

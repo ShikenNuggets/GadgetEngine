@@ -12,7 +12,7 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nullptr), meshInfo(nullptr), textureInfo(nullptr), shader(nullptr), camera(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nullptr), meshInfo(nullptr), textureInfo(nullptr), shader(nullptr), camera(nullptr), light(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -52,6 +52,8 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nul
 }
 
 Win32_Renderer::~Win32_Renderer(){
+	delete light;
+	delete camera;
 	delete textureInfo;
 	delete meshInfo;
 	delete mesh;
@@ -70,6 +72,10 @@ void Win32_Renderer::Render(){
 	if(camera == nullptr){
 		camera = new Camera();
 		camera->CalculateViewMatrix(Vector3(0.0f, 0.0f, 4.0f), Quaternion::Identity());
+	}
+
+	if(light == nullptr){
+		light = new LightSource(Vector3(2.0f, 1.0f, 1.0f));
 	}
 
 	if(meshInfo == nullptr && textureInfo == nullptr && shader == nullptr){
@@ -100,6 +106,11 @@ void Win32_Renderer::Render(){
 	mm *= Matrix4::Rotate(Time::GetInstance()->TimeSinceStartup() * 10.0f, Vector3(1.0f, 0.0f, 0.0f));
 
 	shader->BindMatrix4(SID("modelMatrix"), mm);
+	shader->BindMatrix3(SID("normalMatrix"), (mm.Inverse()).Transpose().ToMatrix3());
+
+	shader->BindVector3(SID("viewPos"), Vector3(0.0f, 0.0f, 4.0f));
+	shader->BindVector3(SID("lightPos"), light->GetPosition());
+	shader->BindColor(SID("lightColor"), light->GetColor());
 
 	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->indices.size()), GL_UNSIGNED_INT, nullptr);
 

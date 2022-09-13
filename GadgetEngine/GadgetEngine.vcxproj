@@ -113,6 +113,7 @@
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Graphics\Color.h" />
+    <ClInclude Include="Graphics\LightSource.h" />
     <ClInclude Include="Graphics\Loaders\BmpLoader.h" />
     <ClInclude Include="Graphics\Loaders\ObjLoader.h" />
     <ClInclude Include="Graphics\Mesh.h" />

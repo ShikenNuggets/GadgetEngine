@@ -7,6 +7,7 @@
 
 #include "Graphics/Renderer.h"
 #include "Graphics/Camera.h"
+#include "Graphics/LightSource.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_MeshInfo.h"
@@ -33,12 +34,15 @@ namespace Gadget{
 
 	protected:
 		SDL_GLContext glContext;
+
+		//TODO - Model rendering, remove everything below Eventually(TM)
 		Mesh* mesh;
 		Texture* texture;
 		GL_MeshInfo* meshInfo;
 		GL_TextureInfo* textureInfo;
 		GL_Shader* shader;
 		Camera* camera;
+		LightSource* light;
 	};
 }
 
