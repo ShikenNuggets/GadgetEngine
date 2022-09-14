@@ -4,9 +4,10 @@
 #include <string>
 #include <vector>
 
-#include "Graphics/Texture.h"
-
 namespace Gadget{
+	//Forward declaration
+	class Texture;
+
 	struct BmpFileHeader{
 		static constexpr uint16_t BMPType = 0x4D42;
 

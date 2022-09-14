@@ -4,6 +4,9 @@
 #include <memory>
 
 #include "Color.h"
+#include "MeshInfo.h"
+#include "Shader.h"
+#include "TextureInfo.h"
 #include "ViewportRect.h"
 #include "Window.h"
 #include "Math/MathObjects.h"
@@ -46,6 +49,10 @@ namespace Gadget{
 
 		float GetAspectRatio(){ return static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()); }
 		void ResetViewportRect(){ SetViewportRect(ViewportRect::Fullscreen); }
+
+		virtual Shader* GenerateAPIShader(StringID shaderResource_) = 0;
+		virtual MeshInfo* GenerateAPIMeshInfo(const Mesh& mesh_) = 0;
+		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) = 0;
 
 	protected:
 		const API renderAPI;

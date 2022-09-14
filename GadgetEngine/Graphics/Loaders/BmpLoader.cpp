@@ -2,6 +2,7 @@
 
 #include "Debug.h"
 #include "Core/FileSystem.h"
+#include "Graphics/Texture.h"
 
 using namespace Gadget;
 

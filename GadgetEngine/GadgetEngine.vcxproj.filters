@@ -16,6 +16,9 @@
     <Filter Include="Graphics\Loaders">
       <UniqueIdentifier>{0FA183C1-FB99-A213-24CC-87981024821F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Materials">
+      <UniqueIdentifier>{67A9A073-538D-61C9-BCED-5B1CA8F04B4B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\OpenGL">
       <UniqueIdentifier>{8AE717A8-F672-856C-FF83-08616B8EE16C}</UniqueIdentifier>
     </Filter>
@@ -78,6 +81,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\Loaders\ObjLoader.h">
       <Filter>Graphics\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Materials\DiffuseTextureMaterial.h">
+      <Filter>Graphics\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Materials\Material.h">
+      <Filter>Graphics\Materials</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Mesh.h">
       <Filter>Graphics</Filter>
@@ -216,6 +225,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Materials\Material.cpp">
+      <Filter>Graphics\Materials</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp">
       <Filter>Graphics\OpenGL</Filter>

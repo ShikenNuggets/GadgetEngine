@@ -28,6 +28,7 @@ namespace Gadget{
 
 		static void OnEvent(const Event& e_);
 
+		Renderer* GetRenderer() const{ return renderer.get(); }
 		Renderer::API GetCurrentRenderAPI() const;
 		float GetAspectRatio() const{ return renderer->GetAspectRatio(); }
 

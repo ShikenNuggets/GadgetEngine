@@ -10,6 +10,7 @@
 #include "Graphics/LightSource.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
+#include "Graphics/Materials/Material.h"
 #include "Graphics/OpenGL/GL_MeshInfo.h"
 #include "Graphics/OpenGL/GL_TextureInfo.h"
 #include "Graphics/OpenGL/GL_Shader.h"
@@ -30,6 +31,10 @@ namespace Gadget{
 		virtual void SetWindingOrder(WindingOrder order_) override;
 		virtual void SetCullFace(CullFace cullFace_) override;
 
+		virtual Shader* GenerateAPIShader(StringID shaderResource_) override;
+		virtual MeshInfo* GenerateAPIMeshInfo(const Mesh& mesh_) override;
+		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) override;
+
 		static void __stdcall GLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 	protected:
@@ -37,10 +42,8 @@ namespace Gadget{
 
 		//TODO - Model rendering, remove everything below Eventually(TM)
 		Mesh* mesh;
-		Texture* texture;
 		GL_MeshInfo* meshInfo;
-		GL_TextureInfo* textureInfo;
-		GL_Shader* shader;
+		Material* material;
 		Camera* camera;
 		LightSource* light;
 	};

@@ -6,13 +6,14 @@
 #include "Debug.h"
 #include "Graphics/Loaders/BmpLoader.h"
 #include "Graphics/Loaders/ObjLoader.h"
+#include "Graphics/Materials/DiffuseTextureMaterial.h"
 #include "Resource/ResourceManager.h"
 
 #include "Core/Time.h"
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nullptr), meshInfo(nullptr), textureInfo(nullptr), shader(nullptr), camera(nullptr), light(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nullptr), meshInfo(nullptr), material(nullptr), camera(nullptr), light(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -54,7 +55,6 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nul
 Win32_Renderer::~Win32_Renderer(){
 	delete light;
 	delete camera;
-	delete textureInfo;
 	delete meshInfo;
 	delete mesh;
 
@@ -78,16 +78,13 @@ void Win32_Renderer::Render(){
 		light = new LightSource(Vector3(2.0f, 1.0f, 1.0f));
 	}
 
-	if(meshInfo == nullptr && textureInfo == nullptr && shader == nullptr){
+	if(meshInfo == nullptr){
 		mesh = ObjLoader::LoadMesh("Resources/cube.obj");
 		meshInfo = new GL_MeshInfo(*mesh);
-		shader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("DefaultShader"));
+	}
 
-		texture = BmpLoader::LoadImage("Resources/wall.bmp");
-		textureInfo = new GL_TextureInfo(*texture);
-
-		delete texture;
-		texture = nullptr;
+	if(material == nullptr){
+		material = new DiffuseTextureMaterial(SID("CubeTexture"), SID("DefaultShader"));
 	}
 
 	SetViewportRect(camera->GetViewportRect());
@@ -95,27 +92,25 @@ void Win32_Renderer::Render(){
 	Matrix4 proj = camera->GetProjectionMatrix();
 
 	meshInfo->Bind();
-	textureInfo->Bind();
-	shader->Bind();
+	material->Bind();
 
-	shader->BindMatrix4(SID("projectionMatrix"), proj);
-	shader->BindMatrix4(SID("viewMatrix"), view);
+	material->GetShader()->BindMatrix4(SID("projectionMatrix"), proj);
+	material->GetShader()->BindMatrix4(SID("viewMatrix"), view);
 
 	Matrix4 mm = Matrix4::Identity();
 	mm *= Matrix4::Rotate(Time::GetInstance()->TimeSinceStartup() * 10.0f, Vector3(0.0f, 1.0f, 0.0f));
 	mm *= Matrix4::Rotate(Time::GetInstance()->TimeSinceStartup() * 10.0f, Vector3(1.0f, 0.0f, 0.0f));
 
-	shader->BindMatrix4(SID("modelMatrix"), mm);
-	shader->BindMatrix3(SID("normalMatrix"), (mm.Inverse()).Transpose().ToMatrix3());
+	material->GetShader()->BindMatrix4(SID("modelMatrix"), mm);
+	material->GetShader()->BindMatrix3(SID("normalMatrix"), (mm.Inverse()).Transpose().ToMatrix3());
 
-	shader->BindVector3(SID("viewPos"), Vector3(0.0f, 0.0f, 4.0f));
-	shader->BindVector3(SID("lightPos"), light->GetPosition());
-	shader->BindColor(SID("lightColor"), light->GetColor());
+	material->GetShader()->BindVector3(SID("viewPos"), Vector3(0.0f, 0.0f, 4.0f));
+	material->GetShader()->BindVector3(SID("lightPos"), light->GetPosition());
+	material->GetShader()->BindColor(SID("lightColor"), light->GetColor());
 
 	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->indices.size()), GL_UNSIGNED_INT, nullptr);
 
-	shader->Unbind();
-	textureInfo->Unbind();
+	material->Unbind();
 	meshInfo->Unbind();
 
 	//Do this only at the end
@@ -188,6 +183,18 @@ void Win32_Renderer::SetCullFace(CullFace cullFace_){
 			Debug::Log(SID("[RENDER]"), "Unsupported cull face [" + std::to_string((int)currentCullFace) + "]!", Debug::Error, __FILE__, __LINE__);
 			break;
 	}
+}
+
+Shader* Win32_Renderer::GenerateAPIShader(StringID shaderResource_){
+	return ResourceManager::GetInstance()->LoadResource<GL_Shader>(shaderResource_);
+}
+
+MeshInfo* Win32_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){
+	return new GL_MeshInfo(mesh_);
+}
+
+TextureInfo* Win32_Renderer::GenerateAPITextureInfo(const Texture& texture_){
+	return new GL_TextureInfo(texture_);
 }
 
 void __stdcall Win32_Renderer::GLDebugCallback(GLenum source_, GLenum type_, GLuint id_, GLenum severity_, GLsizei, const GLchar* message_, const void*){

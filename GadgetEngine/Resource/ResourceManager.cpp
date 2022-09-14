@@ -1,5 +1,6 @@
 #include "ResourceManager.h"
 
+#include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 
 using namespace Gadget;
@@ -26,6 +27,7 @@ void ResourceManager::DeleteInstance(){
 ResourceManager::ResourceManager(){
 	//TODO - Load resource list from some kind of file. JSON?
 	resources.insert(std::make_pair(SID("DefaultShader"), new GL_ShaderResourceContainer("Resources/defaultVert.glsl", "Resources/defaultFrag.glsl")));
+	resources.insert(std::make_pair(SID("CubeTexture"), new TextureResourceContainer("Resources/wall.bmp")));
 }
 
 ResourceManager::~ResourceManager(){

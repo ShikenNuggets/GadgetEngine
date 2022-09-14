@@ -116,6 +116,8 @@
     <ClInclude Include="Graphics\LightSource.h" />
     <ClInclude Include="Graphics\Loaders\BmpLoader.h" />
     <ClInclude Include="Graphics\Loaders\ObjLoader.h" />
+    <ClInclude Include="Graphics\Materials\DiffuseTextureMaterial.h" />
+    <ClInclude Include="Graphics\Materials\Material.h" />
     <ClInclude Include="Graphics\Mesh.h" />
     <ClInclude Include="Graphics\MeshInfo.h" />
     <ClInclude Include="Graphics\OpenGL\GL_MeshInfo.h" />
@@ -168,6 +170,7 @@
     <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />
+    <ClCompile Include="Graphics\Materials\Material.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_Shader.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_TextureInfo.cpp" />

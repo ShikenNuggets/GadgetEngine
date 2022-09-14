@@ -20,11 +20,11 @@ namespace Gadget{
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
-		void BindVector3(StringID uniformName_, const Vector3& vec_);
-		void BindVector4(StringID uniformName_, const Vector4& vec_);
-		void BindMatrix3(StringID uniformName_, const Matrix3& mat3_);
-		void BindMatrix4(StringID uniformName_, const Matrix4& mat4_);
-		void BindColor(StringID uniformName_, const Color& color_);
+		virtual void BindVector3(StringID uniformName_, const Vector3& vec_) override;
+		virtual void BindVector4(StringID uniformName_, const Vector4& vec_) override;
+		virtual void BindMatrix3(StringID uniformName_, const Matrix3& mat3_) override;
+		virtual void BindMatrix4(StringID uniformName_, const Matrix4& mat4_) override;
+		virtual void BindColor(StringID uniformName_, const Color& color_) override;
 
 	private:
 		GLuint shader;
