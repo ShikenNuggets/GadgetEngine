@@ -20,6 +20,8 @@ namespace Gadget{
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
+		virtual void BindInt(StringID uniformName_, int value_) override;
+		virtual void BindFloat(StringID uniformName_, float value_) override;
 		virtual void BindVector3(StringID uniformName_, const Vector3& vec_) override;
 		virtual void BindVector4(StringID uniformName_, const Vector4& vec_) override;
 		virtual void BindMatrix3(StringID uniformName_, const Matrix3& mat3_) override;

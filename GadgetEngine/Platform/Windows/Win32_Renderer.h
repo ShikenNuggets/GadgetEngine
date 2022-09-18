@@ -45,7 +45,7 @@ namespace Gadget{
 		GL_MeshInfo* meshInfo;
 		Material* material;
 		Camera* camera;
-		LightSource* light;
+		PointLight* light;
 	};
 }
 

@@ -75,7 +75,7 @@ void Win32_Renderer::Render(){
 	}
 
 	if(light == nullptr){
-		light = new LightSource(Vector3(2.0f, 1.0f, 1.0f));
+		light = new PointLight(Vector3(2.0f, 1.0f, 1.0f));
 	}
 
 	if(meshInfo == nullptr){
@@ -105,8 +105,16 @@ void Win32_Renderer::Render(){
 	material->GetShader()->BindMatrix3(SID("normalMatrix"), (mm.Inverse()).Transpose().ToMatrix3());
 
 	material->GetShader()->BindVector3(SID("viewPos"), Vector3(0.0f, 0.0f, 4.0f));
-	material->GetShader()->BindVector3(SID("lightPos"), light->GetPosition());
-	material->GetShader()->BindColor(SID("lightColor"), light->GetColor());
+
+	material->GetShader()->BindInt(SID("numPointLights"), 1);
+	material->GetShader()->BindInt(SID("numSpotLights"), 0);
+	material->GetShader()->BindInt(SID("numDirLights"), 0);
+
+	material->GetShader()->BindVector3(SID("pointLights[0].position"), light->GetPosition());
+	material->GetShader()->BindColor(SID("pointLights[0].lightColor"), light->GetColor());
+	material->GetShader()->BindFloat(SID("pointLights[0].constant"), light->GetConstant());
+	material->GetShader()->BindFloat(SID("pointLights[0].linear"), light->GetLinear());
+	material->GetShader()->BindFloat(SID("pointLights[0].quadratic"), light->GetQuadratic());
 
 	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->indices.size()), GL_UNSIGNED_INT, nullptr);
 
@@ -186,7 +194,7 @@ void Win32_Renderer::SetCullFace(CullFace cullFace_){
 }
 
 Shader* Win32_Renderer::GenerateAPIShader(StringID shaderResource_){
-	return ResourceManager::GetInstance()->LoadResource<GL_Shader>(shaderResource_);
+	return ResourceManager::GetInstance()->LoadResource<GL_Shader>(shaderResource_); //This feels not right...
 }
 
 MeshInfo* Win32_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){

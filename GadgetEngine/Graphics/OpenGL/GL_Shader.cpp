@@ -93,6 +93,16 @@ void GL_Shader::Unbind(){
 	glUseProgram(0);
 }
 
+void GL_Shader::BindInt(StringID uniformName_, int value_){
+	AddUniform(uniformName_);
+	glUniform1iv(uniforms[uniformName_], 1, &value_);
+}
+
+void GL_Shader::BindFloat(StringID uniformName_, float value_){
+	AddUniform(uniformName_);
+	glUniform1fv(uniforms[uniformName_], 1, &value_);
+}
+
 void GL_Shader::BindVector3(StringID uniformName_, const Vector3& vec_){
 	AddUniform(uniformName_);
 	glUniform3fv(uniforms[uniformName_], 1, vec_);
