@@ -17,16 +17,20 @@ GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	int color = GL_RGB;
+	GLint internalFormat = GL_RGBA8;
+	GLenum dataFormat = GL_BGRA;
 	if(texture_.GetBitDepth() == 32){
-		color = GL_RGBA;
+		internalFormat = GL_RGBA8;
+		dataFormat = GL_BGRA;
 	}else if(texture_.GetBitDepth() == 24){
-		color = GL_RGB; //Redundant but good to be explicit
+		Debug::Log(SID("RENDER"), "Using RGB image format, RGBA is preferred for optimal performance", Debug::Warning, __FILE__, __LINE__);
+		internalFormat = GL_RGB8;
+		dataFormat = GL_BGR;
 	}else{
 		Debug::Log("Invalid bit depth!", Debug::Error, __FILE__, __LINE__);
 	}
 
-	glTexImage2D(GL_TEXTURE_2D, 0, color, texture_.GetWidth(), texture_.GetHeight(), 0, color, GL_UNSIGNED_BYTE, texture_.GetPixels().data());
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, texture_.GetWidth(), texture_.GetHeight(), 0, dataFormat, GL_UNSIGNED_BYTE, texture_.GetPixels().data());
 	glGenerateMipmap(GL_TEXTURE_2D);
 	Unbind();
 }

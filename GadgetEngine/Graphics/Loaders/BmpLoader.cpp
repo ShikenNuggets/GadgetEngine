@@ -44,22 +44,23 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 	}
 
 	std::vector<uint8_t> pixelData;
-	const size_t imgSize = infoHeader.width * infoHeader.height * infoHeader.bitCount / 8;
+	const size_t imgSize = static_cast<size_t>(infoHeader.width) * infoHeader.height * infoHeader.bitCount / 8;
 	pixelData.reserve(imgSize);
 	
 	if(infoHeader.bitCount == 32){
-		//For some reason my BMPs are all BRG instead of RGB...
+		//Images are loaded in BGRA/BGRA
+		//On Windows specifically, this is optimal
 		for(size_t i = 0; i < imgSize; i += 4){
-			pixelData.push_back(data[fileHeader.offsetData + i + 2]);
-			pixelData.push_back(data[fileHeader.offsetData + i + 1]);
 			pixelData.push_back(data[fileHeader.offsetData + i + 0]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 1]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 2]);
 			pixelData.push_back(data[fileHeader.offsetData + i + 3]);
 		}
 	}else if(infoHeader.bitCount == 24){
 		for(size_t i = 0; i < imgSize; i += 3){
-			pixelData.push_back(data[fileHeader.offsetData + i + 2]);
-			pixelData.push_back(data[fileHeader.offsetData + i + 1]);
 			pixelData.push_back(data[fileHeader.offsetData + i + 0]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 1]);
+			pixelData.push_back(data[fileHeader.offsetData + i + 2]);
 		}
 	}else{
 		Debug::Log("Unsupported bitcount [" + std::to_string(infoHeader.bitCount) + " on BMP[" + filePath_ + "], but compression is not supported!", Debug::Error, __FILE__, __LINE__);
