@@ -9,13 +9,12 @@ GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), texture
 	GADGET_ASSERT(App::GetInstance()->GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 	GADGET_ASSERT(&texture_ == nullptr || texture_.GetWidth() > 0 && texture_.GetHeight() > 0 && !texture_.GetPixels().empty(), "Invalid texture data being passed to OpenGL!");
 
-	glGenTextures(1, &textureID);
+	glCreateTextures(GL_TEXTURE_2D, 1, &textureID);
 	
-	Bind();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureParameteri(textureID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(textureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(textureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTextureParameteri(textureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	GLint internalFormat = GL_RGBA8;
 	GLenum dataFormat = GL_BGRA;
@@ -30,9 +29,9 @@ GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), texture
 		Debug::Log("Invalid bit depth!", Debug::Error, __FILE__, __LINE__);
 	}
 
-	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, texture_.GetWidth(), texture_.GetHeight(), 0, dataFormat, GL_UNSIGNED_BYTE, texture_.GetPixels().data());
-	glGenerateMipmap(GL_TEXTURE_2D);
-	Unbind();
+	glTextureStorage2D(textureID, 1, internalFormat, texture_.GetWidth(), texture_.GetHeight());
+	glTextureSubImage2D(textureID, 0, 0, 0, texture_.GetWidth(), texture_.GetHeight(), dataFormat, GL_UNSIGNED_BYTE, texture_.GetPixels().data());
+	glGenerateTextureMipmap(textureID);
 }
 
 GL_TextureInfo::~GL_TextureInfo(){
