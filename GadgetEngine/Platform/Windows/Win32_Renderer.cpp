@@ -34,6 +34,7 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nul
 	SetViewportRect(ViewportRect::Fullscreen);
 	SetClearColor(Color::DarkGray());
 
+	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
