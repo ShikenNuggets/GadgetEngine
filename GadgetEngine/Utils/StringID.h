@@ -28,7 +28,7 @@ namespace Gadget{
 	};
 
 	//User-defined literal - DON'T USE THIS DIRECTLY, USE THE SID() MACRO
-	constexpr inline StringID operator "" _sid(const char* str_, size_t len_){ return StringID(Hash::CRC32(str_, len_)); }
+	constexpr inline StringID operator "" _sid(const char* str_, size_t len_){ return StringID(Hash::MurmurHash64A(str_, len_)); }
 
 	//Use this to create a hashed string ID and add it to the string database
 	#define SID(str) StringID::InternString(str ""_sid, str)
