@@ -28,6 +28,8 @@ ResourceManager::ResourceManager(){
 	//TODO - Load resource list from some kind of file. JSON?
 	resources.insert(std::make_pair(SID("DefaultShader"), new GL_ShaderResourceContainer("Resources/defaultVert.glsl", "Resources/defaultFrag.glsl")));
 	resources.insert(std::make_pair(SID("ScreenShader"), new GL_ShaderResourceContainer("Resources/screenVert.glsl", "Resources/screenFrag.glsl")));
+	resources.insert(std::make_pair(SID("ScreenInvertShader"), new GL_ShaderResourceContainer("Resources/screenVert.glsl", "Resources/screenInversionEffectFrag.glsl")));
+	resources.insert(std::make_pair(SID("ScreenGrayscaleShader"), new GL_ShaderResourceContainer("Resources/screenVert.glsl", "Resources/screenGrayscaleFrag.glsl")));
 	resources.insert(std::make_pair(SID("CubeTexture"), new TextureResourceContainer("Resources/wall.bmp")));
 }
 
