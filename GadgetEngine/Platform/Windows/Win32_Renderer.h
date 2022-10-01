@@ -11,8 +11,10 @@
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Materials/Material.h"
+#include "Graphics/OpenGL/GL_FrameBuffer.h"
 #include "Graphics/OpenGL/GL_MeshInfo.h"
 #include "Graphics/OpenGL/GL_TextureInfo.h"
+#include "Graphics/OpenGL/GL_ScreenQuad.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 
 namespace Gadget{
@@ -21,6 +23,8 @@ namespace Gadget{
 	public:
 		Win32_Renderer(int w_ = 800, int h_ = 600);
 		virtual ~Win32_Renderer() override;
+
+		virtual void PostInit() override;
 
 		virtual void Render() override;
 		virtual void ClearScreen() override;
@@ -39,6 +43,10 @@ namespace Gadget{
 
 	protected:
 		SDL_GLContext glContext;
+
+		GL_FrameBuffer* mainFBO;
+		GL_Shader* screenShader;
+		GL_ScreenQuad* screenQuad;
 
 		//TODO - Model rendering, remove everything below Eventually(TM)
 		Mesh* mesh;

@@ -73,6 +73,9 @@
     <ClInclude Include="Graphics\Color.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\FrameBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\LightSource.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -94,7 +97,13 @@
     <ClInclude Include="Graphics\MeshInfo.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GL_FrameBuffer.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\OpenGL\GL_MeshInfo.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GL_ScreenQuad.h">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\OpenGL\GL_Shader.h">
@@ -229,7 +238,13 @@
     <ClCompile Include="Graphics\Materials\Material.cpp">
       <Filter>Graphics\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GL_FrameBuffer.cpp">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GL_ScreenQuad.cpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_Shader.cpp">

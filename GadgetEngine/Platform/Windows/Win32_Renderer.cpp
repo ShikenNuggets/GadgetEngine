@@ -13,7 +13,7 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), mesh(nullptr), meshInfo(nullptr), material(nullptr), camera(nullptr), light(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr), mesh(nullptr), meshInfo(nullptr), material(nullptr), camera(nullptr), light(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -61,14 +61,31 @@ Win32_Renderer::~Win32_Renderer(){
 	delete meshInfo;
 	delete mesh;
 
+	delete screenQuad;
+	ResourceManager::GetInstance()->UnloadResource(SID("ScreenShader"));
+	delete mainFBO;
+
 	SDL_GL_DeleteContext(glContext);
 
 	window.reset();
 }
 
+void Win32_Renderer::PostInit(){
+	screenShader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("ScreenShader"));
+	screenQuad = new GL_ScreenQuad();
+	mainFBO = new GL_FrameBuffer(window->GetWidth(), window->GetHeight());
+
+	Renderer::PostInit();
+}
+
 void Win32_Renderer::Render(){
-	ClearScreen();
+	GADGET_ASSERT(postInitComplete, "PostInit has not been called!");
+
+	mainFBO->Bind();
+	glEnable(GL_DEPTH_TEST);
+
 	SetViewportRect(ViewportRect::Fullscreen);
+	ClearScreen();
 
 	//MODEL RENDERING
 	//TODO - Obviously get rid of this code Soon(TM)
@@ -123,6 +140,21 @@ void Win32_Renderer::Render(){
 
 	material->Unbind();
 	meshInfo->Unbind();
+	//END MODEL RENDERING
+
+	//Second Render Pass
+	mainFBO->Unbind();
+	glDisable(GL_DEPTH_TEST);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SetViewportRect(ViewportRect::Fullscreen);
+
+	screenShader->Bind();
+	screenQuad->Bind();
+	glBindTexture(GL_TEXTURE_2D, mainFBO->GetColorTexture());
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	screenQuad->Unbind();
+	screenShader->Unbind();
 
 	//Do this only at the end
 	window.get()->SwapBuffers();
@@ -148,7 +180,17 @@ void Win32_Renderer::SetViewportRect(const Rect& rect_){
 				static_cast<GLsizei>(window->GetHeight() * rect_.h));
 }
 
-void Win32_Renderer::OnResize(int, int){
+void Win32_Renderer::OnResize(int width_, int height_){
+	if(!postInitComplete){
+		return; //New size will be handled correctly when we finish initializing
+	}
+
+	if(mainFBO != nullptr){
+		delete mainFBO;
+		mainFBO = nullptr;
+	}
+	mainFBO = new GL_FrameBuffer(width_, height_);
+
 	//TODO - This is tied to the hardcoded model rendering code. Obviously we need to handle this differently later
 	if(camera != nullptr){
 		camera->SetAspect(GetAspectRatio());
@@ -211,6 +253,7 @@ TextureInfo* Win32_Renderer::GenerateAPITextureInfo(const Texture& texture_){
 void __stdcall Win32_Renderer::GLDebugCallback(GLenum source_, GLenum type_, GLuint id_, GLenum severity_, GLsizei, const GLchar* message_, const void*){
 	//Suppress useless messages
 	switch(id_){
+		case 131169: //The driver allocated storage for renderbuffer - This should not be considered a warning
 		case 131185: //Buffer object will use VIDEO memory - Irrelevant
 			return;
 		default:

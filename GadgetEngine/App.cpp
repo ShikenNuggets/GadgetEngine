@@ -63,6 +63,8 @@ void App::Initialize(){
 	#ifdef GADGET_PLATFORM_WIN32
 	renderer = std::make_unique<Win32_Renderer>(1280, 720);
 	#endif //GADGET_PLATFORM_WIN32
+
+	renderer->PostInit();
 }
 
 void App::Run(){
