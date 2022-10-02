@@ -255,6 +255,7 @@ void Input::ProcessInputs(){
 			buttonsHeld.insert(b.GetButtonID());
 		}else{
 			buttonsUp.insert(b.GetButtonID());
+			buttonsHeld.erase(b.GetButtonID());
 		}
 	}
 	buttonEvents.clear();
