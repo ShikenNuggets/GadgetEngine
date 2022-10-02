@@ -4,6 +4,7 @@
 #include <map>
 
 #include "Resource.h"
+#include "Debug.h"
 #include "Utils/StringID.h"
 
 namespace Gadget{

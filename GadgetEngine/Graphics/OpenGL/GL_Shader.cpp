@@ -129,12 +129,15 @@ void GL_Shader::BindColor(StringID uniformName_, const Color& color_){
 }
 
 std::string GL_Shader::GetShaderLog(GLuint shader_){
-	std::string errorLog;
+	std::string errorLog = "";
 
 	GLsizei errorLogSize = 0;
 	glGetProgramiv(shader_, GL_INFO_LOG_LENGTH, &errorLogSize);
-	errorLog.resize(errorLogSize);
-	glGetProgramInfoLog(shader_, errorLogSize, &errorLogSize, &errorLog[0]);
+
+	if(errorLogSize > 0){
+		errorLog.resize(errorLogSize);
+		glGetProgramInfoLog(shader_, errorLogSize, &errorLogSize, &errorLog[0]);
+	}
 
 	return errorLog;
 }

@@ -73,6 +73,9 @@
     <ClInclude Include="Graphics\Color.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Cubemap.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -96,6 +99,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\MeshInfo.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GL_CubemapInfo.h">
+      <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\OpenGL\GL_FrameBuffer.h">
       <Filter>Graphics\OpenGL</Filter>
@@ -229,6 +235,9 @@
     <ClCompile Include="Graphics\Camera.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Cubemap.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
     </ClCompile>
@@ -237,6 +246,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\Materials\Material.cpp">
       <Filter>Graphics\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GL_CubemapInfo.cpp">
+      <Filter>Graphics\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_FrameBuffer.cpp">
       <Filter>Graphics\OpenGL</Filter>

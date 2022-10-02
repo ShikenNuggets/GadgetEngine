@@ -36,7 +36,6 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 		colorHeader = CreateColorHeader(data);
 
 		//We do not support other color spaces/formats. TODO?
-		GADGET_ASSERT(colorHeader.colorSpaceType == BmpColorHeader::SRGBColorSpace, "Tried to load BMP with invalid color space (only SRGB is supported)!");
 		GADGET_ASSERT(colorHeader.redMask == BmpColorHeader::RGBARedMask, "Tried to load BMP with invalid color format (only RGB and RGBA are supported)!");
 		GADGET_ASSERT(colorHeader.greenMask == BmpColorHeader::RGBAGreenMask, "Tried to load BMP with invalid color format (only RGB and RGBA are supported)!");
 		GADGET_ASSERT(colorHeader.blueMask == BmpColorHeader::RGBABlueMask, "Tried to load BMP with invalid color format (only RGB and RGBA are supported)!");
@@ -113,7 +112,7 @@ BmpColorHeader BmpLoader::CreateColorHeader(const std::vector<uint8_t>& data_){
 	colorHeader.alphaMask = MergeBytes(data_[66], data_[67], data_[68], data_[69]);
 	colorHeader.colorSpaceType = MergeBytes(data_[70], data_[71], data_[72], data_[73]);
 
-	for(int i = 0; i < 16; i++){
+	for(size_t i = 0; i < 16; i++){
 		colorHeader.unused[i] = MergeBytes(data_[74 + (i * 4)], data_[75 + (i * 4)], data_[76 + (i * 4)], data_[77 + (i * 4)]);
 	}
 

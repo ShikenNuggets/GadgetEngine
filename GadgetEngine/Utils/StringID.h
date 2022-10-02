@@ -8,9 +8,11 @@
 
 namespace Gadget{
 	struct StringID{
-		const uint64_t id;
+		uint64_t id;
 
 		explicit constexpr StringID(uint64_t id_) : id(id_){}
+		void operator =(StringID a_){ id = a_.id; }
+
 		std::string GetString() const;
 
 		constexpr inline bool operator ==(StringID a_) const{ return id == a_.id; }

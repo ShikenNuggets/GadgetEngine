@@ -30,7 +30,16 @@ ResourceManager::ResourceManager(){
 	resources.insert(std::make_pair(SID("ScreenShader"), new GL_ShaderResourceContainer("Resources/screenVert.glsl", "Resources/screenFrag.glsl")));
 	resources.insert(std::make_pair(SID("ScreenInvertShader"), new GL_ShaderResourceContainer("Resources/screenVert.glsl", "Resources/screenInversionEffectFrag.glsl")));
 	resources.insert(std::make_pair(SID("ScreenGrayscaleShader"), new GL_ShaderResourceContainer("Resources/screenVert.glsl", "Resources/screenGrayscaleFrag.glsl")));
+	resources.insert(std::make_pair(SID("SkyboxShader"), new GL_ShaderResourceContainer("Resources/skyboxVert.glsl", "Resources/skyboxFrag.glsl")));
+
 	resources.insert(std::make_pair(SID("CubeTexture"), new TextureResourceContainer("Resources/wall.bmp")));
+
+	resources.insert(std::make_pair(SID("SkyboxRightTexture"), new TextureResourceContainer("Resources/skybox/right.bmp")));
+	resources.insert(std::make_pair(SID("SkyboxLeftTexture"), new TextureResourceContainer("Resources/skybox/left.bmp")));
+	resources.insert(std::make_pair(SID("SkyboxTopTexture"), new TextureResourceContainer("Resources/skybox/top.bmp")));
+	resources.insert(std::make_pair(SID("SkyboxBottomTexture"), new TextureResourceContainer("Resources/skybox/bottom.bmp")));
+	resources.insert(std::make_pair(SID("SkyboxFrontTexture"), new TextureResourceContainer("Resources/skybox/front.bmp")));
+	resources.insert(std::make_pair(SID("SkyboxBackTexture"), new TextureResourceContainer("Resources/skybox/back.bmp")));
 }
 
 ResourceManager::~ResourceManager(){

@@ -51,7 +51,7 @@ std::vector<uint8_t> FileSystem::ReadBinaryFile(const std::string& filePath_){
 		return std::vector<uint8_t>();
 	}
 
-	return std::vector<uint8_t>(std::istreambuf_iterator<char>(input), {});
+	return std::vector<uint8_t>(std::istreambuf_iterator<char>(input), {}); //TODO - This is not particularly efficient
 }
 
 void FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){

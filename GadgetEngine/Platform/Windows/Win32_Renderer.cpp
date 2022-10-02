@@ -9,11 +9,13 @@
 #include "Graphics/Materials/DiffuseTextureMaterial.h"
 #include "Resource/ResourceManager.h"
 
+//Just for testing things - TODO, remove these later
 #include "Core/Time.h"
+#include "Input/Input.h"
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr), mesh(nullptr), meshInfo(nullptr), material(nullptr), camera(nullptr), light(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr), mesh(nullptr), meshInfo(nullptr), material(nullptr), camera(nullptr), light(nullptr), cubemap(nullptr), cubemapInfo(nullptr), skyboxShader(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -56,6 +58,9 @@ Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), glContex
 }
 
 Win32_Renderer::~Win32_Renderer(){
+	ResourceManager::GetInstance()->UnloadResource(SID("SkyboxShader"));
+	delete cubemapInfo;
+	delete cubemap;
 	delete light;
 	delete camera;
 	delete meshInfo;
@@ -87,13 +92,45 @@ void Win32_Renderer::Render(){
 	SetViewportRect(ViewportRect::Fullscreen);
 	ClearScreen();
 
-	//MODEL RENDERING
-	//TODO - Obviously get rid of this code Soon(TM)
+	//temp
 	if(camera == nullptr){
 		camera = new Camera();
-		camera->CalculateViewMatrix(Vector3(0.0f, 0.0f, 4.0f), Quaternion::Identity());
+		camera->SetPosition(Vector3(0.0f, 0.0f, 4.0f));
+		camera->SetRotation(Quaternion::Identity());
 	}
 
+	//Camera Controls - TODO - OBVIOUSLY this does not belong here, this is just for testing other features
+	if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_W)){
+		camera->SetPosition(camera->GetPosition() + Vector3(0.0f, 0.0f, -2.5f * Time::GetInstance()->RealDeltaTime()));
+	}else if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_S)){
+		camera->SetPosition(camera->GetPosition() + Vector3(0.0f, 0.0f, 2.5f * Time::GetInstance()->RealDeltaTime()));
+	}
+	
+	if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_A)){
+		camera->SetPosition(camera->GetPosition() + Vector3(-2.5f * Time::GetInstance()->RealDeltaTime(), 0.0f, 0.0f));
+	}else if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_D)){
+		camera->SetPosition(camera->GetPosition() + Vector3(2.5f * Time::GetInstance()->RealDeltaTime(), 0.0f));
+	}
+
+	if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_Arrow_Up)){
+		camera->SetRotation(camera->GetRotation() * Euler(30 * Time::GetInstance()->RealDeltaTime(), 0.0f, 0.0f).ToQuaternion());
+	}else if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_Arrow_Down)){
+		camera->SetRotation(camera->GetRotation() * Euler(-30 * Time::GetInstance()->RealDeltaTime(), 0.0f, 0.0f).ToQuaternion());
+	}
+
+	if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_Arrow_Left)){
+		camera->SetRotation(camera->GetRotation() * Euler(0.0f, 30 * Time::GetInstance()->RealDeltaTime(), 0.0f).ToQuaternion());
+	}else if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_Arrow_Right)){
+		camera->SetRotation(camera->GetRotation() * Euler(0.0f, -30 * Time::GetInstance()->RealDeltaTime(), 0.0f).ToQuaternion());
+	}
+
+	if(Input::GetInstance()->GetButtonDown(ButtonID::Keyboard_R)){
+		camera->SetPosition(Vector3(0.0f, 0.0f, 4.0f));
+		camera->SetRotation(Quaternion::Identity());
+	}
+
+	//MODEL RENDERING
+	//TODO - Obviously get rid of this code Soon(TM)
 	if(light == nullptr){
 		light = new PointLight(Vector3(2.0f, 1.0f, 1.0f));
 	}
@@ -141,6 +178,27 @@ void Win32_Renderer::Render(){
 	material->Unbind();
 	meshInfo->Unbind();
 	//END MODEL RENDERING
+
+	//SKYBOX RENDERING (TODO - also TEMP)
+	if(cubemap == nullptr){
+		skyboxShader = GenerateAPIShader(SID("SkyboxShader"));
+		cubemap = new Cubemap(SID("Skybox4RightTexture"), SID("Skybox4LeftTexture"), SID("Skybox4TopTexture"), SID("Skybox4BottomTexture"), SID("Skybox4FrontTexture"), SID("Skybox4BackTexture"));
+		cubemapInfo = new GL_CubemapInfo(*cubemap);
+	}
+
+	glDepthFunc(GL_LEQUAL);
+	//glDepthMask(GL_FALSE);
+	skyboxShader->Bind();
+	skyboxShader->BindMatrix4(SID("projectionMatrix"), camera->GetProjectionMatrix());
+	Matrix4 skyView = camera->GetViewMatrix().ToMatrix3().ToMatrix4();
+	skyboxShader->BindMatrix4(SID("viewMatrix"), skyView);
+	cubemapInfo->Bind();
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+	cubemapInfo->Unbind();
+	skyboxShader->Unbind();
+	//glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LESS);
+	//END SKYBOX RENDERING
 
 	//Second Render Pass
 	mainFBO->Unbind();

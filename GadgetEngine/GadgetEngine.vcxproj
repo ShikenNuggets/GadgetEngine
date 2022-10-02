@@ -113,6 +113,7 @@
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Graphics\Color.h" />
+    <ClInclude Include="Graphics\Cubemap.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\LightSource.h" />
     <ClInclude Include="Graphics\Loaders\BmpLoader.h" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Graphics\Materials\Material.h" />
     <ClInclude Include="Graphics\Mesh.h" />
     <ClInclude Include="Graphics\MeshInfo.h" />
+    <ClInclude Include="Graphics\OpenGL\GL_CubemapInfo.h" />
     <ClInclude Include="Graphics\OpenGL\GL_FrameBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\GL_MeshInfo.h" />
     <ClInclude Include="Graphics\OpenGL\GL_ScreenQuad.h" />
@@ -171,9 +173,11 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />
+    <ClCompile Include="Graphics\Cubemap.cpp" />
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />
     <ClCompile Include="Graphics\Materials\Material.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GL_CubemapInfo.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_FrameBuffer.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_ScreenQuad.cpp" />

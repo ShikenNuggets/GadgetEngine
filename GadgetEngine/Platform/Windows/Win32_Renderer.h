@@ -16,6 +16,7 @@
 #include "Graphics/OpenGL/GL_TextureInfo.h"
 #include "Graphics/OpenGL/GL_ScreenQuad.h"
 #include "Graphics/OpenGL/GL_Shader.h"
+#include "Graphics/OpenGL/GL_CubemapInfo.h"
 
 namespace Gadget{
 	//OpenGL Renderer for Windows
@@ -54,6 +55,9 @@ namespace Gadget{
 		Material* material;
 		Camera* camera;
 		PointLight* light;
+		Cubemap* cubemap;
+		GL_CubemapInfo* cubemapInfo;
+		Shader* skyboxShader;
 	};
 }
 

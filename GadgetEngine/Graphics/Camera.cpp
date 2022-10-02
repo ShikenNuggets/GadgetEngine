@@ -4,17 +4,17 @@
 
 using namespace Gadget;
 
-Camera::Camera(Projection projection_, const Rect& viewRect_) : view(), projection(), fov(45.0f), aspect(1.0f), nearPlane(0.1f), farPlane(1000.0f), currentProjection(projection_), viewRect(viewRect_){
+Camera::Camera(Projection projection_, const Rect& viewRect_) : view(), projection(), fov(45.0f), aspect(1.0f), nearPlane(0.1f), farPlane(1000.0f), currentProjection(projection_), viewRect(viewRect_), position(), rotation(){
 	aspect = App::GetInstance()->GetAspectRatio();
-	
-	CalculateViewMatrix(Vector3::Zero(), Quaternion::Identity());
+
+	CalculateViewMatrix();
 	CalculateProjectionMatrix();
 }
 
-void Camera::CalculateViewMatrix(const Vector3& cameraPos_, const Quaternion& cameraRot_){
+void Camera::CalculateViewMatrix(){
 	view = Matrix4::Identity();
-	view *= cameraRot_.ToMatrix4().Inverse();
-	view *= Matrix4::Translate(cameraPos_).Inverse();
+	view *= rotation.ToMatrix4().Inverse();
+	view *= Matrix4::Translate(position).Inverse();
 }
 
 void Camera::CalculateProjectionMatrix(){
@@ -63,7 +63,7 @@ float Camera::GetFarPlane() const{
 	return farPlane;
 }
 
-void Camera::SetViewportRect(Rect rect_){
+void Camera::SetViewportRect(const Rect& rect_){
 	viewRect = rect_;
 }
 
