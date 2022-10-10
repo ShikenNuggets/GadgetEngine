@@ -15,13 +15,9 @@ namespace Gadget{
 		virtual void Unbind() override;
 
 		inline constexpr GLuint GetBuffer() const{ return buffer; }
-		inline constexpr GLuint GetColorTexture() const{ return colorTexture; }
-		inline constexpr GLuint GetDepthRBO() const{ return depthRBO; }
 
-	private:
+	protected:
 		GLuint buffer;
-		GLuint colorTexture;
-		GLuint depthRBO;
 	};
 }
 

@@ -122,8 +122,10 @@
     <ClInclude Include="Graphics\Materials\Material.h" />
     <ClInclude Include="Graphics\Mesh.h" />
     <ClInclude Include="Graphics\MeshInfo.h" />
+    <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.h" />
+    <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_DepthFrameBuffer.h" />
+    <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_FrameBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\GL_CubemapInfo.h" />
-    <ClInclude Include="Graphics\OpenGL\GL_FrameBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\GL_MeshInfo.h" />
     <ClInclude Include="Graphics\OpenGL\GL_ScreenQuad.h" />
     <ClInclude Include="Graphics\OpenGL\GL_Shader.h" />
@@ -177,8 +179,10 @@
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />
     <ClCompile Include="Graphics\Materials\Material.cpp" />
+    <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.cpp" />
+    <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DepthFrameBuffer.cpp" />
+    <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_FrameBuffer.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_CubemapInfo.cpp" />
-    <ClCompile Include="Graphics\OpenGL\GL_FrameBuffer.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_ScreenQuad.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_Shader.cpp" />

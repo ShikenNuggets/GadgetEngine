@@ -22,6 +22,9 @@
     <Filter Include="Graphics\OpenGL">
       <UniqueIdentifier>{8AE717A8-F672-856C-FF83-08616B8EE16C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\OpenGL\FrameBuffers">
+      <UniqueIdentifier>{D117325A-BDD2-2106-668A-9A5052246C96}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
     </Filter>
@@ -100,10 +103,16 @@
     <ClInclude Include="Graphics\MeshInfo.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\OpenGL\GL_CubemapInfo.h">
-      <Filter>Graphics\OpenGL</Filter>
+    <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.h">
+      <Filter>Graphics\OpenGL\FrameBuffers</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\OpenGL\GL_FrameBuffer.h">
+    <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_DepthFrameBuffer.h">
+      <Filter>Graphics\OpenGL\FrameBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_FrameBuffer.h">
+      <Filter>Graphics\OpenGL\FrameBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GL_CubemapInfo.h">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\OpenGL\GL_MeshInfo.h">
@@ -247,10 +256,16 @@
     <ClCompile Include="Graphics\Materials\Material.cpp">
       <Filter>Graphics\Materials</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\OpenGL\GL_CubemapInfo.cpp">
-      <Filter>Graphics\OpenGL</Filter>
+    <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.cpp">
+      <Filter>Graphics\OpenGL\FrameBuffers</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\OpenGL\GL_FrameBuffer.cpp">
+    <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DepthFrameBuffer.cpp">
+      <Filter>Graphics\OpenGL\FrameBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_FrameBuffer.cpp">
+      <Filter>Graphics\OpenGL\FrameBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GL_CubemapInfo.cpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp">

@@ -78,7 +78,7 @@ Win32_Renderer::~Win32_Renderer(){
 void Win32_Renderer::PostInit(){
 	screenShader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("ScreenShader"));
 	screenQuad = new GL_ScreenQuad();
-	mainFBO = new GL_FrameBuffer(window->GetWidth(), window->GetHeight());
+	mainFBO = new GL_DefaultFrameBuffer(window->GetWidth(), window->GetHeight());
 
 	Renderer::PostInit();
 }
@@ -182,7 +182,7 @@ void Win32_Renderer::Render(){
 	//SKYBOX RENDERING (TODO - also TEMP)
 	if(cubemap == nullptr){
 		skyboxShader = GenerateAPIShader(SID("SkyboxShader"));
-		cubemap = new Cubemap(SID("Skybox4RightTexture"), SID("Skybox4LeftTexture"), SID("Skybox4TopTexture"), SID("Skybox4BottomTexture"), SID("Skybox4FrontTexture"), SID("Skybox4BackTexture"));
+		cubemap = new Cubemap(SID("SkyboxRightTexture"), SID("SkyboxLeftTexture"), SID("SkyboxTopTexture"), SID("SkyboxBottomTexture"), SID("SkyboxFrontTexture"), SID("SkyboxBackTexture"));
 		cubemapInfo = new GL_CubemapInfo(*cubemap);
 	}
 
@@ -247,7 +247,7 @@ void Win32_Renderer::OnResize(int width_, int height_){
 		delete mainFBO;
 		mainFBO = nullptr;
 	}
-	mainFBO = new GL_FrameBuffer(width_, height_);
+	mainFBO = new GL_DefaultFrameBuffer(width_, height_);
 
 	//TODO - This is tied to the hardcoded model rendering code. Obviously we need to handle this differently later
 	if(camera != nullptr){
