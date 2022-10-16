@@ -9,6 +9,8 @@ namespace Gadget{
 		GL_DepthFrameBuffer(int width_, int height_);
 		virtual ~GL_DepthFrameBuffer() override;
 
+		constexpr GLuint GetDepthMap() const{ return depthMap; }
+
 	private:
 		GLuint depthMap;
 	};

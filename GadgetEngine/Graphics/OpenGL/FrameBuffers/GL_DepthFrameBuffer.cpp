@@ -21,3 +21,7 @@ GL_DepthFrameBuffer::GL_DepthFrameBuffer(int width_, int height_) : GL_FrameBuff
 
 	Unbind();
 }
+
+GL_DepthFrameBuffer::~GL_DepthFrameBuffer(){
+	glDeleteTextures(1, &depthMap);
+}
