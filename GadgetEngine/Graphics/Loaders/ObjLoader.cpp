@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <sstream>
 
+#include "Graphics/Mesh.h"
 #include "Core/FileSystem.h"
 #include "Math/Math.h"
 

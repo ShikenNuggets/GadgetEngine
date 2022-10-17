@@ -1,9 +1,14 @@
 #ifndef GADGET_OBJ_LOADER_H
 #define GADGET_OBJ_LOADER_H
 
-#include "Graphics/Mesh.h"
+#include <string>
+
+#include "Math/Vector.h"
 
 namespace Gadget{
+	//Forward Declaration
+	class Mesh;
+
 	struct VertIndex{
 		constexpr VertIndex(uint32_t pos_, uint32_t tex_, uint32_t norm_) : pos(pos_), norm(norm_), tex(tex_){}
 

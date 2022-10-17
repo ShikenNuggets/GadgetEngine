@@ -1,5 +1,6 @@
 #include "ResourceManager.h"
 
+#include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 
@@ -31,6 +32,8 @@ ResourceManager::ResourceManager(){
 	resources.insert(std::make_pair(SID("ScreenInvertShader"), new GL_ShaderResourceContainer("Resources/screenVert.glsl", "Resources/screenInversionEffectFrag.glsl")));
 	resources.insert(std::make_pair(SID("ScreenGrayscaleShader"), new GL_ShaderResourceContainer("Resources/screenVert.glsl", "Resources/screenGrayscaleFrag.glsl")));
 	resources.insert(std::make_pair(SID("SkyboxShader"), new GL_ShaderResourceContainer("Resources/skyboxVert.glsl", "Resources/skyboxFrag.glsl")));
+
+	resources.insert(std::make_pair(SID("CubeModel"), new MeshResourceContainer("Resources/cube.obj")));
 
 	resources.insert(std::make_pair(SID("CubeTexture"), new TextureResourceContainer("Resources/wall.bmp")));
 
