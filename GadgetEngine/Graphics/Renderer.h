@@ -12,6 +12,9 @@
 #include "Math/MathObjects.h"
 
 namespace Gadget{
+	//Forward Declarations
+	class Scene;
+
 	class Renderer{
 	public:
 		enum class API{
@@ -39,7 +42,7 @@ namespace Gadget{
 		API GetRenderAPI() const{ return renderAPI; }
 		std::weak_ptr<Window> GetWindow() const{ return window; }
 
-		virtual void Render() = 0;
+		virtual void Render(const Scene* scene_) = 0;
 		virtual void ClearScreen() = 0;
 		virtual void SetClearColor(const Color& color_) = 0;
 		virtual void SetViewportRect(const Rect& rect_) = 0;

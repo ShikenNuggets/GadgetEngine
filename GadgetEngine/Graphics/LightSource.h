@@ -26,17 +26,13 @@ namespace Gadget{
 
 	class PointLight : public LightSource{
 	public:
-		PointLight(const Vector3& position_, const Color& color_ = Color::White()) : LightSource(color_), position(position_), constant(1.0f), linear(0.09f), quadratic(0.032f){}
+		PointLight(const Color& color_ = Color::White()) : LightSource(color_), constant(1.0f), linear(0.09f), quadratic(0.032f){}
 
-		constexpr Vector3 GetPosition() const{ return position; }
 		constexpr float GetConstant() const{ return constant; }
 		constexpr float GetLinear() const{ return linear; }
 		constexpr float GetQuadratic() const{ return quadratic; }
 
-		void SetPosition(const Vector3& pos_){ position = pos_; }
-
 	private:
-		Vector3 position;
 		float constant;
 		float linear;
 		float quadratic;
@@ -44,9 +40,8 @@ namespace Gadget{
 
 	class SpotLight : public LightSource{
 	public:
-		SpotLight(const Vector3& position_, const Vector3& direction_, Degree cutOff_ = Degree(12.5f), Degree outerCutOff_ = Degree(15.0f), const Color& color_ = Color::White()) : LightSource(color_), position(position_), direction(direction_), cutOff(cutOff_), outerCutOff(outerCutOff_), constant(1.0f), linear(0.09f), quadratic(0.032f){}
+		SpotLight(const Vector3& direction_, Degree cutOff_ = Degree(12.5f), Degree outerCutOff_ = Degree(15.0f), const Color& color_ = Color::White()) : LightSource(color_), direction(direction_), cutOff(cutOff_), outerCutOff(outerCutOff_), constant(1.0f), linear(0.09f), quadratic(0.032f){}
 
-		constexpr Vector3 GetPosition() const{ return position; }
 		constexpr Vector3 GetDirection() const{ return direction; }
 		constexpr Degree GetCutOff() const{ return cutOff; }
 		constexpr Degree GetOuterCutOff() const{ return outerCutOff; }
@@ -54,13 +49,11 @@ namespace Gadget{
 		constexpr float GetLinear() const{ return linear; }
 		constexpr float GetQuadratic() const{ return quadratic; }
 
-		void SetPosition(const Vector3& pos_){ position = pos_; }
 		void SetDirection(const Vector3& dir_){ direction = dir_; }
 		void SetCutOff(float cutOff_){ cutOff = cutOff_; }
 		void SetOuterCutOff(float outerCutOff_){ outerCutOff = outerCutOff_; }
 
 	private:
-		Vector3 position;
 		Vector3 direction;
 		Degree cutOff;
 		Degree outerCutOff;

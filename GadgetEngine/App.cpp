@@ -12,11 +12,16 @@
 #include "Platform/Windows/Win32_Renderer.h"
 #include "Resource/ResourceManager.h"
 
+//Temp
+#include "Graphics/Components/CameraComponent.h"
+#include "Graphics/Components/LightComponent.h"
+#include "Graphics/Components/RenderComponent.h"
+
 using namespace Gadget;
 
 App* App::instance = nullptr;
 
-App::App() : isRunning(true), renderer(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
+App::App() : isRunning(true), renderer(nullptr), sceneManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
 }
@@ -65,6 +70,32 @@ void App::Initialize(){
 	#endif //GADGET_PLATFORM_WIN32
 
 	renderer->PostInit();
+
+	sceneManager = std::make_unique<BasicSceneManager>();
+
+	//SCENE DEFINITION
+	//TODO - This should be handled by the game, just putting it here for now
+	GameObject* cube = new GameObject();
+	cube->AddComponent(new RenderComponent(cube, SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
+
+	GameObject* light = new GameObject();
+	light->SetPosition(2.0f, 1.0f, 1.0f);
+	light->AddComponent(new PointLightComponent(light));
+
+	GameObject* camera = new GameObject();
+	camera->SetPosition(0.0f, 0.0f, 4.0f);
+	camera->AddComponent(new CameraComponent(camera));
+
+	Scene* testScene = new Scene(SID("TestScene"));
+	testScene->CreateObject(cube);
+	testScene->CreateObject(light);
+	testScene->CreateObject(camera);
+
+	sceneManager->AddScene(testScene);
+
+	//END SCENE DEFINITION
+
+	sceneManager->LoadScene(0);
 }
 
 void App::Run(){
@@ -87,7 +118,7 @@ void App::Run(){
 
 		Input::GetInstance()->ProcessInputs();
 
-		renderer->Render();
+		renderer->Render(sceneManager->CurrentScene());
 
 		//After everything else is done, sleep for the appropriate amount of time (if necessary)
 		Time::GetInstance()->Delay();

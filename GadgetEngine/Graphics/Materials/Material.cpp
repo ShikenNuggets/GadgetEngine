@@ -11,6 +11,6 @@ Material::Material(StringID shaderResource_) : shaderResourceName(shaderResource
 }
 
 Material::~Material(){
-	delete shader;
+	//delete shader; //TODO - I don't know who's supposed to own the shader now but this causes a crash
 	ResourceManager::GetInstance()->UnloadResource(shaderResourceName);
 }

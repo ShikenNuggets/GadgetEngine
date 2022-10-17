@@ -4,6 +4,9 @@
 
 #include "Win32_Window.h"
 #include "Debug.h"
+#include "Graphics/Components/CameraComponent.h"
+#include "Graphics/Components/LightComponent.h"
+#include "Graphics/Components/RenderComponent.h"
 #include "Graphics/Loaders/BmpLoader.h"
 #include "Graphics/Loaders/ObjLoader.h"
 #include "Graphics/Materials/DiffuseTextureMaterial.h"
@@ -15,7 +18,7 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr), mesh(nullptr), meshInfo(nullptr), material(nullptr), camera(nullptr), light(nullptr), cubemap(nullptr), cubemapInfo(nullptr), skyboxShader(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr), cubemap(nullptr), cubemapInfo(nullptr), skyboxShader(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -61,10 +64,6 @@ Win32_Renderer::~Win32_Renderer(){
 	ResourceManager::GetInstance()->UnloadResource(SID("SkyboxShader"));
 	delete cubemapInfo;
 	delete cubemap;
-	delete light;
-	delete camera;
-	delete meshInfo;
-	delete mesh;
 
 	delete screenQuad;
 	ResourceManager::GetInstance()->UnloadResource(SID("ScreenShader"));
@@ -80,10 +79,18 @@ void Win32_Renderer::PostInit(){
 	screenQuad = new GL_ScreenQuad();
 	mainFBO = new GL_DefaultFrameBuffer(window->GetWidth(), window->GetHeight());
 
+	//SKYBOX RENDERING (TODO - Move this to a more permanent location)
+	if(cubemap == nullptr){
+		skyboxShader = GenerateAPIShader(SID("SkyboxShader"));
+		cubemap = new Cubemap(SID("SkyboxRightTexture"), SID("SkyboxLeftTexture"), SID("SkyboxTopTexture"), SID("SkyboxBottomTexture"), SID("SkyboxFrontTexture"), SID("SkyboxBackTexture"));
+		cubemapInfo = new GL_CubemapInfo(*cubemap);
+	}
+
 	Renderer::PostInit();
 }
 
-void Win32_Renderer::Render(){
+void Win32_Renderer::Render(const Scene* scene_){
+	GADGET_BASIC_ASSERT(scene_ != nullptr);
 	GADGET_ASSERT(postInitComplete, "PostInit has not been called!");
 
 	mainFBO->Bind();
@@ -92,113 +99,59 @@ void Win32_Renderer::Render(){
 	SetViewportRect(ViewportRect::Fullscreen);
 	ClearScreen();
 
-	//temp
-	if(camera == nullptr){
-		camera = new Camera();
-		camera->SetPosition(Vector3(0.0f, 0.0f, 4.0f));
-		camera->SetRotation(Quaternion::Identity());
+	//TODO - This is very inefficient, find a better way to do this
+	auto cams = scene_->GetAllComponentsInScene<CameraComponent>();
+	auto meshes = scene_->GetAllComponentsInScene<RenderComponent>();
+	auto lights = scene_->GetAllComponentsInScene<PointLightComponent>();
+
+	GADGET_ASSERT(lights.size() < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(lights.size()) + "!");
+
+	for(const auto& cam : cams){
+		SetViewportRect(cam->GetCamera().GetViewportRect());
+		Matrix4 view = cam->GetCamera().GetViewMatrix();
+		Matrix4 proj = cam->GetCamera().GetProjectionMatrix();
+
+		for(const auto& mesh : meshes){
+			mesh->Bind();
+			mesh->GetShader()->BindMatrix4(SID("projectionMatrix"), proj);
+			mesh->GetShader()->BindMatrix4(SID("viewMatrix"), view);
+
+			Matrix4 modelMatrix = mesh->GetParent()->GetTransform();
+			mesh->GetShader()->BindMatrix4(SID("modelMatrix"), modelMatrix);
+			mesh->GetShader()->BindMatrix3(SID("normalMatrix"), (modelMatrix.Inverse()).Transpose().ToMatrix3());
+
+			mesh->GetShader()->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
+
+			mesh->GetShader()->BindInt(SID("numPointLights"), static_cast<int>(lights.size()));
+			mesh->GetShader()->BindInt(SID("numSpotLights"), 0);
+			mesh->GetShader()->BindInt(SID("numDirLights"), 0);
+
+			for(const auto& light : lights){
+				mesh->GetShader()->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
+				mesh->GetShader()->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
+				mesh->GetShader()->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
+				mesh->GetShader()->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
+				mesh->GetShader()->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+			}
+
+			glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->GetMeshNumIndices()), GL_UNSIGNED_INT, nullptr);
+
+			mesh->Unbind();
+		}
+
+		//SKYBOX RENDERING (TODO - Reorganize this so the scene controls the Skybox, or, something. Anything but this)
+		glDepthFunc(GL_LEQUAL);
+		skyboxShader->Bind();
+		skyboxShader->BindMatrix4(SID("projectionMatrix"), cam->GetCamera().GetProjectionMatrix());
+		Matrix4 skyView = cam->GetCamera().GetViewMatrix().ToMatrix3().ToMatrix4();
+		skyboxShader->BindMatrix4(SID("viewMatrix"), skyView);
+		cubemapInfo->Bind();
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+		cubemapInfo->Unbind();
+		skyboxShader->Unbind();
+		glDepthFunc(GL_LESS);
+		//END SKYBOX RENDERING
 	}
-
-	//Camera Controls - TODO - OBVIOUSLY this does not belong here, this is just for testing other features
-	if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_W)){
-		camera->SetPosition(camera->GetPosition() + Vector3(0.0f, 0.0f, -2.5f * Time::GetInstance()->RealDeltaTime()));
-	}else if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_S)){
-		camera->SetPosition(camera->GetPosition() + Vector3(0.0f, 0.0f, 2.5f * Time::GetInstance()->RealDeltaTime()));
-	}
-	
-	if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_A)){
-		camera->SetPosition(camera->GetPosition() + Vector3(-2.5f * Time::GetInstance()->RealDeltaTime(), 0.0f, 0.0f));
-	}else if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_D)){
-		camera->SetPosition(camera->GetPosition() + Vector3(2.5f * Time::GetInstance()->RealDeltaTime(), 0.0f));
-	}
-
-	if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_Arrow_Up)){
-		camera->SetRotation(camera->GetRotation() * Euler(30 * Time::GetInstance()->RealDeltaTime(), 0.0f, 0.0f).ToQuaternion());
-	}else if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_Arrow_Down)){
-		camera->SetRotation(camera->GetRotation() * Euler(-30 * Time::GetInstance()->RealDeltaTime(), 0.0f, 0.0f).ToQuaternion());
-	}
-
-	if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_Arrow_Left)){
-		camera->SetRotation(camera->GetRotation() * Euler(0.0f, 30 * Time::GetInstance()->RealDeltaTime(), 0.0f).ToQuaternion());
-	}else if(Input::GetInstance()->GetButtonHeld(ButtonID::Keyboard_Arrow_Right)){
-		camera->SetRotation(camera->GetRotation() * Euler(0.0f, -30 * Time::GetInstance()->RealDeltaTime(), 0.0f).ToQuaternion());
-	}
-
-	if(Input::GetInstance()->GetButtonDown(ButtonID::Keyboard_R)){
-		camera->SetPosition(Vector3(0.0f, 0.0f, 4.0f));
-		camera->SetRotation(Quaternion::Identity());
-	}
-
-	//MODEL RENDERING
-	//TODO - Obviously get rid of this code Soon(TM)
-	if(light == nullptr){
-		light = new PointLight(Vector3(2.0f, 1.0f, 1.0f));
-	}
-
-	if(meshInfo == nullptr){
-		mesh = ObjLoader::LoadMesh("Resources/cube.obj");
-		meshInfo = new GL_MeshInfo(*mesh);
-	}
-
-	if(material == nullptr){
-		material = new DiffuseTextureMaterial(SID("CubeTexture"), SID("DefaultShader"));
-	}
-
-	SetViewportRect(camera->GetViewportRect());
-	Matrix4 view = camera->GetViewMatrix();
-	Matrix4 proj = camera->GetProjectionMatrix();
-
-	meshInfo->Bind();
-	material->Bind();
-
-	material->GetShader()->BindMatrix4(SID("projectionMatrix"), proj);
-	material->GetShader()->BindMatrix4(SID("viewMatrix"), view);
-
-	Matrix4 mm = Matrix4::Identity();
-	mm *= Matrix4::Rotate(Time::GetInstance()->TimeSinceStartup() * 10.0f, Vector3(0.0f, 1.0f, 0.0f));
-	mm *= Matrix4::Rotate(Time::GetInstance()->TimeSinceStartup() * 10.0f, Vector3(1.0f, 0.0f, 0.0f));
-
-	material->GetShader()->BindMatrix4(SID("modelMatrix"), mm);
-	material->GetShader()->BindMatrix3(SID("normalMatrix"), (mm.Inverse()).Transpose().ToMatrix3());
-
-	material->GetShader()->BindVector3(SID("viewPos"), Vector3(0.0f, 0.0f, 4.0f));
-
-	material->GetShader()->BindInt(SID("numPointLights"), 1);
-	material->GetShader()->BindInt(SID("numSpotLights"), 0);
-	material->GetShader()->BindInt(SID("numDirLights"), 0);
-
-	material->GetShader()->BindVector3(SID("pointLights[0].position"), light->GetPosition());
-	material->GetShader()->BindColor(SID("pointLights[0].lightColor"), light->GetColor());
-	material->GetShader()->BindFloat(SID("pointLights[0].constant"), light->GetConstant());
-	material->GetShader()->BindFloat(SID("pointLights[0].linear"), light->GetLinear());
-	material->GetShader()->BindFloat(SID("pointLights[0].quadratic"), light->GetQuadratic());
-
-	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->indices.size()), GL_UNSIGNED_INT, nullptr);
-
-	material->Unbind();
-	meshInfo->Unbind();
-	//END MODEL RENDERING
-
-	//SKYBOX RENDERING (TODO - also TEMP)
-	if(cubemap == nullptr){
-		skyboxShader = GenerateAPIShader(SID("SkyboxShader"));
-		cubemap = new Cubemap(SID("SkyboxRightTexture"), SID("SkyboxLeftTexture"), SID("SkyboxTopTexture"), SID("SkyboxBottomTexture"), SID("SkyboxFrontTexture"), SID("SkyboxBackTexture"));
-		cubemapInfo = new GL_CubemapInfo(*cubemap);
-	}
-
-	glDepthFunc(GL_LEQUAL);
-	//glDepthMask(GL_FALSE);
-	skyboxShader->Bind();
-	skyboxShader->BindMatrix4(SID("projectionMatrix"), camera->GetProjectionMatrix());
-	Matrix4 skyView = camera->GetViewMatrix().ToMatrix3().ToMatrix4();
-	skyboxShader->BindMatrix4(SID("viewMatrix"), skyView);
-	cubemapInfo->Bind();
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
-	cubemapInfo->Unbind();
-	skyboxShader->Unbind();
-	//glDepthMask(GL_TRUE);
-	glDepthFunc(GL_LESS);
-	//END SKYBOX RENDERING
 
 	//Second Render Pass
 	mainFBO->Unbind();
@@ -249,10 +202,7 @@ void Win32_Renderer::OnResize(int width_, int height_){
 	}
 	mainFBO = new GL_DefaultFrameBuffer(width_, height_);
 
-	//TODO - This is tied to the hardcoded model rendering code. Obviously we need to handle this differently later
-	if(camera != nullptr){
-		camera->SetAspect(GetAspectRatio());
-	}
+	//TODO - Update camera aspect ratios when this happens
 }
 
 void Win32_Renderer::SetWindingOrder(WindingOrder order_){
@@ -297,7 +247,7 @@ void Win32_Renderer::SetCullFace(CullFace cullFace_){
 }
 
 Shader* Win32_Renderer::GenerateAPIShader(StringID shaderResource_){
-	return ResourceManager::GetInstance()->LoadResource<GL_Shader>(shaderResource_); //This feels not right...
+	return ResourceManager::GetInstance()->LoadResource<GL_Shader>(shaderResource_); //TODO - This feels bad...
 }
 
 MeshInfo* Win32_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){

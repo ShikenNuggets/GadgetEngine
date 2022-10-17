@@ -111,8 +111,15 @@
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Game\BasicSceneManager.h" />
+    <ClInclude Include="Game\Component.h" />
+    <ClInclude Include="Game\GameObject.h" />
+    <ClInclude Include="Game\Scene.h" />
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Graphics\Color.h" />
+    <ClInclude Include="Graphics\Components\CameraComponent.h" />
+    <ClInclude Include="Graphics\Components\LightComponent.h" />
+    <ClInclude Include="Graphics\Components\RenderComponent.h" />
     <ClInclude Include="Graphics\Cubemap.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\LightSource.h" />
@@ -164,6 +171,7 @@
     <ClInclude Include="ScreenCoordinate.h" />
     <ClInclude Include="Utils\Hash.h" />
     <ClInclude Include="Utils\StringID.h" />
+    <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -174,7 +182,12 @@
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
+    <ClCompile Include="Game\BasicSceneManager.cpp" />
+    <ClCompile Include="Game\GameObject.cpp" />
+    <ClCompile Include="Game\Scene.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />
+    <ClCompile Include="Graphics\Components\CameraComponent.cpp" />
+    <ClCompile Include="Graphics\Components\RenderComponent.cpp" />
     <ClCompile Include="Graphics\Cubemap.cpp" />
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />

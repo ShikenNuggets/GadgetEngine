@@ -27,7 +27,7 @@ namespace Gadget{
 
 		virtual void PostInit() override;
 
-		virtual void Render() override;
+		virtual void Render(const Scene* scene_) override;
 		virtual void ClearScreen() override;
 		virtual void SetClearColor(const Color& color_) override;
 		virtual void SetViewportRect(const Rect& rect_) override;
@@ -50,11 +50,6 @@ namespace Gadget{
 		GL_ScreenQuad* screenQuad;
 
 		//TODO - Model rendering, remove everything below Eventually(TM)
-		Mesh* mesh;
-		GL_MeshInfo* meshInfo;
-		Material* material;
-		Camera* camera;
-		PointLight* light;
 		Cubemap* cubemap;
 		GL_CubemapInfo* cubemapInfo;
 		Shader* skyboxShader;

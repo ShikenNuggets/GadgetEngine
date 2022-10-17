@@ -5,7 +5,7 @@
 
 using namespace Gadget;
 
-GL_MeshInfo::GL_MeshInfo(const Mesh& mesh_) : MeshInfo(), vao(0), vbo(0), ebo(0){
+GL_MeshInfo::GL_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_), vao(0), vbo(0), ebo(0){
 	GADGET_ASSERT(App::GetInstance()->GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 
 	glCreateVertexArrays(1, &vao);

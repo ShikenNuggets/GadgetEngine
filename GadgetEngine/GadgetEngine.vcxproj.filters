@@ -10,8 +10,14 @@
     <Filter Include="Events">
       <UniqueIdentifier>{3A8963B1-262B-8E87-0FE6-A1DBFB2615D8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{7FA9857C-6BE0-860D-14CD-6C1000E3020F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Components">
+      <UniqueIdentifier>{6B5E6BF0-D7BF-48FE-602D-8FB0CC8D7FBD}</UniqueIdentifier>
     </Filter>
     <Filter Include="Graphics\Loaders">
       <UniqueIdentifier>{0FA183C1-FB99-A213-24CC-87981024821F}</UniqueIdentifier>
@@ -70,11 +76,32 @@
       <Filter>Events</Filter>
     </ClInclude>
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="Game\BasicSceneManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Component.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene.h">
+      <Filter>Game</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Camera.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Color.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Components\CameraComponent.h">
+      <Filter>Graphics\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Components\LightComponent.h">
+      <Filter>Graphics\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Components\RenderComponent.h">
+      <Filter>Graphics\Components</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Cubemap.h">
       <Filter>Graphics</Filter>
@@ -223,6 +250,9 @@
     <ClInclude Include="Utils\StringID.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -241,8 +271,23 @@
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Events</Filter>
     </ClCompile>
+    <ClCompile Include="Game\BasicSceneManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\Camera.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Components\CameraComponent.cpp">
+      <Filter>Graphics\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Components\RenderComponent.cpp">
+      <Filter>Graphics\Components</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Cubemap.cpp">
       <Filter>Graphics</Filter>
