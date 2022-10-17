@@ -1,4 +1,5 @@
 #ifndef GADGET_APP_H
+#define GADGET_APP_H
 
 #include <memory>
 
