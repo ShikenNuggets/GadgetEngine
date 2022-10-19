@@ -113,6 +113,7 @@
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Game\BasicSceneManager.h" />
     <ClInclude Include="Game\Component.h" />
+    <ClInclude Include="Game\GameLogicComponent.h" />
     <ClInclude Include="Game\GameObject.h" />
     <ClInclude Include="Game\Scene.h" />
     <ClInclude Include="Graphics\Camera.h" />
