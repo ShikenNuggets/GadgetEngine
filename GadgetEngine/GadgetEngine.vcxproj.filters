@@ -91,6 +91,7 @@
     <ClInclude Include="Game\Scene.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="GameInterface.h" />
     <ClInclude Include="Graphics\Camera.h">
       <Filter>Graphics</Filter>
     </ClInclude>

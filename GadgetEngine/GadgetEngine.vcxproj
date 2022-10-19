@@ -116,6 +116,7 @@
     <ClInclude Include="Game\GameLogicComponent.h" />
     <ClInclude Include="Game\GameObject.h" />
     <ClInclude Include="Game\Scene.h" />
+    <ClInclude Include="GameInterface.h" />
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Graphics\Color.h" />
     <ClInclude Include="Graphics\Components\CameraComponent.h" />
