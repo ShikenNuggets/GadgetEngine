@@ -9,6 +9,8 @@
 #include <Graphics/Components/LightComponent.h>
 #include <Graphics/Components/RenderComponent.h>
 
+#include "CameraController.h"
+
 namespace Example{
 	class ExampleGame : public Gadget::GameInterface{
 	public:
@@ -25,6 +27,7 @@ namespace Example{
 			Gadget::GameObject* camera = new Gadget::GameObject();
 			camera->SetPosition(0.0f, 0.0f, 4.0f);
 			camera->AddComponent(new Gadget::CameraComponent(camera));
+			camera->AddComponent(new CameraController(camera));
 
 			Gadget::Scene* testScene = new Gadget::Scene(SID("TestScene"));
 			testScene->CreateObject(cube);

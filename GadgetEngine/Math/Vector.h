@@ -46,6 +46,8 @@ namespace Gadget{
 		//These allow us to pass this as an array to legacy code or things like OpenGL very easily
 		inline constexpr operator const float* () const{ return static_cast<const float*>(&x); }
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
+
+		inline constexpr bool IsNear(const Vector2& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y); }
 	};
 
 	struct Vector3{
@@ -101,6 +103,8 @@ namespace Gadget{
 		inline constexpr operator const float* () const{ return static_cast<const float*>(&x); }
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
 
+		inline constexpr bool IsNear(const Vector3& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y) && Math::Near(z, b_.z); }
+
 		static inline constexpr Vector3 Up(){ return Vector3(0.0f, 1.0f, 0.0f); };
 		static inline constexpr Vector3 Forward(){ return Vector3(0.0f, 0.0f, -1.0f); };
 		static inline constexpr Vector3 Right(){ return Vector3(1.0f, 0.0f, 0.0f); }
@@ -151,6 +155,8 @@ namespace Gadget{
 		//These allow us to pass this as an array to legacy code or things like OpenGL very easily
 		inline constexpr operator const float* () const{ return static_cast<const float*>(&x); }
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
+
+		inline constexpr bool IsNear(const Vector4& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y) && Math::Near(z, b_.z) && Math::Near(w, b_.w); }
 	};
 }
 

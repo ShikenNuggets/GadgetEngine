@@ -117,6 +117,7 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d<
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CameraController.h" />
     <ClInclude Include="ExampleGame.h" />
   </ItemGroup>
   <ItemGroup>

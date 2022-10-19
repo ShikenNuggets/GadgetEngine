@@ -65,6 +65,8 @@ namespace Gadget{
 		Euler ToEuler() const;
 
 		std::string ToString() const;
+
+		inline constexpr bool IsNear(const Quaternion& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y) && Math::Near(z, b_.z) && Math::Near(w, b_.w); }
 	};
 }
 
