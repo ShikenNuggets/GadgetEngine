@@ -10,6 +10,7 @@
 #include <Graphics/Components/RenderComponent.h>
 
 #include "CameraController.h"
+#include "ObjectRotator.h"
 
 namespace Example{
 	class ExampleGame : public Gadget::GameInterface{
@@ -19,6 +20,7 @@ namespace Example{
 		virtual void LoadGame() override{
 			Gadget::GameObject* cube = new Gadget::GameObject();
 			cube->AddComponent(new Gadget::RenderComponent(cube, SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
+			cube->AddComponent(new ObjectRotator(cube));
 
 			Gadget::GameObject* light = new Gadget::GameObject();
 			light->SetPosition(2.0f, 1.0f, 1.0f);
