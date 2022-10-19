@@ -110,7 +110,7 @@ void Win32_Renderer::Render(const Scene* scene_){
 	for(const auto& cam : cams){
 		SetViewportRect(cam->GetCamera().GetViewportRect());
 		Matrix4 view = cam->GetUpdatedViewMatrix();
-		Matrix4 proj = cam->GetCamera().GetProjectionMatrix();
+		Matrix4 proj = cam->GetUpdatedProjectionMatrix();
 
 		for(const auto& mesh : meshes){
 			mesh->Bind();
@@ -143,9 +143,8 @@ void Win32_Renderer::Render(const Scene* scene_){
 		//SKYBOX RENDERING (TODO - Reorganize this so the scene controls the Skybox, or, something. Anything but this)
 		glDepthFunc(GL_LEQUAL);
 		skyboxShader->Bind();
-		skyboxShader->BindMatrix4(SID("projectionMatrix"), cam->GetCamera().GetProjectionMatrix());
-		Matrix4 skyView = cam->GetCamera().GetViewMatrix().ToMatrix3().ToMatrix4();
-		skyboxShader->BindMatrix4(SID("viewMatrix"), skyView);
+		skyboxShader->BindMatrix4(SID("projectionMatrix"), proj);
+		skyboxShader->BindMatrix4(SID("viewMatrix"), view.ToMatrix3().ToMatrix4());
 		cubemapInfo->Bind();
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 		cubemapInfo->Unbind();
@@ -202,8 +201,6 @@ void Win32_Renderer::OnResize(int width_, int height_){
 		mainFBO = nullptr;
 	}
 	mainFBO = new GL_DefaultFrameBuffer(width_, height_);
-
-	//TODO - Update camera aspect ratios when this happens
 }
 
 void Win32_Renderer::SetWindingOrder(WindingOrder order_){

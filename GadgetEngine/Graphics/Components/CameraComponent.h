@@ -11,6 +11,7 @@ namespace Gadget{
 		virtual ~CameraComponent() override;
 
 		Matrix4 GetUpdatedViewMatrix();
+		Matrix4 GetUpdatedProjectionMatrix();
 
 		const Camera& GetCamera(){ return camera; }
 
@@ -18,6 +19,7 @@ namespace Gadget{
 		Camera camera;
 		Vector3 lastPosition;
 		Quaternion lastRotation;
+		float lastAspect;
 	};
 }
 
