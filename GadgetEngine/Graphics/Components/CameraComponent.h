@@ -10,10 +10,14 @@ namespace Gadget{
 		CameraComponent(GameObject* parent_, Camera::Projection projection_ = Camera::Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);
 		virtual ~CameraComponent() override;
 
+		Matrix4 GetUpdatedViewMatrix();
+
 		const Camera& GetCamera(){ return camera; }
 
 	private:
 		Camera camera;
+		Vector3 lastPosition;
+		Quaternion lastRotation;
 	};
 }
 

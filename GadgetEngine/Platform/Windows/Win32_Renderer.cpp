@@ -109,7 +109,7 @@ void Win32_Renderer::Render(const Scene* scene_){
 
 	for(const auto& cam : cams){
 		SetViewportRect(cam->GetCamera().GetViewportRect());
-		Matrix4 view = cam->GetCamera().GetViewMatrix();
+		Matrix4 view = cam->GetUpdatedViewMatrix();
 		Matrix4 proj = cam->GetCamera().GetProjectionMatrix();
 
 		for(const auto& mesh : meshes){
