@@ -100,6 +100,7 @@ void Win32_Renderer::Render(const Scene* scene_){
 	ClearScreen();
 
 	//TODO - This is very inefficient, find a better way to do this
+	//TODO - However we actually decide to do this it should be part of the generic renderer instead of being here
 	auto cams = scene_->GetAllComponentsInScene<CameraComponent>();
 	auto meshes = scene_->GetAllComponentsInScene<RenderComponent>();
 	auto lights = scene_->GetAllComponentsInScene<PointLightComponent>();

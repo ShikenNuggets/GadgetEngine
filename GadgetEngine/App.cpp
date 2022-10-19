@@ -21,7 +21,7 @@ using namespace Gadget;
 
 App* App::instance = nullptr;
 
-App::App() : isRunning(true), renderer(nullptr), sceneManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
+App::App() : isRunning(true), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
 }
@@ -72,6 +72,8 @@ void App::Initialize(){
 	renderer->PostInit();
 
 	sceneManager = std::make_unique<BasicSceneManager>();
+
+	gameLogicManager = std::make_unique<GameLogicManager>();
 }
 
 void App::Run(GameInterface& gameInterface_){
@@ -95,6 +97,8 @@ void App::Run(GameInterface& gameInterface_){
 		renderer->GetWindow().lock()->HandleEvents();
 
 		Input::GetInstance()->ProcessInputs();
+
+		gameLogicManager->Update(sceneManager->CurrentScene(), Time::GetInstance()->DeltaTime());
 
 		renderer->Render(sceneManager->CurrentScene());
 

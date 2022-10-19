@@ -85,6 +85,9 @@
     <ClInclude Include="Game\GameLogicComponent.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameLogicManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
     <ClInclude Include="Game\GameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -276,6 +279,9 @@
       <Filter>Events</Filter>
     </ClCompile>
     <ClCompile Include="Game\BasicSceneManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameLogicManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameObject.cpp">

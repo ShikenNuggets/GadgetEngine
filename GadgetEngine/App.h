@@ -7,6 +7,7 @@
 #include "Window.h"
 #include "Events/Event.h"
 #include "Game/BasicSceneManager.h"
+#include "Game/GameLogicManager.h"
 #include "Graphics/Renderer.h"
 #include "Memory/StackAllocator.h"
 
@@ -42,6 +43,7 @@ namespace Gadget{
 		bool isRunning;
 		std::unique_ptr<Renderer> renderer;
 		std::unique_ptr<BasicSceneManager> sceneManager;
+		std::unique_ptr<GameLogicManager> gameLogicManager;
 		StackAllocator singleFrameAllocator;
 		DoubleBufferedStackAllocator twoFrameAllocator;
 

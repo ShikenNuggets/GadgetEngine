@@ -10,7 +10,7 @@ namespace Gadget{
 		virtual ~GameLogicComponent() override{}
 
 		virtual void OnStart(){}
-		virtual void OnUpdate(float deltaTime_){}
+		virtual void OnUpdate([[maybe_unused]] float deltaTime_){}
 		virtual void OnDestroy(){}
 	};
 }
