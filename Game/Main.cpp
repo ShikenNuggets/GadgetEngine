@@ -6,6 +6,10 @@
 
 #include <Gadget.h>
 
+#include "ExampleGame.h"
+
+using namespace Example;
+
 int main(int argc, char* argv[]){
 	if(argc > 0){
 		std::cout << "Launching with arguments: " << std::endl;
@@ -15,8 +19,10 @@ int main(int argc, char* argv[]){
 		std::cout << argv[i] << std::endl;
 	}
 
+	ExampleGame game = ExampleGame();
+
 	try{
-		Gadget::App::GetInstance()->Run();
+		Gadget::App::GetInstance()->Run(game);
 	}catch(std::runtime_error e){
 		_ASSERT(false);
 	}

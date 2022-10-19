@@ -28,12 +28,12 @@ namespace Gadget{
 		static StringID InternString(StringID sid_, const char* str_);
 		static const char* GetStringFromID(StringID id_);
 	};
-
-	//User-defined literal - DON'T USE THIS DIRECTLY, USE THE SID() MACRO
-	constexpr inline StringID operator "" _sid(const char* str_, size_t len_){ return StringID(Hash::MurmurHash64A(str_, len_)); }
-
-	//Use this to create a hashed string ID and add it to the string database
-	#define SID(str) StringID::InternString(str ""_sid, str)
 }
+
+//User-defined literal - DON'T USE THIS DIRECTLY, USE THE SID() MACRO
+constexpr inline Gadget::StringID operator "" _sid(const char* str_, size_t len_){ return Gadget::StringID(Gadget::Hash::MurmurHash64A(str_, len_)); }
+
+//Use this to create a hashed string ID and add it to the string database
+#define SID(str) Gadget::StringID::InternString(str ""_sid, str)
 
 #endif //!GADGET_STRING_ID_H

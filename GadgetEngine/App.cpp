@@ -72,34 +72,12 @@ void App::Initialize(){
 	renderer->PostInit();
 
 	sceneManager = std::make_unique<BasicSceneManager>();
-
-	//SCENE DEFINITION
-	//TODO - This should be handled by the game, just putting it here for now
-	GameObject* cube = new GameObject();
-	cube->AddComponent(new RenderComponent(cube, SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
-
-	GameObject* light = new GameObject();
-	light->SetPosition(2.0f, 1.0f, 1.0f);
-	light->AddComponent(new PointLightComponent(light));
-
-	GameObject* camera = new GameObject();
-	camera->SetPosition(0.0f, 0.0f, 4.0f);
-	camera->AddComponent(new CameraComponent(camera));
-
-	Scene* testScene = new Scene(SID("TestScene"));
-	testScene->CreateObject(cube);
-	testScene->CreateObject(light);
-	testScene->CreateObject(camera);
-
-	sceneManager->AddScene(testScene);
-
-	//END SCENE DEFINITION
-
-	sceneManager->LoadScene(0);
 }
 
-void App::Run(){
-	Initialize();
+void App::Run(GameInterface& gameInterface_){
+	Initialize(); //Init engine
+	gameInterface_.LoadGame(); //Init game
+	sceneManager->LoadScene(0);
 
 	Time::GetInstance()->Start();
 	while(isRunning){

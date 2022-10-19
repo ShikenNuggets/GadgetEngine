@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "GameInterface.h"
 #include "Window.h"
 #include "Events/Event.h"
 #include "Game/BasicSceneManager.h"
@@ -18,7 +19,7 @@ namespace Gadget{
 		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
 		#endif //GADGET_DEBUG
 
-		void Run();
+		void Run(GameInterface& gameInterface_);
 
 		//Allocate memory that will free itself at the end of the frame
 		//Do not cache this pointer beyond the frame boundary!!!
@@ -33,6 +34,7 @@ namespace Gadget{
 		Renderer* GetRenderer() const{ return renderer.get(); }
 		Renderer::API GetCurrentRenderAPI() const;
 		float GetAspectRatio() const{ return renderer->GetAspectRatio(); }
+		BasicSceneManager* GetSceneManager() const{ return sceneManager.get(); }
 
 	private:
 		static App* instance;

@@ -2,9 +2,6 @@
 #define GADGET_GAME_INTERFACE_H
 
 #include <string>
-#include <vector>
-
-#include "Game/Scene.h"
 
 namespace Gadget{
 	class GameInterface{
