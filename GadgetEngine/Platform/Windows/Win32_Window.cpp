@@ -2,8 +2,9 @@
 
 #include <glad/glad.h>
 
-#include "Debug.h"
 #include "Win32_Utils.h"
+#include "Config.h"
+#include "Debug.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Input/KeyEvent.h"
@@ -12,7 +13,7 @@
 
 using namespace Gadget;
 
-Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr), joysticks(){
+Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, y_), sdlWindow(nullptr), joysticks(){
 	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
 		Debug::Log("SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error
@@ -34,8 +35,13 @@ Win32_Window::Win32_Window(int w_, int h_) : Window(w_, h_), sdlWindow(nullptr),
 		//TODO - Handle Fatal Error
 	}
 
+	if(pos.x == 0 && pos.y == 0){
+		pos.x = SDL_WINDOWPOS_CENTERED;
+		pos.y = SDL_WINDOWPOS_CENTERED;
+	}
+
 	Uint32 windowFlag = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
-	sdlWindow = SDL_CreateWindow("GadgetEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, windowFlag);
+	sdlWindow = SDL_CreateWindow("GadgetEngine", pos.x, pos.y, size.x, size.y, windowFlag);
 	if(sdlWindow == nullptr){
 		Debug::Log("Window could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error
@@ -124,22 +130,6 @@ void Win32_Window::HandleEvents(){
 			default:
 				break;
 		}
-
-		if(e.type == SDL_QUIT){
-			EventHandler::GetInstance()->HandleEvent(WindowCloseEvent());
-			return;
-		}else if(e.type == SDL_WINDOWEVENT){
-			int w = 0, h = 0;
-
-			switch(e.window.event){
-				case SDL_WINDOWEVENT_SIZE_CHANGED:
-					SDL_GetWindowSize(sdlWindow, &w, &h);
-					EventHandler::GetInstance()->HandleEvent(WindowResizedEvent(w, h));
-					break;
-				default:
-					break;
-			}
-		}
 	}
 }
 
@@ -155,6 +145,10 @@ void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 			size.x = w;
 			size.y = h;
 			EventHandler::GetInstance()->HandleEvent(WindowResizedEvent(w, h));
+			break;
+		case SDL_WINDOWEVENT_MOVED:
+			SDL_GetWindowPosition(sdlWindow, &w, &h);
+			EventHandler::GetInstance()->HandleEvent(WindowMovedEvent(w, h));
 			break;
 		default:
 			break;

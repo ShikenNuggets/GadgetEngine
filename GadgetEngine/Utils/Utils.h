@@ -1,14 +1,14 @@
 #ifndef GADGET_UTILS_H
 #define GADGET_UTILS_H
 
+#include <algorithm>
 #include <map>
 #include <vector>
 
 namespace Gadget{
-	class Utils{
-	public:
+	namespace Utils{
 		template <class T>
-		static inline constexpr bool Contains(const std::vector<T>& container_, const T& value_){
+		inline constexpr bool Contains(const std::vector<T>& container_, const T& value_){
 			for(const auto& v : container_){
 				if(v == value_){
 					return true;
@@ -19,12 +19,12 @@ namespace Gadget{
 		}
 
 		template <class T, class Y>
-		static inline constexpr bool ContainsKey(const std::map<T, Y>& container_, const T& key_){
+		inline constexpr bool ContainsKey(const std::map<T, Y>& container_, const T& key_){
 			return container_.find(key_) != container_.end();
 		}
 
 		template <class T, class Y>
-		static inline constexpr bool ContainsValue(const std::map<T, Y>& container_, const Y& value_){
+		inline constexpr bool ContainsValue(const std::map<T, Y>& container_, const Y& value_){
 			for(const auto& v : container_){
 				if(v.second == value_){
 					return true;
@@ -32,6 +32,21 @@ namespace Gadget{
 			}
 
 			return false;
+		}
+
+		inline bool ContainsChar(const std::string& str_, char char_){
+			return str_.find(char_) != std::string::npos;
+		}
+
+		//TODO - These are not unicode safe
+		inline std::string ToUpper(std::string str_){
+			std::transform(str_.begin(), str_.end(), str_.begin(), [](char c){ return static_cast<char>(std::toupper(c)); });
+			return str_;
+		}
+
+		inline std::string ToLower(std::string str_){
+			std::transform(str_.begin(), str_.end(), str_.begin(), [](char c){ return static_cast<char>(std::tolower(c)); });
+			return str_;
 		}
 	};
 }

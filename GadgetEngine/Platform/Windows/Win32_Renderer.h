@@ -22,7 +22,7 @@ namespace Gadget{
 	//OpenGL Renderer for Windows
 	class Win32_Renderer : public Renderer{
 	public:
-		Win32_Renderer(int w_ = 800, int h_ = 600);
+		Win32_Renderer(int w_ = 800, int h_ = 600, int x_ = 0, int y_ = 0);
 		virtual ~Win32_Renderer() override;
 
 		virtual void PostInit() override;

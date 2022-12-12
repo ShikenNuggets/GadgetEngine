@@ -21,13 +21,15 @@ using namespace Gadget;
 
 App* App::instance = nullptr;
 
-App::App() : isRunning(true), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
+App::App() : isRunning(true), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
 }
 
 App::~App(){
-	renderer.reset();
+	gameLogicManager.reset(nullptr);
+	sceneManager.reset(nullptr);
+	renderer.reset(nullptr);
 }
 
 App* App::GetInstance(){
@@ -40,14 +42,12 @@ App* App::GetInstance(){
 
 #ifdef GADGET_DEBUG
 void App::DeleteInstance(){
-	instance->renderer.reset(nullptr);
-
-	Input::DeleteInstance();
-	Time::DeleteInstance();
-	Config::DeleteInstance();
-	ResourceManager::DeleteInstance();
-
 	if(instance != nullptr){
+		Input::DeleteInstance();
+		Time::DeleteInstance();
+		Config::DeleteInstance();
+		ResourceManager::DeleteInstance();
+
 		delete instance;
 		instance = nullptr;
 	}
@@ -55,18 +55,36 @@ void App::DeleteInstance(){
 #endif //GADGET_DEBUG
 
 void App::Initialize(){
-	ResourceManager::GetInstance();
-	Config::GetInstance(); //Init Config
+	resourceMgr = ResourceManager::GetInstance();
+	GADGET_BASIC_ASSERT(resourceMgr);
+
+	config = Config::GetInstance(); //Init Config
+	GADGET_BASIC_ASSERT(config);
+
 	Random::SetSeed();
-	Time::GetInstance();
-	Input::GetInstance();
+	time = Time::GetInstance();
+	GADGET_BASIC_ASSERT(time);
+
+	input = Input::GetInstance();
+	GADGET_BASIC_ASSERT(input);
 
 	#ifdef GADGET_RELEASE
 	Debug::SetLogVerbosity(Debug::Warning);
 	#endif // GADGET_RELEASE
 
+	int width = static_cast<int>(config->GetOptionFloat(Config::WidthWindowedKey));
+	int height = static_cast<int>(config->GetOptionFloat(Config::HeightWindowedKey));
+	int x = static_cast<int>(config->GetOptionFloat(Config::LastWindowX));
+	int y = static_cast<int>(config->GetOptionFloat(Config::LastWindowY));
+
+	//Use a default value if option is invalid
+	if(width <= 100 || height <= 100){
+		width = 1280;
+		height = 720;
+	}
+
 	#ifdef GADGET_PLATFORM_WIN32
-	renderer = std::make_unique<Win32_Renderer>(1280, 720);
+	renderer = std::make_unique<Win32_Renderer>(width, height, x, y);
 	#endif //GADGET_PLATFORM_WIN32
 
 	renderer->PostInit();

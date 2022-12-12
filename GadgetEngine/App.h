@@ -3,13 +3,17 @@
 
 #include <memory>
 
+#include "Config.h"
 #include "GameInterface.h"
 #include "Window.h"
+#include "Core/Time.h"
 #include "Events/Event.h"
 #include "Game/BasicSceneManager.h"
 #include "Game/GameLogicManager.h"
 #include "Graphics/Renderer.h"
+#include "Input/Input.h"
 #include "Memory/StackAllocator.h"
+#include "Resource/ResourceManager.h"
 
 namespace Gadget{
 	class App{
@@ -41,6 +45,10 @@ namespace Gadget{
 		static App* instance;
 
 		bool isRunning;
+		ResourceManager* resourceMgr;
+		Config* config;
+		Time* time;
+		Input* input;
 		std::unique_ptr<Renderer> renderer;
 		std::unique_ptr<BasicSceneManager> sceneManager;
 		std::unique_ptr<GameLogicManager> gameLogicManager;

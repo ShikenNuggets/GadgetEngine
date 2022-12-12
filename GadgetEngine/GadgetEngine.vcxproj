@@ -104,6 +104,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Concurrency\SpinLock.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="ConfigParser.h" />
     <ClInclude Include="Core\FileSystem.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Debug.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Concurrency\SpinLock.cpp" />
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ConfigParser.cpp" />
     <ClCompile Include="Core\FileSystem.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Debug.cpp" />

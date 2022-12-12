@@ -28,6 +28,21 @@ namespace Gadget{
 		static constexpr EventType Type(){ return EventType::WindowClose; }
 		virtual EventType GetEventType() const override{ return Type(); }
 	};
+
+	class WindowMovedEvent : public Event{
+	public:
+		WindowMovedEvent(int x_, int y_) : Event(SID("WindowMovedEvent")), x(x_), y(y_){}
+
+		static constexpr EventType Type(){ return EventType::WindowMoved; }
+		virtual EventType GetEventType() const override{ return Type(); }
+
+		inline int GetX() const{ return x; }
+		inline int GetY() const{ return y; }
+
+	private:
+		int x;
+		int y;
+	};
 }
 
 #endif //!GADGET_APP_EVENT_H

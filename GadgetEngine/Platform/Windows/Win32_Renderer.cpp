@@ -18,8 +18,8 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr), cubemap(nullptr), cubemapInfo(nullptr), skyboxShader(nullptr){
-	window = std::make_unique<Win32_Window>(w_, h_);
+Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr), cubemap(nullptr), cubemapInfo(nullptr), skyboxShader(nullptr){
+	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
 	glContext = SDL_GL_CreateContext(dynamic_cast<Win32_Window*>(window.get())->GetSDLWindow());
