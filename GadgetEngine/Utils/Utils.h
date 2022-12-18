@@ -2,6 +2,7 @@
 #define GADGET_UTILS_H
 
 #include <algorithm>
+#include <stdexcept>
 #include <map>
 #include <vector>
 
@@ -63,6 +64,27 @@ namespace Gadget{
 			ret.erase(std::find_if(ret.rbegin(), ret.rend(), [](unsigned char ch){ return !std::isspace(ch); }).base(), ret.end());
 
 			return ret;
+		}
+
+		inline bool StringIsNumber(const std::string& str_){
+			try{
+				[[maybe_unused]] double value = std::stod(str_);
+				return true;
+			}catch(const std::invalid_argument&){
+				return false;
+			}catch(const std::out_of_range&){
+				return false;
+			}
+		}
+
+		inline double StringToNumber(const std::string& str_){
+			try{
+				return std::stod(str_);
+			}catch(const std::invalid_argument&){
+				return 0.0;
+			}catch(const std::out_of_range&){
+				return 0.0;
+			}
 		}
 	};
 }

@@ -4,8 +4,8 @@
 
 using namespace Gadget;
 
-StringID StringID::None = SID("");
 std::unordered_map<uint64_t, const char*> StringID::stringIdTable;
+StringID StringID::None = SID("");
 
 std::string StringID::GetString() const{
 	return GetStringFromID(*this);

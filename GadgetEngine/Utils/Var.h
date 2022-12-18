@@ -98,8 +98,8 @@ namespace Gadget{
 				return Var(true);
 			}else if(upper == "FALSE"){
 				return Var(false);
-			}else if(std::find_if(str_.begin(), str_.end(), ::isdigit) != str_.end()){ //TODO - This will be a problem if we have a string that contains a number
-				return Var(std::stod(str_));
+			}else if(Utils::StringIsNumber(str_)){
+				return Var(Utils::StringToNumber(str_));
 			}else{
 				return Var(StringID::ProcessString(str_));
 			}
