@@ -72,10 +72,10 @@ void App::Initialize(){
 	Debug::SetLogVerbosity(Debug::Warning);
 	#endif // GADGET_RELEASE
 
-	int width = static_cast<int>(config->GetOptionFloat(Config::WidthWindowedKey));
-	int height = static_cast<int>(config->GetOptionFloat(Config::HeightWindowedKey));
-	int x = static_cast<int>(config->GetOptionFloat(Config::LastWindowX));
-	int y = static_cast<int>(config->GetOptionFloat(Config::LastWindowY));
+	int width = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayWidthKey));
+	int height = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayHeightKey));
+	int x = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowXKey));
+	int y = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowYKey));
 
 	//Use a default value if option is invalid
 	if(width <= 100 || height <= 100){

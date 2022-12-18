@@ -67,6 +67,7 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="EngineVars.h" />
     <ClInclude Include="Events\AppEvent.h">
       <Filter>Events</Filter>
     </ClInclude>
@@ -261,6 +262,9 @@
     <ClInclude Include="Utils\Utils.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Var.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -277,6 +281,7 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="EngineVars.cpp" />
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Events</Filter>
     </ClCompile>

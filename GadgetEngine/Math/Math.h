@@ -24,7 +24,9 @@ namespace Gadget{
 		static inline float Sqrt(float value_){ return static_cast<float>(sqrt(value_)); }
 
 		static inline constexpr bool IsNearZero(float s_){ return s_ <= NearZero && s_ >= -NearZero; }
+		static inline constexpr bool IsNearZero(double s_){ return s_ <= static_cast<double>(NearZero) && s_ >= static_cast<double>(-NearZero); }
 		static inline constexpr bool Near(float a_, float b_){ return IsNearZero(a_ - b_); }
+		static inline constexpr bool Near(double a_, double b_){ return IsNearZero(a_ - b_); }
 
 		static inline constexpr float SafeDivide(float a_, float b_){
 			if(Math::IsNearZero(b_)){
@@ -78,6 +80,11 @@ namespace Gadget{
 
 			return true;
 		}
+
+		static inline constexpr bool IsInteger(double num_){ return Math::Near(static_cast<double>(static_cast<int64_t>(num_)), num_); }
+
+		static inline float Floor(float num_){ return floor(num_); }
+		static inline double Floor(double num_){ return floor(num_); }
 
 		//Delete unwanted compiler-generated constructors, destructors, and assignment operators
 		Math() = delete;

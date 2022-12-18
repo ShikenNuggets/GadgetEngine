@@ -3,6 +3,7 @@
 
 #include <map>
 
+#include "EngineVars.h"
 #include "Events/Event.h"
 #include "Utils/StringID.h"
 
@@ -15,26 +16,22 @@ namespace Gadget{
 		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
 		#endif //GADGET_DEBUG
 
-		float GetOptionFloat(StringID key_) const;
+		double GetOptionFloat(StringID key_) const;
 		bool GetOptionsBool(StringID key_) const;
 		StringID GetOptionsString(StringID key_) const;
 
-		void SetOption(StringID key_, int value_);
-		void SetOption(StringID key_, float value_);
-		void SetOption(StringID key_, bool value_);
-		void SetOption(StringID key_, StringID value_);
+		void SetOption(StringID section_, StringID key_, int32_t value_);
+		void SetOption(StringID section_, StringID key_, int64_t value_);
+		void SetOption(StringID section_, StringID key_, uint32_t value_);
+		void SetOption(StringID section_, StringID key_, uint64_t value_);
+		void SetOption(StringID section_, StringID key_, double value_);
+		void SetOption(StringID section_, StringID key_, bool value_);
+		void SetOption(StringID section_, StringID key_, StringID value_);
+
+		void SaveConfigs();
+		void ResetAllOptionsToDefault();
 
 		static void OnEvent(const Event& e_);
-
-		//Config Keys
-		static const StringID LanguageKey;
-		static const StringID FullscreenKey;
-		static const StringID WidthFullscreenKey;
-		static const StringID HeightFullscreenKey;
-		static const StringID WidthWindowedKey;
-		static const StringID HeightWindowedKey;
-		static const StringID LastWindowX;
-		static const StringID LastWindowY;
 
 	private:
 		static Config* instance;
@@ -45,9 +42,7 @@ namespace Gadget{
 
 		void SetDefaultEngineConfigs();
 
-		std::map<StringID, float> floatOptions;
-		std::map<StringID, bool> boolOptions;
-		std::map<StringID, StringID> stringOptions;
+		EngineVars vars;
 	};
 }
 

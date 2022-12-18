@@ -33,7 +33,7 @@ namespace Gadget{
 
 			uint64_t h = seed_ ^ (len_ * m);
 
-			const uint64_t* data = (const uint64_t*)data_;
+			const uint64_t* data = (const uint64_t*)data_; //TODO - Apparently this cast is not constexpr friendly
 			const uint64_t* end = data + (len_ / 8);
 
 			while(data != end){

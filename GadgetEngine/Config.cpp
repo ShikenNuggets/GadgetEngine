@@ -10,41 +10,19 @@ using namespace Gadget;
 
 Config* Config::instance = nullptr;
 
-const StringID Config::LanguageKey =			SID("Language");
-const StringID Config::FullscreenKey =			SID("Fullscreen");
-const StringID Config::WidthFullscreenKey =		SID("Width_Fullscreen");
-const StringID Config::HeightFullscreenKey =	SID("Height_Fullscreen");
-const StringID Config::WidthWindowedKey =		SID("Width_Windowed");
-const StringID Config::HeightWindowedKey =		SID("Height_Windowed");
-const StringID Config::LastWindowX =			SID("LastWindowX");
-const StringID Config::LastWindowY =			SID("LastWindowY");
-
-Config::Config() : floatOptions(), boolOptions(), stringOptions(){
+Config::Config() : vars(){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowMoved, &OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, &OnEvent);
 
 	LocManager* locMan = LocManager::GetInstance(); //Initialize Localization Manager
 	locMan->AddLanguage(SID("ENG")); //TODO - Pull available languages from a config file
 
-	SetDefaultEngineConfigs();
-
-	ConfigParser::ParseConfigFile(engineConfigFile, floatOptions, boolOptions, stringOptions);
-	locMan->SetCurrentLanguage(GetOptionsString(LanguageKey));
+	ConfigParser::ParseConfigFile(engineConfigFile, vars);
+	locMan->SetCurrentLanguage(GetOptionsString(EngineVars::Core::languageKey));
 }
 
 Config::~Config(){
-	ConfigParser::SerializeConfigs(engineConfigFile, floatOptions, boolOptions, stringOptions);
-}
-
-void Config::SetDefaultEngineConfigs(){
-	SetOption(LanguageKey, SID("ENG"));
-	SetOption(FullscreenKey, false);
-	SetOption(WidthFullscreenKey, 1920);
-	SetOption(HeightFullscreenKey, 1080);
-	SetOption(WidthWindowedKey, 1920);
-	SetOption(HeightWindowedKey, 1080);
-	SetOption(LastWindowX, 0);
-	SetOption(LastWindowY, 0);
+	SaveConfigs();
 }
 
 Config* Config::GetInstance(){
@@ -64,63 +42,52 @@ void Config::DeleteInstance(){
 }
 #endif //GADGET_DEBUG
 
-float Config::GetOptionFloat(StringID key_) const{
-	auto find = floatOptions.find(key_);
-	if(find != floatOptions.end()){
-		return find->second;
-	}
-
-	return 0.0f;
+double Config::GetOptionFloat(StringID key_) const{
+	return vars.GetValue(key_).ToNumber();
 }
 
 bool Config::GetOptionsBool(StringID key_) const{
-	auto find = floatOptions.find(key_);
-	if(find != floatOptions.end()){
-		return find->second;
-	}
-
-	return false;
+	return vars.GetValue(key_).ToBool();
 }
 
 StringID Config::GetOptionsString(StringID key_) const{
-	auto find = stringOptions.find(key_);
-	if(find != stringOptions.end()){
-		return find->second;
-	}
-
-	return SID("");
+	return vars.GetValue(key_).ToStr();
 }
 
-void Config::SetOption(StringID key_, int value_){
-	SetOption(key_, (float)value_);
+void Config::SetOption(StringID section_, StringID key_, int32_t value_){ SetOption(section_, key_, static_cast<double>(value_)); }
+void Config::SetOption(StringID section_, StringID key_, int64_t value_){ SetOption(section_, key_, static_cast<double>(value_)); }
+void Config::SetOption(StringID section_, StringID key_, uint32_t value_){ SetOption(section_, key_, static_cast<double>(value_)); }
+void Config::SetOption(StringID section_, StringID key_, uint64_t value_){ SetOption(section_, key_, static_cast<double>(value_)); }
+
+void Config::SetOption(StringID section_, StringID key_, double value_){
+	vars.SetValue(section_, key_, value_);
 }
 
-void Config::SetOption(StringID key_, float value_){
-	floatOptions[key_] = value_;
+void Config::SetOption(StringID section_, StringID key_, bool value_){
+	vars.SetValue(section_, key_, value_);
 }
 
-void Config::SetOption(StringID key_, bool value_){
-	boolOptions[key_] = value_;
-}
-
-void Config::SetOption(StringID key_, StringID value_){
-	//Need to do this more explicitly, [] operator does not work since StringID doesn't have a default constructor
-	if(stringOptions.find(key_) != stringOptions.end()){
-		stringOptions.at(key_) = value_;
-	}else{
-		stringOptions.emplace(key_, value_);
-	}
+void Config::SetOption(StringID section_, StringID key_, StringID value_){
+	vars.SetValue(section_, key_, value_);
 }
 
 void Config::OnEvent(const Event& e_){
 	switch(e_.GetEventType()){
 		case EventType::WindowResize:
-			GetInstance()->SetOption(WidthWindowedKey, dynamic_cast<const WindowResizedEvent&>(e_).GetWidth());
-			GetInstance()->SetOption(HeightWindowedKey, dynamic_cast<const WindowResizedEvent&>(e_).GetHeight());
+			GetInstance()->SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayWidthKey, dynamic_cast<const WindowResizedEvent&>(e_).GetWidth());
+			GetInstance()->SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayHeightKey, dynamic_cast<const WindowResizedEvent&>(e_).GetHeight());
 			break;
 		case EventType::WindowMoved:
-			GetInstance()->SetOption(LastWindowX, dynamic_cast<const WindowMovedEvent&>(e_).GetX());
-			GetInstance()->SetOption(LastWindowY, dynamic_cast<const WindowMovedEvent&>(e_).GetY());
+			GetInstance()->SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, dynamic_cast<const WindowMovedEvent&>(e_).GetX());
+			GetInstance()->SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowYKey, dynamic_cast<const WindowMovedEvent&>(e_).GetY());
 			break;
 	}
+}
+
+void Config::SaveConfigs(){
+	ConfigParser::SerializeConfigs(engineConfigFile, vars);
+}
+
+void Config::ResetAllOptionsToDefault(){
+	vars = EngineVars();
 }

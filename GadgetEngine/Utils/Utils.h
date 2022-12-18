@@ -5,6 +5,8 @@
 #include <map>
 #include <vector>
 
+#include "StringID.h"
+
 namespace Gadget{
 	namespace Utils{
 		template <class T>
@@ -47,6 +49,20 @@ namespace Gadget{
 		inline std::string ToLower(std::string str_){
 			std::transform(str_.begin(), str_.end(), str_.begin(), [](char c){ return static_cast<char>(std::tolower(c)); });
 			return str_;
+		}
+
+		inline std::string ExtractString(const std::string& str_, char beginAfterDelimeter, char endBeforeDelimeter){
+			size_t first = str_.find_first_of(beginAfterDelimeter);
+			size_t last = str_.find_last_of(endBeforeDelimeter);
+			return str_.substr(first + 1, last - first - 1);
+		}
+
+		inline std::string Trim(const std::string& str_){
+			std::string ret = str_;
+			ret.erase(ret.begin(), std::find_if(ret.begin(), ret.end(), [](unsigned char ch){ return !std::isspace(ch); }));
+			ret.erase(std::find_if(ret.rbegin(), ret.rend(), [](unsigned char ch){ return !std::isspace(ch); }).base(), ret.end());
+
+			return ret;
 		}
 	};
 }

@@ -108,6 +108,7 @@
     <ClInclude Include="Core\FileSystem.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="EngineVars.h" />
     <ClInclude Include="Events\AppEvent.h" />
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Events\EventHandler.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Utils\Hash.h" />
     <ClInclude Include="Utils\StringID.h" />
     <ClInclude Include="Utils\Utils.h" />
+    <ClInclude Include="Utils\Var.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +188,7 @@
     <ClCompile Include="Core\FileSystem.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="EngineVars.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Game\BasicSceneManager.cpp" />
     <ClCompile Include="Game\GameLogicManager.cpp" />
