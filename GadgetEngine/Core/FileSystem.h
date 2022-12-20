@@ -14,7 +14,14 @@ namespace Gadget{
 			Overwrite,
 		};
 
+	#ifdef GADGET_PLATFORM_WIN32
+		static constexpr char PathSeparator = '\\';
+	#else
+		static constexpr char PathSeparator = '/';
+	#endif //GADGET_PLATFORM_WIN32
+		
 		static bool FileExists(const std::string& filePath_);
+		static bool DirExists(const std::string& path_);
 
 		static std::vector<std::string> ReadFile(const std::string& filePath_);
 		static std::string ReadFileToString(const std::string& filePath_);
@@ -23,6 +30,14 @@ namespace Gadget{
 		static void WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_ = WriteType::Append);
 
 		static std::string GetFileNameFromPath(const std::string& path_);
+
+		static std::string GetDocumentsDir();
+
+		static bool CreateFile(const std::string& path_);
+		static bool CreateDir(const std::string& path_);
+
+	private:
+		static std::string RemoveFileNameFromPath(const std::string& path_);
 	};
 }
 

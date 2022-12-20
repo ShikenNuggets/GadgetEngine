@@ -10,6 +10,8 @@ namespace Gadget{
 
 		virtual void LoadGame() = 0;
 
+		std::string GetName() const{ return name; }
+
 	protected:
 		std::string name;
 	};

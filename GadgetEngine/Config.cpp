@@ -1,7 +1,9 @@
 #include "Config.h"
 
+#include "App.h"
 #include "ConfigParser.h"
 #include "LocManager.h"
+#include "Core/FileSystem.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Utils/Utils.h"
@@ -10,14 +12,18 @@ using namespace Gadget;
 
 Config* Config::instance = nullptr;
 
-Config::Config() : vars(){
+Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
+#ifdef GADGET_DEBUG
+	engineConfigPath = engineConfigFileName; //Makes debugging easier to store the file in the same directory
+#endif //GADGET_DEBUG
+
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowMoved, &OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, &OnEvent);
 
 	LocManager* locMan = LocManager::GetInstance(); //Initialize Localization Manager
 	locMan->AddLanguage(SID("ENG")); //TODO - Pull available languages from a config file
 
-	ConfigParser::ParseConfigFile(engineConfigFile, vars);
+	ConfigParser::ParseConfigFile(engineConfigPath, vars);
 	locMan->SetCurrentLanguage(GetOptionsString(EngineVars::Core::languageKey));
 }
 
@@ -85,9 +91,13 @@ void Config::OnEvent(const Event& e_){
 }
 
 void Config::SaveConfigs(){
-	ConfigParser::SerializeConfigs(engineConfigFile, vars);
+	ConfigParser::SerializeConfigs(engineConfigPath, vars);
 }
 
 void Config::ResetAllOptionsToDefault(){
 	vars = EngineVars();
+}
+
+std::string Config::CreateEngineConfigPath(){
+	return FileSystem::GetDocumentsDir() + FileSystem::PathSeparator + App::GetInstance()->GetGameName() + FileSystem::PathSeparator + engineConfigFileName;
 }

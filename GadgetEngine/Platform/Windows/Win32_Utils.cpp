@@ -1,5 +1,9 @@
 #include "Win32_Utils.h"
 
+#include <algorithm>
+
+#include <ShlObj.h>
+
 #pragma warning(disable : 26819) //Kill unfixable warning from SDL2
 #include <SDL.h>
 #pragma warning(default : 26819)
@@ -582,4 +586,15 @@ AxisID Win32_Utils::ConvertSDLJoystickAxisToAxisID(Uint8 axis_){
 
 	Debug::Log("AXIS: " + std::to_string(axis_));
 	return AxisID::None;
+}
+
+std::string Win32_Utils::GetUserDocumentsPath(){
+	WCHAR* path;
+	auto result = SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &path);
+	if(!SUCCEEDED(result)){
+		return "";
+	}
+
+	std::wstring ws(path);
+	return std::string(ws.begin(), ws.end()); //TODO - Unicode
 }

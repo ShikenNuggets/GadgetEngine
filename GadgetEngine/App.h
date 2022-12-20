@@ -36,6 +36,7 @@ namespace Gadget{
 
 		static void OnEvent(const Event& e_);
 
+		std::string GetGameName() const{ return gameName; }
 		Renderer* GetRenderer() const{ return renderer.get(); }
 		Renderer::API GetCurrentRenderAPI() const;
 		float GetAspectRatio() const{ return renderer->GetAspectRatio(); }
@@ -44,6 +45,7 @@ namespace Gadget{
 	private:
 		static App* instance;
 
+		std::string gameName;
 		bool isRunning;
 		ResourceManager* resourceMgr;
 		Config* config;
@@ -58,7 +60,7 @@ namespace Gadget{
 		App();
 		~App();
 
-		void Initialize();
+		void Initialize(const std::string& name_);
 
 		//Delete unwanted compiler-generated copy/move constructors and assignment operators
 		App(const App&) = delete;

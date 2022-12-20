@@ -1,5 +1,11 @@
 #include "FileSystem.h"
 
+#include <filesystem>
+
+#ifdef GADGET_PLATFORM_WIN32
+#include "Platform/Windows/Win32_Utils.h"
+#endif //GADGET_PLATFORM_WIN32
+
 #include "Debug.h"
 
 using namespace Gadget;
@@ -8,6 +14,10 @@ bool FileSystem::FileExists(const std::string& filePath_){
 	std::fstream filestream;
 	filestream.open(filePath_, std::ios::in);
 	return filestream.is_open();
+}
+
+bool FileSystem::DirExists(const std::string& path_){
+	return std::filesystem::is_directory(path_);
 }
 
 std::vector<std::string> FileSystem::ReadFile(const std::string& filePath_){
@@ -55,6 +65,10 @@ std::vector<uint8_t> FileSystem::ReadBinaryFile(const std::string& filePath_){
 }
 
 void FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){
+	if(!FileExists(filePath_)){
+		CreateFile(filePath_);
+	}
+
 	std::fstream filestream;
 
 	switch(type_){
@@ -93,4 +107,41 @@ std::string FileSystem::GetFileNameFromPath(const std::string& path_){
 	}
 
 	return "";
+}
+
+std::string FileSystem::GetDocumentsDir(){
+	#ifdef GADGET_PLATFORM_WIN32
+		return Win32_Utils::GetUserDocumentsPath();
+	#else
+		static_assert(false, "Unhandled platform in FileSystem::GetDocumentsPath!");
+	#endif //!GADGET_PLATFORM_WIN32
+}
+
+bool FileSystem::CreateFile(const std::string& file_){
+	std::string dir = RemoveFileNameFromPath(file_);
+	if(!DirExists(dir)){
+		CreateDir(dir);
+	}
+
+	std::fstream filestream;
+	filestream.open(file_, std::ios::out | std::ios_base::trunc);
+	if(!filestream.is_open()){
+		return false;
+	}
+
+	filestream.flush();
+	filestream.close();
+	return true;
+}
+
+bool FileSystem::CreateDir(const std::string& path_){
+	if(DirExists(path_)){
+		return false;
+	}
+
+	return std::filesystem::create_directory(path_);
+}
+
+std::string FileSystem::RemoveFileNameFromPath(const std::string& path_){
+	return path_.substr(0, path_.find_last_of(PathSeparator));
 }

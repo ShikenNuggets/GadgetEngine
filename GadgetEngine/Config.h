@@ -35,14 +35,15 @@ namespace Gadget{
 
 	private:
 		static Config* instance;
-		static constexpr const char* engineConfigFile = "UserEngine.ini";
+		static constexpr const char* engineConfigFileName = "UserEngine.ini";
 
 		Config();
 		~Config();
 
-		void SetDefaultEngineConfigs();
-
+		std::string engineConfigPath;
 		EngineVars vars;
+
+		std::string CreateEngineConfigPath();
 	};
 }
 
