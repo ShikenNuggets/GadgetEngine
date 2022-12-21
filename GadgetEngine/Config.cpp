@@ -48,6 +48,10 @@ void Config::DeleteInstance(){
 }
 #endif //GADGET_DEBUG
 
+Var Config::GetOption(StringID key_) const{
+	return vars.GetValue(key_);
+}
+
 double Config::GetOptionFloat(StringID key_) const{
 	return vars.GetValue(key_).ToNumber();
 }
