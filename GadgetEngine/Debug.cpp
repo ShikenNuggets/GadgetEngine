@@ -17,7 +17,13 @@ Debug::LogType Debug::logLevel = Debug::Verbose;
 std::set<StringID> Debug::logChannelFilter = std::set<StringID>();
 
 void Debug::Init(){
-	FileSystem::WriteToFile("log.txt", "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + "GMT\n");
+#ifdef GADGET_DEBUG
+	constexpr auto writeType = FileSystem::WriteType::Append; //Keeping all session logs is ideal for debugging
+#else
+	constexpr auto writeType = FileSystem::WriteType::Overwrite; //Deleting logs from old sesions is ideal for end users to avoid bloat
+#endif //GADGET_DEBUG
+
+	FileSystem::WriteToFile("log.txt", "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + "GMT\n", writeType);
 }
 
 void Debug::Log(const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
