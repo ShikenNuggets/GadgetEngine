@@ -73,7 +73,7 @@ project "GadgetEngine"
 	}
 	
 	filter "system:windows"
-		cppdialect "C++17"
+		cppdialect "C++20"
 		staticruntime "On"
 		systemversion "latest"
 		staticruntime "On"
@@ -157,7 +157,7 @@ project "Game"
 	}
 	
 	filter "system:windows"
-		cppdialect "C++17"
+		cppdialect "C++20"
 		staticruntime "On"
 		systemversion "latest"
 		staticruntime "On"
