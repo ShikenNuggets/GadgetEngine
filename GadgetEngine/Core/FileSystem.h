@@ -31,7 +31,7 @@ namespace Gadget{
 
 		static std::string GetFileNameFromPath(const std::string& path_);
 
-		static std::string GetDocumentsDir();
+		static std::string GetPersistentDataDir();
 
 		static bool CreateFile(const std::string& path_);
 		static bool CreateDir(const std::string& path_);

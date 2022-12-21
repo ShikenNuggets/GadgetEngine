@@ -103,5 +103,5 @@ void Config::ResetAllOptionsToDefault(){
 }
 
 std::string Config::CreateEngineConfigPath(){
-	return FileSystem::GetDocumentsDir() + FileSystem::PathSeparator + App::GetInstance()->GetGameName() + FileSystem::PathSeparator + engineConfigFileName;
+	return FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetInstance()->GetGameName() + FileSystem::PathSeparator + engineConfigFileName;
 }

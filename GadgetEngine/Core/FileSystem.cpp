@@ -111,7 +111,7 @@ std::string FileSystem::GetFileNameFromPath(const std::string& path_){
 	return "";
 }
 
-std::string FileSystem::GetDocumentsDir(){
+std::string FileSystem::GetPersistentDataDir(){
 	#ifdef GADGET_PLATFORM_WIN32
 		return Win32_Utils::GetUserDocumentsPath();
 	#else
