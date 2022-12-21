@@ -2,6 +2,8 @@
 #define GADGET_UTILS_H
 
 #include <algorithm>
+#include <chrono>
+#include <format>
 #include <stdexcept>
 #include <map>
 #include <vector>
@@ -10,6 +12,7 @@
 
 namespace Gadget{
 	namespace Utils{
+		//----------Containers----------//
 		template <class T>
 		inline constexpr bool Contains(const std::vector<T>& container_, const T& value_){
 			for(const auto& v : container_){
@@ -37,11 +40,12 @@ namespace Gadget{
 			return false;
 		}
 
+		//----------Strings----------//
+		//TODO - Nothing here makes any considerations for Unicode
 		inline bool ContainsChar(const std::string& str_, char char_){
 			return str_.find(char_) != std::string::npos;
 		}
 
-		//TODO - These are not unicode safe
 		inline std::string ToUpper(std::string str_){
 			std::transform(str_.begin(), str_.end(), str_.begin(), [](char c){ return static_cast<char>(std::toupper(c)); });
 			return str_;
@@ -85,6 +89,11 @@ namespace Gadget{
 			}catch(const std::out_of_range&){
 				return 0.0;
 			}
+		}
+
+		//----------Other----------//
+		inline std::string GetCurrentDateAndTimeString(){
+			return std::format("{:%Y-%m-%d %X}", std::chrono::system_clock::now());
 		}
 	};
 }

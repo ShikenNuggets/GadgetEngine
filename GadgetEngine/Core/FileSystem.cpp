@@ -2,6 +2,8 @@
 
 #include <filesystem>
 
+#include "Utils/Utils.h"
+
 #ifdef GADGET_PLATFORM_WIN32
 #include "Platform/Windows/Win32_Utils.h"
 #endif //GADGET_PLATFORM_WIN32
@@ -119,7 +121,7 @@ std::string FileSystem::GetDocumentsDir(){
 
 bool FileSystem::CreateFile(const std::string& file_){
 	std::string dir = RemoveFileNameFromPath(file_);
-	if(!DirExists(dir)){
+	if(Utils::ContainsChar(dir, PathSeparator) && !DirExists(dir)){
 		CreateDir(dir);
 	}
 

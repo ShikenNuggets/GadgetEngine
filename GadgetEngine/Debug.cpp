@@ -2,18 +2,23 @@
 
 #include <iostream>
 
-#include "Core/FileSystem.h"
-
 #ifdef GADGET_PLATFORM_WIN32
 #pragma warning(disable : 26819) //Kill unfixable warning from SDL2
 #include <SDL_messagebox.h>
 #pragma warning(default : 26819)
 #endif //GADGET_PLATFORM_WIN32
 
+#include "Core/FileSystem.h"
+#include "Utils/Utils.h"
+
 using namespace Gadget;
 
 Debug::LogType Debug::logLevel = Debug::Verbose;
 std::set<StringID> Debug::logChannelFilter = std::set<StringID>();
+
+void Debug::Init(){
+	FileSystem::WriteToFile("log.txt", "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + "GMT\n");
+}
 
 void Debug::Log(const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
 	if(type_ < logLevel){
@@ -81,5 +86,7 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 	if(status != 0){
 		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, __FILENAME__, __LINE__);
 	}
+	#else
+	static_assert(false, "Unhandled platform in Debug::PopupErrorMessage!);
 	#endif //GADGET_PLATFORM_WIN32
 }

@@ -36,6 +36,8 @@ namespace Gadget{
 			FatalError	= 4
 		};
 
+		static void Init();
+
 		static void Log(const std::string& message_, LogType type_ = LogType::Info, const std::string& fileName_ = "", int lineNumber = 0);
 		static void Log(StringID channel_, const std::string& message_, LogType type_ = LogType::Info, const std::string& fileName_ = "", int lineNumber = 0);
 
