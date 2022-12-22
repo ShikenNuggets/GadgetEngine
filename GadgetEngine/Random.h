@@ -17,7 +17,7 @@ namespace Gadget{
 			return rand() % max_ + min_;
 		}
 
-		template<>
+		template<float>
 		static float Range(float min_, float max_){
 			return min_ + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max_ - min_)));
 		}
