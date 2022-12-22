@@ -29,7 +29,7 @@ void Debug::Init(){
 	logFilePath = FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetInstance()->GetGameName() + FileSystem::PathSeparator + logFileName;
 #endif //GADGET_DEBUG
 
-	FileSystem::WriteToFile(logFilePath, "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + "GMT\n", writeType);
+	FileSystem::WriteToFile(logFilePath, "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + " GMT\n", writeType);
 
 	isInitialized = true;
 	WriteQueuedLogs();
