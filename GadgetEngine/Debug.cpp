@@ -102,7 +102,7 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, __FILENAME__, __LINE__);
 	}
 	#else
-	static_assert(false, "Unhandled platform in Debug::PopupErrorMessage!);
+	static_assert(false, "Unhandled platform in Debug::PopupErrorMessage!");
 	#endif //GADGET_PLATFORM_WIN32
 }
 
