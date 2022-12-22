@@ -594,7 +594,12 @@ std::string Win32_Utils::GetUserDocumentsPath(){
 	if(!SUCCEEDED(result)){
 		return "";
 	}
-
+	
 	std::wstring ws(path);
-	return std::string(ws.begin(), ws.end()); //TODO - Unicode
+
+	std::string resultStr;
+	for(const auto& wchar : ws){
+		resultStr += static_cast<char>(wchar); //TODO - Unicode - This seems silly but it avoids a compiler warning
+	}
+	return resultStr;
 }
