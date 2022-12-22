@@ -3,6 +3,7 @@
 
 #include <set>
 #include <string>
+#include <queue>
 
 #include "Utils/StringID.h"
 
@@ -50,8 +51,15 @@ namespace Gadget{
 		static void PopupErrorMessage(const std::string& title_, const std::string& message_);
 
 	private:
+		static constexpr const char* logFileName = "log.txt";
+		static std::string logFilePath;
+		static bool isInitialized;
 		static LogType logLevel;
 		static std::set<StringID> logChannelFilter;
+		static std::queue<std::string> queuedLogsForFileWrite;
+
+		static void QueueLogForFileWrite(const std::string& message_);
+		static void WriteQueuedLogs();
 	};
 }
 

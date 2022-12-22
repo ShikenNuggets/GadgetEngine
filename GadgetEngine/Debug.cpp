@@ -8,22 +8,31 @@
 #pragma warning(default : 26819)
 #endif //GADGET_PLATFORM_WIN32
 
+#include "App.h"
 #include "Core/FileSystem.h"
 #include "Utils/Utils.h"
 
 using namespace Gadget;
 
+std::string Debug::logFilePath = logFileName;
+bool Debug::isInitialized = false;
 Debug::LogType Debug::logLevel = Debug::Verbose;
 std::set<StringID> Debug::logChannelFilter = std::set<StringID>();
+std::queue<std::string> Debug::queuedLogsForFileWrite;
 
 void Debug::Init(){
 #ifdef GADGET_DEBUG
 	constexpr auto writeType = FileSystem::WriteType::Append; //Keeping all session logs is ideal for debugging
+	logFilePath = logFileName;
 #else
 	constexpr auto writeType = FileSystem::WriteType::Overwrite; //Deleting logs from old sesions is ideal for end users to avoid bloat
+	logFilePath = FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetInstance()->GetGameName() + FileSystem::PathSeparator + logFileName;
 #endif //GADGET_DEBUG
 
-	FileSystem::WriteToFile("log.txt", "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + "GMT\n", writeType);
+	FileSystem::WriteToFile(logFilePath, "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + "GMT\n", writeType);
+
+	isInitialized = true;
+	WriteQueuedLogs();
 }
 
 void Debug::Log(const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
@@ -62,7 +71,7 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	}
 
 	std::cout << finalMessage << std::endl;
-	FileSystem::WriteToFile("log.txt", finalMessage + "\n");
+	QueueLogForFileWrite(finalMessage + "\n");
 }
 
 void Debug::Log(StringID channel_, const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
@@ -95,4 +104,16 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 	#else
 	static_assert(false, "Unhandled platform in Debug::PopupErrorMessage!);
 	#endif //GADGET_PLATFORM_WIN32
+}
+
+void Debug::QueueLogForFileWrite(const std::string& message_){
+	queuedLogsForFileWrite.push(message_);
+	WriteQueuedLogs();
+}
+
+void Debug::WriteQueuedLogs(){
+	while(isInitialized && !queuedLogsForFileWrite.empty()){
+		FileSystem::WriteToFile(logFilePath, queuedLogsForFileWrite.front());
+		queuedLogsForFileWrite.pop();
+	}
 }

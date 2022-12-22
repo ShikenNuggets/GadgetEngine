@@ -22,8 +22,6 @@ using namespace Gadget;
 App* App::instance = nullptr;
 
 App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
-	Debug::Init();
-	
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
 }
@@ -58,6 +56,8 @@ void App::DeleteInstance(){
 
 void App::Initialize(const std::string& name_){
 	gameName = name_;
+
+	Debug::Init();
 
 	resourceMgr = ResourceManager::GetInstance();
 	GADGET_BASIC_ASSERT(resourceMgr);
