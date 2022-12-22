@@ -88,7 +88,9 @@ void App::Initialize(const std::string& name_){
 	}
 
 	#ifdef GADGET_PLATFORM_WIN32
-	renderer = std::make_unique<Win32_Renderer>(width, height, x, y);
+		renderer = std::make_unique<Win32_Renderer>(width, height, x, y);
+	#else
+		static_assert(false, "Unhandled platform in App::Initialize!")
 	#endif //GADGET_PLATFORM_WIN32
 
 	renderer->PostInit();
