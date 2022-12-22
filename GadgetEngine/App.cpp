@@ -12,11 +12,6 @@
 #include "Platform/Windows/Win32_Renderer.h"
 #include "Resource/ResourceManager.h"
 
-//Temp
-#include "Graphics/Components/CameraComponent.h"
-#include "Graphics/Components/LightComponent.h"
-#include "Graphics/Components/RenderComponent.h"
-
 using namespace Gadget;
 
 App* App::instance = nullptr;

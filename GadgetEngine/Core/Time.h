@@ -31,7 +31,6 @@ namespace Gadget{
 
 		Time();
 
-		unsigned int targetFPS;
 		float timeScale;
 
 		std::chrono::milliseconds startTime;

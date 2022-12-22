@@ -28,6 +28,11 @@ Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::O
 		//TODO - Handle Fatal Error
 	}
 
+	int status = SDL_GL_SetSwapInterval(Config::GetInstance()->GetOptionsBool(EngineVars::Display::vsyncKey) ? -1 : 0);
+	if(status != 0){
+		Debug::Log("Swap interval could not be set! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
+	}
+
 	if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)){
 		Debug::Log("Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error

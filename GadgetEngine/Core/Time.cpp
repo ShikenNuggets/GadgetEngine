@@ -1,15 +1,16 @@
 #include "Time.h"
 
-#include "Math/Math.h"
-
 #include <chrono>
 #include <thread>
+
+#include "Config.h"
+#include "Math/Math.h"
 
 using namespace Gadget;
 
 Time* Time::instance = nullptr;
 
-Time::Time() : targetFPS(0), timeScale(1.0f), startTime(0), previousTicks(0), currentTicks(0){}
+Time::Time() : timeScale(1.0f), startTime(0), previousTicks(0), currentTicks(0){}
 
 Time* Time::GetInstance(){
 	if(instance == nullptr){
@@ -50,6 +51,7 @@ void Time::Delay(){
 std::chrono::milliseconds Time::GetSleepTime() const{
 	//If the framerate is 0, this is treated as an unlimited framerate
 	//This also prevents a division by 0 later
+	int targetFPS = static_cast<int>(Config::GetInstance()->GetOptionFloat(EngineVars::Display::targetFPSKey));
 	if(targetFPS == 0){
 		return std::chrono::milliseconds(0);
 	}

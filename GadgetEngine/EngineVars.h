@@ -25,6 +25,8 @@ namespace Gadget{
 			static const StringID displayHeightKey;
 			static const StringID lastWindowXKey;
 			static const StringID lastWindowYKey;
+			static const StringID targetFPSKey;
+			static const StringID vsyncKey;
 
 			std::map<StringID, Var> vars = {
 				{ fullscreenKey, false },
@@ -32,6 +34,8 @@ namespace Gadget{
 				{ displayHeightKey, 1080 },
 				{ lastWindowXKey, 0 },
 				{ lastWindowYKey, 0 },
+				{ targetFPSKey, 0 }, //0 is treated as no framerate cap
+				{ vsyncKey, false },
 			};
 		};
 
