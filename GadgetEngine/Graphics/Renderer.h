@@ -6,6 +6,7 @@
 #include "Color.h"
 #include "MeshInfo.h"
 #include "Shader.h"
+#include "Texture.h"
 #include "TextureInfo.h"
 #include "ViewportRect.h"
 #include "Window.h"

@@ -1,7 +1,6 @@
 #ifndef GADGET_WIN32_UTILS_H
 #define GADGET_WIN32_UTILS_H
 
-#include <cstdint>
 #include <string>
 
 #include "Input/InputEnums.h"

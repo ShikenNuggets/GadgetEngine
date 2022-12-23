@@ -3,13 +3,14 @@
 #include <glad/glad.h>
 
 #include "Win32_Window.h"
+#include "Config.h"
 #include "Debug.h"
+#include "Game/Scene.h"
 #include "Graphics/Components/CameraComponent.h"
 #include "Graphics/Components/LightComponent.h"
 #include "Graphics/Components/RenderComponent.h"
-#include "Graphics/Loaders/BmpLoader.h"
-#include "Graphics/Loaders/ObjLoader.h"
-#include "Graphics/Materials/DiffuseTextureMaterial.h"
+#include "Graphics/OpenGL/GL_MeshInfo.h"
+#include "Graphics/OpenGL/GL_TextureInfo.h"
 #include "Resource/ResourceManager.h"
 
 //Just for testing things - TODO, remove these later

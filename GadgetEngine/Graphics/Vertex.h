@@ -1,7 +1,7 @@
 #ifndef GADGET_VERTEX_H
 #define GADGET_VERTEX_H
 
-#include "Math/Matrix.h"
+#include "Math/Vector.h"
 
 namespace Gadget{
 	class Vertex{

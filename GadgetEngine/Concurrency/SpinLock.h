@@ -6,7 +6,7 @@
 namespace Gadget{
 	class SpinLock{
 	public:
-		SpinLock();
+		SpinLock() = default;
 
 		void Acquire();
 		bool TryAcquire();

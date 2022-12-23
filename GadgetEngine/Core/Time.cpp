@@ -1,8 +1,5 @@
 #include "Time.h"
 
-#include <chrono>
-#include <thread>
-
 #include "Config.h"
 #include "Math/Math.h"
 

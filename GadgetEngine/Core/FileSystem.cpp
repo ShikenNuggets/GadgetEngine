@@ -1,14 +1,14 @@
 #include "FileSystem.h"
 
 #include <filesystem>
+#include <fstream>
 
+#include "Debug.h"
 #include "Utils/Utils.h"
 
 #ifdef GADGET_PLATFORM_WIN32
 #include "Platform/Windows/Win32_Utils.h"
 #endif //GADGET_PLATFORM_WIN32
-
-#include "Debug.h"
 
 using namespace Gadget;
 

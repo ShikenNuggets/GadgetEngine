@@ -13,7 +13,7 @@ namespace Gadget{
 
 		StringID GetName() const{ return name; }
 
-		//THIS FUNCTION IS SLOW
+		//THIS FUNCTION IS SLOW - Avoid calling it wherever possible
 		template <class T> std::vector<T*> GetAllComponentsInScene() const{
 			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
 
@@ -36,7 +36,7 @@ namespace Gadget{
 		StringID name;
 		std::vector<GameObject*> gameObjects;
 
-		virtual void SetToDefaultState();
+		virtual void SetToDefaultState(){}
 	};
 }
 

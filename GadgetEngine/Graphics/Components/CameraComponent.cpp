@@ -1,7 +1,6 @@
 #include "CameraComponent.h"
 
 #include "App.h"
-#include "Game/GameObject.h"
 
 using namespace Gadget;
 

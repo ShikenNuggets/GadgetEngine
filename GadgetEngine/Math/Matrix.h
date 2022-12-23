@@ -1,10 +1,14 @@
 #ifndef GADGET_MATRIX_H
 #define GADGET_MATRIX_H
 
+#include <string>
+
+#include "Debug.h"
 #include "Vector.h"
-#include "Euler.h"
 
 namespace Gadget{
+	//Forward declarations
+	class Euler;
 	class Matrix2;
 	class Matrix3;
 	class Matrix4;

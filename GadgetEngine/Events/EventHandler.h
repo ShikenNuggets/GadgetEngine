@@ -1,6 +1,7 @@
 #ifndef GADGET_EVENT_HANDLER_H
 #define GADGET_EVENT_HANDLER_H
 
+#include <functional>
 #include <map>
 #include <vector>
 

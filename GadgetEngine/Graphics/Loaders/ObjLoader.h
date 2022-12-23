@@ -2,6 +2,7 @@
 #define GADGET_OBJ_LOADER_H
 
 #include <string>
+#include <vector>
 
 #include "Math/Vector.h"
 

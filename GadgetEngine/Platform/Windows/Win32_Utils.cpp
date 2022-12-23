@@ -1,7 +1,5 @@
 #include "Win32_Utils.h"
 
-#include <algorithm>
-
 #include <ShlObj.h>
 
 #pragma warning(disable : 26819) //Kill unfixable warning from SDL2

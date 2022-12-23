@@ -1,7 +1,6 @@
 #ifndef GADGET_FILE_SYSTEM_H
 #define GADGET_FILE_SYSTEM_H
 
-#include <fstream>
 #include <string>
 #include <vector>
 

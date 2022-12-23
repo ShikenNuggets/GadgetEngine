@@ -1,8 +1,6 @@
 #ifndef GADGET_WINDOW_H
 #define GADGET_WINDOW_H
 
-#include <string>
-
 #include "Debug.h"
 #include "ScreenCoordinate.h"
 

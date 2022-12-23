@@ -1,8 +1,6 @@
 #ifndef GADGET_TEXTURE_INFO_H
 #define GADGET_TEXTURE_INFO_H
 
-#include "Texture.h"
-
 namespace Gadget{
 	class TextureInfo{
 	public:

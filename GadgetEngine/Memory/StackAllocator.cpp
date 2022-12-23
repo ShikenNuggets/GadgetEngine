@@ -1,7 +1,5 @@
 #include "StackAllocator.h"
 
-#include "Debug.h"
-
 using namespace Gadget;
 
 StackAllocator::StackAllocator(size_t bytes_) : size(bytes_), base(nullptr), markers(){

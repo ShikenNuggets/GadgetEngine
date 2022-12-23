@@ -5,7 +5,6 @@
 #include <set>
 #include <vector>
 
-#include "InputGesture.h"
 #include "InputType.h"
 #include "Events/Event.h"
 

@@ -4,7 +4,6 @@
 
 #include "App.h"
 #include "Win32_Utils.h"
-#include "Config.h"
 #include "Debug.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"

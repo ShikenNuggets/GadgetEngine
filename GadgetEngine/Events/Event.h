@@ -1,8 +1,6 @@
 #ifndef GADGET_EVENT_H
 #define GADGET_EVENT_H
 
-#include <functional>
-
 #include "Utils/StringID.h"
 
 namespace Gadget{
@@ -24,7 +22,7 @@ namespace Gadget{
 		virtual EventType GetEventType() const = 0;
 		inline StringID GetName() const{ return name; }
 		
-		virtual std::string ToString() const{ return StringID::GetStringFromID(GetName()); }
+		virtual std::string ToString() const{ return name.GetString(); }
 
 	protected:
 		StringID name;

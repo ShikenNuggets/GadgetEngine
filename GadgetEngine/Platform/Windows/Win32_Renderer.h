@@ -6,13 +6,8 @@
 #pragma warning(default : 26819)
 
 #include "Graphics/Renderer.h"
-#include "Graphics/Camera.h"
-#include "Graphics/LightSource.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
-#include "Graphics/Materials/Material.h"
-#include "Graphics/OpenGL/GL_MeshInfo.h"
-#include "Graphics/OpenGL/GL_TextureInfo.h"
 #include "Graphics/OpenGL/GL_ScreenQuad.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 #include "Graphics/OpenGL/GL_CubemapInfo.h"

@@ -1,7 +1,6 @@
 #ifndef GADGET_VECTOR_H
 #define GADGET_VECTOR_H
 
-#include <iostream>
 #include <string>
 
 #include "Math.h"

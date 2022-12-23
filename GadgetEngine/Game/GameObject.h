@@ -2,6 +2,8 @@
 #define GADGET_GAME_OBJECT_H
 
 #include "Component.h"
+#include "Math/Euler.h"
+#include "Math/Matrix.h"
 #include "Math/Quaternion.h"
 #include "Math/Vector.h"
 

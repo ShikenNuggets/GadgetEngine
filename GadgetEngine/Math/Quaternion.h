@@ -2,9 +2,18 @@
 #define GADGET_QUATERNION_H
 
 #include "Math.h"
-#include "Matrix.h"
 
 namespace Gadget{
+	//Forward declarations
+	class Euler;
+	class Matrix2;
+	class Matrix3;
+	class Matrix4;
+	class Matrix4x3;
+	struct Vector2;
+	struct Vector3;
+	struct Vector4;
+
 	class Quaternion{
 	public:
 		float w;

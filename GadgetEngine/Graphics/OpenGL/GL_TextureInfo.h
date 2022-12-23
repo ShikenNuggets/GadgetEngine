@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 
+#include "Graphics/Texture.h"
 #include "Graphics/TextureInfo.h"
 
 namespace Gadget{

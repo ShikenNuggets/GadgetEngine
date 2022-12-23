@@ -5,9 +5,7 @@
 
 #include "Config.h"
 #include "GameInterface.h"
-#include "Window.h"
 #include "Core/Time.h"
-#include "Events/Event.h"
 #include "Game/BasicSceneManager.h"
 #include "Game/GameLogicManager.h"
 #include "Graphics/Renderer.h"

@@ -1,14 +1,17 @@
 #ifndef GADGET_HASH_H
 #define GADGET_HASH_H
 
-#include <string>
-
 namespace Gadget{
-	class Hash{
-	public:
+	namespace Hash{
+		//Function prototypes
+		inline constexpr uint32_t CRC32(const char* data_, size_t len_);
+		inline constexpr uint64_t MurmurHash64A(const char* data_, size_t len_, uint64_t seed_);
+		inline constexpr uint32_t crc32_for_byte(uint32_t r);
+		inline constexpr uint64_t GetBlock(const uint64_t* p_);
+
 		//Shamelessly copied from SDL2 (SDL_crc32.c)
 		//Pasted here so it can be constexpr
-		static inline constexpr uint32_t CRC32(const char* data_, size_t len_){
+		inline constexpr uint32_t CRC32(const char* data_, size_t len_){
 			uint32_t crc = 0;
 
 			for(size_t i = 0; i < len_; i++){
@@ -21,7 +24,7 @@ namespace Gadget{
 		//MurmurHash64A - algorith created by Austin Appleby
 		//Algorithm code is in the public domain: https://github.com/explosion/murmurhash/blob/master/murmurhash/MurmurHash2.cpp
 		//More info here: https://en.wikipedia.org/wiki/MurmurHash
-		static inline constexpr uint64_t MurmurHash64A(const char* data_, size_t len_, uint64_t seed_ = 0){
+		inline constexpr uint64_t MurmurHash64A(const char* data_, size_t len_, uint64_t seed_ = 0){
 			//Some assumptions made by the code here
 			static_assert(sizeof(int) == 4);
 			static_assert(sizeof(long long) == 8);
@@ -67,10 +70,9 @@ namespace Gadget{
 			return h;
 		}
 
-	private:
 		//Shamelessly copied from SDL2 (SDL_crc32.c)
 		//Pasted here so it can be constexpr
-		static inline constexpr uint32_t crc32_for_byte(uint32_t r){
+		inline constexpr uint32_t crc32_for_byte(uint32_t r){
 			for(int i = 0; i < 8; i++){
 				r = (r & 1? 0: (uint32_t)0xEDB88320L) ^ r >> 1;
 			}
@@ -78,7 +80,7 @@ namespace Gadget{
 			return r ^ (uint32_t)0xFF000000L;
 		}
 
-		static inline constexpr uint64_t GetBlock(const uint64_t* p_){
+		inline constexpr uint64_t GetBlock(const uint64_t* p_){
 			//TODO - There's an optimization we can do here if we know the machine is little Endian
 			const uint8_t* c = (const uint8_t*)p_;
 			return (uint64_t)c[0] |
@@ -90,14 +92,6 @@ namespace Gadget{
 				(uint64_t)c[6] << 48 |
 				(uint64_t)c[7] << 56;
 		}
-
-		//Delete unwanted compiler-generated constructors, destructors, and assignment operators
-		Hash() = delete;
-		Hash(const Hash&) = delete;
-		Hash(Hash&&) = delete;
-		Hash& operator=(const Hash&) = delete;
-		Hash& operator=(Hash&&) = delete;
-		~Hash() = delete;
 	};
 }
 

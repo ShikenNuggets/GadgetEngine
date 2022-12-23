@@ -2,7 +2,6 @@
 #define GADGET_COMPONENT_H
 
 #include "Debug.h"
-#include "Utils/StringID.h"
 
 namespace Gadget{
 	//Forward Declarations

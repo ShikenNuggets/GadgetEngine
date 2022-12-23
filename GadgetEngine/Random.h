@@ -1,7 +1,6 @@
 #ifndef GADGET_RANDOM_H
 #define GADGET_RANDOM_H
 
-#include <cstdlib>
 #include <chrono>
 
 namespace Gadget{
@@ -17,7 +16,7 @@ namespace Gadget{
 			return rand() % max_ + min_;
 		}
 
-		template<float>
+		template<>
 		static float Range(float min_, float max_){
 			return min_ + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max_ - min_)));
 		}

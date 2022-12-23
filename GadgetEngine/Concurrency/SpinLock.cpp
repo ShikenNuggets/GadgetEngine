@@ -6,8 +6,6 @@
 
 using namespace Gadget;
 
-SpinLock::SpinLock() : atomicFlag(){}
-
 void SpinLock::Acquire(){
 	while(!TryAcquire()){
 		std::this_thread::yield();

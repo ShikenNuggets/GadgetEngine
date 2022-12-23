@@ -1,7 +1,5 @@
 #include "Angle.h"
 
-#include <assert.h>
-
 #include "Math.h"
 
 using namespace Gadget;

@@ -4,11 +4,10 @@
 
 using namespace Gadget;
 
-BasicSceneManager::BasicSceneManager() : scenes(), sceneIndex(0){
-}
+BasicSceneManager::BasicSceneManager() : scenes(), sceneIndex(0){}
 
 BasicSceneManager::~BasicSceneManager(){
-	for(auto s : scenes){
+	for(auto& s : scenes){
 		delete s;
 		s = nullptr;
 	}
