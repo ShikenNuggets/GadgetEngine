@@ -39,8 +39,19 @@ namespace Gadget{
 			};
 		};
 
+		struct Physics{
+			static const StringID sectionName;
+
+			static const StringID gravityConstantKey;
+
+			std::map<StringID, Var> vars = {
+				{ gravityConstantKey, -9.81 },
+			};
+		};
+
 		Core core;
 		Display display;
+		Physics physics;
 
 		constexpr Var GetValue(StringID key_) const{
 			if(Utils::ContainsKey(core.vars, key_)){
@@ -49,6 +60,10 @@ namespace Gadget{
 
 			if(Utils::ContainsKey(display.vars, key_)){
 				return display.vars.at(key_);
+			}
+
+			if(Utils::ContainsKey(physics.vars, key_)){
+				return physics.vars.at(key_);
 			}
 
 			return Var(nullptr);
@@ -66,6 +81,12 @@ namespace Gadget{
 					display.vars.at(key_) = value_;
 				}else{
 					display.vars.emplace(key_, value_);
+				}
+			}else if(section_ == Physics::sectionName){
+				if(Utils::ContainsKey(physics.vars, key_)){
+					physics.vars.at(key_) = value_;
+				}else{
+					physics.vars.emplace(key_, value_);
 				}
 			}else{
 				GADGET_ASSERT(false, "Unrecognized EngineVars section[" + section_.GetString() + "]!");

@@ -13,3 +13,6 @@ const StringID EngineVars::Display::lastWindowXKey = SID("LastWindowX");
 const StringID EngineVars::Display::lastWindowYKey = SID("LastWindowY");
 const StringID EngineVars::Display::targetFPSKey = SID("TargetFPS");
 const StringID EngineVars::Display::vsyncKey = SID("Vsync");
+
+const StringID EngineVars::Physics::sectionName = SID("Engine.Physics");
+const StringID EngineVars::Physics::gravityConstantKey = SID("GravityConstant");
