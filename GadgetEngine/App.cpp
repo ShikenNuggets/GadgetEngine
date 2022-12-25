@@ -16,7 +16,7 @@ using namespace Gadget;
 
 App* App::instance = nullptr;
 
-App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
+App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), physics(nullptr), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
 }
@@ -38,6 +38,7 @@ App* App::GetInstance(){
 #ifdef GADGET_DEBUG
 void App::DeleteInstance(){
 	if(instance != nullptr){
+		PhysManager::DeleteInstance();
 		Input::DeleteInstance();
 		Time::DeleteInstance();
 		Config::DeleteInstance();
@@ -90,6 +91,8 @@ void App::Initialize(const std::string& name_){
 
 	renderer->PostInit();
 
+	physics = PhysManager::GetInstance();
+
 	sceneManager = std::make_unique<BasicSceneManager>();
 
 	gameLogicManager = std::make_unique<GameLogicManager>();
@@ -116,6 +119,8 @@ void App::Run(GameInterface& gameInterface_){
 		renderer->GetWindow().lock()->HandleEvents();
 
 		Input::GetInstance()->ProcessInputs();
+
+		physics->Update(time->DeltaTime());
 
 		gameLogicManager->Update(sceneManager->CurrentScene(), Time::GetInstance()->DeltaTime());
 

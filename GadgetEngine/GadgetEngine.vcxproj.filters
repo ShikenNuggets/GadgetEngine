@@ -40,6 +40,9 @@
     <Filter Include="Memory">
       <UniqueIdentifier>{BE94DDC2-AA36-0899-93F1-1BED7F328FE9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{888B590D-F46A-D8A8-FD82-637F69E13E0A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
@@ -236,6 +239,9 @@
     <ClInclude Include="Memory\StackAllocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\PhysManager.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
     <ClInclude Include="Platform\Windows\Win32_Renderer.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -375,6 +381,9 @@
     </ClCompile>
     <ClCompile Include="Memory\StackAllocator.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysManager.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Platform\Windows\Win32_Renderer.cpp">
       <Filter>Platform\Windows</Filter>

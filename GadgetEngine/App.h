@@ -11,6 +11,7 @@
 #include "Graphics/Renderer.h"
 #include "Input/Input.h"
 #include "Memory/StackAllocator.h"
+#include "Physics/PhysManager.h"
 #include "Resource/ResourceManager.h"
 
 namespace Gadget{
@@ -49,6 +50,7 @@ namespace Gadget{
 		Config* config;
 		Time* time;
 		Input* input;
+		PhysManager* physics;
 		std::unique_ptr<Renderer> renderer;
 		std::unique_ptr<BasicSceneManager> sceneManager;
 		std::unique_ptr<GameLogicManager> gameLogicManager;
