@@ -1,6 +1,8 @@
 #ifndef GADGET_PHYS_MANAGER_H
 #define GADGET_PHYS_MANAGER_H
 
+#include "Game/Scene.h"
+
 namespace Gadget{
 	class PhysManager{
 	public:
@@ -10,11 +12,11 @@ namespace Gadget{
 		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
 		#endif //GADGET_DEBUG
 
-		void Update(float deltaTime_);
+		void Update(Scene* scene_, float deltaTime_);
 
 	private:
 		static PhysManager* instance;
-		
+
 		PhysManager();
 		~PhysManager();
 	};

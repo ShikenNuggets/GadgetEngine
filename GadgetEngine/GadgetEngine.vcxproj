@@ -168,6 +168,7 @@
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Physics\PhysManager.h" />
+    <ClInclude Include="Physics\Rigidbody.h" />
     <ClInclude Include="Platform\Windows\Win32_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_Window.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="Memory\DoubleStackAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
     <ClCompile Include="Physics\PhysManager.cpp" />
+    <ClCompile Include="Physics\Rigidbody.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Window.cpp" />

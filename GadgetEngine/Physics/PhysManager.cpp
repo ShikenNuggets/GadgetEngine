@@ -1,5 +1,7 @@
 #include "PhysManager.h"
 
+#include "Physics/Rigidbody.h"
+
 using namespace Gadget;
 
 PhysManager* PhysManager::instance = nullptr;
@@ -25,4 +27,13 @@ void PhysManager::DeleteInstance(){
 }
 #endif //GADGET_DEBUG
 
-void PhysManager::Update(float deltaTime_){}
+void PhysManager::Update(Scene* scene_, float deltaTime_){
+	const auto rbs = scene_->GetAllComponentsInScene<Rigidbody>();
+	for(const auto& rb : rbs){
+		if(rb->UseGravity()){
+			rb->SetVelocity(rb->GetVelocity() + (Vector3(0.0f, -9.81f, 0.0f) * deltaTime_));
+		}
+
+		rb->Update(deltaTime_);
+	}
+}

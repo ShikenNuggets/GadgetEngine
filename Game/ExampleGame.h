@@ -8,6 +8,7 @@
 #include <Graphics/Components/CameraComponent.h>
 #include <Graphics/Components/LightComponent.h>
 #include <Graphics/Components/RenderComponent.h>
+#include <Physics/Rigidbody.h>
 
 #include "CameraController.h"
 #include "ObjectRotator.h"
@@ -20,6 +21,7 @@ namespace Example{
 		virtual void LoadGame() override{
 			Gadget::GameObject* cube = new Gadget::GameObject();
 			cube->AddComponent(new Gadget::RenderComponent(cube, SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
+			cube->AddComponent(new Gadget::Rigidbody(cube, true));
 			cube->AddComponent(new ObjectRotator(cube));
 
 			Gadget::GameObject* light = new Gadget::GameObject();

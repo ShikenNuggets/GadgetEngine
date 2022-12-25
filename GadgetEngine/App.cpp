@@ -120,7 +120,7 @@ void App::Run(GameInterface& gameInterface_){
 
 		Input::GetInstance()->ProcessInputs();
 
-		physics->Update(time->DeltaTime());
+		physics->Update(sceneManager->CurrentScene(), time->DeltaTime());
 
 		gameLogicManager->Update(sceneManager->CurrentScene(), Time::GetInstance()->DeltaTime());
 
