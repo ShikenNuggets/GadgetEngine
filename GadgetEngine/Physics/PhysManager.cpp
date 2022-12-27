@@ -31,10 +31,10 @@ void PhysManager::DeleteInstance(){
 void PhysManager::Update(Scene* scene_, float deltaTime_){
 	const float gravityConstant = static_cast<float>(Config::GetInstance()->GetOptionFloat(EngineVars::Physics::gravityConstantKey));
 
-	const auto rbs = scene_->GetAllComponentsInScene<Rigidbody>();
+	const auto rbs = scene_->GetAllComponentsInScene<Rigidbody>(); //TODO - This is slow
 	for(const auto& rb : rbs){
 		if(rb->UseGravity()){
-			rb->SetVelocity(rb->GetVelocity() + (Vector3(0.0f, gravityConstant,  0.0f) * deltaTime_));
+			rb->AddForce(Vector3(0.0f, gravityConstant, 0.0f) * rb->GetMass()); //Multiply by mass to cancel out the division later (gravity ignores mass)
 		}
 
 		rb->Update(deltaTime_);

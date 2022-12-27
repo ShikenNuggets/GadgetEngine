@@ -21,7 +21,7 @@ namespace Example{
 		virtual void LoadGame() override{
 			Gadget::GameObject* cube = new Gadget::GameObject();
 			cube->AddComponent(new Gadget::RenderComponent(cube, SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
-			cube->AddComponent(new Gadget::Rigidbody(cube, true));
+			cube->AddComponent(new Gadget::Rigidbody(cube, 100.0f, true));
 			cube->AddComponent(new ObjectRotator(cube));
 
 			Gadget::GameObject* light = new Gadget::GameObject();
