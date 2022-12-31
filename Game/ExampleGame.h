@@ -5,13 +5,8 @@
 #include <GameInterface.h>
 #include <Game/GameObject.h>
 #include <Game/Scene.h>
-#include <Graphics/Components/CameraComponent.h>
-#include <Graphics/Components/LightComponent.h>
-#include <Graphics/Components/RenderComponent.h>
-#include <Physics/Rigidbody.h>
 
-#include "CameraController.h"
-#include "ObjectRotator.h"
+#include "ExampleScene.h"
 
 namespace Example{
 	class ExampleGame : public Gadget::GameInterface{
@@ -19,26 +14,7 @@ namespace Example{
 		ExampleGame() : GameInterface("Example Game"){}
 
 		virtual void LoadGame() override{
-			Gadget::GameObject* cube = new Gadget::GameObject();
-			cube->AddComponent(new Gadget::RenderComponent(cube, SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
-			cube->AddComponent(new Gadget::Rigidbody(cube, 100.0f, true));
-			cube->AddComponent(new ObjectRotator(cube));
-
-			Gadget::GameObject* light = new Gadget::GameObject();
-			light->SetPosition(2.0f, 1.0f, 1.0f);
-			light->AddComponent(new Gadget::PointLightComponent(light));
-
-			Gadget::GameObject* camera = new Gadget::GameObject();
-			camera->SetPosition(0.0f, 0.0f, 4.0f);
-			camera->AddComponent(new Gadget::CameraComponent(camera));
-			camera->AddComponent(new CameraController(camera));
-
-			Gadget::Scene* testScene = new Gadget::Scene(SID("TestScene"));
-			testScene->CreateObject(cube);
-			testScene->CreateObject(light);
-			testScene->CreateObject(camera);
-
-			Gadget::App::GetInstance()->GetSceneManager()->AddScene(testScene);
+			Gadget::App::GetInstance()->GetSceneManager()->AddScene(new ExampleScene());
 		}
 	};
 }

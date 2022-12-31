@@ -1,6 +1,7 @@
 #ifndef EXAMPLE_CAMERA_CONTROLLER_H
 #define EXAMPLE_CAMERA_CONTROLLER_H
 
+#include <App.h>
 #include <Core/Time.h>
 #include <Game/GameLogicComponent.h>
 #include <Game/GameObject.h>
@@ -40,6 +41,8 @@ namespace Example{
 			if(Gadget::Input::GetInstance()->GetButtonDown(Gadget::ButtonID::Keyboard_R)){
 				parent->SetPosition(Gadget::Vector3(0.0f, 0.0f, 4.0f));
 				parent->SetRotation(Gadget::Quaternion::Identity());
+
+				Gadget::App::GetInstance()->GetSceneManager()->LoadScene(0);
 			}
 		}
 	};
