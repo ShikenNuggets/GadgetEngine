@@ -22,14 +22,7 @@ namespace Gadget{
 		MeshResourceContainer(const std::string& path_) : path(path_){}
 
 		virtual Resource* LoadResource() override{
-			if(loadCount == 0){
-				GADGET_ASSERT(resource == nullptr, "Loaded resource has a reference count of 0!");
-				resource = ObjLoader::LoadMesh(path);
-			}
-
-			GADGET_BASIC_ASSERT(resource != nullptr);
-			loadCount++;
-			return resource;
+			return ObjLoader::LoadMesh(path);
 		}
 
 		virtual const std::type_info& GetResourceTypeInfo() override{

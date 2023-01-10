@@ -48,14 +48,7 @@ namespace Gadget{
 		GL_ShaderResourceContainer(const std::string& vertPath_, const std::string fragPath_) : vertPath(vertPath_), fragPath(fragPath_){}
 
 		virtual Resource* LoadResource() override{
-			if(loadCount == 0){
-				GADGET_ASSERT(resource == nullptr, "Loaded resource has a reference count of 0!");
-				resource = new GL_Shader(vertPath, fragPath);
-			}
-
-			GADGET_BASIC_ASSERT(resource != nullptr);
-			loadCount++;
-			return resource;
+			return new GL_Shader(vertPath, fragPath);
 		}
 
 		virtual const std::type_info& GetResourceTypeInfo() override{

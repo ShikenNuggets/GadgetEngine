@@ -29,14 +29,7 @@ namespace Gadget{
 		TextureResourceContainer(const std::string& path_) : ResourceContainer(), path(path_){}
 
 		virtual Resource* LoadResource() override{
-			if(loadCount == 0){
-				GADGET_ASSERT(resource == nullptr, "Loaded resource has a reference count of 0!");
-				resource = BmpLoader::LoadImage(path);
-			}
-			
-			GADGET_BASIC_ASSERT(resource != nullptr);
-			loadCount++;
-			return resource;
+			return BmpLoader::LoadImage(path);
 		}
 
 		virtual const std::type_info& GetResourceTypeInfo() override{
