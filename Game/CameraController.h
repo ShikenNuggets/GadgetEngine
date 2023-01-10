@@ -42,7 +42,7 @@ namespace Example{
 				parent->SetPosition(Gadget::Vector3(0.0f, 0.0f, 4.0f));
 				parent->SetRotation(Gadget::Quaternion::Identity());
 
-				Gadget::App::GetInstance()->GetSceneManager()->LoadScene(0);
+				Gadget::App::GetInstance()->GetSceneManager()->RequestSceneLoad(0);
 			}
 		}
 	};
