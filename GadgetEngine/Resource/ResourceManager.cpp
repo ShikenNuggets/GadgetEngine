@@ -47,6 +47,7 @@ ResourceManager::ResourceManager(){
 
 ResourceManager::~ResourceManager(){
 	for(auto& c : resources){
+		GADGET_ASSERT(c.second->GetReferenceCount() == 0, "ResourceManager being destroyed while Resource [" + c.first.GetString() + "] is still referenced!");
 		delete c.second;
 		c.second = nullptr;
 	}
@@ -59,5 +60,11 @@ void ResourceManager::UnloadResource(StringID name_){
 		Debug::Log(SID("RESOURCE"), "Attempted to unload invalid resource [" + name_.GetString() + "]", Debug::Warning, __FILE__, __LINE__);
 	}
 
-	resources[name_]->UnloadResource();
+	resources[name_]->RemoveReference();
+}
+
+void ResourceManager::DeleteAllUnusedResources(){
+	for(auto& c : resources){
+		c.second->DeleteIfUnused();
+	}
 }

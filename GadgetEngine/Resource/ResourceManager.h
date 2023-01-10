@@ -27,16 +27,18 @@ namespace Gadget{
 				return nullptr;
 			}
 
-			T* rs = dynamic_cast<T*>(resources[resourceName_]->LoadResource());
+			T* rs = dynamic_cast<T*>(resources[resourceName_]->AddReference());
 			if(rs == nullptr){
 				Debug::Log(SID("RESOURCE"), "Resource [" + resourceName_.GetString() + "] could not be loaded!", Debug::Error, __FILE__, __LINE__);
-				resources[resourceName_]->UnloadResource(); //To fix the reference count
+				resources[resourceName_]->RemoveReference(); //To fix the reference count
 			}
 
 			return rs;
 		}
 
 		void UnloadResource(StringID name_);
+
+		void DeleteAllUnusedResources();
 
 	private:
 		static ResourceManager* instance;

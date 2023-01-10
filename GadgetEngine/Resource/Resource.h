@@ -13,30 +13,35 @@ namespace Gadget{
 
 	class ResourceContainer{
 	public:
-		ResourceContainer() : resource(nullptr), loadCount(0){}
+		ResourceContainer() : resource(nullptr), isLoaded(false), referenceCount(0){}
 		virtual ~ResourceContainer(){ delete resource; }
 
 		bool IsLoaded(){ return resource != nullptr; }
+		size_t GetReferenceCount(){ return referenceCount; }
 
 		virtual Resource* AddReference(){
-			if(loadCount == 0){
-				GADGET_ASSERT(resource == nullptr, "Loaded resource has a reference count of 0!");
+			if(!isLoaded){
+				GADGET_ASSERT(resource == nullptr, "Unloaded resource is not null!");
 				resource = LoadResource();
+				isLoaded = true;
 			}
 
 			GADGET_BASIC_ASSERT(resource != nullptr);
-			loadCount++;
+			referenceCount++;
 			return resource;
 		}
 
-		virtual void UnloadResource(){
-			if(loadCount > 0){
-				loadCount--;
+		void RemoveReference(){
+			if(referenceCount > 0){
+				referenceCount--;
 			}
+		}
 
-			if(loadCount == 0){
+		void DeleteIfUnused(){
+			if(referenceCount == 0){
 				delete resource;
 				resource = nullptr;
+				isLoaded = false;
 			}
 		}
 
@@ -47,7 +52,8 @@ namespace Gadget{
 
 	private:
 		Resource* resource;
-		size_t loadCount;
+		bool isLoaded;
+		size_t referenceCount;
 	};
 }
 
