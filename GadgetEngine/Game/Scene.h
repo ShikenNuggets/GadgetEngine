@@ -36,7 +36,9 @@ namespace Gadget{
 		StringID name;
 		std::vector<GameObject*> gameObjects;
 
-		virtual void SetToDefaultState(){}
+		virtual void SetToDefaultState(){ DestroyAllGameObjects(); }
+
+		void DestroyAllGameObjects();
 	};
 }
 

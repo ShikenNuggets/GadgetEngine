@@ -8,10 +8,7 @@ Scene::Scene(StringID name_) : name(name_), gameObjects(){
 }
 
 Scene::~Scene(){
-	for(auto go : gameObjects){
-		delete go;
-		go = nullptr;
-	}
+	DestroyAllGameObjects();
 }
 
 void Scene::CreateObject(GameObject* gameObject_){
@@ -22,4 +19,12 @@ void Scene::CreateObject(GameObject* gameObject_){
 
 	GADGET_ASSERT(!Utils::Contains(gameObjects, gameObject_), "GameObject \"" + gameObject_->GetName().GetString() + "\" is being added to the GameObject list for this scene multiple times!");
 	gameObjects.push_back(gameObject_);
+}
+
+void Scene::DestroyAllGameObjects(){
+	for(const auto& go : gameObjects){
+		delete go;
+	}
+
+	gameObjects.clear();
 }
