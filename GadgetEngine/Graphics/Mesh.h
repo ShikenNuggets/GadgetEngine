@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "Debug.h"
 #include "Vertex.h"
 #include "Loaders/ObjLoader.h"
 #include "Resource/Resource.h"
@@ -21,7 +22,12 @@ namespace Gadget{
 		MeshResourceContainer(const std::string& path_) : path(path_){}
 
 		virtual Resource* LoadResource() override{
-			resource = ObjLoader::LoadMesh(path);
+			if(loadCount == 0){
+				GADGET_ASSERT(resource == nullptr, "Loaded resource has a reference count of 0!");
+				resource = ObjLoader::LoadMesh(path);
+			}
+
+			GADGET_BASIC_ASSERT(resource != nullptr);
 			loadCount++;
 			return resource;
 		}

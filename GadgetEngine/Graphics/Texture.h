@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "Debug.h"
 #include "Loaders/BmpLoader.h"
 #include "Resource/Resource.h"
 
@@ -25,10 +26,15 @@ namespace Gadget{
 
 	class TextureResourceContainer : public ResourceContainer{
 	public:
-		TextureResourceContainer(const std::string& path_) : path(path_){}
+		TextureResourceContainer(const std::string& path_) : ResourceContainer(), path(path_){}
 
 		virtual Resource* LoadResource() override{
-			resource = BmpLoader::LoadImage(path);
+			if(loadCount == 0){
+				GADGET_ASSERT(resource == nullptr, "Loaded resource has a reference count of 0!");
+				resource = BmpLoader::LoadImage(path);
+			}
+			
+			GADGET_BASIC_ASSERT(resource != nullptr);
 			loadCount++;
 			return resource;
 		}
