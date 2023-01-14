@@ -99,6 +99,9 @@
     <ClInclude Include="Game\Scene.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Game\SceneComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
     <ClInclude Include="GameInterface.h" />
     <ClInclude Include="Graphics\Camera.h">
       <Filter>Graphics</Filter>
@@ -113,6 +116,9 @@
       <Filter>Graphics\Components</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Components\RenderComponent.h">
+      <Filter>Graphics\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Components\SkyboxComponent.h">
       <Filter>Graphics\Components</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Cubemap.h">
@@ -313,6 +319,9 @@
       <Filter>Graphics\Components</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Components\RenderComponent.cpp">
+      <Filter>Graphics\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Components\SkyboxComponent.cpp">
       <Filter>Graphics\Components</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Cubemap.cpp">

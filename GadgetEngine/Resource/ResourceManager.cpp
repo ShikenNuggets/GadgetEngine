@@ -46,6 +46,8 @@ ResourceManager::ResourceManager(){
 }
 
 ResourceManager::~ResourceManager(){
+	DeleteAllUnusedResources();
+
 	for(auto& c : resources){
 		GADGET_ASSERT(c.second->GetReferenceCount() == 0, "ResourceManager being destroyed while Resource [" + c.first.GetString() + "] is still referenced!");
 		delete c.second;

@@ -10,7 +10,6 @@
 #include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_ScreenQuad.h"
 #include "Graphics/OpenGL/GL_Shader.h"
-#include "Graphics/OpenGL/GL_CubemapInfo.h"
 #include "Graphics/OpenGL/FrameBuffers/GL_DefaultFrameBuffer.h"
 
 namespace Gadget{
@@ -43,11 +42,6 @@ namespace Gadget{
 		GL_DefaultFrameBuffer* mainFBO;
 		GL_Shader* screenShader;
 		GL_ScreenQuad* screenQuad;
-
-		//TODO - Model rendering, remove everything below Eventually(TM)
-		Cubemap* cubemap;
-		GL_CubemapInfo* cubemapInfo;
-		Shader* skyboxShader;
 	};
 }
 

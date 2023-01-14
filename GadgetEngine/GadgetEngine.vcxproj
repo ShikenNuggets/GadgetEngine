@@ -119,12 +119,14 @@
     <ClInclude Include="Game\GameLogicManager.h" />
     <ClInclude Include="Game\GameObject.h" />
     <ClInclude Include="Game\Scene.h" />
+    <ClInclude Include="Game\SceneComponent.h" />
     <ClInclude Include="GameInterface.h" />
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Graphics\Color.h" />
     <ClInclude Include="Graphics\Components\CameraComponent.h" />
     <ClInclude Include="Graphics\Components\LightComponent.h" />
     <ClInclude Include="Graphics\Components\RenderComponent.h" />
+    <ClInclude Include="Graphics\Components\SkyboxComponent.h" />
     <ClInclude Include="Graphics\Cubemap.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\LightSource.h" />
@@ -199,6 +201,7 @@
     <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Graphics\Components\CameraComponent.cpp" />
     <ClCompile Include="Graphics\Components\RenderComponent.cpp" />
+    <ClCompile Include="Graphics\Components\SkyboxComponent.cpp" />
     <ClCompile Include="Graphics\Cubemap.cpp" />
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />

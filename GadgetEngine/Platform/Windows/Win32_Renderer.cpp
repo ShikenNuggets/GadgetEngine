@@ -9,6 +9,7 @@
 #include "Graphics/Components/CameraComponent.h"
 #include "Graphics/Components/LightComponent.h"
 #include "Graphics/Components/RenderComponent.h"
+#include "Graphics/Components/SkyboxComponent.h"
 #include "Graphics/OpenGL/GL_MeshInfo.h"
 #include "Graphics/OpenGL/GL_TextureInfo.h"
 #include "Resource/ResourceManager.h"
@@ -19,7 +20,7 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr), cubemap(nullptr), cubemapInfo(nullptr), skyboxShader(nullptr){
+Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -67,10 +68,6 @@ Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::O
 }
 
 Win32_Renderer::~Win32_Renderer(){
-	ResourceManager::GetInstance()->UnloadResource(SID("SkyboxShader"));
-	delete cubemapInfo;
-	delete cubemap;
-
 	delete screenQuad;
 	ResourceManager::GetInstance()->UnloadResource(SID("ScreenShader"));
 	delete mainFBO;
@@ -84,13 +81,6 @@ void Win32_Renderer::PostInit(){
 	screenShader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("ScreenShader"));
 	screenQuad = new GL_ScreenQuad();
 	mainFBO = new GL_DefaultFrameBuffer(window->GetWidth(), window->GetHeight());
-
-	//SKYBOX RENDERING (TODO - Move this to a more permanent location)
-	if(cubemap == nullptr){
-		skyboxShader = GenerateAPIShader(SID("SkyboxShader"));
-		cubemap = new Cubemap(SID("SkyboxRightTexture"), SID("SkyboxLeftTexture"), SID("SkyboxTopTexture"), SID("SkyboxBottomTexture"), SID("SkyboxFrontTexture"), SID("SkyboxBackTexture"));
-		cubemapInfo = new GL_CubemapInfo(*cubemap);
-	}
 
 	Renderer::PostInit();
 }
@@ -110,6 +100,7 @@ void Win32_Renderer::Render(const Scene* scene_){
 	auto cams = scene_->GetAllComponentsInScene<CameraComponent>();
 	auto meshes = scene_->GetAllComponentsInScene<RenderComponent>();
 	auto lights = scene_->GetAllComponentsInScene<PointLightComponent>();
+	auto skybox = scene_->GetSceneComponent<SkyboxComponent>();
 
 	GADGET_ASSERT(lights.size() < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(lights.size()) + "!");
 
@@ -146,17 +137,17 @@ void Win32_Renderer::Render(const Scene* scene_){
 			mesh->Unbind();
 		}
 
-		//SKYBOX RENDERING (TODO - Reorganize this so the scene controls the Skybox, or, something. Anything but this)
-		glDepthFunc(GL_LEQUAL);
-		skyboxShader->Bind();
-		skyboxShader->BindMatrix4(SID("projectionMatrix"), proj);
-		skyboxShader->BindMatrix4(SID("viewMatrix"), view.ToMatrix3().ToMatrix4());
-		cubemapInfo->Bind();
+		if(skybox != nullptr){
+			glDepthFunc(GL_LEQUAL);
+			skybox->Bind(proj, view.ToMatrix3().ToMatrix4());
+		}
+		
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
-		cubemapInfo->Unbind();
-		skyboxShader->Unbind();
-		glDepthFunc(GL_LESS);
-		//END SKYBOX RENDERING
+
+		if(skybox != nullptr){
+			skybox->Unbind();
+			glDepthFunc(GL_LESS);
+		}
 	}
 
 	//Second Render Pass

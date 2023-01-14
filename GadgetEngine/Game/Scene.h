@@ -2,6 +2,9 @@
 #define GADGET_SCENE_H
 
 #include "GameObject.h"
+#include "SceneComponent.h"
+
+#include "Graphics/Cubemap.h"
 
 namespace Gadget{
 	class Scene{
@@ -10,6 +13,7 @@ namespace Gadget{
 		~Scene();
 
 		void CreateObject(GameObject* gameObject_);
+		void AddSceneComponent(SceneComponent* sceneComp_);
 
 		StringID GetName() const{ return name; }
 
@@ -30,15 +34,36 @@ namespace Gadget{
 			return comps;
 		}
 
+		template <class T> T* GetSceneComponent() const{
+			static_assert(std::is_base_of<SceneComponent, T>::value, "T must inherit from SceneComponent");
+			T* comp = nullptr;
+
+			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
+			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
+			for(SceneComponent* c : sceneComponents){
+				comp = dynamic_cast<T*>(c);
+				if(comp != nullptr){
+					return comp;
+				}
+			}
+
+			return nullptr;
+		}
+
 	protected:
 		friend class BasicSceneManager;
 
 		StringID name;
 		std::vector<GameObject*> gameObjects;
+		std::vector<SceneComponent*> sceneComponents;
 
-		virtual void SetToDefaultState(){ DestroyAllGameObjects(); }
+		virtual void SetToDefaultState(){
+			DestroyAllGameObjects();
+			DestroyAllSceneComponents();
+		}
 
 		void DestroyAllGameObjects();
+		void DestroyAllSceneComponents();
 	};
 }
 

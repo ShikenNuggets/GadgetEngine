@@ -5,6 +5,7 @@
 #include <Graphics/Components/CameraComponent.h>
 #include <Graphics/Components/LightComponent.h>
 #include <Graphics/Components/RenderComponent.h>
+#include <Graphics/Components/SkyboxComponent.h>
 #include <Physics/Rigidbody.h>
 
 #include "CameraController.h"
@@ -18,6 +19,8 @@ namespace Example{
 	protected:
 		virtual void SetToDefaultState() override{
 			Gadget::Scene::SetToDefaultState();
+
+			AddSceneComponent(new Gadget::SkyboxComponent(this, SID("Skybox")));
 
 			Gadget::GameObject* cube = new Gadget::GameObject();
 			cube->AddComponent(new Gadget::RenderComponent(cube, SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
