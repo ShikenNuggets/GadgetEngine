@@ -11,11 +11,10 @@
 namespace Gadget{
 	class Input{
 	public:
-		static Input* GetInstance();
+		Input();
+		~Input();
 
-		#ifdef GADGET_DEBUG
-		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
-		#endif //GADGET_DEBUG
+		static Input* GetInstance();
 
 		bool GetButtonDown(ButtonID id_) const;
 		bool GetButtonDown(StringID buttonName_) const;
@@ -42,11 +41,6 @@ namespace Gadget{
 		static void OnEvent(const Event& e_);
 
 	private:
-		static Input* instance;
-
-		Input();
-		~Input();
-
 		std::vector<RawButton> buttonEvents;
 		std::vector<RawAxis> axisEvents;
 

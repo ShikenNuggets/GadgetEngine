@@ -6,19 +6,13 @@
 namespace Gadget{
 	class PhysManager{
 	public:
-		static PhysManager* GetInstance();
-
-		#ifdef GADGET_DEBUG
-		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
-		#endif //GADGET_DEBUG
+		PhysManager();
+		~PhysManager();
 
 		void Update(Scene* scene_, float deltaTime_);
 
 	private:
 		static PhysManager* instance;
-
-		PhysManager();
-		~PhysManager();
 	};
 }
 

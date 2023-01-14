@@ -1,29 +1,11 @@
 #include "ResourceManager.h"
 
+#include "App.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 
 using namespace Gadget;
-
-ResourceManager* ResourceManager::instance = nullptr;
-
-ResourceManager* ResourceManager::GetInstance(){
-	if(instance == nullptr){
-		instance = new ResourceManager();
-	}
-
-	return instance;
-}
-
-#ifdef GADGET_DEBUG
-void ResourceManager::DeleteInstance(){
-	if(instance != nullptr){
-		delete instance;
-		instance = nullptr;
-	}
-}
-#endif //GADGET_DEBUG
 
 ResourceManager::ResourceManager(){
 	//TODO - Load resource list from some kind of file. JSON?
@@ -55,6 +37,11 @@ ResourceManager::~ResourceManager(){
 	}
 
 	resources.clear();
+}
+
+ResourceManager* ResourceManager::GetInstance(){
+	GADGET_ASSERT(App::GetInstance()->GetResourceManager() != nullptr, "Tried to get ResourceManager before app was initialized!");
+	return App::GetInstance()->GetResourceManager();
 }
 
 void ResourceManager::UnloadResource(StringID name_){

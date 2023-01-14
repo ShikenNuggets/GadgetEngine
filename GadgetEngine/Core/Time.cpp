@@ -2,31 +2,18 @@
 
 #include <thread>
 
+#include "App.h"
 #include "Config.h"
 #include "Math/Math.h"
 
 using namespace Gadget;
 
-Time* Time::instance = nullptr;
-
 Time::Time() : timeScale(1.0f), startTime(0), previousTicks(0), currentTicks(0){}
 
 Time* Time::GetInstance(){
-	if(instance == nullptr){
-		instance = new Time();
-	}
-
-	return instance;
+	GADGET_ASSERT(App::GetInstance()->GetTime() != nullptr, "Tried to get ResourceManager before app was initialized!");
+	return App::GetInstance()->GetTime();
 }
-
-#ifdef GADGET_DEBUG
-void Time::DeleteInstance(){
-	if(instance != nullptr){
-		delete instance;
-		instance = nullptr;
-	}
-}
-#endif //GADGET_DEBUG
 
 void Time::Start(){
 	startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch());

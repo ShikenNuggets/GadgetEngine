@@ -22,9 +22,15 @@ App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), co
 }
 
 App::~App(){
+	//Calling these normally isn't necessary, but we need to enforce a specific shutdown order
 	gameLogicManager.reset(nullptr);
 	sceneManager.reset(nullptr);
+	physics.reset(nullptr);
 	renderer.reset(nullptr);
+	input.reset(nullptr);
+	time.reset(nullptr);
+	config.reset(nullptr);
+	resourceMgr.reset(nullptr);
 }
 
 App* App::GetInstance(){
@@ -35,38 +41,22 @@ App* App::GetInstance(){
 	return instance;
 }
 
-#ifdef GADGET_DEBUG
 void App::DeleteInstance(){
 	if(instance != nullptr){
-		PhysManager::DeleteInstance();
-		Input::DeleteInstance();
-		Time::DeleteInstance();
-		Config::DeleteInstance();
-		ResourceManager::DeleteInstance();
-
 		delete instance;
 		instance = nullptr;
 	}
 }
-#endif //GADGET_DEBUG
 
 void App::Initialize(const std::string& name_){
 	gameName = name_;
 
 	Debug::Init();
-
-	resourceMgr = ResourceManager::GetInstance();
-	GADGET_BASIC_ASSERT(resourceMgr);
-
-	config = Config::GetInstance(); //Init Config
-	GADGET_BASIC_ASSERT(config);
-
+	resourceMgr = std::make_unique<ResourceManager>();
+	config = std::make_unique<Config>();
 	Random::SetSeed();
-	time = Time::GetInstance();
-	GADGET_BASIC_ASSERT(time);
-
-	input = Input::GetInstance();
-	GADGET_BASIC_ASSERT(input);
+	time = std::make_unique<Time>();
+	input = std::make_unique<Input>();
 
 	#ifdef GADGET_RELEASE
 	Debug::SetLogVerbosity(Debug::Warning);
@@ -91,10 +81,8 @@ void App::Initialize(const std::string& name_){
 
 	renderer->PostInit();
 
-	physics = PhysManager::GetInstance();
-
+	physics = std::make_unique<PhysManager>();
 	sceneManager = std::make_unique<BasicSceneManager>();
-
 	gameLogicManager = std::make_unique<GameLogicManager>();
 }
 

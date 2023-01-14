@@ -10,8 +10,6 @@
 
 using namespace Gadget;
 
-Config* Config::instance = nullptr;
-
 Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
 #ifdef GADGET_DEBUG
 	engineConfigPath = engineConfigFileName; //Makes debugging easier to store the file in the same directory
@@ -32,21 +30,9 @@ Config::~Config(){
 }
 
 Config* Config::GetInstance(){
-	if(instance == nullptr){
-		instance = new Config();
-	}
-
-	return instance;
+	GADGET_ASSERT(App::GetInstance()->GetConfig() != nullptr, "Tried to get Config before app was initialized!");
+	return App::GetInstance()->GetConfig();
 }
-
-#ifdef GADGET_DEBUG
-void Config::DeleteInstance(){
-	if(instance != nullptr){
-		delete instance;
-		instance = nullptr;
-	}
-}
-#endif //GADGET_DEBUG
 
 Var Config::GetOption(StringID key_) const{
 	return vars.GetValue(key_);

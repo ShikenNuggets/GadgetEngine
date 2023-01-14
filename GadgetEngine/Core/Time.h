@@ -6,11 +6,9 @@
 namespace Gadget{
 	class Time{
 	public:
-		static Time* GetInstance();
+		Time();
 
-		#ifdef GADGET_DEBUG
-		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
-		#endif //GADGET_DEBUG
+		static Time* GetInstance();
 
 		void Start();
 		void Update();
@@ -27,10 +25,6 @@ namespace Gadget{
 		}
 
 	private:
-		static Time* instance;
-
-		Time();
-
 		float timeScale;
 
 		std::chrono::milliseconds startTime;

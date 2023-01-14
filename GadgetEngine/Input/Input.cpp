@@ -1,5 +1,6 @@
 #include "Input.h"
 
+#include "App.h"
 #include "GamepadEvent.h"
 #include "KeyEvent.h"
 #include "MouseEvent.h"
@@ -7,8 +8,6 @@
 #include "Math/Math.h"
 
 using namespace Gadget;
-
-Input* Input::instance = nullptr;
 
 Input::Input() : buttonEvents(), axisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), definedButtons(), definedAxes(){
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, OnEvent);
@@ -29,21 +28,9 @@ Input::Input() : buttonEvents(), axisEvents(), buttonsDown(), buttonsUp(), butto
 Input::~Input(){}
 
 Input* Input::GetInstance(){
-	if(instance == nullptr){
-		instance = new Input();
-	}
-
-	return instance;
+	GADGET_ASSERT(App::GetInstance()->GetInput() != nullptr, "Tried to get Input before app was initialized!");
+	return App::GetInstance()->GetInput();
 }
-
-#ifdef GADGET_DEBUG
-void Input::DeleteInstance(){
-	if(instance != nullptr){
-		delete instance;
-		instance = nullptr;
-	}
-}
-#endif //GADGET_DEBUG
 
 bool Input::GetButtonDown(ButtonID id_) const{
 	return buttonsDown.find(id_) != buttonsDown.end();

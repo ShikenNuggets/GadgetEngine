@@ -10,11 +10,10 @@
 namespace Gadget{
 	class Config{
 	public:
-		static Config* GetInstance();
+		Config();
+		~Config();
 
-		#ifdef GADGET_DEBUG
-		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
-		#endif //GADGET_DEBUG
+		static Config* GetInstance();
 
 		Var GetOption(StringID key_) const;
 		double GetOptionFloat(StringID key_) const;
@@ -35,11 +34,7 @@ namespace Gadget{
 		static void OnEvent(const Event& e_);
 
 	private:
-		static Config* instance;
 		static constexpr const char* engineConfigFileName = "UserEngine.ini";
-
-		Config();
-		~Config();
 
 		std::string engineConfigPath;
 		EngineVars vars;

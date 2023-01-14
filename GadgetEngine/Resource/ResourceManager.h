@@ -10,11 +10,10 @@
 namespace Gadget{
 	class ResourceManager{
 	public:
-		static ResourceManager* GetInstance();
+		ResourceManager();
+		~ResourceManager();
 
-		#ifdef GADGET_DEBUG
-		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
-		#endif //GADGET_DEBUG
+		static ResourceManager* GetInstance();
 
 		template <class T> T* LoadResource(StringID resourceName_){
 			if(resources.find(resourceName_) == resources.end() || resources[resourceName_] == nullptr){
@@ -41,11 +40,6 @@ namespace Gadget{
 		void DeleteAllUnusedResources();
 
 	private:
-		static ResourceManager* instance;
-
-		ResourceManager();
-		~ResourceManager();
-
 		std::map<StringID, ResourceContainer*> resources;
 
 		//Delete unwanted compiler-generated copy/move constructors and assignment operators

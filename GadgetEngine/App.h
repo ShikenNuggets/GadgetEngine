@@ -18,10 +18,7 @@ namespace Gadget{
 	class App{
 	public:
 		static App* GetInstance();
-
-		#ifdef GADGET_DEBUG
-		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
-		#endif //GADGET_DEBUG
+		static void DeleteInstance();
 
 		void Run(GameInterface& gameInterface_);
 
@@ -40,17 +37,21 @@ namespace Gadget{
 		Renderer::API GetCurrentRenderAPI() const;
 		float GetAspectRatio() const{ return renderer->GetAspectRatio(); }
 		BasicSceneManager* GetSceneManager() const{ return sceneManager.get(); }
+		ResourceManager* GetResourceManager() const{ return resourceMgr.get(); }
+		Config* GetConfig() const{ return config.get(); }
+		Time* GetTime() const{ return time.get(); }
+		Input* GetInput() const{ return input.get(); }
 
 	private:
 		static App* instance;
 
 		std::string gameName;
 		bool isRunning;
-		ResourceManager* resourceMgr;
-		Config* config;
-		Time* time;
-		Input* input;
-		PhysManager* physics;
+		std::unique_ptr<ResourceManager> resourceMgr;
+		std::unique_ptr<Config> config;
+		std::unique_ptr<Time> time;
+		std::unique_ptr<Input> input;
+		std::unique_ptr<PhysManager> physics;
 		std::unique_ptr<Renderer> renderer;
 		std::unique_ptr<BasicSceneManager> sceneManager;
 		std::unique_ptr<GameLogicManager> gameLogicManager;
