@@ -17,7 +17,6 @@ namespace Gadget{
 	private:
 		StringID shaderName;
 		Shader* shader;
-		Cubemap* cubemap;
 		GL_CubemapInfo* cubemapInfo;
 	};
 }

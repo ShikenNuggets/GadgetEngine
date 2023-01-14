@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-SkyboxComponent::SkyboxComponent(Scene* parent_, StringID skyboxName_, StringID shader_) : SceneComponent(parent_), shaderName(shader_), shader(nullptr), cubemap(nullptr), cubemapInfo(nullptr){
+SkyboxComponent::SkyboxComponent(Scene* parent_, StringID skyboxName_, StringID shader_) : SceneComponent(parent_), shaderName(shader_), shader(nullptr), cubemapInfo(nullptr){
 	shader = App::GetInstance()->GetRenderer()->GenerateAPIShader(shaderName);
 
 	std::array<StringID, 6> textures = {
