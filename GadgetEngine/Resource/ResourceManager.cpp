@@ -39,11 +39,6 @@ ResourceManager::~ResourceManager(){
 	resources.clear();
 }
 
-ResourceManager* ResourceManager::GetInstance(){
-	GADGET_ASSERT(App::GetInstance()->GetResourceManager() != nullptr, "Tried to get ResourceManager before app was initialized!");
-	return App::GetInstance()->GetResourceManager();
-}
-
 void ResourceManager::UnloadResource(StringID name_){
 	if(resources.find(name_) == resources.end() || resources[name_] == nullptr){
 		Debug::Log(SID("RESOURCE"), "Attempted to unload invalid resource [" + name_.GetString() + "]", Debug::Warning, __FILE__, __LINE__);

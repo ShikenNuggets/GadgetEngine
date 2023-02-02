@@ -10,11 +10,6 @@ using namespace Gadget;
 
 Time::Time() : timeScale(1.0f), startTime(0), previousTicks(0), currentTicks(0){}
 
-Time* Time::GetInstance(){
-	GADGET_ASSERT(App::GetInstance()->GetTime() != nullptr, "Tried to get ResourceManager before app was initialized!");
-	return App::GetInstance()->GetTime();
-}
-
 void Time::Start(){
 	startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch());
 	previousTicks = startTime;
@@ -37,7 +32,7 @@ void Time::Delay(){
 std::chrono::milliseconds Time::GetSleepTime() const{
 	//If the framerate is 0, this is treated as an unlimited framerate
 	//This also prevents a division by 0 later
-	int targetFPS = static_cast<int>(Config::GetInstance()->GetOptionFloat(EngineVars::Display::targetFPSKey));
+	int targetFPS = static_cast<int>(App::GetInstance().GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
 	if(targetFPS == 0){
 		return std::chrono::milliseconds(0);
 	}

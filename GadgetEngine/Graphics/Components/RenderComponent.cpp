@@ -7,13 +7,13 @@
 using namespace Gadget;
 
 RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, StringID textureName_, StringID shaderName_) : Component(parent_), meshInfo(nullptr), material(nullptr){
-	Mesh* mesh = ResourceManager::GetInstance()->LoadResource<Mesh>(modelName_);
+	Mesh* mesh = App::GetInstance().GetResourceManager().LoadResource<Mesh>(modelName_);
 	GADGET_BASIC_ASSERT(mesh != nullptr);
 
-	meshInfo = App::GetInstance()->GetRenderer()->GenerateAPIMeshInfo(*mesh);
+	meshInfo = App::GetInstance().GetRenderer().GenerateAPIMeshInfo(*mesh);
 	GADGET_BASIC_ASSERT(meshInfo != nullptr);
 
-	ResourceManager::GetInstance()->UnloadResource(modelName_);
+	App::GetInstance().GetResourceManager().UnloadResource(modelName_);
 
 	material = new DiffuseTextureMaterial(textureName_, shaderName_);
 }

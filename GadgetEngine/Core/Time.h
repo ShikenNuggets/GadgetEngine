@@ -8,8 +8,6 @@ namespace Gadget{
 	public:
 		Time();
 
-		static Time* GetInstance();
-
 		void Start();
 		void Update();
 		void Delay();

@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 
+#include "App.h"
 #include "Win32_Window.h"
 #include "Config.h"
 #include "Debug.h"
@@ -30,7 +31,7 @@ Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::O
 		//TODO - Handle Fatal Error
 	}
 
-	int status = SDL_GL_SetSwapInterval(Config::GetInstance()->GetOptionsBool(EngineVars::Display::vsyncKey) ? -1 : 0);
+	int status = SDL_GL_SetSwapInterval(App::GetInstance().GetConfig().GetOptionsBool(EngineVars::Display::vsyncKey) ? -1 : 0);
 	if(status != 0){
 		Debug::Log("Swap interval could not be set! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
 	}
@@ -69,7 +70,7 @@ Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::O
 
 Win32_Renderer::~Win32_Renderer(){
 	delete screenQuad;
-	ResourceManager::GetInstance()->UnloadResource(SID("ScreenShader"));
+	App::GetInstance().GetResourceManager().UnloadResource(SID("ScreenShader"));
 	delete mainFBO;
 
 	SDL_GL_DeleteContext(glContext);
@@ -78,7 +79,7 @@ Win32_Renderer::~Win32_Renderer(){
 }
 
 void Win32_Renderer::PostInit(){
-	screenShader = ResourceManager::GetInstance()->LoadResource<GL_Shader>(SID("ScreenShader"));
+	screenShader = App::GetInstance().GetResourceManager().LoadResource<GL_Shader>(SID("ScreenShader"));
 	screenQuad = new GL_ScreenQuad();
 	mainFBO = new GL_DefaultFrameBuffer(window->GetWidth(), window->GetHeight());
 
@@ -242,7 +243,7 @@ void Win32_Renderer::SetCullFace(CullFace cullFace_){
 }
 
 Shader* Win32_Renderer::GenerateAPIShader(StringID shaderResource_){
-	return ResourceManager::GetInstance()->LoadResource<GL_Shader>(shaderResource_); //TODO - This feels bad...
+	return App::GetInstance().GetResourceManager().LoadResource<GL_Shader>(shaderResource_); //TODO - This feels bad...
 }
 
 MeshInfo* Win32_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){

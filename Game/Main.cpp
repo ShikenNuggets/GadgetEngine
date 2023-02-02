@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
 	ExampleGame game = ExampleGame();
 
 	try{
-		Gadget::App::GetInstance()->Run(game);
+		Gadget::App::GetInstance().Run(game);
 	}catch(std::runtime_error e){
 		_ASSERT(false);
 	}

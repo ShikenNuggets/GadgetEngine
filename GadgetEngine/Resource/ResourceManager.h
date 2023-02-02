@@ -13,8 +13,6 @@ namespace Gadget{
 		ResourceManager();
 		~ResourceManager();
 
-		static ResourceManager* GetInstance();
-
 		template <class T> T* LoadResource(StringID resourceName_){
 			if(resources.find(resourceName_) == resources.end() || resources[resourceName_] == nullptr){
 				Debug::Log(SID("RESOURCE"), "Attempted to load invalid resource [" + resourceName_.GetString() + "]", Debug::Warning, __FILE__, __LINE__);

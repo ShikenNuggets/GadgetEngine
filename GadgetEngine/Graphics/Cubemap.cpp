@@ -1,5 +1,6 @@
 #include "Cubemap.h"
 
+#include "App.h"
 #include "Resource/ResourceManager.h"
 
 using namespace Gadget;
@@ -10,14 +11,14 @@ Cubemap::Cubemap(StringID right_, StringID left_, StringID top_, StringID bottom
 	textureNames[Bottom] = top_;
 	
 	for(size_t i = 0; i < numTextures; i++){
-		textures[i] = ResourceManager::GetInstance()->LoadResource<Texture>(textureNames[i]);
+		textures[i] = App::GetInstance().GetResourceManager().LoadResource<Texture>(textureNames[i]);
 		GADGET_ASSERT(textures[i] != nullptr, "An error occurred while trying to load texture [" + textureNames[i].GetString() + "] for cubemap!");
 	}
 }
 
 Cubemap::~Cubemap(){
 	for(size_t i = 0; i < numTextures; i++){
-		ResourceManager::GetInstance()->UnloadResource(textureNames[i]);
+		App::GetInstance().GetResourceManager().UnloadResource(textureNames[i]);
 	}
 }
 

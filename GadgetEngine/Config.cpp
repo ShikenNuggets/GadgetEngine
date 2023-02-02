@@ -29,11 +29,6 @@ Config::~Config(){
 	SaveConfigs();
 }
 
-Config* Config::GetInstance(){
-	GADGET_ASSERT(App::GetInstance()->GetConfig() != nullptr, "Tried to get Config before app was initialized!");
-	return App::GetInstance()->GetConfig();
-}
-
 Var Config::GetOption(StringID key_) const{
 	return vars.GetValue(key_);
 }
@@ -70,12 +65,12 @@ void Config::SetOption(StringID section_, StringID key_, StringID value_){
 void Config::OnEvent(const Event& e_){
 	switch(e_.GetEventType()){
 		case EventType::WindowResize:
-			GetInstance()->SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayWidthKey, dynamic_cast<const WindowResizedEvent&>(e_).GetWidth());
-			GetInstance()->SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayHeightKey, dynamic_cast<const WindowResizedEvent&>(e_).GetHeight());
+			App::GetInstance().GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayWidthKey, dynamic_cast<const WindowResizedEvent&>(e_).GetWidth());
+			App::GetInstance().GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayHeightKey, dynamic_cast<const WindowResizedEvent&>(e_).GetHeight());
 			break;
 		case EventType::WindowMoved:
-			GetInstance()->SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, dynamic_cast<const WindowMovedEvent&>(e_).GetX());
-			GetInstance()->SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowYKey, dynamic_cast<const WindowMovedEvent&>(e_).GetY());
+			App::GetInstance().GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, dynamic_cast<const WindowMovedEvent&>(e_).GetX());
+			App::GetInstance().GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowYKey, dynamic_cast<const WindowMovedEvent&>(e_).GetY());
 			break;
 	}
 }
@@ -89,5 +84,5 @@ void Config::ResetAllOptionsToDefault(){
 }
 
 std::string Config::CreateEngineConfigPath(){
-	return FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetInstance()->GetGameName() + FileSystem::PathSeparator + engineConfigFileName;
+	return FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetInstance().GetGameName() + FileSystem::PathSeparator + engineConfigFileName;
 }

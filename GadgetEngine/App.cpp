@@ -14,37 +14,38 @@
 
 using namespace Gadget;
 
-App* App::instance = nullptr;
+std::unique_ptr<App> App::instance = nullptr;
 
 App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), physics(nullptr), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
+	GADGET_ASSERT(instance == nullptr, "Created multiple App instances!");
+	
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
 }
 
 App::~App(){
 	//Calling these normally isn't necessary, but we need to enforce a specific shutdown order
-	gameLogicManager.reset(nullptr);
-	sceneManager.reset(nullptr);
-	physics.reset(nullptr);
-	renderer.reset(nullptr);
-	input.reset(nullptr);
-	time.reset(nullptr);
-	config.reset(nullptr);
-	resourceMgr.reset(nullptr);
+	gameLogicManager.release();
+	sceneManager.release();
+	physics.release();
+	renderer.release();
+	input.release();
+	time.release();
+	config.release();
+	resourceMgr.release();
 }
 
-App* App::GetInstance(){
+App& App::GetInstance(){
 	if(instance == nullptr){
-		instance = new App();
+		instance = std::make_unique<App>();
 	}
 
-	return instance;
+	return *instance;
 }
 
 void App::DeleteInstance(){
 	if(instance != nullptr){
-		delete instance;
-		instance = nullptr;
+		instance.release();
 	}
 }
 
@@ -91,7 +92,7 @@ void App::Run(GameInterface& gameInterface_){
 	gameInterface_.LoadGame(); //Init game
 	sceneManager->LoadScene(0);
 
-	Time::GetInstance()->Start();
+	time->Start();
 	while(isRunning){
 		//Main game loop
 
@@ -106,28 +107,28 @@ void App::Run(GameInterface& gameInterface_){
 		resourceMgr->DeleteAllUnusedResources(); //TODO - We don't necessarily need to do this every frame
 
 		//Regular update follows
-		Time::GetInstance()->Update();
+		time->Update();
 		renderer->GetWindow().lock()->HandleEvents();
 
-		Input::GetInstance()->ProcessInputs();
+		input->ProcessInputs();
 
 		physics->Update(sceneManager->CurrentScene(), time->DeltaTime());
 
-		gameLogicManager->Update(sceneManager->CurrentScene(), Time::GetInstance()->DeltaTime());
+		gameLogicManager->Update(sceneManager->CurrentScene(), time->DeltaTime());
 
 		renderer->Render(sceneManager->CurrentScene());
 
 		//After everything else is done, sleep for the appropriate amount of time (if necessary)
-		Time::GetInstance()->Delay();
+		time->Delay();
 	}
 }
 
 void App::OnEvent(const Event& e_){
 	if(e_.GetEventType() == EventType::WindowClose){
-		GetInstance()->isRunning = false;
+		GetInstance().isRunning = false;
 	}else if(e_.GetEventType() == EventType::WindowResize){
 		auto& ev = dynamic_cast<const WindowResizedEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
-		GetInstance()->renderer->OnResize(ev.GetWidth(), ev.GetHeight());
+		GetInstance().renderer->OnResize(ev.GetWidth(), ev.GetHeight());
 	}
 }
 

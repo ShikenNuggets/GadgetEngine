@@ -13,8 +13,6 @@ namespace Gadget{
 		Config();
 		~Config();
 
-		static Config* GetInstance();
-
 		Var GetOption(StringID key_) const;
 		double GetOptionFloat(StringID key_) const;
 		bool GetOptionsBool(StringID key_) const;

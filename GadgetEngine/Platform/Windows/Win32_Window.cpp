@@ -41,7 +41,7 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, 
 	}
 
 	Uint32 windowFlag = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
-	sdlWindow = SDL_CreateWindow(App::GetInstance()->GetGameName().c_str(), pos.x, pos.y, size.x, size.y, windowFlag);
+	sdlWindow = SDL_CreateWindow(App::GetInstance().GetGameName().c_str(), pos.x, pos.y, size.x, size.y, windowFlag);
 	if(sdlWindow == nullptr){
 		Debug::Log("Window could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
 		//TODO - Handle Fatal Error

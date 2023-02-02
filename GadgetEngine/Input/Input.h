@@ -14,8 +14,6 @@ namespace Gadget{
 		Input();
 		~Input();
 
-		static Input* GetInstance();
-
 		bool GetButtonDown(ButtonID id_) const;
 		bool GetButtonDown(StringID buttonName_) const;
 
