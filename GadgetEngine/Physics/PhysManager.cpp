@@ -11,7 +11,7 @@ PhysManager::PhysManager(){}
 PhysManager::~PhysManager(){}
 
 void PhysManager::Update(Scene* scene_, float deltaTime_){
-	const float gravityConstant = static_cast<float>(App::GetInstance().GetConfig().GetOptionFloat(EngineVars::Physics::gravityConstantKey));
+	const float gravityConstant = static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::gravityConstantKey));
 
 	const auto rbs = scene_->GetAllComponentsInScene<Rigidbody>(); //TODO - This is slow
 	for(const auto& rb : rbs){

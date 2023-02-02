@@ -32,7 +32,7 @@ void Time::Delay(){
 std::chrono::milliseconds Time::GetSleepTime() const{
 	//If the framerate is 0, this is treated as an unlimited framerate
 	//This also prevents a division by 0 later
-	int targetFPS = static_cast<int>(App::GetInstance().GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
+	int targetFPS = static_cast<int>(App::GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
 	if(targetFPS == 0){
 		return std::chrono::milliseconds(0);
 	}

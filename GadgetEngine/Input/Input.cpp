@@ -255,33 +255,33 @@ void Input::ProcessInputs(){
 void Input::OnEvent(const Event& e_){
 	switch(e_.GetEventType()){
 		case EventType::KeyPressed:
-			App::GetInstance().GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyPressedEvent&>(e_).GetKeyCode(), true));
+			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyPressedEvent&>(e_).GetKeyCode(), true));
 			break;
 		case EventType::KeyReleased:
-			App::GetInstance().GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyReleasedEvent&>(e_).GetKeyCode(), false));
+			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyReleasedEvent&>(e_).GetKeyCode(), false));
 			break;
 		case EventType::MouseMoved:
-			App::GetInstance().GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, dynamic_cast<const MouseMovedEvent&>(e_).GetX()));
-			App::GetInstance().GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, dynamic_cast<const MouseMovedEvent&>(e_).GetY()));
+			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, dynamic_cast<const MouseMovedEvent&>(e_).GetX()));
+			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, dynamic_cast<const MouseMovedEvent&>(e_).GetY()));
 			break;
 		case EventType::MouseScroll:
-			App::GetInstance().GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Horizontal, dynamic_cast<const MouseScrollEvent&>(e_).GetXOffset()));
-			App::GetInstance().GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Vertical, dynamic_cast<const MouseScrollEvent&>(e_).GetYOffset()));
+			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Horizontal, dynamic_cast<const MouseScrollEvent&>(e_).GetXOffset()));
+			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Vertical, dynamic_cast<const MouseScrollEvent&>(e_).GetYOffset()));
 			break;
 		case EventType::MouseButtonPressed:
-			App::GetInstance().GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonPressedEvent&>(e_).GetButton(), true));
+			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonPressedEvent&>(e_).GetButton(), true));
 			break;
 		case EventType::MouseButtonReleased:
-			App::GetInstance().GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonReleasedEvent&>(e_).GetButton(), false));
+			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonReleasedEvent&>(e_).GetButton(), false));
 			break;
 		case EventType::GamepadAxis:
-			App::GetInstance().GetInput().axisEvents.push_back(RawAxis(dynamic_cast<const GamepadAxisEvent&>(e_).GetAxisIndex(), dynamic_cast<const GamepadAxisEvent&>(e_).GetValue()));
+			App::GetInput().axisEvents.push_back(RawAxis(dynamic_cast<const GamepadAxisEvent&>(e_).GetAxisIndex(), dynamic_cast<const GamepadAxisEvent&>(e_).GetValue()));
 			break;
 		case EventType::GamepadButtonPressed:
-			App::GetInstance().GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), true));
+			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), true));
 			break;
 		case EventType::GamepadButtonReleased:
-			App::GetInstance().GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), false));
+			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), false));
 			break;
 		default:
 			Debug::Log("Unhandled Event Type [" + e_.GetName().GetString() + "] in Input!", Debug::Error, __FILE__, __LINE__);

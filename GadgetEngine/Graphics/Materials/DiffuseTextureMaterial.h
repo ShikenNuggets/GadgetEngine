@@ -11,12 +11,12 @@ namespace Gadget{
 	class DiffuseTextureMaterial : public Material{
 	public:
 		DiffuseTextureMaterial(StringID textureResource_, StringID shaderResource_) : Material(shaderResource_), textureInfo(nullptr){
-			Texture* tex = App::GetInstance().GetResourceManager().LoadResource<Texture>(textureResource_);
+			Texture* tex = App::GetResourceManager().LoadResource<Texture>(textureResource_);
 			GADGET_ASSERT(tex != nullptr, "Could not load texture [" + textureResource_.GetString() + "]!");
 
-			textureInfo = App::GetInstance().GetRenderer().GenerateAPITextureInfo(*tex);
+			textureInfo = App::GetRenderer().GenerateAPITextureInfo(*tex);
 			GADGET_ASSERT(textureInfo != nullptr, "Could not generate texture info!");
-			App::GetInstance().GetResourceManager().UnloadResource(textureResource_);
+			App::GetResourceManager().UnloadResource(textureResource_);
 		}
 
 		~DiffuseTextureMaterial(){

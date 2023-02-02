@@ -15,7 +15,7 @@ StringID InputGesture::GetName() const{ return name; }
 ButtonMashGesture::ButtonMashGesture(StringID gestureName_, StringID buttonName_, int requiredPresses_, float maxAllowedTime_) : InputGesture(gestureName_, maxAllowedTime_), buttonName(buttonName_), requiredPresses(requiredPresses_), currentPresses(0), lastButtonDownEvent(0.0f){}
 
 bool ButtonMashGesture::IsGestureValid() const{
-	return (App::GetInstance().GetTime().TimeSinceStartup() - lastButtonDownEvent) < maxAllowedTime;
+	return (App::GetTime().TimeSinceStartup() - lastButtonDownEvent) < maxAllowedTime;
 }
 
 bool ButtonMashGesture::IsGestureComplete() const{
@@ -32,9 +32,9 @@ void ButtonMashGesture::Update(){
 		return;
 	}
 
-	if(App::GetInstance().GetInput().GetButtonDown(buttonName)){
+	if(App::GetInput().GetButtonDown(buttonName)){
 		currentPresses++;
-		lastButtonDownEvent = App::GetInstance().GetTime().TimeSinceStartup();
+		lastButtonDownEvent = App::GetTime().TimeSinceStartup();
 	}
 
 	if(!IsGestureValid()){
@@ -54,7 +54,7 @@ bool ButtonSequenceGesture::IsGestureValid() const{
 		return false;
 	}
 
-	return (App::GetInstance().GetTime().TimeSinceStartup() - startTime) < maxAllowedTime;
+	return (App::GetTime().TimeSinceStartup() - startTime) < maxAllowedTime;
 }
 
 bool ButtonSequenceGesture::IsGestureComplete() const{
@@ -69,9 +69,9 @@ void ButtonSequenceGesture::Update(){
 		return; //The sequence is already complete
 	}
 
-	if(App::GetInstance().GetInput().GetButtonDown(buttonNames[currentButtonIndex])){
+	if(App::GetInput().GetButtonDown(buttonNames[currentButtonIndex])){
 		if(currentButtonIndex == 0){
-			startTime = App::GetInstance().GetTime().TimeSinceStartup();
+			startTime = App::GetTime().TimeSinceStartup();
 		}
 
 		if(IsGestureValid()){
@@ -93,7 +93,7 @@ CircularRotationGesture::CircularRotationGesture(StringID gestureName_, StringID
 }
 
 bool CircularRotationGesture::IsGestureValid() const{
-	return (App::GetInstance().GetTime().TimeSinceStartup() - startTime) < maxAllowedTime;
+	return (App::GetTime().TimeSinceStartup() - startTime) < maxAllowedTime;
 }
 
 bool CircularRotationGesture::IsGestureComplete() const{
@@ -107,8 +107,8 @@ void CircularRotationGesture::Update(){
 		return;
 	}
 
-	float xRot = App::GetInstance().GetInput().GetAxis(horizontal);
-	float yRot = App::GetInstance().GetInput().GetAxis(vertical);
+	float xRot = App::GetInput().GetAxis(horizontal);
+	float yRot = App::GetInput().GetAxis(vertical);
 
 	switch(rotations[currentRotationIndex]){
 		case Rotations::UpLeft:
@@ -149,7 +149,7 @@ void CircularRotationGesture::Update(){
 	}
 
 	if(currentRotationIndex == 1){
-		startTime = App::GetInstance().GetTime().TimeSinceStartup();
+		startTime = App::GetTime().TimeSinceStartup();
 	}
 
 	if(!IsGestureValid()){

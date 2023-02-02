@@ -5,7 +5,7 @@
 using namespace Gadget;
 
 SkyboxComponent::SkyboxComponent(Scene* parent_, StringID skyboxName_, StringID shader_) : SceneComponent(parent_), shaderName(shader_), shader(nullptr), cubemapInfo(nullptr){
-	shader = App::GetInstance().GetRenderer().GenerateAPIShader(shaderName);
+	shader = App::GetRenderer().GenerateAPIShader(shaderName);
 
 	std::array<StringID, 6> textures = {
 		StringID::ProcessString(skyboxName_.GetString() + "RightTexture"),
@@ -23,7 +23,7 @@ SkyboxComponent::SkyboxComponent(Scene* parent_, StringID skyboxName_, StringID 
 
 SkyboxComponent::~SkyboxComponent(){
 	delete cubemapInfo;
-	App::GetInstance().GetResourceManager().UnloadResource(shaderName);
+	App::GetResourceManager().UnloadResource(shaderName);
 }
 
 void SkyboxComponent::Bind(const Matrix4& proj_, const Matrix4& view_){

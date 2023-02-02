@@ -26,7 +26,7 @@ void Debug::Init(){
 	logFilePath = logFileName;
 #else
 	constexpr auto writeType = FileSystem::WriteType::Overwrite; //Deleting logs from old sesions is ideal for end users to avoid bloat
-	logFilePath = FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetInstance().GetGameName() + FileSystem::PathSeparator + logFileName;
+	logFilePath = FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetGameName() + FileSystem::PathSeparator + logFileName;
 #endif //GADGET_DEBUG
 
 	FileSystem::WriteToFile(logFilePath, "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + " GMT\n", writeType);

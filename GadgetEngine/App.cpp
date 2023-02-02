@@ -40,6 +40,7 @@ App& App::GetInstance(){
 		instance = std::make_unique<App>();
 	}
 
+	GADGET_ASSERT(instance != nullptr, "App instance was somehow nullptr! Nothing will work!");
 	return *instance;
 }
 
@@ -148,9 +149,9 @@ void* App::AllocateTwoFrameMemory(size_t bytes_){
 	return twoFrameAllocator.CurrentBuffer().Allocate(bytes_);
 }
 
-Renderer::API App::GetCurrentRenderAPI() const{
-	if(renderer != nullptr){
-		return renderer->GetRenderAPI();
+Renderer::API App::GetCurrentRenderAPI(){
+	if(GetInstance().renderer != nullptr){
+		return GetInstance().renderer->GetRenderAPI();
 	}else{
 		return Renderer::API::None;
 	}

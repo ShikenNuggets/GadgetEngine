@@ -35,18 +35,18 @@ namespace Gadget{
 
 		static void OnEvent(const Event& e_);
 
-		std::string GetGameName() const{ return gameName; }
-		Renderer::API GetCurrentRenderAPI() const;
-		float GetAspectRatio() const{ return renderer->GetAspectRatio(); }
+		static std::string GetGameName(){ return GetInstance().gameName; }
+		static Renderer::API GetCurrentRenderAPI();
+		static float GetAspectRatio(){ return GetInstance().renderer->GetAspectRatio(); }
 
-		ResourceManager& GetResourceManager() const{ return *resourceMgr; }
-		Config& GetConfig() const{ return *config; }
-		Time& GetTime() const{ return *time; }
-		Input& GetInput() const{ return *input; }
-		Renderer& GetRenderer() const{ return *renderer; }
-		PhysManager& GetPhysics() const{ return *physics; }
-		BasicSceneManager& GetSceneManager() const{ return *sceneManager; }
-		GameLogicManager& GetGameLogicManager() const{ return *gameLogicManager; }
+		static ResourceManager& GetResourceManager(){ return *GetInstance().resourceMgr; }
+		static Config& GetConfig(){ return *GetInstance().config; }
+		static Time& GetTime(){ return *GetInstance().time; }
+		static Input& GetInput(){ return *GetInstance().input; }
+		static Renderer& GetRenderer(){ return *GetInstance().renderer; }
+		static PhysManager& GetPhysics(){ return *GetInstance().physics; }
+		static BasicSceneManager& GetSceneManager(){ return *GetInstance().sceneManager; }
+		static GameLogicManager& GetGameLogicManager(){ return *GetInstance().gameLogicManager; }
 
 	private:
 		static std::unique_ptr<App> instance;

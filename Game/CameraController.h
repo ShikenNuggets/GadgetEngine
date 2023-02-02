@@ -10,7 +10,7 @@
 namespace Example{
 	class CameraController : public Gadget::GameLogicComponent{
 	public:
-		CameraController(Gadget::GameObject* parent_) : GameLogicComponent(parent_), input(Gadget::App::GetInstance().GetInput()){}
+		CameraController(Gadget::GameObject* parent_) : GameLogicComponent(parent_), input(Gadget::App::GetInput()){}
 		virtual ~CameraController() override{}
 
 		virtual void OnUpdate(float deltaTime_) override{
@@ -42,7 +42,7 @@ namespace Example{
 				parent->SetPosition(Gadget::Vector3(0.0f, 0.0f, 4.0f));
 				parent->SetRotation(Gadget::Quaternion::Identity());
 
-				Gadget::App::GetInstance().GetSceneManager().RequestSceneLoad(0);
+				Gadget::App::GetSceneManager().RequestSceneLoad(0);
 			}
 		}
 

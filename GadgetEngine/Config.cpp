@@ -65,12 +65,12 @@ void Config::SetOption(StringID section_, StringID key_, StringID value_){
 void Config::OnEvent(const Event& e_){
 	switch(e_.GetEventType()){
 		case EventType::WindowResize:
-			App::GetInstance().GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayWidthKey, dynamic_cast<const WindowResizedEvent&>(e_).GetWidth());
-			App::GetInstance().GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayHeightKey, dynamic_cast<const WindowResizedEvent&>(e_).GetHeight());
+			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayWidthKey, dynamic_cast<const WindowResizedEvent&>(e_).GetWidth());
+			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayHeightKey, dynamic_cast<const WindowResizedEvent&>(e_).GetHeight());
 			break;
 		case EventType::WindowMoved:
-			App::GetInstance().GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, dynamic_cast<const WindowMovedEvent&>(e_).GetX());
-			App::GetInstance().GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowYKey, dynamic_cast<const WindowMovedEvent&>(e_).GetY());
+			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, dynamic_cast<const WindowMovedEvent&>(e_).GetX());
+			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowYKey, dynamic_cast<const WindowMovedEvent&>(e_).GetY());
 			break;
 	}
 }
@@ -84,5 +84,5 @@ void Config::ResetAllOptionsToDefault(){
 }
 
 std::string Config::CreateEngineConfigPath(){
-	return FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetInstance().GetGameName() + FileSystem::PathSeparator + engineConfigFileName;
+	return FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetGameName() + FileSystem::PathSeparator + engineConfigFileName;
 }

@@ -7,7 +7,7 @@
 using namespace Gadget;
 
 GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_) : Shader(), shader(0){
-	GADGET_ASSERT(App::GetInstance().GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
+	GADGET_ASSERT(App::GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 
 	std::string vertCodeStr = FileSystem::ReadFileToString(vertPath_);
 	GADGET_BASIC_ASSERT(!vertCodeStr.empty());

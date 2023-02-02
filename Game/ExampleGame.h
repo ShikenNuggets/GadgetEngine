@@ -14,7 +14,7 @@ namespace Example{
 		ExampleGame() : GameInterface("Example Game"){}
 
 		virtual void LoadGame() override{
-			Gadget::App::GetInstance().GetSceneManager().AddScene(new ExampleScene());
+			Gadget::App::GetSceneManager().AddScene(new ExampleScene());
 		}
 	};
 }
