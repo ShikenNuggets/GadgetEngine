@@ -25,14 +25,14 @@ App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), co
 
 App::~App(){
 	//Calling these normally isn't necessary, but we need to enforce a specific shutdown order
-	gameLogicManager.release();
-	sceneManager.release();
-	physics.release();
-	renderer.release();
-	input.release();
-	time.release();
-	config.release();
-	resourceMgr.release();
+	gameLogicManager.reset();
+	sceneManager.reset();
+	physics.reset();
+	renderer.reset();
+	input.reset();
+	time.reset();
+	config.reset();
+	resourceMgr.reset();
 }
 
 App& App::GetInstance(){
@@ -46,7 +46,7 @@ App& App::GetInstance(){
 
 void App::DeleteInstance(){
 	if(instance != nullptr){
-		instance.release();
+		instance.reset();
 	}
 }
 
