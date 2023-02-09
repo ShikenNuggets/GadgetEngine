@@ -33,6 +33,8 @@ namespace Gadget{
 			shader->Unbind();
 		}
 
+		virtual bool HasLighting() const override{ return true; }
+
 	private:
 		TextureInfo* textureInfo;
 	};

@@ -117,20 +117,23 @@ void Win32_Renderer::Render(const Scene* scene_){
 
 			Matrix4 modelMatrix = mesh->GetParent()->GetTransform();
 			mesh->GetShader()->BindMatrix4(SID("modelMatrix"), modelMatrix);
-			mesh->GetShader()->BindMatrix3(SID("normalMatrix"), (modelMatrix.Inverse()).Transpose().ToMatrix3());
 
-			mesh->GetShader()->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
+			if(mesh->GetMaterial()->HasLighting()){
+				mesh->GetShader()->BindMatrix3(SID("normalMatrix"), (modelMatrix.Inverse()).Transpose().ToMatrix3());
 
-			mesh->GetShader()->BindInt(SID("numPointLights"), static_cast<int>(lights.size()));
-			mesh->GetShader()->BindInt(SID("numSpotLights"), 0);
-			mesh->GetShader()->BindInt(SID("numDirLights"), 0);
+				mesh->GetShader()->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
 
-			for(const auto& light : lights){
-				mesh->GetShader()->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
-				mesh->GetShader()->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
-				mesh->GetShader()->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
-				mesh->GetShader()->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
-				mesh->GetShader()->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+				mesh->GetShader()->BindInt(SID("numPointLights"), static_cast<int>(lights.size()));
+				mesh->GetShader()->BindInt(SID("numSpotLights"), 0);
+				mesh->GetShader()->BindInt(SID("numDirLights"), 0);
+
+				for(const auto& light : lights){
+					mesh->GetShader()->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
+					mesh->GetShader()->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
+					mesh->GetShader()->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
+					mesh->GetShader()->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
+					mesh->GetShader()->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+				}
 			}
 
 			glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->GetMeshNumIndices()), GL_UNSIGNED_INT, nullptr);

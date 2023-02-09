@@ -17,6 +17,7 @@ namespace Gadget{
 		void Unbind();
 
 		inline constexpr size_t GetMeshNumIndices() const{ return meshInfo->GetNumIndices(); }
+		Material* GetMaterial(){ return material; }
 		Shader* GetShader(){ return material->GetShader(); }
 
 	private:

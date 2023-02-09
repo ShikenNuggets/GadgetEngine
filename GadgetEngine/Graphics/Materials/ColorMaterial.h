@@ -21,6 +21,8 @@ namespace Gadget{
 			shader->Unbind();
 		}
 
+		virtual bool HasLighting() const override{ return false; }
+
 	private:
 		Color color;
 	};

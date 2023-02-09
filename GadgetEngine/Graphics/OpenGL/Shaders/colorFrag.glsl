@@ -2,7 +2,7 @@
 
 struct Material{
 	vec4 color;
-}
+};
 
 out vec4 color;
 
