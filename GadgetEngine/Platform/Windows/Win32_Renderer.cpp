@@ -144,11 +144,9 @@ void Win32_Renderer::Render(const Scene* scene_){
 		if(skybox != nullptr){
 			glDepthFunc(GL_LEQUAL);
 			skybox->Bind(proj, view.ToMatrix3().ToMatrix4());
-		}
 		
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 
-		if(skybox != nullptr){
 			skybox->Unbind();
 			glDepthFunc(GL_LESS);
 		}
