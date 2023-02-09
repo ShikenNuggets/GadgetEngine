@@ -136,6 +136,9 @@
     <ClInclude Include="Graphics\Loaders\ObjLoader.h">
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Materials\ColorMaterial.h">
+      <Filter>Graphics\Materials</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Materials\DiffuseTextureMaterial.h">
       <Filter>Graphics\Materials</Filter>
     </ClInclude>

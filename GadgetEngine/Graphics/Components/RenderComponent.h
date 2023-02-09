@@ -9,6 +9,7 @@ namespace Gadget{
 	class RenderComponent : public Component{
 	public:
 		RenderComponent(GameObject* parent_, StringID modelName_, StringID textureName_, StringID shaderName_);
+		RenderComponent(GameObject* parent_, StringID modelName_, const Color& color_, StringID shaderName_);
 		virtual ~RenderComponent() override;
 
 		void Bind();
