@@ -10,6 +10,7 @@ namespace Gadget{
 	public:
 		RenderComponent(GameObject* parent_, StringID modelName_, StringID textureName_, StringID shaderName_);
 		RenderComponent(GameObject* parent_, StringID modelName_, const Color& color_, StringID shaderName_);
+		RenderComponent(GameObject* parent_, StringID modelName_, Material* material_);
 		virtual ~RenderComponent() override;
 
 		void Bind();
@@ -21,6 +22,8 @@ namespace Gadget{
 	private:
 		MeshInfo* meshInfo;
 		Material* material;
+
+		void CreateMeshInfo(StringID modelName_);
 	};
 }
 
