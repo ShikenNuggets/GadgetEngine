@@ -23,6 +23,8 @@ Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
 
 	ConfigParser::ParseConfigFile(engineConfigPath, vars);
 	locMan->SetCurrentLanguage(GetOptionsString(EngineVars::Core::languageKey));
+
+	SaveConfigs(); //Force a save in case the file doesn't exist yet
 }
 
 Config::~Config(){
