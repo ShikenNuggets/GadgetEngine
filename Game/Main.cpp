@@ -7,6 +7,7 @@
 #include <Gadget.h>
 
 #include "ExampleGame.h"
+#include "Demos/01-Pong/PongGame.h"
 
 using namespace Example;
 
@@ -19,7 +20,8 @@ int main(int argc, char* argv[]){
 		std::cout << argv[i] << std::endl;
 	}
 
-	ExampleGame game = ExampleGame();
+	//ExampleGame game = ExampleGame();
+	Pong::PongGame game = Pong::PongGame();
 
 	try{
 		Gadget::App::GetInstance().Run(game);
