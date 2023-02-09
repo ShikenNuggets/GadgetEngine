@@ -30,9 +30,9 @@ namespace Gadget{
 		bool GetMultiButtonUp(StringID multiButton_) const;
 		bool GetMultiButtonHeld(StringID multiButton_) const;
 
-		void DefineButton(const Button&& button_);
-		void DefineAxis(const Axis&& axis_);
-		void DefineMultiButton(const MultiButton&& multiButton_);
+		void DefineButton(const Button& button_);
+		void DefineAxis(const Axis& axis_);
+		void DefineMultiButton(const MultiButton& multiButton_);
 
 		void ProcessInputs();
 

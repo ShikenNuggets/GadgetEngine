@@ -97,6 +97,8 @@ namespace Gadget{
 
 	class Axis{
 	public:
+		Axis(StringID name_, float deadzone_ = 0.05f, bool invert_ = false) : name(name_), axisIDs(), buttonAxisIDs(), deadzone(deadzone_), invert(invert_){}
+
 		Axis(StringID name_, AxisID axisID_, float deadzone_ = 0.05f, bool invert_ = false) : name(name_), axisIDs(), buttonAxisIDs(), deadzone(deadzone_), invert(invert_){
 			axisIDs.insert(axisID_);
 		}
@@ -115,6 +117,7 @@ namespace Gadget{
 		bool IsInverted() const{ return invert; }
 
 		void AddAxisID(AxisID id_){ axisIDs.insert(id_); }
+		void AddButtonAxis(const ButtonAxis& buttonAxis_){ buttonAxisIDs.push_back(buttonAxis_); }
 
 		void RemoveAxisID(AxisID id_){
 			GADGET_ASSERT(axisIDs.find(id_) != axisIDs.end(), "Tried to remove invalid axis ID [" + std::to_string((int)id_) + "]!");
