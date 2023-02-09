@@ -12,7 +12,7 @@ namespace Gadget{
 		Transform(const Vector3& pos_, const Quaternion& rot_ = Quaternion::Identity(), const Vector3& scale_ = Vector3::Fill(1.0f));
 		Transform(const Vector3& pos_, const Euler& euler_, const Vector3& scale_ = Vector3::Fill(1.0f));
 
-		Matrix4 GetTransform() const;
+		Matrix4 GetTransformMatrix() const;
 
 		Vector3 position;
 		Quaternion rotation;
@@ -47,7 +47,7 @@ namespace Gadget{
 		Vector3 GetPosition() const{ return transform.position; }
 		Quaternion GetRotation() const{ return transform.rotation; }
 		Vector3 GetScale() const{ return transform.scale; }
-		Matrix4 GetTransform() const{ return transform.GetTransform(); }
+		Matrix4 GetTransformMatrix() const{ return transform.GetTransformMatrix(); }
 
 		void SetName(StringID newName_){ name = newName_; }
 

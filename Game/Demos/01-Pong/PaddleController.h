@@ -19,7 +19,7 @@ namespace Pong{
 				moveAxis = Gadget::App::GetInput().GetAxis(SID("RightPaddleMove"));
 			}
 
-			parent->GetTransform().Translate(Gadget::Vector3(0.0f, moveAxis * paddleMoveSpeed * deltaTime_, 0.0f));
+			parent->Translate(Gadget::Vector3(0.0f, moveAxis * paddleMoveSpeed * deltaTime_, 0.0f));
 		}
 
 	private:

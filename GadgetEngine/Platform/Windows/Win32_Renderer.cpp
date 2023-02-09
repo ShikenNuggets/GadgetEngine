@@ -115,7 +115,7 @@ void Win32_Renderer::Render(const Scene* scene_){
 			mesh->GetShader()->BindMatrix4(SID("projectionMatrix"), proj);
 			mesh->GetShader()->BindMatrix4(SID("viewMatrix"), view);
 
-			Matrix4 modelMatrix = mesh->GetParent()->GetTransform();
+			Matrix4 modelMatrix = mesh->GetParent()->GetTransformMatrix();
 			mesh->GetShader()->BindMatrix4(SID("modelMatrix"), modelMatrix);
 
 			if(mesh->GetMaterial()->HasLighting()){
