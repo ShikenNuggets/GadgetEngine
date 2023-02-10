@@ -18,7 +18,7 @@ namespace Gadget{
 		float GetMass() const{ return mass; }
 		Vector3 GetVelocity() const{ return velocity; }
 		Vector3 GetAcceleration() const{ return acceleration; }
-		bool UseGravity() const{ return true; }
+		bool UseGravity() const{ return useGravity; }
 
 		void SetMass(float mass_){ mass = mass_; }
 		void SetVelocity(const Vector3& velocity_){ velocity = velocity_; }
