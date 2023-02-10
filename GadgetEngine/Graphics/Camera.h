@@ -25,6 +25,7 @@ namespace Gadget{
 		float GetFOV() const;
 		float GetNearPlane() const;
 		float GetFarPlane() const;
+		float GetOrthoHeight() const;
 
 		void SetViewportRect(const Rect& rect_);
 		void SetProjection(Projection projection_);
@@ -32,6 +33,7 @@ namespace Gadget{
 		void SetAspect(float aspect_);
 		void SetNearPlane(float near_);
 		void SetFarPlane(float far_);
+		void SetOrthoHeight(float height_);
 
 	private:
 		Matrix4 view;
@@ -40,6 +42,7 @@ namespace Gadget{
 		float aspect;
 		float nearPlane;
 		float farPlane;
+		float orthoHeight;
 
 		Rect viewRect;
 		Projection currentProjection;

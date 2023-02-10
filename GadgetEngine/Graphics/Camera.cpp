@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection projection_, const Rect& viewRect_) : view(), projection(), fov(45.0f), aspect(1.0f), nearPlane(0.1f), farPlane(1000.0f), currentProjection(projection_), viewRect(viewRect_){
+Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection projection_, const Rect& viewRect_) : view(), projection(), fov(45.0f), aspect(1.0f), nearPlane(0.1f), farPlane(1000.0f), orthoHeight(12.0f), currentProjection(projection_), viewRect(viewRect_){
 	aspect = App::GetAspectRatio();
 
 	CalculateViewMatrix(position_, rotation_);
@@ -27,7 +27,7 @@ void Camera::CalculateProjectionMatrix(){
 			projection = Matrix4::Perspective(fov, aspect, nearPlane, farPlane);
 			break;
 		case Projection::Orthographic:
-			projection = Matrix4::Orthographic(-10.0f, 10.0f * aspect, -10.0f, 10.0f / aspect, -100.0f, 100.0f);
+			projection = Matrix4::Orthographic(-(orthoHeight * aspect) / 2.0f, (orthoHeight * aspect) / 2.0f, -orthoHeight / 2.0f, orthoHeight / 2.0f, -100.0f, 100.0f);
 			break;
 		default:
 			Debug::Log("Invalid projection mode!", Debug::Error, __FILE__, __LINE__);
@@ -63,6 +63,10 @@ float Camera::GetFarPlane() const{
 	return farPlane;
 }
 
+float Camera::GetOrthoHeight() const{
+	return orthoHeight;
+}
+
 void Camera::SetViewportRect(const Rect& rect_){
 	viewRect = rect_;
 }
@@ -90,4 +94,8 @@ void Camera::SetNearPlane(float near_){
 void Camera::SetFarPlane(float far_){
 	farPlane = far_;
 	CalculateProjectionMatrix();
+}
+
+void Camera::SetOrthoHeight(float height_){
+	orthoHeight = height_;
 }
