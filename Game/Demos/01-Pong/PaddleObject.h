@@ -3,6 +3,7 @@
 
 #include <Game/GameObject.h>
 #include <Graphics/Components/RenderComponent.h>
+#include <Physics/BoxCollider2D.h>
 
 #include "PaddleController.h"
 
@@ -12,6 +13,7 @@ namespace Pong{
 		PaddleObject(Gadget::StringID name_ = SID("Paddle"), unsigned int player_ = 1) : GameObject(name_){
 			SetScale(Gadget::Vector3(0.5f, 3.0f, 1.0f));
 			AddComponent(new Gadget::RenderComponent(this, SID("CubeModel"), Gadget::Color::White(), SID("ColorShader")));
+			AddComponent(new Gadget::BoxCollider2D(this, 1.0f, 1.0f));
 			AddComponent(new PaddleController(this, player_));
 		}
 	};

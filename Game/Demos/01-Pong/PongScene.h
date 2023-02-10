@@ -3,11 +3,11 @@
 
 #include <Game/Scene.h>
 #include <Graphics/Components/CameraComponent.h>
-#include <Graphics/Components/LightComponent.h>
 #include <Graphics/Components/RenderComponent.h>
-#include <Graphics/Components/SkyboxComponent.h>
+#include <Physics/BoxCollider2D.h>
 #include <Physics/Rigidbody.h>
 
+#include "BallController.h"
 #include "PaddleObject.h"
 
 namespace Pong{
@@ -19,18 +19,26 @@ namespace Pong{
 		virtual void SetToDefaultState() override{
 			Gadget::Scene::SetToDefaultState();
 
-			Gadget::GameObject* camera = new Gadget::GameObject();
+			auto camera = new Gadget::GameObject();
 			camera->SetPosition(0.0f, 0.0f, 0.0f);
 			camera->AddComponent(new Gadget::CameraComponent(camera, Gadget::Camera::Projection::Orthographic));
 			CreateObject(camera);
 
-			Gadget::GameObject* leftPaddle = new PaddleObject(SID("LeftPaddle"), 1);
-			leftPaddle->SetPosition(-5.0f, 0.0f, 0.0f);
+			auto leftPaddle = new PaddleObject(SID("LeftPaddle"), 1);
+			leftPaddle->SetPosition(-7.5f, 0.0f, 0.0f);
 			CreateObject(leftPaddle);
 
-			Gadget::GameObject* rightPaddle = new PaddleObject(SID("RightPaddle"), 2);
-			rightPaddle->SetPosition(15.0f, 0.0f, 0.0f);
+			auto rightPaddle = new PaddleObject(SID("RightPaddle"), 2);
+			rightPaddle->SetPosition(7.5f, 0.0f, 0.0f);
 			CreateObject(rightPaddle);
+
+			auto ball = new Gadget::GameObject();
+			ball->SetScale(0.5f);
+			ball->AddComponent(new Gadget::RenderComponent(ball, SID("CubeModel"), Gadget::Color::White(), SID("ColorShader")));
+			ball->AddComponent(new Gadget::Rigidbody(ball, 1.0f, false));
+			ball->AddComponent(new Gadget::BoxCollider2D(ball));
+			ball->AddComponent(new BallController(ball, 200.0f));
+			CreateObject(ball);
 		}
 	};
 }

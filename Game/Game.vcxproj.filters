@@ -10,6 +10,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="Demos\01-Pong\BallController.h">
+      <Filter>Demos\01-Pong</Filter>
+    </ClInclude>
     <ClInclude Include="Demos\01-Pong\PaddleController.h">
       <Filter>Demos\01-Pong</Filter>
     </ClInclude>
