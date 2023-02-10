@@ -248,6 +248,15 @@
     <ClInclude Include="Memory\StackAllocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\BoxCollider2D.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CollisionSystem.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
     <ClInclude Include="Physics\PhysManager.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -396,6 +405,9 @@
     </ClCompile>
     <ClCompile Include="Memory\StackAllocator.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\CollisionSystem.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Physics\PhysManager.cpp">
       <Filter>Physics</Filter>

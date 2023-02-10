@@ -170,6 +170,9 @@
     <ClInclude Include="Memory\DoubleStackAllocator.h" />
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
+    <ClInclude Include="Physics\BoxCollider2D.h" />
+    <ClInclude Include="Physics\Collider.h" />
+    <ClInclude Include="Physics\CollisionSystem.h" />
     <ClInclude Include="Physics\PhysManager.h" />
     <ClInclude Include="Physics\Rigidbody.h" />
     <ClInclude Include="Platform\Windows\Win32_Renderer.h" />
@@ -227,6 +230,7 @@
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Memory\DoubleStackAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
+    <ClCompile Include="Physics\CollisionSystem.cpp" />
     <ClCompile Include="Physics\PhysManager.cpp" />
     <ClCompile Include="Physics\Rigidbody.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Renderer.cpp" />
