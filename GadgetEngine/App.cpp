@@ -24,15 +24,7 @@ App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), co
 }
 
 App::~App(){
-	//Calling these normally isn't necessary, but we need to enforce a specific shutdown order
-	gameLogicManager.reset();
-	sceneManager.reset();
-	physics.reset();
-	renderer.reset();
-	input.reset();
-	time.reset();
-	config.reset();
-	resourceMgr.reset();
+	Destroy();
 }
 
 App& App::GetInstance(){
@@ -46,6 +38,7 @@ App& App::GetInstance(){
 
 void App::DeleteInstance(){
 	if(instance != nullptr){
+		instance->Destroy(); //Destroy must be called before reset so that the App instance is still valid
 		instance.reset();
 	}
 }
@@ -86,6 +79,17 @@ void App::Initialize(const std::string& name_){
 	physics = std::make_unique<PhysManager>();
 	sceneManager = std::make_unique<BasicSceneManager>();
 	gameLogicManager = std::make_unique<GameLogicManager>();
+}
+
+void App::Destroy(){
+	gameLogicManager.reset();
+	sceneManager.reset();
+	physics.reset();
+	renderer.reset();
+	input.reset();
+	time.reset();
+	config.reset();
+	resourceMgr.reset();
 }
 
 void App::Run(GameInterface& gameInterface_){

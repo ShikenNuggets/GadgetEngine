@@ -66,6 +66,7 @@ namespace Gadget{
 		std::unique_ptr<GameLogicManager> gameLogicManager;
 
 		void Initialize(const std::string& name_);
+		void Destroy();
 
 		//Delete unwanted compiler-generated copy/move constructors and assignment operators
 		App(const App&) = delete;
