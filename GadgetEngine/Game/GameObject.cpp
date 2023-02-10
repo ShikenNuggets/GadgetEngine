@@ -34,3 +34,12 @@ void GameObject::AddComponent(Component* component_){
 	GADGET_ASSERT(!Utils::Contains(components, component_), "Component is being added to the component list for this object multiple times!");
 	components.push_back(component_);
 }
+
+bool GameObject::HasTag(StringID tag_) const{
+	return Utils::Contains(tags, tag_);
+}
+
+void GameObject::AddTag(StringID tag_){
+	GADGET_ASSERT(!HasTag(tag_), "Tried adding tag [" + tag_.GetString() + "] to a GameObject that already has that tag!");
+	tags.push_back(tag_);
+}

@@ -44,12 +44,14 @@ namespace Gadget{
 		}
 
 		StringID GetName() const{ return name; }
+		bool HasTag(StringID tag_) const;
 		Vector3 GetPosition() const{ return transform.position; }
 		Quaternion GetRotation() const{ return transform.rotation; }
 		Vector3 GetScale() const{ return transform.scale; }
 		Matrix4 GetTransformMatrix() const{ return transform.GetTransformMatrix(); }
 
 		void SetName(StringID newName_){ name = newName_; }
+		void AddTag(StringID tag_);
 
 		void SetPosition(const Vector3& pos_){ transform.position = pos_; }
 		void SetPosition(float x_, float y_, float z_){ transform.position += Vector3(x_, y_, z_); }
@@ -70,6 +72,7 @@ namespace Gadget{
 
 	protected:
 		StringID name;
+		std::vector<StringID> tags;
 		Transform transform;
 		std::vector<Component*> components;
 	};
