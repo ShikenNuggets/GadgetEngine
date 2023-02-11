@@ -26,8 +26,8 @@ namespace Pong{
 				rigidbody->SetVelocity(Gadget::Vector3(-rigidbody->GetVelocity().x, rigidbody->GetVelocity().y, rigidbody->GetVelocity().z));
 			}else if(col_.HasTag(SID("Wall"))){
 				rigidbody->SetVelocity(Gadget::Vector3(rigidbody->GetVelocity().x, -rigidbody->GetVelocity().y, rigidbody->GetVelocity().z));
-			}else if(col_.HasTag(SID("Goal"))){
-
+			}else if(col_.HasTag(SID("LeftGoal"))){
+			}else if(col_.HasTag(SID("RightGoal"))){
 			}
 
 			GameLogicComponent::OnCollision(col_);
