@@ -25,11 +25,17 @@
     <ClInclude Include="Demos\01-Pong\PongScene.h">
       <Filter>Demos\01-Pong</Filter>
     </ClInclude>
+    <ClInclude Include="Demos\01-Pong\PongSceneHandler.h">
+      <Filter>Demos\01-Pong</Filter>
+    </ClInclude>
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
     <ClInclude Include="ObjectRotator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Demos\01-Pong\PongSceneHandler.cpp">
+      <Filter>Demos\01-Pong</Filter>
+    </ClCompile>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
 </Project>

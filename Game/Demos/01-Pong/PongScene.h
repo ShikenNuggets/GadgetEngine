@@ -9,6 +9,7 @@
 
 #include "BallController.h"
 #include "PaddleObject.h"
+#include "PongSceneHandler.h"
 
 namespace Pong{
 	class PongScene : public Gadget::Scene{
@@ -18,6 +19,8 @@ namespace Pong{
 	protected:
 		virtual void SetToDefaultState() override{
 			Gadget::Scene::SetToDefaultState();
+
+			AddSceneComponent(new PongSceneHandler(this));
 
 			auto camera = new Gadget::GameObject();
 			camera->SetPosition(0.0f, 0.0f, 0.0f);
@@ -66,7 +69,7 @@ namespace Pong{
 
 			auto rightGoal = new Gadget::GameObject();
 			rightGoal->AddTag(SID("RightGoal"));
-			rightGoal->SetPosition(Gadget::Vector3(-10.5f, 0.0f, 0.0f));
+			rightGoal->SetPosition(Gadget::Vector3(10.5f, 0.0f, 0.0f));
 			rightGoal->SetScale(Gadget::Vector3(0.25f, 15.0f, 1.0f));
 			rightGoal->AddComponent(new Gadget::RenderComponent(rightGoal, SID("CubeModel"), Gadget::Color::Gray(), SID("ColorShader")));
 			rightGoal->AddComponent(new Gadget::BoxCollider2D(rightGoal, 1.0f, 1.0f, true));

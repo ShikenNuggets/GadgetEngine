@@ -12,7 +12,7 @@ namespace Gadget{
 		Component(GameObject* parent_) : parent(parent_){ GADGET_BASIC_ASSERT(parent_ != nullptr); }
 		virtual ~Component(){}
 
-		const GameObject* GetParent() const{ return parent; }
+		GameObject* GetParent() const{ return parent; }
 
 	protected:
 		GameObject* parent;

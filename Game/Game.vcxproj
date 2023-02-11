@@ -123,11 +123,13 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d<
     <ClInclude Include="Demos\01-Pong\PaddleObject.h" />
     <ClInclude Include="Demos\01-Pong\PongGame.h" />
     <ClInclude Include="Demos\01-Pong\PongScene.h" />
+    <ClInclude Include="Demos\01-Pong\PongSceneHandler.h" />
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
     <ClInclude Include="ObjectRotator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Demos\01-Pong\PongSceneHandler.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

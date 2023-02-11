@@ -5,13 +5,16 @@
 #include <Game/GameLogicComponent.h>
 #include <Physics/Rigidbody.h>
 
+#include "PongSceneHandler.h"
+
 namespace Pong{
 	class BallController : public Gadget::GameLogicComponent{
 	public:
-		BallController(Gadget::GameObject* parent_, float initialForce_) : GameLogicComponent(parent_), initialForce(initialForce_), rigidbody(nullptr){}
+		BallController(Gadget::GameObject* parent_, float initialForce_) : GameLogicComponent(parent_), initialForce(initialForce_), rigidbody(nullptr), sceneHandler(nullptr){}
 
 		virtual void OnStart() override{
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();
+			sceneHandler = Gadget::App::GetSceneManager().CurrentScene()->GetSceneComponent<PongSceneHandler>();
 			GADGET_BASIC_ASSERT(rigidbody != nullptr);
 			if(rigidbody != nullptr){
 				rigidbody->AddForce(Gadget::Vector3::Right() * initialForce);
@@ -23,19 +26,25 @@ namespace Pong{
 
 		virtual void OnCollision(const Gadget::Collision& col_) override{
 			if(col_.HasTag(SID("Paddle"))){
-				rigidbody->SetVelocity(Gadget::Vector3(-rigidbody->GetVelocity().x, rigidbody->GetVelocity().y, rigidbody->GetVelocity().z));
+				FlipVelocityX();
 			}else if(col_.HasTag(SID("Wall"))){
-				rigidbody->SetVelocity(Gadget::Vector3(rigidbody->GetVelocity().x, -rigidbody->GetVelocity().y, rigidbody->GetVelocity().z));
+				FlipVelocityY();
 			}else if(col_.HasTag(SID("LeftGoal"))){
+				sceneHandler->AddScoreAndResetGame(1);
 			}else if(col_.HasTag(SID("RightGoal"))){
+				sceneHandler->AddScoreAndResetGame(2);
 			}
 
 			GameLogicComponent::OnCollision(col_);
 		}
 
+		void FlipVelocityX(){ rigidbody->SetVelocity(Gadget::Vector3(-rigidbody->GetVelocity().x, rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
+		void FlipVelocityY(){ rigidbody->SetVelocity(Gadget::Vector3(rigidbody->GetVelocity().x, -rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
+
 	private:
 		const float initialForce;
 		Gadget::Rigidbody* rigidbody;
+		PongSceneHandler* sceneHandler;
 	};
 }
 
