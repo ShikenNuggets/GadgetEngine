@@ -11,10 +11,15 @@ void GameLogicManager::Update(const Scene* scene_, float deltaTime_){
 	//TODO - This is very inefficient, find a better way to do this
 	auto lcs = scene_->GetAllComponentsInScene<GameLogicComponent>();
 	for(auto& lc : lcs){
+		GADGET_BASIC_ASSERT(lc != nullptr);
 		if(!lc->HasStarted()){
 			lc->OnStart();
 		}
 
 		lc->OnUpdate(deltaTime_);
+
+		while(lc->HasCollisionsToHandle()){
+			lc->OnCollision(lc->PopCollisionToHandle());
+		}
 	}
 }

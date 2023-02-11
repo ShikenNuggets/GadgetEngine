@@ -1,6 +1,7 @@
 #ifndef GADGET_PHYS_MANAGER_H
 #define GADGET_PHYS_MANAGER_H
 
+#include "Collider.h"
 #include "Game/Scene.h"
 
 namespace Gadget{
@@ -13,6 +14,8 @@ namespace Gadget{
 
 	private:
 		static PhysManager* instance;
+
+		void HandleCollisionResponse(Collider* collider_, Collider* other_);
 	};
 }
 

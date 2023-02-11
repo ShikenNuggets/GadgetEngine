@@ -6,7 +6,12 @@
 namespace Gadget{
 	class Collider : public Component{
 	public:
-		Collider(GameObject* parent_) : Component(parent_){}
+		Collider(GameObject* parent_, bool isTrigger_) : Component(parent_), isTrigger(isTrigger_){}
+
+		bool IsTrigger() const{ return isTrigger; }
+
+	protected:
+		bool isTrigger;
 	};
 }
 

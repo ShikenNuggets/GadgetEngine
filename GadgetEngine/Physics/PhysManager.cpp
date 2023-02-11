@@ -5,6 +5,7 @@
 #include "Collider.h"
 #include "CollisionSystem.h"
 #include "Rigidbody.h"
+#include "Game/GameLogicComponent.h"
 
 using namespace Gadget;
 
@@ -25,19 +26,31 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 	}
 
 	const auto cls = scene_->GetAllComponentsInScene<BoxCollider2D>(); //TODO - This is slow
+	//TODO - This is *really* slow. It checks every collider in the scene against every other collider
+	//This is bad enough in a small scene but it'll get exponentially worse as more colliders are added
 	for(int i = 0; i < cls.size(); i++){
 		for(int j = i + 1; j < cls.size(); j++){
 			if(CollisionSystem::TestCollision(*cls[i], *cls[j])){
-				auto rb1 = cls[i]->GetParent()->GetComponent<Rigidbody>();
-				if(rb1 != nullptr){
-					//TODO - Handle collision response
-				}
-
-				auto rb2 = cls[j]->GetParent()->GetComponent<Rigidbody>();
-				if(rb2 != nullptr){
-					//TODO - Handle collision response
-				}
+				HandleCollisionResponse(cls[i], cls[j]);
+				HandleCollisionResponse(cls[j], cls[i]);
 			}
 		}
+	}
+}
+
+void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_){
+	auto rb1 = collider_->GetParent()->GetComponent<Rigidbody>();
+	auto lgs = collider_->GetParent()->GetComponents<GameLogicComponent>();
+
+	Collision collision = Collision(other_->GetParent()->GetTags(), collider_->IsTrigger() || other_->IsTrigger());
+
+	if(!collision.isTrigger){
+		if(rb1 != nullptr){
+			//TODO - Physics collision response
+		}
+	}
+
+	for(const auto& lg : lgs){
+		lg->AddCollisionToHandle(collision);
 	}
 }
