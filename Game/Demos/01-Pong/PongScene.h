@@ -36,7 +36,7 @@ namespace Pong{
 			ball->SetScale(0.5f);
 			ball->AddComponent(new Gadget::RenderComponent(ball, SID("CubeModel"), Gadget::Color::White(), SID("ColorShader")));
 			ball->AddComponent(new Gadget::Rigidbody(ball, 1.0f, false));
-			ball->AddComponent(new Gadget::BoxCollider2D(ball));
+			ball->AddComponent(new Gadget::BoxCollider2D(ball, 1.0f, 1.0f, true));
 			ball->AddComponent(new BallController(ball, 200.0f));
 			CreateObject(ball);
 		}
