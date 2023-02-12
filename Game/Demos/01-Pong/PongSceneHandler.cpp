@@ -16,8 +16,6 @@ void PongSceneHandler::AddScoreAndResetGame(int player_){
 
 	auto bc = parent->GetComponentInScene<BallController>();
 	if(bc != nullptr){
-		bc->GetParent()->SetPosition(Gadget::Vector3::Zero());
-		bc->FlipVelocityX();
-		bc->FlipVelocityY();
+		bc->Reset();
 	}
 }

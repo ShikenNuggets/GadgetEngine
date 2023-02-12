@@ -17,8 +17,7 @@ namespace Pong{
 			sceneHandler = Gadget::App::GetSceneManager().CurrentScene()->GetSceneComponent<PongSceneHandler>();
 			GADGET_BASIC_ASSERT(rigidbody != nullptr);
 			if(rigidbody != nullptr){
-				rigidbody->AddForce(Gadget::Vector3::Right() * initialForce);
-				rigidbody->AddForce(Gadget::Vector3::Up() * initialForce / 2.0f);
+				rigidbody->SetVelocity(Gadget::Vector3(initialForce, initialForce / 2.0f, 0.0f));
 			}
 
 			GameLogicComponent::OnStart();
@@ -38,13 +37,25 @@ namespace Pong{
 			GameLogicComponent::OnCollision(col_);
 		}
 
-		void FlipVelocityX(){ rigidbody->SetVelocity(Gadget::Vector3(-rigidbody->GetVelocity().x, rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
-		void FlipVelocityY(){ rigidbody->SetVelocity(Gadget::Vector3(rigidbody->GetVelocity().x, -rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
+		void Reset(){
+			parent->SetPosition(Gadget::Vector3::Zero());
+			FlipVelocityX();
+			FlipVelocityY();
+			auto oldVelocity = rigidbody->GetVelocity();
+			rigidbody->SetVelocity(Gadget::Vector3(
+				Gadget::Math::Clamp(-initialForce, initialForce, oldVelocity.x), 
+				Gadget::Math::Clamp(-initialForce / 2.0f, initialForce / 2.0f, oldVelocity.y),
+				0.0f)
+			);
+		}
 
 	private:
 		const float initialForce;
 		Gadget::Rigidbody* rigidbody;
 		PongSceneHandler* sceneHandler;
+
+		void FlipVelocityX(){ rigidbody->SetVelocity(Gadget::Vector3(-rigidbody->GetVelocity().x, rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
+		void FlipVelocityY(){ rigidbody->SetVelocity(Gadget::Vector3(rigidbody->GetVelocity().x, -rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
 	};
 }
 
