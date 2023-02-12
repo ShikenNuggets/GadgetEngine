@@ -26,6 +26,7 @@ namespace Pong{
 		virtual void OnCollision(const Gadget::Collision& col_) override{
 			if(col_.HasTag(SID("Paddle"))){
 				FlipVelocityX();
+				//IncreaseVelocity(); //Will re-enable this when position correcting is in, currently has inconsistent behaviour
 			}else if(col_.HasTag(SID("Wall"))){
 				FlipVelocityY();
 			}else if(col_.HasTag(SID("LeftGoal"))){
@@ -56,6 +57,21 @@ namespace Pong{
 
 		void FlipVelocityX(){ rigidbody->SetVelocity(Gadget::Vector3(-rigidbody->GetVelocity().x, rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
 		void FlipVelocityY(){ rigidbody->SetVelocity(Gadget::Vector3(rigidbody->GetVelocity().x, -rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
+
+		void IncreaseVelocity(){
+			float xAmount = 0.1f;
+			float yAmount = xAmount / 2.0f;
+
+			if(rigidbody->GetVelocity().x < 0.0f){
+				xAmount *= -1.0f;
+			}
+
+			if(rigidbody->GetVelocity().y < 0.0f){
+				yAmount *= -1.0f;
+			}
+
+			rigidbody->AddVelocity(xAmount, yAmount, 0.0);
+		}
 	};
 }
 
