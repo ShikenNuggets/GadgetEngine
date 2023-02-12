@@ -46,13 +46,17 @@ void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_)
 	collision.otherTags = other_->GetParent()->GetTags();
 	collision.otherPos = other_->GetParent()->GetPosition();
 	collision.otherScale = other_->GetColliderSize();
-	collision.collisionVector = other_->GetParent()->GetPosition() - collider_->GetParent()->GetPosition();
-	collision.overlapAmount = CollisionSystem::CalculateOverlapAmount(collision.collisionVector.Normalized(), *dynamic_cast<BoxCollider2D*>(collider_), *dynamic_cast<BoxCollider2D*>(other_));
+	collision.collisionVector = CollisionSystem::CalculateContactPoint(*dynamic_cast<BoxCollider2D*>(collider_), *dynamic_cast<BoxCollider2D*>(other_)) - collider_->GetParent()->GetPosition();
+
+	if(!collision.collisionVector.IsNear(Vector3::Zero())){
+		collision.overlapAmount = CollisionSystem::CalculateOverlapAmount(collision.collisionVector.Normalized(), *dynamic_cast<BoxCollider2D*>(collider_), *dynamic_cast<BoxCollider2D*>(other_));
+	}
+
 	collision.isTrigger = collider_->IsTrigger() || other_->IsTrigger();
 
 	if(!collision.isTrigger){
 		if(rb != nullptr){
-			//TODO - Physics collision response
+			rb->CollisionResponse(collision);
 		}
 	}
 

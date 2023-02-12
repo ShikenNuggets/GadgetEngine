@@ -1,6 +1,7 @@
 #ifndef GADGET_RIGIDBODY_H
 #define GADGET_RIGIDBODY_H
 
+#include "CollisionSystem.h"
 #include "Game/Component.h"
 #include "Math/Vector.h"
 
@@ -27,6 +28,8 @@ namespace Gadget{
 		void SetVelocity(float x_, float y_, float z_){ velocity = Vector3(x_, y_, z_); }
 		void SetAcceleration(const Vector3& accel_){ acceleration = accel_; }
 		void SetAcceleration(float x_, float y_, float z_){ acceleration = Vector3(x_, y_, z_); }
+
+		void CollisionResponse(const Collision& collision_);
 
 	private:
 		float mass; //Mass in kg

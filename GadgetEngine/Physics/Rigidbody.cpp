@@ -41,3 +41,8 @@ void Rigidbody::AddVelocity(const Vector3& vel_){
 void Rigidbody::AddVelocity(float x_, float y_, float z_){
 	AddVelocity(Vector3(x_, y_, z_));
 }
+
+void Rigidbody::CollisionResponse(const Collision& collision_){
+	//TODO - This is obviously not proper collision response
+	parent->Translate(-collision_.collisionVector.Normalized() * collision_.overlapAmount);
+}

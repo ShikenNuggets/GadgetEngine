@@ -36,7 +36,13 @@ namespace Gadget{
 		inline constexpr bool Intersects(float x_, float y_){
 			const float halfWidth = w / 2.0f;
 			const float halfHeight = h / 2.0f;
-			return (x_ > x - halfWidth && x_ < x + halfWidth) && (y_ < (1.0f - y) + halfHeight && y_ >(1.0f - y) - halfHeight);
+
+			const float left = x - halfWidth;
+			const float right = x + halfWidth;
+			const float top = y + halfHeight;
+			const float bottom = y - halfHeight;
+
+			return x_ >= left && x_ <= right && y_ <= top && y_ >= bottom;
 		}
 
 		inline constexpr bool Intersects(const Vector2& v_){
