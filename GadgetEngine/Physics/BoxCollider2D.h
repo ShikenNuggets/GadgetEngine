@@ -10,6 +10,14 @@ namespace Gadget{
 
 		float GetWidth() const{ return width; }
 		float GetHeight() const{ return height; }
+		
+		virtual Vector3 GetColliderSize() const override{
+			return Vector3(
+				parent->GetScale().x * (width / 2.0f),
+				parent->GetScale().y * (height / 2.0f),
+				parent->GetScale().z
+			);
+		}
 
 		void SetWidth(float width_){ width = width_; }
 		void SetHeight(float height_){ height = height_; }

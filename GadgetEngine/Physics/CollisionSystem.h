@@ -2,14 +2,19 @@
 #define GADGET_COLLISION_SYSTEM_H
 
 #include "BoxCollider2D.h"
+#include "Math/Vector.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
 	struct Collision{
-		Collision(std::vector<StringID> otherTags_, bool isTriggerCollision_) : otherTags(otherTags_), isTrigger(isTriggerCollision_){}
+		Collision() : didCollide(false), otherTags(), otherPos(), otherScale(), collisionVector(), overlapAmount(0.0f), isTrigger(false){}
 
-		//TODO - We'll need more collision info here for physics response
+		bool didCollide;
 		std::vector<StringID> otherTags;
+		Vector3 otherPos;
+		Vector3 otherScale;
+		Vector3 collisionVector;
+		float overlapAmount;
 		bool isTrigger;
 
 		constexpr bool HasTag(StringID tag_) const{ return Utils::Contains(otherTags, tag_); }
@@ -17,6 +22,7 @@ namespace Gadget{
 
 	namespace CollisionSystem{
 		bool TestCollision(const BoxCollider2D& cl1, const BoxCollider2D& cl2);
+		float CalculateOverlapAmount(const Vector3& dir_, const BoxCollider2D& cl1, const BoxCollider2D& cl2);
 	};
 }
 

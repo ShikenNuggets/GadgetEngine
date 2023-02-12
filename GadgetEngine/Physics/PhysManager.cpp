@@ -39,13 +39,19 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 }
 
 void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_){
-	auto rb1 = collider_->GetParent()->GetComponent<Rigidbody>();
+	auto rb = collider_->GetParent()->GetComponent<Rigidbody>();
 	auto lgs = collider_->GetParent()->GetComponents<GameLogicComponent>();
 
-	Collision collision = Collision(other_->GetParent()->GetTags(), collider_->IsTrigger() || other_->IsTrigger());
+	Collision collision;
+	collision.otherTags = other_->GetParent()->GetTags();
+	collision.otherPos = other_->GetParent()->GetPosition();
+	collision.otherScale = other_->GetColliderSize();
+	collision.collisionVector = other_->GetParent()->GetPosition() - collider_->GetParent()->GetPosition();
+	collision.overlapAmount = CollisionSystem::CalculateOverlapAmount(collision.collisionVector.Normalized(), *dynamic_cast<BoxCollider2D*>(collider_), *dynamic_cast<BoxCollider2D*>(other_));
+	collision.isTrigger = collider_->IsTrigger() || other_->IsTrigger();
 
 	if(!collision.isTrigger){
-		if(rb1 != nullptr){
+		if(rb != nullptr){
 			//TODO - Physics collision response
 		}
 	}
