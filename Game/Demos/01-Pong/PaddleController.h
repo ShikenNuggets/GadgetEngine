@@ -11,6 +11,11 @@ namespace Pong{
 			GADGET_BASIC_ASSERT(player == 1 || player == 2);
 		}
 
+		virtual void OnStart() override{
+			startPosition = parent->GetPosition();
+			GameLogicComponent::OnStart();
+		}
+
 		virtual void OnUpdate(float deltaTime_) override{
 			float moveAxis = 0.0f;
 			if(player == 1){
@@ -20,11 +25,18 @@ namespace Pong{
 			}
 
 			parent->Translate(Gadget::Vector3(0.0f, moveAxis * paddleMoveSpeed * deltaTime_, 0.0f));
+
+			GameLogicComponent::OnUpdate(deltaTime_);
+		}
+
+		void Reset(){
+			parent->SetPosition(startPosition);
 		}
 
 	private:
 		const float paddleMoveSpeed;
 		const unsigned int player;
+		Gadget::Vector3 startPosition;
 	};
 }
 
