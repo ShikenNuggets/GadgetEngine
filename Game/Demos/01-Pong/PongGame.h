@@ -14,6 +14,7 @@ namespace Pong{
 		PongGame() : GameInterface("Pong"){}
 
 		virtual void LoadGame() override{
+			Gadget::App::GetRenderer().SetClearColor(Gadget::Color::Black());
 			DefineInputs();
 			Gadget::App::GetSceneManager().AddScene(new PongScene());
 		}
