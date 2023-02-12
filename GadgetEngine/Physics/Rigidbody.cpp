@@ -33,3 +33,11 @@ void Rigidbody::AddForce(const Vector3& force_){
 
 	acceleration += force_ / mass;
 }
+
+void Rigidbody::AddVelocity(const Vector3& vel_){
+	velocity += vel_;
+}
+
+void Rigidbody::AddVelocity(float x_, float y_, float z_){
+	AddVelocity(Vector3(x_, y_, z_));
+}
