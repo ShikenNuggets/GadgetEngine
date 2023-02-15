@@ -32,6 +32,12 @@ void Scene::AddSceneComponent(SceneComponent* sceneComp_){
 	sceneComponents.push_back(sceneComp_);
 }
 
+void Scene::Update(float deltaTime_){
+	for(const auto& sc : sceneComponents){
+		sc->OnUpdate(deltaTime_);
+	}
+}
+
 void Scene::DestroyAllGameObjects(){
 	for(const auto& go : gameObjects){
 		delete go;

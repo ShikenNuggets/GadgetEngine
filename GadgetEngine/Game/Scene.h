@@ -15,6 +15,8 @@ namespace Gadget{
 		void CreateObject(GameObject* gameObject_);
 		void AddSceneComponent(SceneComponent* sceneComp_);
 
+		void Update(float deltaTime_);
+
 		StringID GetName() const{ return name; }
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache result when possible

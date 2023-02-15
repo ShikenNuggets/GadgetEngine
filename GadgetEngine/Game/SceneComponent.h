@@ -12,6 +12,8 @@ namespace Gadget{
 		SceneComponent(Scene* parent_) : parent(parent_){ GADGET_BASIC_ASSERT(parent_ != nullptr); }
 		virtual ~SceneComponent(){}
 
+		virtual void OnUpdate([[maybe_unused]] float deltaTime_){}
+
 		const Scene* GetParent() const{ return parent; }
 
 	protected:

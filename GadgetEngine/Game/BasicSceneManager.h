@@ -9,7 +9,7 @@ namespace Gadget{
 		BasicSceneManager();
 		~BasicSceneManager();
 
-		void Update();
+		void Update(float deltaTime_);
 
 		void AddScene(Scene* scene_);
 

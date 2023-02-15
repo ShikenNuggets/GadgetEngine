@@ -13,12 +13,14 @@ BasicSceneManager::~BasicSceneManager(){
 	}
 }
 
-void BasicSceneManager::Update(){
+void BasicSceneManager::Update(float deltaTime_){
 	if(!sceneLoadRequests.empty()){
 		LoadScene(sceneLoadRequests.front());
 		sceneLoadRequests.pop();
 		GADGET_ASSERT(sceneLoadRequests.empty(), "More than one scene load request was pending at a time!");
 	}
+
+	CurrentScene()->Update(deltaTime_);
 }
 
 void BasicSceneManager::AddScene(Scene* scene_){
