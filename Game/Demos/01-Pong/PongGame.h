@@ -30,6 +30,12 @@ namespace Pong{
 			axis.AddAxisID(Gadget::AxisID::Gamepad_RightStick_Vertical);
 			axis.AddButtonAxis(Gadget::ButtonAxis(Gadget::ButtonID::Keyboard_Arrow_Down, Gadget::ButtonID::Keyboard_Arrow_Up));
 			Gadget::App::GetInput().DefineAxis(axis);
+
+			auto resetButton = Gadget::Button(SID("ResetButton"));
+			resetButton.AddButtonID(Gadget::ButtonID::Keyboard_R);
+			resetButton.AddButtonID(Gadget::ButtonID::Gamepad_Start);
+			resetButton.AddButtonID(Gadget::ButtonID::Gamepad_Select);
+			Gadget::App::GetInput().DefineButton(resetButton);
 		}
 	};
 }

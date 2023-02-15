@@ -8,6 +8,8 @@ namespace Pong{
 	public:
 		PongSceneHandler(Gadget::Scene* scene_);
 
+		virtual void OnUpdate(float deltaTime_) override;
+
 		void Reset();
 		void AddScoreAndResetGame(int player_);
 
