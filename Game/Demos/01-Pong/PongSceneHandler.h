@@ -8,6 +8,7 @@ namespace Pong{
 	public:
 		PongSceneHandler(Gadget::Scene* scene_);
 
+		void Reset();
 		void AddScoreAndResetGame(int player_);
 
 	private:

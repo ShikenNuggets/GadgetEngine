@@ -10,7 +10,7 @@
 namespace Pong{
 	class BallController : public Gadget::GameLogicComponent{
 	public:
-		BallController(Gadget::GameObject* parent_, float initialForce_) : GameLogicComponent(parent_), initialForce(initialForce_), rigidbody(nullptr), sceneHandler(nullptr){}
+		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(parent_), initialForce(initialForce_), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_){}
 
 		virtual void OnStart() override{
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();
@@ -20,7 +20,19 @@ namespace Pong{
 				rigidbody->SetVelocity(Gadget::Vector3(initialForce, initialForce / 2.0f, 0.0f));
 			}
 
+			playAreaWidth += 2.0f; //Add a small buffer to the play area
+			playAreaHeight += 2.0f;
+
 			GameLogicComponent::OnStart();
+		}
+
+		virtual void OnUpdate(float deltaTime_) override{
+			Gadget::Rect playAreaRect = Gadget::Rect(0.0f, 0.0f, playAreaWidth, playAreaHeight);
+			if(!playAreaRect.Intersects(parent->GetPosition().x, parent->GetPosition().y)){
+				sceneHandler->Reset(); //Ball went out of bounds
+			}
+
+			GameLogicComponent::OnUpdate(deltaTime_);
 		}
 
 		virtual void OnCollision(const Gadget::Collision& col_) override{
@@ -56,6 +68,8 @@ namespace Pong{
 		const float initialForce;
 		Gadget::Rigidbody* rigidbody;
 		PongSceneHandler* sceneHandler;
+		float playAreaWidth;
+		float playAreaHeight;
 
 		void FlipVelocityX(){ rigidbody->SetVelocity(Gadget::Vector3(-rigidbody->GetVelocity().x, rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
 		void FlipVelocityY(){ rigidbody->SetVelocity(Gadget::Vector3(rigidbody->GetVelocity().x, -rigidbody->GetVelocity().y, rigidbody->GetVelocity().z)); }
