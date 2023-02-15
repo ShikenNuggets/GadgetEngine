@@ -16,6 +16,9 @@ Input::Input() : buttonEvents(), axisEvents(), buttonsDown(), buttonsUp(), butto
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseScroll, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonReleased, OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadAxis, OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonPressed, OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonReleased, OnEvent);
 
 	//These reserve values are somewhat arbitrary, adjust as you see fit
 	buttonEvents.reserve(256);
@@ -281,7 +284,7 @@ void Input::OnEvent(const Event& e_){
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), true));
 			break;
 		case EventType::GamepadButtonReleased:
-			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), false));
+			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonReleasedEvent&>(e_).GetButton(), false));
 			break;
 		default:
 			Debug::Log("Unhandled Event Type [" + e_.GetName().GetString() + "] in Input!", Debug::Error, __FILE__, __LINE__);
