@@ -76,7 +76,15 @@ namespace Pong{
 		}
 
 		void CorrectPositionAfterCollision(const Gadget::Collision& col_){
-			parent->Translate(-col_.collisionVector.Normalized() * col_.overlapAmount);
+			Gadget::Vector3 collisionCorrection = -col_.collisionVector.Normalized() * col_.overlapAmount;
+
+			if(col_.HasTag(SID("Paddle"))){
+				parent->Translate(collisionCorrection.x, 0.0f, 0.0f);
+			}else if(col_.HasTag(SID("Wall"))){
+				parent->Translate(0.0f, collisionCorrection.y, 0.0f);
+			}else{
+				parent->Translate(collisionCorrection);
+			}
 		}
 	};
 }
