@@ -34,4 +34,6 @@ void PongSceneHandler::AddScoreAndResetGame(int player_){
 	}else{
 		player2Score++;
 	}
+
+	Reset();
 }
