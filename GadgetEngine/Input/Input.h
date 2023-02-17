@@ -41,11 +41,13 @@ namespace Gadget{
 	private:
 		std::vector<RawButton> buttonEvents;
 		std::vector<RawAxis> axisEvents;
+		std::vector<RawAxis> persistentAxisEvents;
 
 		std::set<ButtonID> buttonsDown;
 		std::set<ButtonID> buttonsHeld;
 		std::set<ButtonID> buttonsUp;
 		std::map<AxisID, float> axes;
+		std::map<AxisID, float> persistentAxes; //Special axes that are based on a persistent state rather than just motion (e.g. an analog stick)
 
 		std::vector<Button> definedButtons;
 		std::vector<Axis> definedAxes;

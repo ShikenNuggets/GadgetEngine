@@ -9,7 +9,7 @@
 
 using namespace Gadget;
 
-Input::Input() : buttonEvents(), axisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), definedButtons(), definedAxes(){
+Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), persistentAxes(), definedButtons(), definedAxes(){
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, OnEvent);
@@ -23,6 +23,7 @@ Input::Input() : buttonEvents(), axisEvents(), buttonsDown(), buttonsUp(), butto
 	//These reserve values are somewhat arbitrary, adjust as you see fit
 	buttonEvents.reserve(256);
 	axisEvents.reserve(256);
+	persistentAxisEvents.reserve(256);
 
 	definedButtons.reserve(32);
 	definedAxes.reserve(16);
@@ -99,6 +100,11 @@ float Input::GetAxis(AxisID id_) const{
 	auto it = axes.find(id_);
 	if(it != axes.end()){
 		return axes.at(id_);
+	}
+
+	it = persistentAxes.find(id_);
+	if(it != persistentAxes.end()){
+		return persistentAxes.at(id_);
 	}
 
 	return 0.0f;
@@ -253,6 +259,15 @@ void Input::ProcessInputs(){
 		}
 	}
 	axisEvents.clear();
+
+	for(const auto& a : persistentAxisEvents){
+		if(persistentAxes.find(a.GetAxisID()) != persistentAxes.end()){
+			persistentAxes[a.GetAxisID()] = a.Value(); //Persistent axis has a single set value
+		}else{
+			persistentAxes.insert(std::make_pair(a.GetAxisID(), a.Value()));
+		}
+	}
+	axisEvents.clear();
 }
 
 void Input::OnEvent(const Event& e_){
@@ -278,7 +293,7 @@ void Input::OnEvent(const Event& e_){
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonReleasedEvent&>(e_).GetButton(), false));
 			break;
 		case EventType::GamepadAxis:
-			App::GetInput().axisEvents.push_back(RawAxis(dynamic_cast<const GamepadAxisEvent&>(e_).GetAxisIndex(), dynamic_cast<const GamepadAxisEvent&>(e_).GetValue()));
+			App::GetInput().persistentAxisEvents.push_back(RawAxis(dynamic_cast<const GamepadAxisEvent&>(e_).GetAxisIndex(), dynamic_cast<const GamepadAxisEvent&>(e_).GetValue()));
 			break;
 		case EventType::GamepadButtonPressed:
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), true));
