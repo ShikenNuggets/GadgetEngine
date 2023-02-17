@@ -118,6 +118,7 @@ namespace Gadget{
 
 		void AddAxisID(AxisID id_){ axisIDs.insert(id_); }
 		void AddButtonAxis(const ButtonAxis& buttonAxis_){ buttonAxisIDs.push_back(buttonAxis_); }
+		void Invert(bool is_){ invert = is_; }
 
 		void RemoveAxisID(AxisID id_){
 			GADGET_ASSERT(axisIDs.find(id_) != axisIDs.end(), "Tried to remove invalid axis ID [" + std::to_string((int)id_) + "]!");

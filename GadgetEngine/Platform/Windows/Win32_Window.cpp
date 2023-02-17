@@ -115,6 +115,11 @@ void Win32_Window::HandleEvents(){
 			case SDL_JOYAXISMOTION:
 				joystickAxis = Win32_Utils::ConvertSDLJoystickAxisToAxisID(e.jaxis.axis);
 				range = static_cast<float>(e.jaxis.value) / static_cast<float>(std::numeric_limits<int16_t>::max()); //Convert the quantized value we get from SDL to a float between -1 and 1
+				
+				if(joystickAxis == AxisID::Gamepad_LeftStick_Vertical || joystickAxis == AxisID::Gamepad_RightStick_Vertical){
+					range *= -1.0f;
+				}
+				
 				EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e.jaxis.which, joystickAxis, range));
 				//TODO - Trigger button events here as well
 				break;
