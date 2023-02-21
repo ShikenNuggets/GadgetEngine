@@ -87,6 +87,16 @@ namespace Gadget{
 			}
 		}
 
+		//----------Binary----------//
+		//TODO - Nothing here considers endianness
+		inline uint16_t MergeBytes(uint8_t a_, uint8_t b_){
+			return (b_ << 8) | a_; 
+		}
+
+		inline uint32_t MergeBytes(uint8_t a_, uint8_t b_, uint8_t c_, uint8_t d_){
+			return (d_ << 24) | (c_ << 16) | (b_ << 8) | a_;
+		}
+
 		//----------Other----------//
 		inline std::string GetCurrentDateAndTimeString(){
 			return std::format("{:%Y-%m-%d %X}", std::chrono::system_clock::now());

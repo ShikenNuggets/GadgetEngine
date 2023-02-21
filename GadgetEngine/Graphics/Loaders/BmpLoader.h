@@ -56,10 +56,6 @@ namespace Gadget{
 		static BmpFileHeader CreateFileHeader(const std::vector<uint8_t>& data_);
 		static BmpInfoHeader CreateInfoHeader(const std::vector<uint8_t>& data_);
 		static BmpColorHeader CreateColorHeader(const std::vector<uint8_t>& data_);
-
-		//TODO - Move these into a helper class so the logic can be used elsewhere?
-		static uint16_t MergeBytes(uint8_t a_, uint8_t b_);
-		static uint32_t MergeBytes(uint8_t a_, uint8_t b_, uint8_t c_, uint8_t d_);
 	};
 }
 
