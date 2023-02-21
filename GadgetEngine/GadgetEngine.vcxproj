@@ -131,6 +131,7 @@
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\LightSource.h" />
     <ClInclude Include="Graphics\Loaders\BmpLoader.h" />
+    <ClInclude Include="Graphics\Loaders\FontLoader.h" />
     <ClInclude Include="Graphics\Loaders\ObjLoader.h" />
     <ClInclude Include="Graphics\Materials\ColorMaterial.h" />
     <ClInclude Include="Graphics\Materials\DiffuseTextureMaterial.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Graphics\OpenGL\GL_TextureInfo.h" />
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Graphics\Shader.h" />
+    <ClInclude Include="Graphics\Text\Font.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\TextureInfo.h" />
     <ClInclude Include="Graphics\Vertex.h" />
@@ -208,6 +210,7 @@
     <ClCompile Include="Graphics\Components\SkyboxComponent.cpp" />
     <ClCompile Include="Graphics\Cubemap.cpp" />
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
+    <ClCompile Include="Graphics\Loaders\FontLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />
     <ClCompile Include="Graphics\Materials\Material.cpp" />
     <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.cpp" />

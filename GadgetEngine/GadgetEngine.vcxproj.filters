@@ -31,6 +31,9 @@
     <Filter Include="Graphics\OpenGL\FrameBuffers">
       <UniqueIdentifier>{D117325A-BDD2-2106-668A-9A5052246C96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Text">
+      <UniqueIdentifier>{EAFD8D97-56BE-09CE-1FF9-524B8B784EAA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
     </Filter>
@@ -133,6 +136,9 @@
     <ClInclude Include="Graphics\Loaders\BmpLoader.h">
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Loaders\FontLoader.h">
+      <Filter>Graphics\Loaders</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Loaders\ObjLoader.h">
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
@@ -180,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\Shader.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Text\Font.h">
+      <Filter>Graphics\Text</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Texture.h">
       <Filter>Graphics</Filter>
@@ -340,6 +349,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp">
+      <Filter>Graphics\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Loaders\FontLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp">
