@@ -88,13 +88,58 @@ namespace Gadget{
 		}
 
 		//----------Binary----------//
-		//TODO - Nothing here considers endianness
-		inline uint16_t MergeBytes(uint8_t a_, uint8_t b_){
-			return (b_ << 8) | a_; 
+		constexpr inline uint16_t MergeBytes(uint8_t a_, uint8_t b_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			if(littleEndian_){
+				return (b_ << 8) | a_;
+			}else{
+				return (a_ << 8) | b_;
+			}
 		}
 
-		inline uint32_t MergeBytes(uint8_t a_, uint8_t b_, uint8_t c_, uint8_t d_){
-			return (d_ << 24) | (c_ << 16) | (b_ << 8) | a_;
+		constexpr inline uint32_t MergeBytes(uint8_t a_, uint8_t b_, uint8_t c_, uint8_t d_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			if(littleEndian_){
+				return (d_ << 24) | (c_ << 16) | (b_ << 8) | a_;
+			}else{
+				return (a_ << 24) | (b_ << 16) | (c_ << 8) | d_;
+			}
+		}
+
+		constexpr inline uint64_t MergeBytes(uint8_t a_, uint8_t b_, uint8_t c_, uint8_t d_, uint8_t e_, uint8_t f_, uint8_t g_, uint8_t h_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			if(littleEndian_){
+				return (
+					(static_cast<uint64_t>(h_) << 56)
+					| (static_cast<uint64_t>(g_) << 48)
+					| (static_cast<uint64_t>(f_) << 40)
+					| (static_cast<uint64_t>(e_) << 32)
+					| (static_cast<uint64_t>(d_) << 24)
+					| (static_cast<uint64_t>(c_) << 16)
+					| (static_cast<uint64_t>(b_) << 8)
+					| static_cast<uint64_t>(a_)
+				);
+			}else{
+				return (
+					(static_cast<uint64_t>(a_) << 56)
+					| (static_cast<uint64_t>(b_) << 48)
+					| (static_cast<uint64_t>(c_) << 40)
+					| (static_cast<uint64_t>(d_) << 32)
+					| (static_cast<uint64_t>(e_) << 24)
+					| (static_cast<uint64_t>(f_) << 16)
+					| (static_cast<uint64_t>(g_) << 8)
+					| static_cast<uint64_t>(h_)
+				);
+			}
+		}
+
+		constexpr inline uint16_t MergeTwoBytes(const std::vector<uint8_t>& buffer_, size_t offset_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			return MergeBytes(buffer_[offset_], buffer_[offset_ + 1], littleEndian_);
+		}
+
+		constexpr inline uint32_t MergeFourBytes(const std::vector<uint8_t>& buffer_, size_t offset_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			return MergeBytes(buffer_[offset_], buffer_[offset_ + 1], buffer_[offset_ + 2], buffer_[offset_ + 3], littleEndian_);
+		}
+
+		constexpr inline uint64_t MergeEightBytes(const std::vector<uint8_t>& buffer_, size_t offset_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			return MergeBytes(buffer_[offset_], buffer_[offset_ + 1], buffer_[offset_ + 2], buffer_[offset_ + 3], buffer_[offset_ + 4], buffer_[offset_ + 5], buffer_[offset_ + 6], buffer_[offset_ + 7], littleEndian_);
 		}
 
 		//----------Other----------//
