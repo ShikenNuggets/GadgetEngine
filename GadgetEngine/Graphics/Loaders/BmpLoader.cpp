@@ -9,6 +9,7 @@ using namespace Gadget;
 
 Texture* BmpLoader::LoadImage(const std::string& filePath_){
 	auto data = FileSystem::ReadBinaryFile(filePath_);
+	data.shrink_to_fit();
 	if(data.empty()){
 		Debug::Log("Could not load BMP image file [" + filePath_ + "]!", Debug::Error, __FILE__, __LINE__);
 		return nullptr;
@@ -19,14 +20,16 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 		return nullptr;
 	}
 
-	BmpFileHeader fileHeader = CreateFileHeader(data);
+	ByteSequencer bs = ByteSequencer(data);
+
+	BmpFileHeader fileHeader = CreateFileHeader(data, bs);
 
 	if(fileHeader.fileType != BmpFileHeader::BMPType){
 		Debug::Log("Invalid file type for BMP file [" + filePath_ + "]!", Debug::Error, __FILE__, __LINE__);
 		return nullptr;
 	}
 
-	BmpInfoHeader infoHeader = CreateInfoHeader(data);
+	BmpInfoHeader infoHeader = CreateInfoHeader(data, bs);
 	if(infoHeader.compression != 0 && infoHeader.compression != 3){
 		Debug::Log("Tried to load compressed BMP [" + filePath_ + "], but compression is not supported!", Debug::Error, __FILE__, __LINE__);
 		return nullptr;
@@ -34,7 +37,7 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 
 	BmpColorHeader colorHeader;
 	if(infoHeader.bitCount == 32){
-		colorHeader = CreateColorHeader(data);
+		colorHeader = CreateColorHeader(data, bs);
 
 		//We do not support other color spaces/formats. TODO?
 		GADGET_ASSERT(colorHeader.redMask == BmpColorHeader::RGBARedMask, "Tried to load BMP with invalid color format (only RGB and RGBA are supported)!");
@@ -71,50 +74,50 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 }
 
 //TODO - These don't consider endianness at all, which could be a problem later
-BmpFileHeader BmpLoader::CreateFileHeader(const std::vector<uint8_t>& data_){
+BmpFileHeader BmpLoader::CreateFileHeader(const std::vector<uint8_t>& data_, ByteSequencer& byteSequencer_){
 	GADGET_ASSERT(data_.size() > sizeof(BmpFileHeader), "Invalid BMP data!");
 
 	BmpFileHeader fileHeader{};
-	fileHeader.fileType = Utils::MergeBytes(data_[0], data_[1]);
-	fileHeader.fileSize = Utils::MergeBytes(data_[2], data_[3], data_[4], data_[5]);
-	fileHeader.reserved1 = Utils::MergeBytes(data_[6], data_[7]);
-	fileHeader.reserved2 = Utils::MergeBytes(data_[8], data_[9]);
-	fileHeader.offsetData = Utils::MergeBytes(data_[10], data_[11], data_[12], data_[13]);
+	fileHeader.fileType = byteSequencer_.Sequence2Bytes();
+	fileHeader.fileSize = byteSequencer_.Sequence4Bytes();
+	fileHeader.reserved1 = byteSequencer_.Sequence2Bytes();
+	fileHeader.reserved2 = byteSequencer_.Sequence2Bytes();
+	fileHeader.offsetData = byteSequencer_.Sequence4Bytes();
 
 	return fileHeader;
 }
 
-BmpInfoHeader BmpLoader::CreateInfoHeader(const std::vector<uint8_t>& data_){
+BmpInfoHeader BmpLoader::CreateInfoHeader(const std::vector<uint8_t>& data_, ByteSequencer& byteSequencer_){
 	GADGET_ASSERT(data_.size() > sizeof(BmpFileHeader) + sizeof(BmpInfoHeader), "Invalid BMP data!");
 
 	BmpInfoHeader infoHeader{};
-	infoHeader.size = Utils::MergeBytes(data_[14], data_[15], data_[16], data_[17]);
-	infoHeader.width = static_cast<int32_t>(Utils::MergeBytes(data_[18], data_[19], data_[20], data_[21]));
-	infoHeader.height = static_cast<int32_t>(Utils::MergeBytes(data_[22], data_[23], data_[24], data_[25]));
-	infoHeader.planes = Utils::MergeBytes(data_[26], data_[27]);
-	infoHeader.bitCount = Utils::MergeBytes(data_[28], data_[29]);
-	infoHeader.compression = Utils::MergeBytes(data_[30], data_[31], data_[32], data_[33]);
-	infoHeader.sizeImage = static_cast<int32_t>(Utils::MergeBytes(data_[34], data_[35], data_[36], data_[37]));
-	infoHeader.xPixelsPerMeter = static_cast<int32_t>(Utils::MergeBytes(data_[38], data_[39], data_[40], data_[41]));
-	infoHeader.yPixelsPerMeter = static_cast<int32_t>(Utils::MergeBytes(data_[42], data_[43], data_[44], data_[45]));
-	infoHeader.colorsUsed = Utils::MergeBytes(data_[46], data_[47], data_[48], data_[49]);
-	infoHeader.colorsImportant = Utils::MergeBytes(data_[50], data_[51], data_[52], data_[53]);
+	infoHeader.size = byteSequencer_.Sequence4Bytes();
+	infoHeader.width = static_cast<int32_t>(byteSequencer_.Sequence4Bytes());
+	infoHeader.height = static_cast<int32_t>(byteSequencer_.Sequence4Bytes());
+	infoHeader.planes = byteSequencer_.Sequence2Bytes();
+	infoHeader.bitCount = byteSequencer_.Sequence2Bytes();
+	infoHeader.compression = byteSequencer_.Sequence4Bytes();
+	infoHeader.sizeImage = static_cast<int32_t>(byteSequencer_.Sequence4Bytes());
+	infoHeader.xPixelsPerMeter = static_cast<int32_t>(byteSequencer_.Sequence4Bytes());
+	infoHeader.yPixelsPerMeter = static_cast<int32_t>(byteSequencer_.Sequence4Bytes());
+	infoHeader.colorsUsed = byteSequencer_.Sequence4Bytes();
+	infoHeader.colorsImportant = byteSequencer_.Sequence4Bytes();
 
 	return infoHeader;
 }
 
-BmpColorHeader BmpLoader::CreateColorHeader(const std::vector<uint8_t>& data_){
+BmpColorHeader BmpLoader::CreateColorHeader(const std::vector<uint8_t>& data_, ByteSequencer& byteSequencer_){
 	GADGET_ASSERT(data_.size() > sizeof(BmpFileHeader) + sizeof(BmpInfoHeader) + sizeof(BmpColorHeader), "Invalid BMP data!");
 
 	BmpColorHeader colorHeader{};
-	colorHeader.redMask = Utils::MergeBytes(data_[54], data_[55], data_[56], data_[57]);
-	colorHeader.greenMask = Utils::MergeBytes(data_[58], data_[59], data_[60], data_[61]);
-	colorHeader.blueMask = Utils::MergeBytes(data_[62], data_[63], data_[64], data_[65]);
-	colorHeader.alphaMask = Utils::MergeBytes(data_[66], data_[67], data_[68], data_[69]);
-	colorHeader.colorSpaceType = Utils::MergeBytes(data_[70], data_[71], data_[72], data_[73]);
+	colorHeader.redMask = byteSequencer_.Sequence4Bytes();
+	colorHeader.greenMask = byteSequencer_.Sequence4Bytes();
+	colorHeader.blueMask = byteSequencer_.Sequence4Bytes();
+	colorHeader.alphaMask = byteSequencer_.Sequence4Bytes();
+	colorHeader.colorSpaceType = byteSequencer_.Sequence4Bytes();
 
 	for(size_t i = 0; i < 16; i++){
-		colorHeader.unused[i] = Utils::MergeBytes(data_[74 + (i * 4)], data_[75 + (i * 4)], data_[76 + (i * 4)], data_[77 + (i * 4)]);
+		colorHeader.unused[i] = byteSequencer_.Sequence4Bytes();
 	}
 
 	return colorHeader;

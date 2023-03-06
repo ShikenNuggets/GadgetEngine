@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "Utils/ByteSequencer.h"
+
 namespace Gadget{
 	//Forward declaration
 	class Texture;
@@ -53,9 +55,9 @@ namespace Gadget{
 		static Texture* LoadImage(const std::string& filePath_);
 
 	private:
-		static BmpFileHeader CreateFileHeader(const std::vector<uint8_t>& data_);
-		static BmpInfoHeader CreateInfoHeader(const std::vector<uint8_t>& data_);
-		static BmpColorHeader CreateColorHeader(const std::vector<uint8_t>& data_);
+		static BmpFileHeader CreateFileHeader(const std::vector<uint8_t>& data_, ByteSequencer& byteSequencer_);
+		static BmpInfoHeader CreateInfoHeader(const std::vector<uint8_t>& data_, ByteSequencer& byteSequencer_);
+		static BmpColorHeader CreateColorHeader(const std::vector<uint8_t>& data_, ByteSequencer& byteSequencer_);
 	};
 }
 
