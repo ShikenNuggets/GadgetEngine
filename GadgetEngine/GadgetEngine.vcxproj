@@ -149,6 +149,8 @@
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\Text\Font.h" />
+    <ClInclude Include="Graphics\Text\GlyphData.h" />
+    <ClInclude Include="Graphics\Text\TrueTypeConstants.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\TextureInfo.h" />
     <ClInclude Include="Graphics\Vertex.h" />

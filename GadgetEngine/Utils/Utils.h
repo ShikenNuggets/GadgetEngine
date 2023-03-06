@@ -142,6 +142,10 @@ namespace Gadget{
 			return MergeBytes(buffer_[offset_], buffer_[offset_ + 1], buffer_[offset_ + 2], buffer_[offset_ + 3], buffer_[offset_ + 4], buffer_[offset_ + 5], buffer_[offset_ + 6], buffer_[offset_ + 7], littleEndian_);
 		}
 
+		constexpr inline bool HasFlag(uint8_t byte_, uint8_t flag_){
+			return (byte_ & flag_);
+		}
+
 		//----------Other----------//
 		inline std::string GetCurrentDateAndTimeString(){
 			return std::format("{:%Y-%m-%d %X}", std::chrono::system_clock::now());

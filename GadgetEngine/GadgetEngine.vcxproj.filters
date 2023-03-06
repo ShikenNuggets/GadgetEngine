@@ -190,6 +190,12 @@
     <ClInclude Include="Graphics\Text\Font.h">
       <Filter>Graphics\Text</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Text\GlyphData.h">
+      <Filter>Graphics\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Text\TrueTypeConstants.h">
+      <Filter>Graphics\Text</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>

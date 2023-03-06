@@ -9,10 +9,28 @@
 namespace Gadget{
 	//Forward Declaration
 	class Font;
+	struct GlyphData;
 
 	class FontLoader{
 	public:
-		static Font* LoadFont(const std::string& filePath_);
+		Font* LoadFont(const std::string& filePath_);
+
+	private:
+		void LoadCmapTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadGlyfTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadHeadTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadHheaTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadHmtxTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadLocaTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadMaxpTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadNameTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadOS2Table(const std::vector<uint8_t>& data_, size_t tableOffset_);
+		void LoadPostTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
+
+		int16_t indexToLocFormat;
+		size_t numGlyphs;
+		std::vector<uint32_t> offsets;
+		std::vector<GlyphData> glypthDatas;
 	};
 }
 
