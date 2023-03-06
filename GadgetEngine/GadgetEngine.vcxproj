@@ -129,6 +129,11 @@
     <ClInclude Include="Graphics\Components\SkyboxComponent.h" />
     <ClInclude Include="Graphics\Cubemap.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
+    <ClInclude Include="Graphics\GUI\CanvasSceneComponent.h" />
+    <ClInclude Include="Graphics\GUI\GuiCanvas.h" />
+    <ClInclude Include="Graphics\GUI\GuiElement.h" />
+    <ClInclude Include="Graphics\GUI\GuiManager.h" />
+    <ClInclude Include="Graphics\GUI\GuiTextElement.h" />
     <ClInclude Include="Graphics\LightSource.h" />
     <ClInclude Include="Graphics\Loaders\BmpLoader.h" />
     <ClInclude Include="Graphics\Loaders\FontLoader.h" />
@@ -212,6 +217,8 @@
     <ClCompile Include="Graphics\Components\RenderComponent.cpp" />
     <ClCompile Include="Graphics\Components\SkyboxComponent.cpp" />
     <ClCompile Include="Graphics\Cubemap.cpp" />
+    <ClCompile Include="Graphics\GUI\CanvasSceneComponent.cpp" />
+    <ClCompile Include="Graphics\GUI\GuiCanvas.cpp" />
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\FontLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />

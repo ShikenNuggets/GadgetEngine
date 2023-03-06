@@ -19,6 +19,9 @@
     <Filter Include="Graphics\Components">
       <UniqueIdentifier>{6B5E6BF0-D7BF-48FE-602D-8FB0CC8D7FBD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\GUI">
+      <UniqueIdentifier>{2AED684A-1650-F8EE-BFD5-30A5AB17C471}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\Loaders">
       <UniqueIdentifier>{0FA183C1-FB99-A213-24CC-87981024821F}</UniqueIdentifier>
     </Filter>
@@ -129,6 +132,21 @@
     </ClInclude>
     <ClInclude Include="Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GUI\CanvasSceneComponent.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GUI\GuiCanvas.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GUI\GuiElement.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GUI\GuiManager.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GUI\GuiTextElement.h">
+      <Filter>Graphics\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\LightSource.h">
       <Filter>Graphics</Filter>
@@ -356,6 +374,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\Cubemap.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\GUI\CanvasSceneComponent.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\GUI\GuiCanvas.cpp">
+      <Filter>Graphics\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
