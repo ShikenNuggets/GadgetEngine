@@ -4,6 +4,8 @@
 #include <Game/Scene.h>
 #include <Graphics/Components/CameraComponent.h>
 #include <Graphics/Components/RenderComponent.h>
+#include <Graphics/GUI/CanvasSceneComponent.h>
+#include <Graphics/GUI/GuiTextElement.h>
 #include <Physics/BoxCollider2D.h>
 #include <Physics/Rigidbody.h>
 
@@ -24,6 +26,10 @@ namespace Pong{
 			Gadget::Scene::SetToDefaultState();
 
 			AddSceneComponent(new PongSceneHandler(this));
+
+			Gadget::GuiCanvas gc = Gadget::GuiCanvas(SID("MainCanvas"));
+			gc.AddElement(new Gadget::GuiTextElement(SID("Score1"), "0", SID("Arial"), Gadget::Vector2::Zero(), Gadget::GuiAnchor::Center));
+			AddSceneComponent(new Gadget::CanvasSceneComponent(this, gc));
 
 			auto camera = new Gadget::GameObject();
 			camera->SetPosition(0.0f, 0.0f, 0.0f);
