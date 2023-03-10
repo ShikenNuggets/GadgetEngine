@@ -15,6 +15,8 @@
 #include "Graphics/OpenGL/GL_TextureInfo.h"
 #include "Resource/ResourceManager.h"
 
+#include "Graphics/Text/TextMesh.h"
+
 //Just for testing things - TODO, remove these later
 #include "Core/Time.h"
 #include "Input/Input.h"
@@ -151,6 +153,15 @@ void Win32_Renderer::Render(const Scene* scene_){
 			glDepthFunc(GL_LESS);
 		}
 	}
+
+	//TEST CODE - PLEASE REMOVE THIS SOON
+	TextMesh textMesh = TextMesh(SID("ArialFont"), "The big brown fox jumps over the lazy dog");
+	for(size_t i = 0; i < textMesh.GetNumMeshes(); i++){
+		textMesh.GetMeshInfo(i)->Bind();
+		glDrawElements(GL_TRIANGLES, textMesh.GetMeshInfo(i)->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+		textMesh.GetMeshInfo(i)->Unbind();
+	}
+	//END OF TEST CODE
 
 	//Second Render Pass
 	mainFBO->Unbind();

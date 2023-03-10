@@ -155,6 +155,7 @@
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\Text\Font.h" />
     <ClInclude Include="Graphics\Text\GlyphData.h" />
+    <ClInclude Include="Graphics\Text\TextMesh.h" />
     <ClInclude Include="Graphics\Text\TrueTypeConstants.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\TextureInfo.h" />
@@ -231,6 +232,8 @@
     <ClCompile Include="Graphics\OpenGL\GL_ScreenQuad.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_Shader.cpp" />
     <ClCompile Include="Graphics\OpenGL\GL_TextureInfo.cpp" />
+    <ClCompile Include="Graphics\Text\Font.cpp" />
+    <ClCompile Include="Graphics\Text\TextMesh.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Input\InputGesture.cpp" />
     <ClCompile Include="LocManager.cpp" />

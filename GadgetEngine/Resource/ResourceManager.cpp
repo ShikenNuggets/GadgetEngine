@@ -4,6 +4,7 @@
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_Shader.h"
+#include "Graphics/Text/Font.h"
 
 using namespace Gadget;
 
@@ -26,6 +27,8 @@ ResourceManager::ResourceManager(){
 	resources.insert(std::make_pair(SID("SkyboxBottomTexture"), new TextureResourceContainer("Resources/skybox/bottom.bmp")));
 	resources.insert(std::make_pair(SID("SkyboxFrontTexture"), new TextureResourceContainer("Resources/skybox/front.bmp")));
 	resources.insert(std::make_pair(SID("SkyboxBackTexture"), new TextureResourceContainer("Resources/skybox/back.bmp")));
+
+	resources.emplace(SID("ArialFont"), new FontResourceContainer("Resources/arial.ttf"));
 }
 
 ResourceManager::~ResourceManager(){
