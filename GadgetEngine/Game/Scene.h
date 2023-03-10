@@ -4,8 +4,6 @@
 #include "GameObject.h"
 #include "SceneComponent.h"
 
-#include "Graphics/Cubemap.h"
-
 namespace Gadget{
 	class Scene{
 	public:

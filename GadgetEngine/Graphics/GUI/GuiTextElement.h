@@ -7,7 +7,7 @@
 namespace Gadget{
 	class GuiTextElement : public GuiElement{
 	public:
-		GuiTextElement(const std::string& text_, StringID font_, const Vector2& pos_, GuiAnchor anchor_, bool isActive_ = true) : GuiElement(pos_, anchor_, isActive_), text(text_), fontName(font_){}
+		GuiTextElement(StringID name_, const std::string& text_, StringID font_, const Vector2& pos_, GuiAnchor anchor_, bool isActive_ = true) : GuiElement(name_, pos_, anchor_, isActive_), text(text_), fontName(font_){}
 
 	private:
 		std::string text;

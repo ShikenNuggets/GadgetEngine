@@ -19,7 +19,7 @@ namespace Gadget{
 
 	class GuiElement{
 	public:
-		GuiElement(const Vector2& pos_, GuiAnchor anchor_, bool isActive_ = true) : position(pos_), anchor(anchor_), isActive(isActive_){}
+		GuiElement(StringID name_, const Vector2& pos_, GuiAnchor anchor_, bool isActive_ = true) : name(name_), position(pos_), anchor(anchor_), isActive(isActive_){}
 
 		virtual void Update([[maybe_unused]] float deltaTime_){}
 
@@ -30,6 +30,7 @@ namespace Gadget{
 		void SetAnchor(GuiAnchor anchor_){ anchor = anchor_; }
 
 	private:
+		StringID name;
 		bool isActive;
 		Vector2 position;
 		GuiAnchor anchor;
