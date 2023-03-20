@@ -152,16 +152,26 @@ void Win32_Renderer::Render(const Scene* scene_){
 			skybox->Unbind();
 			glDepthFunc(GL_LESS);
 		}
-	}
 
-	//TEST CODE - PLEASE REMOVE THIS SOON
-	TextMesh textMesh = TextMesh(SID("ArialFont"), "The big brown fox jumps over the lazy dog");
-	for(size_t i = 0; i < textMesh.GetNumMeshes(); i++){
-		textMesh.GetMeshInfo(i)->Bind();
-		glDrawElements(GL_TRIANGLES, textMesh.GetMeshInfo(i)->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
-		textMesh.GetMeshInfo(i)->Unbind();
+		//TEST CODE - PLEASE REMOVE THIS SOON
+		TextMesh textMesh = TextMesh(SID("ArialFont"), "The big brown fox jumps over the lazy dog");
+		auto shader = App::GetResourceManager().LoadResource<GL_Shader>(SID("Text2DShader"));
+		shader->Bind();
+		shader->BindMatrix4(SID("modelMatrix"), Matrix4::Scale(Vector3::Fill(100.0f)));
+		shader->BindMatrix4(SID("viewMatrix"), view);
+		shader->BindMatrix4(SID("projectionMatrix"), proj);
+
+		for(size_t i = 0; i < textMesh.GetNumMeshes(); i++){
+			//shader->BindInt(SID("charPos"), i);
+
+			textMesh.GetMeshInfo(i)->Bind();
+			glDrawElements(GL_TRIANGLES, textMesh.GetMeshInfo(i)->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+			textMesh.GetMeshInfo(i)->Unbind();
+		}
+		shader->Unbind();
+		App::GetResourceManager().UnloadResource(SID("Text2DShader"));
+		//END OF TEST CODE
 	}
-	//END OF TEST CODE
 
 	//Second Render Pass
 	mainFBO->Unbind();

@@ -10,7 +10,7 @@ TextMesh::TextMesh(StringID font_, const std::string& initialText_) : fontName(f
 
 	auto glyphVerts = font->CalculatePolygonsForString(initialText_);
 
-	for(const auto glyph : glyphVerts){
+	for(const auto& glyph : glyphVerts){
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
 		for(uint32_t i = 0; i < glyph.size(); i++){

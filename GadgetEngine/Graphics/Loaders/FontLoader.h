@@ -27,8 +27,8 @@ namespace Gadget{
 		void LoadOS2Table(const std::vector<uint8_t>& data_, size_t tableOffset_);
 		void LoadPostTable(const std::vector<uint8_t>& data_, size_t tableOffset_);
 
-		int16_t indexToLocFormat;
-		size_t numGlyphs;
+		int16_t indexToLocFormat = 0;
+		size_t numGlyphs = 0;
 		std::vector<uint32_t> offsets;
 		std::vector<GlyphData> glypthDatas;
 	};
