@@ -15,8 +15,8 @@ namespace Gadget{
 		bool yIsPositive = false;
 		bool contoursOverlap = false;
 
-		int16_t xCoordinate;
-		int16_t yCoordinate;
+		int16_t xCoordinate = 0;
+		int16_t yCoordinate = 0;
 	};
 
 	struct GlyphData{

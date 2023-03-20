@@ -50,7 +50,6 @@ Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::O
 	SetClearColor(Color::DarkGray());
 
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glDepthFunc(GL_LESS);
