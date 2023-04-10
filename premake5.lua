@@ -52,12 +52,14 @@ project "GadgetEngine"
 		"SDK/include",
 		"SDK/Glad/include",
 		"SDK/SDL/include",
+		"SDK/freetype/include",
 	}
 	
 	libdirs
 	{
 		"Build/SDL2/%{cfg.buildcfg}/",
 		"Build/SDL2main/%{cfg.buildcfg}/",
+		"SDK/freetype/libs/%{cfg.buildcfg}/",
 	}
 	
 	dependson
@@ -125,6 +127,7 @@ project "Game"
 		"SDK/include/",
 		"SDK/Glad/include",
 		"SDK/SDL/include/",
+		"SDK/freetype/include",
 	}
 	
 	libdirs
@@ -133,6 +136,7 @@ project "Game"
 		"Build/Glad/%{cfg.buildcfg}/",
 		"Build/SDL2/%{cfg.buildcfg}/",
 		"Build/SDL2main/%{cfg.buildcfg}/",
+		"SDK/freetype/libs/%{cfg.buildcfg}/",
 	}
 	
 	links
@@ -141,6 +145,7 @@ project "Game"
 		"Glad.lib",
 		"SDL2.lib",
 		"SDL2main.lib",
+		"freetype.lib",
 	}
 	
 	dependson
