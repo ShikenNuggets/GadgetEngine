@@ -4,7 +4,7 @@
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_Shader.h"
-#include "Graphics/Text/Font.h"
+#include "Graphics/Text/FreetypeFont.h"
 
 using namespace Gadget;
 
@@ -29,7 +29,7 @@ ResourceManager::ResourceManager(){
 	resources.insert(std::make_pair(SID("SkyboxFrontTexture"), new TextureResourceContainer("Resources/skybox/front.bmp")));
 	resources.insert(std::make_pair(SID("SkyboxBackTexture"), new TextureResourceContainer("Resources/skybox/back.bmp")));
 
-	resources.emplace(SID("ArialFont"), new FontResourceContainer("Resources/arial.ttf"));
+	resources.emplace(SID("ArialFont"), new FreetypeFontResourceContainer("Resources/arial.ttf"));
 }
 
 ResourceManager::~ResourceManager(){

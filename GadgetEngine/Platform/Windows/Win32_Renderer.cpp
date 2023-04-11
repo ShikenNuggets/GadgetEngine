@@ -11,8 +11,10 @@
 #include "Graphics/Components/LightComponent.h"
 #include "Graphics/Components/RenderComponent.h"
 #include "Graphics/Components/SkyboxComponent.h"
+#include "Graphics/OpenGL/GL_DynamicMeshInfo.h"
 #include "Graphics/OpenGL/GL_MeshInfo.h"
 #include "Graphics/OpenGL/GL_TextureInfo.h"
+#include "Graphics/OpenGL/GL_FontInfo.h"
 #include "Resource/ResourceManager.h"
 
 #include "Graphics/Text/TextMesh.h"
@@ -153,22 +155,82 @@ void Win32_Renderer::Render(const Scene* scene_){
 		}
 
 		//TEST CODE - PLEASE REMOVE THIS SOON
-		TextMesh textMesh = TextMesh(SID("ArialFont"), "The big brown fox jumps over the lazy dog");
-		auto shader = App::GetResourceManager().LoadResource<GL_Shader>(SID("Text2DShader"));
-		shader->Bind();
-		shader->BindMatrix4(SID("modelMatrix"), Matrix4::Scale(Vector3::Fill(100.0f)));
-		shader->BindMatrix4(SID("viewMatrix"), view);
-		shader->BindMatrix4(SID("projectionMatrix"), proj);
+		TextMesh textMesh = TextMesh(SID("ArialFont"), SID("Text2DShader"), "Test");
+		textMesh.GetShader()->Bind();
+		//textMesh.GetShader()->BindMatrix4(SID("modelMatrix"), Matrix4::Scale(Vector3::Fill(100.0f)));
+		//textMesh.GetShader()->BindMatrix4(SID("viewMatrix"), view);
+		textMesh.GetShader()->BindMatrix4(SID("projectionMatrix"), Matrix4::Orthographic(-1.0f, 1.0f, -1.0f, 1.0f));
 
-		for(size_t i = 0; i < textMesh.GetNumMeshes(); i++){
-			//shader->BindInt(SID("charPos"), i);
+		textMesh.GetMeshInfo()->Bind();
 
-			textMesh.GetMeshInfo(i)->Bind();
-			glDrawElements(GL_TRIANGLES, textMesh.GetMeshInfo(i)->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
-			textMesh.GetMeshInfo(i)->Unbind();
+		float rectX = 0.0f;
+		float rectY = 0.0f;
+		float rectW = 0.3f;
+		float rectH = 0.25f;
+
+		int totalWidthInPixels = 0;
+		int biggestHeightInPixels = 0;
+		for(char c : textMesh.GetText()){
+			FreetypeFontCharacter ch = textMesh.GetFont()->GetCharacters().at(c);
+			totalWidthInPixels += ch.width + ch.left;
+
+			if(ch.rows - ch.top > biggestHeightInPixels){
+				biggestHeightInPixels = ch.rows - ch.top;
+			}
 		}
-		shader->Unbind();
-		App::GetResourceManager().UnloadResource(SID("Text2DShader"));
+
+		float screenWidthPerPixel = rectW / totalWidthInPixels;
+
+		float x = rectX - (rectW / 2.0f);
+		float y = rectY + (rectH / 2.0f);
+		float width = screenWidthPerPixel;
+		float height = rectH / 100.0f;
+
+		GL_FontInfo* fontInfo = dynamic_cast<GL_FontInfo*>(textMesh.GetFont()->GetFontInfo());
+		GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(textMesh.GetMeshInfo());
+
+		//Iterate through all characters in text
+		for(char c : textMesh.GetText()){
+			FreetypeFontCharacter ch = textMesh.GetFont()->GetCharacters().at(c);
+
+			GLfloat xpos = x + ch.left * width;
+			GLfloat ypos = y - (ch.rows - ch.top) * height;
+
+			GLfloat w = ch.width * width;
+			GLfloat h = ch.rows * height;
+			// Update VBO for each character
+			GLfloat vertices[6][4] = {
+				{ xpos,     ypos + h,   0.0, 0.0 },
+				{ xpos,     ypos,		0.0, 1.0 },
+				{ xpos + w, ypos,       1.0, 1.0 },
+
+				{ xpos,     ypos + h,   0.0, 0.0 },
+				{ xpos + w, ypos,       1.0, 1.0 },
+				{ xpos + w, ypos + h,   1.0, 0.0 }
+			};
+
+			//Don't bind the texture if it's a space, for some reason doing so causes OpenGL warnings
+			if(c != 32){
+				//Render glyph texture over quad
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, fontInfo->GetTextureForChar(c));
+			}
+
+			//Update content of VBO memory
+			glBindBuffer(GL_ARRAY_BUFFER, meshInfo->GetVBO());
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			//Render quad
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			//Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+			x += (ch.advanceX >> 6) * width; //Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels)) 
+		}
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		textMesh.GetMeshInfo()->Unbind();
+
+		textMesh.GetShader()->Unbind();
 		//END OF TEST CODE
 	}
 
@@ -271,8 +333,16 @@ MeshInfo* Win32_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){
 	return new GL_MeshInfo(mesh_);
 }
 
+MeshInfo* Win32_Renderer::GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_){
+	return new GL_DynamicMeshInfo(numVertices_, numIndices_);
+}
+
 TextureInfo* Win32_Renderer::GenerateAPITextureInfo(const Texture& texture_){
 	return new GL_TextureInfo(texture_);
+}
+
+FontInfo* Win32_Renderer::GenerateAPIFontInfo(const FreetypeFont& font_){
+	return new GL_FontInfo(font_);
 }
 
 void __stdcall Win32_Renderer::GLDebugCallback(GLenum source_, GLenum type_, GLuint id_, GLenum severity_, GLsizei, const GLchar* message_, const void*){

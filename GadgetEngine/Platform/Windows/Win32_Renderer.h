@@ -32,7 +32,9 @@ namespace Gadget{
 
 		virtual Shader* GenerateAPIShader(StringID shaderResource_) override;
 		virtual MeshInfo* GenerateAPIMeshInfo(const Mesh& mesh_) override;
+		virtual MeshInfo* GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_) override;
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) override;
+		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) override;
 
 		static void __stdcall GLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 

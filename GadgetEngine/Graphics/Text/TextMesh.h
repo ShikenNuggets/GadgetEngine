@@ -1,22 +1,28 @@
 #ifndef GADGET_TEXT_MESH_H
 #define GADGET_TEXT_MESH_H
 
-#include "Font.h"
+#include "FreetypeFont.h"
 #include "Graphics/MeshInfo.h"
+#include "Graphics/Shader.h"
 
 namespace Gadget{
 	class TextMesh{
 	public:
-		TextMesh(StringID font_, const std::string& initialText_);
+		TextMesh(StringID font_, StringID shader_, const std::string& initialText_);
 		~TextMesh();
 
-		size_t GetNumMeshes() const{ return meshInfos.size(); }
-		MeshInfo* GetMeshInfo(size_t index_) const{ return meshInfos[index_]; }
+		FreetypeFont* GetFont() const{ return font; }
+		Shader* GetShader() const{ return shader; }
+		std::string GetText() const{ return text; }
+		MeshInfo* GetMeshInfo() const{ return meshInfo; }
 
 	private:
+		std::string text;
 		StringID fontName;
-		Font* font;
-		std::vector<MeshInfo*> meshInfos;
+		FreetypeFont* font;
+		MeshInfo* meshInfo;
+		StringID shaderName;
+		Shader* shader;
 	};
 }
 

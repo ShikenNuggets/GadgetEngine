@@ -130,6 +130,9 @@
     <ClInclude Include="Graphics\Cubemap.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\FontInfo.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -155,6 +158,9 @@
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Loaders\FontLoader.h">
+      <Filter>Graphics\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Loaders\FreetypeFontLoader.h">
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Loaders\ObjLoader.h">
@@ -187,6 +193,12 @@
     <ClInclude Include="Graphics\OpenGL\GL_CubemapInfo.h">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GL_DynamicMeshInfo.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GL_FontInfo.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\OpenGL\GL_MeshInfo.h">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
@@ -206,6 +218,9 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Text\Font.h">
+      <Filter>Graphics\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Text\FreetypeFont.h">
       <Filter>Graphics\Text</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Text\GlyphData.h">
@@ -390,6 +405,9 @@
     <ClCompile Include="Graphics\Loaders\FontLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Loaders\FreetypeFontLoader.cpp">
+      <Filter>Graphics\Loaders</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
     </ClCompile>
@@ -406,6 +424,12 @@
       <Filter>Graphics\OpenGL\FrameBuffers</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_CubemapInfo.cpp">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GL_DynamicMeshInfo.cpp">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GL_FontInfo.cpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GL_MeshInfo.cpp">

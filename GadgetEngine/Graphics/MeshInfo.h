@@ -6,7 +6,7 @@
 namespace Gadget{
 	class MeshInfo{
 	public:
-		MeshInfo(const Mesh& mesh_) : numIndices(mesh_.indices.size()){}
+		MeshInfo(size_t numIndices_) : numIndices(numIndices_){}
 		virtual ~MeshInfo(){}
 
 		virtual void Bind() = 0;

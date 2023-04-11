@@ -5,19 +5,12 @@
 
 using namespace Gadget;
 
-GL_MeshInfo::GL_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_), vao(0), vbo(0), ebo(0){
+GL_MeshInfo::GL_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), vao(0), vbo(0), ebo(0){
 	GADGET_ASSERT(App::GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 
 	glCreateVertexArrays(1, &vao);
 	glCreateBuffers(1, &vbo);
 	glCreateBuffers(1, &ebo);
-
-	static constexpr GLfloat triangleVerts[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f,  1.0f, 0.0f,
-	};
-	static constexpr GLuint triangleIndices[] = { 0, 1, 2 };
 
 	glNamedBufferData(vbo, mesh_.vertices.size() * sizeof(Vertex), &mesh_.vertices[0], GL_STATIC_DRAW);
 	glNamedBufferData(ebo, mesh_.indices.size() * sizeof(uint32_t), &mesh_.indices[0], GL_STATIC_DRAW);

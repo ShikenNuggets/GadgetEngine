@@ -4,12 +4,14 @@
 #include <memory>
 
 #include "Color.h"
+#include "FontInfo.h"
 #include "MeshInfo.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "TextureInfo.h"
 #include "ViewportRect.h"
 #include "Window.h"
+#include "Graphics/Text/FreetypeFont.h"
 #include "Math/MathObjects.h"
 
 namespace Gadget{
@@ -58,7 +60,9 @@ namespace Gadget{
 
 		virtual Shader* GenerateAPIShader(StringID shaderResource_) = 0;
 		virtual MeshInfo* GenerateAPIMeshInfo(const Mesh& mesh_) = 0;
+		virtual MeshInfo* GenerateAPIDynamicMeshInfo(size_t numVertices, size_t numIndices) = 0;
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) = 0;
+		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) = 0;
 
 	protected:
 		const API renderAPI;

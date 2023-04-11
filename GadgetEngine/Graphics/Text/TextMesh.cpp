@@ -4,25 +4,17 @@
 
 using namespace Gadget;
 
-TextMesh::TextMesh(StringID font_, const std::string& initialText_) : fontName(font_), font(nullptr), meshInfos(){
-	font = App::GetResourceManager().LoadResource<Font>(fontName);
+TextMesh::TextMesh(StringID font_, StringID shader_, const std::string& initialText_) : text(initialText_), fontName(font_), font(nullptr), meshInfo(nullptr), shaderName(shader_), shader(nullptr){
+	font = App::GetResourceManager().LoadResource<FreetypeFont>(fontName);
 	GADGET_BASIC_ASSERT(font != nullptr);
 
-	auto glyphVerts = font->CalculatePolygonsForString(initialText_);
-
-	for(const auto& glyph : glyphVerts){
-		std::vector<Vertex> vertices;
-		std::vector<uint32_t> indices;
-		for(uint32_t i = 0; i < glyph.size(); i++){
-			vertices.push_back(Vertex(Vector3(glyph[i].x, glyph[i].y, 1.0f), Vector3::Zero(), Vector2::Zero()));
-			indices.push_back(i);
-		}
-
-		Mesh mesh = Mesh(vertices, indices);
-		meshInfos.push_back(App::GetRenderer().GenerateAPIMeshInfo(mesh));
-	}
+	meshInfo = App::GetRenderer().GenerateAPIDynamicMeshInfo(4, 6);
+	shader = App::GetRenderer().GenerateAPIShader(shader_);
 }
 
 TextMesh::~TextMesh(){
+	delete meshInfo;
+
+	App::GetResourceManager().UnloadResource(shaderName);
 	App::GetResourceManager().UnloadResource(fontName);
 }
