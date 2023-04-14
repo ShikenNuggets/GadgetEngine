@@ -28,7 +28,7 @@ namespace Pong{
 			AddSceneComponent(new PongSceneHandler(this));
 
 			Gadget::GuiCanvas gc = Gadget::GuiCanvas(SID("MainCanvas"));
-			gc.AddElement(new Gadget::GuiTextElement(SID("Score1"), "0", SID("ArialFont"), Gadget::Vector2::Zero(), Gadget::GuiAnchor::Center));
+			gc.AddElement(new Gadget::GuiTextElement(SID("Score1"), "Test", SID("ArialFont"), Gadget::Vector2::Zero(), Gadget::Vector2(1.0f, 1.0f), Gadget::GuiAnchor::Center));
 			AddSceneComponent(new Gadget::CanvasSceneComponent(this, gc));
 
 			auto camera = new Gadget::GameObject();

@@ -18,3 +18,15 @@ void GuiCanvas::Update(float deltaTime_){
 		e->Update(deltaTime_);
 	}
 }
+
+GuiElement* GuiCanvas::GetElement(StringID name_){
+	for(const auto& e : elements){
+		GADGET_BASIC_ASSERT(e != nullptr);
+		if(e->GetName() == name_){
+			return e;
+		}
+	}
+
+	Debug::Log("Tried to get a GuiElement [" + name.GetString() + "], but it could not be found!", Debug::Warning, __FILE__, __LINE__);
+	return nullptr;
+}

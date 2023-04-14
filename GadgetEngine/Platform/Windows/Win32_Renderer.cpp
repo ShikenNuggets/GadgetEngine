@@ -15,6 +15,8 @@
 #include "Graphics/OpenGL/GL_MeshInfo.h"
 #include "Graphics/OpenGL/GL_TextureInfo.h"
 #include "Graphics/OpenGL/GL_FontInfo.h"
+#include "Graphics/GUI/CanvasSceneComponent.h"
+#include "Graphics/GUI/GuiTextElement.h"
 #include "Resource/ResourceManager.h"
 
 #include "Graphics/Text/TextMesh.h"
@@ -105,6 +107,12 @@ void Win32_Renderer::Render(const Scene* scene_){
 	auto meshes = scene_->GetAllComponentsInScene<RenderComponent>();
 	auto lights = scene_->GetAllComponentsInScene<PointLightComponent>();
 	auto skybox = scene_->GetSceneComponent<SkyboxComponent>();
+	auto canvas = scene_->GetSceneComponent<CanvasSceneComponent>();
+
+	std::vector<GuiTextElement*> guiTexts;
+	if(canvas != nullptr){
+		guiTexts = canvas->GetCanvas().GetElements<GuiTextElement>();
+	}
 
 	GADGET_ASSERT(lights.size() < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(lights.size()) + "!");
 
@@ -113,6 +121,8 @@ void Win32_Renderer::Render(const Scene* scene_){
 		Matrix4 view = cam->GetUpdatedViewMatrix();
 		Matrix4 proj = cam->GetUpdatedProjectionMatrix();
 
+		//------------------------------------------------------------------------------------------------------------------------
+		//Render all meshes in the scene
 		for(const auto& mesh : meshes){
 			mesh->Bind();
 			mesh->GetShader()->BindMatrix4(SID("projectionMatrix"), proj);
@@ -144,6 +154,8 @@ void Win32_Renderer::Render(const Scene* scene_){
 			mesh->Unbind();
 		}
 
+		//------------------------------------------------------------------------------------------------------------------------
+		//Render the skybox
 		if(skybox != nullptr){
 			glDepthFunc(GL_LEQUAL);
 			skybox->Bind(proj, view.ToMatrix3().ToMatrix4());
@@ -154,86 +166,70 @@ void Win32_Renderer::Render(const Scene* scene_){
 			glDepthFunc(GL_LESS);
 		}
 
-		//TEST CODE - PLEASE REMOVE THIS SOON
-		TextMesh textMesh = TextMesh(SID("ArialFont"), SID("Text2DShader"), "Test");
-		textMesh.GetShader()->Bind();
-		//textMesh.GetShader()->BindMatrix4(SID("modelMatrix"), Matrix4::Scale(Vector3::Fill(100.0f)));
-		//textMesh.GetShader()->BindMatrix4(SID("viewMatrix"), view);
-		textMesh.GetShader()->BindMatrix4(SID("projectionMatrix"), Matrix4::Orthographic(-1.0f, 1.0f, -1.0f, 1.0f));
+		//------------------------------------------------------------------------------------------------------------------------
+		//Render UI elements
+		for(const auto& text : guiTexts){
+			text->GetTextMesh().GetShader()->Bind();
+			text->GetTextMesh().GetShader()->BindMatrix4(SID("projectionMatrix"), Matrix4::Orthographic(-1.0f, 1.0f, -1.0f, 1.0f));
 
-		textMesh.GetMeshInfo()->Bind();
+			text->GetTextMesh().GetMeshInfo()->Bind();
 
-		float rectX = 0.0f;
-		float rectY = 0.0f;
-		float rectW = 0.3f;
-		float rectH = 0.25f;
+			int totalWidthInPixels = text->GetTextMesh().GetTotalWidthInPixels();
+			int totalHeightInPixels = text->GetTextMesh().GetTotalHeightInPixels();
 
-		int totalWidthInPixels = 0;
-		int biggestHeightInPixels = 0;
-		for(char c : textMesh.GetText()){
-			FreetypeFontCharacter ch = textMesh.GetFont()->GetCharacters().at(c);
-			totalWidthInPixels += ch.width + ch.left;
+			float screenWidthPerPixel = text->GetSize().x / totalWidthInPixels;
+			float screenHeightPerPixel = screenWidthPerPixel;
+			float heightToUse = screenWidthPerPixel * totalHeightInPixels;
 
-			if(ch.rows - ch.top > biggestHeightInPixels){
-				biggestHeightInPixels = ch.rows - ch.top;
-			}
-		}
+			float x = text->GetPosition().x - (text->GetSize().x / 2.0f);
+			float y = text->GetPosition().y - (heightToUse / 2.0f);
 
-		float screenWidthPerPixel = rectW / totalWidthInPixels;
+			GL_FontInfo* fontInfo = dynamic_cast<GL_FontInfo*>(text->GetTextMesh().GetFont()->GetFontInfo());
+			GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(text->GetTextMesh().GetMeshInfo());
 
-		float x = rectX - (rectW / 2.0f);
-		float y = rectY + (rectH / 2.0f);
-		float width = screenWidthPerPixel;
-		float height = rectH / 100.0f;
+			for(char c : text->GetText()){
+				FreetypeFontCharacter ch = text->GetTextMesh().GetFont()->GetCharacters().at(c);
 
-		GL_FontInfo* fontInfo = dynamic_cast<GL_FontInfo*>(textMesh.GetFont()->GetFontInfo());
-		GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(textMesh.GetMeshInfo());
+				GLfloat xpos = x + ch.left * screenWidthPerPixel;
+				GLfloat ypos = y - (ch.rows - ch.top) * screenHeightPerPixel;
 
-		//Iterate through all characters in text
-		for(char c : textMesh.GetText()){
-			FreetypeFontCharacter ch = textMesh.GetFont()->GetCharacters().at(c);
+				GLfloat w = ch.width * screenWidthPerPixel;
+				GLfloat h = ch.rows * screenHeightPerPixel;
+				// Update VBO for each character
+				GLfloat vertices[6][4] = {
+					{ xpos,     ypos + h,   0.0, 0.0 },
+					{ xpos,     ypos,		0.0, 1.0 },
+					{ xpos + w, ypos,       1.0, 1.0 },
 
-			GLfloat xpos = x + ch.left * width;
-			GLfloat ypos = y - (ch.rows - ch.top) * height;
+					{ xpos,     ypos + h,   0.0, 0.0 },
+					{ xpos + w, ypos,       1.0, 1.0 },
+					{ xpos + w, ypos + h,   1.0, 0.0 }
+				};
 
-			GLfloat w = ch.width * width;
-			GLfloat h = ch.rows * height;
-			// Update VBO for each character
-			GLfloat vertices[6][4] = {
-				{ xpos,     ypos + h,   0.0, 0.0 },
-				{ xpos,     ypos,		0.0, 1.0 },
-				{ xpos + w, ypos,       1.0, 1.0 },
+				//Don't bind the texture if it's a space, for some reason doing so causes OpenGL warnings
+				if(c != 32){
+					//Render glyph texture over quad
+					glActiveTexture(GL_TEXTURE0);
+					glBindTexture(GL_TEXTURE_2D, fontInfo->GetTextureForChar(c));
+				}
 
-				{ xpos,     ypos + h,   0.0, 0.0 },
-				{ xpos + w, ypos,       1.0, 1.0 },
-				{ xpos + w, ypos + h,   1.0, 0.0 }
-			};
+				//Update content of VBO memory
+				glBindBuffer(GL_ARRAY_BUFFER, meshInfo->GetVBO());
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-			//Don't bind the texture if it's a space, for some reason doing so causes OpenGL warnings
-			if(c != 32){
-				//Render glyph texture over quad
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, fontInfo->GetTextureForChar(c));
+				//Render quad
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+				//Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+				x += (ch.advanceX >> 6) * screenWidthPerPixel; //Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels)) 
 			}
 
-			//Update content of VBO memory
-			glBindBuffer(GL_ARRAY_BUFFER, meshInfo->GetVBO());
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-			//Render quad
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			//Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-			x += (ch.advanceX >> 6) * width; //Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels)) 
+			text->GetTextMesh().GetMeshInfo()->Unbind();
+			text->GetTextMesh().GetShader()->Unbind();
 		}
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		textMesh.GetMeshInfo()->Unbind();
-
-		textMesh.GetShader()->Unbind();
-		//END OF TEST CODE
 	}
 
+	//------------------------------------------------------------------------------------------------------------------------
 	//Second Render Pass
 	mainFBO->Unbind();
 	glDisable(GL_DEPTH_TEST);

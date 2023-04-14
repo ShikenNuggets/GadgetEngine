@@ -18,3 +18,26 @@ TextMesh::~TextMesh(){
 	App::GetResourceManager().UnloadResource(shaderName);
 	App::GetResourceManager().UnloadResource(fontName);
 }
+
+int TextMesh::GetTotalWidthInPixels() const{
+	int totalWidthInPixels = 0;
+	for(char c : text){
+		FreetypeFontCharacter ch = font->GetCharacters().at(c);
+		totalWidthInPixels += (ch.advanceX >> 6);
+	}
+
+	return totalWidthInPixels;
+}
+
+int TextMesh::GetTotalHeightInPixels() const{
+	int totalHeightInPixels = 0;
+	for(char c : text){
+		FreetypeFontCharacter ch = font->GetCharacters().at(c);
+
+		if(ch.rows > totalHeightInPixels){
+			totalHeightInPixels = ch.rows;
+		}
+	}
+
+	return totalHeightInPixels;
+}

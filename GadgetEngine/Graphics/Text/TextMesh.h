@@ -16,6 +16,9 @@ namespace Gadget{
 		std::string GetText() const{ return text; }
 		MeshInfo* GetMeshInfo() const{ return meshInfo; }
 
+		int GetTotalWidthInPixels() const;
+		int GetTotalHeightInPixels() const;
+
 	private:
 		std::string text;
 		StringID fontName;

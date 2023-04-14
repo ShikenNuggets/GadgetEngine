@@ -14,6 +14,42 @@ namespace Gadget{
 
 		virtual void Update(float deltaTime_);
 
+		GuiElement* GetElement(StringID name_);
+
+		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
+		template <class T> T* GetElement() const{
+			static_assert(std::is_base_of<GuiElement, T>::value, "T must inherit from GuiElement");
+			T* element = nullptr;
+
+			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
+			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
+			for(GuiElement* e : elements){
+				element = dynamic_cast<T*>(e);
+				if(element != nullptr){
+					return element;
+				}
+			}
+
+			return nullptr;
+		}
+
+		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
+		template <class T> std::vector<T*> GetElements() const{
+			static_assert(std::is_base_of<GuiElement, T>::value, "T must inherit from GuiElement");
+			std::vector<T*> ems;
+
+			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
+			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
+			for(GuiElement* e : elements){
+				T* element = dynamic_cast<T*>(e);
+				if(element != nullptr){
+					ems.push_back(element);
+				}
+			}
+
+			return ems;
+		}
+
 	private:
 		StringID name;
 		bool isActive;
