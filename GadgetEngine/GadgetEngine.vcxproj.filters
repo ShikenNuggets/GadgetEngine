@@ -139,6 +139,9 @@
     <ClInclude Include="Graphics\GUI\CanvasSceneComponent.h">
       <Filter>Graphics\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\GUI\FpsDisplayElement.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\GUI\GuiCanvas.h">
       <Filter>Graphics\GUI</Filter>
     </ClInclude>

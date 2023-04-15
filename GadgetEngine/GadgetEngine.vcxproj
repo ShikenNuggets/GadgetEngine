@@ -131,6 +131,7 @@
     <ClInclude Include="Graphics\FontInfo.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\GUI\CanvasSceneComponent.h" />
+    <ClInclude Include="Graphics\GUI\FpsDisplayElement.h" />
     <ClInclude Include="Graphics\GUI\GuiCanvas.h" />
     <ClInclude Include="Graphics\GUI\GuiElement.h" />
     <ClInclude Include="Graphics\GUI\GuiManager.h" />

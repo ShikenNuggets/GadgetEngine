@@ -5,6 +5,7 @@
 #include <Graphics/Components/CameraComponent.h>
 #include <Graphics/Components/RenderComponent.h>
 #include <Graphics/GUI/CanvasSceneComponent.h>
+#include <Graphics/GUI/FpsDisplayElement.h>
 #include <Graphics/GUI/GuiTextElement.h>
 #include <Physics/BoxCollider2D.h>
 #include <Physics/Rigidbody.h>
@@ -30,6 +31,7 @@ namespace Pong{
 			Gadget::GuiCanvas* gc = new Gadget::GuiCanvas(SID("MainCanvas"));
 			gc->AddElement(new Gadget::GuiTextElement(SID("Score1"), "0", SID("ArialFont"), Gadget::Vector2(-1.5f, 0.85f), Gadget::Vector2(0.125f, 0.125f), Gadget::GuiAnchor::Center));
 			gc->AddElement(new Gadget::GuiTextElement(SID("Score2"), "0", SID("ArialFont"), Gadget::Vector2(1.5f, 0.85f), Gadget::Vector2(0.125f, 0.125f), Gadget::GuiAnchor::Center));
+			gc->AddElement(new Gadget::FpsDisplayElement(SID("FPS"), SID("ArialFont"), Gadget::Vector2(1.65f, -0.95f), Gadget::Vector2(0.125f, 0.125f), Gadget::GuiAnchor::Center));
 			AddSceneComponent(new Gadget::CanvasSceneComponent(this, gc));
 
 			auto camera = new Gadget::GameObject();
