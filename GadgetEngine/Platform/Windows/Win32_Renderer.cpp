@@ -168,9 +168,13 @@ void Win32_Renderer::Render(const Scene* scene_){
 
 		//------------------------------------------------------------------------------------------------------------------------
 		//Render UI elements
+
+		Matrix4 uiProjection = Matrix4::Orthographic(-1.0f, 1.0f, -1.0f, 1.0f);
+		uiProjection[0] = 1.0f / GetAspectRatio();
+
 		for(const auto& text : guiTexts){
 			text->GetTextMesh().GetShader()->Bind();
-			text->GetTextMesh().GetShader()->BindMatrix4(SID("projectionMatrix"), Matrix4::Orthographic(-1.0f, 1.0f, -1.0f, 1.0f));
+			text->GetTextMesh().GetShader()->BindMatrix4(SID("projectionMatrix"), uiProjection);
 
 			text->GetTextMesh().GetMeshInfo()->Bind();
 
