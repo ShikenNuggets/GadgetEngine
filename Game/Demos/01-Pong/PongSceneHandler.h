@@ -1,6 +1,8 @@
 #ifndef PONG_SCENE_HANDLER_H
 #define PONG_SCENE_HANDLER_H
 
+#include <Graphics/GUI/GuiTextElement.h>
+
 #include "Game/SceneComponent.h"
 
 namespace Pong{
@@ -16,6 +18,8 @@ namespace Pong{
 	private:
 		int player1Score;
 		int player2Score;
+		Gadget::GuiTextElement* player1ScoreUI;
+		Gadget::GuiTextElement* player2ScoreUI;
 	};
 }
 

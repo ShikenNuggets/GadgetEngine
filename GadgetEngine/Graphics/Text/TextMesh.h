@@ -19,6 +19,8 @@ namespace Gadget{
 		int GetTotalWidthInPixels() const;
 		int GetTotalHeightInPixels() const;
 
+		void SetText(const std::string& text_){ text = text_; }
+
 	private:
 		std::string text;
 		StringID fontName;
