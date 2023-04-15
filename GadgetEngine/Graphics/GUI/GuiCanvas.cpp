@@ -6,6 +6,12 @@ using namespace Gadget;
 
 GuiCanvas::GuiCanvas(StringID name_, bool isActive_) : name(name_), isActive(isActive_), elements(){}
 
+GuiCanvas::~GuiCanvas(){
+	for(const auto& e : elements){
+		delete e;
+	}
+}
+
 void GuiCanvas::AddElement(GuiElement* element_){
 	GADGET_BASIC_ASSERT(element_ != nullptr);
 	GADGET_ASSERT(!Utils::Contains(elements, element_), "Tried to add an element to this canvas multiple times!");

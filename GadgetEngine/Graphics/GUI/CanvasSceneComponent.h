@@ -7,15 +7,16 @@
 namespace Gadget{
 	class CanvasSceneComponent : public SceneComponent{
 	public:
-		CanvasSceneComponent(Scene* parent_, const GuiCanvas& canvas_);
+		CanvasSceneComponent(Scene* parent_, GuiCanvas* canvas_);
+		~CanvasSceneComponent();
 
 		virtual void OnUpdate(float deltaTime_) override;
 
-		GuiCanvas& GetCanvas(){ return canvas; }
-		const GuiCanvas& GetCanvas() const{ return canvas; }
+		GuiCanvas& GetCanvas(){ return *canvas; }
+		const GuiCanvas& GetCanvas() const{ return *canvas; }
 
 	private:
-		GuiCanvas canvas;
+		GuiCanvas* canvas;
 	};
 }
 
