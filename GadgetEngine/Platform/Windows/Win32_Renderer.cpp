@@ -17,6 +17,7 @@
 #include "Graphics/OpenGL/GL_FontInfo.h"
 #include "Graphics/GUI/CanvasSceneComponent.h"
 #include "Graphics/GUI/GuiTextElement.h"
+#include "Graphics/GUI/GuiTextureElement.h"
 #include "Resource/ResourceManager.h"
 
 #include "Graphics/Text/TextMesh.h"
@@ -110,8 +111,10 @@ void Win32_Renderer::Render(const Scene* scene_){
 	auto canvas = scene_->GetSceneComponent<CanvasSceneComponent>();
 
 	std::vector<GuiTextElement*> guiTexts;
+	std::vector<GuiTextureElement*> guiTextures;
 	if(canvas != nullptr){
 		guiTexts = canvas->GetCanvas().GetElements<GuiTextElement>();
+		guiTextures = canvas->GetCanvas().GetElements<GuiTextureElement>();
 	}
 
 	GADGET_ASSERT(lights.size() < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(lights.size()) + "!");
@@ -172,6 +175,45 @@ void Win32_Renderer::Render(const Scene* scene_){
 		Matrix4 uiProjection = Matrix4::Orthographic(-1.0f, 1.0f, -1.0f, 1.0f);
 		uiProjection[0] = 1.0f / GetAspectRatio();
 
+		//TEXTURES
+		for(const auto& texture : guiTextures){
+			Shader* shader = texture->GetShader();
+			shader->Bind();
+			shader->BindMatrix4(SID("projectionMatrix"), uiProjection);
+
+			GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(texture->GetMeshInfo());
+			meshInfo->Bind();
+
+			float x = texture->GetPosition().x;
+			float y = texture->GetPosition().y;
+			float w = texture->GetSize().x;
+			float h = texture->GetSize().y;
+
+			GLfloat vertices[6][4] = {
+				{ x - w, y + h, 0.0f, 0.0f },
+				{ x - w, y - h, 0.0f, 1.0f },
+				{ x + w, y - h, 1.0f, 1.0f },
+
+				{ x - w, y + h, 0.0f, 0.0f },
+				{ x + w, y - h, 1.0f, 1.0f },
+				{ x + w, y + h, 1.0f, 0.0f }
+			};
+
+			GL_TextureInfo* textureInfo = dynamic_cast<GL_TextureInfo*>(texture->GetTextureInfo());
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, textureInfo->GetTexture());
+
+			//Update content of VBO memory
+			glBindBuffer(GL_ARRAY_BUFFER, meshInfo->GetVBO());
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			//Render quad
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
+
+		//TEXT
 		for(const auto& text : guiTexts){
 			text->GetTextMesh().GetShader()->Bind();
 			text->GetTextMesh().GetShader()->BindMatrix4(SID("projectionMatrix"), uiProjection);
