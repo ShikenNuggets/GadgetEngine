@@ -29,6 +29,11 @@ namespace Gadget{
 				if(element != nullptr){
 					return element;
 				}
+
+				auto* se = e->GetSubElement<T>();
+				if(se != nullptr){
+					return se;
+				}
 			}
 
 			return nullptr;
@@ -46,6 +51,9 @@ namespace Gadget{
 				if(element != nullptr){
 					ems.push_back(element);
 				}
+
+				auto se = e->GetSubElements<T>();
+				ems.append_range(se);
 			}
 
 			return ems;
