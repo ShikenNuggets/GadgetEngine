@@ -175,44 +175,6 @@ void Win32_Renderer::Render(const Scene* scene_){
 		Matrix4 uiProjection = Matrix4::Orthographic(-1.0f, 1.0f, -1.0f, 1.0f);
 		uiProjection[0] = 1.0f / GetAspectRatio();
 
-		//TEXTURES
-		for(const auto& texture : guiTextures){
-			Shader* shader = texture->GetShader();
-			shader->Bind();
-			shader->BindMatrix4(SID("projectionMatrix"), uiProjection);
-
-			GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(texture->GetMeshInfo());
-			meshInfo->Bind();
-
-			float x = texture->GetPosition().x;
-			float y = texture->GetPosition().y;
-			float w = texture->GetSize().x;
-			float h = texture->GetSize().y;
-
-			GLfloat vertices[6][4] = {
-				{ x - w, y + h, 0.0f, 0.0f },
-				{ x - w, y - h, 0.0f, 1.0f },
-				{ x + w, y - h, 1.0f, 1.0f },
-
-				{ x - w, y + h, 0.0f, 0.0f },
-				{ x + w, y - h, 1.0f, 1.0f },
-				{ x + w, y + h, 1.0f, 0.0f }
-			};
-
-			GL_TextureInfo* textureInfo = dynamic_cast<GL_TextureInfo*>(texture->GetTextureInfo());
-
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, textureInfo->GetTexture());
-
-			//Update content of VBO memory
-			glBindBuffer(GL_ARRAY_BUFFER, meshInfo->GetVBO());
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-			//Render quad
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-		}
-
 		//TEXT
 		for(const auto& text : guiTexts){
 			text->GetTextMesh().GetShader()->Bind();
@@ -272,6 +234,44 @@ void Win32_Renderer::Render(const Scene* scene_){
 
 			text->GetTextMesh().GetMeshInfo()->Unbind();
 			text->GetTextMesh().GetShader()->Unbind();
+		}
+
+		//TEXTURES
+		for(const auto& texture : guiTextures){
+			Shader* shader = texture->GetShader();
+			shader->Bind();
+			shader->BindMatrix4(SID("projectionMatrix"), uiProjection);
+
+			GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(texture->GetMeshInfo());
+			meshInfo->Bind();
+
+			float x = texture->GetPosition().x;
+			float y = texture->GetPosition().y;
+			float w = texture->GetSize().x;
+			float h = texture->GetSize().y;
+
+			GLfloat vertices[6][4] = {
+				{ x - w, y + h, 0.0f, 0.0f },
+				{ x - w, y - h, 0.0f, 1.0f },
+				{ x + w, y - h, 1.0f, 1.0f },
+
+				{ x - w, y + h, 0.0f, 0.0f },
+				{ x + w, y - h, 1.0f, 1.0f },
+				{ x + w, y + h, 1.0f, 0.0f }
+			};
+
+			GL_TextureInfo* textureInfo = dynamic_cast<GL_TextureInfo*>(texture->GetTextureInfo());
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, textureInfo->GetTexture());
+
+			//Update content of VBO memory
+			glBindBuffer(GL_ARRAY_BUFFER, meshInfo->GetVBO());
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			//Render quad
+			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 	}
 
