@@ -5,11 +5,12 @@
 #include "KeyEvent.h"
 #include "MouseEvent.h"
 #include "Events/EventHandler.h"
+#include "Window.h"
 #include "Math/Math.h"
 
 using namespace Gadget;
 
-Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), persistentAxes(), definedButtons(), definedAxes(){
+Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), persistentAxes(), definedButtons(), definedAxes(), currentMouseX(0), currentMouseY(0){
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, OnEvent);
@@ -143,6 +144,14 @@ float Input::GetAxis(StringID axisName_) const{
 
 	Debug::Log("Tried to query undefined axis [" + axisName_.GetString() + "]!", Debug::Warning, __FILE__, __LINE__);
 	return 0.0f;
+}
+
+float Input::GetCurrentMouseXInGUICoordinates() const{
+	return static_cast<float>(currentMouseX) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetWidth());
+}
+
+float Input::GetCurrentMouseYInGUICoordinates() const{
+	return static_cast<float>(currentMouseY) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetHeight());
 }
 
 bool Input::GetMultiButtonDown(StringID multiButton_) const{
@@ -279,8 +288,11 @@ void Input::OnEvent(const Event& e_){
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyReleasedEvent&>(e_).GetKeyCode(), false));
 			break;
 		case EventType::MouseMoved:
-			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, dynamic_cast<const MouseMovedEvent&>(e_).GetX()));
-			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, dynamic_cast<const MouseMovedEvent&>(e_).GetY()));
+			App::GetInput().currentMouseX = dynamic_cast<const MouseMovedEvent&>(e_).GetX();
+			App::GetInput().currentMouseY = dynamic_cast<const MouseMovedEvent&>(e_).GetY();
+
+			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, App::GetInput().currentMouseX));
+			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, App::GetInput().currentMouseY));
 			break;
 		case EventType::MouseScroll:
 			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Horizontal, dynamic_cast<const MouseScrollEvent&>(e_).GetXOffset()));

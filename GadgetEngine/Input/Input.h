@@ -26,6 +26,11 @@ namespace Gadget{
 		float GetAxis(AxisID id_) const;
 		float GetAxis(StringID axisName_) const;
 
+		int GetCurrentMouseXInPixels() const{ return currentMouseX; }
+		int GetCurrentMouseYInPixels() const{ return currentMouseY; }
+		float GetCurrentMouseXInGUICoordinates() const;
+		float GetCurrentMouseYInGUICoordinates() const;
+
 		bool GetMultiButtonDown(StringID multiButton_) const;
 		bool GetMultiButtonUp(StringID multiButton_) const;
 		bool GetMultiButtonHeld(StringID multiButton_) const;
@@ -48,6 +53,9 @@ namespace Gadget{
 		std::set<ButtonID> buttonsUp;
 		std::map<AxisID, float> axes;
 		std::map<AxisID, float> persistentAxes; //Special axes that are based on a persistent state rather than just motion (e.g. an analog stick)
+
+		int currentMouseX;
+		int currentMouseY;
 
 		std::vector<Button> definedButtons;
 		std::vector<Axis> definedAxes;
