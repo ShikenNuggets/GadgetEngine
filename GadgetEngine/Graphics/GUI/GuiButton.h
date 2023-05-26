@@ -8,13 +8,19 @@
 namespace Gadget{
 	class GuiButton : public GuiElement{
 	public:
-		GuiButton(StringID name_, const std::string& text_, StringID font_, StringID texture_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : GuiElement(name_, pos_, size_, anchor_, isActive_){
-			AddSubElement(new GuiTextElement(StringID::ProcessString(name_.GetString() + "_text"), text_, font_, pos_, size_, anchor_, isActive_));
-			AddSubElement(new GuiTextureElement(StringID::ProcessString(name_.GetString() + "_texture"), texture_, pos_, size_, anchor_, isActive_));
+		GuiButton(StringID name_, const std::string& text_, StringID font_, StringID texture_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : GuiElement(name_, pos_, size_, anchor_, isActive_), text(nullptr), texture(nullptr){
+			text = new GuiTextElement(StringID::ProcessString(name_.GetString() + "_text"), text_, font_, pos_, size_, anchor_, isActive_);
+			texture = new GuiTextureElement(StringID::ProcessString(name_.GetString() + "_texture"), texture_, pos_, size_, anchor_, isActive_);
+
+			AddSubElement(text);
+			AddSubElement(texture);
 		}
 
 		GuiTextElement* GetTextElement(){ return text; }
 		GuiTextureElement* GetTextureElement(){ return texture; }
+
+		virtual void OnClick(ButtonID button_, const Vector2& clickPoint_) override{
+		}
 
 	private:
 		GuiTextElement* text;

@@ -1,5 +1,6 @@
 #include "GuiCanvas.h"
 
+#include "App.h"
 #include "Utils/Utils.h"
 
 using namespace Gadget;
@@ -35,4 +36,28 @@ GuiElement* GuiCanvas::GetElement(StringID name_){
 
 	Debug::Log("Tried to get a GuiElement [" + name.GetString() + "], but it could not be found!", Debug::Warning, __FILE__, __LINE__);
 	return nullptr;
+}
+
+void GuiCanvas::OnMouseMoved(int xPos, int yPos){
+}
+
+void GuiCanvas::OnMouseClick(ButtonID mouseButton){
+	Vector2 clickPoint = Vector2(App::GetInput().GetCurrentMouseXInGUICoordinates(), App::GetInput().GetCurrentMouseYInGUICoordinates());
+
+	Debug::Log("Click! " + clickPoint.ToString());
+
+	switch(mouseButton){
+		case Gadget::ButtonID::Mouse_LeftMouseButton:
+		case Gadget::ButtonID::Mouse_RightMouseButton:
+
+			for(const auto& e : elements){
+				if(e->PointIntersects(clickPoint)){
+					e->OnClick(mouseButton, clickPoint);
+				}
+			}
+
+			break;
+		default:
+			break;
+	}
 }

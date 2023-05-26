@@ -8,7 +8,9 @@
 #include "Core/Time.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
+#include "Graphics/GUI/CanvasSceneComponent.h"
 #include "Input/Input.h"
+#include "Input/MouseEvent.h"
 #include "Platform/Windows/Win32_Renderer.h"
 #include "Resource/ResourceManager.h"
 
@@ -21,6 +23,8 @@ App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), co
 	
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, OnEvent);
 }
 
 App::~App(){
@@ -135,6 +139,12 @@ void App::OnEvent(const Event& e_){
 	}else if(e_.GetEventType() == EventType::WindowResize){
 		auto& ev = dynamic_cast<const WindowResizedEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
 		GetInstance().renderer->OnResize(ev.GetWidth(), ev.GetHeight());
+	}else if(e_.GetEventType() == EventType::MouseMoved){
+		auto& ev = dynamic_cast<const MouseMovedEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
+		GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseMoved(ev.GetX(), ev.GetY());
+	}else if(e_.GetEventType() == EventType::MouseButtonPressed){
+		auto& ec = dynamic_cast<const MouseButtonEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
+		GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseClick(ec.GetButton());
 	}
 }
 

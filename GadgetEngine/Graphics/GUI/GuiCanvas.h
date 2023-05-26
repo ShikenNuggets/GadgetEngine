@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "GuiElement.h"
+#include "Input/InputEnums.h"
 
 namespace Gadget{
 	class GuiCanvas{
@@ -16,6 +17,9 @@ namespace Gadget{
 		virtual void Update(float deltaTime_);
 
 		GuiElement* GetElement(StringID name_);
+
+		virtual void OnMouseMoved(int xPos, int yPos);
+		virtual void OnMouseClick(ButtonID mouseButton);
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
 		template <class T> T* GetElement() const{

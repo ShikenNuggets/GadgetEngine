@@ -1,6 +1,7 @@
 #ifndef GADGET_GUI_ELEMENT_H
 #define GADGET_GUI_ELEMENT_H
 
+#include "Input/InputEnums.h"
 #include "Math/Vector.h"
 
 namespace Gadget{
@@ -84,6 +85,14 @@ namespace Gadget{
 			}
 
 			return ems;
+		}
+
+		virtual void OnClick(ButtonID button_, const Vector2& clickPoint_){
+			for(const auto& e : subElements){
+				if(e->PointIntersects(clickPoint_)){
+					e->OnClick(button_, clickPoint_);
+				}
+			}
 		}
 
 		bool PointIntersects(const Vector2& point_) const{

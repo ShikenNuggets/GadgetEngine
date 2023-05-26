@@ -7,19 +7,23 @@
 namespace Gadget{
 	class MouseMovedEvent : public Event{
 	public:
-		MouseMovedEvent(float x_, float y_) : Event(SID("MouseMovedEvent")), x(x_), y(y_){}
+		MouseMovedEvent(float x_, float y_, float xAbs_, float yAbs_) : Event(SID("MouseMovedEvent")), x(x_), y(y_), xAbsolute(xAbs_), yAbsolute(yAbs_){}
 
 		static constexpr EventType Type(){ return EventType::MouseMoved; }
 		virtual EventType GetEventType() const override{ return Type(); }
 
 		inline float GetX() const{ return x; }
 		inline float GetY() const{ return y; }
+		inline float GetXAbsolute() const{ return xAbsolute; }
+		inline float GetYAbsolute() const{ return yAbsolute; }
 
 		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(x) + ", " + std::to_string(y); }
 
 	private:
 		float x;
 		float y;
+		float xAbsolute;
+		float yAbsolute;
 	};
 
 	class MouseScrollEvent : public Event{
