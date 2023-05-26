@@ -86,6 +86,13 @@ namespace Gadget{
 			return ems;
 		}
 
+		bool PointIntersects(const Vector2& point_) const{
+			return (point_.x >= position.x - size.x
+				&& point_.x <= position.x + size.x
+				&& point_.y >= position.y - size.y
+				&& point_.y <= position.y + size.y);
+		}
+
 	private:
 		StringID name;
 		bool isActive;
