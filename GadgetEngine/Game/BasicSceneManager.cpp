@@ -42,6 +42,8 @@ void BasicSceneManager::LoadScene(size_t index_){
 	}else{
 		sceneIndex = index_;
 	}
+
+	CurrentScene()->SetToDefaultState();
 }
 
 void BasicSceneManager::LoadScene(StringID name_){
@@ -49,6 +51,8 @@ void BasicSceneManager::LoadScene(StringID name_){
 	for(int i = 0; i < scenes.size(); i++){
 		if(scenes[i]->name == name_){
 			sceneIndex = i;
+			CurrentScene()->SetToDefaultState();
+			return;
 		}
 	}
 

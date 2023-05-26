@@ -6,6 +6,7 @@
 #include <Game/GameObject.h>
 #include <Game/Scene.h>
 
+#include "PongMenuScene.h"
 #include "PongScene.h"
 
 namespace Pong{
@@ -16,6 +17,7 @@ namespace Pong{
 		virtual void LoadGame() override{
 			Gadget::App::GetRenderer().SetClearColor(Gadget::Color::Black());
 			DefineInputs();
+			Gadget::App::GetSceneManager().AddScene(new PongMenuScene());
 			Gadget::App::GetSceneManager().AddScene(new PongScene());
 		}
 

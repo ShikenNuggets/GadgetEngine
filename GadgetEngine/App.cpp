@@ -141,10 +141,16 @@ void App::OnEvent(const Event& e_){
 		GetInstance().renderer->OnResize(ev.GetWidth(), ev.GetHeight());
 	}else if(e_.GetEventType() == EventType::MouseMoved){
 		auto& ev = dynamic_cast<const MouseMovedEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
-		GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseMoved(ev.GetX(), ev.GetY());
+
+		if(GetInstance().GetSceneManager().CurrentScene() != nullptr && GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
+			GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseMoved(ev.GetX(), ev.GetY());
+		}
 	}else if(e_.GetEventType() == EventType::MouseButtonPressed){
 		auto& ec = dynamic_cast<const MouseButtonEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
-		GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseClick(ec.GetButton());
+
+		if(GetInstance().GetSceneManager().CurrentScene() != nullptr && GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
+			GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseClick(ec.GetButton());
+		}
 	}
 }
 
