@@ -86,6 +86,16 @@ namespace Gadget{
 		static inline float Floor(float num_){ return floor(num_); }
 		static inline double Floor(double num_){ return floor(num_); }
 
+		static inline float RemapRange(float value_, float oldMin_, float oldMax_, float newMin_, float newMax_){
+			if(oldMin_ == oldMax_ || newMin_ == newMax_){
+				return newMin_;
+			}
+
+			float oldRange = (oldMax_ - oldMin_);
+			float newRange = (newMax_ - newMin_);
+			return (((value_ - oldMin_) * newRange) / oldRange) + newMin_;
+		}
+
 		//Delete unwanted compiler-generated constructors, destructors, and assignment operators
 		Math() = delete;
 		Math(const Math&) = delete;

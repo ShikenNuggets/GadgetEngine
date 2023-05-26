@@ -147,11 +147,13 @@ float Input::GetAxis(StringID axisName_) const{
 }
 
 float Input::GetCurrentMouseXInGUICoordinates() const{
-	return static_cast<float>(currentMouseX) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetWidth());
+	float value = static_cast<float>(currentMouseX) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetWidth());
+	return Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range
 }
 
 float Input::GetCurrentMouseYInGUICoordinates() const{
-	return static_cast<float>(currentMouseY) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetHeight());
+	float value = static_cast<float>(currentMouseY) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetHeight());
+	return -Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range, then invert
 }
 
 bool Input::GetMultiButtonDown(StringID multiButton_) const{
@@ -288,11 +290,11 @@ void Input::OnEvent(const Event& e_){
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyReleasedEvent&>(e_).GetKeyCode(), false));
 			break;
 		case EventType::MouseMoved:
-			App::GetInput().currentMouseX = dynamic_cast<const MouseMovedEvent&>(e_).GetX();
-			App::GetInput().currentMouseY = dynamic_cast<const MouseMovedEvent&>(e_).GetY();
+			App::GetInput().currentMouseX = dynamic_cast<const MouseMovedEvent&>(e_).GetXAbsolute();
+			App::GetInput().currentMouseY = dynamic_cast<const MouseMovedEvent&>(e_).GetYAbsolute();
 
-			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, App::GetInput().currentMouseX));
-			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, App::GetInput().currentMouseY));
+			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, dynamic_cast<const MouseMovedEvent&>(e_).GetX()));
+			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, dynamic_cast<const MouseMovedEvent&>(e_).GetY()));
 			break;
 		case EventType::MouseScroll:
 			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Horizontal, dynamic_cast<const MouseScrollEvent&>(e_).GetXOffset()));
