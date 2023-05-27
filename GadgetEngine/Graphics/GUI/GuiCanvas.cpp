@@ -44,8 +44,6 @@ void GuiCanvas::OnMouseMoved(int xPos, int yPos){
 void GuiCanvas::OnMouseClick(ButtonID mouseButton){
 	Vector2 clickPoint = Vector2(App::GetInput().GetCurrentMouseXInGUICoordinates(), App::GetInput().GetCurrentMouseYInGUICoordinates());
 
-	Debug::Log("Click! " + clickPoint.ToString());
-
 	switch(mouseButton){
 		case Gadget::ButtonID::Mouse_LeftMouseButton:
 		case Gadget::ButtonID::Mouse_RightMouseButton:
