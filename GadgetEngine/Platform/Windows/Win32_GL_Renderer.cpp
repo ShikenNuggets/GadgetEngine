@@ -1,4 +1,4 @@
-#include "Win32_Renderer.h"
+#include "Win32_GL_Renderer.h"
 
 #include <glad/glad.h>
 
@@ -28,7 +28,7 @@
 
 using namespace Gadget;
 
-Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr){
+Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -66,7 +66,7 @@ Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::O
 	#ifdef GADGET_DEBUG
 	if(glDebugMessageCallback){
 		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback((GLDEBUGPROC)Win32_Renderer::GLDebugCallback, nullptr);
+		glDebugMessageCallback((GLDEBUGPROC)Win32_GL_Renderer::GLDebugCallback, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
 	}else{
 		Debug::Log(SID("RENDER"), "Could not set up OpenGL debug callback, OpenGL issues will not be logged!", Debug::Warning, __FILE__, __LINE__);
@@ -74,7 +74,7 @@ Win32_Renderer::Win32_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::O
 	#endif // GADGET_DEBUG
 }
 
-Win32_Renderer::~Win32_Renderer(){
+Win32_GL_Renderer::~Win32_GL_Renderer(){
 	delete screenQuad;
 	App::GetResourceManager().UnloadResource(SID("ScreenShader"));
 	delete mainFBO;
@@ -84,7 +84,7 @@ Win32_Renderer::~Win32_Renderer(){
 	window.reset();
 }
 
-void Win32_Renderer::PostInit(){
+void Win32_GL_Renderer::PostInit(){
 	screenShader = App::GetResourceManager().LoadResource<GL_Shader>(SID("ScreenShader"));
 	screenQuad = new GL_ScreenQuad();
 	mainFBO = new GL_DefaultFrameBuffer(window->GetWidth(), window->GetHeight());
@@ -92,7 +92,7 @@ void Win32_Renderer::PostInit(){
 	Renderer::PostInit();
 }
 
-void Win32_Renderer::Render(const Scene* scene_){
+void Win32_GL_Renderer::Render(const Scene* scene_){
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
 	GADGET_ASSERT(postInitComplete, "PostInit has not been called!");
 
@@ -294,15 +294,15 @@ void Win32_Renderer::Render(const Scene* scene_){
 	window.get()->SwapBuffers();
 }
 
-void Win32_Renderer::ClearScreen(){
+void Win32_GL_Renderer::ClearScreen(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Win32_Renderer::SetClearColor(const Color& color_){
+void Win32_GL_Renderer::SetClearColor(const Color& color_){
 	glClearColor(color_.r, color_.g, color_.b, color_.a);
 }
 
-void Win32_Renderer::SetViewportRect(const Rect& rect_){
+void Win32_GL_Renderer::SetViewportRect(const Rect& rect_){
 	GADGET_ASSERT(rect_.x >= 0.0f && rect_.x <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.y >= 0.0f && rect_.y <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.w >= 0.0f && rect_.w <= 1.0f, "Tried to set invalid viewport rect!");
@@ -314,7 +314,7 @@ void Win32_Renderer::SetViewportRect(const Rect& rect_){
 				static_cast<GLsizei>(window->GetHeight() * rect_.h));
 }
 
-void Win32_Renderer::OnResize(int width_, int height_){
+void Win32_GL_Renderer::OnResize(int width_, int height_){
 	if(!postInitComplete){
 		return; //New size will be handled correctly when we finish initializing
 	}
@@ -326,7 +326,7 @@ void Win32_Renderer::OnResize(int width_, int height_){
 	mainFBO = new GL_DefaultFrameBuffer(width_, height_);
 }
 
-void Win32_Renderer::SetWindingOrder(WindingOrder order_){
+void Win32_GL_Renderer::SetWindingOrder(WindingOrder order_){
 	Renderer::SetWindingOrder(order_);
 
 	switch(currentWindingOrder){
@@ -342,7 +342,7 @@ void Win32_Renderer::SetWindingOrder(WindingOrder order_){
 	}
 }
 
-void Win32_Renderer::SetCullFace(CullFace cullFace_){
+void Win32_GL_Renderer::SetCullFace(CullFace cullFace_){
 	Renderer::SetCullFace(cullFace_);
 
 	switch(currentCullFace){
@@ -367,27 +367,27 @@ void Win32_Renderer::SetCullFace(CullFace cullFace_){
 	}
 }
 
-Shader* Win32_Renderer::GenerateAPIShader(StringID shaderResource_){
+Shader* Win32_GL_Renderer::GenerateAPIShader(StringID shaderResource_){
 	return App::GetResourceManager().LoadResource<GL_Shader>(shaderResource_); //TODO - This feels bad...
 }
 
-MeshInfo* Win32_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){
+MeshInfo* Win32_GL_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){
 	return new GL_MeshInfo(mesh_);
 }
 
-MeshInfo* Win32_Renderer::GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_){
+MeshInfo* Win32_GL_Renderer::GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_){
 	return new GL_DynamicMeshInfo(numVertices_, numIndices_);
 }
 
-TextureInfo* Win32_Renderer::GenerateAPITextureInfo(const Texture& texture_){
+TextureInfo* Win32_GL_Renderer::GenerateAPITextureInfo(const Texture& texture_){
 	return new GL_TextureInfo(texture_);
 }
 
-FontInfo* Win32_Renderer::GenerateAPIFontInfo(const FreetypeFont& font_){
+FontInfo* Win32_GL_Renderer::GenerateAPIFontInfo(const FreetypeFont& font_){
 	return new GL_FontInfo(font_);
 }
 
-void __stdcall Win32_Renderer::GLDebugCallback(GLenum source_, GLenum type_, GLuint id_, GLenum severity_, GLsizei, const GLchar* message_, const void*){
+void __stdcall Win32_GL_Renderer::GLDebugCallback(GLenum source_, GLenum type_, GLuint id_, GLenum severity_, GLsizei, const GLchar* message_, const void*){
 	//Suppress useless messages
 	switch(id_){
 		case 131169: //The driver allocated storage for renderbuffer - This should not be considered a warning

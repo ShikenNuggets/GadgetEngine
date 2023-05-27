@@ -323,7 +323,7 @@
     <ClInclude Include="Physics\Rigidbody.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\Windows\Win32_Renderer.h">
+    <ClInclude Include="Platform\Windows\Win32_GL_Renderer.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\Win32_Utils.h">
@@ -502,7 +502,7 @@
     <ClCompile Include="Physics\Rigidbody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Platform\Windows\Win32_Renderer.cpp">
+    <ClCompile Include="Platform\Windows\Win32_GL_Renderer.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Platform\Windows\Win32_Utils.cpp">

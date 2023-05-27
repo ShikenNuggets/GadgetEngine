@@ -193,7 +193,7 @@
     <ClInclude Include="Physics\CollisionSystem.h" />
     <ClInclude Include="Physics\PhysManager.h" />
     <ClInclude Include="Physics\Rigidbody.h" />
-    <ClInclude Include="Platform\Windows\Win32_Renderer.h" />
+    <ClInclude Include="Platform\Windows\Win32_GL_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_Window.h" />
     <ClInclude Include="Random.h" />
@@ -260,7 +260,7 @@
     <ClCompile Include="Physics\CollisionSystem.cpp" />
     <ClCompile Include="Physics\PhysManager.cpp" />
     <ClCompile Include="Physics\Rigidbody.cpp" />
-    <ClCompile Include="Platform\Windows\Win32_Renderer.cpp" />
+    <ClCompile Include="Platform\Windows\Win32_GL_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Window.cpp" />
     <ClCompile Include="Resource\ResourceManager.cpp" />
