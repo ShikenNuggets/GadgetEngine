@@ -187,6 +187,7 @@ project "Game"
 		{
 			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E",
 			"echo D|xcopy \"$(SolutionDir)Build\\SDL2\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E",
+			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\bin\\x64\\*.dll\" \"$(TargetDir)\" /y /E",
 			"echo D|xcopy \"$(SolutionDir)Build\\Resources\\\" \"$(TargetDir)Resources\\\" /y /E /d",
 		}
 		
