@@ -50,6 +50,7 @@ project "GadgetEngine"
 	{
 		"%{prj.name}/",
 		"SDK/include",
+		"SDK/Assimp/include",
 		"SDK/Glad/include",
 		"SDK/SDL/include",
 		"SDK/freetype/include",
@@ -59,6 +60,7 @@ project "GadgetEngine"
 	{
 		"Build/SDL2/%{cfg.buildcfg}/",
 		"Build/SDL2main/%{cfg.buildcfg}/",
+		"SDK/Assimp/lib/x64/",
 		"SDK/freetype/libs/%{cfg.buildcfg}/",
 	}
 	
@@ -125,6 +127,7 @@ project "Game"
 		"%{prj.name}/",
 		"GadgetEngine/",
 		"SDK/include/",
+		"SDK/Assimp/include",
 		"SDK/Glad/include",
 		"SDK/SDL/include/",
 		"SDK/freetype/include",
@@ -136,12 +139,14 @@ project "Game"
 		"Build/Glad/%{cfg.buildcfg}/",
 		"Build/SDL2/%{cfg.buildcfg}/",
 		"Build/SDL2main/%{cfg.buildcfg}/",
+		"SDK/Assimp/lib/x64/",
 		"SDK/freetype/libs/%{cfg.buildcfg}/",
 	}
 	
 	links
 	{
 		"GadgetEngine.lib",
+		"assimp-vc143-mt.lib",
 		"Glad.lib",
 		"SDL2.lib",
 		"SDL2main.lib",

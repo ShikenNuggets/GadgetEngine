@@ -61,7 +61,7 @@
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -72,8 +72,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GadgetEngine.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Build\GadgetEngine\Debug;..\Build\Glad\Debug;..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\SDK\freetype\libs\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GadgetEngine.lib;assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Build\GadgetEngine\Debug;..\Build\Glad\Debug;..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -90,7 +90,7 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d<
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -104,8 +104,8 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d<
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>GadgetEngine.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Build\GadgetEngine\Release;..\Build\Glad\Release;..\Build\SDL2\Release;..\Build\SDL2main\Release;..\SDK\freetype\libs\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GadgetEngine.lib;assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Build\GadgetEngine\Release;..\Build\Glad\Release;..\Build\SDL2\Release;..\Build\SDL2main\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
