@@ -20,8 +20,8 @@ int main(int argc, char* argv[]){
 		std::cout << argv[i] << std::endl;
 	}
 
-	//ExampleGame game = ExampleGame();
-	Pong::PongGame game = Pong::PongGame();
+	ExampleGame game = ExampleGame();
+	//Pong::PongGame game = Pong::PongGame();
 
 	try{
 		Gadget::App::GetInstance().Run(game);

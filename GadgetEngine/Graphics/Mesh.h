@@ -5,7 +5,7 @@
 
 #include "Debug.h"
 #include "Vertex.h"
-#include "Loaders/ObjLoader.h"
+#include "Loaders/AssimpModelLoader.h"
 #include "Resource/Resource.h"
 
 namespace Gadget{
@@ -22,7 +22,7 @@ namespace Gadget{
 		MeshResourceContainer(const std::string& path_) : path(path_){}
 
 		virtual Resource* LoadResource() override{
-			return ObjLoader::LoadMesh(path);
+			return AssimpModelLoader::LoadMesh(path);
 		}
 
 		virtual const std::type_info& GetResourceTypeInfo() override{

@@ -139,6 +139,7 @@
     <ClInclude Include="Graphics\GUI\GuiTextElement.h" />
     <ClInclude Include="Graphics\GUI\GuiTextureElement.h" />
     <ClInclude Include="Graphics\LightSource.h" />
+    <ClInclude Include="Graphics\Loaders\AssimpModelLoader.h" />
     <ClInclude Include="Graphics\Loaders\BmpLoader.h" />
     <ClInclude Include="Graphics\Loaders\FontLoader.h" />
     <ClInclude Include="Graphics\Loaders\FreetypeFontLoader.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="Graphics\Cubemap.cpp" />
     <ClCompile Include="Graphics\GUI\CanvasSceneComponent.cpp" />
     <ClCompile Include="Graphics\GUI\GuiCanvas.cpp" />
+    <ClCompile Include="Graphics\Loaders\AssimpModelLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\FontLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\FreetypeFontLoader.cpp" />

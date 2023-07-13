@@ -163,6 +163,9 @@
     <ClInclude Include="Graphics\LightSource.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Loaders\AssimpModelLoader.h">
+      <Filter>Graphics\Loaders</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Loaders\BmpLoader.h">
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
@@ -407,6 +410,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\GUI\GuiCanvas.cpp">
       <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Loaders\AssimpModelLoader.cpp">
+      <Filter>Graphics\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\BmpLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
