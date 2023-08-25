@@ -1,6 +1,7 @@
 #ifndef GADGET_BYTE_SEQUENCER_H
 #define GADGET_BYTE_SEQUENCER_H
 
+#include <bit>
 #include <vector>
 
 namespace Gadget{

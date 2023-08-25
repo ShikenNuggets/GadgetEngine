@@ -1,6 +1,7 @@
 #ifndef GADGET_UTILS_H
 #define GADGET_UTILS_H
 
+#include <algorithm>
 #include <chrono>
 #include <format>
 #include <map>
