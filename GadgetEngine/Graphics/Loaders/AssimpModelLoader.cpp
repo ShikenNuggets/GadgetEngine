@@ -1,8 +1,10 @@
 #include "AssimpModelLoader.h"
 
 //#include <assimp/scene.h>
+#pragma warning(disable : 4244) //Kill unfixable warnings from Assimp
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#pragma warning(default : 4244)
 
 #include "Graphics/Mesh.h"
 #include "Math/Math.h"
@@ -22,6 +24,9 @@ Mesh* AssimpModelLoader::LoadMesh(const std::string& filePath_){
 }
 
 Mesh* AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene){
+	GADGET_BASIC_ASSERT(node != nullptr);
+	GADGET_BASIC_ASSERT(scene != nullptr);
+
 	for(unsigned int i = 0; i < node->mNumMeshes; i++){
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 

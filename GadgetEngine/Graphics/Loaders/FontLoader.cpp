@@ -21,17 +21,17 @@ Font* FontLoader::LoadFont(const std::string& filePath_){
 	GADGET_BASIC_ASSERT(sfntVersion == 0x00010000 || sfntVersion == 0x4F54544F);
 
 	uint16_t numTables = bs.Sequence2Bytes();
-	uint16_t searchRange = bs.Sequence2Bytes();
-	uint16_t entrySelector = bs.Sequence2Bytes();
-	uint16_t rangeShift = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t searchRange = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t entrySelector = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t rangeShift = bs.Sequence2Bytes();
 
 	std::map<uint32_t, uint32_t> tableOffsets;
 
 	for(uint16_t i = 0; i < numTables; i++){
 		uint32_t tagInt = bs.Sequence4Bytes();
-		uint32_t checksum = bs.Sequence4Bytes();
+		[[maybe_unused]] uint32_t checksum = bs.Sequence4Bytes();
 		uint32_t offset = bs.Sequence4Bytes();
-		uint32_t length = bs.Sequence4Bytes();
+		[[maybe_unused]] uint32_t length = bs.Sequence4Bytes();
 
 		tableOffsets.emplace(tagInt, offset);
 
@@ -95,17 +95,17 @@ Font* FontLoader::LoadFont(const std::string& filePath_){
 void FontLoader::LoadCmapTable(const std::vector<uint8_t>& data_, size_t tableOffset_){
 	ByteSequencer bs = ByteSequencer(data_, tableOffset_, false);
 
-	uint16_t version = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t version = bs.Sequence2Bytes();
 	uint16_t numSubTables = bs.Sequence2Bytes();
 
 	for(size_t i = 0; i < numSubTables; i++){
-		uint16_t platformID = bs.Sequence2Bytes();
-		uint16_t platformSpecificID = bs.Sequence2Bytes();
+		[[maybe_unused]] uint16_t platformID = bs.Sequence2Bytes();
+		[[maybe_unused]] uint16_t platformSpecificID = bs.Sequence2Bytes();
 		uint32_t offset = bs.Sequence4Bytes();
 
 		uint16_t format = Utils::MergeTwoBytes(data_, tableOffset_ + offset, false);
-		uint16_t length = Utils::MergeTwoBytes(data_, tableOffset_ + offset + 2, false);
-		uint16_t language = Utils::MergeTwoBytes(data_, tableOffset_ + offset + 4, false);
+		[[maybe_unused]] uint16_t length = Utils::MergeTwoBytes(data_, tableOffset_ + offset + 2, false);
+		[[maybe_unused]] uint16_t language = Utils::MergeTwoBytes(data_, tableOffset_ + offset + 4, false);
 
 		if(format == 0){ //Byte encoding table
 			std::array<uint8_t, 256> glyphIdArray = std::array<uint8_t, 256>();
@@ -127,27 +127,27 @@ void FontLoader::LoadCmapTable(const std::vector<uint8_t>& data_, size_t tableOf
 void FontLoader::LoadHeadTable(const std::vector<uint8_t>& data_, size_t tableOffset_){
 	ByteSequencer bs = ByteSequencer(data_, tableOffset_, false);
 
-	uint16_t majorVersion = bs.Sequence2Bytes();
-	uint16_t minorVersion = bs.Sequence2Bytes();
-	uint16_t fontRevision = bs.Sequence2Bytes();
-	uint32_t checksumAdjustment = bs.Sequence4Bytes();
-	uint32_t magicNumber = bs.Sequence4Bytes();
-	uint16_t flags = bs.Sequence2Bytes();
-	uint16_t unitsPerEm = bs.Sequence2Bytes();
-	uint64_t created = bs.Sequence8Bytes();
-	uint64_t modified = bs.Sequence8Bytes();
-	int16_t xMin = bs.Sequence2Bytes();
-	int16_t yMin = bs.Sequence2Bytes();
-	int16_t xMax = bs.Sequence2Bytes();
-	int16_t yMax = bs.Sequence2Bytes();
-	uint16_t macStyle = bs.Sequence2Bytes();
-	uint16_t lowestRecPPEM = bs.Sequence2Bytes();
-	int16_t fontDirectionHint = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t majorVersion = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t minorVersion = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t fontRevision = bs.Sequence2Bytes();
+	[[maybe_unused]] uint32_t checksumAdjustment = bs.Sequence4Bytes();
+	[[maybe_unused]] uint32_t magicNumber = bs.Sequence4Bytes();
+	[[maybe_unused]] uint16_t flags = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t unitsPerEm = bs.Sequence2Bytes();
+	[[maybe_unused]] uint64_t created = bs.Sequence8Bytes();
+	[[maybe_unused]] uint64_t modified = bs.Sequence8Bytes();
+	[[maybe_unused]] int16_t xMin = bs.Sequence2Bytes();
+	[[maybe_unused]] int16_t yMin = bs.Sequence2Bytes();
+	[[maybe_unused]] int16_t xMax = bs.Sequence2Bytes();
+	[[maybe_unused]] int16_t yMax = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t macStyle = bs.Sequence2Bytes();
+	[[maybe_unused]] uint16_t lowestRecPPEM = bs.Sequence2Bytes();
+	[[maybe_unused]] int16_t fontDirectionHint = bs.Sequence2Bytes();
 	indexToLocFormat = bs.Sequence2Bytes();
 
 	GADGET_BASIC_ASSERT(indexToLocFormat == 0 || indexToLocFormat == 1);
 
-	int16_t glyphDataFormat = bs.Sequence2Bytes();
+	[[maybe_unused]] int16_t glyphDataFormat = bs.Sequence2Bytes();
 }
 
 void FontLoader::LoadGlyfTable(const std::vector<uint8_t>& data_, size_t tableOffset_){
@@ -157,10 +157,10 @@ void FontLoader::LoadGlyfTable(const std::vector<uint8_t>& data_, size_t tableOf
 		ByteSequencer bs = ByteSequencer(data_, offsetToGlyph, false);
 
 		int16_t numberOfContours = bs.Sequence2Bytes();
-		int16_t xMin = bs.Sequence2Bytes();
-		int16_t yMin = bs.Sequence2Bytes();
-		int16_t xMax = bs.Sequence2Bytes();
-		int16_t yMax = bs.Sequence2Bytes();
+		[[maybe_unused]] int16_t xMin = bs.Sequence2Bytes();
+		[[maybe_unused]] int16_t yMin = bs.Sequence2Bytes();
+		[[maybe_unused]] int16_t xMax = bs.Sequence2Bytes();
+		[[maybe_unused]] int16_t yMax = bs.Sequence2Bytes();
 
 		if(numberOfContours < 0){
 			GADGET_BASIC_ASSERT(numberOfContours == -1);
@@ -235,7 +235,7 @@ void FontLoader::LoadGlyfTable(const std::vector<uint8_t>& data_, size_t tableOf
 						p.yCoordinate = -yCoord;
 					}
 				}else{
-					int16_t xCoord = bs.Sequence2Bytes();
+					[[maybe_unused]] int16_t xCoord = bs.Sequence2Bytes();
 				}
 
 				lastYCoord = p.yCoordinate;

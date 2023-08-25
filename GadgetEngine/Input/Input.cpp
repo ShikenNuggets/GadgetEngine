@@ -290,8 +290,8 @@ void Input::OnEvent(const Event& e_){
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyReleasedEvent&>(e_).GetKeyCode(), false));
 			break;
 		case EventType::MouseMoved:
-			App::GetInput().currentMouseX = dynamic_cast<const MouseMovedEvent&>(e_).GetXAbsolute();
-			App::GetInput().currentMouseY = dynamic_cast<const MouseMovedEvent&>(e_).GetYAbsolute();
+			App::GetInput().currentMouseX = static_cast<int>(dynamic_cast<const MouseMovedEvent&>(e_).GetXAbsolute());
+			App::GetInput().currentMouseY = static_cast<int>(dynamic_cast<const MouseMovedEvent&>(e_).GetYAbsolute());
 
 			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, dynamic_cast<const MouseMovedEvent&>(e_).GetX()));
 			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, dynamic_cast<const MouseMovedEvent&>(e_).GetY()));

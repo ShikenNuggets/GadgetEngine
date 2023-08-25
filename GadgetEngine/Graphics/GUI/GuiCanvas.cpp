@@ -38,7 +38,7 @@ GuiElement* GuiCanvas::GetElement(StringID name_){
 	return nullptr;
 }
 
-void GuiCanvas::OnMouseMoved(int xPos, int yPos){
+void GuiCanvas::OnMouseMoved([[maybe_unused]] int xPos, [[maybe_unused]] int yPos){
 }
 
 void GuiCanvas::OnMouseClick(ButtonID mouseButton){

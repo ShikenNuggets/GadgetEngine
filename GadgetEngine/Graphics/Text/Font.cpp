@@ -26,9 +26,9 @@ std::vector<Vector2> Font::CalculatePolygonForGlyph(unsigned char glyph_){
 
     std::vector<Vector2> returnVal;
     for(size_t i = 0; i < d.triangles.size(); i += 3){
-        returnVal.push_back(Vector2(d.coords[2 * d.triangles[i]], d.coords[2 * d.triangles[i] + 1]));
-        returnVal.push_back(Vector2(d.coords[2 * d.triangles[i + 1]], d.coords[2 * d.triangles[i + 1] + 1]));
-        returnVal.push_back(Vector2(d.coords[2 * d.triangles[i + 2]], d.coords[2 * d.triangles[i + 2] + 1]));
+        returnVal.push_back(Vector2(static_cast<float>(d.coords[2 * d.triangles[i]]),       static_cast<float>(d.coords[2 * d.triangles[i] + 1])));
+        returnVal.push_back(Vector2(static_cast<float>(d.coords[2 * d.triangles[i + 1]]),   static_cast<float>(d.coords[2 * d.triangles[i + 1] + 1])));
+        returnVal.push_back(Vector2(static_cast<float>(d.coords[2 * d.triangles[i + 2]]),   static_cast<float>(d.coords[2 * d.triangles[i + 2] + 1])));
     }
 
     return returnVal;

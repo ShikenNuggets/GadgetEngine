@@ -143,7 +143,7 @@ void App::OnEvent(const Event& e_){
 		auto& ev = dynamic_cast<const MouseMovedEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
 
 		if(GetInstance().GetSceneManager().CurrentScene() != nullptr && GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
-			GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseMoved(ev.GetX(), ev.GetY());
+			GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseMoved(static_cast<int>(ev.GetX()), static_cast<int>(ev.GetY()));
 		}
 	}else if(e_.GetEventType() == EventType::MouseButtonPressed){
 		auto& ec = dynamic_cast<const MouseButtonEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient

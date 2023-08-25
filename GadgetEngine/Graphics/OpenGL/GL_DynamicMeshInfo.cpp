@@ -5,7 +5,7 @@
 
 using namespace Gadget;
 
-GL_DynamicMeshInfo::GL_DynamicMeshInfo(size_t numVertices_, size_t numIndices_) : MeshInfo(numIndices_), vao(0), vbo(0){
+GL_DynamicMeshInfo::GL_DynamicMeshInfo([[maybe_unused]] size_t numVertices_, size_t numIndices_) : MeshInfo(numIndices_), vao(0), vbo(0){
 	GADGET_ASSERT(App::GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 
 	glCreateVertexArrays(1, &vao);
