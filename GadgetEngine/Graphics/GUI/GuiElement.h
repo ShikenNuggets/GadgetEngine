@@ -81,7 +81,9 @@ namespace Gadget{
 				}
 
 				auto se = e->GetSubElements<T>();
-				ems.append_range(se);
+				//ems.append_range(se); //Cool feature, doesn't exist yet as of C++20
+				ems.reserve(ems.size() + se.size());
+				ems.insert(ems.end(), se.begin(), se.end());
 			}
 
 			return ems;
