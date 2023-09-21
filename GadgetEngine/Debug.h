@@ -17,6 +17,7 @@
 #if defined GADGET_DEBUG && defined GADGET_PLATFORM_WIN32
 	#define GADGET_ASSERT(expr, msg) if(!(expr)){ Gadget::Debug::PopupErrorMessage(std::string("Assert Failed! ") + __FILENAME__ + " : " + std::to_string(__LINE__), msg); __debugbreak(); }
 	#define GADGET_BASIC_ASSERT(expr) GADGET_ASSERT(expr, "Condition Failed: " ## #expr)
+	#define GADGET_ASSERT_NOT_IMPLEMENTED GADGET_ASSERT(false, "Function not implemented!");
 #endif //GADGET_DEBUG && GADGET_PLATFORM_WIN32
 
 #if defined GADGET_RELEASE || !defined GADGET_PLATFORM_WIN32
