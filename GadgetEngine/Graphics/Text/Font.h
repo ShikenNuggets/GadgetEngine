@@ -11,6 +11,8 @@ namespace Gadget{
 		Font(const std::vector<GlyphData>& glyphs_) : glyphs(glyphs_){}
 		virtual ~Font() override{}
 
+		static constexpr const char* typeName = "Font";
+
 		std::vector<Vector2> CalculatePolygonForGlyph(unsigned char glyph_);
 		std::vector<std::vector<Vector2>> CalculatePolygonsForString(const std::string& text_);
 
@@ -20,7 +22,7 @@ namespace Gadget{
 
 	class FontResourceContainer : public ResourceContainer{
 	public:
-		FontResourceContainer(const std::string& path_) : path(path_){}
+		FontResourceContainer(const std::string& path_) : ResourceContainer(Font::typeName, path_){}
 
 		virtual Resource* LoadResource() override{
 			FontLoader fl = FontLoader();
@@ -30,9 +32,6 @@ namespace Gadget{
 		virtual const std::type_info& GetResourceTypeInfo() override{
 			return typeid(Font);
 		}
-
-	private:
-		std::string path;
 	};
 }
 

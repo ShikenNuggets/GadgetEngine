@@ -13,11 +13,12 @@ namespace Gadget{
 
 	class ResourceContainer{
 	public:
-		ResourceContainer() : resource(nullptr), isLoaded(false), referenceCount(0){}
+		ResourceContainer(const std::string type_, const std::string& path_) : type(type_), path(path_), resource(nullptr), isLoaded(false), referenceCount(0){}
 		virtual ~ResourceContainer(){ delete resource; }
 
-		bool IsLoaded(){ return resource != nullptr; }
-		size_t GetReferenceCount(){ return referenceCount; }
+		std::string Path() const{ return path; }
+		bool IsLoaded() const{ return resource != nullptr; }
+		size_t GetReferenceCount() const{ return referenceCount; }
 
 		virtual Resource* AddReference(){
 			if(!isLoaded){
@@ -49,6 +50,10 @@ namespace Gadget{
 		virtual Resource* LoadResource() = 0;
 
 		virtual const std::type_info& GetResourceTypeInfo() = 0;
+
+	protected:
+		const std::string type;
+		std::string path;
 
 	private:
 		Resource* resource;

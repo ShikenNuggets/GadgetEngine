@@ -39,6 +39,8 @@ namespace Gadget{
 			fontInfo = fontInfo_;
 		}
 
+		static constexpr const char* typeName = "FreetypeFont";
+
 		const std::map<char, FreetypeFontCharacter>& GetCharacters() const{ return characters; }
 		FontInfo* GetFontInfo() const{ return fontInfo; }
 
@@ -49,7 +51,7 @@ namespace Gadget{
 
 	class FreetypeFontResourceContainer : public ResourceContainer{
 	public:
-		FreetypeFontResourceContainer(const std::string& path_) : path(path_){}
+		FreetypeFontResourceContainer(const std::string& path_) : ResourceContainer(FreetypeFont::typeName, path_){}
 
 		virtual Resource* LoadResource() override{
 			FreetypeFontLoader ffl = FreetypeFontLoader();
@@ -59,9 +61,6 @@ namespace Gadget{
 		virtual const std::type_info& GetResourceTypeInfo() override{
 			return typeid(FreetypeFont);
 		}
-
-	private:
-		std::string path;
 	};
 }
 

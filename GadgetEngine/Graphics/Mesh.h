@@ -13,13 +13,15 @@ namespace Gadget{
 	public:
 		Mesh(const std::vector<Vertex>& verts_, const std::vector<uint32_t>& indices_) : vertices(verts_), indices(indices_){}
 
+		static constexpr const char* typeName = "Mesh";
+
 		const std::vector<Vertex> vertices;
 		const std::vector<uint32_t> indices;
 	};
 
 	class MeshResourceContainer : public ResourceContainer{
 	public:
-		MeshResourceContainer(const std::string& path_) : path(path_){}
+		MeshResourceContainer(const std::string& path_) : ResourceContainer(Mesh::typeName, path_){}
 
 		virtual Resource* LoadResource() override{
 			return AssimpModelLoader::LoadMesh(path);
@@ -28,9 +30,6 @@ namespace Gadget{
 		virtual const std::type_info& GetResourceTypeInfo() override{
 			return typeid(Mesh);
 		}
-
-	private:
-		std::string path;
 	};
 }
 

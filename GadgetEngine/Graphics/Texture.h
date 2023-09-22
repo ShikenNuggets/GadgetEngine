@@ -12,6 +12,8 @@ namespace Gadget{
 	public:
 		Texture(int width_, int height_, int bitDepth_, const std::vector<uint8_t>& pixelData_) : width(width_), height(height_), bitDepth(bitDepth_), pixelData(pixelData_){}
 
+		static constexpr const char* typeName = "Texture";
+
 		int GetWidth() const{ return width; }
 		int GetHeight() const{ return height; }
 		int GetBitDepth() const{ return bitDepth; }
@@ -26,7 +28,9 @@ namespace Gadget{
 
 	class TextureResourceContainer : public ResourceContainer{
 	public:
-		TextureResourceContainer(const std::string& path_) : ResourceContainer(), path(path_){}
+		TextureResourceContainer(const std::string& path_) : ResourceContainer(Texture::typeName, path_){}
+
+		std::string GetPath() const{ return path; }
 
 		virtual Resource* LoadResource() override{
 			return BmpLoader::LoadImage(path);
@@ -35,9 +39,6 @@ namespace Gadget{
 		virtual const std::type_info& GetResourceTypeInfo() override{
 			return typeid(Texture);
 		}
-
-	private:
-		std::string path;
 	};
 }
 

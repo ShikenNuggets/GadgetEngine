@@ -17,6 +17,8 @@ namespace Gadget{
 		GL_Shader(const std::string& vertPath_, const std::string& fragPath_);
 		virtual ~GL_Shader() override;
 
+		static constexpr const char* typeName = "GL_Shader";
+
 		GLuint GetShaderProgram();
 		virtual void Bind() override;
 		virtual void Unbind() override;
@@ -46,10 +48,10 @@ namespace Gadget{
 
 	class GL_ShaderResourceContainer : public ResourceContainer{
 	public:
-		GL_ShaderResourceContainer(const std::string& vertPath_, const std::string fragPath_) : vertPath(vertPath_), fragPath(fragPath_){}
+		GL_ShaderResourceContainer(const std::string& vertPath_, const std::string fragPath_) : ResourceContainer(GL_Shader::typeName, vertPath_), fragPath(fragPath_){}
 
 		virtual Resource* LoadResource() override{
-			return new GL_Shader(vertPath, fragPath);
+			return new GL_Shader(path, fragPath);
 		}
 
 		virtual const std::type_info& GetResourceTypeInfo() override{
@@ -57,7 +59,6 @@ namespace Gadget{
 		}
 
 	private:
-		std::string vertPath;
 		std::string fragPath;
 	};
 }
