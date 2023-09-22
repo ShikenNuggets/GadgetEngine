@@ -4,6 +4,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <nlohmann/json.hpp>
+
 #include "Hash.h"
 
 namespace Gadget{
@@ -44,5 +46,16 @@ constexpr inline Gadget::StringID operator "" _sid(const char* str_, size_t len_
 
 //Use this to create a hashed string ID and add it to the string database
 #define SID(str) Gadget::StringID::InternString(str ""_sid, str)
+
+//JSON Serializing/Deserializing
+namespace Gadget{
+	inline void to_json(nlohmann::json& j_, const StringID& s_){
+		j_ = nlohmann::json{ {"string", s_.GetString()} };
+	}
+
+	inline void from_json(nlohmann::json& j_, StringID& s_){
+		s_ = StringID::ProcessString(j_.at("string"));
+	}
+}
 
 #endif //!GADGET_STRING_ID_H

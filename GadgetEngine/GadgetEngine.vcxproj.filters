@@ -58,6 +58,9 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{ED6CDF9B-D939-3AA7-0253-284FEE7E6F35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serializers">
+      <UniqueIdentifier>{B2497DB5-1EFF-F5AA-A7F3-EF8113A8ECAE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
     </Filter>
@@ -343,6 +346,9 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="ScreenCoordinate.h" />
+    <ClInclude Include="Serializers\ResourceContainerSerializer.h">
+      <Filter>Serializers</Filter>
+    </ClInclude>
     <ClInclude Include="Utils\ByteSequencer.h">
       <Filter>Utils</Filter>
     </ClInclude>
