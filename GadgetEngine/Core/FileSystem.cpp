@@ -110,7 +110,7 @@ void FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vect
 }
 
 void FileSystem::WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
-	FileSystem::WriteToFile(filePath_, json_.dump(), type_);
+	FileSystem::WriteToFile(filePath_, json_.dump(4), type_);
 }
 
 void FileSystem::WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
