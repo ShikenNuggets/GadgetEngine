@@ -66,6 +66,14 @@ std::vector<uint8_t> FileSystem::ReadBinaryFile(const std::string& filePath_){
 	return std::vector<uint8_t>(std::istreambuf_iterator<char>(input), {}); //TODO - This is not particularly efficient
 }
 
+nlohmann::json FileSystem::ReadPlainTextJSONFile(const std::string& filePath_){
+	return nlohmann::json::parse(ReadFileToString(filePath_));
+}
+
+nlohmann::json FileSystem::ReadBinaryJSONFile(const std::string& filePath_){
+	return nlohmann::json::from_bson(ReadBinaryFile(filePath_)); //We're gonna use BSON https://bsonspec.org/
+}
+
 void FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){
 	if(!FileExists(filePath_)){
 		CreateFile(filePath_);
@@ -94,6 +102,19 @@ void FileSystem::WriteToFile(const std::string& filePath_, const std::string& co
 
 	filestream << content_;
 	filestream.close();
+}
+
+void FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_){
+	std::ofstream outfile(filePath_, std::ios::out | std::ios::binary);
+	outfile.write(reinterpret_cast<const char*>(&data_[0]), data_.size());
+}
+
+void FileSystem::WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
+	FileSystem::WriteToFile(filePath_, json_.dump(), type_);
+}
+
+void FileSystem::WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
+	WriteToBinaryFile(filePath_, nlohmann::json::to_bson(json_), type_);
 }
 
 std::string FileSystem::GetFileNameFromPath(const std::string& path_){

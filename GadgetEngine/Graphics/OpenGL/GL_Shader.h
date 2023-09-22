@@ -50,6 +50,8 @@ namespace Gadget{
 	public:
 		GL_ShaderResourceContainer(const std::string& vertPath_, const std::string fragPath_) : ResourceContainer(GL_Shader::typeName, vertPath_), fragPath(fragPath_){}
 
+		std::string FragPath() const{ return fragPath; }
+
 		virtual Resource* LoadResource() override{
 			return new GL_Shader(path, fragPath);
 		}

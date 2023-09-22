@@ -16,6 +16,7 @@ namespace Gadget{
 		ResourceContainer(const std::string type_, const std::string& path_) : type(type_), path(path_), resource(nullptr), isLoaded(false), referenceCount(0){}
 		virtual ~ResourceContainer(){ delete resource; }
 
+		std::string Type() const{ return type; }
 		std::string Path() const{ return path; }
 		bool IsLoaded() const{ return resource != nullptr; }
 		size_t GetReferenceCount() const{ return referenceCount; }
