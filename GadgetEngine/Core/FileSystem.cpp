@@ -67,10 +67,20 @@ std::vector<uint8_t> FileSystem::ReadBinaryFile(const std::string& filePath_){
 }
 
 nlohmann::json FileSystem::ReadPlainTextJSONFile(const std::string& filePath_){
+	if(!FileExists(filePath_)){
+		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
+		return nlohmann::json(nullptr);
+	}
+
 	return nlohmann::json::parse(ReadFileToString(filePath_));
 }
 
 nlohmann::json FileSystem::ReadBinaryJSONFile(const std::string& filePath_){
+	if(!FileExists(filePath_)){
+		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
+		return nlohmann::json(nullptr);
+	}
+
 	return nlohmann::json::from_bson(ReadBinaryFile(filePath_)); //We're gonna use BSON https://bsonspec.org/
 }
 
