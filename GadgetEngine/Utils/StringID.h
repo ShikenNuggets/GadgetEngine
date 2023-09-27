@@ -27,7 +27,7 @@ namespace Gadget{
 
 		//DON'T USE THIS DIRECTLY, USE THE SID() MACRO
 		static StringID InternString(StringID sid_, const char* str_);
-		static const char* GetStringFromID(StringID id_);
+		static std::string GetStringFromID(StringID id_);
 
 		//Only use this if the SID() macro cannot be used
 		static inline StringID ProcessString(const std::string& str_){
@@ -35,7 +35,7 @@ namespace Gadget{
 		}
 
 	private:
-		static std::unordered_map<uint64_t, const char*> stringIdTable;
+		static std::unordered_map<uint64_t, std::string> stringIdTable;
 
 		uint64_t id;
 	};
