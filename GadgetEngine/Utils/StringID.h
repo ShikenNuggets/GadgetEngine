@@ -54,7 +54,7 @@ namespace Gadget{
 	}
 
 	inline void from_json(nlohmann::json& j_, StringID& s_){
-		s_ = StringID::ProcessString(j_.at("string"));
+		s_ = StringID::ProcessString(j_);
 	}
 }
 

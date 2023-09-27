@@ -1,0 +1,153 @@
+[
+    [
+        {
+            "string": "ScreenGrayscaleShader"
+        },
+        {
+            "path1": "Resources/screenVert.glsl",
+            "path2": "Resources/screenGrayscaleFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "CubeModel"
+        },
+        {
+            "path": "Resources/cube.obj",
+            "resource_type": "Mesh"
+        }
+    ],
+    [
+        {
+            "string": "SkyboxBackTexture"
+        },
+        {
+            "path": "Resources/skybox/back.bmp",
+            "resource_type": "Texture"
+        }
+    ],
+    [
+        {
+            "string": "SkyboxRightTexture"
+        },
+        {
+            "path": "Resources/skybox/right.bmp",
+            "resource_type": "Texture"
+        }
+    ],
+    [
+        {
+            "string": "DefaultShader"
+        },
+        {
+            "path1": "Resources/defaultVert.glsl",
+            "path2": "Resources/defaultFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "Text2DShader"
+        },
+        {
+            "path1": "Resources/text2DVert.glsl",
+            "path2": "Resources/text2DFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "ColorShader"
+        },
+        {
+            "path1": "Resources/defaultVert.glsl",
+            "path2": "Resources/colorFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "SkyboxShader"
+        },
+        {
+            "path1": "Resources/skyboxVert.glsl",
+            "path2": "Resources/skyboxFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "SkyboxTopTexture"
+        },
+        {
+            "path": "Resources/skybox/top.bmp",
+            "resource_type": "Texture"
+        }
+    ],
+    [
+        {
+            "string": "ArialFont"
+        },
+        {
+            "path": "Resources/arial.ttf",
+            "resource_type": "FreetypeFont"
+        }
+    ],
+    [
+        {
+            "string": "CubeTexture"
+        },
+        {
+            "path": "Resources/wall.bmp",
+            "resource_type": "Texture"
+        }
+    ],
+    [
+        {
+            "string": "SkyboxLeftTexture"
+        },
+        {
+            "path": "Resources/skybox/left.bmp",
+            "resource_type": "Texture"
+        }
+    ],
+    [
+        {
+            "string": "ScreenInvertShader"
+        },
+        {
+            "path1": "Resources/screenVert.glsl",
+            "path2": "Resources/screenInversionEffectFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "ScreenShader"
+        },
+        {
+            "path1": "Resources/screenVert.glsl",
+            "path2": "Resources/screenFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "SkyboxBottomTexture"
+        },
+        {
+            "path": "Resources/skybox/bottom.bmp",
+            "resource_type": "Texture"
+        }
+    ],
+    [
+        {
+            "string": "SkyboxFrontTexture"
+        },
+        {
+            "path": "Resources/skybox/front.bmp",
+            "resource_type": "Texture"
+        }
+    ]
+]
