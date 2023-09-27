@@ -11,7 +11,7 @@
 using namespace Gadget;
 
 ResourceManager::ResourceManager(){
-	auto resJson = FileSystem::ReadPlainTextJSONFile("resources.json");
+	auto resJson = FileSystem::ReadPlainTextJSONFile("Resources/resources.json");
 	//resources = resJson; //TODO - Ideally this would work, but I'm just getting template errors that are hard to diagnose
 
 	//Parsing manually for now
