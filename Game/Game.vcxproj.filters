@@ -4,12 +4,21 @@
     <Filter Include="Demos">
       <UniqueIdentifier>{1DC3060D-89D7-2EBE-5259-D21DBE2C2BEF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Demos\00-DemoReel">
+      <UniqueIdentifier>{86AD7288-F2C3-701E-3B3B-FC3FA79041A6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Demos\01-Pong">
       <UniqueIdentifier>{2EE4DCF3-9AA4-582A-63DF-A1A7CF5E9D06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="Demos\00-DemoReel\DemoReelGame.h">
+      <Filter>Demos\00-DemoReel</Filter>
+    </ClInclude>
+    <ClInclude Include="Demos\00-DemoReel\DemoReelScene.h">
+      <Filter>Demos\00-DemoReel</Filter>
+    </ClInclude>
     <ClInclude Include="Demos\01-Pong\BallController.h">
       <Filter>Demos\01-Pong</Filter>
     </ClInclude>
