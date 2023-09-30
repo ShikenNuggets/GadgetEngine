@@ -8,6 +8,7 @@ namespace Gadget{
 	class InputGesture{
 	public:
 		InputGesture(StringID name_, float maxAllowedTime_);
+		virtual ~InputGesture(){}
 
 		StringID GetName() const;
 		virtual bool IsGestureValid() const = 0;
@@ -25,6 +26,7 @@ namespace Gadget{
 	class ButtonMashGesture : public InputGesture{
 	public:
 		ButtonMashGesture(StringID gestureName_, StringID buttonName_, int requiredPresses_ = 25, float maxAllowedTime_ = 0.25f);
+		virtual ~ButtonMashGesture(){}
 
 		virtual bool IsGestureValid() const override;
 		virtual bool IsGestureComplete() const override;

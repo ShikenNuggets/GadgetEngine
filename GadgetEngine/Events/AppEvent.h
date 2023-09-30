@@ -9,12 +9,12 @@ namespace Gadget{
 		WindowResizedEvent(int width_, int height_) : Event(SID("WindowResizedEvent")), width(width_), height(height_){}
 
 		static constexpr EventType Type(){ return EventType::WindowResize; }
-		virtual EventType GetEventType() const override{ return Type(); }
+		virtual EventType GetEventType() const final override{ return Type(); }
 
 		inline int GetWidth() const{ return width; }
 		inline int GetHeight() const{ return height; }
 
-		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(width) + ", " + std::to_string(height); }
+		virtual std::string ToString() const final override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(width) + ", " + std::to_string(height); }
 
 	private:
 		int width;
@@ -26,7 +26,7 @@ namespace Gadget{
 		WindowCloseEvent() : Event(SID("WindowCloseEvent")){}
 
 		static constexpr EventType Type(){ return EventType::WindowClose; }
-		virtual EventType GetEventType() const override{ return Type(); }
+		virtual EventType GetEventType() const final override{ return Type(); }
 	};
 
 	class WindowMovedEvent : public Event{
@@ -34,7 +34,7 @@ namespace Gadget{
 		WindowMovedEvent(int x_, int y_) : Event(SID("WindowMovedEvent")), x(x_), y(y_){}
 
 		static constexpr EventType Type(){ return EventType::WindowMoved; }
-		virtual EventType GetEventType() const override{ return Type(); }
+		virtual EventType GetEventType() const final override { return Type(); }
 
 		inline int GetX() const{ return x; }
 		inline int GetY() const{ return y; }

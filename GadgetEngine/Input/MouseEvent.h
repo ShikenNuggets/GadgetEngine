@@ -10,14 +10,14 @@ namespace Gadget{
 		MouseMovedEvent(float x_, float y_, float xAbs_, float yAbs_) : Event(SID("MouseMovedEvent")), x(x_), y(y_), xAbsolute(xAbs_), yAbsolute(yAbs_){}
 
 		static constexpr EventType Type(){ return EventType::MouseMoved; }
-		virtual EventType GetEventType() const override{ return Type(); }
+		virtual EventType GetEventType() const final override{ return Type(); }
 
 		inline float GetX() const{ return x; }
 		inline float GetY() const{ return y; }
 		inline float GetXAbsolute() const{ return xAbsolute; }
 		inline float GetYAbsolute() const{ return yAbsolute; }
 
-		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(x) + ", " + std::to_string(y); }
+		virtual std::string ToString() const final override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(x) + ", " + std::to_string(y); }
 
 	private:
 		float x;
@@ -31,12 +31,12 @@ namespace Gadget{
 		MouseScrollEvent(float xOffset_, float yOffset_) : Event(SID("MouseScrollEvent")), xOffset(xOffset_), yOffset(yOffset_){}
 
 		static constexpr EventType Type(){ return EventType::MouseScroll; }
-		virtual EventType GetEventType() const override{ return Type(); }
+		virtual EventType GetEventType() const final override{ return Type(); }
 
 		inline float GetXOffset() const{ return xOffset; }
 		inline float GetYOffset() const{ return yOffset; }
 
-		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(xOffset) + ", " + std::to_string(yOffset); }
+		virtual std::string ToString() const final override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string(xOffset) + ", " + std::to_string(yOffset); }
 
 	private:
 		float xOffset;
@@ -49,6 +49,7 @@ namespace Gadget{
 
 	protected:
 		MouseButtonEvent(ButtonID button_, StringID name_) : Event(name_), button(button_){}
+		virtual ~MouseButtonEvent(){}
 
 		ButtonID button;
 	};
@@ -58,9 +59,9 @@ namespace Gadget{
 		MouseButtonPressedEvent(ButtonID button_) : MouseButtonEvent(button_, SID("MouseButtonPressedEvent")){}
 
 		static constexpr EventType Type(){ return EventType::MouseButtonPressed; }
-		virtual EventType GetEventType() const override{ return Type(); }
+		virtual EventType GetEventType() const final override{ return Type(); }
 
-		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string((int)button); }
+		virtual std::string ToString() const final override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string((int)button); }
 	};
 
 	class MouseButtonReleasedEvent : public MouseButtonEvent{
@@ -68,9 +69,9 @@ namespace Gadget{
 		MouseButtonReleasedEvent(ButtonID button_) : MouseButtonEvent(button_, SID("MouseButtonReleasedEvent")){}
 
 		static constexpr EventType Type(){ return EventType::MouseButtonReleased; }
-		virtual EventType GetEventType() const override{ return Type(); }
+		virtual EventType GetEventType() const final override{ return Type(); }
 
-		virtual std::string ToString() const override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string((int)button); }
+		virtual std::string ToString() const final override{ return std::string(StringID::GetStringFromID(name)) + ": " + std::to_string((int)button); }
 	};
 }
 
