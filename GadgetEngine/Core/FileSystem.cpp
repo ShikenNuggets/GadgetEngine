@@ -84,7 +84,7 @@ nlohmann::json FileSystem::ReadBinaryJSONFile(const std::string& filePath_){
 	return nlohmann::json::from_bson(ReadBinaryFile(filePath_)); //We're gonna use BSON https://bsonspec.org/
 }
 
-void FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){
+bool FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){
 	if(!FileExists(filePath_)){
 		CreateFile(filePath_);
 	}
@@ -102,29 +102,70 @@ void FileSystem::WriteToFile(const std::string& filePath_, const std::string& co
 			filestream.open(filePath_, std::ios::out);
 			break;
 		default:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
 	}
 
 	if(!filestream.is_open()){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
-		return;
+		return false;
 	}
 
 	filestream << content_;
 	filestream.close();
+
+	if(!filestream){
+		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
+		return false;
+	}
+
+	return true;
 }
 
-void FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_){
-	std::ofstream outfile(filePath_, std::ios::out | std::ios::binary);
+bool FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_){
+	if(!FileExists(filePath_)){
+		CreateFile(filePath_);
+	}
+
+	std::ofstream outfile;
+	switch(type_)
+	{
+		case WriteType::Append:
+			outfile.open(filePath_, std::ios::out | std::ios_base::app | std::ios::binary);
+			break;
+		case WriteType::Clear:
+			outfile.open(filePath_, std::ios::out | std::ios_base::trunc | std::ios::binary);
+			break;
+		case WriteType::Overwrite:
+			outfile.open(filePath_, std::ios::out | std::ios::binary);
+			break;
+		default:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			break;
+	}
+
+	if(!outfile.is_open()){
+		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
+		return false;
+	}
+	
 	outfile.write(reinterpret_cast<const char*>(&data_[0]), data_.size());
+	outfile.close();
+	
+	if(!outfile){
+		Debug::Log(SID("FILESYSTEM"), "An error occurred while writing to file " + filePath_ + "!", Debug::Error, __FILE__, __LINE__);
+		return false;
+	}
+
+	return true;
 }
 
-void FileSystem::WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
-	FileSystem::WriteToFile(filePath_, json_.dump(4), type_);
+bool FileSystem::WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
+	return FileSystem::WriteToFile(filePath_, json_.dump(4), type_);
 }
 
-void FileSystem::WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
-	WriteToBinaryFile(filePath_, nlohmann::json::to_bson(json_), type_);
+bool FileSystem::WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
+	return WriteToBinaryFile(filePath_, nlohmann::json::to_bson(json_), type_);
 }
 
 std::string FileSystem::GetFileNameFromPath(const std::string& path_){

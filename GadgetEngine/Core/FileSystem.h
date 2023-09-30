@@ -30,10 +30,11 @@ namespace Gadget{
 		static nlohmann::json ReadPlainTextJSONFile(const std::string& filePath_);
 		static nlohmann::json ReadBinaryJSONFile(const std::string& filePath_);
 		
-		static void WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_ = WriteType::Append);
-		static void WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_ = WriteType::Overwrite);
-		static void WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
-		static void WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
+		//Returns true when file write was successful
+		static bool WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_ = WriteType::Append);
+		static bool WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_ = WriteType::Overwrite);
+		static bool WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
+		static bool WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
 
 		static std::string GetFileNameFromPath(const std::string& path_);
 
