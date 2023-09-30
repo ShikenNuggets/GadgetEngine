@@ -7,6 +7,7 @@ namespace Gadget{
 	class GameInterface{
 	public:
 		GameInterface(const std::string& name_) : name(name_){}
+		virtual ~GameInterface(){}
 
 		virtual void LoadGame() = 0;
 

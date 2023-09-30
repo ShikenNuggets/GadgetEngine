@@ -8,7 +8,7 @@ namespace Gadget{
 	class Scene{
 	public:
 		Scene(StringID name_);
-		~Scene();
+		virtual ~Scene();
 
 		void CreateObject(GameObject* gameObject_);
 		void AddSceneComponent(SceneComponent* sceneComp_);

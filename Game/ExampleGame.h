@@ -13,7 +13,7 @@ namespace Example{
 	public:
 		ExampleGame() : GameInterface("Example Game"){}
 
-		virtual void LoadGame() override{
+		virtual void LoadGame() final override{
 			Gadget::App::GetSceneManager().AddScene(new ExampleScene());
 		}
 	};

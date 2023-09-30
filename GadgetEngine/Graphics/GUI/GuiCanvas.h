@@ -10,7 +10,7 @@ namespace Gadget{
 	class GuiCanvas{
 	public:
 		GuiCanvas(StringID name_, bool isActive_ = true);
-		~GuiCanvas();
+		virtual ~GuiCanvas();
 
 		void AddElement(GuiElement* element_);
 

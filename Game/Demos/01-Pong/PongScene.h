@@ -20,7 +20,7 @@ namespace Pong{
 		PongScene() : Gadget::Scene(SID("PongScene")){}
 
 	protected:
-		virtual void SetToDefaultState() override{
+		virtual void SetToDefaultState() final override{
 			constexpr float playAreaWidth = 21.0f;
 			constexpr float playAreaHeight = 12.0f;
 

@@ -21,7 +21,7 @@ namespace Pong{
 		PongMenuScene() : Gadget::Scene(SID("PongMenuScene")){}
 
 	protected:
-		virtual void SetToDefaultState() override{
+		virtual void SetToDefaultState() final override{
 			Gadget::Scene::SetToDefaultState();
 
 			PongMenuSceneHandler* sceneHandler = new PongMenuSceneHandler(this);

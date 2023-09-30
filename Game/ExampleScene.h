@@ -17,7 +17,7 @@ namespace Example{
 		ExampleScene() : Gadget::Scene(SID("ExampleScene")){}
 
 	protected:
-		virtual void SetToDefaultState() override{
+		virtual void SetToDefaultState() final override{
 			Gadget::Scene::SetToDefaultState();
 
 			AddSceneComponent(new Gadget::SkyboxComponent(this, SID("Skybox")));
