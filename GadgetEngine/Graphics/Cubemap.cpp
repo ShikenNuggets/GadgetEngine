@@ -58,8 +58,8 @@ bool Cubemap::IsValid() const{
 }
 
 Texture* Cubemap::GetTexture(Orientation o_) const{
-	GADGET_ASSERT(static_cast<int>(o_) >= 0 && static_cast<int>(o_) < numTextures, "Invalid Cubemap texture orientation [" + std::to_string(o_) + "]!");
-	return textures[static_cast<int>(o_)];
+	GADGET_ASSERT(static_cast<int>(o_) >= 0 && static_cast<size_t>(o_) < numTextures, "Invalid Cubemap texture orientation [" + std::to_string(o_) + "]!");
+	return textures[static_cast<size_t>(o_)];
 }
 
 Texture* Cubemap::GetTexture(size_t orientation_) const{

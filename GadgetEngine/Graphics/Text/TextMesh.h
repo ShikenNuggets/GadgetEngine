@@ -16,8 +16,8 @@ namespace Gadget{
 		std::string GetText() const{ return text; }
 		MeshInfo* GetMeshInfo() const{ return meshInfo; }
 
-		int GetTotalWidthInPixels() const;
-		int GetTotalHeightInPixels() const;
+		size_t GetTotalWidthInPixels() const;
+		size_t GetTotalHeightInPixels() const;
 
 		void SetText(const std::string& text_){ text = text_; }
 

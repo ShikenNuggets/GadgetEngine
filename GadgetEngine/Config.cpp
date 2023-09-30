@@ -74,6 +74,8 @@ void Config::OnEvent(const Event& e_){
 			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, dynamic_cast<const WindowMovedEvent&>(e_).GetX());
 			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowYKey, dynamic_cast<const WindowMovedEvent&>(e_).GetY());
 			break;
+		default:
+			break;
 	}
 }
 

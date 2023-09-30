@@ -28,8 +28,8 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 	const auto cls = scene_->GetAllComponentsInScene<BoxCollider2D>(); //TODO - This is slow
 	//TODO - This is *really* slow. It checks every collider in the scene against every other collider
 	//This is bad enough in a small scene but it'll get exponentially worse as more colliders are added
-	for(int i = 0; i < cls.size(); i++){
-		for(int j = i + 1; j < cls.size(); j++){
+	for(size_t i = 0; i < cls.size(); i++){
+		for(size_t j = i + 1; j < cls.size(); j++){
 			if(CollisionSystem::TestCollision(*cls[i], *cls[j])){
 				HandleCollisionResponse(cls[i], cls[j]);
 				HandleCollisionResponse(cls[j], cls[i]);

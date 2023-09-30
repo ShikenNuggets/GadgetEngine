@@ -90,7 +90,7 @@ void Win32_Window::HandleEvents(){
 				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(Win32_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
 				break;
 			case SDL_MOUSEMOTION:
-				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(static_cast<float>(e.motion.xrel) / GetWidth(), static_cast<float>(e.motion.yrel) / GetHeight(), e.motion.x, e.motion.y));
+				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(static_cast<float>(e.motion.xrel) / GetWidth(), static_cast<float>(e.motion.yrel) / GetHeight(), static_cast<float>(e.motion.x), static_cast<float>(e.motion.y)));
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				EventHandler::GetInstance()->HandleEvent(MouseButtonPressedEvent(Win32_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));

@@ -72,7 +72,7 @@ namespace Gadget{
 				return false;
 			}
 
-			for(int i = 2; i <= num_ / 2; i++){
+			for(uint64_t i = 2; i <= num_ / 2; i++){
 				if(num_ % i == 0){
 					return false;
 				}

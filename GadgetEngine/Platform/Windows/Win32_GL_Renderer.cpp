@@ -182,8 +182,8 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 			text->GetTextMesh().GetMeshInfo()->Bind();
 
-			int totalWidthInPixels = text->GetTextMesh().GetTotalWidthInPixels();
-			int totalHeightInPixels = text->GetTextMesh().GetTotalHeightInPixels();
+			size_t totalWidthInPixels = text->GetTextMesh().GetTotalWidthInPixels();
+			size_t totalHeightInPixels = text->GetTextMesh().GetTotalHeightInPixels();
 
 			float screenWidthPerPixel = text->GetSize().x / totalWidthInPixels;
 			float screenHeightPerPixel = screenWidthPerPixel;

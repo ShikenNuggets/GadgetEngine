@@ -16,7 +16,7 @@ GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), texture
 	glTextureParameteri(textureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTextureParameteri(textureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	GLint internalFormat = GL_RGBA8;
+	GLenum internalFormat = GL_RGBA8;
 	GLenum dataFormat = GL_BGRA;
 	if(texture_.GetBitDepth() == 32){
 		internalFormat = GL_RGBA8;

@@ -16,7 +16,7 @@ GL_CubemapInfo::GL_CubemapInfo(const Cubemap& cubemap_) : textureID(0), vao(0), 
 
 	GADGET_BASIC_ASSERT(cubemap_.IsValid());
 
-	GLint internalFormat = GL_RGBA8;
+	GLenum internalFormat = GL_RGBA8;
 	GLenum dataFormat = GL_BGRA;
 	if(cubemap_.GetBitDepth() == 32){
 		internalFormat = GL_RGBA8;
@@ -31,8 +31,8 @@ GL_CubemapInfo::GL_CubemapInfo(const Cubemap& cubemap_) : textureID(0), vao(0), 
 
 	glTextureStorage2D(textureID, 1, internalFormat, cubemap_.GetFaceWidth(), cubemap_.GetFaceHeight());
 
-	for(int i = 0; i < 6; i++){
-		glTextureSubImage3D(textureID, 0, 0, 0, i, cubemap_.GetTexture(i)->GetWidth(), cubemap_.GetTexture(i)->GetHeight(), 1, dataFormat, GL_UNSIGNED_BYTE, cubemap_.GetTexture(i)->GetPixels().data());
+	for(size_t i = 0; i < 6; i++){
+		glTextureSubImage3D(textureID, 0, 0, 0, static_cast<GLint>(i), cubemap_.GetTexture(i)->GetWidth(), cubemap_.GetTexture(i)->GetHeight(), 1, dataFormat, GL_UNSIGNED_BYTE, cubemap_.GetTexture(i)->GetPixels().data());
 	}
 	glGenerateTextureMipmap(textureID);
 
@@ -106,7 +106,7 @@ GL_CubemapInfo::~GL_CubemapInfo(){
 }
 
 void GL_CubemapInfo::Bind(int textureIndex_){
-	glActiveTexture(GL_TEXTURE0 + textureIndex_); //TODO - Check the maximum and ensure we don't go over it
+	glActiveTexture(GLenum(GL_TEXTURE0 + textureIndex_)); //TODO - Check the maximum and ensure we don't go over it
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 	glBindVertexArray(vao);
 }

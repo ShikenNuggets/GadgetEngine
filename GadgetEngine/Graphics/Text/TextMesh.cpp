@@ -19,23 +19,23 @@ TextMesh::~TextMesh(){
 	App::GetResourceManager().UnloadResource(fontName);
 }
 
-int TextMesh::GetTotalWidthInPixels() const{
-	int totalWidthInPixels = 0;
+size_t TextMesh::GetTotalWidthInPixels() const{
+	size_t totalWidthInPixels = 0;
 	for(char c : text){
 		FreetypeFontCharacter ch = font->GetCharacters().at(c);
-		totalWidthInPixels += (static_cast<int>(ch.advanceX) >> 6);
+		totalWidthInPixels += (static_cast<size_t>(ch.advanceX) >> 6);
 	}
 
 	return totalWidthInPixels;
 }
 
-int TextMesh::GetTotalHeightInPixels() const{
-	int totalHeightInPixels = 0;
+size_t TextMesh::GetTotalHeightInPixels() const{
+	size_t totalHeightInPixels = 0;
 	for(char c : text){
 		FreetypeFontCharacter ch = font->GetCharacters().at(c);
 
 		if(ch.rows > totalHeightInPixels){
-			totalHeightInPixels = static_cast<int>(ch.rows);
+			totalHeightInPixels = static_cast<size_t>(ch.rows);
 		}
 	}
 
