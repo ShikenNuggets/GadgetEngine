@@ -11,6 +11,7 @@ project "Glad"
 	location "_prj/"
 	kind "StaticLib"
 	language "C"
+	warnings "Off"
 
 	targetdir ("../Build/%{prj.name}/%{cfg.buildcfg}/") 
 	objdir ("../Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
