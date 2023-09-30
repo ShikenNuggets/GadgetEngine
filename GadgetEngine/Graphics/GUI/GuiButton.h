@@ -21,20 +21,20 @@ namespace Gadget{
 		GuiTextElement* GetTextElement(){ return text; }
 		GuiTextureElement* GetTextureElement(){ return texture; }
 
-		void SetOnClickCallback(const std::function<void(void)>& func_){
+		void SetOnClickCallback(const std::function<void(ButtonID, const Vector2&)>& func_){
 			onClickFunc = func_;
 		}
 
 		virtual void OnClick(ButtonID button_, const Vector2& clickPoint_) override{
 			if(button_ == ButtonID::Mouse_LeftMouseButton){
-				onClickFunc();
+				onClickFunc(button_, clickPoint_);
 			}
 		}
 
 	private:
 		GuiTextElement* text;
 		GuiTextureElement* texture;
-		std::function<void(void)> onClickFunc;
+		std::function<void(ButtonID, const Vector2&)> onClickFunc;
 	};
 }
 
