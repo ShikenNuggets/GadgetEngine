@@ -1,3 +1,6 @@
 [submodule "SDK/SDL"]
 	path = SDK/SDL
 	url = https://github.com/libsdl-org/SDL
+[submodule "SDK/bullet3"]
+	path = SDK/bullet3
+	url = https://github.com/bulletphysics/bullet3.git
