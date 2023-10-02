@@ -72,6 +72,7 @@ project "GadgetEngine"
 		"SDK/Glad/include",
 		"SDK/SDL/include",
 		"SDK/freetype/include",
+		"SDK/bullet3/src",
 	}
 	
 	libdirs
@@ -80,6 +81,9 @@ project "GadgetEngine"
 		"Build/SDL2main/%{cfg.buildcfg}/",
 		"SDK/Assimp/lib/x64/",
 		"SDK/freetype/libs/%{cfg.buildcfg}/",
+		"Build/BulletCollision/%{cfg.buildcfg}/",
+		"Build/BulletDynamics/%{cfg.buildcfg}/",
+		"Build/BulletLinearMath/%{cfg.buildcfg}/",
 	}
 	
 	dependson
@@ -87,6 +91,9 @@ project "GadgetEngine"
 		"Glad",
 		"SDL2",
 		"SDL2main",
+		"BulletCollision",
+		"BulletDynamics",
+		"BulletLinearMath",
 	}
 	
 	flags
@@ -149,6 +156,7 @@ project "Game"
 		"SDK/Glad/include",
 		"SDK/SDL/include/",
 		"SDK/freetype/include",
+		"SDK/bullet3/src",
 	}
 	
 	libdirs
@@ -159,6 +167,9 @@ project "Game"
 		"Build/SDL2main/%{cfg.buildcfg}/",
 		"SDK/Assimp/lib/x64/",
 		"SDK/freetype/libs/%{cfg.buildcfg}/",
+		"Build/BulletCollision/%{cfg.buildcfg}/",
+		"Build/BulletDynamics/%{cfg.buildcfg}/",
+		"Build/BulletLinearMath/%{cfg.buildcfg}/",
 	}
 	
 	links
@@ -169,6 +180,9 @@ project "Game"
 		"SDL2.lib",
 		"SDL2main.lib",
 		"freetype.lib",
+		"BulletCollision.lib",
+		"BulletDynamics.lib",
+		"BulletLinearMath.lib",
 	}
 	
 	dependson
@@ -177,6 +191,9 @@ project "Game"
 		"Glad",
 		"SDL2",
 		"SDL2main",
+		"BulletCollision",
+		"BulletDynamics",
+		"BulletLinearMath",
 	}
 	
 	flags
