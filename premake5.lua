@@ -103,10 +103,8 @@ project "GadgetEngine"
 	
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
 		staticruntime "On"
-		runtime "Release"
 		
 		defines
 		{
@@ -121,10 +119,12 @@ project "GadgetEngine"
 	filter "configurations:Debug"
 		defines "GADGET_DEBUG"
 		symbols "On"
+		runtime "Debug"
 		
 	filter "configurations:Release"
 		defines "GADGET_RELEASE"
 		optimize "On"
+		runtime "Release"
 		
 		flags
 		{
@@ -203,10 +203,9 @@ project "Game"
 	
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
 		staticruntime "On"
-		runtime "Release"
+		
 		
 		defines
 		{
@@ -230,11 +229,13 @@ project "Game"
 		defines "GADGET_DEBUG"
 		symbols "On"
 		kind "ConsoleApp"
+		runtime "Debug"
 		
 	filter "configurations:Release"
 		defines "GADGET_RELEASE"
 		optimize "On"
 		kind "WindowedApp"
+		runtime "Release"
 		
 		flags
 		{
