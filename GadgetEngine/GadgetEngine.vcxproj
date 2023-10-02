@@ -190,6 +190,7 @@
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Physics\BoxCollider2D.h" />
+    <ClInclude Include="Physics\BulletHelper.h" />
     <ClInclude Include="Physics\Collider.h" />
     <ClInclude Include="Physics\CollisionSystem.h" />
     <ClInclude Include="Physics\PhysManager.h" />

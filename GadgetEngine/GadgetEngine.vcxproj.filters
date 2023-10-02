@@ -317,6 +317,9 @@
     <ClInclude Include="Physics\BoxCollider2D.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\BulletHelper.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
     <ClInclude Include="Physics\Collider.h">
       <Filter>Physics</Filter>
     </ClInclude>

@@ -9,7 +9,7 @@
 
 namespace Gadget{
 	struct Transform{
-		Transform(const Vector3& pos_, const Quaternion& rot_ = Quaternion::Identity(), const Vector3& scale_ = Vector3::Fill(1.0f));
+		constexpr Transform(const Vector3& pos_, const Quaternion& rot_ = Quaternion::Identity(), const Vector3& scale_ = Vector3::Fill(1.0f)) : position(pos_), rotation(rot_), scale(scale_){}
 		Transform(const Vector3& pos_, const Euler& euler_, const Vector3& scale_ = Vector3::Fill(1.0f));
 
 		Matrix4 GetTransformMatrix() const;
