@@ -31,6 +31,24 @@ externalproject "SDL2main"
 		"SDL2",
 	}
 	
+externalproject "BulletCollision"
+	location "SDK/_prj"
+	filename "BulletCollision"
+	kind "StaticLib"
+	language "C++"
+	
+externalproject "BulletDynamics"
+	location "SDK/_prj"
+	filename "BulletDynamics"
+	kind "StaticLib"
+	language "C++"
+	
+externalproject "BulletLinearMath"
+	location "SDK/_prj"
+	filename "LinearMath"
+	kind "StaticLib"
+	language "C++"
+	
 project "GadgetEngine"
 	location "GadgetEngine"
 	kind "StaticLib"
