@@ -1,3 +1,6 @@
+#ifndef GADGET_BULLET_HELPER_H
+#define GADGET_BULLET_HELPER_H
+
 #include <btBulletDynamicsCommon.h>
 
 #include "Game/GameObject.h"
@@ -31,3 +34,5 @@ namespace BulletHelper{
 		return btTransform(ConvertQuaternion(transform_.rotation), ConvertVector3(transform_.position));
 	}
 };
+
+#endif //!GADGET_BULLET_HELPER_H
