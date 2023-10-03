@@ -4,8 +4,6 @@
 
 using namespace Gadget;
 
-Transform::Transform(const Vector3& pos_, const Quaternion& rot_, const Vector3& scale_) : position(pos_), rotation(rot_), scale(scale_){}
-
 Transform::Transform(const Vector3& pos_, const Euler& euler_, const Vector3& scale_) : position(pos_), rotation(euler_.ToQuaternion()), scale(scale_){}
 
 Matrix4 Transform::GetTransformMatrix() const{
