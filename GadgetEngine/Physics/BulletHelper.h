@@ -1,7 +1,14 @@
 #ifndef GADGET_BULLET_HELPER_H
 #define GADGET_BULLET_HELPER_H
 
+//Hide warnings from external code that we can't/won't modify - WNF
+#pragma warning(disable : 26451)	//Possible arithmetic overflow
+#pragma warning(disable : 26495)	//Uninitialized member variable
+#pragma warning(disable : 4127)		//Conditional expression is constant
 #include <btBulletDynamicsCommon.h>
+#pragma warning(default : 26451)
+#pragma warning(default : 26495)
+#pragma warning(default : 4127)
 
 #include "Game/GameObject.h"
 
@@ -23,7 +30,7 @@ namespace BulletHelper{
 	}
 
 	constexpr inline Gadget::Transform ConvertTransform(const btTransform& transform_, const Gadget::Vector3& scale_){
-		return Gadget::Transform(ConvertVector3(transform_.getOrigin()), ConvertQuaternion(transform_.getRotation()));
+		return Gadget::Transform(ConvertVector3(transform_.getOrigin()), ConvertQuaternion(transform_.getRotation()), scale_);
 	}
 
 	constexpr inline Gadget::Transform ConvertTransform(const btTransform& transform_, float scale_ = 1.0f){

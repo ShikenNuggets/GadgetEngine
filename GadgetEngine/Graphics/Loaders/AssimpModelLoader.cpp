@@ -1,10 +1,10 @@
 #include "AssimpModelLoader.h"
 
-//#include <assimp/scene.h>
-#pragma warning(disable : 4244) //Kill unfixable warnings from Assimp
+//Hide warnings from external code that we can't/won't modify
+#pragma warning(disable : 26451)	//Possible arithmetic overflow
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
-#pragma warning(default : 4244)
+#pragma warning(default : 26451)
 
 #include "Graphics/Mesh.h"
 #include "Math/Math.h"

@@ -3,7 +3,10 @@
 
 #include <string>
 
+//Hide warnings from external code that we can't/won't modify - WNF
+#pragma warning(disable : 4244)		//Possible loss of data from type conversion
 #include <assimp/scene.h>
+#pragma warning(default : 4244)
 
 namespace Gadget{
 	//Forward Declaration

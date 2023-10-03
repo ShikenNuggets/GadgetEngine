@@ -4,7 +4,14 @@
 #include <string>
 #include <unordered_map>
 
+//Hide warnings from external code that we can't/won't modify - WNF
+#pragma warning(disable : 26495)	//Uninitialized member variable
+#pragma warning(disable : 26800)	//Use of a moved object
+#pragma warning(disable : 26819)	//Unnanotated fallthrough in switch statement
 #include <nlohmann/json.hpp>
+#pragma warning(default : 26495)
+#pragma warning(default : 26800)
+#pragma warning(default : 26819)
 
 #include "Hash.h"
 
