@@ -24,6 +24,8 @@ namespace Gadget{
 		GameObject(StringID name_ = SID("GameObject"));
 		~GameObject();
 
+		void Update(float deltaTime_);
+
 		void AddComponent(Component* component_);
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
@@ -66,6 +68,7 @@ namespace Gadget{
 		Vector3 GetPosition() const{ return transform.position; }
 		Quaternion GetRotation() const{ return transform.rotation; }
 		Vector3 GetScale() const{ return transform.scale; }
+		const Transform& GetTransform() const{ return transform; }
 		Matrix4 GetTransformMatrix() const{ return transform.GetTransformMatrix(); }
 
 		void SetName(StringID newName_){ name = newName_; }

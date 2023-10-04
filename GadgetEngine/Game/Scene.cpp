@@ -36,6 +36,10 @@ void Scene::Update(float deltaTime_){
 	for(const auto& sc : sceneComponents){
 		sc->OnUpdate(deltaTime_);
 	}
+
+	for(auto& go : gameObjects){
+		go->Update(deltaTime_);
+	}
 }
 
 void Scene::DestroyAllGameObjects(){

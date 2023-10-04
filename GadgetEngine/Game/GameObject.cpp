@@ -16,6 +16,15 @@ Matrix4 Transform::GetTransformMatrix() const{
 
 GameObject::GameObject(StringID name_) : transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), components(), name(name_){}
 
+void GameObject::Update(float deltaTime_){
+	for(const auto& component : components){
+		//TODO - There is probably a better approach to this than checking every component every frame...
+		if(!component->IsActivated()){
+			component->OnActivated();
+		}
+	}
+}
+
 GameObject::~GameObject(){
 	for(auto c : components){
 		delete c;
