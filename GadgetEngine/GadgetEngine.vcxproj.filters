@@ -508,6 +508,9 @@
     <ClCompile Include="Memory\StackAllocator.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\Collider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
     <ClCompile Include="Physics\CollisionSystem.cpp">
       <Filter>Physics</Filter>
     </ClCompile>

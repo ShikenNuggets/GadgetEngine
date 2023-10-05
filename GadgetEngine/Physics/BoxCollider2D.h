@@ -6,7 +6,7 @@
 namespace Gadget{
 	class BoxCollider2D : public Collider{
 	public:
-		BoxCollider2D(GameObject* parent_, float width_ = 1.0f, float height_ = 1.0f, bool isTrigger_ = false) : Collider(parent_, isTrigger_), width(width_), height(height_){}
+		BoxCollider2D(GameObject* parent_, float width_ = 1.0f, float height_ = 1.0f, bool isTrigger_ = false) : Collider(parent_, ColliderShape::Box2D, isTrigger_), width(width_), height(height_){}
 
 		float GetWidth() const{ return width; }
 		float GetHeight() const{ return height; }

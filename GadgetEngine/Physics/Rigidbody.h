@@ -1,6 +1,7 @@
 #ifndef GADGET_RIGIDBODY_H
 #define GADGET_RIGIDBODY_H
 
+#include "BulletHelper.h"
 #include "CollisionSystem.h"
 #include "Game/Component.h"
 #include "Math/Vector.h"
@@ -19,23 +20,22 @@ namespace Gadget{
 		void AddVelocity(float x_, float y_, float z_);
 
 		float GetMass() const{ return mass; }
-		Vector3 GetVelocity() const{ return velocity; }
-		Vector3 GetAcceleration() const{ return acceleration; }
+		Vector3 GetVelocity() const;
 		bool UseGravity() const{ return useGravity; }
 
 		void SetMass(float mass_){ mass = mass_; }
-		void SetVelocity(const Vector3& velocity_){ velocity = velocity_; }
-		void SetVelocity(float x_, float y_, float z_){ velocity = Vector3(x_, y_, z_); }
-		void SetAcceleration(const Vector3& accel_){ acceleration = accel_; }
-		void SetAcceleration(float x_, float y_, float z_){ acceleration = Vector3(x_, y_, z_); }
+		void SetVelocity(const Vector3& velocity_);
+		void SetVelocity(float x_, float y_, float z_);
 
 		void CollisionResponse(const Collision& collision_);
 
 	private:
+		friend class Collider;
+
 		float mass; //Mass in kg
-		Vector3 velocity; //Velocity in m/s
-		Vector3 acceleration;
 		bool useGravity;
+
+		btRigidBody* bulletRb;
 	};
 }
 
