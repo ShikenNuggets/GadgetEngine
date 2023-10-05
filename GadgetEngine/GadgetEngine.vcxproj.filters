@@ -326,6 +326,9 @@
     <ClInclude Include="Physics\CollisionSystem.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\CubeCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
     <ClInclude Include="Physics\PhysManager.h">
       <Filter>Physics</Filter>
     </ClInclude>

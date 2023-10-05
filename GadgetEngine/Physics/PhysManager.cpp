@@ -137,12 +137,11 @@ btCollisionShape* PhysManager::CreateCollisionShape(const Collider* col_){
 	switch(col_->GetShape())
 	{
 		case ColliderShape::Box2D:
+		case ColliderShape::Cube:
 			return new btBoxShape(BulletHelper::ConvertVector3(col_->GetColliderSize()));
 		case ColliderShape::Circle2D:
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
-		case ColliderShape::Cube:
-			return new btBoxShape(BulletHelper::ConvertVector3(col_->GetColliderSize()));
 		case ColliderShape::Sphere:
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;

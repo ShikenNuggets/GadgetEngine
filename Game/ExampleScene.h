@@ -6,6 +6,7 @@
 #include <Graphics/Components/LightComponent.h>
 #include <Graphics/Components/RenderComponent.h>
 #include <Graphics/Components/SkyboxComponent.h>
+#include <Physics/CubeCollider.h>
 #include <Physics/Rigidbody.h>
 
 #include "CameraController.h"
@@ -25,7 +26,7 @@ namespace Example{
 			Gadget::GameObject* cube = new Gadget::GameObject();
 			cube->AddComponent(new Gadget::RenderComponent(cube, SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
 			cube->AddComponent(new Gadget::Rigidbody(cube, 100.0f, true));
-			cube->AddComponent(new Gadget::BoxCollider2D(cube));
+			cube->AddComponent(new Gadget::CubeCollider(cube));
 			cube->AddComponent(new ObjectRotator(cube));
 
 			Gadget::GameObject* light = new Gadget::GameObject();
