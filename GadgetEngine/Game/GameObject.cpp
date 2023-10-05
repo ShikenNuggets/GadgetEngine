@@ -30,6 +30,7 @@ GameObject::~GameObject(){
 		delete c;
 		c = nullptr;
 	}
+	components.clear();
 }
 
 void GameObject::AddComponent(Component* component_){
@@ -49,4 +50,11 @@ bool GameObject::HasTag(StringID tag_) const{
 void GameObject::AddTag(StringID tag_){
 	GADGET_ASSERT(!HasTag(tag_), "Tried adding tag [" + tag_.GetString() + "] to a GameObject that already has that tag!");
 	tags.push_back(tag_);
+}
+
+void GameObject::OnTransformModified(){
+	for(auto& c : components){
+		GADGET_BASIC_ASSERT(c != nullptr);
+		c->OnTransformModified();
+	}
 }

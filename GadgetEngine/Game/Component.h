@@ -17,6 +17,9 @@ namespace Gadget{
 			isActivated = true;
 		}
 
+		//Runs when the parent GameObject's transform is modified (i.e. translated, rotated, scale set to a new value)
+		virtual void OnTransformModified(){}
+
 		GameObject* GetParent() const{ return parent; }
 		bool IsActivated() const{ return isActivated; }
 

@@ -74,28 +74,30 @@ namespace Gadget{
 		void SetName(StringID newName_){ name = newName_; }
 		void AddTag(StringID tag_);
 
-		void SetPosition(const Vector3& pos_){ transform.position = pos_; }
-		void SetPosition(float x_, float y_, float z_){ transform.position += Vector3(x_, y_, z_); }
+		void SetPosition(const Vector3& pos_){ transform.position = pos_; OnTransformModified(); }
+		void SetPosition(float x_, float y_, float z_){ transform.position += Vector3(x_, y_, z_); OnTransformModified(); }
 
-		void SetRotation(const Quaternion& rot_){ transform.rotation = rot_; }
-		void SetRotation(const Euler& rot_){ transform.rotation = rot_.ToQuaternion(); }
-		void SetRotation(float x_, float y_, float z_){ transform.rotation = Euler(x_, y_, z_).ToQuaternion(); }
+		void SetRotation(const Quaternion& rot_){ transform.rotation = rot_; OnTransformModified(); }
+		void SetRotation(const Euler& rot_){ transform.rotation = rot_.ToQuaternion(); OnTransformModified(); }
+		void SetRotation(float x_, float y_, float z_){ transform.rotation = Euler(x_, y_, z_).ToQuaternion(); OnTransformModified(); }
 
-		void SetScale(float scale_){ transform.scale = Vector3::Fill(scale_); }
-		void SetScale(const Vector3& scale_){ transform.scale = scale_; }
+		void SetScale(float scale_){ transform.scale = Vector3::Fill(scale_); OnTransformModified(); }
+		void SetScale(const Vector3& scale_){ transform.scale = scale_; OnTransformModified(); }
 
-		void Translate(const Vector3& translation_){ transform.position += translation_; }
-		void Translate(float x_, float y_, float z_){ transform.position += Vector3(x_, y_, z_); }
+		void Translate(const Vector3& translation_){ transform.position += translation_; OnTransformModified(); }
+		void Translate(float x_, float y_, float z_){ transform.position += Vector3(x_, y_, z_); OnTransformModified(); }
 
-		void Rotate(const Quaternion& rotation_){ transform.rotation *= rotation_; }
-		void Rotate(const Euler& rotation_){ transform.rotation *= rotation_.ToQuaternion(); }
-		void Rotate(float x_, float y_, float z_){ transform.rotation *= Euler(x_, y_, z_).ToQuaternion(); }
+		void Rotate(const Quaternion& rotation_){ transform.rotation *= rotation_; OnTransformModified(); }
+		void Rotate(const Euler& rotation_){ transform.rotation *= rotation_.ToQuaternion(); OnTransformModified(); }
+		void Rotate(float x_, float y_, float z_){ transform.rotation *= Euler(x_, y_, z_).ToQuaternion(); OnTransformModified(); }
 
 	protected:
 		StringID name;
 		std::vector<StringID> tags;
 		Transform transform;
 		std::vector<Component*> components;
+
+		virtual void OnTransformModified();
 	};
 }
 
