@@ -1,6 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletCollision", "_prj\BulletCollision.vcxproj", "{08E11BF7-4E84-FC4C-BF03-92A5DCBA95F3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletDynamics", "_prj\BulletDynamics.vcxproj", "{88F0444D-A3FA-5C49-8541-A21649B1F7FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletLinearMath", "_prj\LinearMath.vcxproj", "{FD9CBD8A-36F5-644A-A177-0132CA44E4A6}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glad", "_prj\Glad.vcxproj", "{BDD6857C-A90D-870D-52FA-6C103E10030F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2", "_prj\SDL2.vcxproj", "{3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F}"
@@ -13,19 +21,44 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Develop|x64 = Develop|x64
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08E11BF7-4E84-FC4C-BF03-92A5DCBA95F3}.Debug|x64.ActiveCfg = Debug|x64
+		{08E11BF7-4E84-FC4C-BF03-92A5DCBA95F3}.Debug|x64.Build.0 = Debug|x64
+		{08E11BF7-4E84-FC4C-BF03-92A5DCBA95F3}.Develop|x64.ActiveCfg = Develop|x64
+		{08E11BF7-4E84-FC4C-BF03-92A5DCBA95F3}.Develop|x64.Build.0 = Develop|x64
+		{08E11BF7-4E84-FC4C-BF03-92A5DCBA95F3}.Release|x64.ActiveCfg = Release|x64
+		{08E11BF7-4E84-FC4C-BF03-92A5DCBA95F3}.Release|x64.Build.0 = Release|x64
+		{88F0444D-A3FA-5C49-8541-A21649B1F7FF}.Debug|x64.ActiveCfg = Debug|x64
+		{88F0444D-A3FA-5C49-8541-A21649B1F7FF}.Debug|x64.Build.0 = Debug|x64
+		{88F0444D-A3FA-5C49-8541-A21649B1F7FF}.Develop|x64.ActiveCfg = Develop|x64
+		{88F0444D-A3FA-5C49-8541-A21649B1F7FF}.Develop|x64.Build.0 = Develop|x64
+		{88F0444D-A3FA-5C49-8541-A21649B1F7FF}.Release|x64.ActiveCfg = Release|x64
+		{88F0444D-A3FA-5C49-8541-A21649B1F7FF}.Release|x64.Build.0 = Release|x64
+		{FD9CBD8A-36F5-644A-A177-0132CA44E4A6}.Debug|x64.ActiveCfg = Debug|x64
+		{FD9CBD8A-36F5-644A-A177-0132CA44E4A6}.Debug|x64.Build.0 = Debug|x64
+		{FD9CBD8A-36F5-644A-A177-0132CA44E4A6}.Develop|x64.ActiveCfg = Develop|x64
+		{FD9CBD8A-36F5-644A-A177-0132CA44E4A6}.Develop|x64.Build.0 = Develop|x64
+		{FD9CBD8A-36F5-644A-A177-0132CA44E4A6}.Release|x64.ActiveCfg = Release|x64
+		{FD9CBD8A-36F5-644A-A177-0132CA44E4A6}.Release|x64.Build.0 = Release|x64
 		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Debug|x64.ActiveCfg = Debug|x64
 		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Debug|x64.Build.0 = Debug|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Develop|x64.ActiveCfg = Develop|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Develop|x64.Build.0 = Develop|x64
 		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Release|x64.ActiveCfg = Release|x64
 		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Release|x64.Build.0 = Release|x64
 		{3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F}.Debug|x64.ActiveCfg = Debug|x64
 		{3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F}.Debug|x64.Build.0 = Debug|x64
+		{3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F}.Develop|x64.ActiveCfg = Develop|x64
+		{3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F}.Develop|x64.Build.0 = Develop|x64
 		{3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F}.Release|x64.ActiveCfg = Release|x64
 		{3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F}.Release|x64.Build.0 = Release|x64
 		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Debug|x64.ActiveCfg = Debug|x64
 		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Debug|x64.Build.0 = Debug|x64
+		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Develop|x64.ActiveCfg = Develop|x64
+		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Develop|x64.Build.0 = Develop|x64
 		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Release|x64.ActiveCfg = Release|x64
 		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection

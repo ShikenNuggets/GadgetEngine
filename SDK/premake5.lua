@@ -4,8 +4,27 @@ workspace "LIBS"
 	configurations
 	{
 		"Debug",
+		"Develop",
 		"Release"
 	}
+	
+externalproject "BulletCollision"
+	location "_prj"
+	filename "BulletCollision"
+	kind "StaticLib"
+	language "C++"
+	
+externalproject "BulletDynamics"
+	location "_prj"
+	filename "BulletDynamics"
+	kind "StaticLib"
+	language "C++"
+	
+externalproject "BulletLinearMath"
+	location "_prj"
+	filename "LinearMath"
+	kind "StaticLib"
+	language "C++"
 
 project "Glad"
 	location "_prj/"
@@ -31,6 +50,17 @@ project "Glad"
 		systemversion "latest"
 		staticruntime "On"
 		runtime "Release"
+		
+	filter "configurations:Debug"
+		symbols "Default"
+		
+	filter "configurations:Develop"
+		symbols "Default"
+		optimize "Speed"
+		
+	filter "configurations:Release"
+		symbols "On"
+		optimize "Speed"
 
 project "SDL2"
 	location "_prj/"
@@ -172,6 +202,11 @@ project "SDL2"
 		symbols "Default"
 		defines { "_DEBUG" }
 		
+	filter "configurations:Develop"
+		symbols "Default"
+		optimize "Speed"
+		defines { "_DEBUG" }
+		
 	filter "configurations:Release"
 		symbols "On"
 		optimize "Speed"
@@ -207,5 +242,12 @@ project "SDL2main"
 		runtime "Release"
 		
 	filter "configurations:Debug"
-
+		symbols "Default"
+	
+	filter "configurations:Develop"
+		symbols "Default"
+		optimize "Speed"
+	
 	filter "configurations:Release"
+		symbols "On"
+		optimize "Speed"

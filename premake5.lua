@@ -4,6 +4,7 @@ workspace "GadgetEngine"
 	configurations
 	{
 		"Debug",
+		"Develop",
 		"Release"
 	}
 	
@@ -121,9 +122,34 @@ project "GadgetEngine"
 		symbols "On"
 		runtime "Debug"
 		
+	filter "configurations:Develop"
+		defines "GADGET_DEBUG"
+		symbols "On"
+		optimize "Speed"
+		runtime "Debug"
+		
+		flags
+		{
+			"LinkTimeOptimization"
+		}
+		
+		libdirs
+		{
+			"Build/GadgetEngine/Debug/",
+			"Build/Glad/Debug/",
+			"Build/SDL2/Debug/",
+			"Build/SDL2main/Debug/",
+			"SDK/Assimp/lib/x64/",
+			"SDK/freetype/libs/Debug/",
+			"Build/BulletCollision/Debug/",
+			"Build/BulletDynamics/Debug/",
+			"Build/BulletLinearMath/Debug/",
+		}
+		
 	filter "configurations:Release"
 		defines "GADGET_RELEASE"
-		optimize "On"
+		symbols "Off"
+		optimize "Speed"
 		runtime "Release"
 		
 		flags
@@ -231,9 +257,34 @@ project "Game"
 		kind "ConsoleApp"
 		runtime "Debug"
 		
+	filter "Configurations:Develop"
+		defines "GADGET_DEBUG"
+		symbols "On"
+		optimize "Speed"
+		kind "ConsoleApp"
+		runtime "Debug"
+		
+		flags
+		{
+			"LinkTimeOptimization"
+		}
+		
+		libdirs
+		{
+			"Build/GadgetEngine/Debug/",
+			"Build/Glad/Debug/",
+			"Build/SDL2/Debug/",
+			"Build/SDL2main/Debug/",
+			"SDK/Assimp/lib/x64/",
+			"SDK/freetype/libs/Debug/",
+			"Build/BulletCollision/Debug/",
+			"Build/BulletDynamics/Debug/",
+			"Build/BulletLinearMath/Debug/",
+		}
+		
 	filter "configurations:Release"
 		defines "GADGET_RELEASE"
-		optimize "On"
+		optimize "Speed"
 		kind "WindowedApp"
 		runtime "Release"
 		
@@ -241,3 +292,4 @@ project "Game"
 		{
 			"LinkTimeOptimization"
 		}
+		
