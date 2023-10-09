@@ -29,7 +29,7 @@ namespace Gadget{
 
 		std::vector<btCollisionShape*> cachedCollisionShapes;
 
-		void HandleCollisionResponse(Collider* collider_, Collider* other_);
+		void HandleCollisionResponse(btBroadphasePair collisionPair_, Collider* collider_, Collider* other_);
 		btCollisionShape* CreateCollisionShape(const Collider* col_);
 	};
 }

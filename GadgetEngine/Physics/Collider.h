@@ -23,6 +23,9 @@ namespace Gadget{
 		virtual void OnActivated() override;
 		virtual void OnTransformModified() override;
 
+		//Remove the collider from the physics sim and re-add it
+		void Reset();
+
 		ColliderShape GetShape() const{ return shape; }
 		bool IsTrigger() const{ return isTrigger; }
 

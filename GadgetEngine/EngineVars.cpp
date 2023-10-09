@@ -16,3 +16,4 @@ const StringID EngineVars::Display::vsyncKey = SID("Vsync");
 
 const StringID EngineVars::Physics::sectionName = SID("Engine.Physics");
 const StringID EngineVars::Physics::gravityConstantKey = SID("GravityConstant");
+const StringID EngineVars::Physics::physicsUpdatesKey = SID("PhysicsUpdatesPerSecond");

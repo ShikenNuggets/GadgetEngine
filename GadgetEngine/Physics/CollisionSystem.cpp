@@ -23,6 +23,48 @@ bool CollisionSystem::TestCollision(const BoxCollider2D& cl1, const BoxCollider2
 	return (c1Left <= c2Right && c1Right >= c2Left && c1Bottom <= c2Top && c1Top >= c2Bottom);
 }
 
+Vector3 CollisionSystem::CalculateContactPoint(const Collider* col1_, const Collider* col2_){
+	switch(col1_->GetShape()){
+		case ColliderShape::None:
+			break;
+		case ColliderShape::Box2D:
+			return CalculateContactPoint(*dynamic_cast<const BoxCollider2D*>(col1_), *dynamic_cast<const BoxCollider2D*>(col2_));
+		case ColliderShape::Cube:
+			break;
+		case ColliderShape::Circle2D:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			break;
+		case ColliderShape::Sphere:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			break;
+		default:
+			break;
+	}
+
+	return Vector3::Zero();
+}
+
+float CollisionSystem::CalculateOverlapAmount(const Vector3& dir_, const Collider* col1_, const Collider* col2_){
+	switch(col1_->GetShape()){
+		case ColliderShape::None:
+			break;
+		case ColliderShape::Box2D:
+			return CalculateOverlapAmount(dir_, *dynamic_cast<const BoxCollider2D*>(col1_), *dynamic_cast<const BoxCollider2D*>(col2_));
+		case ColliderShape::Cube:
+			break;
+		case ColliderShape::Circle2D:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			break;
+		case ColliderShape::Sphere:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			break;
+		default:
+			break;
+	}
+
+	return 0.0f;
+}
+
 Vector3 CollisionSystem::CalculateContactPoint(const BoxCollider2D& cl1, const BoxCollider2D& cl2){
 	float c1Left = cl1.GetParent()->GetPosition().x - (cl1.GetParent()->GetScale().x * (cl1.GetWidth() / 2.0f));
 	float c1Right = cl1.GetParent()->GetPosition().x + (cl1.GetParent()->GetScale().x * (cl1.GetWidth() / 2.0f));

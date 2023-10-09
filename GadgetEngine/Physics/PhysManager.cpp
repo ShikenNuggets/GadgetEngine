@@ -38,11 +38,26 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
 
-	bulletDynamicsWorld->stepSimulation(deltaTime_);
+	const float fixedTimeStep = 1.0f / App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey);
+
+	bulletDynamicsWorld->stepSimulation(deltaTime_, 4, fixedTimeStep);
 
 	const auto rbs = scene_->GetAllComponentsInScene<Rigidbody>(); //TODO - This is slow
 	for(const auto& rb : rbs){
 		rb->Update(deltaTime_);
+	}
+
+	bulletDynamicsWorld->performDiscreteCollisionDetection();
+
+	std::vector<std::pair<btRigidBody*, btRigidBody*>> collisionPairs;
+	const auto& pairArray = bulletDynamicsWorld->getPairCache()->getOverlappingPairArray();
+	for(size_t i = 0; i < pairArray.size(); i++){
+		if(pairArray[i].m_pProxy0 == nullptr || pairArray[i].m_pProxy0->m_clientObject == nullptr || pairArray[i].m_pProxy1 == nullptr || pairArray[i].m_pProxy1->m_clientObject == nullptr){
+			collisionPairs.push_back(std::make_pair<btRigidBody*, btRigidBody*>(nullptr, nullptr)); //Maintains index continuity
+			continue;
+		}
+
+		collisionPairs.push_back(std::make_pair<btRigidBody*, btRigidBody*>((btRigidBody*)pairArray[i].m_pProxy0->m_clientObject, (btRigidBody*)pairArray[i].m_pProxy1->m_clientObject));
 	}
 
 	const auto cls = scene_->GetAllComponentsInScene<Collider>(); //TODO - This is slow
@@ -57,9 +72,13 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 				continue;
 			}
 
-			if(cls[i]->bulletRb->checkCollideWith(cls[j]->bulletRb)){
-				HandleCollisionResponse(cls[i], cls[j]);
-				HandleCollisionResponse(cls[j], cls[i]);
+			for(size_t k = 0; k < collisionPairs.size(); k++){
+				if((collisionPairs[k].first == cls[i]->bulletRb && collisionPairs[k].second == cls[j]->bulletRb)
+					|| (collisionPairs[k].first == cls[j]->bulletRb && collisionPairs[k].second == cls[i]->bulletRb)){
+					HandleCollisionResponse(pairArray[k], cls[i], cls[j]);
+					HandleCollisionResponse(pairArray[k], cls[j], cls[i]);
+					break;
+				}
 			}
 		}
 	}
@@ -89,13 +108,47 @@ btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody*
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, motionState, shape, localInertia);
 		body = new btRigidBody(rbInfo);
 
-		body->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
+		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 	}else{
 		//Dynamic object
 		shape->calculateLocalInertia(rb_->GetMass(), localInertia);
 
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(rb_->GetMass(), motionState, shape, localInertia);
 		body = new btRigidBody(rbInfo);
+
+		switch(rb_->GetFreezeRotation()){
+			case FreezeRotationType::None:
+				body->setAngularFactor(btVector3(1.0f, 1.0f, 1.0f));
+				break;
+			case FreezeRotationType::FreezeX:
+				body->setAngularFactor(btVector3(0.0f, 1.0f, 1.0f));
+				break;
+			case FreezeRotationType::FreezeY:
+				body->setAngularFactor(btVector3(1.0f, 0.0f, 1.0f));
+				break;
+			case FreezeRotationType::FreezeZ:
+				body->setAngularFactor(btVector3(1.0f, 1.0f, 0.0f));
+				break;
+			case FreezeRotationType::FreezeXY:
+				body->setAngularFactor(btVector3(0.0f, 0.0f, 1.0f));
+				break;
+			case FreezeRotationType::FreezeXZ:
+				body->setAngularFactor(btVector3(0.0f, 1.0f, 0.0f));
+				break;
+			case FreezeRotationType::FreezeYZ:
+				body->setAngularFactor(btVector3(1.0f, 0.0f, 0.0f));
+				break;
+			case FreezeRotationType::FreezeAll:
+				body->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
+				break;
+			default:
+				GADGET_ASSERT_NOT_IMPLEMENTED;
+				break;
+		}
+	}
+
+	if(col_->IsTrigger()){
+		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	}
 
 	GADGET_BASIC_ASSERT(body != nullptr);
@@ -118,12 +171,16 @@ void PhysManager::RemoveFromSimulation(btRigidBody* brb_){
 	delete brb_;
 }
 
-void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_){
+void PhysManager::HandleCollisionResponse(btBroadphasePair collisionPair_, Collider* collider_, Collider* other_){
 	Collision collision;
 	collision.otherTags = other_->GetParent()->GetTags();
 	collision.otherPos = other_->GetParent()->GetPosition();
 	collision.otherScale = other_->GetColliderSize();
-	collision.collisionVector = Vector3::Zero(); //TODO - Pull this from Bullet
+	collision.collisionVector = CollisionSystem::CalculateContactPoint(collider_, other_) - collider_->GetParent()->GetPosition();
+
+	if(!collision.collisionVector.IsNear(Vector3::Zero())){
+		collision.overlapAmount = CollisionSystem::CalculateOverlapAmount(collision.collisionVector.Normalized(), collider_, other_);
+	}
 
 	collision.isTrigger = collider_->IsTrigger() || other_->IsTrigger();
 

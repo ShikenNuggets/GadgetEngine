@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_) : Component(parent_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr){
+Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(parent_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr), freezeRotation(freezeType_){
 	GADGET_BASIC_ASSERT(parent != nullptr);
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
@@ -67,6 +67,10 @@ void Rigidbody::SetVelocity(const Vector3& vel_){
 		return;
 	}
 
+	if(!Math::IsNearZero(vel_.x) || !Math::IsNearZero(vel_.y) || !Math::IsNearZero(vel_.z)){
+		bulletRb->activate(true); //Force activate the rigidbody if we're hard setting a non-zero velocity
+	}
+
 	bulletRb->setLinearVelocity(BulletHelper::ConvertVector3(vel_));
 }
 
@@ -74,7 +78,60 @@ void Rigidbody::SetVelocity(float x_, float y_, float z_){
 	SetVelocity(Vector3(x_, y_, z_));
 }
 
+void Rigidbody::FreezeRotation(FreezeRotationType type_){
+	freezeRotation = type_;
+
+	if(bulletRb != nullptr){
+		switch(freezeRotation){
+			case FreezeRotationType::None:
+				bulletRb->setAngularFactor(btVector3(1.0f, 1.0f, 1.0f));
+				break;
+			case FreezeRotationType::FreezeX:
+				bulletRb->setAngularFactor(btVector3(0.0f, 1.0f, 1.0f));
+				break;
+			case FreezeRotationType::FreezeY:
+				bulletRb->setAngularFactor(btVector3(1.0f, 0.0f, 1.0f));
+				break;
+			case FreezeRotationType::FreezeZ:
+				bulletRb->setAngularFactor(btVector3(1.0f, 1.0f, 0.0f));
+				break;
+			case FreezeRotationType::FreezeXY:
+				bulletRb->setAngularFactor(btVector3(0.0f, 0.0f, 1.0f));
+				break;
+			case FreezeRotationType::FreezeXZ:
+				bulletRb->setAngularFactor(btVector3(0.0f, 1.0f, 0.0f));
+				break;
+			case FreezeRotationType::FreezeYZ:
+				bulletRb->setAngularFactor(btVector3(1.0f, 0.0f, 0.0f));
+				break;
+			case FreezeRotationType::FreezeAll:
+				bulletRb->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
+				break;
+			default:
+				GADGET_ASSERT_NOT_IMPLEMENTED;
+				break;
+		}
+	}
+}
+
+void Rigidbody::ClearForces(){
+	if(bulletRb == nullptr){
+		return;
+	}
+
+	bulletRb->clearForces();
+}
+
 void Rigidbody::CollisionResponse(const Collision& collision_){
 	//TODO - This is obviously not proper collision response
 	parent->Translate(-collision_.collisionVector.Normalized() * collision_.overlapAmount);
+}
+
+void Rigidbody::Reset(){
+	Collider* collider = parent->GetComponent<Collider>();
+	GADGET_BASIC_ASSERT(collider != nullptr); //All rigidbodies must have colliders
+
+	if(collider != nullptr){
+		collider->Reset();
+	}
 }

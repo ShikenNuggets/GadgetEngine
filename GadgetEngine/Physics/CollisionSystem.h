@@ -22,6 +22,10 @@ namespace Gadget{
 
 	namespace CollisionSystem{
 		bool TestCollision(const BoxCollider2D& cl1, const BoxCollider2D& cl2);
+
+		Vector3 CalculateContactPoint(const Collider* col1_, const Collider* col2_);
+		float CalculateOverlapAmount(const Vector3& dir_, const Collider* col1_, const Collider* col2_);
+
 		Vector3 CalculateContactPoint(const BoxCollider2D& cl1, const BoxCollider2D& cl2);
 		float CalculateOverlapAmount(const Vector3& dir_, const BoxCollider2D& cl1, const BoxCollider2D& cl2);
 	};

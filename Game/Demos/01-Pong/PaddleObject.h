@@ -14,7 +14,7 @@ namespace Pong{
 			AddTag(SID("Paddle"));
 			SetScale(Gadget::Vector3(0.5f, 3.0f, 1.0f));
 			AddComponent(new Gadget::RenderComponent(this, SID("CubeModel"), Gadget::Color::White(), SID("ColorShader")));
-			AddComponent(new Gadget::Rigidbody(this, 1.0f, false));
+			AddComponent(new Gadget::Rigidbody(this, 1.0f, false, Gadget::FreezeRotationType::FreezeAll));
 			AddComponent(new Gadget::BoxCollider2D(this));
 			AddComponent(new PaddleController(this, player_));
 		}

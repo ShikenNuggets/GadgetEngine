@@ -43,9 +43,11 @@ namespace Gadget{
 			static const StringID sectionName;
 
 			static const StringID gravityConstantKey;
+			static const StringID physicsUpdatesKey;
 
 			std::map<StringID, Var> vars = {
 				{ gravityConstantKey, -9.81 },
+				{ physicsUpdatesKey, 240 }
 			};
 		};
 

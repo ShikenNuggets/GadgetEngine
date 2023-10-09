@@ -7,9 +7,20 @@
 #include "Math/Vector.h"
 
 namespace Gadget{
+	enum class FreezeRotationType{
+		None,
+		FreezeX,
+		FreezeY,
+		FreezeZ,
+		FreezeXY,
+		FreezeXZ,
+		FreezeYZ,
+		FreezeAll
+	};
+
 	class Rigidbody : public Component{
 	public:
-		Rigidbody(GameObject* parent_, float mass_, bool useGravity_);
+		Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_ = FreezeRotationType::None);
 		~Rigidbody();
 
 		void Update(float deltaTime_);
@@ -22,18 +33,26 @@ namespace Gadget{
 		float GetMass() const{ return mass; }
 		Vector3 GetVelocity() const;
 		bool UseGravity() const{ return useGravity; }
+		FreezeRotationType GetFreezeRotation() const{ return freezeRotation; }
 
 		void SetMass(float mass_){ mass = mass_; }
 		void SetVelocity(const Vector3& velocity_);
 		void SetVelocity(float x_, float y_, float z_);
+		void FreezeRotation(FreezeRotationType type_);
+
+		void ClearForces();
 
 		void CollisionResponse(const Collision& collision_);
+
+		//Remove the rigidbody from the physics sim and re-add it
+		void Reset();
 
 	private:
 		friend class Collider;
 
 		float mass; //Mass in kg
 		bool useGravity;
+		FreezeRotationType freezeRotation;
 
 		btRigidBody* bulletRb;
 	};

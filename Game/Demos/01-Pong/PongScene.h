@@ -50,8 +50,8 @@ namespace Pong{
 			auto ball = new Gadget::GameObject();
 			ball->SetScale(0.5f);
 			ball->AddComponent(new Gadget::RenderComponent(ball, SID("CubeModel"), Gadget::Color::White(), SID("ColorShader")));
-			ball->AddComponent(new Gadget::Rigidbody(ball, 1.0f, false));
-			ball->AddComponent(new Gadget::BoxCollider2D(ball, 1.0f, 1.0f, true));
+			ball->AddComponent(new Gadget::Rigidbody(ball, 1.0f, false, Gadget::FreezeRotationType::FreezeAll));
+			ball->AddComponent(new Gadget::BoxCollider2D(ball));
 			ball->AddComponent(new BallController(ball, 2.0f, playAreaWidth, playAreaHeight));
 			CreateObject(ball);
 
@@ -76,7 +76,7 @@ namespace Pong{
 			leftGoal->SetPosition(Gadget::Vector3(-playAreaWidth / 2.0f, 0.0f, 0.0f));
 			leftGoal->SetScale(Gadget::Vector3(0.25f, 15.0f, 1.0f));
 			leftGoal->AddComponent(new Gadget::RenderComponent(leftGoal, SID("CubeModel"), Gadget::Color::DarkGray(), SID("ColorShader")));
-			leftGoal->AddComponent(new Gadget::BoxCollider2D(leftGoal, 1.0f, 1.0f, true));
+			leftGoal->AddComponent(new Gadget::BoxCollider2D(leftGoal));
 			CreateObject(leftGoal);
 
 			auto rightGoal = new Gadget::GameObject();
@@ -84,7 +84,7 @@ namespace Pong{
 			rightGoal->SetPosition(Gadget::Vector3(playAreaWidth / 2.0f, 0.0f, 0.0f));
 			rightGoal->SetScale(Gadget::Vector3(0.25f, 15.0f, 1.0f));
 			rightGoal->AddComponent(new Gadget::RenderComponent(rightGoal, SID("CubeModel"), Gadget::Color::DarkGray(), SID("ColorShader")));
-			rightGoal->AddComponent(new Gadget::BoxCollider2D(rightGoal, 1.0f, 1.0f, true));
+			rightGoal->AddComponent(new Gadget::BoxCollider2D(rightGoal));
 			CreateObject(rightGoal);
 		}
 	};
