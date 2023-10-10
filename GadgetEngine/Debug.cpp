@@ -106,6 +106,12 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 	#endif //GADGET_PLATFORM_WIN32
 }
 
+void Debug::ThrowFatalError(StringID channel_, const std::string& message_, const std::string& file_, int line_){
+	Debug::Log(channel_, message_, FatalError, file_, line_);
+	PopupErrorMessage("Fatal Error! [" + channel_.GetString() + "]", message_ + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_));
+	throw std::runtime_error(message_ + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_));
+}
+
 void Debug::QueueLogForFileWrite(const std::string& message_){
 	queuedLogsForFileWrite.push(message_);
 	WriteQueuedLogs();

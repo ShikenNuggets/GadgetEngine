@@ -15,24 +15,20 @@ using namespace Gadget;
 
 Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, y_), sdlWindow(nullptr), joysticks(){
 	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
-		Debug::Log("SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
+		Debug::ThrowFatalError(SID("RENDER"), "SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
 
 	//TODO - There's a lot of OpenGL specific code in here. Ideally the window and the rendering context are as separate as possible
 	if(SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1) != 0){
-		Debug::Log("Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
+		Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
 
 	if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) != 0){
-		Debug::Log("Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
+		Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
 
 	if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6) != 0){
-		Debug::Log("Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
+		Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
 
 	if(pos.x == 0 && pos.y == 0){
@@ -43,14 +39,12 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, 
 	Uint32 windowFlag = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 	sdlWindow = SDL_CreateWindow(App::GetGameName().c_str(), pos.x, pos.y, size.x, size.y, windowFlag);
 	if(sdlWindow == nullptr){
-		Debug::Log("Window could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
+		Debug::ThrowFatalError(SID("RENDER"), "Window could not be created! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
 
 	//This is enabled by default but it's good to be explicit
 	if(SDL_JoystickEventState(SDL_ENABLE) != 1){
-		Debug::Log("Joystick events could not be enabled! SDL Error: " + std::string(SDL_GetError()), Debug::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
+		Debug::ThrowFatalError(SID("INPUT"), "Joystick events could not be enabled! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
 }
 

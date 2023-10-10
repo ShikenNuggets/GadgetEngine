@@ -34,8 +34,7 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
 	glContext = SDL_GL_CreateContext(dynamic_cast<Win32_Window*>(window.get())->GetSDLWindow());
 	if(glContext == nullptr){
-		Debug::Log("OpenGL context could not be created! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
+		Debug::ThrowFatalError(SID("RENDER"), "OpenGL context could not be created! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
 
 	int status = SDL_GL_SetSwapInterval(App::GetConfig().GetOptionsBool(EngineVars::Display::vsyncKey) ? -1 : 0);
@@ -44,8 +43,7 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 	}
 
 	if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)){
-		Debug::Log("Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), Debug::LogType::FatalError, __FILE__, __LINE__);
-		//TODO - Handle Fatal Error
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()),  __FILE__, __LINE__);
 	}
 
 	SetWindingOrder(currentWindingOrder);

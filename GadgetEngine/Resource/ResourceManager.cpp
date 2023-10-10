@@ -12,14 +12,14 @@ using namespace Gadget;
 
 ResourceManager::ResourceManager(){
 	if(!FileSystem::FileExists("Resources/resources.json")){
-		Debug::Log("resources.json file does not exist!", Debug::FatalError, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RESOURCE"), "resources.json file does not exist!", __FILE__, __LINE__);
 	}
 
 	auto resJson = FileSystem::ReadPlainTextJSONFile("Resources/resources.json");
 	//resources = resJson; //TODO - Ideally this would work, but I'm just getting template errors that are hard to diagnose
 
 	if(resJson.is_null()){
-		Debug::Log("An error occured while loading resources.json!", Debug::FatalError, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RESOURCE"), "An error occured while loading resources.json!", __FILE__, __LINE__);
 	}
 
 	//Parsing manually for now
