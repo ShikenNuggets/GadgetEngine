@@ -13,9 +13,9 @@ namespace Gadget{
 		
 		virtual Vector3 GetColliderSize() const override{
 			return Vector3(
-				parent->GetScale().x * (width / 2.0f),
-				parent->GetScale().y * (height / 2.0f),
-				parent->GetScale().z
+				(parent->GetScale().x * width) / 2.0f,
+				(parent->GetScale().y * height) / 2.0f,
+				parent->GetScale().z / 2.0f
 			);
 		}
 
