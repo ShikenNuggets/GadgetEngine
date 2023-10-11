@@ -75,6 +75,11 @@ namespace Gadget{
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
 			for(GuiElement* e : subElements){
+				GADGET_BASIC_ASSERT(e != nullptr);
+				if(e == nullptr){
+					continue;
+				}
+
 				T* element = dynamic_cast<T*>(e);
 				if(element != nullptr){
 					ems.push_back(element);

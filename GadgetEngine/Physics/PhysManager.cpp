@@ -38,7 +38,7 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
 
-	const float fixedTimeStep = 1.0f / App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey);
+	const float fixedTimeStep = 1.0f / static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey));
 
 	bulletDynamicsWorld->stepSimulation(deltaTime_, 4, fixedTimeStep);
 
@@ -51,7 +51,7 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 
 	std::vector<std::pair<btRigidBody*, btRigidBody*>> collisionPairs;
 	const auto& pairArray = bulletDynamicsWorld->getPairCache()->getOverlappingPairArray();
-	for(size_t i = 0; i < pairArray.size(); i++){
+	for(int i = 0; i < pairArray.size(); i++){
 		if(pairArray[i].m_pProxy0 == nullptr || pairArray[i].m_pProxy0->m_clientObject == nullptr || pairArray[i].m_pProxy1 == nullptr || pairArray[i].m_pProxy1->m_clientObject == nullptr){
 			collisionPairs.push_back(std::make_pair<btRigidBody*, btRigidBody*>(nullptr, nullptr)); //Maintains index continuity
 			continue;
@@ -75,8 +75,8 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 			for(size_t k = 0; k < collisionPairs.size(); k++){
 				if((collisionPairs[k].first == cls[i]->bulletRb && collisionPairs[k].second == cls[j]->bulletRb)
 					|| (collisionPairs[k].first == cls[j]->bulletRb && collisionPairs[k].second == cls[i]->bulletRb)){
-					HandleCollisionResponse(pairArray[k], cls[i], cls[j]);
-					HandleCollisionResponse(pairArray[k], cls[j], cls[i]);
+					HandleCollisionResponse(pairArray[(int)k], cls[i], cls[j]);
+					HandleCollisionResponse(pairArray[(int)k], cls[j], cls[i]);
 					break;
 				}
 			}
@@ -171,7 +171,7 @@ void PhysManager::RemoveFromSimulation(btRigidBody* brb_){
 	delete brb_;
 }
 
-void PhysManager::HandleCollisionResponse(btBroadphasePair collisionPair_, Collider* collider_, Collider* other_){
+void PhysManager::HandleCollisionResponse([[maybe_unused]] btBroadphasePair collisionPair_, Collider* collider_, Collider* other_){
 	Collision collision;
 	collision.otherTags = other_->GetParent()->GetTags();
 	collision.otherPos = other_->GetParent()->GetPosition();

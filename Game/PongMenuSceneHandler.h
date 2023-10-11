@@ -9,7 +9,7 @@ namespace Pong{
 	public:
 		PongMenuSceneHandler(Gadget::Scene* scene_) : SceneComponent(scene_){}
 
-		virtual void OnUpdate(float deltaTime_) final override{}
+		virtual void OnUpdate([[maybe_unused]] float deltaTime_) final override{}
 
 		void LoadOnePlayerGame(){
 			Gadget::App::GetSceneManager().RequestSceneLoad(1);

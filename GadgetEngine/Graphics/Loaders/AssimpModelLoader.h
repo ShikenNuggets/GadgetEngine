@@ -5,8 +5,10 @@
 
 //Hide warnings from external code that we can't/won't modify - WNF
 #pragma warning(disable : 4244)		//Possible loss of data from type conversion
+#pragma warning(disable : 26451)	//Possible arithmetic overflow
 #include <assimp/scene.h>
 #pragma warning(default : 4244)
+#pragma warning(default : 26451)	//Possible arithmetic overflow
 
 namespace Gadget{
 	//Forward Declaration
