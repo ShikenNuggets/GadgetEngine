@@ -10,7 +10,7 @@
 namespace Pong{
 	class BallController : public Gadget::GameLogicComponent{
 	public:
-		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(parent_), initialForce(initialForce_), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_), movingUp(true), movingRight(true), collisionTimer(0.0f), ignorePaddleCollisions(false), ignoreWallCollisions(false){}
+		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(parent_), initialForce(initialForce_), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_), movingUp(true), movingRight(true), collisionTimer(0.0f), ignorePaddleCollisions(false), ignoreWallCollisions(false), roundOver(false){}
 
 		virtual void OnStart() override{
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();
@@ -53,16 +53,22 @@ namespace Pong{
 				ApplyNewVelocity(false, true);
 				CorrectPositionAfterCollision(col_);
 				ignoreWallCollisions = true; //Temporarily ignore wall collisions to avoid wonky behaviour
-			}else if(col_.HasTag(SID("LeftGoal"))){
-				sceneHandler->AddScoreAndResetGame(1);
-			}else if(col_.HasTag(SID("RightGoal"))){
+			}else if(col_.HasTag(SID("LeftGoal")) && !roundOver){
+				roundOver = true;
 				sceneHandler->AddScoreAndResetGame(2);
+			}else if(col_.HasTag(SID("RightGoal")) && !roundOver){
+				roundOver = true;
+				sceneHandler->AddScoreAndResetGame(1);
 			}
 
 			GameLogicComponent::OnCollision(col_);
 		}
 
 		void Reset(){
+			while(HasCollisionsToHandle()){
+				PopCollisionToHandle(); //Remove all pending collisions so they don't interfere with the new round
+			}
+
 			parent->SetPosition(Gadget::Vector3::Zero());
 			parent->SetRotation(Gadget::Quaternion::Identity());
 
@@ -70,6 +76,8 @@ namespace Pong{
 
 			currentForce = initialForce;
 			ApplyNewVelocity(true, true, 0.0f);
+
+			roundOver = false;
 		}
 
 	private:
@@ -86,6 +94,7 @@ namespace Pong{
 		float collisionTimer;
 		bool ignorePaddleCollisions;
 		bool ignoreWallCollisions;
+		bool roundOver;
 
 		void ApplyNewVelocity(bool flipX_, bool flipY_, float speedIncrease_ = 0.2f){
 			currentForce += speedIncrease_;
