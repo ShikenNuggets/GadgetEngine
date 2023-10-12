@@ -47,40 +47,15 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 		rb->Update(deltaTime_);
 	}
 
-	bulletDynamicsWorld->performDiscreteCollisionDetection();
-
-	std::vector<std::pair<btRigidBody*, btRigidBody*>> collisionPairs;
-	const auto& pairArray = bulletDynamicsWorld->getPairCache()->getOverlappingPairArray();
-	for(int i = 0; i < pairArray.size(); i++){
-		if(pairArray[i].m_pProxy0 == nullptr || pairArray[i].m_pProxy0->m_clientObject == nullptr || pairArray[i].m_pProxy1 == nullptr || pairArray[i].m_pProxy1->m_clientObject == nullptr){
-			collisionPairs.push_back(std::make_pair<btRigidBody*, btRigidBody*>(nullptr, nullptr)); //Maintains index continuity
+	const auto cls = App::GetSceneManager().CurrentScene()->GetAllComponentsInScene<Collider>(); //TODO - This is slow
+	for(size_t i = 0; i < cls.size(); i++){
+		GADGET_BASIC_ASSERT(cls[i] != nullptr);
+		if(cls[i] == nullptr || cls[i]->bulletRb == nullptr){
 			continue;
 		}
 
-		collisionPairs.push_back(std::make_pair<btRigidBody*, btRigidBody*>((btRigidBody*)pairArray[i].m_pProxy0->m_clientObject, (btRigidBody*)pairArray[i].m_pProxy1->m_clientObject));
-	}
-
-	const auto cls = scene_->GetAllComponentsInScene<Collider>(); //TODO - This is slow
-	//TODO - This is *really* slow. It checks every collider in the scene against every other collider
-	//This is bad enough in a small scene but it'll get exponentially worse as more colliders are added
-	for(size_t i = 0; i < cls.size(); i++){
-		for(size_t j = i + 1; j < cls.size(); j++){
-			GADGET_BASIC_ASSERT(cls[i] != nullptr);
-			GADGET_BASIC_ASSERT(cls[j] != nullptr);
-
-			if(cls[i] == nullptr || cls[j] == nullptr || cls[i]->bulletRb == nullptr || cls[j]->bulletRb == nullptr){
-				continue;
-			}
-
-			for(size_t k = 0; k < collisionPairs.size(); k++){
-				if((collisionPairs[k].first == cls[i]->bulletRb && collisionPairs[k].second == cls[j]->bulletRb)
-					|| (collisionPairs[k].first == cls[j]->bulletRb && collisionPairs[k].second == cls[i]->bulletRb)){
-					HandleCollisionResponse(pairArray[(int)k], cls[i], cls[j]);
-					HandleCollisionResponse(pairArray[(int)k], cls[j], cls[i]);
-					break;
-				}
-			}
-		}
+		BulletCollisionResultCallback callback;
+		bulletDynamicsWorld->contactTest(cls[i]->bulletRb, callback);
 	}
 }
 
@@ -171,7 +146,7 @@ void PhysManager::RemoveFromSimulation(btRigidBody* brb_){
 	delete brb_;
 }
 
-void PhysManager::HandleCollisionResponse([[maybe_unused]] btBroadphasePair collisionPair_, Collider* collider_, Collider* other_){
+void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_){
 	Collision collision;
 	collision.otherTags = other_->GetParent()->GetTags();
 	collision.otherPos = other_->GetParent()->GetPosition();
@@ -208,4 +183,35 @@ btCollisionShape* PhysManager::CreateCollisionShape(const Collider* col_){
 	}
 
 	return nullptr;
+}
+
+//Return value of this function is not used by Bullet, in case you're wondering
+btScalar BulletCollisionResultCallback::addSingleResult([[maybe_unused]] btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, [[maybe_unused]] int partId0, [[maybe_unused]] int index0, const btCollisionObjectWrapper* colObj1Wrap, [[maybe_unused]] int partId1, [[maybe_unused]] int index1){
+	GADGET_BASIC_ASSERT(colObj0Wrap != nullptr && colObj1Wrap != nullptr);
+	if(colObj0Wrap == nullptr || colObj1Wrap == nullptr){
+		Debug::Log("Collision callback called with invalid collision object wrappers!", Debug::Error, __FILE__, __LINE__);
+		return 0;
+	}
+
+	const btCollisionObject* obj0 = colObj0Wrap->getCollisionObject();
+	const btCollisionObject* obj1 = colObj1Wrap->getCollisionObject();
+
+	GADGET_BASIC_ASSERT(obj0 != nullptr && obj1 != nullptr && obj0->getUserPointer() != nullptr && obj1->getUserPointer() != nullptr);
+	if(obj0 == nullptr || obj1 == nullptr){
+		Debug::Log("Collision callback called with invalid collision objects!", Debug::Error, __FILE__, __LINE__);
+		return 0;
+	}
+
+	if(obj0->getUserPointer() == nullptr || obj1->getUserPointer() == nullptr){
+		Debug::Log("Collision callback called with invalid collider user pointers!", Debug::Error, __FILE__, __LINE__);
+		return 0;
+	}
+
+	Collider* col0 = (Collider*)obj0->getUserPointer();
+	Collider* col1 = (Collider*)obj1->getUserPointer();
+	
+	App::GetPhysics().HandleCollisionResponse(col0, col1);
+	App::GetPhysics().HandleCollisionResponse(col1, col0);
+
+	return 0;
 }

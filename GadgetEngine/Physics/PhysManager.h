@@ -7,6 +7,10 @@
 #include "Game/Scene.h"
 
 namespace Gadget{
+	struct BulletCollisionResultCallback : public btCollisionWorld::ContactResultCallback{
+		virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1) override;
+	};
+
 	class PhysManager{
 	public:
 		PhysManager();
@@ -20,6 +24,8 @@ namespace Gadget{
 	private:
 		static PhysManager* instance;
 
+		friend struct BulletCollisionResultCallback;
+
 		//Bullet physics objects
 		btDiscreteDynamicsWorld* bulletDynamicsWorld;
 		btBroadphaseInterface* broadphase;
@@ -29,7 +35,7 @@ namespace Gadget{
 
 		std::vector<btCollisionShape*> cachedCollisionShapes;
 
-		void HandleCollisionResponse(btBroadphasePair collisionPair_, Collider* collider_, Collider* other_);
+		void HandleCollisionResponse(Collider* collider_, Collider* other_);
 		btCollisionShape* CreateCollisionShape(const Collider* col_);
 	};
 }

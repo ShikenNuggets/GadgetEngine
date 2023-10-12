@@ -41,4 +41,6 @@ void Collider::Reset(){
 	if(rb != nullptr){
 		rb->bulletRb = bulletRb;
 	}
+
+	bulletRb->setUserPointer(this);
 }

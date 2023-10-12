@@ -33,6 +33,7 @@ namespace Gadget{
 
 	protected:
 		friend class PhysManager;
+		friend struct BulletCollisionResultCallback;
 
 		const ColliderShape shape;
 		bool isTrigger;
