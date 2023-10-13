@@ -91,6 +91,9 @@ namespace Gadget{
 		void Rotate(const Euler& rotation_){ transform.rotation *= rotation_.ToQuaternion(); OnTransformModified(); }
 		void Rotate(float x_, float y_, float z_){ transform.rotation *= Euler(x_, y_, z_).ToQuaternion(); OnTransformModified(); }
 
+		static GameObject* FindWithTag(StringID tag_);
+		static std::vector<GameObject*> FindObjectsWithTag(StringID tag_);
+
 	protected:
 		StringID name;
 		std::vector<StringID> tags;

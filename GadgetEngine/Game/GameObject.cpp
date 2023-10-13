@@ -1,5 +1,6 @@
 #include "GameObject.h"
 
+#include "App.h"
 #include "Utils/Utils.h"
 
 using namespace Gadget;
@@ -50,6 +51,14 @@ bool GameObject::HasTag(StringID tag_) const{
 void GameObject::AddTag(StringID tag_){
 	GADGET_ASSERT(!HasTag(tag_), "Tried adding tag [" + tag_.GetString() + "] to a GameObject that already has that tag!");
 	tags.push_back(tag_);
+}
+
+GameObject* GameObject::FindWithTag(StringID tag_){
+	return App::GetInstance().GetSceneManager().CurrentScene()->FindWithTag(tag_);
+}
+
+std::vector<GameObject*> GameObject::FindObjectsWithTag(StringID tag_){
+	return App::GetInstance().GetSceneManager().CurrentScene()->FindObjectsWithTag(tag_);
 }
 
 void GameObject::OnTransformModified(){
