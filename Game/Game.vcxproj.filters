@@ -31,6 +31,12 @@
     <ClInclude Include="Demos\01-Pong\PongGame.h">
       <Filter>Demos\01-Pong</Filter>
     </ClInclude>
+    <ClInclude Include="Demos\01-Pong\PongMenuScene.h">
+      <Filter>Demos\01-Pong</Filter>
+    </ClInclude>
+    <ClInclude Include="Demos\01-Pong\PongMenuSceneHandler.h">
+      <Filter>Demos\01-Pong</Filter>
+    </ClInclude>
     <ClInclude Include="Demos\01-Pong\PongScene.h">
       <Filter>Demos\01-Pong</Filter>
     </ClInclude>
@@ -40,8 +46,6 @@
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
     <ClInclude Include="ObjectRotator.h" />
-    <ClInclude Include="PongMenuScene.h" />
-    <ClInclude Include="PongMenuSceneHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demos\01-Pong\PongSceneHandler.cpp">
