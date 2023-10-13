@@ -17,6 +17,9 @@ namespace Gadget{
 
 		StringID GetName() const{ return name; }
 
+		GameObject* FindWithTag(StringID tag_);
+		std::vector<GameObject*> FindObjectsWithTag(StringID tag_);
+
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache result when possible
 		template <class T> T* GetComponentInScene() const{
 			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");

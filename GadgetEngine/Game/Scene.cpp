@@ -42,6 +42,27 @@ void Scene::Update(float deltaTime_){
 	}
 }
 
+GameObject* Scene::FindWithTag(StringID tag_){
+	for(const auto& go : gameObjects){
+		if(go->HasTag(tag_)){
+			return go;
+		}
+	}
+
+	return nullptr;
+}
+
+std::vector<GameObject*> Scene::FindObjectsWithTag(StringID tag_){
+	std::vector<GameObject*> objs;
+	for(const auto& go : gameObjects){
+		if(go->HasTag(tag_)){
+			objs.push_back(go);
+		}
+	}
+
+	return objs;
+}
+
 void Scene::DestroyAllGameObjects(){
 	for(const auto& go : gameObjects){
 		delete go;
