@@ -50,7 +50,7 @@ namespace Pong{
 				CorrectPositionAfterCollision(col_);
 				ignorePaddleCollisions = true; //Temporarily ignore paddle collisions to avoid wonky behaviour
 			}else if(col_.HasTag(SID("Wall")) && !ignoreWallCollisions){
-				ApplyNewVelocity(false, true);
+				ApplyNewVelocity(false, true, 0.0f);
 				CorrectPositionAfterCollision(col_);
 				ignoreWallCollisions = true; //Temporarily ignore wall collisions to avoid wonky behaviour
 			}else if(col_.HasTag(SID("LeftGoal")) && !roundOver){
@@ -96,7 +96,7 @@ namespace Pong{
 		bool ignoreWallCollisions;
 		bool roundOver;
 
-		void ApplyNewVelocity(bool flipX_, bool flipY_, float speedIncrease_ = 0.2f){
+		void ApplyNewVelocity(bool flipX_, bool flipY_, float speedIncrease_ = 0.5f){
 			currentForce += speedIncrease_;
 			Gadget::Vector3 oldVelocity = rigidbody->GetVelocity();
 			Gadget::Vector3 newVelocity = Gadget::Vector3::Zero();
