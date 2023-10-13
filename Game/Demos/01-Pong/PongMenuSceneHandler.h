@@ -4,6 +4,8 @@
 #include <App.h>
 #include <Game/SceneComponent.h>
 
+#include "PongState.h"
+
 namespace Pong{
 	class PongMenuSceneHandler : public Gadget::SceneComponent{
 	public:
@@ -12,10 +14,15 @@ namespace Pong{
 		virtual void OnUpdate([[maybe_unused]] float deltaTime_) final override{}
 
 		void LoadOnePlayerGame(){
+			PongState::currentMode = GameMode::SoloEasy;
 			Gadget::App::GetSceneManager().RequestSceneLoad(1);
 		}
 
-		void LoadTwoPlayerGame(){}
+		void LoadTwoPlayerGame(){
+			PongState::currentMode = GameMode::TwoPlayer;
+			Gadget::App::GetSceneManager().RequestSceneLoad(1);
+		}
+
 		void OpenSettings(){}
 	};
 }
