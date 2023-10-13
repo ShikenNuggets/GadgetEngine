@@ -48,6 +48,7 @@ namespace Pong{
 			CreateObject(rightPaddle);
 
 			auto ball = new Gadget::GameObject();
+			ball->AddTag(SID("Ball"));
 			ball->SetScale(0.5f);
 			ball->AddComponent(new Gadget::RenderComponent(ball, SID("CubeModel"), Gadget::Color::White(), SID("ColorShader")));
 			ball->AddComponent(new Gadget::Rigidbody(ball, 1.0f, false, Gadget::FreezeRotationType::FreezeAll));
