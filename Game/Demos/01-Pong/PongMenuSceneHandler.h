@@ -18,6 +18,11 @@ namespace Pong{
 			Gadget::App::GetSceneManager().RequestSceneLoad(1);
 		}
 
+		void LoadOnePlayerHardGame(){
+			PongState::currentMode = GameMode::SoloHard;
+			Gadget::App::GetSceneManager().RequestSceneLoad(1);
+		}
+
 		void LoadTwoPlayerGame(){
 			PongState::currentMode = GameMode::TwoPlayer;
 			Gadget::App::GetSceneManager().RequestSceneLoad(1);

@@ -27,15 +27,18 @@ namespace Pong{
 			PongMenuSceneHandler* sceneHandler = new PongMenuSceneHandler(this);
 			AddSceneComponent(sceneHandler);
 
-			Gadget::GuiButton* soloButton = new Gadget::GuiButton(SID("PlayButton"), "Play Solo", SID("ArialFont"), SID("CubeTexture"), Gadget::Vector2(0.0f, 0.5f), Gadget::Vector2(0.4f, 0.15f), Gadget::GuiAnchor::Center);
-			Gadget::GuiButton* multiButton = new Gadget::GuiButton(SID("MultiButton"), "Play Multi", SID("ArialFont"), SID("CubeTexture"), Gadget::Vector2(0.0f, -0.5f), Gadget::Vector2(0.4f, 0.15f), Gadget::GuiAnchor::Center);
+			Gadget::GuiButton* soloButton = new Gadget::GuiButton(SID("PlayEasyButton"), "Solo (Easy)", SID("ArialFont"), SID("CubeTexture"), Gadget::Vector2(0.0f, 0.5f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
+			Gadget::GuiButton* soloHardButton = new Gadget::GuiButton(SID("PlayHardButton"), "Solo (Hard)", SID("ArialFont"), SID("CubeTexture"), Gadget::Vector2(0.0f, 0.0f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
+			Gadget::GuiButton* multiButton = new Gadget::GuiButton(SID("MultiButton"), "2 Player", SID("ArialFont"), SID("CubeTexture"), Gadget::Vector2(0.0f, -0.5f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
 
 			soloButton->SetOnClickCallback(std::bind(&PongMenuSceneHandler::LoadOnePlayerGame, sceneHandler));
+			soloHardButton->SetOnClickCallback(std::bind(&PongMenuSceneHandler::LoadOnePlayerHardGame, sceneHandler));
 			multiButton->SetOnClickCallback(std::bind(&PongMenuSceneHandler::LoadTwoPlayerGame, sceneHandler));
 
 			Gadget::GuiCanvas* gc = new Gadget::GuiCanvas(SID("MainCanvas"));
 
 			gc->AddElement(soloButton);
+			gc->AddElement(soloHardButton);
 			gc->AddElement(multiButton);
 			gc->AddElement(new Gadget::FpsDisplayElement(SID("FPS"), SID("ArialFont"), Gadget::Vector2(1.65f, -0.95f), Gadget::Vector2(0.125f, 0.125f), Gadget::GuiAnchor::Center));
 			AddSceneComponent(new Gadget::CanvasSceneComponent(this, gc));
