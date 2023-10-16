@@ -27,9 +27,9 @@ namespace Pong{
 			PongMenuSceneHandler* sceneHandler = new PongMenuSceneHandler(this);
 			AddSceneComponent(sceneHandler);
 
-			Gadget::GuiButton* soloButton = new Gadget::GuiButton(SID("PlayEasyButton"), "Solo (Easy)", SID("ArialFont"), SID("CubeTexture"), Gadget::Vector2(0.0f, 0.5f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
-			Gadget::GuiButton* soloHardButton = new Gadget::GuiButton(SID("PlayHardButton"), "Solo (Hard)", SID("ArialFont"), SID("CubeTexture"), Gadget::Vector2(0.0f, 0.0f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
-			Gadget::GuiButton* multiButton = new Gadget::GuiButton(SID("MultiButton"), "2 Player", SID("ArialFont"), SID("CubeTexture"), Gadget::Vector2(0.0f, -0.5f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
+			Gadget::GuiButton* soloButton = new Gadget::GuiButton(SID("PlayEasyButton"), "Solo (Easy)", SID("ArialFont"), SID("ButtonTexture"), Gadget::Vector2(0.0f, 0.5f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
+			Gadget::GuiButton* soloHardButton = new Gadget::GuiButton(SID("PlayHardButton"), "Solo (Hard)", SID("ArialFont"), SID("ButtonTexture"), Gadget::Vector2(0.0f, 0.0f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
+			Gadget::GuiButton* multiButton = new Gadget::GuiButton(SID("MultiButton"), "2 Player", SID("ArialFont"), SID("ButtonTexture"), Gadget::Vector2(0.0f, -0.5f), Gadget::Vector2(0.5f, 0.2f), Gadget::GuiAnchor::Center);
 
 			soloButton->SetOnClickCallback(std::bind(&PongMenuSceneHandler::LoadOnePlayerGame, sceneHandler));
 			soloHardButton->SetOnClickCallback(std::bind(&PongMenuSceneHandler::LoadOnePlayerHardGame, sceneHandler));

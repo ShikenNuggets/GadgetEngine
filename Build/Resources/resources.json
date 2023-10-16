@@ -103,6 +103,15 @@
             "resource_type": "Texture"
         }
     ],
+	[
+        {
+            "string": "ButtonTexture"
+        },
+        {
+            "path": "Resources/button.bmp",
+            "resource_type": "Texture"
+        }
+    ],
     [
         {
             "string": "SkyboxLeftTexture"
