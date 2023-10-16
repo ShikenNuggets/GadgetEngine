@@ -56,7 +56,7 @@ namespace Pong{
 			ball->AddComponent(new BallController(ball, 2.0f, playAreaWidth, playAreaHeight));
 			CreateObject(ball);
 
-			auto topWall = new Gadget::GameObject();
+			auto topWall = new Gadget::GameObject(SID("TopWall"));
 			topWall->AddTag(SID("Wall"));
 			topWall->SetPosition(Gadget::Vector3(0.0f, playAreaHeight / 2.0f, 0.0f));
 			topWall->SetScale(Gadget::Vector3(30.0f, 0.25f, 1.0f));
@@ -64,7 +64,7 @@ namespace Pong{
 			topWall->AddComponent(new Gadget::BoxCollider2D(topWall));
 			CreateObject(topWall);
 
-			auto bottomWall = new Gadget::GameObject();
+			auto bottomWall = new Gadget::GameObject(SID("BottomWall"));
 			bottomWall->AddTag(SID("Wall"));
 			bottomWall->SetPosition(Gadget::Vector3(0.0f, -playAreaHeight / 2.0f, 0.0f));
 			bottomWall->SetScale(Gadget::Vector3(30.0f, 0.25f, 1.0f));
