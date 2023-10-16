@@ -35,9 +35,13 @@ namespace Pong{
 
 			auto resetButton = Gadget::Button(SID("ResetButton"));
 			resetButton.AddButtonID(Gadget::ButtonID::Keyboard_R);
-			resetButton.AddButtonID(Gadget::ButtonID::Gamepad_Start);
 			resetButton.AddButtonID(Gadget::ButtonID::Gamepad_Select);
 			Gadget::App::GetInput().DefineButton(resetButton);
+
+			auto quitButton = Gadget::Button(SID("QuitButton"));
+			quitButton.AddButtonID(Gadget::ButtonID::Keyboard_Escape);
+			quitButton.AddButtonID(Gadget::ButtonID::Gamepad_Start);
+			Gadget::App::GetInput().DefineButton(quitButton);
 		}
 	};
 }

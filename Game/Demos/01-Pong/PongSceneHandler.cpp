@@ -23,6 +23,10 @@ void PongSceneHandler::OnUpdate([[maybe_unused]] float deltaTime_){
 	if(Gadget::App::GetInput().GetButtonDown(SID("ResetButton"))){
 		Reset();
 	}
+
+	if(Gadget::App::GetInput().GetButtonDown(SID("QuitButton"))){
+		Gadget::App::GetSceneManager().RequestSceneLoad(0);
+	}
 }
 
 void PongSceneHandler::Reset(){
