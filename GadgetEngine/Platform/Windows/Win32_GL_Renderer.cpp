@@ -37,7 +37,13 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 		Debug::ThrowFatalError(SID("RENDER"), "OpenGL context could not be created! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
 
-	int status = SDL_GL_SetSwapInterval(App::GetConfig().GetOptionsBool(EngineVars::Display::vsyncKey) ? -1 : 0);
+	int swapInterval = App::GetConfig().GetOptionsBool(EngineVars::Display::vsyncKey) ? -1 : 0;
+	int status = SDL_GL_SetSwapInterval(swapInterval);
+	if(status != 0 && swapInterval < 0){
+		//Adaptive sync isn't supported, try again with regular vsync
+		status = SDL_GL_SetSwapInterval(1);
+	}
+
 	if(status != 0){
 		Debug::Log("Swap interval could not be set! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
 	}
