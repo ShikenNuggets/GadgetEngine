@@ -18,67 +18,94 @@ namespace Pong{
 			PaddleController::OnStart();
 		}
 
-		//Calculate where the ball will be when it gets to this paddle
+		Gadget::Vector3 CalculateNextBounce(const Gadget::Vector3& startPos_, const Gadget::Vector3& ballScale_, const Gadget::Vector3& velocity_, float topWallPos_, float bottomWallPos_, float leftPaddlePos_, float rightPaddlePos_, int recursionCount_ = 0.0f) const{
+			if(recursionCount_ > 10){
+				Gadget::Debug::Log("Infinite recursion detected!", Gadget::Debug::Error, __FILE__, __LINE__);
+				return Gadget::Vector3::Zero();
+			}
+			
+			float wallPos = 0.0f;
+			if(velocity_.y > 0.0f){
+				wallPos = topWallPos_;
+			}else if(velocity_.y < 0.0f){
+				wallPos = bottomWallPos_;
+			}else{
+				return Gadget::Vector3::Zero();
+			}
+
+			float paddlePos = 0.0f;
+			bool finalStage = false;
+			if(velocity_.x > 0.0f){
+				paddlePos = rightPaddlePos_;
+				finalStage = true;
+			}else{
+				paddlePos = leftPaddlePos_;
+			}
+
+			float distanceToWall = Gadget::Math::Abs(wallPos - startPos_.y) - (ballScale_.y / 2.0f);
+			float distanceToPaddle = Gadget::Math::Abs(paddlePos - startPos_.x) - (ballScale_.x / 2.0f);
+
+			float timeToBounceWall = distanceToWall / Gadget::Math::Abs(velocity_.y);
+			float timeToHitPaddle = distanceToPaddle / Gadget::Math::Abs(velocity_.x);
+
+			if(wallPos == 0.0f || (timeToBounceWall > timeToHitPaddle && finalStage)){
+				return startPos_ + (velocity_ * timeToHitPaddle);
+			}else if(timeToBounceWall > timeToHitPaddle && !finalStage){
+				float ballPosXAfterBounce = startPos_.x + (velocity_.x * timeToHitPaddle);
+				float ballPosYAfterBounce = startPos_.x + (velocity_.x * timeToHitPaddle);
+
+				return CalculateNextBounce(Gadget::Vector3(ballPosXAfterBounce, ballPosYAfterBounce, startPos_.z), ballScale_, Gadget::Vector3(velocity_.x * -1.5f, velocity_.y * 1.5f, velocity_.z), topWallPos_, bottomWallPos_, leftPaddlePos_, rightPaddlePos_, ++recursionCount_);
+			}else{
+				float ballPosXAfterBounce = startPos_.x + (velocity_.x * timeToBounceWall);
+				float ballPosYAfterBounce = startPos_.y + (velocity_.y * timeToBounceWall);
+
+				return CalculateNextBounce(Gadget::Vector3(ballPosXAfterBounce, ballPosYAfterBounce, startPos_.z), ballScale_, Gadget::Vector3(velocity_.x, -velocity_.y, velocity_.z), topWallPos_, bottomWallPos_, leftPaddlePos_, rightPaddlePos_, ++recursionCount_);
+			}
+
+			return startPos_;
+		}
+
 		float AdvancedCalculateTargetPosition(){
 			Gadget::Rigidbody* ballRb = ball->GetComponent<Gadget::Rigidbody>();
 			Gadget::Vector3 ballVelocity = ballRb->GetVelocity();
 
-			//Ball is going towards the other guy
-			if(ballVelocity.x < 0.0f){
-				return 0.0f;
-			}
+			
+			float topWallPos = 0.0f;
+			float bottomWallPos = 0.0f;
 
-			//Ball is coming towards us!
-			if(ballVelocity.x > 0.0f){
-				auto walls = Gadget::GameObject::FindObjectsWithTag(SID("Wall"));
-				Gadget::StringID wallName = SID("BottomWall");
-				bool useBottomWall = true;
-				float wallPos = 0.0f;
-				if(ballVelocity.y > 0.0f){
-					wallName = SID("TopWall");
-					useBottomWall = false;
+			auto walls = Gadget::GameObject::FindObjectsWithTag(SID("Wall"));
+			for(const auto& wall : walls){
+				GADGET_BASIC_ASSERT(wall != nullptr);
+				if(wall == nullptr){
+					Gadget::Debug::Log("Invalid GameObject* from FindObjectsWithTag call!", Gadget::Debug::Error, __FILE__, __LINE__);
+					continue;
 				}
 
-				for(const auto& wall : walls){
-					GADGET_BASIC_ASSERT(wall != nullptr);
-					if(wall == nullptr){
-						Gadget::Debug::Log("Invalid GameObject* from FindObjectsWithTag call!", Gadget::Debug::Error, __FILE__, __LINE__);
-						continue;
-					}
-
-					if(wall->GetName() == wallName){
-						wallPos = wall->GetPosition().y;
-
-						if(wallPos > 0.0f){
-							wallPos -= wall->GetScale().y / 2.0f;
-						} else{
-							wallPos += wall->GetScale().y / 2.0f;
-						}
-					}
-				}
-
-				float distanceToWall = Gadget::Math::Abs(wallPos - (ball->GetPosition().y)) - (ball->GetScale().y / 2.0f);
-				float distanceToPaddle = Gadget::Math::Abs((parent->GetPosition().x - (parent->GetScale().x / 2.0f)) - (ball->GetPosition().x)) - (ball->GetScale().x / 2.0f);
-
-				float timeToBounceWall = distanceToWall / Gadget::Math::Abs(ballVelocity.y);
-				float timeToHitPaddle = distanceToPaddle / Gadget::Math::Abs(ballVelocity.x);
-
-				if(wallPos == 0.0f || timeToBounceWall > timeToHitPaddle){
-					//Ball is coming towards us NOW! (or something went wrong with wallPos and we're just ignoring it)
-					return ball->GetPosition().y + (ballVelocity.y * timeToHitPaddle);
-				} else if(timeToHitPaddle > timeToBounceWall){
-					//Ball is heading towards the wall - Figure out where it'll go after it bounces
-					float ballPosXAfterBounce = ball->GetPosition().x + (ballVelocity.x * timeToBounceWall);
-					float ballPosYAfterBounce = ball->GetPosition().y + (ballVelocity.y * timeToBounceWall);
-
-					float newDistanceToPaddle = Gadget::Math::Abs((parent->GetPosition().x - (parent->GetScale().x / 2.0f)) - (ballPosXAfterBounce + ball->GetScale().x));
-					float newTimeToHitPaddle = newDistanceToPaddle / ballVelocity.x;
-
-					return ballPosYAfterBounce + ((-ballVelocity.y) * newTimeToHitPaddle);
+				if(wall->GetName() == SID("TopWall")){
+					topWallPos = wall->GetPosition().y - (wall->GetScale().y / 2.0f);
+				}else if(wall->GetName() == SID("BottomWall")){
+					bottomWallPos = wall->GetPosition().y + (wall->GetScale().y / 2.0f);
 				}
 			}
 
-			return 0.0f;
+			float leftPaddlePos = 0.0f;
+			float rightPaddlePos = 0.0f;
+			auto paddles = Gadget::GameObject::FindObjectsWithTag(SID("Paddle"));
+			for(const auto& paddle : paddles){
+				GADGET_BASIC_ASSERT(paddle != nullptr);
+				if(paddle == nullptr){
+					Gadget::Debug::Log("Invalid GameObject* from FindObjectsWithTag call!", Gadget::Debug::Error, __FILE__, __LINE__);
+					continue;
+				}
+
+				if(paddle->GetName() == SID("LeftPaddle")){
+					leftPaddlePos = paddle->GetPosition().x + (paddle->GetScale().x / 2.0f);
+				}else if(paddle->GetName() == SID("RightPaddle")){
+					rightPaddlePos = paddle->GetPosition().x + (paddle->GetScale().x / 2.0f);
+				}
+			}
+
+			return CalculateNextBounce(ball->GetPosition(), ball->GetScale(), ballVelocity, topWallPos, bottomWallPos, leftPaddlePos, rightPaddlePos).y;
 		}
 
 		float CalculateMoveAxis(){
@@ -93,7 +120,7 @@ namespace Pong{
 			float targetPos = 0.0f;
 			if(PongState::currentMode == GameMode::SoloEasy){
 				targetPos = ball->GetPosition().y;
-			} else{
+			}else{
 				targetPos = AdvancedCalculateTargetPosition();
 			}
 
