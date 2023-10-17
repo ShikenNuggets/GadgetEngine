@@ -22,6 +22,9 @@
     <ClInclude Include="Demos\01-Pong\BallController.h">
       <Filter>Demos\01-Pong</Filter>
     </ClInclude>
+    <ClInclude Include="Demos\01-Pong\PaddleAI.h">
+      <Filter>Demos\01-Pong</Filter>
+    </ClInclude>
     <ClInclude Include="Demos\01-Pong\PaddleController.h">
       <Filter>Demos\01-Pong</Filter>
     </ClInclude>
@@ -43,10 +46,12 @@
     <ClInclude Include="Demos\01-Pong\PongSceneHandler.h">
       <Filter>Demos\01-Pong</Filter>
     </ClInclude>
+    <ClInclude Include="Demos\01-Pong\PongState.h">
+      <Filter>Demos\01-Pong</Filter>
+    </ClInclude>
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
     <ClInclude Include="ObjectRotator.h" />
-    <ClInclude Include="PongState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demos\01-Pong\PongSceneHandler.cpp">

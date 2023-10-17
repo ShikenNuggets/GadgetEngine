@@ -5,7 +5,9 @@
 #include <Graphics/Components/RenderComponent.h>
 #include <Physics/BoxCollider2D.h>
 
+#include "PaddleAI.h"
 #include "PaddleController.h"
+#include "PongState.h"
 
 namespace Pong{
 	class PaddleObject : public Gadget::GameObject{
@@ -16,7 +18,16 @@ namespace Pong{
 			AddComponent(new Gadget::RenderComponent(this, SID("CubeModel"), Gadget::Color::White(), SID("ColorShader")));
 			AddComponent(new Gadget::Rigidbody(this, 1.0f, false, Gadget::FreezeRotationType::FreezeAll));
 			AddComponent(new Gadget::BoxCollider2D(this));
-			AddComponent(new PaddleController(this, player_));
+
+			switch(PongState::currentMode){
+				case GameMode::SoloEasy: [[fallthrough]];
+				case GameMode::SoloHard:
+					AddComponent(new PaddleAI(this, player_));
+					break;
+				default:
+					AddComponent(new PaddleController(this, player_));
+					break;
+			}
 		}
 	};
 }
