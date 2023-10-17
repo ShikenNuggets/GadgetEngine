@@ -19,7 +19,7 @@ namespace Pong{
 			AddComponent(new Gadget::Rigidbody(this, 1.0f, false, Gadget::FreezeRotationType::FreezeAll));
 			AddComponent(new Gadget::BoxCollider2D(this));
 
-			if(player_ == 2 && PongState::currentMode == GameMode::SoloEasy || PongState::currentMode == GameMode::SoloHard){
+			if(player_ == 2 && (PongState::currentMode == GameMode::SoloEasy || PongState::currentMode == GameMode::SoloHard)){
 				AddComponent(new PaddleAI(this, player_));
 			}else{
 				AddComponent(new PaddleController(this, player_));
