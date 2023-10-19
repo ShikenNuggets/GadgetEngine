@@ -22,7 +22,7 @@ Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
 	locMan->AddLanguage(SID("ENG")); //TODO - Pull available languages from a config file
 
 	ConfigParser::ParseConfigFile(engineConfigPath, vars);
-	locMan->SetCurrentLanguage(GetOptionsString(EngineVars::Core::languageKey));
+	locMan->SetCurrentLanguage(GetOptionString(EngineVars::Core::languageKey));
 
 	SaveConfigs(); //Force a save in case the file doesn't exist yet
 }
@@ -39,11 +39,11 @@ double Config::GetOptionFloat(StringID key_) const{
 	return vars.GetValue(key_).ToNumber();
 }
 
-bool Config::GetOptionsBool(StringID key_) const{
+bool Config::GetOptionBool(StringID key_) const{
 	return vars.GetValue(key_).ToBool();
 }
 
-StringID Config::GetOptionsString(StringID key_) const{
+StringID Config::GetOptionString(StringID key_) const{
 	return vars.GetValue(key_).ToStr();
 }
 

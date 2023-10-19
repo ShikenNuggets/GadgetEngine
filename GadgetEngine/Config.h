@@ -15,8 +15,8 @@ namespace Gadget{
 
 		Var GetOption(StringID key_) const;
 		double GetOptionFloat(StringID key_) const;
-		bool GetOptionsBool(StringID key_) const;
-		StringID GetOptionsString(StringID key_) const;
+		bool GetOptionBool(StringID key_) const;
+		StringID GetOptionString(StringID key_) const;
 
 		void SetOption(StringID section_, StringID key_, int32_t value_);
 		void SetOption(StringID section_, StringID key_, int64_t value_);
