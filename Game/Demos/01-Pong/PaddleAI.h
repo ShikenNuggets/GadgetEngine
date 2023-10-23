@@ -108,7 +108,7 @@ namespace Pong{
 			return CalculateNextBounce(ball->GetPosition(), ball->GetScale(), ballVelocity, topWallPos, bottomWallPos, leftPaddlePos, rightPaddlePos).y;
 		}
 
-		float CalculateMoveAxis(){
+		float CalculateMoveAxis(float deltaTime_){
 			if(ball == nullptr){
 				ball = Gadget::GameObject::FindWithTag(SID("Ball"));
 			}
@@ -124,15 +124,16 @@ namespace Pong{
 				targetPos = AdvancedCalculateTargetPosition();
 			}
 
-			if(Gadget::Math::Abs(parent->GetPosition().y - targetPos) < 0.25f){
-				return 0.0f;
+			float multiplier = 1.0f;
+			if(Gadget::Math::Abs(parent->GetPosition().y - targetPos) < (paddleMoveSpeed * Gadget::App::GetFixedDeltaTime())){
+				multiplier = Gadget::Math::Abs(parent->GetPosition().y - targetPos) / (paddleMoveSpeed * Gadget::App::GetFixedDeltaTime());
 			}
 
 			//Simply move towards the ball
 			if(targetPos > parent->GetPosition().y){
-				return 1.0f;
-			} else if(targetPos < parent->GetPosition().y){
-				return -1.0f;
+				return 1.0f * multiplier;
+			}else if(targetPos < parent->GetPosition().y){
+				return -1.0f * multiplier;
 			}
 
 			return 0.0f;
@@ -141,7 +142,7 @@ namespace Pong{
 		virtual void OnUpdate(float deltaTime_) override{
 			GADGET_BASIC_ASSERT(rigidbody != nullptr);
 
-			float moveAxis = CalculateMoveAxis();
+			float moveAxis = CalculateMoveAxis(deltaTime_);
 
 			rigidbody->ClearForces();
 			rigidbody->SetVelocity(Gadget::Vector3(0.0f, moveAxis * paddleMoveSpeed, 0.0f));

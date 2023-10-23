@@ -10,7 +10,7 @@
 namespace Pong{
 	class BallController : public Gadget::GameLogicComponent{
 	public:
-		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(parent_), initialForce(initialForce_), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_), movingUp(true), movingRight(true), collisionTimer(0.0f), ignorePaddleCollisions(false), ignoreWallCollisions(false), roundOver(false){}
+		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(parent_), initialForce(initialForce_), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_), movingUp(true), movingRight(true), lastCollidedObject(0), roundOver(false){}
 
 		virtual void OnStart() override{
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();
@@ -32,35 +32,27 @@ namespace Pong{
 				sceneHandler->Reset(); //Ball went out of bounds
 			}
 
-			if(ignoreWallCollisions || ignorePaddleCollisions){
-				collisionTimer += deltaTime_;
-				if(collisionTimer > 0.1f){
-					ignoreWallCollisions = false;
-					ignorePaddleCollisions = false;
-					collisionTimer = 0.0f;
-				}
-			}
-
 			GameLogicComponent::OnUpdate(deltaTime_);
 		}
 
 		virtual void OnCollision(const Gadget::Collision& col_) override{
-			if(col_.HasTag(SID("Paddle")) && !ignorePaddleCollisions){
-				ApplyNewVelocity(true, false);
-				CorrectPositionAfterCollision(col_);
-				ignorePaddleCollisions = true; //Temporarily ignore paddle collisions to avoid wonky behaviour
-			}else if(col_.HasTag(SID("Wall")) && !ignoreWallCollisions){
-				ApplyNewVelocity(false, true, 0.0f);
-				CorrectPositionAfterCollision(col_);
-				ignoreWallCollisions = true; //Temporarily ignore wall collisions to avoid wonky behaviour
-			}else if(col_.HasTag(SID("LeftGoal")) && !roundOver){
-				roundOver = true;
-				sceneHandler->AddScoreAndResetGame(2);
-			}else if(col_.HasTag(SID("RightGoal")) && !roundOver){
-				roundOver = true;
-				sceneHandler->AddScoreAndResetGame(1);
+			if(col_.otherName != lastCollidedObject){
+				if(col_.HasTag(SID("Paddle"))){
+					ApplyNewVelocity(true, false);
+					CorrectPositionAfterPaddleCollision(col_);
+				}else if(col_.HasTag(SID("Wall"))){
+					ApplyNewVelocity(false, true, 0.0f);
+					CorrectPositionAfterWallCollision(col_);
+				}else if(col_.HasTag(SID("LeftGoal")) && !roundOver){
+					roundOver = true;
+					sceneHandler->AddScoreAndResetGame(2);
+				}else if(col_.HasTag(SID("RightGoal")) && !roundOver){
+					roundOver = true;
+					sceneHandler->AddScoreAndResetGame(1);
+				}
 			}
 
+			lastCollidedObject = col_.otherName;
 			GameLogicComponent::OnCollision(col_);
 		}
 
@@ -91,9 +83,7 @@ namespace Pong{
 		bool movingUp;
 		bool movingRight;
 
-		float collisionTimer;
-		bool ignorePaddleCollisions;
-		bool ignoreWallCollisions;
+		Gadget::StringID lastCollidedObject;
 		bool roundOver;
 
 		void ApplyNewVelocity(bool flipX_, bool flipY_, float speedIncrease_ = 0.5f){
@@ -124,19 +114,35 @@ namespace Pong{
 			rigidbody->SetVelocity(newVelocity);
 		}
 
-		void CorrectPositionAfterCollision(const Gadget::Collision& col_){
-			if(Gadget::Math::IsNearZero(col_.collisionVector.SquaredMagnitude()) || Gadget::Math::IsNearZero(col_.overlapAmount)){
-				return;
+		void CorrectPositionAfterPaddleCollision(const Gadget::Collision& col_){
+			Gadget::Vector3 pos = GetParent()->GetPosition();
+			float xScale = GetParent()->GetScale().x / 2.0f;
+			float paddleX = 0.0f;
+			if(col_.otherPos.x < 0.0f){
+				paddleX = col_.otherPos.x + (col_.otherScale.x / 2.0f);
+			}else{
+				paddleX = col_.otherPos.x - (col_.otherScale.x / 2.0f);
+				xScale = -xScale;
 			}
 
-			Gadget::Vector3 collisionCorrection = -col_.collisionVector.Normalized() * col_.overlapAmount;
+			if((pos.x < 0.0f && pos.x < paddleX + xScale) || (pos.x > 0.0f && pos.x > paddleX + xScale)){
+				GetParent()->SetPosition(paddleX + xScale, pos.y, pos.z);
+			}
+		}
 
-			if(col_.HasTag(SID("Paddle"))){
-				parent->Translate(collisionCorrection.x, 0.0f, 0.0f);
-			}else if(col_.HasTag(SID("Wall"))){
-				parent->Translate(0.0f, collisionCorrection.y, 0.0f);
+		void CorrectPositionAfterWallCollision(const Gadget::Collision& col_){
+			Gadget::Vector3 pos = GetParent()->GetPosition();
+			float yScale = GetParent()->GetScale().y / 2.0f;
+			float paddleY = 0.0f;
+			if(col_.otherPos.y < 0.0f){
+				paddleY = col_.otherPos.y + (col_.otherScale.y / 2.0f);
 			}else{
-				parent->Translate(collisionCorrection);
+				paddleY = col_.otherPos.y - (col_.otherScale.y / 2.0f);
+				yScale = -yScale;
+			}
+
+			if((pos.y < 0.0f && pos.y < paddleY + yScale) || (pos.y > 0.0f && pos.y > paddleY + yScale)){
+				GetParent()->SetPosition(pos.x, paddleY + yScale, pos.z);
 			}
 		}
 	};

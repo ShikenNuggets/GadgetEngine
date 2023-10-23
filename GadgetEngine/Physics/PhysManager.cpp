@@ -38,9 +38,7 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
 
-	const float fixedTimeStep = 1.0f / static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey));
-
-	bulletDynamicsWorld->stepSimulation(deltaTime_, 4, fixedTimeStep);
+	bulletDynamicsWorld->stepSimulation(deltaTime_, 0); //TODO - We should eventually do proper interpolation w/ fixed time step
 
 	const auto rbs = scene_->GetAllComponentsInScene<Rigidbody>(); //TODO - This is slow
 	for(const auto& rb : rbs){
@@ -148,6 +146,7 @@ void PhysManager::RemoveFromSimulation(btRigidBody* brb_){
 
 void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_){
 	Collision collision;
+	collision.otherName = other_->GetParent()->GetName();
 	collision.otherTags = other_->GetParent()->GetTags();
 	collision.otherPos = other_->GetParent()->GetPosition();
 	collision.otherScale = other_->GetColliderSize();

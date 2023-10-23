@@ -25,6 +25,8 @@ void Collider::OnTransformModified(){
 		return;
 	}
 
+	bulletRb->activate(true); //Force activate the rigidbody if we're hard setting a new position
+
 	//If we modify the transform directly, we need to make sure those changes are reflected within the physics engine
 	bulletRb->setWorldTransform(BulletHelper::ConvertTransform(parent->GetTransform()));
 	bulletRb->getMotionState()->setWorldTransform(BulletHelper::ConvertTransform(parent->GetTransform()));

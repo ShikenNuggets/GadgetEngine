@@ -7,9 +7,10 @@
 
 namespace Gadget{
 	struct Collision{
-		Collision() : didCollide(false), otherTags(), otherPos(), otherScale(), collisionVector(), overlapAmount(0.0f), isTrigger(false){}
+		Collision() : didCollide(false), otherName(0), otherTags(), otherPos(), otherScale(), collisionVector(), overlapAmount(0.0f), isTrigger(false){}
 
 		bool didCollide;
+		StringID otherName;
 		std::vector<StringID> otherTags;
 		Vector3 otherPos;
 		Vector3 otherScale;
