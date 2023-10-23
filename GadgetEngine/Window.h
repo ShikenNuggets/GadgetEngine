@@ -26,6 +26,8 @@ namespace Gadget{
 		virtual void HandleEvents() = 0;
 		virtual void SwapBuffers() = 0;
 
+		virtual float GetRefreshRate() = 0;
+
 	protected:
 		ScreenCoordinate size;
 		ScreenCoordinate pos;

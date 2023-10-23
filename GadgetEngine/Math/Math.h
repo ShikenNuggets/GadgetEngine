@@ -86,6 +86,9 @@ namespace Gadget{
 		static inline float Floor(float num_){ return floor(num_); }
 		static inline double Floor(double num_){ return floor(num_); }
 
+		static inline float Ceiling(float num_){ return ceil(num_); }
+		static inline double Ceiling(double num_){ return ceil(num_); }
+
 		static inline float RemapRange(float value_, float oldMin_, float oldMax_, float newMin_, float newMax_){
 			if(oldMin_ == oldMax_ || newMin_ == newMax_){
 				return newMin_;

@@ -177,3 +177,23 @@ Renderer::API App::GetCurrentRenderAPI(){
 		return Renderer::API::None;
 	}
 }
+
+float App::GetFixedDeltaTime(){
+	return 1.0f / static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey));
+}
+
+float App::GetCurrentFramerateCap(){
+	float targetFPS = GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey);
+	bool vsync = GetConfig().GetOptionBool(EngineVars::Display::vsyncKey);
+
+	if(targetFPS == 0.0f && vsync == false){
+		return 0.0f;
+	}
+
+	float vsyncFPS = GetRenderer().GetWindow().lock()->GetRefreshRate();
+	if(vsyncFPS != 0.0f && (targetFPS == 0.0f || vsyncFPS < targetFPS)){
+		return vsyncFPS;
+	}
+
+	return targetFPS;
+}

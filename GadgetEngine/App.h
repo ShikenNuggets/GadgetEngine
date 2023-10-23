@@ -38,6 +38,8 @@ namespace Gadget{
 		static std::string GetGameName(){ return GetInstance().gameName; }
 		static Renderer::API GetCurrentRenderAPI();
 		static float GetAspectRatio(){ return GetInstance().renderer->GetAspectRatio(); }
+		static float GetFixedDeltaTime();
+		static float GetCurrentFramerateCap();
 
 		static ResourceManager& GetResourceManager(){ return *GetInstance().resourceMgr; }
 		static Config& GetConfig(){ return *GetInstance().config; }

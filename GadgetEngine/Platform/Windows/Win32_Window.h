@@ -20,9 +20,12 @@ namespace Gadget{
 		virtual void HandleEvents() override;
 		virtual void SwapBuffers() override;
 
+		virtual float GetRefreshRate() override{ return refreshRate; };
+
 	private:
 		SDL_Window* sdlWindow;
 		std::vector<SDL_Joystick*> joysticks;
+		float refreshRate;
 
 		void HandleWindowEvent(const SDL_Event& e_);
 		void HandleHatMotionEvent(const SDL_Event& e_);

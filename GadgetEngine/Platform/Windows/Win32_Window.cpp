@@ -13,7 +13,7 @@
 
 using namespace Gadget;
 
-Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, y_), sdlWindow(nullptr), joysticks(){
+Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, y_), sdlWindow(nullptr), joysticks(), refreshRate(0.0f){
 	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
 		Debug::ThrowFatalError(SID("RENDER"), "SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
@@ -45,6 +45,13 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, 
 	//This is enabled by default but it's good to be explicit
 	if(SDL_JoystickEventState(SDL_ENABLE) != 1){
 		Debug::ThrowFatalError(SID("INPUT"), "Joystick events could not be enabled! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
+	}
+
+	SDL_DisplayMode mode;
+	if(SDL_GetCurrentDisplayMode(0, &mode) != 0){
+		Debug::Log("Could not get Display Mode! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
+	}else{
+		refreshRate = static_cast<float>(mode.refresh_rate);
 	}
 }
 
