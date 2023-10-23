@@ -75,7 +75,7 @@ namespace Gadget{
 		void AddTag(StringID tag_);
 
 		void SetPosition(const Vector3& pos_){ transform.position = pos_; OnTransformModified(); }
-		void SetPosition(float x_, float y_, float z_){ transform.position += Vector3(x_, y_, z_); OnTransformModified(); }
+		void SetPosition(float x_, float y_, float z_){ transform.position = Vector3(x_, y_, z_); OnTransformModified(); }
 
 		void SetRotation(const Quaternion& rot_){ transform.rotation = rot_; OnTransformModified(); }
 		void SetRotation(const Euler& rot_){ transform.rotation = rot_.ToQuaternion(); OnTransformModified(); }
