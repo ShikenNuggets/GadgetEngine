@@ -393,6 +393,9 @@
     <ClCompile Include="Game\BasicSceneManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Component.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
     <ClCompile Include="Game\GameLogicManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>

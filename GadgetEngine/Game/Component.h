@@ -2,9 +2,11 @@
 #define GADGET_COMPONENT_H
 
 #include "Debug.h"
+#include "Math/Quaternion.h"
 
 namespace Gadget{
 	//Forward Declarations
+	struct Transform;
 	class GameObject;
 
 	class Component{
@@ -22,6 +24,17 @@ namespace Gadget{
 
 		GameObject* GetParent() const{ return parent; }
 		bool IsActivated() const{ return isActivated; }
+
+		//GameObject Helper Functions
+		StringID GetParentName() const;
+		bool HasTag(StringID tag_) const;
+		std::vector<StringID> GetTags() const;
+
+		Vector3 GetPosition() const;
+		Quaternion GetRotation() const;
+		Vector3 GetScale() const;
+		const Transform& GetTransform() const;
+		Matrix4 GetTransformMatrix() const;
 
 	protected:
 		GameObject* parent;

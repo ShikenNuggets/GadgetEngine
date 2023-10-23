@@ -272,6 +272,7 @@
     <ClCompile Include="EngineVars.cpp" />
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Game\BasicSceneManager.cpp" />
+    <ClCompile Include="Game\Component.cpp" />
     <ClCompile Include="Game\GameLogicManager.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
