@@ -22,7 +22,8 @@ namespace Gadget{
 	public:
 		enum class API{
 			None = 0,
-			OpenGL
+			OpenGL,
+			DX12
 		};
 
 		enum class WindingOrder{
