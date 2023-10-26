@@ -125,8 +125,8 @@ namespace Pong{
 			}
 
 			float multiplier = 1.0f;
-			if(Gadget::Math::Abs(parent->GetPosition().y - targetPos) < (paddleMoveSpeed * Gadget::App::GetFixedDeltaTime())){
-				multiplier = Gadget::Math::Abs(parent->GetPosition().y - targetPos) / (paddleMoveSpeed * Gadget::App::GetFixedDeltaTime());
+			if(Gadget::Math::Abs(parent->GetPosition().y - targetPos) < (paddleMoveSpeed * deltaTime_)){
+				multiplier = Gadget::Math::Abs(parent->GetPosition().y - targetPos) / (paddleMoveSpeed * deltaTime_);
 			}
 
 			//Simply move towards the ball
