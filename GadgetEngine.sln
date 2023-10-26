@@ -39,6 +39,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2main", "SDK\_prj\SDL2ma
 		{3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F} = {3ABE8B7C-26F5-8C0D-CFE1-7210BBF7080F}
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workbench", "Workbench\Workbench.csproj", "{88ED1F41-F457-D4B7-3D96-855DA93FB20C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -94,6 +96,12 @@ Global
 		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Develop|x64.Build.0 = Develop|x64
 		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Release|x64.ActiveCfg = Release|x64
 		{1FBB913C-0B88-EC47-34A1-DAEF20CD21D6}.Release|x64.Build.0 = Release|x64
+		{88ED1F41-F457-D4B7-3D96-855DA93FB20C}.Debug|x64.ActiveCfg = Debug|x64
+		{88ED1F41-F457-D4B7-3D96-855DA93FB20C}.Debug|x64.Build.0 = Debug|x64
+		{88ED1F41-F457-D4B7-3D96-855DA93FB20C}.Develop|x64.ActiveCfg = Develop|x64
+		{88ED1F41-F457-D4B7-3D96-855DA93FB20C}.Develop|x64.Build.0 = Develop|x64
+		{88ED1F41-F457-D4B7-3D96-855DA93FB20C}.Release|x64.ActiveCfg = Release|x64
+		{88ED1F41-F457-D4B7-3D96-855DA93FB20C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

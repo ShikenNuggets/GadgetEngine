@@ -50,6 +50,12 @@ externalproject "BulletLinearMath"
 	kind "StaticLib"
 	language "C++"
 	
+externalproject "Workbench"
+	location "Workbench"
+	filename "Workbench"
+	kind "WindowedApp"
+	language "C#"
+	
 project "GadgetEngine"
 	location "GadgetEngine"
 	kind "StaticLib"

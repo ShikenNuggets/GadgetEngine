@@ -30,7 +30,9 @@
 *.out
 *.app
 /.vs
+*/.vs
 /Build
+[Oo]bj/
 
 # User-specific files
 *.rsuser

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <BaseOutputPath>E:\Coding\GadgetEngine\Build\Workbench</BaseOutputPath>
+    <BaseIntermediateOutputPath>E:\Coding\GadgetEngine\Build\Intermediate\Workbench</BaseIntermediateOutputPath>
+    <Configurations>Debug;Release;Develop</Configurations>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+</Project>

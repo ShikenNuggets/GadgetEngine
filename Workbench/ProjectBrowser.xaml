@@ -1,0 +1,23 @@
+﻿<Window x:Class="Workbench.ProjectBrowser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Workbench"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="ProjectBrowser" Height="600" Width="800">
+    <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
+			<ToggleButton Content="Open Project" x:Name="openProjectButton" FontSize="24" Click="OnToggleButton_Click" IsChecked="True"/>
+			<ToggleButton Content="New Project" x:Name="newProjectButton" FontSize="24" Margin="50, 0, 0, 0" Click="OnToggleButton_Click" IsChecked="False"/>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal" Grid.Row="1">
+			<local:OpenProjectController x:Name="openProjectArea" />
+			<local:NewProjectController x:Name="newProjectArea" />
+		</StackPanel>
+    </Grid>
+</Window>
