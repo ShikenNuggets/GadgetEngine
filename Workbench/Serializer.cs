@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Workbench
 {
@@ -14,7 +15,7 @@ namespace Workbench
         public static void ToFile<T>(T obj, string path) where T : class{
             try
             {
-                using var fs = new FileStream(path, FileMode.Create);
+                using var fs = XmlWriter.Create(path, new XmlWriterSettings { Indent = true });
                 var serializer = new DataContractSerializer(typeof(T));
                 serializer.WriteObject(fs, obj);
             }

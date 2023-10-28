@@ -1,9 +1,9 @@
 <ProjectTemplate xmlns="http://schemas.datacontract.org/2004/07/Workbench" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-    <ProjectFile>project.wbn</ProjectFile>
-    <ProjectType>Empty Project</ProjectType>
     <Folders xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
         <a:string>.temp</a:string>
         <a:string>Assets</a:string>
         <a:string>Code</a:string>
     </Folders>
+    <ProjectFile>project.wbn</ProjectFile>
+    <ProjectType>Empty Project</ProjectType>
 </ProjectTemplate>

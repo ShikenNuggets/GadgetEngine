@@ -20,6 +20,9 @@
     <None Update="ProjectTemplates\EmptyProject\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="ProjectTemplates\EmptyProject\project.wbn">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ProjectTemplates\EmptyProject\screenshot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

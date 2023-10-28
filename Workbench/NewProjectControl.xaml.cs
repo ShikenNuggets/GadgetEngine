@@ -24,5 +24,21 @@ namespace Workbench
         {
             InitializeComponent();
         }
+
+        private void OnCreate_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as NewProjectViewModel;
+            var projectPath = vm.CreateProject(templateListBox.SelectedItem as ProjectTemplate);
+
+            bool dialogResult = false;
+            var wnd = Window.GetWindow(this);
+            if(!string.IsNullOrWhiteSpace(projectPath))
+            {
+                dialogResult = true;
+            }
+
+            wnd.DialogResult = dialogResult;
+            wnd.Close();
+        }
     }
 }
