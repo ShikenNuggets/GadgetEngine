@@ -16,18 +16,18 @@ using System.Windows.Shapes;
 namespace Workbench
 {
     /// <summary>
-    /// Interaction logic for NewProjectController.xaml
+    /// Interaction logic for NewProjectControl.xaml
     /// </summary>
-    public partial class NewProjectController : UserControl
+    public partial class NewProjectControl : UserControl
     {
-        public NewProjectController()
+        public NewProjectControl()
         {
             InitializeComponent();
         }
 
         private void OnCreate_Button_Click(object sender, RoutedEventArgs e)
         {
-            var vm = DataContext as NewProjectViewModel;
+            var vm = DataContext as NewProjectVM;
             var projectPath = vm.CreateProject(templateListBox.SelectedItem as ProjectTemplate);
 
             bool dialogResult = false;
@@ -35,7 +35,7 @@ namespace Workbench
             if(!string.IsNullOrWhiteSpace(projectPath))
             {
                 dialogResult = true;
-                var project = OpenProjectViewModel.Open(new ProjectData(){ 
+                var project = OpenProjectVM.Open(new ProjectData(){ 
                     ProjectName = vm.ProjectName, 
                     ProjectPath = projectPath 
                 });

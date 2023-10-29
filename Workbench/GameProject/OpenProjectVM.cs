@@ -17,7 +17,7 @@ namespace Workbench
         [DataMember] public string ProjectPath { get; set; }
         [DataMember] public DateTime LastOpened { get; set; }
 
-        public string FullPath { get => ProjectViewModel.GetFullPath(ProjectPath, ProjectName); }
+        public string FullPath { get => ProjectVM.GetFullPath(ProjectPath, ProjectName); }
 
         public byte[] Icon { get; set; }
         public byte[] Screenshot { get; set; }
@@ -29,13 +29,13 @@ namespace Workbench
         [DataMember] public List<ProjectData> Projects { get; set; }
     }
 
-    public class OpenProjectViewModel : BaseViewModel
+    public class OpenProjectVM : BaseViewModel
     {
         private static readonly string _applicationDataPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\GadgetWorkbench\";
         private static readonly string _projectDataPath;
         private static readonly ObservableCollection<ProjectData> _projects = new ObservableCollection<ProjectData>();
 
-        public static ReadOnlyObservableCollection<ProjectData> Projects {  get; }
+        public static ReadOnlyObservableCollection<ProjectData> Projects { get; }
 
         private static void ReadProjectData()
         {
@@ -43,15 +43,15 @@ namespace Workbench
             {
                 var projects = Serializer.FromFile<ProjectDataList>(_projectDataPath).Projects.OrderByDescending(x => x.LastOpened);
                 _projects.Clear();
-                foreach(var project in projects)
+                foreach (var project in projects)
                 {
                     if (!File.Exists(project.FullPath))
                     {
                         continue;
                     }
 
-                    project.Icon = File.ReadAllBytes($@"{project.ProjectPath}\{ProjectViewModel.TempDir}icon.png");
-                    project.Screenshot = File.ReadAllBytes($@"{project.ProjectPath}\{ProjectViewModel.TempDir}screenshot.png");
+                    project.Icon = File.ReadAllBytes($@"{project.ProjectPath}\{ProjectVM.TempDir}icon.png");
+                    project.Screenshot = File.ReadAllBytes($@"{project.ProjectPath}\{ProjectVM.TempDir}screenshot.png");
                     _projects.Add(project);
                 }
             }
@@ -63,7 +63,7 @@ namespace Workbench
             Serializer.ToFile(new ProjectDataList() { Projects = projects }, _projectDataPath);
         }
 
-        public static ProjectViewModel Open(ProjectData projectData)
+        public static ProjectVM Open(ProjectData projectData)
         {
             ReadProjectData();
             var project = _projects.FirstOrDefault(x => x.FullPath == projectData.FullPath);
@@ -77,10 +77,10 @@ namespace Workbench
 
             WriteProjectData();
 
-            return ProjectViewModel.Load(project.FullPath);
+            return ProjectVM.Load(project.FullPath);
         }
 
-        static OpenProjectViewModel()
+        static OpenProjectVM()
         {
             try
             {

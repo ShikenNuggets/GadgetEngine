@@ -37,21 +37,21 @@ namespace Workbench
         private void OnMainWindowClosing(object? sender, CancelEventArgs e)
         {
             Closing -= OnMainWindowClosing;
-            ProjectViewModel.Current?.Unload();
+            ProjectVM.Current?.Unload();
         }
 
         private void OpenProjectBrowser()
         {
-            var projectBrowser = new ProjectBrowser();
+            var projectBrowser = new ProjectBrowserWindow();
             if (projectBrowser.ShowDialog() == false || projectBrowser.DataContext == null)
             {
                 Application.Current.Shutdown();
             }
             else
             {
-                if(ProjectViewModel.Current != null) 
+                if(ProjectVM.Current != null) 
                 {
-                    ProjectViewModel.Current.Unload();
+                    ProjectVM.Current.Unload();
                 }
 
                 DataContext = projectBrowser.DataContext;

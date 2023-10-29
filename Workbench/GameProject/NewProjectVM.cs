@@ -9,22 +9,23 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Workbench{
+namespace Workbench
+{
     [DataContract]
     public class ProjectTemplate
     {
         [DataMember] public required string ProjectType { get; set; }
-        [DataMember] public required string ProjectFile {  get; set; }
+        [DataMember] public required string ProjectFile { get; set; }
         [DataMember] public required List<string> Folders { get; set; }
 
         public byte[]? Icon { get; set; }
         public byte[]? Screenshot { get; set; }
-        public string? IconFilePath {  get; set; }
+        public string? IconFilePath { get; set; }
         public string? ScreenshotFilePath { get; set; }
-        public string? ProjectFilePath {  get; set; }
+        public string? ProjectFilePath { get; set; }
     }
 
-    class NewProjectViewModel : BaseViewModel
+    class NewProjectVM : BaseViewModel
     {
         private readonly string _templatePath = @"ProjectTemplates\";
 
@@ -34,7 +35,7 @@ namespace Workbench{
         public string ProjectName
         {
             get => _projectName;
-            
+
             set
             {
                 if (_projectName != value)
@@ -49,7 +50,7 @@ namespace Workbench{
         public string ProjectPath
         {
             get => _path;
-            
+
             set
             {
                 if (_path != value)
@@ -106,7 +107,7 @@ namespace Workbench{
             {
                 ErrorMessage = "Error: Please enter a project name.";
             }
-            else if(ProjectName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+            else if (ProjectName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
             {
                 ErrorMessage = "Error: Invalid character(s) used in project name [" + ProjectName.ElementAt(ProjectName.IndexOfAny(Path.GetInvalidFileNameChars())) + "].";
             }
@@ -114,11 +115,11 @@ namespace Workbench{
             {
                 ErrorMessage = "Error: Please enter a project path.";
             }
-            else if(ProjectPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
+            else if (ProjectPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
             {
                 ErrorMessage = "Error: Invalid character(s) used in project path [" + ProjectName.ElementAt(ProjectName.IndexOfAny(Path.GetInvalidPathChars())) + "].";
             }
-            else if(Directory.Exists(path) && Directory.EnumerateFileSystemEntries(path).Any())
+            else if (Directory.Exists(path) && Directory.EnumerateFileSystemEntries(path).Any())
             {
                 ErrorMessage = "Error: Project path already exists and is not empty.";
             }
@@ -184,16 +185,16 @@ namespace Workbench{
                 //Copy the project file, with the new name and new information
                 var projectXml = File.ReadAllText(template.ProjectFilePath);
                 projectXml = string.Format(projectXml, ProjectName, ProjectPath);
-                var projectPath = ProjectViewModel.GetFullPath(finalPath, ProjectName);
+                var projectPath = ProjectVM.GetFullPath(finalPath, ProjectName);
                 File.WriteAllText(projectPath, projectXml);
 
                 //Copy the Icon and Screenshot to the temp folder
-                File.Copy(template.IconFilePath, finalPath + ProjectViewModel.TempDir + Path.GetFileName(template.IconFilePath));
-                File.Copy(template.ScreenshotFilePath, finalPath + ProjectViewModel.TempDir + Path.GetFileName(template.ScreenshotFilePath));
+                File.Copy(template.IconFilePath, finalPath + ProjectVM.TempDir + Path.GetFileName(template.IconFilePath));
+                File.Copy(template.ScreenshotFilePath, finalPath + ProjectVM.TempDir + Path.GetFileName(template.ScreenshotFilePath));
 
                 return finalPath;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
@@ -201,7 +202,8 @@ namespace Workbench{
             return string.Empty;
         }
 
-        public NewProjectViewModel(){
+        public NewProjectVM()
+        {
             ProjectTemplates = new ReadOnlyObservableCollection<ProjectTemplate>(_projectTemplates);
 
             try
@@ -210,22 +212,22 @@ namespace Workbench{
                 Debug.Assert(templates != null && templates.Any());
                 foreach (var file in templates)
                 {
-                    var filePath = System.IO.Path.GetDirectoryName(file);
+                    var filePath = Path.GetDirectoryName(file);
                     Debug.Assert(!string.IsNullOrWhiteSpace(filePath));
 
                     var template = Serializer.FromFile<ProjectTemplate>(file);
 
-                    template.IconFilePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(filePath, "icon.png"));
+                    template.IconFilePath = Path.GetFullPath(Path.Combine(filePath, "icon.png"));
                     template.Icon = File.ReadAllBytes(template.IconFilePath);
-                    template.ScreenshotFilePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(filePath, "screenshot.png"));
+                    template.ScreenshotFilePath = Path.GetFullPath(Path.Combine(filePath, "screenshot.png"));
                     template.Screenshot = File.ReadAllBytes(template.ScreenshotFilePath);
-                    template.ProjectFilePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(filePath, template.ProjectFile));
+                    template.ProjectFilePath = Path.GetFullPath(Path.Combine(filePath, template.ProjectFile));
 
                     _projectTemplates.Add(template);
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }

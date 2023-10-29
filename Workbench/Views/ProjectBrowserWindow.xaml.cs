@@ -17,9 +17,9 @@ namespace Workbench
     /// <summary>
     /// Interaction logic for ProjectBrowser.xaml
     /// </summary>
-    public partial class ProjectBrowser : Window
+    public partial class ProjectBrowserWindow : Window
     {
-        public ProjectBrowser()
+        public ProjectBrowserWindow()
         {
             InitializeComponent();
         }

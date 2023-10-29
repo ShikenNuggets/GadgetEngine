@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Workbench
 {
     /// <summary>
-    /// Interaction logic for OpenProjectController.xaml
+    /// Interaction logic for OpenProjectControl.xaml
     /// </summary>
-    public partial class OpenProjectController : UserControl
+    public partial class OpenProjectControl : UserControl
     {
-        public OpenProjectController()
+        public OpenProjectControl()
         {
             InitializeComponent();
         }
@@ -37,8 +37,8 @@ namespace Workbench
 
         private void OpenSelectedProject()
         {
-            var vm = DataContext as OpenProjectViewModel;
-            var project = OpenProjectViewModel.Open(projectsListBox.SelectedItem as ProjectData);
+            var vm = DataContext as OpenProjectVM;
+            var project = OpenProjectVM.Open(projectsListBox.SelectedItem as ProjectData);
 
             bool dialogResult = false;
             var wnd = Window.GetWindow(this);

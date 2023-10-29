@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Workbench
 {
     [DataContract]
-    public class SceneViewModel : BaseViewModel
+    public class SceneVM : BaseViewModel
     {
         private string _name;
         public string Name
@@ -25,7 +25,7 @@ namespace Workbench
             }
         }
 
-        public ProjectViewModel Project { get; private set; }
+        public ProjectVM Project { get; private set; }
 
         [DataMember] private bool _isActive;
         public bool IsActive
@@ -41,7 +41,7 @@ namespace Workbench
             }
         }
 
-        public SceneViewModel(ProjectViewModel project, string name)
+        public SceneVM(ProjectVM project, string name)
         {
             Debug.Assert(project != null);
             Debug.Assert(!string.IsNullOrWhiteSpace(name));

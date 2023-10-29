@@ -12,7 +12,7 @@ using System.Windows;
 namespace Workbench
 {
     [DataContract(Name = "Game")]
-    public class ProjectViewModel : BaseViewModel
+    public class ProjectVM : BaseViewModel
     {
         public static string Extension { get; } = ".wbn";
         public static string TempDir { get; } = $@".wbn\";
@@ -22,12 +22,12 @@ namespace Workbench
 
         public string FullPath => GetFullPath(Path, Name);
 
-        [DataMember(Name = "Scenes")] private ObservableCollection<SceneViewModel> _scenes = new ObservableCollection<SceneViewModel>();
-        [DataMember(Name = "ActiveScene")] private SceneViewModel _activeScene;
+        [DataMember(Name = "Scenes")] private ObservableCollection<SceneVM> _scenes = new ObservableCollection<SceneVM>();
+        [DataMember(Name = "ActiveScene")] private SceneVM _activeScene;
 
-        public ReadOnlyObservableCollection<SceneViewModel> Scenes { get; private set; }
+        public ReadOnlyObservableCollection<SceneVM> Scenes { get; private set; }
 
-        public SceneViewModel ActiveScene
+        public SceneVM ActiveScene
         {
             get => _activeScene;
             set
@@ -40,20 +40,20 @@ namespace Workbench
             }
         }
 
-        public static ProjectViewModel Current => Application.Current.MainWindow.DataContext as ProjectViewModel;
+        public static ProjectVM Current => Application.Current.MainWindow.DataContext as ProjectVM;
 
-        public static ProjectViewModel Load(string file)
+        public static ProjectVM Load(string file)
         {
             Debug.Assert(File.Exists(file));
-            return Serializer.FromFile<ProjectViewModel>(file);
+            return Serializer.FromFile<ProjectVM>(file);
         }
 
-        public static void Save(ProjectViewModel project)
+        public static void Save(ProjectVM project)
         {
             Serializer.ToFile(project, project.FullPath);
         }
 
-        private ProjectViewModel(string name, string path)
+        private ProjectVM(string name, string path)
         {
             Name = name;
             Path = path;
@@ -66,13 +66,13 @@ namespace Workbench
         {
             if (_scenes == null)
             {
-                _scenes = new ObservableCollection<SceneViewModel>
+                _scenes = new ObservableCollection<SceneVM>
                 {
-                    new SceneViewModel(this, "DefaultScene")
+                    new SceneVM(this, "DefaultScene")
                 };
             }
 
-            Scenes = new ReadOnlyObservableCollection<SceneViewModel>(_scenes);
+            Scenes = new ReadOnlyObservableCollection<SceneVM>(_scenes);
             OnPropertyChanged(nameof(Scenes));
 
             ActiveScene = Scenes.FirstOrDefault(x => x.IsActive);
