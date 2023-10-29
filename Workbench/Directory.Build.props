@@ -1,5 +1,0 @@
-<Project>
-  <PropertyGroup>
-	<BaseIntermediateOutputPath>..\Build\Intermediate\Workbench</BaseIntermediateOutputPath>
-  </PropertyGroup>
-</Project>
