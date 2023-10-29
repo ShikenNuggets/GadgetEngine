@@ -147,8 +147,7 @@ namespace Workbench{
 
             try
             {
-                var finalPathDir = Path.GetDirectoryName(finalPath);
-                Debug.Assert(finalPathDir != null);
+                Debug.Assert(finalPath != null);
 
                 if (Directory.Exists(finalPath))
                 {
@@ -159,7 +158,7 @@ namespace Workbench{
                 {
                     Debug.Assert(!string.IsNullOrWhiteSpace(folder));
 
-                    string folderPath = Path.GetFullPath(Path.Combine(finalPathDir, folder));
+                    string folderPath = Path.GetFullPath(Path.Combine(finalPath, folder));
                     Directory.CreateDirectory(folderPath);
 
                     var dirInfo = new DirectoryInfo(folderPath);
@@ -169,19 +168,30 @@ namespace Workbench{
                     }
                 }
 
-                List<string> filesToIgnore = new();
-                filesToIgnore.Add("template.xml");
-                filesToIgnore.Add("project.wbn");
+                List<string> filesToIgnore = new()
+                {
+                    "template.xml",
+                    template.ProjectFile,
+                    Path.GetFileName(template.IconFilePath),
+                    Path.GetFileName(template.ScreenshotFilePath)
+                };
 
                 Debug.Assert(!string.IsNullOrWhiteSpace(template.ProjectFilePath));
-                Utils.CopyDirectory(new FileInfo(template.ProjectFilePath).Directory.FullName, finalPathDir, true, filesToIgnore);
 
+                //Copy all files from the template to the new directory
+                Utils.CopyDirectory(new FileInfo(template.ProjectFilePath).Directory.FullName, finalPath, true, filesToIgnore);
+
+                //Copy the project file, with the new name and new information
                 var projectXml = File.ReadAllText(template.ProjectFilePath);
                 projectXml = string.Format(projectXml, ProjectName, ProjectPath);
-                var projectPath = ProjectViewModel.GetFullPath(finalPathDir, ProjectName);
+                var projectPath = ProjectViewModel.GetFullPath(finalPath, ProjectName);
                 File.WriteAllText(projectPath, projectXml);
 
-                return finalPathDir;
+                //Copy the Icon and Screenshot to the temp folder
+                File.Copy(template.IconFilePath, finalPath + ProjectViewModel.TempDir + Path.GetFileName(template.IconFilePath));
+                File.Copy(template.ScreenshotFilePath, finalPath + ProjectViewModel.TempDir + Path.GetFileName(template.ScreenshotFilePath));
+
+                return finalPath;
             }
             catch(Exception ex)
             {

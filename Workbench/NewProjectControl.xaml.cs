@@ -35,6 +35,11 @@ namespace Workbench
             if(!string.IsNullOrWhiteSpace(projectPath))
             {
                 dialogResult = true;
+                var project = OpenProjectViewModel.Open(new ProjectData(){ 
+                    ProjectName = vm.ProjectName, 
+                    ProjectPath = projectPath 
+                });
+                wnd.DataContext = project;
             }
 
             wnd.DialogResult = dialogResult;

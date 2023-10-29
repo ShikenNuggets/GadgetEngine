@@ -4,6 +4,7 @@
   <Path>{1}</Path>
   <Scenes>
     <SceneViewModel z:Id="i2">
+		<IsActive>true</IsActive>
 		<Name>DefaultScene</Name>
 		<Project z:Ref="i1"/>
 	</SceneViewModel>

@@ -24,5 +24,32 @@ namespace Workbench
         {
             InitializeComponent();
         }
+
+        private void OnOpen_Button_Click(object sender, RoutedEventArgs e)
+        {
+            OpenSelectedProject();
+        }
+
+        private void OnListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenSelectedProject();
+        }
+
+        private void OpenSelectedProject()
+        {
+            var vm = DataContext as OpenProjectViewModel;
+            var project = OpenProjectViewModel.Open(projectsListBox.SelectedItem as ProjectData);
+
+            bool dialogResult = false;
+            var wnd = Window.GetWindow(this);
+            if (project != null)
+            {
+                dialogResult = true;
+                wnd.DataContext = project;
+            }
+
+            wnd.DialogResult = dialogResult;
+            wnd.Close();
+        }
     }
 }

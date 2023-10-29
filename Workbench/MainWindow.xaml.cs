@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace Workbench
         {
             InitializeComponent();
             Loaded += OnMainWindowLoaded;
+            Closing += OnMainWindowClosing;
         }
 
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
@@ -32,13 +34,27 @@ namespace Workbench
             OpenProjectBrowser();
         }
 
+        private void OnMainWindowClosing(object? sender, CancelEventArgs e)
+        {
+            Closing -= OnMainWindowClosing;
+            ProjectViewModel.Current?.Unload();
+        }
+
         private void OpenProjectBrowser()
         {
             var projectBrowser = new ProjectBrowser();
-            if(projectBrowser.ShowDialog() == false){
+            if (projectBrowser.ShowDialog() == false || projectBrowser.DataContext == null)
+            {
                 Application.Current.Shutdown();
-            }else{
-                //TODO - Load project...
+            }
+            else
+            {
+                if(ProjectViewModel.Current != null) 
+                {
+                    ProjectViewModel.Current.Unload();
+                }
+
+                DataContext = projectBrowser.DataContext;
             }
         }
     }
