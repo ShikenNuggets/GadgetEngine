@@ -3,10 +3,10 @@
   <Name>{0}</Name>
   <Path>{1}</Path>
   <Scenes>
-    <SceneViewModel z:Id="i2">
+    <SceneVM z:Id="i2">
 		<IsActive>true</IsActive>
 		<Name>DefaultScene</Name>
 		<Project z:Ref="i1"/>
-	</SceneViewModel>
+	</SceneVM>
   </Scenes>
 </Game>

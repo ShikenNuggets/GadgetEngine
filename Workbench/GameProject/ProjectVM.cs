@@ -64,7 +64,7 @@ namespace Workbench
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            if (_scenes == null)
+            if (_scenes == null || _scenes.Count == 0)
             {
                 _scenes = new ObservableCollection<SceneVM>
                 {
@@ -76,6 +76,11 @@ namespace Workbench
             OnPropertyChanged(nameof(Scenes));
 
             ActiveScene = Scenes.FirstOrDefault(x => x.IsActive);
+            if (ActiveScene == null)
+            {
+                Scenes.First().IsActive = true;
+                ActiveScene = Scenes.First();
+            }
         }
 
         public void Unload()

@@ -11,7 +11,7 @@ namespace Workbench
     [DataContract]
     public class SceneVM : BaseViewModel
     {
-        private string _name;
+        [DataMember (Name="Name")] private string _name;
         public string Name
         {
             get => _name;
@@ -25,9 +25,9 @@ namespace Workbench
             }
         }
 
-        public ProjectVM Project { get; private set; }
+        [DataMember] public ProjectVM Project { get; private set; }
 
-        [DataMember] private bool _isActive;
+        [DataMember (Name="IsActive")] private bool _isActive;
         public bool IsActive
         {
             get => _isActive;
