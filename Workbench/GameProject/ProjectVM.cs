@@ -21,7 +21,7 @@ namespace Workbench
         [DataMember] public string Name { get; private set; } = "NewProject";
         [DataMember] public string Path { get; private set; }
 
-        public string FullPath => GetFullPath(Path, Name);
+        public string FullPath => GetFullPath(Path + $@"\{Name}", Name);
 
         [DataMember(Name = "Scenes")] private ObservableCollection<SceneVM> _scenes = new ObservableCollection<SceneVM>();
         [DataMember(Name = "ActiveScene")] private SceneVM _activeScene;
@@ -47,8 +47,9 @@ namespace Workbench
 
         public ICommand UndoCommand {  get; private set; }
         public ICommand RedoCommand {  get; private set; }
-        public ICommand AddScene {  get; private set; }
-        public ICommand RemoveScene {  get; private set; }
+        public ICommand SaveCommand {  get; private set; }
+        public ICommand AddSceneCommand {  get; private set; }
+        public ICommand RemoveSceneCommand {  get; private set; }
 
         private SceneVM AddSceneInternal(string sceneName)
         {
@@ -104,7 +105,7 @@ namespace Workbench
                 ActiveScene = Scenes.First();
             }
 
-            AddScene = new RelayCommand<object>(x =>
+            AddSceneCommand = new RelayCommand<object>(x =>
             {
                 var newScene = AddSceneInternal($"Scene{_scenes.Count}");
                 var sceneIndex = _scenes.IndexOf(newScene);
@@ -116,7 +117,7 @@ namespace Workbench
                 ));
             });
 
-            RemoveScene = new RelayCommand<SceneVM>(x =>
+            RemoveSceneCommand = new RelayCommand<SceneVM>(x =>
             {
                 var sceneIndex = _scenes.IndexOf(x);
                 RemoveSceneInternal(x);
@@ -130,6 +131,7 @@ namespace Workbench
 
             UndoCommand = new RelayCommand<object>(x => UndoRedo.Undo());
             RedoCommand = new RelayCommand<object>(x => UndoRedo.Redo());
+            SaveCommand = new RelayCommand<object>(x => Save(this));
         }
 
         public void Unload()

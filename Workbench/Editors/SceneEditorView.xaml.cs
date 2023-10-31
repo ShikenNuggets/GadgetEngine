@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,14 @@ namespace Workbench.Editors
         public SceneEditorView()
         {
             InitializeComponent();
+            Loaded += OnSceneEditorViewLoaded;
+        }
+
+        private void OnSceneEditorViewLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= OnSceneEditorViewLoaded;
+            Focus();
+            ((INotifyCollectionChanged)ProjectVM.UndoRedo.UndoList).CollectionChanged += (s, e) => Focus();
         }
     }
 }
