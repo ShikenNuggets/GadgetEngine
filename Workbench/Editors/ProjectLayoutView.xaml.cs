@@ -25,5 +25,19 @@ namespace Workbench.Editors
         {
             InitializeComponent();
         }
+
+        private void OnAddGameObject_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var vm = btn.DataContext as SceneVM;
+            vm.AddGameObjectCommand.Execute(new GameObjectVM(vm) { Name = "GameObject" + vm.GameObjects.Count});
+        }
+
+        private void OnGameObject_ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.Assert(sender is ListBox);
+            var gameObject = (sender as ListBox).SelectedItems[0];
+            GameObjectView.Instance.DataContext = gameObject;
+        }
     }
 }

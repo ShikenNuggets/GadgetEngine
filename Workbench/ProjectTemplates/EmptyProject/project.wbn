@@ -4,6 +4,7 @@
   <Path>{1}</Path>
   <Scenes>
     <SceneVM z:Id="i2">
+		<GameObjects />
 		<IsActive>true</IsActive>
 		<Name>DefaultScene</Name>
 		<Project z:Ref="i1"/>

@@ -8,7 +8,7 @@
              mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance Type=proj:ProjectVM, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="32"/>
 			<RowDefinition/>
@@ -29,12 +29,22 @@
 									<StackPanel Orientation="Horizontal">
 										<TextBlock Text="{Binding Name}"/>
 										<Button Content="Remove"
-												Command="{Binding DataContext.RemoveSceneCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+												Command="{Binding DataContext.RemoveSceneCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
 												CommandParameter="{Binding}" Margin="20,0" Focusable="False" />
+										<Button Content=" + " IsEnabled="{Binding IsActive}" Click="OnAddGameObject_Button_Click" />
 									</StackPanel>
 								</Grid>
 							</Expander.Header>
-							<Border Background="Blue" Height="100" />
+							<ListBox ItemsSource="{Binding GameObjects}" IsEnabled="{Binding IsActive}" SelectionMode="Extended" SelectionChanged="OnGameObject_ListBox_SelectionChanged">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="{Binding Name}" />
+											<Button Content=" X " Command="{Binding ParentScene.RemoveGameObjectCommand}" CommandParameter="{Binding}" Margin="5,0,0,0"/>
+										</StackPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
 						</Expander>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
