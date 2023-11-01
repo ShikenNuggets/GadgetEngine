@@ -26,12 +26,24 @@ namespace Workbench
         public void Undo() => _undoAction?.Invoke();
         public void Redo() => _redoAction?.Invoke();
 
-        public UndoRedoAction(string name,  Action undo, Action redo)
+        public UndoRedoAction(string name, Action undo, Action redo)
         {
             Debug.Assert(undo != null && redo != null);
             Name = name;
             _undoAction = undo;
             _redoAction = redo;
+        }
+
+        public UndoRedoAction(string name, string property, object instance, object undoValue, object redoValue)
+        {
+            Debug.Assert(instance != null);
+            Debug.Assert(!string.IsNullOrWhiteSpace(property));
+            Debug.Assert(instance.GetType().GetProperty(property) != null);
+            Debug.Assert(undoValue.GetType() == redoValue.GetType());
+
+            Name = name;
+            _undoAction = () => instance.GetType().GetProperty(property).SetValue(instance, undoValue);
+            _redoAction = () => instance.GetType().GetProperty(property).SetValue(instance, redoValue);
         }
     }
 

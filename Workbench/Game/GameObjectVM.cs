@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Workbench
 {
@@ -14,6 +15,7 @@ namespace Workbench
     public class GameObjectVM : BaseViewModel
     {
         private string _name;
+        private bool _isEnabled;
         [DataMember (Name = nameof(Components))] private ObservableCollection<ComponentVM> _components = new ObservableCollection<ComponentVM>();
 
         [DataMember] public string Name
@@ -28,9 +30,24 @@ namespace Workbench
                 }
             }
         }
+        [DataMember] public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    OnPropertyChanged(nameof(IsEnabled));
+                }
+            }
+        }
         [DataMember] public SceneVM ParentScene { get; private set; }
 
         public ReadOnlyObservableCollection<ComponentVM> Components { get; private set; }
+
+        public ICommand RenameCommand { get; private set; }
+        public ICommand EnableCommand {  get; private set; }
 
         public GameObjectVM(SceneVM scene)
         {
@@ -55,6 +72,23 @@ namespace Workbench
 
             Components = new ReadOnlyObservableCollection<ComponentVM>(_components);
             OnPropertyChanged(nameof(Components));
+
+            RenameCommand = new RelayCommand<string>(x =>
+            {
+                Debug.Assert(!string.IsNullOrEmpty(x));
+                var oldName = _name;
+                Name = x;
+
+                ProjectVM.UndoRedo.Add(new UndoRedoAction($"Rename GameObject '{oldName}' to '{x}'", nameof(Name), this, oldName, x));
+            }, x => x != _name);
+
+            EnableCommand = new RelayCommand<bool>(x =>
+            {
+                var oldValue = _isEnabled;
+                IsEnabled = x;
+
+                ProjectVM.UndoRedo.Add(new UndoRedoAction(x ? $"Enabled '{Name}'" : $"Disabled '{Name}'", nameof(IsEnabled), this, oldValue, x));
+            });
         }
     }
 }

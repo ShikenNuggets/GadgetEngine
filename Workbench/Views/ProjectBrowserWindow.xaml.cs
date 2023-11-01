@@ -22,6 +22,17 @@ namespace Workbench
         public ProjectBrowserWindow()
         {
             InitializeComponent();
+
+            Loaded += OnProjectBrowserDialogLoaded;
+        }
+
+        private void OnProjectBrowserDialogLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= OnProjectBrowserDialogLoaded;
+            if (!OpenProjectVM.Projects.Any())
+            {
+                OnToggleButton_Click(newProjectButton, new RoutedEventArgs());
+            }
         }
 
         private void OnToggleButton_Click(object sender, RoutedEventArgs e)
