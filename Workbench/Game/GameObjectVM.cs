@@ -15,7 +15,7 @@ namespace Workbench
     public class GameObjectVM : BaseViewModel
     {
         private string _name;
-        private bool _isEnabled;
+        private bool _isEnabled = true;
         [DataMember (Name = nameof(Components))] private ObservableCollection<ComponentVM> _components = new ObservableCollection<ComponentVM>();
 
         [DataMember] public string Name
@@ -79,7 +79,7 @@ namespace Workbench
                 var oldName = _name;
                 Name = x;
 
-                ProjectVM.UndoRedo.Add(new UndoRedoAction($"Rename GameObject '{oldName}' to '{x}'", nameof(Name), this, oldName, x));
+                ProjectVM.UndoRedo.Add(new UndoRedoAction($"Renamed GameObject '{oldName}' to '{x}'", nameof(Name), this, oldName, x));
             }, x => x != _name);
 
             EnableCommand = new RelayCommand<bool>(x =>

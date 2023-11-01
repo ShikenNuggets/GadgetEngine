@@ -94,7 +94,7 @@ namespace Workbench
                 var index = _gameObjects.IndexOf(x);
 
                 ProjectVM.UndoRedo.Add(new UndoRedoAction(
-                    $"Add GameObject {x.Name} to Scene {Name}",
+                    $"Added '{x.Name}' to Scene '{Name}'",
                     () => RemoveGameObject(x),
                     () => _gameObjects.Insert(index, x)
                 ));
@@ -107,7 +107,7 @@ namespace Workbench
                 RemoveGameObject(x);
 
                 ProjectVM.UndoRedo.Add(new UndoRedoAction(
-                    $"Remove GameObject {x.Name} from Scene {Name}",
+                    $"Removed '{x.Name}' from Scene '{Name}'",
                     () => _gameObjects.Insert(index, x),
                     () => RemoveGameObject(x)
                 ));

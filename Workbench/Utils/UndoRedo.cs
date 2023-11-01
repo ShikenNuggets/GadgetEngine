@@ -75,6 +75,8 @@ namespace Workbench
             {
                 _undoList.Add(cmd);
                 _redoList.Clear();
+
+                Logger.Log(MessageType.Verbose, cmd.Name);
             }
         }
 
@@ -88,6 +90,8 @@ namespace Workbench
                 cmd.Undo();
                 _canAddNewActions = true;
                 _redoList.Insert(0, cmd);
+
+                Logger.Log(MessageType.Verbose, "[Undo] " + cmd.Name);
             }
         }
 
@@ -101,6 +105,8 @@ namespace Workbench
                 cmd.Redo();
                 _canAddNewActions = true;
                 _undoList.Add(cmd);
+
+                Logger.Log(MessageType.Verbose, "[Redo] " + cmd.Name);
             }
         }
     }

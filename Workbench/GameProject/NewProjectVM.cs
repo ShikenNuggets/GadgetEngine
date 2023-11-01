@@ -197,6 +197,8 @@ namespace Workbench
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                Logger.Log(MessageType.Error, $"Failed to create new {template.ProjectType} project!");
+                throw;
             }
 
             return string.Empty;
@@ -230,6 +232,8 @@ namespace Workbench
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                Logger.Log(MessageType.Error, "Failed to read project templates!");
+                throw;
             }
 
             ValidateProjectPath();

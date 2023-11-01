@@ -21,7 +21,7 @@ namespace Workbench
         [DataMember] public string Name { get; private set; } = "NewProject";
         [DataMember] public string Path { get; private set; }
 
-        public string FullPath => GetFullPath(Path + $@"\{Name}", Name);
+        public string FullPath => GetFullPath(Path + $@"{Name}", Name);
 
         [DataMember(Name = "Scenes")] private ObservableCollection<SceneVM> _scenes = new ObservableCollection<SceneVM>();
         [DataMember(Name = "ActiveScene")] private SceneVM _activeScene;
@@ -74,6 +74,7 @@ namespace Workbench
         public static void Save(ProjectVM project)
         {
             Serializer.ToFile(project, project.FullPath);
+            Logger.Log(MessageType.Info, $"Project saved to {project.FullPath}");
         }
 
         private ProjectVM(string name, string path)
@@ -111,7 +112,7 @@ namespace Workbench
                 var sceneIndex = _scenes.IndexOf(newScene);
 
                 UndoRedo.Add(new UndoRedoAction(
-                    $"Add {newScene.Name}",
+                    $"Added '{newScene.Name}'",
                     () => RemoveSceneInternal(newScene), //Undo
                     () => _scenes.Insert(sceneIndex, newScene) //Redo
                 ));
@@ -123,7 +124,7 @@ namespace Workbench
                 RemoveSceneInternal(x);
 
                 UndoRedo.Add(new UndoRedoAction(
-                    $"Remove {x.Name}",
+                    $"Removed '{x.Name}'",
                     () => _scenes.Insert(sceneIndex, x),
                     () => RemoveSceneInternal(x)
                 ));
@@ -136,12 +137,12 @@ namespace Workbench
 
         public void Unload()
         {
-            //TODO
+            UndoRedo.Reset();
         }
 
         public static string GetFullPath(string path, string name)
         {
-            return $"{path}\\{name}{Extension}";
+            return $@"{path}\{name}{Extension}";
         }
     }
 }
