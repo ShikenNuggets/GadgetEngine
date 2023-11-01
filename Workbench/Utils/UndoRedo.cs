@@ -37,6 +37,8 @@ namespace Workbench
 
     public class UndoRedo
     {
+        private bool _canAddNewActions = true; //Used to prevent undoing/redoing *while* undoing/redoing
+
         private readonly ObservableCollection<IUndoRedo> _undoList = new ObservableCollection<IUndoRedo>();
         private readonly ObservableCollection<IUndoRedo> _redoList = new ObservableCollection<IUndoRedo>();
 
@@ -57,8 +59,11 @@ namespace Workbench
 
         public void Add(IUndoRedo cmd)
         {
-            _undoList.Add(cmd);
-            _redoList.Clear();
+            if (_canAddNewActions)
+            {
+                _undoList.Add(cmd);
+                _redoList.Clear();
+            }
         }
 
         public void Undo()
@@ -67,7 +72,9 @@ namespace Workbench
             {
                 var cmd = _undoList.Last();
                 _undoList.Remove(cmd);
+                _canAddNewActions = false;
                 cmd.Undo();
+                _canAddNewActions = true;
                 _redoList.Insert(0, cmd);
             }
         }
@@ -78,7 +85,9 @@ namespace Workbench
             {
                 var cmd = _redoList.First();
                 _redoList.Remove(cmd);
+                _canAddNewActions = false;
                 cmd.Redo();
+                _canAddNewActions = true;
                 _undoList.Add(cmd);
             }
         }
