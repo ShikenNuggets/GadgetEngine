@@ -51,7 +51,7 @@ namespace Workbench
                 return;
             }
 
-            var selectedItem = templateListBox.SelectedItems;
+            var selectedItem = templateListBox.SelectedItem;
             if (selectedItem == null || selectedItem is not ProjectTemplate)
             {
                 Logger.Log(MessageType.Warning, "Selected Item is not a valid ProjectTemplate!");

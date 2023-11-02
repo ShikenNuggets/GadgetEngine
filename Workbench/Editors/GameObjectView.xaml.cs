@@ -35,8 +35,10 @@ namespace Workbench.Editors
             Instance = this;
             DataContextChanged += (_, __) =>
             {
-                Debug.Assert(DataContext != null);
-                Debug.Assert(DataContext is MultiSelectedObjectVM);
+                if (DataContext == null)
+                {
+                    return;
+                }
 
                 var mso = DataContext as MultiSelectedObjectVM;
                 Debug.Assert(mso != null);
@@ -89,7 +91,7 @@ namespace Workbench.Editors
         private void OnName_TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             Debug.Assert(sender != null);
-            Debug.Assert(sender is CheckBox);
+            Debug.Assert(sender is TextBox);
             if (DataContext == null || DataContext is not MultiSelectedObjectVM)
             {
                 return;

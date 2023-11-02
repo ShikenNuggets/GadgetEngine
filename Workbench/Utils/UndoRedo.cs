@@ -36,14 +36,35 @@ namespace Workbench
 
         public UndoRedoAction(string name, string property, object instance, object undoValue, object redoValue)
         {
+            Debug.Assert(!string.IsNullOrWhiteSpace(name));
             Debug.Assert(instance != null);
             Debug.Assert(!string.IsNullOrWhiteSpace(property));
             Debug.Assert(instance.GetType().GetProperty(property) != null);
             Debug.Assert(undoValue.GetType() == redoValue.GetType());
 
+            if (instance == null)
+            {
+                Logger.Log(MessageType.Error, "Invalid UndoRedo action!");
+                throw new TypeInitializationException(nameof(UndoRedoAction), null);
+            }
+
             Name = name;
-            _undoAction = () => instance.GetType().GetProperty(property).SetValue(instance, undoValue);
-            _redoAction = () => instance.GetType().GetProperty(property).SetValue(instance, redoValue);
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                Logger.Log(MessageType.Warning, "Invalid name set for UndoRedoAction!");
+                Name = "Unnamed UndoRedoAction";
+            }
+
+            var prop = instance.GetType().GetProperty(property);
+            Debug.Assert(prop != null);
+            if (prop == null)
+            {
+                Logger.Log(MessageType.Error, "Invalid UndoRedo action!");
+                throw new TypeInitializationException(nameof(UndoRedoAction), null);
+            }
+
+            _undoAction = () => prop.SetValue(instance, undoValue);
+            _redoAction = () => prop.SetValue(instance, redoValue);
         }
     }
 

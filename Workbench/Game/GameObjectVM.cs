@@ -44,10 +44,12 @@ namespace Workbench
         }
         [DataMember] public SceneVM ParentScene { get; private set; }
 
-        public ReadOnlyObservableCollection<ComponentVM> Components { get; private set; }
+        public ReadOnlyObservableCollection<ComponentVM>? Components { get; private set; } = null;
 
         public GameObjectVM(SceneVM scene)
         {
+            _name = "GameObject";
+
             Debug.Assert(scene != null);
             ParentScene = scene;
             _components.Add(new TransformComponentVM(this));
@@ -110,9 +112,6 @@ namespace Workbench
 
         public List<GameObjectVM> SelectedObjects { get; private set; }
 
-        public ICommand RenameCommand { get; private set; }
-        public ICommand EnableCommand { get; private set; }
-
         public MultiSelectedObjectVM(List<GameObjectVM> objects)
         {
             Debug.Assert(objects != null && objects.Any() == true);
@@ -126,33 +125,30 @@ namespace Workbench
                     return;
                 }
 
+                Debug.Assert(e != null);
+                Debug.Assert(!string.IsNullOrWhiteSpace(e.PropertyName));
+
                 UpdateGameObjects(e.PropertyName);
             };
-
-            RenameCommand = new RelayCommand<string>(x =>
-            {
-                Debug.Assert(!string.IsNullOrEmpty(x));
-                var oldName = _name;
-                Name = x;
-
-                ProjectVM.UndoRedo.Add(new UndoRedoAction($"Renamed GameObject '{oldName}' to '{x}'", nameof(Name), this, oldName, x));
-            }, x => x != _name);
-
-            EnableCommand = new RelayCommand<bool>(x =>
-            {
-                var oldValue = _isEnabled;
-                IsEnabled = x;
-
-                ProjectVM.UndoRedo.Add(new UndoRedoAction(x ? $"Enabled '{Name}'" : $"Disabled '{Name}'", nameof(IsEnabled), this, oldValue, x));
-            });
         }
 
         protected virtual bool UpdateGameObjects(string propertyName)
         {
             switch (propertyName)
             {
-                case nameof(IsEnabled): SelectedObjects.ForEach(x => x.IsEnabled = IsEnabled.Value); return true;
-                case nameof(Name): SelectedObjects.ForEach(x => x.Name = Name); return true;
+                case nameof(IsEnabled):
+                    if (IsEnabled != null)
+                    {
+                        SelectedObjects.ForEach(x => x.IsEnabled = IsEnabled.Value);
+                    }
+                    return true;
+
+                case nameof(Name):
+                    if (Name != null)
+                    {
+                        SelectedObjects.ForEach(x => x.Name = Name);
+                    }
+                    return true;
             }
 
             return false;

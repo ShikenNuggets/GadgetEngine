@@ -55,8 +55,18 @@ namespace Workbench
         {
             FilteredMessages.Filter += (s, e) =>
             {
-                Debug.Assert(e != null && e.Item != null && e.Item is LogMessage);
-                var type = (int)(e.Item as LogMessage).MessageType;
+                Debug.Assert(e != null);
+                Debug.Assert(e.Item != null);
+                Debug.Assert(e.Item is LogMessage);
+
+                var logMessage = e.Item as LogMessage;
+                if (logMessage == null)
+                {
+                    Log(MessageType.Error, "");
+                    throw new ArgumentNullException(nameof(e.Item));
+                }
+
+                var type = (int)logMessage.MessageType;
                 e.Accepted = (type & _messageFilter) != 0;
             };
         }

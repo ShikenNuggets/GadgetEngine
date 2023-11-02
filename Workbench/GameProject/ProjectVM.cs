@@ -24,11 +24,11 @@ namespace Workbench
         public string FullPath => GetFullPath(Path + $@"{Name}", Name);
 
         [DataMember(Name = "Scenes")] private ObservableCollection<SceneVM> _scenes = new ObservableCollection<SceneVM>();
-        [DataMember(Name = "ActiveScene")] private SceneVM _activeScene;
+        [DataMember(Name = "ActiveScene")] private SceneVM? _activeScene;
 
         public ReadOnlyObservableCollection<SceneVM> Scenes { get; private set; }
 
-        public SceneVM ActiveScene
+        public SceneVM? ActiveScene
         {
             get => _activeScene;
             set
@@ -41,15 +41,15 @@ namespace Workbench
             }
         }
 
-        public static ProjectVM Current => Application.Current.MainWindow.DataContext as ProjectVM;
+        public static ProjectVM? Current => Application.Current.MainWindow.DataContext as ProjectVM;
 
         public static UndoRedo UndoRedo { get; private set; } = new UndoRedo();
 
-        public ICommand UndoCommand {  get; private set; }
-        public ICommand RedoCommand {  get; private set; }
-        public ICommand SaveCommand {  get; private set; }
-        public ICommand AddSceneCommand {  get; private set; }
-        public ICommand RemoveSceneCommand {  get; private set; }
+        public ICommand? UndoCommand {  get; private set; }
+        public ICommand? RedoCommand {  get; private set; }
+        public ICommand? SaveCommand {  get; private set; }
+        public ICommand? AddSceneCommand {  get; private set; }
+        public ICommand? RemoveSceneCommand {  get; private set; }
 
         private SceneVM AddSceneInternal(string sceneName)
         {
@@ -81,6 +81,8 @@ namespace Workbench
         {
             Name = name;
             Path = path;
+
+            Scenes = new ReadOnlyObservableCollection<SceneVM>(_scenes);
 
             OnDeserialized(new StreamingContext());
         }
@@ -125,6 +127,12 @@ namespace Workbench
 
             RemoveSceneCommand = new RelayCommand<SceneVM>(x =>
             {
+                Debug.Assert(x != null);
+                if (x == null)
+                {
+                    throw new ArgumentNullException(nameof(x), "Invalid argument in RemoveSceneCommand!");
+                }
+
                 var sceneIndex = _scenes.IndexOf(x);
                 RemoveSceneInternal(x);
 
@@ -133,7 +141,7 @@ namespace Workbench
                     () => _scenes.Insert(sceneIndex, x),
                     () => RemoveSceneInternal(x)
                 ));
-            }, x => !x.IsActive);
+            }, x => x != null && !x.IsActive);
 
             UndoCommand = new RelayCommand<object>(x => UndoRedo.Undo());
             RedoCommand = new RelayCommand<object>(x => UndoRedo.Redo());

@@ -13,20 +13,27 @@ namespace Workbench
     [DataContract]
     public class ProjectData
     {
-        [DataMember] public string ProjectName { get; set; }
-        [DataMember] public string ProjectPath { get; set; }
+        [DataMember] public string? ProjectName { get; set; }
+        [DataMember] public string? ProjectPath { get; set; }
         [DataMember] public DateTime LastOpened { get; set; }
 
-        public string FullPath { get => ProjectVM.GetFullPath(ProjectPath, ProjectName); }
+        public string FullPath {
+            get
+            {
+                Debug.Assert(!string.IsNullOrWhiteSpace(ProjectPath));
+                Debug.Assert(!string.IsNullOrWhiteSpace(ProjectName));
+                return ProjectVM.GetFullPath(ProjectPath, ProjectName);
+            }
+        }
 
-        public byte[] Icon { get; set; }
-        public byte[] Screenshot { get; set; }
+        public byte[]? Icon { get; set; }
+        public byte[]? Screenshot { get; set; }
     }
 
     [DataContract]
     public class ProjectDataList
     {
-        [DataMember] public List<ProjectData> Projects { get; set; }
+        [DataMember] public List<ProjectData> Projects { get; set; } = new List<ProjectData>();
     }
 
     public class OpenProjectVM : BaseViewModel

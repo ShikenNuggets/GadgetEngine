@@ -27,7 +27,7 @@ namespace Workbench
             }
         }
 
-        public static T? FromFile<T>(string path)
+        public static T FromFile<T>(string path)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Workbench
                 }
                 else
                 {
-                    return default;
+                    throw new FileLoadException("File could not be loaded!", path);
                 }
             }
             catch(Exception ex)

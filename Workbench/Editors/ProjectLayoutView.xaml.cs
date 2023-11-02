@@ -29,7 +29,7 @@ namespace Workbench.Editors
         private void OnAddGameObject_Button_Click(object sender, RoutedEventArgs e)
         {
             Debug.Assert(DataContext != null);
-            Debug.Assert(DataContext is SceneVM);
+            Debug.Assert(DataContext is ProjectVM);
             Debug.Assert(sender != null);
             Debug.Assert(sender is Button);
 
@@ -39,6 +39,7 @@ namespace Workbench.Editors
                 return;
             }
 
+            Debug.Assert(btn.DataContext is SceneVM);
             if (btn.DataContext is not SceneVM vm || vm.GameObjects == null)
             {
                 return;
@@ -71,11 +72,47 @@ namespace Workbench.Editors
                 "GameObject Selection Changed",
                 () => { //Undo
                     listBox.UnselectAll();
-                    previousSelection.ForEach(x => (listBox.ItemContainerGenerator.ContainerFromItem(x) as ListBoxItem).IsSelected = true);
+
+                    previousSelection.ForEach(x =>
+                    {
+                        var container = listBox.ItemContainerGenerator.ContainerFromItem(x);
+                        if (container == null || container is not ListBoxItem)
+                        {
+                            Logger.Log(MessageType.Warning, "Invalid ListBoxItem!");
+                            return;
+                        }
+
+                        var listBoxItem = container as ListBoxItem;
+                        if (listBoxItem == null)
+                        {
+                            Logger.Log(MessageType.Warning, "Invalid ListBoxItem!");
+                            return;
+                        }
+
+                        listBoxItem.IsSelected = true;
+                    });
                 },
                 () => { //Redo
                     listBox.UnselectAll();
-                    newSelection.ForEach(x => (listBox.ItemContainerGenerator.ContainerFromItem(x) as ListBoxItem).IsSelected = true);
+                    
+                    newSelection.ForEach(x =>
+                    {
+                        var container = listBox.ItemContainerGenerator.ContainerFromItem(x);
+                        if (container == null || container is not ListBoxItem)
+                        {
+                            Logger.Log(MessageType.Warning, "Invalid ListBoxItem!");
+                            return;
+                        }
+
+                        var listBoxItem = container as ListBoxItem;
+                        if (listBoxItem == null)
+                        {
+                            Logger.Log(MessageType.Warning, "Invalid ListBoxItem!");
+                            return;
+                        }
+
+                        listBoxItem.IsSelected = true;
+                    });
                 }
             ));
 
