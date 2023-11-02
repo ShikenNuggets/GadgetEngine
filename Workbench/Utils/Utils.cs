@@ -46,5 +46,11 @@ namespace Workbench
                 }
             }
         }
+
+        private static readonly float NearZero = float.MinValue;
+        public static bool IsNearZero(float s_) => s_ <= NearZero && s_ >= -NearZero;
+        public static bool IsNearZero(double s_) => s_ <= NearZero && s_ >= -NearZero;
+        public static bool Near(float a_, float b_) => IsNearZero(a_ - b_);
+        public static bool Near(double a_, double b_) => IsNearZero(a_ - b_);
     }
 }

@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Workbench
 {
+    public interface IMultiSelectComponent{}
+
     [DataContract]
-    public class ComponentVM : BaseViewModel
+    public abstract class ComponentVM : BaseViewModel
     {
         [DataMember] public GameObjectVM Owner { get; private set; }
 
@@ -19,4 +21,6 @@ namespace Workbench
             Owner = owner;
         }
     }
+
+    public abstract class MultiSelectComponentVM<T> : BaseViewModel, IMultiSelectComponent where T : ComponentVM{}
 }

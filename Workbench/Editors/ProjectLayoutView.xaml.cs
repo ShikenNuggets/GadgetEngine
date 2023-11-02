@@ -35,20 +35,15 @@ namespace Workbench.Editors
 
         private void OnGameObject_ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            GameObjectView.Instance.DataContext = null;
-
             if (sender == null)
             {
                 return;
             }
+
             Debug.Assert(sender is ListBox);
 
             var listBox = sender as ListBox;
             Debug.Assert(listBox != null);
-            if (e.AddedItems.Count > 0)
-            {
-                GameObjectView.Instance.DataContext = listBox.SelectedItems[0]; //TODO - This sucks
-            }
 
             var newSelection = listBox.SelectedItems.Cast<GameObjectVM>().ToList();
             var previousSelection = newSelection.Except(e.AddedItems.Cast<GameObjectVM>()).Concat(e.RemovedItems.Cast<GameObjectVM>()).ToList();
@@ -64,6 +59,13 @@ namespace Workbench.Editors
                     newSelection.ForEach(x => (listBox.ItemContainerGenerator.ContainerFromItem(x) as ListBoxItem).IsSelected = true);
                 }
             ));
+
+            MultiSelectedGameObjectVM msGo = null;
+            if (newSelection.Any())
+            {
+                msGo = new MultiSelectedGameObjectVM(newSelection);
+            }
+            GameObjectView.Instance.DataContext = msGo;
         }
     }
 }
