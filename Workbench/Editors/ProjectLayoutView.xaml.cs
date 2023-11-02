@@ -28,8 +28,22 @@ namespace Workbench.Editors
 
         private void OnAddGameObject_Button_Click(object sender, RoutedEventArgs e)
         {
-            var btn = sender as Button;
-            var vm = btn.DataContext as SceneVM;
+            Debug.Assert(DataContext != null);
+            Debug.Assert(DataContext is SceneVM);
+            Debug.Assert(sender != null);
+            Debug.Assert(sender is Button);
+
+            if (sender is not Button btn)
+            {
+                Logger.Log(MessageType.Warning, "Invalid sender for Button Click callback!");
+                return;
+            }
+
+            if (btn.DataContext is not SceneVM vm || vm.GameObjects == null)
+            {
+                return;
+            }
+
             vm.AddGameObjectCommand.Execute(new GameObjectVM(vm) { Name = "GameObject" + vm.GameObjects.Count});
         }
 
@@ -44,6 +58,11 @@ namespace Workbench.Editors
 
             var listBox = sender as ListBox;
             Debug.Assert(listBox != null);
+            if(listBox == null)
+            {
+                Logger.Log(MessageType.Warning, "Invalid sender for selection changed callback!");
+                return;
+            }
 
             var newSelection = listBox.SelectedItems.Cast<GameObjectVM>().ToList();
             var previousSelection = newSelection.Except(e.AddedItems.Cast<GameObjectVM>()).Concat(e.RemovedItems.Cast<GameObjectVM>()).ToList();
@@ -60,12 +79,17 @@ namespace Workbench.Editors
                 }
             ));
 
-            MultiSelectedGameObjectVM msGo = null;
+            MultiSelectedGameObjectVM? msGo = null;
             if (newSelection.Any())
             {
                 msGo = new MultiSelectedGameObjectVM(newSelection);
             }
-            GameObjectView.Instance.DataContext = msGo;
+
+            Debug.Assert(GameObjectView.Instance != null);
+            if (GameObjectView.Instance != null)
+            {
+                GameObjectView.Instance.DataContext = msGo;
+            }
         }
     }
 }

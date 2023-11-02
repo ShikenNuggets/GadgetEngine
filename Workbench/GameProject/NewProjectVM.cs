@@ -169,18 +169,34 @@ namespace Workbench
                     }
                 }
 
-                List<string> filesToIgnore = new()
+                string? templateIconFilePath = template.IconFilePath;
+                string? templateScreenshotFilePath = template.ScreenshotFilePath;
+                string? iconFileName = Path.GetFileName(template.IconFilePath);
+                string? screenshotFileName = Path.GetFileName(template.ScreenshotFilePath);
+
+                List<string?> filesToIgnore = new()
                 {
                     "template.xml",
                     template.ProjectFile,
-                    Path.GetFileName(template.IconFilePath),
-                    Path.GetFileName(template.ScreenshotFilePath)
+                    iconFileName,
+                    screenshotFileName
                 };
 
                 Debug.Assert(!string.IsNullOrWhiteSpace(template.ProjectFilePath));
+                if (string.IsNullOrWhiteSpace(template.ProjectFilePath) )
+                {
+                    throw new NullReferenceException(nameof(template.ProjectFilePath) + " was null");
+                }
+
+                var newDiretory = new FileInfo(template.ProjectFilePath).Directory;
+                Debug.Assert(newDiretory != null);
+                if (newDiretory == null )
+                {
+                    throw new NullReferenceException(nameof(newDiretory) + " was null");
+                }
 
                 //Copy all files from the template to the new directory
-                Utils.CopyDirectory(new FileInfo(template.ProjectFilePath).Directory.FullName, finalPath, true, filesToIgnore);
+                Utils.CopyDirectory(newDiretory.FullName, finalPath, true, filesToIgnore);
 
                 //Copy the project file, with the new name and new information
                 var projectXml = File.ReadAllText(template.ProjectFilePath);
@@ -189,8 +205,15 @@ namespace Workbench
                 File.WriteAllText(projectPath, projectXml);
 
                 //Copy the Icon and Screenshot to the temp folder
-                File.Copy(template.IconFilePath, finalPath + ProjectVM.TempDir + Path.GetFileName(template.IconFilePath));
-                File.Copy(template.ScreenshotFilePath, finalPath + ProjectVM.TempDir + Path.GetFileName(template.ScreenshotFilePath));
+                if(template.IconFilePath != null)
+                {
+                    File.Copy(template.IconFilePath, finalPath + ProjectVM.TempDir + Path.GetFileName(template.IconFilePath));
+                }
+
+                if (template.ScreenshotFilePath != null)
+                {
+                    File.Copy(template.ScreenshotFilePath, finalPath + ProjectVM.TempDir + Path.GetFileName(template.ScreenshotFilePath));
+                }
 
                 return finalPath;
             }
@@ -200,8 +223,6 @@ namespace Workbench
                 Logger.Log(MessageType.Error, $"Failed to create new {template.ProjectType} project!");
                 throw;
             }
-
-            return string.Empty;
         }
 
         public NewProjectVM()
@@ -218,6 +239,11 @@ namespace Workbench
                     Debug.Assert(!string.IsNullOrWhiteSpace(filePath));
 
                     var template = Serializer.FromFile<ProjectTemplate>(file);
+                    if (template == null)
+                    {
+                        Logger.Log(MessageType.Error, $"An error occured while deserializing {file}!");
+                        throw new SerializationException($"An error occured while deserializing {file}!");
+                    }
 
                     template.IconFilePath = Path.GetFullPath(Path.Combine(filePath, "icon.png"));
                     template.Icon = File.ReadAllBytes(template.IconFilePath);

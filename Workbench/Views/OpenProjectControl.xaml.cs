@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,8 +47,38 @@ namespace Workbench
 
         private void OpenSelectedProject()
         {
+            Debug.Assert(DataContext != null);
+            Debug.Assert(DataContext is OpenProjectVM);
+
             var vm = DataContext as OpenProjectVM;
-            var project = OpenProjectVM.Open(projectsListBox.SelectedItem as ProjectData);
+            Debug.Assert(vm != null);
+            if (vm == null)
+            {
+                Logger.Log(MessageType.Error, "DataContext could not be converted to OpenProjectVM!");
+                return;
+            }
+
+            if (projectsListBox == null || projectsListBox.SelectedItems.Count == 0)
+            {
+                Logger.Log(MessageType.Warning, "Open button clicked while no project templates are selected!");
+                return;
+            }
+
+            var selectedItem = projectsListBox.SelectedItem;
+            if (selectedItem == null || selectedItem is not ProjectData)
+            {
+                Logger.Log(MessageType.Warning, "Selected Item is not a valid ProjectData!");
+                return;
+            }
+            var projectData = selectedItem as ProjectData;
+            Debug.Assert(projectData != null);
+            if (projectData == null)
+            {
+                Logger.Log(MessageType.Error, "Selected Item could not be converted to ProjectData!");
+                return;
+            }
+
+            var project = OpenProjectVM.Open(projectData);
 
             bool dialogResult = false;
             var wnd = Window.GetWindow(this);

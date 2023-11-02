@@ -41,7 +41,13 @@ namespace Workbench
         {
             if (File.Exists(_projectDataPath))
             {
-                var projects = Serializer.FromFile<ProjectDataList>(_projectDataPath).Projects.OrderByDescending(x => x.LastOpened);
+                var projectDataList = Serializer.FromFile<ProjectDataList>(_projectDataPath);
+                if (projectDataList == null)
+                {
+                    return;
+                }
+
+                var projects = projectDataList.Projects.OrderByDescending(x => x.LastOpened);
                 _projects.Clear();
                 foreach (var project in projects)
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,8 +28,44 @@ namespace Workbench
 
         private void OnCreate_Button_Click(object sender, RoutedEventArgs e)
         {
+            Debug.Assert(DataContext != null);
+            Debug.Assert(DataContext is NewProjectVM);
+
+            if(DataContext == null)
+            {
+                Logger.Log(MessageType.Warning, "Create button clicked with no DataContext!");
+                return;
+            }
+
             var vm = DataContext as NewProjectVM;
-            var projectPath = vm.CreateProject(templateListBox.SelectedItem as ProjectTemplate);
+            Debug.Assert(vm != null);
+            if(vm == null)
+            {
+                Logger.Log(MessageType.Error, "DataContext could not be converted to NewProjectVM!");
+                return;
+            }
+
+            if (templateListBox == null || templateListBox.SelectedItems.Count == 0)
+            {
+                Logger.Log(MessageType.Warning, "Create button clicked while no project templates are selected!");
+                return;
+            }
+
+            var selectedItem = templateListBox.SelectedItems;
+            if (selectedItem == null || selectedItem is not ProjectTemplate)
+            {
+                Logger.Log(MessageType.Warning, "Selected Item is not a valid ProjectTemplate!");
+                return;
+            }
+            var projectTemplate = selectedItem as ProjectTemplate;
+            Debug.Assert(projectTemplate != null);
+            if (projectTemplate == null)
+            {
+                Logger.Log(MessageType.Error, "Selected Item could not be converted to ProjectTemplate!");
+                return;
+            }
+
+            var projectPath = vm.CreateProject(projectTemplate);
 
             bool dialogResult = false;
             var wnd = Window.GetWindow(this);

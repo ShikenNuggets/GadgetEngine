@@ -13,7 +13,7 @@ namespace Workbench
         private readonly Action<T?> _execute;
         private readonly Predicate<T?>? _canExecute;
 
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove {  CommandManager.RequerySuggested -= value; }

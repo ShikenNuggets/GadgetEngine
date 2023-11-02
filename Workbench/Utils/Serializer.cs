@@ -27,13 +27,21 @@ namespace Workbench
             }
         }
 
-        public static T FromFile<T>(string path)
+        public static T? FromFile<T>(string path)
         {
             try
             {
                 using var fs = new FileStream(path, FileMode.Open);
                 var serializer = new DataContractSerializer(typeof(T));
-                return (T)serializer.ReadObject(fs);
+                var serializedObject = serializer.ReadObject(fs);
+                if (serializedObject != null)
+                {
+                    return (T)serializedObject;
+                }
+                else
+                {
+                    return default;
+                }
             }
             catch(Exception ex)
             {

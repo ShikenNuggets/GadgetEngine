@@ -13,7 +13,10 @@ namespace Workbench
     [DataContract]
     public class SceneVM : BaseViewModel
     {
-        [DataMember (Name="Name")] private string _name;
+        [DataMember (Name="Name")] private string _name = "Scene";
+        [DataMember(Name = "IsActive")] private bool _isActive;
+        [DataMember(Name = nameof(GameObjects))] private ObservableCollection<GameObjectVM> _gameObjects = new ObservableCollection<GameObjectVM>();
+
         public string Name
         {
             get => _name;
@@ -26,10 +29,7 @@ namespace Workbench
                 }
             }
         }
-
         [DataMember] public ProjectVM Project { get; private set; }
-
-        [DataMember (Name="IsActive")] private bool _isActive;
         public bool IsActive
         {
             get => _isActive;
@@ -43,11 +43,10 @@ namespace Workbench
             }
         }
 
-        [DataMember (Name = nameof(GameObjects))] private ObservableCollection<GameObjectVM> _gameObjects = new ObservableCollection<GameObjectVM>();
-        public ReadOnlyObservableCollection<GameObjectVM> GameObjects { get; private set; }
+        public ReadOnlyObservableCollection<GameObjectVM>? GameObjects { get; private set; } = null;
 
-        public ICommand AddGameObjectCommand {  get; private set; }
-        public ICommand RemoveGameObjectCommand {  get; private set; }
+        public ICommand AddGameObjectCommand { get; private set; } = new RelayCommand<object>((x) => { });
+        public ICommand RemoveGameObjectCommand {  get; private set; } = new RelayCommand<object>((x) => { });
 
         public SceneVM(ProjectVM project, string name)
         {
@@ -78,9 +77,11 @@ namespace Workbench
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
+            Debug.Assert(_gameObjects != null);
             if (_gameObjects == null)
             {
                 //TODO - Indicate some kind of "corrupted project" error to the user
+                Logger.Log(MessageType.Error, $"GameObjects in scene '{Name}' were not deserialized correctly!");
                 _gameObjects = new ObservableCollection<GameObjectVM>();
             }
 

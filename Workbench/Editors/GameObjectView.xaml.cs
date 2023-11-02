@@ -21,8 +21,8 @@ namespace Workbench.Editors
     /// </summary>
     public partial class GameObjectView : UserControl
     {
-        private Action _undoAction;
-        private string _propertyName;
+        private Action? _undoAction = null;
+        private string? _propertyName = null;
 
         public static GameObjectView? Instance { get; private set; }
 
@@ -35,8 +35,15 @@ namespace Workbench.Editors
             Instance = this;
             DataContextChanged += (_, __) =>
             {
-                Debug.Assert(DataContext != null && DataContext is MultiSelectedObjectVM);
-                (DataContext as MultiSelectedObjectVM).PropertyChanged += (s, e) => _propertyName = e.PropertyName;
+                Debug.Assert(DataContext != null);
+                Debug.Assert(DataContext is MultiSelectedObjectVM);
+
+                var mso = DataContext as MultiSelectedObjectVM;
+                Debug.Assert(mso != null);
+                if (mso != null)
+                {
+                   mso.PropertyChanged += (s, e) => _propertyName = e.PropertyName;
+                }
             };
         }
 
@@ -81,6 +88,8 @@ namespace Workbench.Editors
 
         private void OnName_TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
+            Debug.Assert(sender != null);
+            Debug.Assert(sender is CheckBox);
             if (DataContext == null || DataContext is not MultiSelectedObjectVM)
             {
                 return;
@@ -89,6 +98,13 @@ namespace Workbench.Editors
             if (_propertyName == nameof(MultiSelectedObjectVM.Name) && _undoAction != null)
             {
                 var vm = DataContext as MultiSelectedObjectVM;
+                Debug.Assert(vm != null);
+                if (vm == null)
+                {
+                    Logger.Log(MessageType.Error, "DataContext could not be converted to MultiSelectedObjectVM!");
+                    return;
+                }
+
                 var numSelectedObjs = vm.SelectedObjects.Count;
 
                 var redoAction = GetRenameAction();
@@ -100,11 +116,32 @@ namespace Workbench.Editors
 
         private void OnIsEnabled_Checkbox_Click(object sender, RoutedEventArgs e)
         {
+            Debug.Assert(sender != null);
+            Debug.Assert(sender is CheckBox);
+            if (DataContext == null || DataContext is not MultiSelectedObjectVM)
+            {
+                return;
+            }
+
             var vm = DataContext as MultiSelectedObjectVM;
+            Debug.Assert(vm != null);
+            if (vm == null)
+            {
+                Logger.Log(MessageType.Error, "DataContext could not be converted to MultiSelectedObjectVM!");
+                return;
+            }
+
+            var checkbox = sender as CheckBox;
+            if (checkbox == null)
+            {
+                Logger.Log(MessageType.Error, "Sender was not a valid CheckBox!");
+                return;
+            }
+
             var numSelectedObjs = vm.SelectedObjects.Count;
 
             var undoAction = GetIsEnabledAction();
-            vm.IsEnabled = (sender as CheckBox).IsChecked == true;
+            vm.IsEnabled = checkbox.IsChecked == true;
             var redoAction = GetIsEnabledAction();
 
             string msg = $"Enabled {numSelectedObjs} GameObject";
