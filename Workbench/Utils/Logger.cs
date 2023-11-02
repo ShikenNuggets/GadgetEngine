@@ -30,7 +30,7 @@ namespace Workbench
         public string Caller { get; }
         public int Line { get; }
 
-        public string MetaData => $"{File}: {Caller}: {MetaData}:";
+        public string MetaData => $"{File}:{Caller} ({Line})";
 
         public LogMessage(MessageType type, string message, string file, string caller, int line)
         {

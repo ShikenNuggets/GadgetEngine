@@ -88,6 +88,11 @@ namespace Workbench
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
+            Logger.Log(MessageType.Verbose, "Verbose");
+            Logger.Log(MessageType.Info, "Info");
+            Logger.Log(MessageType.Warning, "Warning");
+            Logger.Log(MessageType.Error, "Error");
+
             if (_scenes == null || _scenes.Count == 0)
             {
                 _scenes = new ObservableCollection<SceneVM>
