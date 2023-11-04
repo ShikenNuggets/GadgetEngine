@@ -11,6 +11,7 @@ namespace Gadget{
 		virtual ~PointLightComponent() override{}
 
 		static PointLightComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+		static std::vector<PointLightComponent*> GetComponents(GUID objectGuid_){ return componentCollection.GetComponents(objectGuid_); }
 
 		const PointLight& GetLightSource() const{ return lightSource; }
 

@@ -11,6 +11,7 @@ namespace Gadget{
 		virtual ~CameraComponent() override;
 
 		static CameraComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+		static std::vector<CameraComponent*> GetComponents(GUID objectGuid_){ return componentCollection.GetComponents(objectGuid_); }
 
 		Matrix4 GetUpdatedViewMatrix();
 		Matrix4 GetUpdatedProjectionMatrix();

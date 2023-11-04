@@ -51,15 +51,21 @@ namespace Gadget{
 		static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
 
 		private:
-			std::map<GUID, T*> guidMap;
+			std::map<GUID, std::vector<T*>> guidMap;
 
 		public:
 			ComponentCollection(){}
 
 			void Add(T* element_){
-				static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
 				GADGET_BASIC_ASSERT(element_ != nullptr);
-				guidMap.emplace(element_->GetParent()->GetGUID(), element_);
+				GADGET_BASIC_ASSERT(element_->GetParent() != nullptr);
+
+				GUID objectGuid = element_->GetParent()->GetGUID();
+				if(Utils::ContainsKey(guidMap, objectGuid)){
+					guidMap.at(objectGuid).push_back(element_);
+				}else{
+					guidMap.emplace(element_->GetParent()->GetGUID(), std::vector<T*>{ element_ });
+				}
 			}
 
 			void Remove(GUID objectGuid_){
@@ -67,20 +73,28 @@ namespace Gadget{
 			}
 
 			void Remove(T* element_){
-				GADGET_BASIC_ASSERT(Utils::ContainsValue(guidMap, element_));
-				for(const auto& e : guidMap){
-					if(e.second == element_){
-						guidMap.erase(e.first);
-						return;
-					}
-				}
+				GADGET_BASIC_ASSERT(element_ != nullptr);
+				GADGET_BASIC_ASSERT(element_->GetParent() != nullptr);
+				GADGET_BASIC_ASSERT(Utils::ContainsKey(guidMap, element_->GetParent()->GetGUID()));
 
-				return;
+				auto& vec = guidMap.at(element_->GetParent()->GetGUID());
+				vec.erase(std::remove(vec.begin(), vec.end(), nullptr), vec.end());
+				if(vec.empty()){
+					Remove(element_->GetParent()->GetGUID());
+				}
 			}
 
 			T* Get(GUID objectGuid_) const{
-				return nullptr;
-				return Utils::GetValue(guidMap, objectGuid_);
+				const auto& vec = guidMap.at(objectGuid_);
+				if(vec.empty()){
+					return nullptr;
+				}
+
+				return vec.front();
+			}
+
+			std::vector<T*> GetComponents(GUID objectGuid_) const{
+				return guidMap.at(objectGuid_);
 			}
 	};
 }

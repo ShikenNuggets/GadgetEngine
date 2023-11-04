@@ -20,7 +20,8 @@ namespace Gadget{
 		Collider(GameObject* parent_, ColliderShape shape_, bool isTrigger_);
 		virtual ~Collider();
 
-		Collider* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+		static Collider* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+		static std::vector<Collider*> GetComponents(GUID objectGuid_){ return componentCollection.GetComponents(objectGuid_); }
 
 		virtual void OnActivated() override;
 		virtual void OnTransformModified() override;

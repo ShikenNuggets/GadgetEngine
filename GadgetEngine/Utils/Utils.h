@@ -37,17 +37,6 @@ namespace Gadget{
 			return false;
 		}
 
-		template <class T, class Y>
-		inline constexpr Y GetValue(const std::map<T, Y>& container_, const T& key_){
-			static_assert(std::is_pointer<Y>::value);
-			auto it = container_.find(key_);
-			if(it != container_.end()){
-				return container_.at(key_);
-			}
-
-			return nullptr;
-		}
-
 		//----------Strings----------//
 		//TODO - Nothing here makes any considerations for Unicode
 		inline bool ContainsChar(const std::string& str_, char char_){

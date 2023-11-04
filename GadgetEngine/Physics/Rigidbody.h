@@ -23,7 +23,8 @@ namespace Gadget{
 		Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_ = FreezeRotationType::None);
 		~Rigidbody();
 
-		Rigidbody* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+		static Rigidbody* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+		static std::vector<Rigidbody*> GetComponents(GUID objectGuid_){ return componentCollection.GetComponents(objectGuid_); }
 
 		void Update(float deltaTime_);
 
