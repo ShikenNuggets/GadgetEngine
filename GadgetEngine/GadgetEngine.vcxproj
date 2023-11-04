@@ -256,6 +256,7 @@
     <ClInclude Include="ScreenCoordinate.h" />
     <ClInclude Include="Serializers\ResourceContainerSerializer.h" />
     <ClInclude Include="Utils\ByteSequencer.h" />
+    <ClInclude Include="Utils\GUID.h" />
     <ClInclude Include="Utils\Hash.h" />
     <ClInclude Include="Utils\StringID.h" />
     <ClInclude Include="Utils\Utils.h" />
@@ -324,6 +325,7 @@
     <ClCompile Include="Platform\Windows\Win32_Window.cpp" />
     <ClCompile Include="Resource\ResourceManager.cpp" />
     <ClCompile Include="Utils\ByteSequencer.cpp" />
+    <ClCompile Include="Utils\GUID.cpp" />
     <ClCompile Include="Utils\StringID.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

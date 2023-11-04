@@ -2,6 +2,7 @@
 #define GADGET_SCENE_COMPONENT_H
 
 #include "Debug.h"
+#include "Utils/GUID.h"
 
 namespace Gadget{
 	//Forward declaration
@@ -9,14 +10,16 @@ namespace Gadget{
 
 	class SceneComponent{
 	public:
-		SceneComponent(Scene* parent_) : parent(parent_){ GADGET_BASIC_ASSERT(parent_ != nullptr); }
+		SceneComponent(Scene* parent_) : guid(GUID::Generate()), parent(parent_){ GADGET_BASIC_ASSERT(parent_ != nullptr); }
 		virtual ~SceneComponent(){}
 
 		virtual void OnUpdate([[maybe_unused]] float deltaTime_){}
 
+		GUID GetGUID() const{ return guid; }
 		const Scene* GetParent() const{ return parent; }
 
 	protected:
+		GUID guid;
 		Scene* parent;
 	};
 }

@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include "SceneComponent.h"
+#include "Utils/GUID.h"
 
 namespace Gadget{
 	class Scene{
@@ -15,6 +16,7 @@ namespace Gadget{
 
 		void Update(float deltaTime_);
 
+		GUID GetGUID() const{ return guid; }
 		StringID GetName() const{ return name; }
 
 		GameObject* FindWithTag(StringID tag_);
@@ -69,6 +71,7 @@ namespace Gadget{
 	protected:
 		friend class BasicSceneManager;
 
+		GUID guid;
 		StringID name;
 		std::vector<GameObject*> gameObjects;
 		std::vector<SceneComponent*> sceneComponents;

@@ -6,6 +6,7 @@
 #include "Math/Matrix.h"
 #include "Math/Quaternion.h"
 #include "Math/Vector.h"
+#include "Utils/GUID.h"
 
 namespace Gadget{
 	struct Transform{
@@ -27,6 +28,8 @@ namespace Gadget{
 		void Update(float deltaTime_);
 
 		void AddComponent(Component* component_);
+
+		GUID GetGUID() const{ return guid; }
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
 		template <class T> T* GetComponent() const{
@@ -95,6 +98,7 @@ namespace Gadget{
 		static std::vector<GameObject*> FindObjectsWithTag(StringID tag_);
 
 	protected:
+		GUID guid;
 		StringID name;
 		std::vector<StringID> tags;
 		Transform transform;

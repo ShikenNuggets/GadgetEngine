@@ -361,6 +361,9 @@
     <ClInclude Include="Utils\ByteSequencer.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\GUID.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Utils\Hash.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -545,6 +548,9 @@
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="Utils\ByteSequencer.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\GUID.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\StringID.cpp">

@@ -15,9 +15,9 @@ Matrix4 Transform::GetTransformMatrix() const{
 	return (positionMatrix * (rotationMatrix * scaleMatrix));
 }
 
-GameObject::GameObject(StringID name_) : transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), components(), name(name_){}
+GameObject::GameObject(StringID name_) : guid(GUID::Generate()), transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), components(), name(name_){}
 
-void GameObject::Update(float deltaTime_){
+void GameObject::Update([[maybe_unused]] float deltaTime_){
 	for(const auto& component : components){
 		//TODO - There is probably a better approach to this than checking every component every frame...
 		if(!component->IsActivated()){

@@ -3,6 +3,7 @@
 
 #include "Debug.h"
 #include "Math/Quaternion.h"
+#include "Utils/GUID.h"
 
 namespace Gadget{
 	//Forward Declarations
@@ -11,7 +12,7 @@ namespace Gadget{
 
 	class Component{
 	public:
-		Component(GameObject* parent_) : parent(parent_), isActivated(false){ GADGET_BASIC_ASSERT(parent_ != nullptr); }
+		Component(GameObject* parent_) : guid(GUID::Generate()), parent(parent_), isActivated(false){ GADGET_BASIC_ASSERT(parent_ != nullptr); }
 		virtual ~Component(){}
 
 		//Runs the first frame that the object is activated
@@ -22,6 +23,7 @@ namespace Gadget{
 		//Runs when the parent GameObject's transform is modified (i.e. translated, rotated, scale set to a new value)
 		virtual void OnTransformModified(){}
 
+		GUID GetGUID() const{ return guid; }
 		GameObject* GetParent() const{ return parent; }
 		bool IsActivated() const{ return isActivated; }
 
@@ -37,6 +39,7 @@ namespace Gadget{
 		Matrix4 GetTransformMatrix() const;
 
 	protected:
+		GUID guid;
 		GameObject* parent;
 		bool isActivated;
 	};
