@@ -34,7 +34,10 @@ namespace Gadget{
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
 		template <class T> T* GetComponent() const{
 			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
-			T* comp = nullptr;
+			T* comp = dynamic_cast<T*>(T::Get(GetGUID())); //This dynamic_cast looks unnecessary but it ensures that this plays nice with the whole class hierarchy
+			if(comp != nullptr){
+				return comp;
+			}
 
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
@@ -49,9 +52,15 @@ namespace Gadget{
 		}
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the results when possible
-		template <class T> std::vector<T*> GetComponents() const{
+		//Unlike GetComponent, this function won't play nice with the whole class hierarchy
+		//If the Component subclass you're trying to use doesn't have a ComponentCollection, you'll need to either give it one or dynamic_cast these yourself
+		template <class T>
+		std::vector<T*> GetComponents() const{
 			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
-			std::vector<T*> comps;
+			std::vector<T*> comps = T::GetComponents(guid);
+			if(!comps.empty()){
+				return comps;
+			}
 
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis

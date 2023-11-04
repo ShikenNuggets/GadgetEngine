@@ -17,6 +17,7 @@ namespace Gadget{
 		}
 
 		static GameLogicComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+		static std::vector<GameLogicComponent*> GetComponents(GUID objectGuid_){ return componentCollection.GetComponents(objectGuid_); }
 
 		virtual void OnStart(){ hasStarted = true; }
 		virtual void OnUpdate([[maybe_unused]] float deltaTime_){}

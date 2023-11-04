@@ -85,6 +85,10 @@ namespace Gadget{
 			}
 
 			T* Get(GUID objectGuid_) const{
+				if(!Utils::ContainsKey(guidMap, objectGuid_)){
+					return nullptr;
+				}
+
 				const auto& vec = guidMap.at(objectGuid_);
 				if(vec.empty()){
 					return nullptr;
@@ -94,6 +98,10 @@ namespace Gadget{
 			}
 
 			std::vector<T*> GetComponents(GUID objectGuid_) const{
+				if(!Utils::ContainsKey(guidMap, objectGuid_)){
+					return std::vector<T*>();
+				}
+
 				return guidMap.at(objectGuid_);
 			}
 	};
