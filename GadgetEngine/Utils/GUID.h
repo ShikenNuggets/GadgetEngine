@@ -12,15 +12,33 @@ namespace Gadget{
 
 		uint64_t id;
 
+	public:
 		GUID(uint64_t id_) : id(id_){}
 
-	public:
-		inline constexpr bool operator==(const GUID& uuid_){
-			return id == uuid_.id;
+		uint64_t Id() const{ return id; }
+
+		inline constexpr bool operator==(const GUID& guid_) const{
+			return id == guid_.id;
 		}
 
-		inline constexpr bool operator!=(const GUID& uuid_){
-			return id != uuid_.id;
+		inline constexpr bool operator!=(const GUID& guid_) const{
+			return id != guid_.id;
+		}
+
+		inline constexpr bool operator<(const GUID& guid_) const{
+			return id < guid_.id;
+		}
+
+		inline constexpr bool operator<=(const GUID& guid_) const{
+			return id <= guid_.id;
+		}
+
+		inline constexpr bool operator>(const GUID& guid_) const{
+			return id > guid_.id;
+		}
+
+		inline constexpr bool operator >=(const GUID& guid_) const{
+			return id >= guid_.id;
 		}
 
 		static GUID Generate(){

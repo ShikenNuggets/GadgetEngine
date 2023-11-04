@@ -4,14 +4,20 @@
 
 using namespace Gadget;
 
+ComponentCollection<CameraComponent> CameraComponent::componentCollection = ComponentCollection<CameraComponent>();
+
 CameraComponent::CameraComponent(GameObject* parent_, Camera::Projection projection_, const Rect& viewRect_) : Component(parent_){
 	camera = Camera(parent->GetPosition(), parent->GetRotation(), projection_, viewRect_);
 	lastPosition = parent->GetPosition();
 	lastRotation = parent->GetRotation();
 	lastAspect = App::GetAspectRatio();
+
+	componentCollection.Add(this);
 }
 
-CameraComponent::~CameraComponent(){}
+CameraComponent::~CameraComponent(){
+	componentCollection.Remove(this);
+}
 
 Matrix4 CameraComponent::GetUpdatedViewMatrix(){
 	if(!lastPosition.IsNear(parent->GetPosition()) || !lastRotation.IsNear(parent->GetRotation())){

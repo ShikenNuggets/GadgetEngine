@@ -7,8 +7,16 @@
 namespace Gadget{
 	class GameLogicComponent : public Component{
 	public:
-		GameLogicComponent(GameObject* parent_) : Component(parent_), hasStarted(false), collisionsToHandle(){}
-		virtual ~GameLogicComponent() override{ OnDestroy(); }
+		GameLogicComponent(GameObject* parent_) : Component(parent_), hasStarted(false), collisionsToHandle(){
+			componentCollection.Add(this);
+		}
+
+		virtual ~GameLogicComponent() override{
+			OnDestroy();
+			componentCollection.Remove(this);
+		}
+
+		static GameLogicComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
 
 		virtual void OnStart(){ hasStarted = true; }
 		virtual void OnUpdate([[maybe_unused]] float deltaTime_){}
@@ -32,6 +40,8 @@ namespace Gadget{
 	private:
 		bool hasStarted;
 		std::queue<Collision> collisionsToHandle;
+
+		static ComponentCollection<GameLogicComponent> componentCollection;
 	};
 }
 

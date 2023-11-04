@@ -23,6 +23,8 @@ namespace Gadget{
 		Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_ = FreezeRotationType::None);
 		~Rigidbody();
 
+		Rigidbody* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+
 		void Update(float deltaTime_);
 
 		//Apply a force in Newtons
@@ -55,6 +57,8 @@ namespace Gadget{
 		FreezeRotationType freezeRotation;
 
 		btRigidBody* bulletRb;
+
+		static ComponentCollection<Rigidbody> componentCollection;
 	};
 }
 

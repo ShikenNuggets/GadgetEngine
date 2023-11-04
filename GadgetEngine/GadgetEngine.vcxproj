@@ -275,11 +275,13 @@
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Game\BasicSceneManager.cpp" />
     <ClCompile Include="Game\Component.cpp" />
+    <ClCompile Include="Game\GameLogicComponent.cpp" />
     <ClCompile Include="Game\GameLogicManager.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Graphics\Components\CameraComponent.cpp" />
+    <ClCompile Include="Graphics\Components\LightComponent.cpp" />
     <ClCompile Include="Graphics\Components\RenderComponent.cpp" />
     <ClCompile Include="Graphics\Components\SkyboxComponent.cpp" />
     <ClCompile Include="Graphics\Cubemap.cpp" />

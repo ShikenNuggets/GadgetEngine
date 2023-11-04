@@ -402,6 +402,9 @@
     <ClCompile Include="Game\Component.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameLogicComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
     <ClCompile Include="Game\GameLogicManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -415,6 +418,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Components\CameraComponent.cpp">
+      <Filter>Graphics\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Components\LightComponent.cpp">
       <Filter>Graphics\Components</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Components\RenderComponent.cpp">

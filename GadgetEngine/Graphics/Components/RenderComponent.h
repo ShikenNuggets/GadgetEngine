@@ -13,6 +13,8 @@ namespace Gadget{
 		RenderComponent(GameObject* parent_, StringID modelName_, Material* material_);
 		virtual ~RenderComponent() override;
 
+		RenderComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+
 		void Bind();
 		void Unbind();
 
@@ -25,6 +27,8 @@ namespace Gadget{
 		Material* material;
 
 		void CreateMeshInfo(StringID modelName_);
+
+		static ComponentCollection<RenderComponent> componentCollection;
 	};
 }
 

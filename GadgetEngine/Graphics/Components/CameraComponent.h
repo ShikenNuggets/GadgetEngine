@@ -10,6 +10,8 @@ namespace Gadget{
 		CameraComponent(GameObject* parent_, Camera::Projection projection_ = Camera::Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);
 		virtual ~CameraComponent() override;
 
+		static CameraComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+
 		Matrix4 GetUpdatedViewMatrix();
 		Matrix4 GetUpdatedProjectionMatrix();
 
@@ -20,6 +22,8 @@ namespace Gadget{
 		Vector3 lastPosition;
 		Quaternion lastRotation;
 		float lastAspect;
+
+		static ComponentCollection<CameraComponent> componentCollection;
 	};
 }
 

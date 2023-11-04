@@ -4,6 +4,7 @@
 #include "Debug.h"
 #include "Math/Quaternion.h"
 #include "Utils/GUID.h"
+#include "Utils/Utils.h"
 
 namespace Gadget{
 	//Forward Declarations
@@ -42,6 +43,45 @@ namespace Gadget{
 		GUID guid;
 		GameObject* parent;
 		bool isActivated;
+	};
+
+	//TODO - Thread safety
+	template <class T>
+	class ComponentCollection{
+		static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+
+		private:
+			std::map<GUID, T*> guidMap;
+
+		public:
+			ComponentCollection(){}
+
+			void Add(T* element_){
+				static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+				GADGET_BASIC_ASSERT(element_ != nullptr);
+				guidMap.emplace(element_->GetParent()->GetGUID(), element_);
+			}
+
+			void Remove(GUID objectGuid_){
+				guidMap.erase(objectGuid_);
+			}
+
+			void Remove(T* element_){
+				GADGET_BASIC_ASSERT(Utils::ContainsValue(guidMap, element_));
+				for(const auto& e : guidMap){
+					if(e.second == element_){
+						guidMap.erase(e.first);
+						return;
+					}
+				}
+
+				return;
+			}
+
+			T* Get(GUID objectGuid_) const{
+				return nullptr;
+				return Utils::GetValue(guidMap, objectGuid_);
+			}
 	};
 }
 

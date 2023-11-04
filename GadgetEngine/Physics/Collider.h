@@ -17,8 +17,10 @@ namespace Gadget{
 
 	class Collider : public Component{
 	public:
-		Collider(GameObject* parent_, ColliderShape shape_, bool isTrigger_) : Component(parent_), shape(shape_), isTrigger(isTrigger_), bulletRb(nullptr){}
+		Collider(GameObject* parent_, ColliderShape shape_, bool isTrigger_);
 		virtual ~Collider();
+
+		Collider* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
 
 		virtual void OnActivated() override;
 		virtual void OnTransformModified() override;
@@ -39,6 +41,9 @@ namespace Gadget{
 		bool isTrigger;
 
 		btRigidBody* bulletRb;
+
+	private:
+		static ComponentCollection<Collider> componentCollection;
 	};
 }
 

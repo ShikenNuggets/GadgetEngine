@@ -4,10 +4,18 @@
 
 using namespace Gadget;
 
+ComponentCollection<Collider> Collider::componentCollection;
+
+Collider::Collider(GameObject* parent_, ColliderShape shape_, bool isTrigger_) : Component(parent_), shape(shape_), isTrigger(isTrigger_), bulletRb(nullptr){
+	componentCollection.Add(this);
+}
+
 Collider::~Collider(){
 	if(bulletRb != nullptr){
 		App::GetPhysics().RemoveFromSimulation(bulletRb);
 	}
+
+	componentCollection.Remove(this);
 }
 
 void Collider::OnActivated(){

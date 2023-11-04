@@ -10,10 +10,14 @@ namespace Gadget{
 		PointLightComponent(GameObject* parent_) : Component(parent_), lightSource(){}
 		virtual ~PointLightComponent() override{}
 
+		static PointLightComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
+
 		const PointLight& GetLightSource() const{ return lightSource; }
 
 	private:
 		PointLight lightSource;
+
+		static ComponentCollection<PointLightComponent> componentCollection;
 	};
 }
 
