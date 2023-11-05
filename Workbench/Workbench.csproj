@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo D|xcopy &quot;$(SolutionDir)Build\GadgetDLL\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)Build\SDL2\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\Assimp\bin\x64\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)Build\GadgetDLL\$(Configuration)\*.lib&quot; &quot;$(TargetDir)&quot; /y /E" />
+    <Exec Command="echo D|xcopy &quot;$(SolutionDir)Build\GadgetDLL\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)Build\SDL2\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\Assimp\bin\x64\*.dll&quot; &quot;$(TargetDir)&quot; /y /E" />
   </Target>
 
 </Project>
