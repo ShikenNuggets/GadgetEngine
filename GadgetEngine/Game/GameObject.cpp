@@ -15,7 +15,9 @@ Matrix4 Transform::GetTransformMatrix() const{
 	return (positionMatrix * (rotationMatrix * scaleMatrix));
 }
 
-GameObject::GameObject(StringID name_) : guid(GUID::Generate()), transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), components(), name(name_){}
+GameObject::GameObject(StringID name_) : guid(GUID::Generate()), transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), components(), name(name_){
+	GameObjectCollection::Add(this);
+}
 
 void GameObject::Update([[maybe_unused]] float deltaTime_){
 	for(const auto& component : components){
@@ -32,6 +34,8 @@ GameObject::~GameObject(){
 		c = nullptr;
 	}
 	components.clear();
+
+	GameObjectCollection::Remove(this);
 }
 
 void GameObject::AddComponent(Component* component_){

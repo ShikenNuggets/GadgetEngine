@@ -115,6 +115,40 @@ namespace Gadget{
 
 		virtual void OnTransformModified();
 	};
+
+	//TODO - Thread safety
+	class GameObjectCollection{
+		private:
+			static std::map<GUID, GameObject*> guidMap;
+
+		public:
+			GameObjectCollection(){}
+
+			static void Add(GameObject* element_){
+				GADGET_BASIC_ASSERT(element_ != nullptr);
+				guidMap.emplace(element_->GetGUID(), element_);
+			}
+
+			static void Remove(GUID objectGuid_){
+				GADGET_BASIC_ASSERT(Utils::ContainsKey(guidMap, objectGuid_));
+				guidMap.erase(objectGuid_);
+			}
+
+			static void Remove(GameObject* element_){
+				GADGET_BASIC_ASSERT(element_ != nullptr);
+				GADGET_BASIC_ASSERT(Utils::ContainsKey(guidMap, element_->GetGUID()));
+
+				Remove(element_->GetGUID());
+			}
+
+			static GameObject* Get(GUID objectGuid_){
+				if(!Utils::ContainsKey(guidMap, objectGuid_)){
+					return nullptr;
+				}
+
+				return guidMap.at(objectGuid_);
+			}
+	};
 }
 
 #endif //!GADGET_GAME_OBJECT_H
