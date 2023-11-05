@@ -50,12 +50,6 @@ externalproject "BulletLinearMath"
 	kind "StaticLib"
 	language "C++"
 	
-externalproject "Workbench"
-	location "Workbench"
-	filename "Workbench"
-	kind "WindowedApp"
-	language "C#"
-	
 project "GadgetEngine"
 	location "GadgetEngine"
 	kind "StaticLib"
@@ -163,6 +157,138 @@ project "GadgetEngine"
 			"LinkTimeOptimization",
 		}
 		
+project "GadgetDLL"
+	location "GadgetDLL"
+	kind "SharedLib"
+	language "C++"
+	warnings "Extra"
+
+	targetname "Gadget"
+	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
+	objdir ("Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
+
+	defines
+	{
+		"GADGETDLL_EXPORTS",
+		"_WINDOWS",
+		"_USRDLL"
+	}
+
+	files
+	{
+		"%{prj.name}/**.h",
+		"%{prj.name}/**.cpp",
+	}
+
+	includedirs
+	{
+		"%{prj.name}/",
+		"GadgetEngine/",
+		"SDK/include/",
+		"SDK/Assimp/include",
+		"SDK/Glad/include",
+		"SDK/SDL/include/",
+		"SDK/freetype/include",
+		"SDK/bullet3/src",
+	}
+
+	libdirs
+	{
+		"Build/GadgetEngine/%{cfg.buildcfg}/",
+		"Build/Glad/%{cfg.buildcfg}/",
+		"Build/SDL2/%{cfg.buildcfg}/",
+		"Build/SDL2main/%{cfg.buildcfg}/",
+		"SDK/Assimp/lib/x64/",
+		"SDK/freetype/libs/%{cfg.buildcfg}/",
+		"Build/BulletCollision/%{cfg.buildcfg}/",
+		"Build/BulletDynamics/%{cfg.buildcfg}/",
+		"Build/BulletLinearMath/%{cfg.buildcfg}/",
+	}
+
+	links
+	{
+		"GadgetEngine.lib",
+		"assimp-vc143-mt.lib",
+		"Glad.lib",
+		"SDL2.lib",
+		"SDL2main.lib",
+		"freetype.lib",
+		"BulletCollision.lib",
+		"BulletDynamics.lib",
+		"BulletLinearMath.lib",
+	}
+
+	dependson
+	{
+		"GadgetEngine",
+		"Glad",
+		"SDL2",
+		"SDL2main",
+		"BulletCollision",
+		"BulletDynamics",
+		"BulletLinearMath",
+	}
+
+	flags
+	{
+		"MultiProcessorCompile"
+	}
+
+	filter "system:windows"
+		cppdialect "C++20"
+		systemversion "latest"
+		staticruntime "On"
+		ignoredefaultlibraries "LIBCMT"
+		
+		defines
+		{
+			"GADGET_PLATFORM_WIN32",
+		}
+
+		fatalwarnings
+		{
+			"4715"
+		}
+		
+	filter "configurations:Debug"
+		defines "GADGET_DEBUG"
+		symbols "On"
+		runtime "Debug"
+		
+	filter "Configurations:Develop"
+		defines "GADGET_DEBUG"
+		symbols "On"
+		optimize "Speed"
+		runtime "Debug"
+		
+		flags
+		{
+			"LinkTimeOptimization"
+		}
+		
+		libdirs
+		{
+			"Build/GadgetEngine/Debug/",
+			"Build/Glad/Debug/",
+			"Build/SDL2/Debug/",
+			"Build/SDL2main/Debug/",
+			"SDK/Assimp/lib/x64/",
+			"SDK/freetype/libs/Debug/",
+			"Build/BulletCollision/Debug/",
+			"Build/BulletDynamics/Debug/",
+			"Build/BulletLinearMath/Debug/",
+		}
+		
+	filter "configurations:Release"
+		defines "GADGET_RELEASE"
+		optimize "Speed"
+		runtime "Release"
+		
+		flags
+		{
+			"LinkTimeOptimization"
+		}
+
 project "Game"
 	location "Game"
 	language "C++"
@@ -299,3 +425,9 @@ project "Game"
 			"LinkTimeOptimization"
 		}
 		
+externalproject "Workbench"
+	location "Workbench"
+	filename "Workbench"
+	kind "WindowedApp"
+	language "C#"
+	dependson "GadgetDLL"
