@@ -88,6 +88,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Zl %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -96,7 +97,6 @@
       <AdditionalDependencies>GadgetEngine.lib;assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\GadgetEngine\Debug;..\Build\Glad\Debug;..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\Build\GadgetDLL\Debug\Gadget.lib</ImportLibrary>
-      <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -115,6 +115,7 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Zl %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -125,7 +126,6 @@
       <AdditionalDependencies>GadgetEngine.lib;assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\GadgetEngine\Develop;..\Build\Glad\Develop;..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\SDK\freetype\libs\Develop;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\Build\GadgetEngine\Debug;..\Build\Glad\Debug;..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\Build\GadgetDLL\Develop\Gadget.lib</ImportLibrary>
-      <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,6 +142,7 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Zl %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -151,7 +152,6 @@
       <AdditionalDependencies>GadgetEngine.lib;assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\GadgetEngine\Release;..\Build\Glad\Release;..\Build\SDL2\Release;..\Build\SDL2main\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\Build\GadgetDLL\Release\Gadget.lib</ImportLibrary>
-      <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

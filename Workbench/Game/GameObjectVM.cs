@@ -14,10 +14,48 @@ namespace Workbench
     [KnownType(typeof(TransformComponentVM))]
     public class GameObjectVM : BaseViewModel
     {
+        private ulong _guid = Utils.InvalidGUID;
+        private bool _isActiveInEngine;
         private string _name;
         private bool _isEnabled = true;
         [DataMember (Name = nameof(Components))] private ObservableCollection<ComponentVM> _components = new ObservableCollection<ComponentVM>();
 
+        [DataMember] public ulong GUID
+        {
+            get => _guid;
+            set
+            {
+                if (_guid != value)
+                {
+                    _guid = value;
+                    OnPropertyChanged(nameof(GUID));
+                }
+            }
+        }
+        [DataMember] public bool IsActiveInEngine
+        {
+            get => _isActiveInEngine;
+            set
+            {
+                if (_isActiveInEngine != value)
+                {
+                    _isActiveInEngine = value;
+                    if (_isActiveInEngine)
+                    {
+                        GUID = GadgetAPI.CreateGameObject(this);
+                        Debug.Assert(GUID != Utils.InvalidGUID);
+                    }
+                    else
+                    {
+                        GadgetAPI.DestroyGameObject(this);
+                        GUID = Utils.InvalidGUID;
+
+                    }
+
+                    OnPropertyChanged(nameof(IsActiveInEngine));
+                }
+            }
+        }
         [DataMember] public string Name
         {
             get => _name;
@@ -45,6 +83,9 @@ namespace Workbench
         [DataMember] public SceneVM ParentScene { get; private set; }
 
         public ReadOnlyObservableCollection<ComponentVM>? Components { get; private set; } = null;
+
+        public ComponentVM? GetComponent(Type type) => Components?.FirstOrDefault(c => c.GetType() == type);
+        public T? GetComponent<T>() where T : ComponentVM => GetComponent(typeof(T)) as T;
 
         public GameObjectVM(SceneVM scene)
         {

@@ -10,6 +10,8 @@ namespace Workbench
 {
     public static class Utils
     {
+        public const ulong InvalidGUID = 0;
+
         public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive, List<string?>? filesToIgnore = null)
         {
             var dir = new DirectoryInfo(sourceDir);

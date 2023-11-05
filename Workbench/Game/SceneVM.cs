@@ -59,11 +59,20 @@ namespace Workbench
             OnDeserialized(new StreamingContext());
         }
 
-        private GameObjectVM AddGameObject(GameObjectVM gameObject)
+        private GameObjectVM AddGameObject(GameObjectVM gameObject, int index = -1)
         {
             Debug.Assert(gameObject != null);
             Debug.Assert(!_gameObjects.Contains(gameObject));
-            _gameObjects.Add(gameObject);
+            gameObject.IsActiveInEngine = IsActive;
+            if (index < 0)
+            {
+                _gameObjects.Add(gameObject);
+            }
+            else
+            {
+                _gameObjects.Insert(index, gameObject);
+            }
+            
             return gameObject;
         }
 
@@ -71,6 +80,7 @@ namespace Workbench
         {
             Debug.Assert(gameObject != null);
             Debug.Assert(_gameObjects.Contains(gameObject));
+            gameObject.IsActiveInEngine = IsActive;
             _gameObjects.Remove(gameObject);
         }
 
@@ -85,6 +95,11 @@ namespace Workbench
                 _gameObjects = new ObservableCollection<GameObjectVM>();
             }
 
+            foreach (var  gameObject in _gameObjects)
+            {
+                gameObject.IsActiveInEngine = IsActive;
+            }
+
             GameObjects = new ReadOnlyObservableCollection<GameObjectVM>(_gameObjects);
             OnPropertyChanged(nameof(GameObjects));
 
@@ -97,7 +112,7 @@ namespace Workbench
                 ProjectVM.UndoRedo.Add(new UndoRedoAction(
                     $"Added '{x.Name}' to Scene '{Name}'",
                     () => RemoveGameObject(x),
-                    () => _gameObjects.Insert(index, x)
+                    () => AddGameObject(x, index)
                 ));
             });
 
@@ -109,7 +124,7 @@ namespace Workbench
 
                 ProjectVM.UndoRedo.Add(new UndoRedoAction(
                     $"Removed '{x.Name}' from Scene '{Name}'",
-                    () => _gameObjects.Insert(index, x),
+                    () => AddGameObject(x, index),
                     () => RemoveGameObject(x)
                 ));
             });

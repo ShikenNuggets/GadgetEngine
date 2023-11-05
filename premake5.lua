@@ -238,7 +238,7 @@ project "GadgetDLL"
 		cppdialect "C++20"
 		systemversion "latest"
 		staticruntime "On"
-		ignoredefaultlibraries "LIBCMT"
+		buildoptions "/Zl"
 		
 		defines
 		{
