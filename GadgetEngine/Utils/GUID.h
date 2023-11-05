@@ -13,6 +13,8 @@ namespace Gadget{
 		uint64_t id;
 
 	public:
+		static constexpr uint64_t Invalid = 0;
+
 		GUID(uint64_t id_) : id(id_){}
 
 		uint64_t Id() const{ return id; }

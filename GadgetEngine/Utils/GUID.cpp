@@ -2,4 +2,4 @@
 
 using namespace Gadget;
 
-std::atomic<uint64_t> GUID::nextUUID = 0;
+std::atomic<uint64_t> GUID::nextUUID = 1;
