@@ -4,6 +4,12 @@
 #include <SDL.h>
 #pragma warning(default : 26819)
 
+#ifdef GADGET_DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif //GADGET_DEBUG
+
 #include <Gadget.h>
 
 #include "ExampleGame.h"
@@ -32,6 +38,9 @@ int main(int argc, char* argv[]){
 #ifdef GADGET_DEBUG
 	Gadget::App::DeleteInstance();
 	std::cout << "The program is now complete." << std::endl;
+
+	_CrtDumpMemoryLeaks();
 #endif //_DEBUG
+
 	return 0;
 }
