@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Workbench"
 		xmlns:editors="clr-namespace:Workbench.Editors"
         mc:Ignorable="d"
-        Title="Gadget Workbench" Height="720" Width="1280">
+        Title="Gadget Workbench" Height="720" Width="1280"
+		Style="{StaticResource WorkbenchWindowStyle}">
 	<Grid>
 		<editors:SceneEditorView />
 	</Grid>

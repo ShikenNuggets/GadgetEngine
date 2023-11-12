@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -41,14 +42,46 @@ namespace Workbench
                 newProjectButton.IsChecked = false;
                 openProjectButton.IsChecked = true;
 
-                openProjectArea.Visibility = Visibility.Visible;
-
+                newProjectArea.IsEnabled = false;
+                openProjectArea.IsEnabled = true;
+                AnimateToOpenProject();
             }else if(sender == newProjectButton){
                 openProjectButton.IsChecked = false;
                 newProjectButton.IsChecked = true;
 
-                openProjectArea.Visibility = Visibility.Collapsed;
+                openProjectArea.IsEnabled = false;
+                newProjectArea.IsEnabled = true;
+                AnimateToNewProject();
             }
+        }
+
+        private readonly CubicEase _easing = new CubicEase() { EasingMode = EasingMode.EaseInOut };
+
+        private void AnimateToOpenProject(double animLength = 0.5)
+        {
+            var highlightAnimation = new DoubleAnimation(460, 220, new Duration(TimeSpan.FromSeconds(animLength)));
+            highlightAnimation.EasingFunction = _easing;
+            highlightRect.BeginAnimation(Canvas.LeftProperty, highlightAnimation);
+
+            openProjectArea.Visibility = Visibility.Visible;
+            var animation = new ThicknessAnimation(new Thickness(-800, 0, 0, 0), new Thickness(0), new Duration(TimeSpan.FromSeconds(animLength)));
+            animation.EasingFunction = _easing;
+            browserContent.BeginAnimation(MarginProperty, animation);
+        }
+
+        private void AnimateToNewProject(double animLength = 0.5)
+        {
+            var highlightAnimation = new DoubleAnimation(220, 460, new Duration(TimeSpan.FromSeconds(animLength)));
+            highlightAnimation.EasingFunction = _easing;
+            highlightRect.BeginAnimation(Canvas.LeftProperty, highlightAnimation);
+
+            var animation = new ThicknessAnimation(new Thickness(0), new Thickness(-800, 0, 0, 0), new Duration(TimeSpan.FromSeconds(animLength)));
+            animation.EasingFunction = _easing;
+            browserContent.BeginAnimation(MarginProperty, animation);
+            animation.Completed += (s, e) =>
+            {
+                openProjectArea.Visibility = Visibility.Collapsed;
+            };
         }
     }
 }

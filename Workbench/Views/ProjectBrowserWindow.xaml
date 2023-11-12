@@ -5,19 +5,91 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Workbench"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="Workbench - Project Browser" Height="600" Width="800">
-    <Grid>
+        Title="Workbench - Project Browser" Height="600" Width="800"
+		Style="{StaticResource WorkbenchDialogWindowStyle}">
+	<Window.Resources>
+		<Style TargetType="{x:Type ToggleButton}">
+			<Setter Property="FontSize" Value="32"/>
+			<Setter Property="FontFamily" Value="Bahnschrift"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="Foreground" Value="{StaticResource Editor.Disabled.FontBrush}"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ToggleButton}">
+						<TextBlock Text="{TemplateBinding Button.Content}" Style="{x:Null}">
+							<TextBlock.Effect>
+								<DropShadowEffect BlurRadius="2" ShadowDepth="1" Opacity="0.6"/>
+							</TextBlock.Effect>
+						</TextBlock>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsEnabled" Value="False">
+								<Setter Property="Background" Value="{StaticResource Editor.Window.GrayBrush4}"/>
+							</Trigger>
+							<Trigger Property="IsChecked" Value="True">
+								<Setter Property="Foreground" Value="White"/>
+							</Trigger>
+							<MultiTrigger>
+								<MultiTrigger.Conditions>
+									<Condition Property="IsMouseOver" Value="True"/>
+									<Condition Property="IsChecked" Value="False"/>
+								</MultiTrigger.Conditions>
+								<Setter Property="Foreground" Value="{StaticResource Editor.FontBrush}"/>
+							</MultiTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
 			<RowDefinition />
 		</Grid.RowDefinitions>
+		<Canvas x:Name="canvas">
+			<Rectangle Width="{Binding Path=ActualWidth, ElementName=newProjectButton}" Height="{Binding Path=ActualHeight, ElementName=canvas}" x:Name="highlightRect" Canvas.Left="220" Opacity="0.3">
+				<Rectangle.Effect>
+					<BlurEffect Radius="10" KernelType="Gaussian"/>
+				</Rectangle.Effect>
+				<Rectangle.Fill>
+					<RadialGradientBrush GradientOrigin="0.5,1" Center="0.5,1" RadiusY="2">
+						<GradientStop Color="White" Offset="0"/>
+						<GradientStop Color="Transparent" Offset="1"/>
+					</RadialGradientBrush>
+				</Rectangle.Fill>
+				<Rectangle.OpacityMask>
+					<RadialGradientBrush GradientOrigin="0.5,1" Center="0.5,1" RadiusY="0.5">
+						<GradientStop Color="White" Offset="0"/>
+						<GradientStop Color="Transparent" Offset="1"/>
+					</RadialGradientBrush>
+				</Rectangle.OpacityMask>
+			</Rectangle>
+		</Canvas>
+		<Rectangle Height="2" VerticalAlignment="Bottom" Margin="40,0">
+			<Rectangle.Fill>
+				<LinearGradientBrush>
+					<LinearGradientBrush.GradientStops>
+						<GradientStop Color="Transparent" Offset="0"/>
+						<GradientStop Color="{StaticResource Editor.Disabled.FontColor}" Offset="0.33"/>
+						<GradientStop Color="{StaticResource Editor.Disabled.FontColor}" Offset="0.66"/>
+						<GradientStop Color="Transparent" Offset="1"/>
+					</LinearGradientBrush.GradientStops>
+				</LinearGradientBrush>
+			</Rectangle.Fill>
+		</Rectangle>
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
-			<ToggleButton Content="Open Project" x:Name="openProjectButton" FontSize="24" Click="OnToggleButton_Click" IsChecked="True"/>
-			<ToggleButton Content="New Project" x:Name="newProjectButton" FontSize="24" Margin="50, 0, 0, 0" Click="OnToggleButton_Click" IsChecked="False"/>
+			<ToggleButton Content="Open Project" x:Name="openProjectButton" FontSize="24" Margin="10,10,0,10" Click="OnToggleButton_Click" IsChecked="True"/>
+			<ToggleButton Content="New Project" x:Name="newProjectButton" FontSize="24" Margin="100, 10, 0, 10" Click="OnToggleButton_Click" IsChecked="False"/>
 		</StackPanel>
-		<StackPanel Orientation="Horizontal" Grid.Row="1">
+		<StackPanel x:Name="browserContent" Orientation="Horizontal" Grid.Row="1">
+			<StackPanel.Effect>
+				<DropShadowEffect Opacity="0.6" BlurRadius="15" ShadowDepth="2"/>
+			</StackPanel.Effect>
 			<local:OpenProjectControl x:Name="openProjectArea" />
-			<local:NewProjectControl x:Name="newProjectArea" />
+			<local:NewProjectControl x:Name="newProjectArea" Margin="0,0,0,0" />
 		</StackPanel>
     </Grid>
 </Window>
