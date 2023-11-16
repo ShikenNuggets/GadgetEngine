@@ -9,12 +9,16 @@
 			 d:DataContext="{d:DesignInstance Type=proj:ProjectVM, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="217*"/>
+			<ColumnDefinition Width="583*"/>
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="32"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<Button Content="Add Scene" Width="96" VerticalAlignment="Center" Focusable="False" Grid.Row="0" HorizontalAlignment="Left" Margin="20,0,0,0" Command="{Binding AddSceneCommand}"/>
-		<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+		<Button Content="Add Scene" Width="120" Focusable="False" HorizontalAlignment="Center" Margin="20,0,0,0" Command="{Binding AddSceneCommand}"/>
+		<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
 			<ItemsControl ItemsSource="{Binding Scenes}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
@@ -27,7 +31,7 @@
 							<Expander.Header>
 								<Grid>
 									<StackPanel Orientation="Horizontal">
-										<TextBlock Text="{Binding Name}"/>
+										<TextBlock Text="{Binding Name}" Style="{StaticResource LightTextBlockStyle}"/>
 										<Button Content="Remove"
 												Command="{Binding DataContext.RemoveSceneCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
 												CommandParameter="{Binding}" Margin="20,0" Focusable="False" />

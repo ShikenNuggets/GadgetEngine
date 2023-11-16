@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Workbench.Editors"
 			 xmlns:main="clr-namespace:Workbench"
              mc:Ignorable="d" Focusable="True"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="720" d:DesignWidth="1280">
 	<UserControl.InputBindings>
 		<KeyBinding Command="{Binding UndoCommand}" Key="Z" Modifiers="Ctrl"/>
 		<KeyBinding Command="{Binding RedoCommand}" Key="Y" Modifiers="Ctrl"/>
@@ -31,8 +31,8 @@
 					<RowDefinition Height="2*"/>
 					<RowDefinition/>
 				</Grid.RowDefinitions>
-				<GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-				<TabControl Grid.Row="1">
+				<GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+				<TabControl Grid.Row="1" Background="{StaticResource Editor.Window.GrayBrush2}" Margin="0,5,0,0">
 					<TabItem Header="Log">
 						<main:LogView />
 					</TabItem>
@@ -42,16 +42,16 @@
 				</TabControl>
 			</Grid>
 
-			<GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+			<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
 			<Grid Grid.Column="1" Margin="5,0,0,0">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="3*"/>
 					<RowDefinition/>
 				</Grid.RowDefinitions>
-				<GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-				<local:ProjectLayoutView />
-				<local:GameObjectView Grid.Row="1"/>
+				<GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+				<local:ProjectLayoutView Background="{StaticResource Editor.Window.GrayBrush3}" />
+				<local:GameObjectView Grid.Row="1" Background="{StaticResource Editor.Window.GrayBrush3}" Margin="0,5,0,0"/>
 			</Grid>
 		</Grid>
 	</Grid>
