@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Workbench"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="Workbench - Project Browser" Height="600" Width="800"
-		Style="{StaticResource WorkbenchDialogWindowStyle}">
+        Title="Workbench - Project Browser" Width="800" Height="600"
+		Style="{StaticResource WorkbenchDialogWindowStyle}"
+		MinWidth="800" MinHeight="600">
 	<Window.Resources>
 		<Style TargetType="{x:Type ToggleButton}">
 			<Setter Property="FontSize" Value="32"/>

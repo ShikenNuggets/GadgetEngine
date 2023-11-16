@@ -25,6 +25,29 @@ namespace Workbench
             InitializeComponent();
 
             Loaded += OnProjectBrowserDialogLoaded;
+            SizeChanged += OnSizeChanged;
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double newMargin = 0;
+            if (Width > 800)
+            {
+                newMargin = Width - 800;
+            }
+
+            newProjectArea.Margin = new Thickness(newMargin, 0, 0, 0);
+
+            if (openProjectArea.IsEnabled)
+            {
+                highlightRect.SetCurrentValue(Canvas.LeftProperty, openProjectButton.TranslatePoint(default, canvas).X);
+                browserContent.SetCurrentValue(MarginProperty, new Thickness());
+            }
+            else if (newProjectArea.IsEnabled)
+            {
+                highlightRect.SetCurrentValue(Canvas.LeftProperty, newProjectButton.TranslatePoint(default, canvas).X);
+                browserContent.SetCurrentValue(MarginProperty, new Thickness(-Width, 0, 0, 0));
+            }
         }
 
         private void OnProjectBrowserDialogLoaded(object sender, RoutedEventArgs e)
@@ -59,29 +82,31 @@ namespace Workbench
 
         private void AnimateToOpenProject(double animLength = 0.5)
         {
-            var highlightAnimation = new DoubleAnimation(460, 220, new Duration(TimeSpan.FromSeconds(animLength)));
+            double newProjectButtonPos = newProjectButton.TranslatePoint(default, canvas).X;
+            double openProjectButtonPos = openProjectButton.TranslatePoint(default, canvas).X;
+
+            var highlightAnimation = new DoubleAnimation(newProjectButtonPos, openProjectButtonPos, new Duration(TimeSpan.FromSeconds(animLength)));
             highlightAnimation.EasingFunction = _easing;
             highlightRect.BeginAnimation(Canvas.LeftProperty, highlightAnimation);
 
             openProjectArea.Visibility = Visibility.Visible;
-            var animation = new ThicknessAnimation(new Thickness(-800, 0, 0, 0), new Thickness(0), new Duration(TimeSpan.FromSeconds(animLength)));
+            var animation = new ThicknessAnimation(new Thickness(-Width, 0, 0, 0), new Thickness(0), new Duration(TimeSpan.FromSeconds(animLength)));
             animation.EasingFunction = _easing;
             browserContent.BeginAnimation(MarginProperty, animation);
         }
 
         private void AnimateToNewProject(double animLength = 0.5)
         {
-            var highlightAnimation = new DoubleAnimation(220, 460, new Duration(TimeSpan.FromSeconds(animLength)));
+            double newProjectButtonPos = newProjectButton.TranslatePoint(default, canvas).X;
+            double openProjectButtonPos = openProjectButton.TranslatePoint(default, canvas).X;
+
+            var highlightAnimation = new DoubleAnimation(openProjectButtonPos, newProjectButtonPos, new Duration(TimeSpan.FromSeconds(animLength)));
             highlightAnimation.EasingFunction = _easing;
             highlightRect.BeginAnimation(Canvas.LeftProperty, highlightAnimation);
 
-            var animation = new ThicknessAnimation(new Thickness(0), new Thickness(-800, 0, 0, 0), new Duration(TimeSpan.FromSeconds(animLength)));
+            var animation = new ThicknessAnimation(new Thickness(0), new Thickness(-Width, 0, 0, 0), new Duration(TimeSpan.FromSeconds(animLength)));
             animation.EasingFunction = _easing;
             browserContent.BeginAnimation(MarginProperty, animation);
-            animation.Completed += (s, e) =>
-            {
-                openProjectArea.Visibility = Visibility.Collapsed;
-            };
         }
     }
 }
