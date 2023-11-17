@@ -48,7 +48,7 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="FocusVisual">
+	<Style x:Key="FocusVisualStyle">
 		<Setter Property="Control.Template">
 			<Setter.Value>
 				<ControlTemplate>
@@ -58,7 +58,7 @@
 		</Setter>
 	</Style>
 	<Style TargetType="{x:Type Button}">
-		<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+		<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}"/>
 		<Setter Property="Background">
 			<Setter.Value>
 				<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">

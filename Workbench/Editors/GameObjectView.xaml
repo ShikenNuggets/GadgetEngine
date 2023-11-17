@@ -36,7 +36,7 @@
 				<TextBlock Text="Name" Grid.Column="0" Margin="5,0,0,0" Style="{StaticResource LightTextBlockStyle}"/>
 				<TextBox Text="{Binding Name, UpdateSourceTrigger=Explicit}" Grid.Column="1" GotKeyboardFocus="OnName_TextBox_GotKeyboardFocus" LostKeyboardFocus="OnName_TextBox_LostKeyboardFocus"/>
 				<StackPanel Orientation="Horizontal" Grid.Column="2">
-					<TextBlock Text="Enabled" Margin="5,0,0,0" />
+					<TextBlock Text="Enabled" Margin="5,0,0,0" Style="{StaticResource LightTextBlockStyle}" />
 					<CheckBox IsChecked="{Binding IsEnabled, Mode=OneWay, UpdateSourceTrigger=Explicit}" Click="OnIsEnabled_Checkbox_Click" Margin="5,0,5,0" VerticalAlignment="Center" />
 				</StackPanel>
 

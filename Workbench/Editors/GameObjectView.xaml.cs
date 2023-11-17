@@ -49,7 +49,7 @@ namespace Workbench.Editors
             };
         }
 
-        private Action GetRenameAction()
+        private Action GetIsEnabledAction()
         {
             var vm = DataContext as MultiSelectedObjectVM;
 
@@ -63,7 +63,7 @@ namespace Workbench.Editors
             });
         }
 
-        private Action GetIsEnabledAction()
+        private Action GetRenameAction()
         {
             var vm = DataContext as MultiSelectedObjectVM;
 
@@ -94,6 +94,7 @@ namespace Workbench.Editors
             Debug.Assert(sender is TextBox);
             if (DataContext == null || DataContext is not MultiSelectedObjectVM)
             {
+                _undoAction = null;
                 return;
             }
 
@@ -108,9 +109,9 @@ namespace Workbench.Editors
                 }
 
                 var numSelectedObjs = vm.SelectedObjects.Count;
-
+                    
                 var redoAction = GetRenameAction();
-                ProjectVM.UndoRedo.Add(new UndoRedoAction(numSelectedObjs > 1 ? $"Renamed 1 GameObject" : $"Renamed {numSelectedObjs} GameObjects", _undoAction, redoAction));
+                ProjectVM.UndoRedo.Add(new UndoRedoAction(numSelectedObjs == 1 ? $"Renamed 1 GameObject" : $"Renamed {numSelectedObjs} GameObjects", _undoAction, redoAction));
                 _propertyName = null;
             }
             _undoAction = null;
