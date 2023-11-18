@@ -45,11 +45,10 @@ namespace Workbench
                         GUID = GadgetAPI.CreateGameObject(this);
                         Debug.Assert(GUID != Utils.InvalidGUID);
                     }
-                    else
+                    else if (GUID != Utils.InvalidGUID)
                     {
                         GadgetAPI.DestroyGameObject(this);
                         GUID = Utils.InvalidGUID;
-
                     }
 
                     OnPropertyChanged(nameof(IsActiveInEngine));
@@ -173,6 +172,12 @@ namespace Workbench
             };
         }
 
+        public T? GetMultiSelectComponent<T>() where T : IMultiSelectComponent
+        {
+            Debug.Assert(Components != null);
+            return (T?)Components.FirstOrDefault(x => x.GetType() == typeof(T));
+        }
+
         protected virtual bool UpdateGameObjects(string propertyName)
         {
             switch (propertyName)
@@ -195,7 +200,7 @@ namespace Workbench
             return false;
         }
 
-        public static float? GetMixedValues(List<GameObjectVM> objects, Func<GameObjectVM, float> getProperty)
+        public static float? GetMixedValues<T>(List<T> objects, Func<T, float> getProperty)
         {
             var value = getProperty(objects.First());
             foreach(var obj in objects.Skip(1))
@@ -209,7 +214,7 @@ namespace Workbench
             return value;
         }
 
-        public static bool? GetMixedValues(List<GameObjectVM> objects, Func<GameObjectVM, bool> getProperty)
+        public static bool? GetMixedValues<T>(List<T> objects, Func<T, bool> getProperty)
         {
             var value = getProperty(objects.First());
             foreach (var obj in objects.Skip(1))
@@ -223,7 +228,7 @@ namespace Workbench
             return value;
         }
 
-        public static string? GetMixedValues(List<GameObjectVM> objects, Func<GameObjectVM, string> getProperty)
+        public static string? GetMixedValues<T>(List<T> objects, Func<T, string> getProperty)
         {
             var value = getProperty(objects.First());
             foreach (var obj in objects.Skip(1))
@@ -250,8 +255,29 @@ namespace Workbench
             _canUpdate = false;
 
             UpdateMultiSelectGameEntity();
+            MakeCommonComponentList();
             
             _canUpdate = true;
+        }
+
+        private void MakeCommonComponentList()
+        {
+            _components.Clear();
+            var firstObj = SelectedObjects.FirstOrDefault();
+            if (firstObj == null || firstObj.Components == null)
+            {
+                return;
+            }
+
+            foreach(var component in firstObj.Components)
+            {
+                var type = component.GetType();
+                if (!SelectedObjects.Skip(1).Any(obj => obj.GetComponent(type) == null))
+                {
+                    Debug.Assert(Components.FirstOrDefault(x => x.GetType() == type) == null);
+                    _components.Add(component.GetMultiSelectComponent(this));
+                }
+            }
         }
     }
 

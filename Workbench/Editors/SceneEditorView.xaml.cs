@@ -31,7 +31,6 @@ namespace Workbench.Editors
         {
             Loaded -= OnSceneEditorViewLoaded;
             Focus();
-            ((INotifyCollectionChanged)ProjectVM.UndoRedo.UndoList).CollectionChanged += (s, e) => Focus();
         }
     }
 }

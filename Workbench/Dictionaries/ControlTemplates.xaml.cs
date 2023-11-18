@@ -93,11 +93,15 @@ namespace Workbench.Dictionaries
             var textBox = sender as TextBox;
             Debug.Assert(textBox != null);
 
+            if(!textBox.IsVisible)
+            {
+                return;
+            }
+
             var exp = textBox.GetBindingExpression(TextBox.TextProperty);
             if (exp != null)
             {
                 exp.UpdateTarget();
-                textBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Previous));
                 textBox.Visibility = Visibility.Collapsed;
             }
         }

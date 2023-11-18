@@ -54,5 +54,31 @@ namespace Workbench
         public static bool IsNearZero(double s_) => s_ <= NearZero && s_ >= -NearZero;
         public static bool Near(float a_, float b_) => IsNearZero(a_ - b_);
         public static bool Near(double a_, double b_) => IsNearZero(a_ - b_);
+
+        public static bool Near(float? a_, float? b_)
+        {
+            if (a_ == null && b_ == null)
+            {
+                return true;
+            }
+            else if (a_ == null || b_ == null)
+            {
+                return false;
+            }
+            return Near(a_.Value, b_.Value);
+        }
+
+        public static bool Near(double? a_, double? b_)
+        {
+            if (a_ == null && b_ == null)
+            {
+                return true;
+            }
+            else if (a_ == null || b_ == null)
+            {
+                return false;
+            }
+            return Near(a_.Value, b_.Value);
+        }
     }
 }

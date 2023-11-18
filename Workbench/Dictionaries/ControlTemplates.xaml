@@ -408,7 +408,7 @@
 					<Grid>
 						<TextBlock x:Name="PART_textBlock" Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Center">
 							<TextBlock.Style>
-								<Style TargetType="{x:Type controls:NumberBox}">
+								<Style TargetType="{x:Type TextBlock}">
 									<Style.Triggers>
 										<Trigger Property="IsMouseOver" Value="True">
 											<Setter Property="Cursor" Value="SizeWE"/>
@@ -449,7 +449,7 @@
 						<Grid MinWidth="50" x:Name="grid">
 							<TextBlock x:Name="PART_textBlock" Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Center">
 								<TextBlock.Style>
-									<Style TargetType="{x:Type controls:NumberBox}">
+									<Style TargetType="{x:Type TextBlock}">
 										<Style.Triggers>
 											<Trigger Property="IsMouseOver" Value="True">
 												<Setter Property="Cursor" Value="SizeWE"/>
@@ -521,16 +521,6 @@
 					</Border>
 					<ControlTemplate.Triggers>
 						<DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}" Value="Horizontal">
-							<Setter Property="Grid.Row" TargetName="nbX" Value="0"/>
-							<Setter Property="Grid.Row" TargetName="nbY" Value="1"/>
-							<Setter Property="Grid.Row" TargetName="nbZ" Value="2"/>
-							<Setter Property="Grid.Row" TargetName="nbW" Value="3"/>
-							<Setter Property="Width" TargetName="columnDefinition1" Value="auto"/>
-							<Setter Property="Width" TargetName="columnDefinition2" Value="auto"/>
-							<Setter Property="Width" TargetName="columnDefinition3" Value="auto"/>
-						</DataTrigger>
-
-						<DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}" Value="Vertical">
 							<Setter Property="Grid.Column" TargetName="nbX" Value="0"/>
 							<Setter Property="Grid.Column" TargetName="nbY" Value="1"/>
 							<Setter Property="Grid.Column" TargetName="nbZ" Value="2"/>
@@ -538,6 +528,16 @@
 							<Setter Property="Height" TargetName="rowDefinition1" Value="auto"/>
 							<Setter Property="Height" TargetName="rowDefinition2" Value="auto"/>
 							<Setter Property="Height" TargetName="rowDefinition3" Value="auto"/>
+						</DataTrigger>
+
+						<DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}" Value="Vertical">
+							<Setter Property="Grid.Row" TargetName="nbX" Value="0"/>
+							<Setter Property="Grid.Row" TargetName="nbY" Value="1"/>
+							<Setter Property="Grid.Row" TargetName="nbZ" Value="2"/>
+							<Setter Property="Grid.Row" TargetName="nbW" Value="3"/>
+							<Setter Property="Width" TargetName="columnDefinition1" Value="auto"/>
+							<Setter Property="Width" TargetName="columnDefinition2" Value="auto"/>
+							<Setter Property="Width" TargetName="columnDefinition3" Value="auto"/>
 						</DataTrigger>
 
 						<DataTrigger Binding="{Binding VectorType, RelativeSource={RelativeSource Self}}" Value="Vector2">

@@ -28,7 +28,7 @@ namespace Workbench.Controls
         }
 
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(string), typeof(NumberBox), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        public static readonly DependencyProperty MultiplierProperty = DependencyProperty.Register(nameof(Multiplier), typeof(double), typeof(NumberBox), new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly DependencyProperty MultiplierProperty = DependencyProperty.Register(nameof(Multiplier), typeof(double), typeof(NumberBox), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         static NumberBox()
         {
@@ -54,6 +54,8 @@ namespace Workbench.Controls
             _mouseCaptured = true;
             _valueChanged = false;
             _mouseXStart = e.GetPosition(this).X;
+
+            Focus();
 
             e.Handled = true;
         }

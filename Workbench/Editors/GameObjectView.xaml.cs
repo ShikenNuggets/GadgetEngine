@@ -79,6 +79,7 @@ namespace Workbench.Editors
 
         private void OnName_TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
+            _propertyName = string.Empty;
             if (DataContext == null || DataContext is not MultiSelectedObjectVM)
             {
                 return;
