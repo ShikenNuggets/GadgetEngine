@@ -48,6 +48,60 @@ namespace Workbench.Dictionaries
             }
         }
 
+        private void OnTextBoxRename_KeyDown(object sender, KeyEventArgs e)
+        {
+            Debug.Assert(sender != null);
+            Debug.Assert(e != null);
+            Debug.Assert(sender is TextBox);
+
+            var textBox = sender as TextBox;
+            Debug.Assert(textBox != null);
+
+            var exp = textBox.GetBindingExpression(TextBox.TextProperty);
+            if (exp == null)
+            {
+                return;
+            }
+
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                if (textBox.Tag is ICommand command && command.CanExecute(textBox.Text))
+                {
+                    command.Execute(textBox.Text);
+                }
+                else
+                {
+                    exp.UpdateSource();
+                }
+
+                textBox.Visibility = Visibility.Collapsed;
+                e.Handled = true;
+            }
+            else if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                exp.UpdateSource();
+                textBox.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void OnTextBoxRename_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Debug.Assert(sender != null);
+            Debug.Assert(e != null);
+            Debug.Assert(sender is TextBox);
+
+            var textBox = sender as TextBox;
+            Debug.Assert(textBox != null);
+
+            var exp = textBox.GetBindingExpression(TextBox.TextProperty);
+            if (exp != null)
+            {
+                exp.UpdateTarget();
+                textBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Previous));
+                textBox.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void OnClose_Button_Click(object sender, RoutedEventArgs e)
         {
             var window = (Window)((FrameworkElement)sender).TemplatedParent;
