@@ -89,9 +89,9 @@
 			</Border.Effect>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,0" VerticalAlignment="Center">
 				<Button Content="Clear" Margin="20,0" Click="OnClear_Button_Click" Focusable="False"/>
-				<ToggleButton Content="Info" Margin="2,0" ToolTip="Toggle Info Logs" x:Name="toggleInfo" Background="{StaticResource Editor.GreenBrush}"/>
-				<ToggleButton Content="Warn" Margin="2,0" ToolTip="Toggle Warning Logs" x:Name="toggleWarning" Background="{StaticResource Editor.OrangeBrush}" />
-				<ToggleButton Content="Error" Margin="2,0" ToolTip="Toggle Error Logs" x:Name="toggleError" Background="{StaticResource Editor.RedBrush}" />
+				<ToggleButton Content="Info" Margin="2,0" ToolTip="Toggle Info Logs" x:Name="toggleInfo" Background="{StaticResource Editor.GreenBrush}" IsChecked="True"/>
+				<ToggleButton Content="Warn" Margin="2,0" ToolTip="Toggle Warning Logs" x:Name="toggleWarning" Background="{StaticResource Editor.OrangeBrush}" IsChecked="True"/>
+				<ToggleButton Content="Error" Margin="2,0" ToolTip="Toggle Error Logs" x:Name="toggleError" Background="{StaticResource Editor.RedBrush}" IsChecked="True"/>
 			</StackPanel>
 		</Border>
 	</Grid>
