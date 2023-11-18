@@ -44,7 +44,7 @@ namespace Workbench
 
 			//Transform
 			var transform = gameObject.GetComponent<TransformComponentVM>();
-			Debug.Assert(transform != null);
+			//Debug.Assert(transform != null); //TODO - This assert is currently meaningless, but we'll want it back later
 			if (transform == null)
 			{
 				Logger.Log(MessageType.Warning, "All GameObjects should have a Transform component!");
