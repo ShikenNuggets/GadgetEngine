@@ -234,6 +234,11 @@ project "GadgetDLL"
 		"MultiProcessorCompile"
 	}
 
+	forceincludes
+	{
+		"Gadget.h"
+	}
+
 	filter "system:windows"
 		cppdialect "C++20"
 		systemversion "latest"
@@ -357,6 +362,11 @@ project "Game"
 	flags
 	{
 		"MultiProcessorCompile"
+	}
+
+	forceincludes
+	{
+		"Gadget.h"
 	}
 	
 	filter "system:windows"

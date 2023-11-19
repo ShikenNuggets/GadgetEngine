@@ -83,6 +83,7 @@
       <TreatSpecificWarningsAsErrors>4715;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -114,6 +115,7 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d<
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -149,6 +151,7 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d<
       <TreatSpecificWarningsAsErrors>4715;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\GadgetEngine;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
