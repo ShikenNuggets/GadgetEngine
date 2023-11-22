@@ -89,7 +89,7 @@
       <ImportLibrary>..\..\Build\SDL2\Debug\SDL2.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)\SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+      <Command>echo D|xcopy "$(SolutionDir)SDK\SDL\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
 echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -114,7 +114,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <ImportLibrary>..\..\Build\SDL2\Develop\SDL2.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)\SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+      <Command>echo D|xcopy "$(SolutionDir)SDK\SDL\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
 echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -141,7 +141,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <ImportLibrary>..\..\Build\SDL2\Release\SDL2.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)\SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+      <Command>echo D|xcopy "$(SolutionDir)SDK\SDL\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
 echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

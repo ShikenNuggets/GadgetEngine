@@ -99,8 +99,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+      <Command>echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -135,8 +134,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+      <Command>echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -171,8 +169,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+      <Command>echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
