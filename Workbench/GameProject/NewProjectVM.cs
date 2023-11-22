@@ -18,6 +18,7 @@ namespace Workbench
         [DataMember] public required string ProjectFile { get; set; }
         [DataMember] public required List<string> Folders { get; set; }
 
+        public string? RootPath { get; set; }
         public byte[]? Icon { get; set; }
         public byte[]? Screenshot { get; set; }
         public string? IconFilePath { get; set; }
@@ -179,7 +180,9 @@ namespace Workbench
                     "template.xml",
                     template.ProjectFile,
                     iconFileName,
-                    screenshotFileName
+                    screenshotFileName,
+                    "MSVCSolution",
+                    "MSVCProject"
                 };
 
                 Debug.Assert(!string.IsNullOrWhiteSpace(template.ProjectFilePath));
@@ -204,6 +207,8 @@ namespace Workbench
                 var projectPath = ProjectVM.GetFullPath(finalPath, ProjectName);
                 File.WriteAllText(projectPath, projectXml);
 
+                CreateMSVCSolution(template, finalPath);
+
                 //Copy the Icon and Screenshot to the temp folder
                 if(template.IconFilePath != null)
                 {
@@ -223,6 +228,59 @@ namespace Workbench
                 Logger.Log(MessageType.Error, $"Failed to create new {template.ProjectType} project!");
                 throw;
             }
+        }
+
+        private void CreateMSVCSolution(ProjectTemplate template, string projectPath)
+        {
+            Debug.Assert(template != null && template.RootPath != null);
+
+            string vcSolutionPath = Path.Combine(template.RootPath, "MSVCSolution");
+            string vcProjectPath = Path.Combine(template.RootPath, "MSVCProject");
+
+            Debug.Assert(File.Exists(vcSolutionPath));
+            Debug.Assert(File.Exists(vcProjectPath));
+
+            var gadgetIncludePath = Path.Combine(MainWindow.GadgetEnginePath, @"include\GadgetEngine\");
+            var gadgetLibraryPath = Path.Combine(MainWindow.GadgetEnginePath, @"lib\");
+
+            List<string> gadgetIncludes = new()
+            {
+                gadgetIncludePath,
+                Path.Combine(MainWindow.GadgetEnginePath, @"include\Assimp\"),
+                Path.Combine(MainWindow.GadgetEnginePath, @"include\bullet3\"),
+                Path.Combine(MainWindow.GadgetEnginePath, @"include\common\"),
+                Path.Combine(MainWindow.GadgetEnginePath, @"include\freetype\"),
+                Path.Combine(MainWindow.GadgetEnginePath, @"include\Glad\"),
+                Path.Combine(MainWindow.GadgetEnginePath, @"include\SDL2\")
+            };
+
+            Debug.Assert(Directory.Exists(gadgetIncludePath));
+            Debug.Assert(Directory.Exists(gadgetLibraryPath));
+
+            var projectName = ProjectName;
+            var projectGUID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+            var solutionGUID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+
+            var solutionText = File.ReadAllText(vcSolutionPath);
+            solutionText = string.Format(solutionText, projectName, projectGUID, solutionGUID);
+            File.WriteAllText(Path.GetFullPath(Path.Combine(projectPath, $"{projectName}.sln")), solutionText);
+
+            var projectText = File.ReadAllText(vcProjectPath);
+            projectText = string.Format(projectText, projectName, projectGUID, ConstructListOfIncludePathsForMSVC(gadgetIncludes), gadgetLibraryPath);
+            File.WriteAllText(Path.GetFullPath(Path.Combine(projectPath, @$"Code\{projectName}.vcxproj")), projectText);
+        }
+
+        private static string ConstructListOfIncludePathsForMSVC(List<string> includePaths)
+        {
+            Debug.Assert(includePaths != null && includePaths.Count > 0);
+
+            string finalStr = "";
+            foreach(var path in includePaths)
+            {
+                finalStr += path + ";";
+            }
+
+            return finalStr;
         }
 
         public NewProjectVM()
@@ -245,6 +303,7 @@ namespace Workbench
                         throw new SerializationException($"An error occured while deserializing {file}!");
                     }
 
+                    template.RootPath = filePath;
                     template.IconFilePath = Path.GetFullPath(Path.Combine(filePath, "icon.png"));
                     template.Icon = File.ReadAllBytes(template.IconFilePath);
                     template.ScreenshotFilePath = Path.GetFullPath(Path.Combine(filePath, "screenshot.png"));

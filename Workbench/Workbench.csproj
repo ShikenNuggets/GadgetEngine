@@ -24,7 +24,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ProjectTemplates\EmptyProject\Code\Main.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ProjectTemplates\EmptyProject\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ProjectTemplates\EmptyProject\MSVCProject">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ProjectTemplates\EmptyProject\MSVCSolution">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="ProjectTemplates\EmptyProject\project.wbn">
@@ -39,7 +48,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo D|xcopy &quot;$(SolutionDir)Build\GadgetDLL\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)Build\SDL2\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\Assimp\bin\x64\*.dll&quot; &quot;$(TargetDir)&quot; /y /E" />
+    <Exec Command="echo D|xcopy &quot;$(SolutionDir)Build\GadgetDLL\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)Build\SDL2\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\Assimp\bin\x64\*.dll&quot; &quot;$(TargetDir)&quot; /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\_Gadget\include\*.*&quot; &quot;$(TargetDir)_Gadget\include\&quot; /s /y /E&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.*&quot; &quot;$(TargetDir)_Gadget\lib\$(Configuration)\&quot; /s /y /E" />
   </Target>
 
 </Project>
