@@ -42,7 +42,11 @@ namespace Gadget{
 		}
 
 	private:
-		static std::unordered_map<uint64_t, std::string> stringIdTable;
+		//This is a little silly, but it prevents a static initialization order fiasco
+		static inline std::unordered_map<uint64_t, std::string>& StringIDTable(){
+			static auto stringIdTable = std::unordered_map<uint64_t, std::string>();
+			return stringIdTable;
+		}
 
 		uint64_t id;
 	};

@@ -4,7 +4,6 @@
 
 using namespace Gadget;
 
-std::unordered_map<uint64_t, std::string> StringID::stringIdTable;
 StringID StringID::None = SID("");
 
 std::string StringID::GetString() const{
@@ -12,6 +11,8 @@ std::string StringID::GetString() const{
 }
 
 StringID StringID::InternString(StringID sid_, const char* str_){
+	auto& stringIdTable = StringIDTable();
+
 	if(stringIdTable.find(sid_.id) == stringIdTable.end()){
 		stringIdTable[sid_.id] = str_;
 	}
@@ -22,6 +23,8 @@ StringID StringID::InternString(StringID sid_, const char* str_){
 }
 
 std::string StringID::GetStringFromID(StringID id_){
+	auto& stringIdTable = StringIDTable();
+
 	auto find = stringIdTable.find(id_.id);
 	if(find != stringIdTable.end()){
 		return stringIdTable[id_.id];
