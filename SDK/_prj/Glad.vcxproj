@@ -83,7 +83,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
 echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -105,7 +105,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
 echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -129,7 +129,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
 echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

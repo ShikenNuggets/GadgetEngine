@@ -53,7 +53,7 @@ project "Glad"
 
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)SDK\\SDL\\include\\*.h\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E",
+			"echo D|xcopy \"$(SolutionDir)SDK\\$(ProjectName)\\include\\*.h*\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E",
 			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E"
 		}
 		
@@ -206,7 +206,7 @@ project "SDL2"
 
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)SDK\\$(ProjectName)\\include\\*.h\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E",
+			"echo D|xcopy \"$(SolutionDir)SDK\\SDL\\include\\*.h*\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E",
 			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E"
 		}
 		
@@ -252,6 +252,11 @@ project "SDL2main"
 		systemversion "latest"
 		staticruntime "On"
 		runtime "Release"
+
+		postbuildcommands
+		{
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E"
+		}
 		
 	filter "configurations:Debug"
 		symbols "Default"
