@@ -44,3 +44,6 @@
 
 # Mono auto generated files
 mono_crash.*
+
+# Special Directories
+SDK/_Gadget/

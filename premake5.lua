@@ -116,6 +116,16 @@ project "GadgetEngine"
 		{
 			"4715"
 		}
+
+		postbuildcommands
+		{
+			"echo D|xcopy \"$(ProjectDir)*.h\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E",
+			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\include\\*.h\" \"$(SolutionDir)SDK\\_Gadget\\include\\Assimp\\\" /s /y /E",
+			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\include\\*.h\" \"$(SolutionDir)SDK\\_Gadget\\include\\freetype\\\" /s /y /E",
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E",
+			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\lib\\x64\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E",
+			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E"
+		}
 		
 	filter "configurations:Debug"
 		defines "GADGET_DEBUG"
@@ -253,6 +263,11 @@ project "GadgetDLL"
 		fatalwarnings
 		{
 			"4715"
+		}
+
+		postbuildcommands
+		{
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E"
 		}
 		
 	filter "configurations:Debug"

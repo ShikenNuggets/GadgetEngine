@@ -99,6 +99,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -131,6 +135,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
     <ClCompile>
@@ -163,6 +171,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\bullet3\src\LinearMath\btAabbUtil2.h" />

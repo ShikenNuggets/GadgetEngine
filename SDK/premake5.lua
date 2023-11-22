@@ -50,6 +50,12 @@ project "Glad"
 		systemversion "latest"
 		staticruntime "On"
 		runtime "Release"
+
+		postbuildcommands
+		{
+			"echo D|xcopy \"$(SolutionDir)\\SDK\\$(ProjectName)\\include\\*.h\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E",
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E"
+		}
 		
 	filter "configurations:Debug"
 		symbols "Default"
@@ -196,6 +202,12 @@ project "SDL2"
 		{
 			"SDL/src/audio/wasapi/SDL_wasapi_winrt.cpp",
 			"SDL/src/render/direct3d11/SDL_render_winrt**",
+		}
+
+		postbuildcommands
+		{
+			"echo D|xcopy \"$(SolutionDir)\\SDK\\$(ProjectName)\\include\\*.h\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E",
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E"
 		}
 		
 	filter "configurations:Debug"

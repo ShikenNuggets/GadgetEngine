@@ -94,6 +94,14 @@
     <Lib>
       <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(ProjectDir)*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(SolutionDir)SDK\Assimp\include\*.h" "$(SolutionDir)SDK\_Gadget\include\Assimp\" /s /y /E
+echo D|xcopy "$(SolutionDir)SDK\freetype\include\*.h" "$(SolutionDir)SDK\_Gadget\include\freetype\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E
+echo D|xcopy "$(SolutionDir)SDK\Assimp\lib\x64\*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E
+echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
     <ClCompile>
@@ -122,6 +130,14 @@
     <Lib>
       <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\SDK\freetype\libs\Develop;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\Build\GadgetEngine\Debug;..\Build\Glad\Debug;..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(ProjectDir)*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(SolutionDir)SDK\Assimp\include\*.h" "$(SolutionDir)SDK\_Gadget\include\Assimp\" /s /y /E
+echo D|xcopy "$(SolutionDir)SDK\freetype\include\*.h" "$(SolutionDir)SDK\_Gadget\include\freetype\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E
+echo D|xcopy "$(SolutionDir)SDK\Assimp\lib\x64\*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E
+echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -149,6 +165,14 @@
     <Lib>
       <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(ProjectDir)*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(SolutionDir)SDK\Assimp\include\*.h" "$(SolutionDir)SDK\_Gadget\include\Assimp\" /s /y /E
+echo D|xcopy "$(SolutionDir)SDK\freetype\include\*.h" "$(SolutionDir)SDK\_Gadget\include\freetype\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E
+echo D|xcopy "$(SolutionDir)SDK\Assimp\lib\x64\*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E
+echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />

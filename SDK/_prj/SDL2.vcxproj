@@ -88,6 +88,10 @@
       <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\Build\SDL2\Debug\SDL2.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(SolutionDir)\SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
     <ClCompile>
@@ -109,6 +113,10 @@
       <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\Build\SDL2\Develop\SDL2.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(SolutionDir)\SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -132,6 +140,10 @@
       <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\Build\SDL2\Release\SDL2.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>echo D|xcopy "$(SolutionDir)\SDK\$(ProjectName)\include\*.h" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\SDL\include\SDL.h" />
