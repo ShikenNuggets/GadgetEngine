@@ -203,7 +203,7 @@ namespace Workbench
 
                 //Copy the project file, with the new name and new information
                 var projectXml = File.ReadAllText(template.ProjectFilePath);
-                projectXml = string.Format(projectXml, ProjectName, ProjectPath);
+                projectXml = string.Format(projectXml, ProjectName, finalPath);
                 var projectPath = ProjectVM.GetFullPath(finalPath, ProjectName);
                 File.WriteAllText(projectPath, projectXml);
 
