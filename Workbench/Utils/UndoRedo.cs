@@ -74,20 +74,28 @@ namespace Workbench
 
         private readonly ObservableCollection<IUndoRedo> _undoList = new ObservableCollection<IUndoRedo>();
         private readonly ObservableCollection<IUndoRedo> _redoList = new ObservableCollection<IUndoRedo>();
+        private int currentIndex = -1;
+        private int checkpoint = -1;
 
         public ReadOnlyObservableCollection<IUndoRedo> UndoList { get; private set; }
         public ReadOnlyObservableCollection<IUndoRedo> RedoList { get; private set; }
+
+        public bool IsAtCheckpoint => checkpoint == currentIndex;
 
         public UndoRedo()
         {
             UndoList = new ReadOnlyObservableCollection<IUndoRedo>(_undoList);
             RedoList = new ReadOnlyObservableCollection<IUndoRedo>(_redoList);
+            currentIndex = -1;
+            checkpoint = currentIndex;
         }
 
         public void Reset()
         {
             _undoList.Clear();
             _redoList.Clear();
+            currentIndex = -1;
+            checkpoint = currentIndex;
         }
 
         public void Add(IUndoRedo cmd)
@@ -97,8 +105,12 @@ namespace Workbench
                 _undoList.Add(cmd);
                 _redoList.Clear();
 
+                currentIndex++;
+
                 Logger.Log(MessageType.Verbose, cmd.Name);
             }
+
+            ProjectVM.TryShowUnsavedChanges();
         }
 
         public void Undo()
@@ -112,8 +124,12 @@ namespace Workbench
                 _canAddNewActions = true;
                 _redoList.Insert(0, cmd);
 
+                currentIndex--;
+
                 Logger.Log(MessageType.Verbose, "[Undo] " + cmd.Name);
             }
+
+            ProjectVM.TryShowUnsavedChanges();
         }
 
         public void Redo()
@@ -127,8 +143,18 @@ namespace Workbench
                 _canAddNewActions = true;
                 _undoList.Add(cmd);
 
+                currentIndex++;
+
                 Logger.Log(MessageType.Verbose, "[Redo] " + cmd.Name);
             }
+
+            ProjectVM.TryShowUnsavedChanges();
+        }
+
+        public void SetCheckpoint()
+        {
+            checkpoint = currentIndex;
+            ProjectVM.TryShowUnsavedChanges();
         }
     }
 }

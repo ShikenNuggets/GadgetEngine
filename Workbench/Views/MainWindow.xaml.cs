@@ -22,6 +22,9 @@ namespace Workbench
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static string _baseWindowTitle => "Gadget Workbench";
+        private static string WindowTitle => ProjectVM.HasUnsavedChanges ? _baseWindowTitle + "*" : _baseWindowTitle;
+
         public static string GadgetEnginePath { get; private set; } = Directory.GetCurrentDirectory() + @"\_Gadget\";
 
         public MainWindow()
@@ -29,6 +32,11 @@ namespace Workbench
             InitializeComponent();
             Loaded += OnMainWindowLoaded;
             Closing += OnMainWindowClosing;
+        }
+
+        public void UpdateTitleToShowUnsavedChanges()
+        {
+            Title = WindowTitle; //This isn't really the proper way to do this, but it's easier than dealing with properties and stuff
         }
 
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)

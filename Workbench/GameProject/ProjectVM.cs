@@ -85,6 +85,16 @@ namespace Workbench
 
         public static UndoRedo UndoRedo { get; private set; } = new UndoRedo();
 
+        public static bool HasUnsavedChanges => !UndoRedo.IsAtCheckpoint;
+
+        public static void TryShowUnsavedChanges()
+        {
+            if (Application.Current != null && Application.Current.MainWindow != null && Application.Current.MainWindow is MainWindow mw)
+            {
+                mw.UpdateTitleToShowUnsavedChanges();
+            }
+        }
+
         public ICommand? UndoCommand {  get; private set; }
         public ICommand? RedoCommand {  get; private set; }
         public ICommand? SaveCommand {  get; private set; }
@@ -161,6 +171,7 @@ namespace Workbench
         {
             Serializer.ToFile(project, project.FullPath);
             Logger.Log(MessageType.Info, $"Project saved to {project.FullPath}");
+            UndoRedo.SetCheckpoint();
         }
 
         private async Task BuildGameCodeDLL(bool showWindow = true)
