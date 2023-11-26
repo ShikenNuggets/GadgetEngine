@@ -32,5 +32,10 @@ namespace Workbench.Editors
             Loaded -= OnSceneEditorViewLoaded;
             Focus();
         }
+
+        private void OnNewClass_Button_Click(object sender, RoutedEventArgs e)
+        {
+            new AddCppDialog().ShowDialog();
+        }
     }
 }

@@ -6,6 +6,8 @@
 #include <crtdbg.h>
 #endif //GADGET_DEBUG
 
+#include <Gadget.h>
+
 class GameProjectInterface : public Gadget::GameInterface{
 public:
 	GameProjectInterface() : GameInterface("GameProject"){}

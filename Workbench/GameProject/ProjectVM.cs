@@ -15,13 +15,14 @@ namespace Workbench
     [DataContract(Name = "Game")]
     public class ProjectVM : BaseViewModel
     {
-        public static string Extension { get; } = ".wbn";
+        public const string ProjectExtension = ".wbn";
         public static string TempDir { get; } = $@".wbn\";
 
         [DataMember] public string Name { get; private set; } = "NewProject";
         [DataMember] public string Path { get; private set; }
 
-        public string FullPath => GetFullPath(Path + $@"{Name}", Name);
+        public string FullPath => GetFullPath(Path, Name);
+        public string SolutionPath => GetFullPath(Path, Name, VisualStudioHelper.SolutionExtension);
 
         [DataMember(Name = "Scenes")] private ObservableCollection<SceneVM> _scenes = new ObservableCollection<SceneVM>();
         [DataMember(Name = "ActiveScene")] private SceneVM? _activeScene;
@@ -150,12 +151,26 @@ namespace Workbench
 
         public void Unload()
         {
+            VisualStudioHelper.CloseVisualStudio();
             UndoRedo.Reset();
         }
 
-        public static string GetFullPath(string path, string name)
+        public static string GetFullPath(string path, string name, string extension = ProjectExtension)
         {
-            return $@"{path}\{name}{Extension}";
+            return $@"{path}\{name}{extension}";
+        }
+
+        public string GetCppNamespaceName()
+        {
+            Debug.Assert(!string.IsNullOrWhiteSpace(Name));
+
+            var projectName = Name.Replace(' ', '_');
+            return projectName;
+        }
+
+        public string GetCppPreprocessorPrefix()
+        {
+            return GetCppNamespaceName().ToUpper() + "_";
         }
     }
 }
