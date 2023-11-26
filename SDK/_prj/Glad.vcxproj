@@ -83,8 +83,8 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -105,8 +105,8 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,8 +129,8 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E</Command>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\$(ProjectName)\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
