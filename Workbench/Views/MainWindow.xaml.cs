@@ -47,6 +47,16 @@ namespace Workbench
 
         private void OnMainWindowClosing(object? sender, CancelEventArgs e)
         {
+            if (ProjectVM.HasUnsavedChanges)
+            {
+                bool? result = new UnsavedChangesView().ShowDialog();
+                if (result == false)
+                {
+                    e.Cancel = true;
+                    return; //User changed their mind, don't exit
+                }
+            }
+
             Closing -= OnMainWindowClosing;
             ProjectVM.Current?.Unload();
         }
