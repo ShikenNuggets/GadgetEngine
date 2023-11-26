@@ -15,7 +15,7 @@ namespace Workbench
         public const string SolutionExtension = ".sln";
 
         private static EnvDTE._DTE? _vsInstance = null;
-        private static readonly string _programId = "VisualStudio.DTE.17.0";
+        private static readonly string _programId = "VisualStudio.DTE.17.0"; //VS2022 internal version number
 
         [DllImport("ole32.dll")]
         private static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
@@ -23,9 +23,14 @@ namespace Workbench
         [DllImport("ole32.dll")]
         private static extern int GetRunningObjectTable(uint reserved, out IRunningObjectTable pprot);
 
+        public static bool LastBuildSucceeded { get; private set; } = true;
+        public static bool BuildDone { get; private set; } = true;
+
         public static void OpenVisualStudio(string solutionPath)
         {
             Debug.Assert(solutionPath != null);
+
+            Logger.Log(MessageType.Info, "Checking if Visual Studio is open...");
 
             IRunningObjectTable? rot = null;
             IEnumMoniker? monikerTable = null;
@@ -65,6 +70,7 @@ namespace Workbench
                             var solutionName = dte.Solution.FullName;
                             if (solutionName == solutionPath)
                             {
+                                Logger.Log(MessageType.Verbose, "Found Visual Studio instance that was already open.");
                                 _vsInstance = dte;
                                 isOpen = true;
                             }
@@ -76,6 +82,7 @@ namespace Workbench
                         Type? visualStudioType = Type.GetTypeFromProgID(_programId, true);
                         if (visualStudioType != null)
                         {
+                            Logger.Log(MessageType.Info, "Launching Visual Studio...");
                             _vsInstance = Activator.CreateInstance(visualStudioType) as EnvDTE._DTE;
                         }
                     }
@@ -109,8 +116,20 @@ namespace Workbench
         {
             if (_vsInstance?.Solution.IsOpen == true)
             {
+                Logger.Log(MessageType.Info, "Saving all files in Visual Studio...");
                 _vsInstance.ExecuteCommand("File.SaveAll");
+                if (IsBusy())
+                {
+                    Logger.Log(MessageType.Info, "Stopping Visual Studio debugger...");
+                    _vsInstance.Debugger.Stop();
+                }
+
+                Logger.Log(MessageType.Info, "Closing Visual Studio...");
                 _vsInstance.Solution.Close();
+            }
+            else
+            {
+                Logger.Log(MessageType.Verbose, "Tried to close Visual Studio when it isn't open.");
             }
             _vsInstance?.Quit();
         }
@@ -134,6 +153,7 @@ namespace Workbench
 
                 if (_vsInstance.Solution.IsOpen == false)
                 {
+                    Logger.Log(MessageType.Info, "Opening solution in Visual Studio...");
                     _vsInstance.Solution.Open(solutionPath);
                 }
                 else
@@ -147,6 +167,7 @@ namespace Workbench
                     {
                         foreach (string file in files)
                         {
+                            Logger.Log(MessageType.Info, $"Adding {file} to Visual Studio solution...");
                             project.ProjectItems.AddFromFile(file);
                         }
                     }
@@ -176,6 +197,96 @@ namespace Workbench
             }
 
             return true;
+        }
+
+        public static bool IsBusy()
+        {
+            bool result = false;
+
+            for (int i = 0; i < 3 && !result; i++)
+            {
+                try
+                {
+                    result = _vsInstance != null && (_vsInstance.Debugger.CurrentProgram != null || _vsInstance.Debugger.CurrentMode == EnvDTE.dbgDebugMode.dbgRunMode);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    if (!result)
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static void BuildSolution(ProjectVM project, string config, bool showWindow = true)
+        {
+            if (IsBusy())
+            {
+                Logger.Log(MessageType.Info, "Visual Studio is currently running a process.");
+                return;
+            }
+
+            OpenVisualStudio(project.SolutionPath);
+            LastBuildSucceeded = BuildDone = false;
+
+            if (_vsInstance == null)
+            {
+                Logger.Log(MessageType.Error, "Could not start a build because Visual Studio could not be opened.");
+                return; //Couldn't open Visual Studio, can't start a build
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                try
+                {
+                    if (!_vsInstance.Solution.IsOpen)
+                    {
+                        _vsInstance.Solution.Open(project.SolutionPath);
+                    }
+                    _vsInstance.MainWindow.Visible = showWindow;
+
+                    _vsInstance.Events.BuildEvents.OnBuildProjConfigBegin += OnBuildSolutionBegin;
+                    _vsInstance.Events.BuildEvents.OnBuildProjConfigDone += OnBuildSolutionDone;
+
+                    _vsInstance.Solution.SolutionBuild.SolutionConfigurations.Item(config).Activate();
+                    _vsInstance.ExecuteCommand("Build.BuildSolution");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    Logger.Log(MessageType.Error, $"Attempt {i} to build {project.Name} failed!");
+                }
+            }
+        }
+
+        private static void OnBuildSolutionBegin(string project, string projectConfig, string platform, string solutionConfig)
+        {
+            Logger.Log(MessageType.Info, $"Building {project}, {projectConfig}, {platform}, {solutionConfig}");
+        }
+
+        private static void OnBuildSolutionDone(string project, string projectConfig, string platform, string solutionConfig, bool success)
+        {
+            if (BuildDone)
+            {
+                return;
+            }
+
+            if (success)
+            {
+                Logger.Log(MessageType.Info, $"Build succeeded.");
+            }
+            else
+            {
+                Logger.Log(MessageType.Error, $"Build failed!");
+            }
+
+            BuildDone = true;
+            LastBuildSucceeded = success;
         }
     }
 }

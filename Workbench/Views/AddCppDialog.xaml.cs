@@ -28,7 +28,7 @@ namespace Workbench
             pathTextBox.Text = @"Code\";
         }
 
-        bool Validate()
+        private bool Validate()
         {
             Debug.Assert(ProjectVM.Current != null);
             Debug.Assert(ProjectVM.Current.Path != null);

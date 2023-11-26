@@ -33,7 +33,12 @@ namespace Workbench
     {
         private const string _dllName = "Gadget.dll";
 
-		[DllImport(_dllName)]
+		[DllImport(_dllName, CharSet = CharSet.Ansi)]
+		public static extern int LoadGameCodeDLL(string dllPath);
+        [DllImport(_dllName)]
+        public static extern int UnloadGameCodeDLL();
+
+        [DllImport(_dllName)]
 		private static extern ulong CreateGameObject(GameObjectDescriptor descriptor_);
 		[DllImport(_dllName)]
 		private static extern void DestroyGameObject(ulong guid_);

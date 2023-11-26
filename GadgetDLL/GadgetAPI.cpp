@@ -4,11 +4,15 @@
 #define WORKBENCH_INTERFACE extern "C" __declspec(dllexport)
 #endif //!WORKBENCH_INTERFACE
 
+#include <Windows.h>
+
 #include <App.h>
 
 using namespace Gadget;
 
 namespace{
+	HMODULE gameCodeDLL{ nullptr };
+
 	struct TransformInfo{
 		float position[3];
 		float rotation[3];
@@ -28,6 +32,29 @@ namespace{
 	};
 } //Anonymous Namespace
 
+WORKBENCH_INTERFACE uint32_t LoadGameCodeDLL(const char* dllPath_){
+	if(gameCodeDLL){
+		return FALSE;
+	}
+
+	gameCodeDLL = LoadLibraryA(dllPath_);
+	GADGET_BASIC_ASSERT(gameCodeDLL);
+
+	return gameCodeDLL ? TRUE : FALSE;
+}
+
+WORKBENCH_INTERFACE uint32_t UnloadGameCodeDLL(){
+	if(!gameCodeDLL){
+		return FALSE;
+	}
+
+	GADGET_BASIC_ASSERT(gameCodeDLL);
+	int result = FreeLibrary(gameCodeDLL);
+	GADGET_BASIC_ASSERT(result);
+	gameCodeDLL = nullptr;
+	return TRUE;
+}
+
 WORKBENCH_INTERFACE uint64_t CreateGameObject(GameObjectDescriptor* descriptor_){
 	GADGET_BASIC_ASSERT(descriptor_ != nullptr);
 
@@ -42,7 +69,7 @@ WORKBENCH_INTERFACE uint64_t CreateGameObject(GameObjectDescriptor* descriptor_)
 }
 
 WORKBENCH_INTERFACE void DestroyGameObject(uint64_t guid_){
-	GADGET_BASIC_ASSERT(guid_ != GUID::Invalid);
+	GADGET_BASIC_ASSERT(guid_ != Gadget::GUID::Invalid);
 
 	GameObject* go = GameObjectCollection::Get(guid_);
 	GADGET_BASIC_ASSERT(go != nullptr);

@@ -12,14 +12,53 @@ using System.Windows.Input;
 
 namespace Workbench
 {
+    enum BuildConfiguration
+    {
+        Editor,
+        Win64_Debug,
+        Win64_Release
+    }
+
     [DataContract(Name = "Game")]
     public class ProjectVM : BaseViewModel
     {
         public const string ProjectExtension = ".wbn";
         public static string TempDir { get; } = $@".wbn\";
 
+        private static readonly string[] _buildConfigurationNames = new string[] { "Debug", "EditorDLL", "Release" };
+        private static string GetConfigurationName(BuildConfiguration config)
+        {
+            switch (config)
+            {
+                case BuildConfiguration.Editor:
+                    return "EditorDLL";
+                case BuildConfiguration.Win64_Debug:
+                    return "Debug";
+                case BuildConfiguration.Win64_Release:
+                    return "Release";
+                default:
+                    Debug.Assert(false);
+                    Logger.Log(MessageType.Error, $"Invalid build config {config}!");
+                    return string.Empty;
+            }
+        }
+
+        private BuildConfiguration _buildConfig;
+
         [DataMember] public string Name { get; private set; } = "NewProject";
         [DataMember] public string Path { get; private set; }
+        [DataMember] public int BuildConfig
+        {
+            get => (int)_buildConfig;
+            set
+            {
+                if ((int)_buildConfig != value)
+                {
+                    _buildConfig = (BuildConfiguration)value;
+                    OnPropertyChanged(nameof(BuildConfig));
+                }
+            }
+        }
 
         public string FullPath => GetFullPath(Path, Name);
         public string SolutionPath => GetFullPath(Path, Name, VisualStudioHelper.SolutionExtension);
@@ -51,69 +90,10 @@ namespace Workbench
         public ICommand? SaveCommand {  get; private set; }
         public ICommand? AddSceneCommand {  get; private set; }
         public ICommand? RemoveSceneCommand {  get; private set; }
+        public ICommand? BuildCommand {  get; private set; }
 
-        private SceneVM AddSceneInternal(string sceneName)
+        private void SetupCommands()
         {
-            Debug.Assert(!string.IsNullOrWhiteSpace(sceneName));
-            SceneVM scene = new(this, sceneName);
-            _scenes.Add(scene);
-            return scene;
-        }
-
-        private void RemoveSceneInternal(SceneVM scene)
-        {
-            Debug.Assert(scene != null && _scenes.Contains(scene));
-            _scenes.Remove(scene);
-        }
-
-        public static ProjectVM Load(string file)
-        {
-            Debug.Assert(File.Exists(file));
-            return Serializer.FromFile<ProjectVM>(file);
-        }
-
-        public static void Save(ProjectVM project)
-        {
-            Serializer.ToFile(project, project.FullPath);
-            Logger.Log(MessageType.Info, $"Project saved to {project.FullPath}");
-        }
-
-        private ProjectVM(string name, string path)
-        {
-            Name = name;
-            Path = path;
-
-            Scenes = new ReadOnlyObservableCollection<SceneVM>(_scenes);
-
-            OnDeserialized(new StreamingContext());
-        }
-
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
-        {
-            Logger.Log(MessageType.Verbose, "Verbose");
-            Logger.Log(MessageType.Info, "Info");
-            Logger.Log(MessageType.Warning, "Warning");
-            Logger.Log(MessageType.Error, "Error");
-
-            if (_scenes == null || _scenes.Count == 0)
-            {
-                _scenes = new ObservableCollection<SceneVM>
-                {
-                    new SceneVM(this, "DefaultScene")
-                };
-            }
-
-            Scenes = new ReadOnlyObservableCollection<SceneVM>(_scenes);
-            OnPropertyChanged(nameof(Scenes));
-
-            ActiveScene = Scenes.FirstOrDefault(x => x.IsActive);
-            if (ActiveScene == null)
-            {
-                Scenes.First().IsActive = true;
-                ActiveScene = Scenes.First();
-            }
-
             AddSceneCommand = new RelayCommand<object>(x =>
             {
                 var newScene = AddSceneInternal($"Scene{_scenes.Count}");
@@ -144,9 +124,141 @@ namespace Workbench
                 ));
             }, x => x != null && !x.IsActive);
 
-            UndoCommand = new RelayCommand<object>(x => UndoRedo.Undo());
-            RedoCommand = new RelayCommand<object>(x => UndoRedo.Redo());
+            UndoCommand = new RelayCommand<object>(x => UndoRedo.Undo(), x => UndoRedo.UndoList.Any());
+            RedoCommand = new RelayCommand<object>(x => UndoRedo.Redo(), x => UndoRedo.RedoList.Any());
             SaveCommand = new RelayCommand<object>(x => Save(this));
+            BuildCommand = new RelayCommand<bool>(async x => await BuildGameCodeDLL(x), x => !VisualStudioHelper.IsBusy() && VisualStudioHelper.BuildDone);
+
+            OnPropertyChanged(nameof(AddSceneCommand));
+            OnPropertyChanged(nameof(RemoveSceneCommand));
+            OnPropertyChanged(nameof(UndoCommand));
+            OnPropertyChanged(nameof(RedoCommand));
+            OnPropertyChanged(nameof(SaveCommand));
+            OnPropertyChanged(nameof(BuildCommand));
+        }
+
+        private SceneVM AddSceneInternal(string sceneName)
+        {
+            Debug.Assert(!string.IsNullOrWhiteSpace(sceneName));
+            SceneVM scene = new(this, sceneName);
+            _scenes.Add(scene);
+            return scene;
+        }
+
+        private void RemoveSceneInternal(SceneVM scene)
+        {
+            Debug.Assert(scene != null && _scenes.Contains(scene));
+            _scenes.Remove(scene);
+        }
+
+        public static ProjectVM Load(string file)
+        {
+            Debug.Assert(File.Exists(file));
+            return Serializer.FromFile<ProjectVM>(file);
+        }
+
+        public static void Save(ProjectVM project)
+        {
+            Serializer.ToFile(project, project.FullPath);
+            Logger.Log(MessageType.Info, $"Project saved to {project.FullPath}");
+        }
+
+        private async Task BuildGameCodeDLL(bool showWindow = true)
+        {
+            try
+            {
+                UnloadGameCodeDLL();
+
+                await Task.Run(() => VisualStudioHelper.BuildSolution(this, GetConfigurationName(BuildConfiguration.Editor), showWindow));
+
+                if (VisualStudioHelper.LastBuildSucceeded)
+                {
+                    await Task.Run(LoadGameCodeDLL);
+                }
+                else
+                {
+                    Logger.Log(MessageType.Warning, "Build failed, DLL will not be loaded.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Logger.Log(MessageType.Error, "An error occurred while trying to build the game code DLL!");
+                throw;
+            }
+        }
+
+        private async void LoadGameCodeDLL()
+        {
+            var dll = $@"{Path}Build\EditorDLL\{Name}.dll";
+            if (!File.Exists(dll))
+            {
+                return;
+            }
+
+            int result = await Task.Run(() => GadgetAPI.LoadGameCodeDLL(dll));
+
+            if (result != 0) 
+            {
+                Logger.Log(MessageType.Info, $"{Name}.dll loaded successfully.");
+            }
+            else
+            {
+                Logger.Log(MessageType.Warning, $"{Name}.dll could not be loaded!");
+            }
+        }
+
+        private void UnloadGameCodeDLL()
+        {
+            if (GadgetAPI.UnloadGameCodeDLL() != 0)
+            {
+                Logger.Log(MessageType.Info, $"{Name}.dll unloaded.");
+            }
+            else
+            {
+                Logger.Log(MessageType.Warning, $"{Name}.dll could not be unloaded!");
+            }
+        }
+
+        private ProjectVM(string name, string path)
+        {
+            Name = name;
+            Path = path;
+
+            Scenes = new ReadOnlyObservableCollection<SceneVM>(_scenes);
+
+            OnDeserialized(new StreamingContext());
+        }
+
+        [OnDeserialized]
+        private async void OnDeserialized(StreamingContext context)
+        {
+            Logger.Log(MessageType.Verbose, "Verbose");
+            Logger.Log(MessageType.Info, "Info");
+            Logger.Log(MessageType.Warning, "Warning");
+            Logger.Log(MessageType.Error, "Error");
+
+            if (_scenes == null || _scenes.Count == 0)
+            {
+                _scenes = new ObservableCollection<SceneVM>
+                {
+                    new SceneVM(this, "DefaultScene")
+                };
+            }
+
+            Scenes = new ReadOnlyObservableCollection<SceneVM>(_scenes);
+            OnPropertyChanged(nameof(Scenes));
+
+            ActiveScene = Scenes.FirstOrDefault(x => x.IsActive);
+            if (ActiveScene == null)
+            {
+                Scenes.First().IsActive = true;
+                ActiveScene = Scenes.First();
+            }
+
+            await Task.Run(LoadGameCodeDLL);
+
+            SetupCommands();
         }
 
         public void Unload()
