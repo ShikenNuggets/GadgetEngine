@@ -50,6 +50,18 @@ namespace Gadget{
 		static bool CreateFile(const std::string& path_);
 		static bool CreateDir(const std::string& path_);
 
+		static std::string ConstructFilePath(std::convertible_to<std::string_view> auto&& ...s){
+			std::string finalStr = "";
+			for(const auto& v : std::initializer_list<std::string_view>{ s... }){
+				if(!finalStr.empty()){
+					finalStr += PathSeparator;
+				}
+
+				finalStr += v;
+			}
+			return finalStr;
+		}
+
 	private:
 		static std::string RemoveFileNameFromPath(const std::string& path_);
 	};
