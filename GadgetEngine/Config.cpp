@@ -19,6 +19,7 @@ Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, &OnEvent);
 
 	LocManager* locMan = LocManager::GetInstance(); //Initialize Localization Manager
+	GADGET_BASIC_ASSERT(locMan != nullptr);
 	locMan->AddLanguage(SID("ENG")); //TODO - Pull available languages from a config file
 
 	ConfigParser::ParseConfigFile(engineConfigPath, vars);
@@ -79,7 +80,7 @@ void Config::OnEvent(const Event& e_){
 	}
 }
 
-void Config::SaveConfigs(){
+void Config::SaveConfigs() const{
 	ConfigParser::SerializeConfigs(engineConfigPath, vars);
 }
 
@@ -88,5 +89,5 @@ void Config::ResetAllOptionsToDefault(){
 }
 
 std::string Config::CreateEngineConfigPath(){
-	return FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetGameName() + FileSystem::PathSeparator + engineConfigFileName;
+	return FileSystem::ConstructFilePath(FileSystem::GetPersistentDataDir(), App::GetGameName(), engineConfigFileName);
 }

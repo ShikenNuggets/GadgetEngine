@@ -34,12 +34,18 @@ void EventHandler::DeleteInstance(){
 #endif //GADGET_DEBUG
 
 void EventHandler::SetEventCallback(EventType type_, std::function<void(const Event&)> callback_){
+	GADGET_BASIC_ASSERT(type_ != EventType::None);
+	GADGET_BASIC_ASSERT(type_ < EventType::Count);
 	GADGET_ASSERT(eventCallbacks.find(type_) != eventCallbacks.end(), "Tried to set event callback of invalid type!");
 
 	eventCallbacks[type_].push_back(callback_);
 }
 
 void EventHandler::HandleEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() != EventType::None);
+	GADGET_BASIC_ASSERT(e_.GetEventType() < EventType::Count);
+	GADGET_BASIC_ASSERT(eventCallbacks.size() == (int)EventType::Count);
+
 	for(auto& callback : eventCallbacks[e_.GetEventType()]){
 		callback(e_);
 	}

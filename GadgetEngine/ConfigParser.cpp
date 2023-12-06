@@ -10,6 +10,7 @@
 using namespace Gadget;
 
 void ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& vars_){
+	GADGET_BASIC_ASSERT(!path_.empty());
 	if(!FileSystem::FileExists(path_)){
 		return;
 	}
@@ -37,6 +38,8 @@ void ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& vars_){
 }
 
 void ConfigParser::SerializeConfigs(const std::string& path_, const EngineVars& vars_){
+	GADGET_BASIC_ASSERT(!path_.empty());
+
 	std::string output = "";
 	output += SerializeSection(EngineVars::Core::sectionName, vars_.core.vars);
 	output += SerializeSection(EngineVars::Display::sectionName, vars_.display.vars);
@@ -45,6 +48,8 @@ void ConfigParser::SerializeConfigs(const std::string& path_, const EngineVars& 
 }
 
 std::string ConfigParser::SerializeSection(StringID section_, const std::map<StringID, Var>& vars_){
+	GADGET_BASIC_ASSERT(section_ != StringID::None);
+
 	std::vector<std::string> outputStrs;
 	outputStrs.reserve(vars_.size());
 

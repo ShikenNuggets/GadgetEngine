@@ -27,6 +27,12 @@
 #define GADGET_BASIC_ASSERT(expr) GADGET_ASSERT(expr, "Condition Failed: " ## #expr)
 #define GADGET_ASSERT_NOT_IMPLEMENTED GADGET_ASSERT(false, "Case not implemented - Ask a dev!");
 
+#if defined GADGET_DEBUG
+	#define GADGET_DEBUG_INT(var) int var
+#else
+	#define GADGET_DEBUG_INT(var) ;
+#endif
+
 namespace Gadget{
 	class Debug{
 	public:
@@ -35,7 +41,8 @@ namespace Gadget{
 			Info		= 1,
 			Warning		= 2,
 			Error		= 3,
-			FatalError	= 4
+			FatalError	= 4,
+			LogType_MAX //Put new values ABOVE this, nothing should be below
 		};
 
 		static void Init();
@@ -60,7 +67,7 @@ namespace Gadget{
 		static bool isInitialized;
 		static LogType logLevel;
 		static std::set<StringID> logChannelFilter;
-		static std::queue<std::string> queuedLogsForFileWrite;
+		static std::queue<std::string> queuedLogsForFileWrite; //TODO - Make this thread-safe
 
 		static void QueueLogForFileWrite(const std::string& message_);
 		static void WriteQueuedLogs();

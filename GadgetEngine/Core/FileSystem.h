@@ -20,6 +20,7 @@ namespace Gadget{
 			Append,
 			Clear,
 			Overwrite,
+			WriteType_MAX //Put new values ABOVE this, nothing should be below
 		};
 
 	#ifdef GADGET_PLATFORM_WIN32

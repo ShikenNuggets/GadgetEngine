@@ -31,16 +31,21 @@ void LocManager::DeleteInstance(){
 
 StringID LocManager::GetCurrentLanguage() const{
 	GADGET_ASSERT(currentLanguage < languages.size(), "Current Language set to an invalid value!");
+
 	return languages[currentLanguage];
 }
 
 void LocManager::AddLanguage(StringID language_){
+	GADGET_BASIC_ASSERT(language_ != StringID::None);
 	GADGET_ASSERT(languages.size() < std::numeric_limits<uint8_t>::max(), "LocManager cannot support more than 256 languages!");
 	GADGET_ASSERT(std::find(languages.begin(), languages.end(), language_) == languages.end(), language_.GetString() + " added to the language list multiple times!");
+
 	languages.push_back(language_);
 }
 
 void LocManager::SetCurrentLanguage(StringID language_){
+	GADGET_BASIC_ASSERT(language_ != StringID::None);
+
 	for(size_t i = 0; i < languages.size(); i++){
 		if(languages[i] == language_){
 			currentLanguage = static_cast<uint8_t>(i);

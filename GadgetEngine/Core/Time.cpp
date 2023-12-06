@@ -11,12 +11,18 @@ using namespace Gadget;
 Time::Time() : timeScale(1.0f), startTime(0), previousTicks(0), currentTicks(0){}
 
 void Time::Start(){
+	if(startTime.count() != 0){
+		Debug::Log("Start Time has been reset.", Debug::Warning, __FILE__, __LINE__);
+	}
+
 	startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch());
 	previousTicks = startTime;
 	currentTicks = startTime;
 }
 
 void Time::Update(){
+	GADGET_BASIC_ASSERT(startTime.count() != 0);
+
 	previousTicks = currentTicks;
 	currentTicks = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch());
 }

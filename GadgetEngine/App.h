@@ -70,6 +70,30 @@ namespace Gadget{
 		void Initialize(const std::string& name_);
 		void Destroy();
 
+		inline bool IsFullyInitialized() const{
+			return
+				resourceMgr != nullptr
+				&& config != nullptr
+				&& time != nullptr
+				&& input != nullptr
+				&& renderer != nullptr
+				&& physics != nullptr
+				&& sceneManager != nullptr
+				&& gameLogicManager != nullptr;
+		}
+
+		inline bool IsFullyDestroyed() const{
+			return
+				resourceMgr == nullptr
+				&& config == nullptr
+				&& time == nullptr
+				&& input == nullptr
+				&& renderer == nullptr
+				&& physics == nullptr
+				&& sceneManager == nullptr
+				&& gameLogicManager == nullptr;
+		}
+
 		//Delete unwanted compiler-generated copy/move constructors and assignment operators
 		App(const App&) = delete;
 		App(App&&) = delete;

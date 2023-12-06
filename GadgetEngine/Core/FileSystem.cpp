@@ -13,16 +13,22 @@
 using namespace Gadget;
 
 bool FileSystem::FileExists(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+
 	std::fstream filestream;
 	filestream.open(filePath_, std::ios::in);
 	return filestream.is_open();
 }
 
 bool FileSystem::DirExists(const std::string& path_){
+	GADGET_BASIC_ASSERT(!path_.empty());
+
 	return std::filesystem::is_directory(path_);
 }
 
 std::vector<std::string> FileSystem::ReadFile(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+
 	std::vector<std::string> fileContents;
 
 	std::fstream filestream;
@@ -45,6 +51,8 @@ std::vector<std::string> FileSystem::ReadFile(const std::string& filePath_){
 }
 
 std::string FileSystem::ReadFileToString(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+
 	std::string result;
 	std::vector<std::string> fileContents = ReadFile(filePath_);
 	result.reserve(fileContents.size() * 16);
@@ -57,6 +65,8 @@ std::string FileSystem::ReadFileToString(const std::string& filePath_){
 }
 
 std::vector<uint8_t> FileSystem::ReadBinaryFile(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+
 	std::ifstream input(filePath_, std::ios::binary);
 	if(!input.is_open()){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
@@ -67,6 +77,8 @@ std::vector<uint8_t> FileSystem::ReadBinaryFile(const std::string& filePath_){
 }
 
 nlohmann::json FileSystem::ReadPlainTextJSONFile(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+
 	if(!FileExists(filePath_)){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
 		return nlohmann::json(nullptr);
@@ -76,6 +88,8 @@ nlohmann::json FileSystem::ReadPlainTextJSONFile(const std::string& filePath_){
 }
 
 nlohmann::json FileSystem::ReadBinaryJSONFile(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+
 	if(!FileExists(filePath_)){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
 		return nlohmann::json(nullptr);
@@ -85,6 +99,11 @@ nlohmann::json FileSystem::ReadBinaryJSONFile(const std::string& filePath_){
 }
 
 bool FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+	//TODO - Check if file path is valid
+	GADGET_BASIC_ASSERT(!content_.empty());
+	GADGET_BASIC_ASSERT(type_ < WriteType::WriteType_MAX);
+
 	if(!FileExists(filePath_)){
 		CreateFile(filePath_);
 	}
@@ -123,6 +142,11 @@ bool FileSystem::WriteToFile(const std::string& filePath_, const std::string& co
 }
 
 bool FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+	//TODO - Check if file path is valid
+	GADGET_BASIC_ASSERT(!data_.empty());
+	GADGET_BASIC_ASSERT(type_ < WriteType::WriteType_MAX);
+
 	if(!FileExists(filePath_)){
 		CreateFile(filePath_);
 	}
@@ -131,6 +155,7 @@ bool FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vect
 	switch(type_)
 	{
 		case WriteType::Append:
+			Debug::Log("Appending to binary files is not recommended.", Debug::Warning, __FILE__, __LINE__);
 			outfile.open(filePath_, std::ios::out | std::ios_base::app | std::ios::binary);
 			break;
 		case WriteType::Clear:
@@ -186,6 +211,9 @@ std::string FileSystem::GetPersistentDataDir(){
 }
 
 bool FileSystem::CreateFile(const std::string& file_){
+	GADGET_BASIC_ASSERT(!file_.empty());
+	//TODO - Check if file name is valid
+
 	std::string dir = RemoveFileNameFromPath(file_);
 	if(Utils::ContainsChar(dir, PathSeparator) && !DirExists(dir)){
 		CreateDir(dir);
@@ -203,6 +231,9 @@ bool FileSystem::CreateFile(const std::string& file_){
 }
 
 bool FileSystem::CreateDir(const std::string& path_){
+	GADGET_BASIC_ASSERT(!path_.empty());
+	//TODO - Check if path is valid
+
 	if(DirExists(path_)){
 		return false;
 	}
@@ -211,5 +242,6 @@ bool FileSystem::CreateDir(const std::string& path_){
 }
 
 std::string FileSystem::RemoveFileNameFromPath(const std::string& path_){
+	GADGET_BASIC_ASSERT(path_.empty());
 	return path_.substr(0, path_.find_last_of(PathSeparator));
 }

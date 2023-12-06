@@ -48,7 +48,12 @@ void App::DeleteInstance(){
 }
 
 void App::Initialize(const std::string& name_){
-	gameName = name_;
+	GADGET_BASIC_ASSERT(!name_.empty());
+	GADGET_BASIC_ASSERT(IsFullyDestroyed());
+
+	if(!name_.empty()){
+		gameName = name_;
+	}
 
 	Debug::Init();
 	resourceMgr = std::make_unique<ResourceManager>();
@@ -83,9 +88,13 @@ void App::Initialize(const std::string& name_){
 	physics = std::make_unique<PhysManager>();
 	sceneManager = std::make_unique<BasicSceneManager>();
 	gameLogicManager = std::make_unique<GameLogicManager>();
+
+	GADGET_BASIC_ASSERT(IsFullyInitialized());
 }
 
 void App::Destroy(){
+	GADGET_BASIC_ASSERT(IsFullyInitialized());
+
 	gameLogicManager.reset();
 	sceneManager.reset();
 	physics.reset();
@@ -94,6 +103,8 @@ void App::Destroy(){
 	time.reset();
 	config.reset();
 	resourceMgr.reset();
+
+	GADGET_BASIC_ASSERT(IsFullyDestroyed());
 }
 
 void App::Run(GameInterface& gameInterface_){
@@ -134,6 +145,8 @@ void App::Run(GameInterface& gameInterface_){
 }
 
 void App::OnEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
+
 	if(e_.GetEventType() == EventType::WindowClose){
 		GetInstance().isRunning = false;
 	}else if(e_.GetEventType() == EventType::WindowResize){
@@ -155,6 +168,8 @@ void App::OnEvent(const Event& e_){
 }
 
 void* App::AllocateSingleFrameMemory(size_t bytes_){
+	GADGET_BASIC_ASSERT(IsFullyInitialized());
+
 	if(bytes_ == 0 || !singleFrameAllocator.CanAllocate(bytes_)){
 		return nullptr;
 	}
@@ -163,6 +178,8 @@ void* App::AllocateSingleFrameMemory(size_t bytes_){
 }
 
 void* App::AllocateTwoFrameMemory(size_t bytes_){
+	GADGET_BASIC_ASSERT(IsFullyInitialized());
+
 	if(bytes_ == 0 || !twoFrameAllocator.CurrentBuffer().CanAllocate(bytes_)){
 		return nullptr;
 	}
@@ -171,6 +188,8 @@ void* App::AllocateTwoFrameMemory(size_t bytes_){
 }
 
 Renderer::API App::GetCurrentRenderAPI(){
+	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
+
 	if(GetInstance().renderer != nullptr){
 		return GetInstance().renderer->GetRenderAPI();
 	}else{
@@ -179,11 +198,22 @@ Renderer::API App::GetCurrentRenderAPI(){
 }
 
 float App::GetFixedDeltaTime(){
-	return 1.0f / static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey));
+	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
+
+	const float physicsUpdatesPerSecond = static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey));
+	GADGET_BASIC_ASSERT(physicsUpdatesPerSecond > 0.0f);
+	if(physicsUpdatesPerSecond > 0.0f){
+		Debug::Log("PhysicsUpdates was an invalid value!", Debug::Warning, __FILE__, __LINE__);
+		return 0.0f; //Avoid divide by 0, or wonkiness caused by negative number
+	}
+
+	return 1.0f / physicsUpdatesPerSecond;
 }
 
 float App::GetCurrentFramerateCap(){
-	float targetFPS = GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey);
+	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
+
+	float targetFPS = static_cast<float>(GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
 	bool vsync = GetConfig().GetOptionBool(EngineVars::Display::vsyncKey);
 
 	if(targetFPS == 0.0f && vsync == false){

@@ -36,6 +36,9 @@ void Debug::Init(){
 }
 
 void Debug::Log(const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
+	GADGET_BASIC_ASSERT(!message_.empty());
+	GADGET_BASIC_ASSERT(type_ < LogType_MAX);
+
 	if(type_ < logLevel){
 		return; //Ignore log messages below the current log level
 	}
@@ -75,6 +78,9 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 }
 
 void Debug::Log(StringID channel_, const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
+	GADGET_BASIC_ASSERT(channel_ != StringID::None);
+	GADGET_BASIC_ASSERT(!message_.empty());
+
 	if(logChannelFilter.empty() || logChannelFilter.find(channel_) != logChannelFilter.end()){
 		Debug::Log("[" + channel_.GetString() + "] " + message_, type_, fileName_, lineNumber_); //Only print if there is no filter set or if this channel is in the filter list
 	}
@@ -85,6 +91,7 @@ Debug::LogType Debug::GetLogVerbosity(){ return logLevel; }
 void Debug::SetLogVerbosity(Debug::LogType type_){ logLevel = type_; }
 
 void Debug::AddFilter(StringID id_){
+	GADGET_BASIC_ASSERT(id_ != StringID::None);
 	logChannelFilter.insert(id_);
 }
 
@@ -93,6 +100,9 @@ void Debug::ResetFilter(){
 }
 
 void Debug::PopupErrorMessage(const std::string& title_, const std::string& message_){
+	GADGET_BASIC_ASSERT(!title_.empty());
+	GADGET_BASIC_ASSERT(!message_.empty());
+
 	Debug::Log(SID("FATAL"), message_, FatalError);
 
 	#ifdef GADGET_PLATFORM_WIN32
@@ -107,12 +117,17 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 }
 
 void Debug::ThrowFatalError(StringID channel_, const std::string& message_, const std::string& file_, int line_){
+	GADGET_BASIC_ASSERT(channel_ != StringID::None);
+	GADGET_BASIC_ASSERT(!message_.empty());
+
 	Debug::Log(channel_, message_, FatalError, file_, line_);
 	PopupErrorMessage("Fatal Error! [" + channel_.GetString() + "]", message_ + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_));
 	throw std::runtime_error(message_ + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_));
 }
 
 void Debug::QueueLogForFileWrite(const std::string& message_){
+	GADGET_BASIC_ASSERT(!message_.empty());
+
 	queuedLogsForFileWrite.push(message_);
 	WriteQueuedLogs();
 }
