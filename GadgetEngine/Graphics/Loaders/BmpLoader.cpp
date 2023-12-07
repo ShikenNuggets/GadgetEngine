@@ -8,6 +8,9 @@
 using namespace Gadget;
 
 Texture* BmpLoader::LoadImage(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
+
 	auto data = FileSystem::ReadBinaryFile(filePath_);
 	data.shrink_to_fit();
 	if(data.empty()){

@@ -6,6 +6,13 @@
 using namespace Gadget;
 
 Cubemap::Cubemap(StringID right_, StringID left_, StringID top_, StringID bottom_, StringID front_, StringID back_) : textureNames({ right_, left_, top_, bottom_, front_, back_ }), textures(){
+	GADGET_BASIC_ASSERT(right_ != StringID::None);
+	GADGET_BASIC_ASSERT(left_ != StringID::None);
+	GADGET_BASIC_ASSERT(top_ != StringID::None);
+	GADGET_BASIC_ASSERT(bottom_ != StringID::None);
+	GADGET_BASIC_ASSERT(front_ != StringID::None);
+	GADGET_BASIC_ASSERT(back_ != StringID::None);
+	
 	//Flip top and bottom
 	textureNames[Top] = bottom_;
 	textureNames[Bottom] = top_;
@@ -58,11 +65,13 @@ bool Cubemap::IsValid() const{
 }
 
 Texture* Cubemap::GetTexture(Orientation o_) const{
+	GADGET_BASIC_ASSERT(IsValid());
 	GADGET_ASSERT(static_cast<int>(o_) >= 0 && static_cast<size_t>(o_) < numTextures, "Invalid Cubemap texture orientation [" + std::to_string(o_) + "]!");
 	return textures[static_cast<size_t>(o_)];
 }
 
 Texture* Cubemap::GetTexture(size_t orientation_) const{
+	GADGET_BASIC_ASSERT(IsValid());
 	GADGET_BASIC_ASSERT(orientation_ < numTextures);
 	return textures[orientation_];
 }

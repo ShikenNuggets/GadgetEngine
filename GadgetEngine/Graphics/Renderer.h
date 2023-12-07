@@ -23,22 +23,33 @@ namespace Gadget{
 		enum class API{
 			None = 0,
 			OpenGL,
-			DX12
+			DX12,
+
+			API_MAX //Do not put any values below this
 		};
 
 		enum class WindingOrder{
 			Clockwise,
-			CounterClockwise
+			CounterClockwise,
+
+			WindingOrder_MAX //Do not put any values below this
 		};
 
 		enum class CullFace{
 			None,
 			Back,
 			Front,
-			All
+			All,
+
+			CullFace_MAX //Do not put any values below this
 		};
 
-		Renderer(API renderAPI_, WindingOrder order_ = WindingOrder::CounterClockwise, CullFace cullface_ = CullFace::Back) : renderAPI(renderAPI_), postInitComplete(false), window(nullptr), currentWindingOrder(order_), currentCullFace(cullface_){}
+		Renderer(API renderAPI_, WindingOrder order_ = WindingOrder::CounterClockwise, CullFace cullface_ = CullFace::Back) : renderAPI(renderAPI_), postInitComplete(false), window(nullptr), currentWindingOrder(order_), currentCullFace(cullface_){
+			GADGET_BASIC_ASSERT(renderAPI_ < API::API_MAX);
+			GADGET_BASIC_ASSERT(order_ < WindingOrder::WindingOrder_MAX);
+			GADGET_BASIC_ASSERT(cullface_ < CullFace::CullFace_MAX);
+		}
+
 		virtual ~Renderer(){}
 
 		virtual void PostInit(){ postInitComplete = true; }
@@ -53,8 +64,15 @@ namespace Gadget{
 
 		virtual void OnResize(int newWidth_, int newHeight_) = 0; //TODO - Update all camera projection matrices
 
-		virtual void SetWindingOrder(WindingOrder order_){ currentWindingOrder = order_; }
-		virtual void SetCullFace(CullFace cullFace_){ currentCullFace = cullFace_; }
+		virtual void SetWindingOrder(WindingOrder order_){
+			GADGET_BASIC_ASSERT(order_ < WindingOrder::WindingOrder_MAX);
+			currentWindingOrder = order_;
+		}
+
+		virtual void SetCullFace(CullFace cullFace_){
+			GADGET_BASIC_ASSERT(cullFace_ < CullFace::CullFace_MAX);
+			currentCullFace = cullFace_;
+		}
 
 		float GetAspectRatio(){ return static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()); }
 		void ResetViewportRect(){ SetViewportRect(ViewportRect::Fullscreen); }

@@ -32,15 +32,25 @@ GL_MeshInfo::GL_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), va
 
 	glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(Vertex));
 	glVertexArrayElementBuffer(vao, ebo);
+
+	GADGET_BASIC_ASSERT(vao != 0);
+	GADGET_BASIC_ASSERT(vbo != 0);
+	GADGET_BASIC_ASSERT(ebo != 0);
 }
 
 GL_MeshInfo::~GL_MeshInfo(){
+	GADGET_BASIC_ASSERT(vao != 0);
+	GADGET_BASIC_ASSERT(vbo != 0);
+	GADGET_BASIC_ASSERT(ebo != 0);
+
 	glDeleteBuffers(1, &ebo);
 	glDeleteBuffers(1, &vbo);
 	glDeleteVertexArrays(1, &vao);
 }
 
 void GL_MeshInfo::Bind(){
+	GADGET_BASIC_ASSERT(vao != 0);
+
 	glBindVertexArray(vao);
 }
 

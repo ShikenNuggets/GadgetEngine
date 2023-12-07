@@ -1,6 +1,7 @@
 #include "FreetypeFontLoader.h"
 
 #include "App.h"
+#include "Core/FileSystem.h"
 #include "Graphics/Text/FreetypeFont.h"
 
 using namespace Gadget;
@@ -16,7 +17,10 @@ FreetypeFontLoader::~FreetypeFontLoader(){
 }
 
 FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
 	GADGET_BASIC_ASSERT(ftLib != nullptr);
+
 	if(ftLib == nullptr){
 		return nullptr;
 	}

@@ -10,8 +10,15 @@ namespace Gadget{
 		CameraComponent(GameObject* parent_, Camera::Projection projection_ = Camera::Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);
 		virtual ~CameraComponent() override;
 
-		static CameraComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
-		static std::vector<CameraComponent*> GetComponents(GUID objectGuid_){ return componentCollection.GetComponents(objectGuid_); }
+		static CameraComponent* Get(GUID objectGuid_){
+			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
+			return componentCollection.Get(objectGuid_);
+		}
+
+		static std::vector<CameraComponent*> GetComponents(GUID objectGuid_){
+			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
+			return componentCollection.GetComponents(objectGuid_);
+		}
 
 		Matrix4 GetUpdatedViewMatrix();
 		Matrix4 GetUpdatedProjectionMatrix();

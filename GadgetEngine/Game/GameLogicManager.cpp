@@ -8,6 +8,9 @@ GameLogicManager::GameLogicManager(){}
 
 //Overly simplistic but it's fine for just a basic integration
 void GameLogicManager::Update(const Scene* scene_, float deltaTime_){
+	GADGET_BASIC_ASSERT(scene_ != nullptr);
+	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
+
 	//TODO - This is very inefficient, find a better way to do this
 	auto lcs = scene_->GetAllComponentsInScene<GameLogicComponent>();
 	for(auto& lc : lcs){

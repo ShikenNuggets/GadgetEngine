@@ -14,9 +14,20 @@ namespace Gadget{
 		constexpr float GetAmbientIntensity() const{ return ambientIntensity; }
 		constexpr float GetDiffuseIntensity() const{ return diffuseIntensity; }
 
-		void SetColor(const Color& color_){ color = color_; }
-		float SetAmbientIntensity(float value_){ ambientIntensity = value_; }
-		float SetDiffuseIntensity(float value_){ diffuseIntensity = value_; }
+		void SetColor(const Color& color_){
+			GADGET_BASIC_ASSERT(color_.IsValid());
+			color = color_;
+		}
+
+		float SetAmbientIntensity(float value_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
+			ambientIntensity = value_;
+		}
+		
+		float SetDiffuseIntensity(float value_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
+			diffuseIntensity = value_;
+		}
 
 	protected:
 		Color color;
@@ -49,9 +60,20 @@ namespace Gadget{
 		constexpr float GetLinear() const{ return linear; }
 		constexpr float GetQuadratic() const{ return quadratic; }
 
-		void SetDirection(const Vector3& dir_){ direction = dir_; }
-		void SetCutOff(float cutOff_){ cutOff = cutOff_; }
-		void SetOuterCutOff(float outerCutOff_){ outerCutOff = outerCutOff_; }
+		void SetDirection(const Vector3& dir_){
+			GADGET_BASIC_ASSERT(dir_.IsValid());
+			direction = dir_;
+		}
+
+		void SetCutOff(float cutOff_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(cutOff_));
+			cutOff = cutOff_;
+		}
+
+		void SetOuterCutOff(float outerCutOff_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(outerCutOff_));
+			outerCutOff = outerCutOff_;
+		}
 
 	private:
 		Vector3 direction;
@@ -67,7 +89,11 @@ namespace Gadget{
 		DirectionalLight(const Vector3& direction_, const Color& color_ = Color::White()) : LightSource(color_), direction(direction_){}
 
 		constexpr Vector3 GetDirection() const{ return direction; }
-		void SetDirection(const Vector3& dir_){ direction = dir_; }
+
+		void SetDirection(const Vector3& dir_){
+			GADGET_BASIC_ASSERT(dir_.IsValid());
+			direction = dir_;
+		}
 
 	private:
 		Vector3 direction;

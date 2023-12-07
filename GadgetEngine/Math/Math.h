@@ -89,7 +89,7 @@ namespace Gadget{
 		static inline float Ceiling(float num_){ return ceil(num_); }
 		static inline double Ceiling(double num_){ return ceil(num_); }
 
-		static inline float RemapRange(float value_, float oldMin_, float oldMax_, float newMin_, float newMax_){
+		static inline constexpr float RemapRange(float value_, float oldMin_, float oldMax_, float newMin_, float newMax_){
 			if(oldMin_ == oldMax_ || newMin_ == newMax_){
 				return newMin_;
 			}
@@ -97,6 +97,14 @@ namespace Gadget{
 			float oldRange = (oldMax_ - oldMin_);
 			float newRange = (newMax_ - newMin_);
 			return (((value_ - oldMin_) * newRange) / oldRange) + newMin_;
+		}
+
+		static inline bool IsValidNumber(float value_){
+			return !std::isnan(value_) && !std::isinf(value_);
+		}
+
+		static inline bool IsValidNumber(double value_){
+			return !isnan(value_) && !isinf(value_);
 		}
 
 		//Delete unwanted compiler-generated constructors, destructors, and assignment operators

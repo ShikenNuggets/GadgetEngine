@@ -1,8 +1,11 @@
 #include "GL_DepthFrameBuffer.h"
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 GL_DepthFrameBuffer::GL_DepthFrameBuffer(int width_, int height_) : GL_FrameBuffer(width_, height_), depthMap(0){
+	GADGET_BASIC_ASSERT(width_ > 0 && height_ > 0);
 	//TODO - I'd rather use the direct state access functions, but calling glTextureSubImage2D here causes a crash later, unclear why
 
 	Bind();
@@ -20,8 +23,11 @@ GL_DepthFrameBuffer::GL_DepthFrameBuffer(int width_, int height_) : GL_FrameBuff
 	glReadBuffer(GL_NONE);
 
 	Unbind();
+
+	GADGET_BASIC_ASSERT(depthMap != 0);
 }
 
 GL_DepthFrameBuffer::~GL_DepthFrameBuffer(){
+	GADGET_BASIC_ASSERT(depthMap != 0);
 	glDeleteTextures(1, &depthMap);
 }

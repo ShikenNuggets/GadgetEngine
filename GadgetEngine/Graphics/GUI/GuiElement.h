@@ -15,12 +15,19 @@ namespace Gadget{
 		TopLeft,
 		TopRight,
 		BottomLeft,
-		BottomRight
+		BottomRight,
+
+		GuiAnchor_MAX //Don't put any values under this!
 	};
 
 	class GuiElement{
 	public:
-		GuiElement(StringID name_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : name(name_), position(pos_), size(size_), anchor(anchor_), isActive(isActive_){}
+		GuiElement(StringID name_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : name(name_), position(pos_), size(size_), anchor(anchor_), isActive(isActive_){
+			GADGET_BASIC_ASSERT(name_ != StringID::None);
+			GADGET_BASIC_ASSERT(pos_.IsValid());
+			GADGET_BASIC_ASSERT(size_.IsValid());
+			GADGET_BASIC_ASSERT(anchor_ != GuiAnchor::GuiAnchor_MAX);
+		}
 		
 		virtual ~GuiElement(){
 			for(const auto& se : subElements){
@@ -28,7 +35,7 @@ namespace Gadget{
 			}
 		}
 
-		virtual void Update([[maybe_unused]] float deltaTime_){}
+		virtual void Update([[maybe_unused]] float deltaTime_){ GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f); }
 
 		StringID GetName() const{ return name; }
 		bool IsActive() const{ return isActive; }
@@ -37,7 +44,10 @@ namespace Gadget{
 		GuiAnchor GetAnchor() const{ return anchor; }
 		const std::vector<GuiElement*>& GetSubElements() const{ return subElements; }
 
-		void AddSubElement(GuiElement* element){ subElements.push_back(element); }
+		void AddSubElement(GuiElement* element_){
+			GADGET_BASIC_ASSERT(element_ != nullptr);
+			subElements.push_back(element_);
+		}
 
 		void SetName(StringID name_){ name = name_; }
 		void SetIsActive(bool isActive_){ isActive = isActive_; }
@@ -95,6 +105,9 @@ namespace Gadget{
 		}
 
 		virtual void OnClick(ButtonID button_, const Vector2& clickPoint_){
+			GADGET_BASIC_ASSERT(button_ != ButtonID::ButtonID_MAX);
+			GADGET_BASIC_ASSERT(clickPoint_.IsValid());
+
 			for(const auto& e : subElements){
 				if(e->PointIntersects(clickPoint_)){
 					e->OnClick(button_, clickPoint_);
@@ -103,13 +116,15 @@ namespace Gadget{
 		}
 
 		bool PointIntersects(const Vector2& point_) const{
+			GADGET_BASIC_ASSERT(point_.IsValid());
+
 			return (point_.x >= position.x - size.x
 				&& point_.x <= position.x + size.x
 				&& point_.y >= position.y - size.y
 				&& point_.y <= position.y + size.y);
 		}
 
-	private:
+	protected:
 		StringID name;
 		bool isActive;
 		Vector2 position;

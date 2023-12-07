@@ -7,6 +7,10 @@
 using namespace Gadget;
 
 GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_) : Shader(), shader(0){
+	GADGET_BASIC_ASSERT(!vertPath_.empty());
+	GADGET_BASIC_ASSERT(!fragPath_.empty());
+	GADGET_BASIC_ASSERT(FileSystem::FileExists(vertPath_));
+	GADGET_BASIC_ASSERT(FileSystem::FileExists(fragPath_));
 	GADGET_ASSERT(App::GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 
 	std::string vertCodeStr = FileSystem::ReadFileToString(vertPath_);
@@ -70,9 +74,12 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	glDetachShader(shader, vertShader);
 	glDeleteShader(fragShader);
 	glDeleteShader(vertShader);
+
+	GADGET_BASIC_ASSERT(shader != 0);
 }
 
 GL_Shader::~GL_Shader(){
+	GADGET_BASIC_ASSERT(shader != 0);
 	glDeleteProgram(shader);
 }
 
@@ -81,6 +88,7 @@ GLuint GL_Shader::GetShaderProgram(){
 }
 
 void GL_Shader::Bind(){
+	GADGET_BASIC_ASSERT(shader != 0);
 	glUseProgram(shader);
 }
 
@@ -89,41 +97,49 @@ void GL_Shader::Unbind(){
 }
 
 void GL_Shader::BindInt(StringID uniformName_, int value_){
+	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 	AddUniform(uniformName_);
 	glUniform1iv(uniforms[uniformName_], 1, &value_);
 }
 
 void GL_Shader::BindFloat(StringID uniformName_, float value_){
+	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 	AddUniform(uniformName_);
 	glUniform1fv(uniforms[uniformName_], 1, &value_);
 }
 
 void GL_Shader::BindVector2(StringID uniformName_, const Vector2& vec_){
+	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 	AddUniform(uniformName_);
 	glUniform2fv(uniforms[uniformName_], 1, vec_);
 }
 
 void GL_Shader::BindVector3(StringID uniformName_, const Vector3& vec_){
+	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 	AddUniform(uniformName_);
 	glUniform3fv(uniforms[uniformName_], 1, vec_);
 }
 
 void GL_Shader::BindVector4(StringID uniformName_, const Vector4& vec_){
+	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 	AddUniform(uniformName_);
 	glUniform4fv(uniforms[uniformName_], 1, vec_);
 }
 
 void GL_Shader::BindMatrix3(StringID uniformName_, const Matrix3& mat3_){
+	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 	AddUniform(uniformName_);
 	glUniformMatrix3fv(uniforms[uniformName_], 1, GL_FALSE, mat3_);
 }
 
 void GL_Shader::BindMatrix4(StringID uniformName_, const Matrix4& mat4_){
+	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 	AddUniform(uniformName_);
 	glUniformMatrix4fv(uniforms[uniformName_], 1, GL_FALSE, mat4_);
 }
 
 void GL_Shader::BindColor(StringID uniformName_, const Color& color_){
+	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 	AddUniform(uniformName_);
 	glUniform4fv(uniforms[uniformName_], 1, color_);
 }

@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "Core/FileSystem.h"
 #include "Debug.h"
 #include "Vertex.h"
 #include "Loaders/AssimpModelLoader.h"
@@ -21,7 +22,10 @@ namespace Gadget{
 
 	class MeshResourceContainer : public ResourceContainer{
 	public:
-		MeshResourceContainer(const std::string& path_) : ResourceContainer(Mesh::typeName, path_){}
+		MeshResourceContainer(const std::string& path_) : ResourceContainer(Mesh::typeName, path_){
+			GADGET_BASIC_ASSERT(!path_.empty());
+			GADGET_BASIC_ASSERT(FileSystem::FileExists(path_));
+		}
 
 		virtual Resource* LoadResource() override{
 			return AssimpModelLoader::LoadMesh(path);

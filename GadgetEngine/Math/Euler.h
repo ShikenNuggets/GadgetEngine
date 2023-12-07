@@ -37,6 +37,8 @@ namespace Gadget{
 		Matrix4 ToMatrix4() const;
 		Quaternion ToQuaternion() const;
 
+		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(z); }
+
 		std::string ToString() const;
 	};
 }

@@ -6,6 +6,8 @@
 using namespace Gadget;
 
 Material::Material(StringID shaderResource_) : shaderResourceName(shaderResource_), shader(nullptr){
+	GADGET_BASIC_ASSERT(shaderResourceName != StringID::None);
+
 	shader = App::GetRenderer().GenerateAPIShader(shaderResourceName);
 	GADGET_ASSERT(shader != nullptr, "Could not load shader [" + shaderResourceName.GetString() + "]!");
 }

@@ -5,6 +5,11 @@
 using namespace Gadget;
 
 Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection projection_, const Rect& viewRect_) : view(), projection(), fov(45.0f), aspect(1.0f), nearPlane(0.1f), farPlane(1000.0f), orthoHeight(12.0f), currentProjection(projection_), viewRect(viewRect_){
+	GADGET_BASIC_ASSERT(position_.IsValid());
+	GADGET_BASIC_ASSERT(rotation_.IsValid());
+	GADGET_BASIC_ASSERT(projection_ < Projection::Projection_MAX);
+	GADGET_BASIC_ASSERT(viewRect_.IsValid());
+	
 	aspect = App::GetAspectRatio();
 
 	CalculateViewMatrix(position_, rotation_);
@@ -12,6 +17,9 @@ Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection
 }
 
 void Camera::CalculateViewMatrix(const Vector3& position_, const Quaternion& rotation_){
+	GADGET_BASIC_ASSERT(position_.IsValid());
+	GADGET_BASIC_ASSERT(rotation_.IsValid());
+
 	view = Matrix4::Identity();
 	view *= rotation_.ToMatrix4().Inverse();
 	view *= Matrix4::Translate(position_).Inverse();
@@ -33,6 +41,8 @@ void Camera::CalculateProjectionMatrix(){
 			Debug::Log("Invalid projection mode!", Debug::Error, __FILE__, __LINE__);
 			break;
 	}
+
+	GADGET_BASIC_ASSERT(projection.IsValid());
 }
 
 Matrix4 Camera::GetViewMatrix() const{
@@ -68,34 +78,41 @@ float Camera::GetOrthoHeight() const{
 }
 
 void Camera::SetViewportRect(const Rect& rect_){
+	GADGET_BASIC_ASSERT(rect_.IsValid());
 	viewRect = rect_;
 }
 
 void Camera::SetProjection(Projection projection_){
+	GADGET_BASIC_ASSERT(projection_ < Projection::Projection_MAX);
 	currentProjection = projection_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetFOV(float fov_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(fov_) && fov_ > 0.0f);
 	fov = fov_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetAspect(float aspect_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(aspect_));
 	aspect = aspect_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetNearPlane(float near_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(near_));
 	nearPlane = near_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetFarPlane(float far_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(far_));
 	farPlane = far_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetOrthoHeight(float height_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
 	orthoHeight = height_;
 }

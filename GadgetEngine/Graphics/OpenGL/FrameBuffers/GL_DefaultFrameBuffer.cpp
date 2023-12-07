@@ -5,6 +5,7 @@
 using namespace Gadget;
 
 GL_DefaultFrameBuffer::GL_DefaultFrameBuffer(int width_, int height_) : GL_FrameBuffer(width_, height_), colorTexture(0), depthRBO(0){
+	GADGET_BASIC_ASSERT(width_ > 0 && height_ > 0);
 	//TODO - I'd rather use the direct state access functions, but calling glTextureSubImage2D here causes a crash later, unclear why
 
 	Bind();
@@ -26,9 +27,15 @@ GL_DefaultFrameBuffer::GL_DefaultFrameBuffer(int width_, int height_) : GL_Frame
 	GADGET_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "An error occured when creating the OpenGL Frame Buffer!");
 
 	Unbind();
+
+	GADGET_BASIC_ASSERT(colorTexture != 0);
+	GADGET_BASIC_ASSERT(depthRBO != 0);
 }
 
 GL_DefaultFrameBuffer::~GL_DefaultFrameBuffer(){
+	GADGET_BASIC_ASSERT(colorTexture != 0);
+	GADGET_BASIC_ASSERT(depthRBO != 0);
+
 	glDeleteRenderbuffers(1, &depthRBO);
 	glDeleteTextures(1, &colorTexture);
 }

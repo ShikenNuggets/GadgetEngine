@@ -1,5 +1,7 @@
 #include "GL_ScreenQuad.h"
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 GL_ScreenQuad::GL_ScreenQuad() : ebo(0){
@@ -33,15 +35,24 @@ GL_ScreenQuad::GL_ScreenQuad() : ebo(0){
 
 	glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(GLfloat) * 4);
 	glVertexArrayElementBuffer(vao, ebo);
+
+	GADGET_BASIC_ASSERT(vao != 0);
+	GADGET_BASIC_ASSERT(vbo != 0);
+	GADGET_BASIC_ASSERT(ebo != 0);
 }
 
 GL_ScreenQuad::~GL_ScreenQuad(){
+	GADGET_BASIC_ASSERT(vao != 0);
+	GADGET_BASIC_ASSERT(vbo != 0);
+	GADGET_BASIC_ASSERT(ebo != 0);
+
 	glDeleteBuffers(1, &ebo);
 	glDeleteBuffers(1, &vbo);
 	glDeleteVertexArrays(1, &vao);
 }
 
 void GL_ScreenQuad::Bind(){
+	GADGET_BASIC_ASSERT(vao != 0);
 	glBindVertexArray(vao);
 }
 

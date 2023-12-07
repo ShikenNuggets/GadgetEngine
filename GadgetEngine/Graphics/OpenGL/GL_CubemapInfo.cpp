@@ -5,6 +5,8 @@
 using namespace Gadget;
 
 GL_CubemapInfo::GL_CubemapInfo(const Cubemap& cubemap_) : textureID(0), vao(0), vbo(0), ebo(0){
+	GADGET_BASIC_ASSERT(cubemap_.IsValid());
+
 	//----------TEXTURE SETUP----------
 	glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &textureID);
 
@@ -106,6 +108,8 @@ GL_CubemapInfo::~GL_CubemapInfo(){
 }
 
 void GL_CubemapInfo::Bind(int textureIndex_){
+	GADGET_BASIC_ASSERT(textureIndex_ >= 0);
+
 	glActiveTexture(GLenum(GL_TEXTURE0 + textureIndex_)); //TODO - Check the maximum and ensure we don't go over it
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 	glBindVertexArray(vao);

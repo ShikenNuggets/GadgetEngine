@@ -32,13 +32,19 @@ GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), texture
 	glTextureStorage2D(textureID, 1, internalFormat, texture_.GetWidth(), texture_.GetHeight());
 	glTextureSubImage2D(textureID, 0, 0, 0, texture_.GetWidth(), texture_.GetHeight(), dataFormat, GL_UNSIGNED_BYTE, texture_.GetPixels().data());
 	glGenerateTextureMipmap(textureID);
+
+	GADGET_BASIC_ASSERT(textureID != 0);
 }
 
 GL_TextureInfo::~GL_TextureInfo(){
+	GADGET_BASIC_ASSERT(textureID != 0);
 	glDeleteTextures(1, &textureID);
 }
 
 void GL_TextureInfo::Bind(int textureIndex_){
+	GADGET_BASIC_ASSERT(textureID != 0);
+	GADGET_BASIC_ASSERT(textureIndex_ >= 0);
+
 	glActiveTexture(GL_TEXTURE0 + textureIndex_); //TODO - Check the maximum and ensure we don't go over it
 	glBindTexture(GL_TEXTURE_2D, textureID);
 }

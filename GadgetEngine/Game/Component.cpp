@@ -5,33 +5,50 @@
 using namespace Gadget;
 
 StringID Component::GetParentName() const{
+	GADGET_BASIC_ASSERT(parent != nullptr);
+
 	return parent->GetName();
 }
 
 bool Component::HasTag(StringID tag_) const{
+	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(tag_ != StringID::None);
+
 	return parent->HasTag(tag_);
 }
 
 std::vector<StringID> Component::GetTags() const{
+	GADGET_BASIC_ASSERT(parent != nullptr);
+
 	return parent->GetTags();
 }
 
 Vector3 Component::GetPosition() const{
+	GADGET_BASIC_ASSERT(parent != nullptr);
+
 	return parent->GetPosition();
 }
 
 Quaternion Component::GetRotation() const{
+	GADGET_BASIC_ASSERT(parent != nullptr);
+
 	return parent->GetRotation();
 }
 
 Vector3 Component::GetScale() const{
+	GADGET_BASIC_ASSERT(parent != nullptr);
+
 	return parent->GetScale();
 }
 
 const Transform& Component::GetTransform() const{
+	GADGET_BASIC_ASSERT(parent != nullptr);
+
 	return parent->GetTransform();
 }
 
 Matrix4 Component::GetTransformMatrix() const{
+	GADGET_BASIC_ASSERT(parent != nullptr);
+
 	return parent->GetTransformMatrix();
 }

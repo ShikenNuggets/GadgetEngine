@@ -47,6 +47,7 @@ namespace Gadget{
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
 
 		inline constexpr bool IsNear(const Vector2& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y); }
+		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y); }
 	};
 
 	struct Vector3{
@@ -103,6 +104,7 @@ namespace Gadget{
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
 
 		inline constexpr bool IsNear(const Vector3& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y) && Math::Near(z, b_.z); }
+		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(z); }
 
 		static inline constexpr Vector3 Up(){ return Vector3(0.0f, 1.0f, 0.0f); };
 		static inline constexpr Vector3 Forward(){ return Vector3(0.0f, 0.0f, -1.0f); };
@@ -156,6 +158,7 @@ namespace Gadget{
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
 
 		inline constexpr bool IsNear(const Vector4& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y) && Math::Near(z, b_.z) && Math::Near(w, b_.w); }
+		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(z) && Math::IsValidNumber(w); }
 	};
 }
 

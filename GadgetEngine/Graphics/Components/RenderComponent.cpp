@@ -10,43 +10,84 @@ using namespace Gadget;
 ComponentCollection<RenderComponent> RenderComponent::componentCollection = ComponentCollection<RenderComponent>();
 
 RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, StringID textureName_, StringID shaderName_) : Component(parent_), meshInfo(nullptr), material(nullptr){
+	GADGET_BASIC_ASSERT(parent_ != nullptr);
+	GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
+	GADGET_BASIC_ASSERT(textureName_ != StringID::None);
+	GADGET_BASIC_ASSERT(shaderName_ != StringID::None);
+	
 	CreateMeshInfo(modelName_);
 	material = new DiffuseTextureMaterial(textureName_, shaderName_);
 
 	componentCollection.Add(this);
+
+	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr);
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
 RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, const Color& color_, StringID shaderName_) : Component(parent_), meshInfo(nullptr), material(nullptr){
+	GADGET_BASIC_ASSERT(parent_ != nullptr);
+	GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
+	GADGET_BASIC_ASSERT(color_.IsValid());
+	GADGET_BASIC_ASSERT(shaderName_ != StringID::None);
+	
 	CreateMeshInfo(modelName_);
 	material = new ColorMaterial(color_, shaderName_);
 
 	componentCollection.Add(this);
+
+	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr);
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
 RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, Material* material_) : Component(parent_), meshInfo(nullptr), material(material_){
+	GADGET_BASIC_ASSERT(parent_ != nullptr);
+	GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
+	GADGET_BASIC_ASSERT(material_ != nullptr);
+
 	CreateMeshInfo(modelName_);
 
 	componentCollection.Add(this);
+
+	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr);
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
 RenderComponent::~RenderComponent(){
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
+
 	delete material;
 	delete meshInfo;
 
 	componentCollection.Remove(this);
+
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == nullptr);
 }
 
 void RenderComponent::Bind(){
+	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr);
+
 	meshInfo->Bind();
 	material->Bind();
 }
 
 void RenderComponent::Unbind(){
+	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr);
+
 	material->Unbind();
 	meshInfo->Unbind();
 }
 
 void RenderComponent::CreateMeshInfo(StringID modelName_){
+	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
+
 	Mesh* mesh = App::GetResourceManager().LoadResource<Mesh>(modelName_);
 	GADGET_BASIC_ASSERT(mesh != nullptr);
 

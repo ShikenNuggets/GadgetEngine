@@ -28,7 +28,9 @@ App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), co
 }
 
 App::~App(){
-	Destroy();
+	if(IsFullyInitialized()){
+		Destroy();
+	}
 }
 
 App& App::GetInstance(){
@@ -188,7 +190,7 @@ void* App::AllocateTwoFrameMemory(size_t bytes_){
 }
 
 Renderer::API App::GetCurrentRenderAPI(){
-	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
+	GADGET_BASIC_ASSERT(instance != nullptr);
 
 	if(GetInstance().renderer != nullptr){
 		return GetInstance().renderer->GetRenderAPI();

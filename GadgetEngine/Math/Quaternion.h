@@ -76,6 +76,7 @@ namespace Gadget{
 		std::string ToString() const;
 
 		inline constexpr bool IsNear(const Quaternion& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y) && Math::Near(z, b_.z) && Math::Near(w, b_.w); }
+		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(z) && Math::IsValidNumber(w); }
 	};
 }
 

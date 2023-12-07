@@ -62,6 +62,16 @@ namespace Gadget{
 		Matrix4 ToMatrix4() const;
 		Matrix4x3 ToMatrix4x3() const;
 
+		inline bool IsValid() const{
+			for(int i = 0; i < mat2Size; i++){
+				if(!Math::IsValidNumber(m[i])){
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		std::string ToString() const;
 
 	private:
@@ -122,6 +132,16 @@ namespace Gadget{
 		Matrix4x3 ToMatrix4x3() const;
 		Euler ToEuler() const;
 		Quaternion ToQuaternion() const;
+
+		inline bool IsValid() const{
+			for(int i = 0; i < mat3Size; i++){
+				if(!Math::IsValidNumber(m[i])){
+					return false;
+				}
+			}
+
+			return true;
+		}
 
 		std::string ToString() const;
 
@@ -226,6 +246,16 @@ namespace Gadget{
 		Euler ToEuler() const;
 		Quaternion ToQuaternion() const;
 
+		inline bool IsValid() const{
+			for(int i = 0; i < mat4Size; i++){
+				if(!Math::IsValidNumber(m[i])){
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		std::string ToString() const;
 
 	private:
@@ -311,6 +341,16 @@ namespace Gadget{
 		Matrix4 ToMatrix4() const;
 		Euler ToEuler() const;
 		Quaternion ToQuaternion() const;
+
+		inline bool IsValid() const{
+			for(int i = 0; i < mat4x3Size; i++){
+				if(!Math::IsValidNumber(m[i])){
+					return false;
+				}
+			}
+
+			return true;
+		}
 
 		std::string ToString() const;
 

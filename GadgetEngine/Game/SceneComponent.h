@@ -10,7 +10,11 @@ namespace Gadget{
 
 	class SceneComponent{
 	public:
-		SceneComponent(Scene* parent_) : guid(GUID::Generate()), parent(parent_){ GADGET_BASIC_ASSERT(parent_ != nullptr); }
+		SceneComponent(Scene* parent_) : guid(GUID::Generate()), parent(parent_){
+			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			GADGET_BASIC_ASSERT(guid != GUID::Invalid);
+		}
+
 		virtual ~SceneComponent(){}
 
 		virtual void OnUpdate([[maybe_unused]] float deltaTime_){}

@@ -4,6 +4,7 @@
 using namespace Gadget;
 
 Scene::Scene(StringID name_) : guid(GUID::Generate()), name(name_), gameObjects(){
+	GADGET_BASIC_ASSERT(name_ != StringID::None);
 	SetToDefaultState();
 }
 
@@ -33,6 +34,8 @@ void Scene::AddSceneComponent(SceneComponent* sceneComp_){
 }
 
 void Scene::Update(float deltaTime_){
+	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
+
 	for(const auto& sc : sceneComponents){
 		sc->OnUpdate(deltaTime_);
 	}
@@ -43,6 +46,8 @@ void Scene::Update(float deltaTime_){
 }
 
 GameObject* Scene::FindWithTag(StringID tag_){
+	GADGET_BASIC_ASSERT(tag_ != StringID::None);
+
 	for(const auto& go : gameObjects){
 		if(go->HasTag(tag_)){
 			return go;
@@ -53,6 +58,8 @@ GameObject* Scene::FindWithTag(StringID tag_){
 }
 
 std::vector<GameObject*> Scene::FindObjectsWithTag(StringID tag_){
+	GADGET_BASIC_ASSERT(tag_ != StringID::None);
+
 	std::vector<GameObject*> objs;
 	for(const auto& go : gameObjects){
 		if(go->HasTag(tag_)){

@@ -286,7 +286,9 @@ namespace Gadget{
 		Keyboard_Keypad_MemStore,
 		Keyboard_Keypad_MemSubtract,
 
-		Keyboard_Unknown
+		Keyboard_Unknown,
+
+		ButtonID_MAX
 	};
 
 	enum class AxisID{
@@ -306,6 +308,8 @@ namespace Gadget{
 		Mouse_Move_Vertical,
 		Mouse_Scroll_Horizontal,
 		Mouse_Scroll_Vertical,
+
+		AxisID_MAX
 	};
 }
 

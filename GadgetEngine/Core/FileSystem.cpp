@@ -242,6 +242,6 @@ bool FileSystem::CreateDir(const std::string& path_){
 }
 
 std::string FileSystem::RemoveFileNameFromPath(const std::string& path_){
-	GADGET_BASIC_ASSERT(path_.empty());
+	GADGET_BASIC_ASSERT(!path_.empty());
 	return path_.substr(0, path_.find_last_of(PathSeparator));
 }

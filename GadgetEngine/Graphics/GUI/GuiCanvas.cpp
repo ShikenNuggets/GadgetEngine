@@ -5,7 +5,9 @@
 
 using namespace Gadget;
 
-GuiCanvas::GuiCanvas(StringID name_, bool isActive_) : name(name_), isActive(isActive_), elements(){}
+GuiCanvas::GuiCanvas(StringID name_, bool isActive_) : name(name_), isActive(isActive_), elements(){
+	GADGET_BASIC_ASSERT(name_ != StringID::None);
+}
 
 GuiCanvas::~GuiCanvas(){
 	for(const auto& e : elements){
@@ -20,6 +22,8 @@ void GuiCanvas::AddElement(GuiElement* element_){
 }
 
 void GuiCanvas::Update(float deltaTime_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f);
+
 	for(auto& e : elements){
 		GADGET_BASIC_ASSERT(e != nullptr);
 		e->Update(deltaTime_);
@@ -27,6 +31,8 @@ void GuiCanvas::Update(float deltaTime_){
 }
 
 GuiElement* GuiCanvas::GetElement(StringID name_){
+	GADGET_BASIC_ASSERT(name_ != StringID::None);
+
 	for(const auto& e : elements){
 		GADGET_BASIC_ASSERT(e != nullptr);
 		if(e->GetName() == name_){
@@ -41,16 +47,18 @@ GuiElement* GuiCanvas::GetElement(StringID name_){
 void GuiCanvas::OnMouseMoved([[maybe_unused]] int xPos, [[maybe_unused]] int yPos){
 }
 
-void GuiCanvas::OnMouseClick(ButtonID mouseButton){
+void GuiCanvas::OnMouseClick(ButtonID mouseButton_){
+	GADGET_BASIC_ASSERT(mouseButton_ != ButtonID::ButtonID_MAX);
+
 	Vector2 clickPoint = Vector2(App::GetInput().GetCurrentMouseXInGUICoordinates(), App::GetInput().GetCurrentMouseYInGUICoordinates());
 
-	switch(mouseButton){
+	switch(mouseButton_){
 		case Gadget::ButtonID::Mouse_LeftMouseButton:
 		case Gadget::ButtonID::Mouse_RightMouseButton:
 
 			for(const auto& e : elements){
 				if(e->PointIntersects(clickPoint)){
-					e->OnClick(mouseButton, clickPoint);
+					e->OnClick(mouseButton_, clickPoint);
 				}
 			}
 

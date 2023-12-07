@@ -9,6 +9,7 @@
 using namespace Gadget;
 
 Mesh* ObjLoader::LoadMesh(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
 	GADGET_ASSERT(FileSystem::FileExists(filePath_), "Tried to load non-existent file [" + filePath_ + "]!");
 	if(!FileSystem::FileExists(filePath_)){
 		Debug::Log(SID("OBJLOADER"), "Tried to load non-existent file [" + filePath_ + "]!", Debug::Error, __FILE__, __LINE__);
@@ -88,10 +89,15 @@ Mesh* ObjLoader::LoadMesh(const std::string& filePath_){
 	vertices.shrink_to_fit();
 	indices.shrink_to_fit();
 
+	GADGET_BASIC_ASSERT(!vertices.empty());
+	GADGET_BASIC_ASSERT(!indices.empty());
+
 	return new Mesh(vertices, indices);
 }
 
 Vector2 ObjLoader::ProcessVector2(const std::string& data_){
+	GADGET_BASIC_ASSERT(!data_.empty());
+
 	Vector2 v = Vector2::Zero();
 	std::stringstream data(data_);
 
@@ -111,6 +117,8 @@ Vector2 ObjLoader::ProcessVector2(const std::string& data_){
 }
 
 Vector3 ObjLoader::ProcessVector3(const std::string& data_){
+	GADGET_BASIC_ASSERT(!data_.empty());
+
 	Vector3 v = Vector3::Zero();
 	std::stringstream data(data_);
 
@@ -135,6 +143,8 @@ Vector3 ObjLoader::ProcessVector3(const std::string& data_){
 }
 
 void ObjLoader::ProcessIndices(const std::string& data_, std::vector<VertIndex>& indexList_){
+	GADGET_BASIC_ASSERT(!data_.empty());
+
 	std::stringstream data(data_);
 	uint32_t tmp1 = 0;
 	uint32_t tmp2 = 0;

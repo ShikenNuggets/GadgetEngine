@@ -13,15 +13,30 @@ namespace Gadget{
 		RenderComponent(GameObject* parent_, StringID modelName_, Material* material_);
 		virtual ~RenderComponent() override;
 
-		static RenderComponent* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
-		static std::vector<RenderComponent*> GetComponents(GUID objectGuid_){ return componentCollection.GetComponents(objectGuid_); }
+		static RenderComponent* Get(GUID objectGuid_){
+			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
+			return componentCollection.Get(objectGuid_);
+		}
+
+		static std::vector<RenderComponent*> GetComponents(GUID objectGuid_){
+			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
+			return componentCollection.GetComponents(objectGuid_);
+		}
 
 		void Bind();
 		void Unbind();
 
-		inline constexpr size_t GetMeshNumIndices() const{ return meshInfo->GetNumIndices(); }
+		inline constexpr size_t GetMeshNumIndices() const{
+			GADGET_BASIC_ASSERT(meshInfo != nullptr);
+			return meshInfo->GetNumIndices();
+		}
+
 		Material* GetMaterial(){ return material; }
-		Shader* GetShader(){ return material->GetShader(); }
+
+		Shader* GetShader(){
+			GADGET_BASIC_ASSERT(material != nullptr);
+			return material->GetShader();
+		}
 
 	private:
 		MeshInfo* meshInfo;

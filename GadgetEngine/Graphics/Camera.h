@@ -10,7 +10,9 @@ namespace Gadget{
 	public:
 		enum class Projection{
 			Orthographic,
-			Perspective
+			Perspective,
+
+			Projection_MAX //Do not put any values below this!
 		};
 
 		Camera(const Vector3& position_ = Vector3::Zero(), const Quaternion& rotation_ = Quaternion::Identity(), Projection projection_ = Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);

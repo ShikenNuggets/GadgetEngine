@@ -10,14 +10,22 @@
 namespace Gadget{
 	class ColorMaterial : public Material{
 	public:
-		ColorMaterial(const Color& color_, StringID shaderResource_) : Material(shaderResource_), color(color_){}
+		ColorMaterial(const Color& color_, StringID shaderResource_) : Material(shaderResource_), color(color_){
+			GADGET_BASIC_ASSERT(color_.IsValid());
+			GADGET_BASIC_ASSERT(shaderResource_ != StringID::None);
+			GADGET_BASIC_ASSERT(shader != nullptr);
+		}
 
 		virtual void Bind() override{
+			GADGET_BASIC_ASSERT(shader != nullptr);
+
 			shader->Bind();
 			shader->BindColor(SID("material.color"), color);
 		}
 
 		virtual void Unbind() override{
+			GADGET_BASIC_ASSERT(shader != nullptr);
+
 			shader->Unbind();
 		}
 

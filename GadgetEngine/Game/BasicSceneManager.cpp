@@ -14,6 +14,8 @@ BasicSceneManager::~BasicSceneManager(){
 }
 
 void BasicSceneManager::Update(float deltaTime_){
+	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
+
 	if(!sceneLoadRequests.empty()){
 		LoadScene(sceneLoadRequests.front());
 		sceneLoadRequests.pop();
@@ -47,6 +49,8 @@ void BasicSceneManager::LoadScene(size_t index_){
 }
 
 void BasicSceneManager::LoadScene(StringID name_){
+	GADGET_BASIC_ASSERT(name_ != StringID::None);
+
 	CurrentScene()->SetToDefaultState();
 	for(size_t i = 0; i < scenes.size(); i++){
 		if(scenes[i]->name == name_){
@@ -71,6 +75,8 @@ void BasicSceneManager::RequestSceneLoad(size_t index_){
 }
 
 void BasicSceneManager::RequestSceneLoad(StringID name_){
+	GADGET_BASIC_ASSERT(name_ != StringID::None);
+
 	for(size_t i = 0; i < scenes.size(); i++){
 		if(scenes[i]->name == name_){
 			RequestSceneLoad(i);

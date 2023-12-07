@@ -6,9 +6,17 @@
 namespace Gadget{
 	class FpsDisplayElement : public GuiTextElement{
 	public:
-		FpsDisplayElement(StringID name_, StringID font_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : GuiTextElement(name_, "", font_, pos_, size_, anchor_, isActive_), timeCounter(0.0f), previousFrameTimes(){}
+		FpsDisplayElement(StringID name_, StringID font_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : GuiTextElement(name_, "", font_, pos_, size_, anchor_, isActive_), timeCounter(0.0f), previousFrameTimes(){
+			GADGET_BASIC_ASSERT(name_ != StringID::None);
+			GADGET_BASIC_ASSERT(font_ != StringID::None);
+			GADGET_BASIC_ASSERT(pos_.IsValid());
+			GADGET_BASIC_ASSERT(size_.IsValid());
+			GADGET_BASIC_ASSERT(anchor_ < GuiAnchor::GuiAnchor_MAX);
+		}
 		
 		virtual void Update([[maybe_unused]] float deltaTime_) override{
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f);
+
 			timeCounter += App::GetTime().PureDeltaTime();
 			previousFrameTimes.push_back(App::GetTime().PureDeltaTime());
 

@@ -13,7 +13,11 @@ namespace Gadget{
 
 	class Component{
 	public:
-		Component(GameObject* parent_) : guid(GUID::Generate()), parent(parent_), isActivated(false){ GADGET_BASIC_ASSERT(parent_ != nullptr); }
+		Component(GameObject* parent_) : guid(GUID::Generate()), parent(parent_), isActivated(false){
+			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			GADGET_BASIC_ASSERT(guid != GUID::Invalid);
+		}
+
 		virtual ~Component(){}
 
 		//Runs the first frame that the object is activated
@@ -58,7 +62,9 @@ namespace Gadget{
 
 			void Add(T* element_){
 				GADGET_BASIC_ASSERT(element_ != nullptr);
+				GADGET_BASIC_ASSERT(element_->GetGUID() != GUID::Invalid);
 				GADGET_BASIC_ASSERT(element_->GetParent() != nullptr);
+				GADGET_BASIC_ASSERT(element_->GetParent()->GetGUID() != GUID::Invalid);
 
 				GUID objectGuid = element_->GetParent()->GetGUID();
 				if(Utils::ContainsKey(guidMap, objectGuid)){
@@ -69,22 +75,27 @@ namespace Gadget{
 			}
 
 			void Remove(GUID objectGuid_){
+				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 				guidMap.erase(objectGuid_);
 			}
 
 			void Remove(T* element_){
 				GADGET_BASIC_ASSERT(element_ != nullptr);
+				GADGET_BASIC_ASSERT(element_->GetGUID() != GUID::Invalid);
 				GADGET_BASIC_ASSERT(element_->GetParent() != nullptr);
+				GADGET_BASIC_ASSERT(element_->GetParent()->GetGUID() != GUID::Invalid);
 				GADGET_BASIC_ASSERT(Utils::ContainsKey(guidMap, element_->GetParent()->GetGUID()));
 
 				auto& vec = guidMap.at(element_->GetParent()->GetGUID());
-				vec.erase(std::remove(vec.begin(), vec.end(), nullptr), vec.end());
+				vec.erase(std::remove(vec.begin(), vec.end(), element_), vec.end());
 				if(vec.empty()){
 					Remove(element_->GetParent()->GetGUID());
 				}
 			}
 
 			T* Get(GUID objectGuid_) const{
+				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
+
 				if(!Utils::ContainsKey(guidMap, objectGuid_)){
 					return nullptr;
 				}
@@ -98,6 +109,8 @@ namespace Gadget{
 			}
 
 			std::vector<T*> GetComponents(GUID objectGuid_) const{
+				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
+
 				if(!Utils::ContainsKey(guidMap, objectGuid_)){
 					return std::vector<T*>();
 				}

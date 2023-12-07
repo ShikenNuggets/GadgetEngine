@@ -6,6 +6,7 @@
 #include <assimp/postprocess.h>
 #pragma warning(default : 26451)
 
+#include "Core/FileSystem.h"
 #include "Graphics/Mesh.h"
 #include "Math/Math.h"
 #include "Math/Vector.h"
@@ -13,6 +14,9 @@
 using namespace Gadget;
 
 Mesh* AssimpModelLoader::LoadMesh(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
+
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath_, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
