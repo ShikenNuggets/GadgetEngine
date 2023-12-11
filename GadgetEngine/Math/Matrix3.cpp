@@ -12,36 +12,56 @@ Matrix3::Matrix3() : m(){
 Matrix3::Matrix3(	float x1_, float x2_, float x3_,
 					float y1_, float y2_, float y3_,
 					float z1_, float z2_, float z3_) : m(){
+	GADGET_BASIC_ASSERT(x1_);
+	GADGET_BASIC_ASSERT(x2_);
+	GADGET_BASIC_ASSERT(x3_);
+	GADGET_BASIC_ASSERT(y1_);
+	GADGET_BASIC_ASSERT(y2_);
+	GADGET_BASIC_ASSERT(y3_);
+	GADGET_BASIC_ASSERT(z1_);
+	GADGET_BASIC_ASSERT(z2_);
+	GADGET_BASIC_ASSERT(z3_);
+
 	m[0] = x1_; m[3] = y1_; m[6] = z1_;
 	m[1] = x2_; m[4] = y2_; m[7] = z2_;
 	m[2] = x3_; m[5] = y3_; m[8] = z3_;
 }
 
-Matrix3::Matrix3(const float fillValue) : m(){
+Matrix3::Matrix3(const float fillValue_) : m(){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(fillValue_));
+
 	for(int i = 0; i < mat3Size; i++){
-		m[i] = fillValue;
+		m[i] = fillValue_;
 	}
 }
 
 Matrix3::Matrix3(const Matrix2& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = 0.0f;
 	m[3] = m_[2];	m[4] = m_[3];	m[5] = 0.0f;
 	m[6] = 0.0f;	m[7] = 0.0f;	m[8] = 1.0f;
 }
 
 Matrix3::Matrix3(const Matrix4& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = m_[2];
 	m[3] = m_[4];	m[4] = m_[5];	m[5] = m_[6];
 	m[6] = m_[8];	m[7] = m_[9];	m[8] = m_[10];
 }
 
 Matrix3::Matrix3(const Matrix4x3& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[1] = m_[1];	m[2] = m_[2];
 	m[3] = m_[3];	m[4] = m_[4];	m[5] = m_[5];
 	m[6] = m_[6];	m[7] = m_[7];	m[8] = m_[8];
 }
 
 Matrix3& Matrix3::operator =(const Matrix4& m_){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	this->m[0] = m_[0]; this->m[1] = m_[1]; this->m[2] = m_[2];
 	this->m[3] = m_[4]; this->m[4] = m_[5]; this->m[5] = m_[6];
 	this->m[6] = m_[8]; this->m[7] = m_[9]; this->m[8] = m_[10];
@@ -54,6 +74,9 @@ float& Matrix3::operator [](unsigned int i_){
 }
 
 Matrix3 Matrix3::operator +(const Matrix3& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	Matrix3 result = Matrix3(0.0f);
 	for(unsigned int i = 0; i < mat3Size; i++){
 		result[i] = m[i] + m_[i];
@@ -63,6 +86,9 @@ Matrix3 Matrix3::operator +(const Matrix3& m_) const{
 }
 
 Matrix3 Matrix3::operator -(const Matrix3& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	Matrix3 result = Matrix3(0.0f);
 	for(unsigned int i = 0; i < mat3Size; i++){
 		result[i] = m[i] - m_[i];
@@ -72,12 +98,18 @@ Matrix3 Matrix3::operator -(const Matrix3& m_) const{
 }
 
 Matrix3 Matrix3::operator *(float s_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+
 	return Matrix3(	m[0] * s_, m[1] * s_, m[2] * s_,
 					m[3] * s_, m[4] * s_, m[5] * s_,
 					m[6] * s_, m[7] * s_, m[8] * s_);
 }
 
 Matrix3 Matrix3::operator *(const Matrix3& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	return Matrix3(
 		//COLUMN 1
 		Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[0], m_[1], m_[2]),
@@ -95,6 +127,9 @@ Matrix3 Matrix3::operator *(const Matrix3& m_) const{
 }
 
 Matrix3 Matrix3::operator /(float s_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+
 	return Matrix3(	Math::SafeDivide(m[0], s_), Math::SafeDivide(m[1], s_), Math::SafeDivide(m[2], s_),
 					Math::SafeDivide(m[3], s_), Math::SafeDivide(m[4], s_), Math::SafeDivide(m[5], s_),
 					Math::SafeDivide(m[6], s_), Math::SafeDivide(m[7], s_), Math::SafeDivide(m[8], s_));
@@ -111,18 +146,22 @@ Matrix3::operator float*(){ return static_cast<float*>(&m[0]); }
 Matrix3::operator const float*() const{ return static_cast<const float*>(&m[0]); }
 
 Matrix3 Matrix3::Transpose() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix3(	m[0], m[3], m[6],
 					m[1], m[4], m[7],
 					m[2], m[5], m[8]);
 }
 
 float Matrix3::Determinant() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return	m[0] * (m[4] * m[8] - m[7] * m[5]) -
 			m[1] * (m[3] * m[8] - m[5] * m[6]) +
 			m[2] * (m[3] * m[7] - m[4] * m[6]);
 }
 
 Matrix3 Matrix3::Inverse() const{
+	GADGET_BASIC_ASSERT(IsValid());
+
 	float invdet = Math::SafeDivide(1.0f, Determinant());
 
 	return Matrix3(
@@ -139,18 +178,23 @@ Matrix3 Matrix3::Inverse() const{
 }
 
 Matrix2 Matrix3::ToMatrix2() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix2(*this);
 }
 
 Matrix4 Matrix3::ToMatrix4() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix4(*this);
 }
 
 Matrix4x3 Matrix3::ToMatrix4x3() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix4x3(*this);
 }
 
 Euler Matrix3::ToEuler() const{
+	GADGET_BASIC_ASSERT(IsValid());
+
 	Angle heading = Angle(0.0f);
 	Angle attitude = Math::Asin(m[1]);
 	Angle bank = Angle(0.0f);
@@ -169,6 +213,8 @@ Euler Matrix3::ToEuler() const{
 }
 
 Quaternion Matrix3::ToQuaternion() const{
+	GADGET_BASIC_ASSERT(IsValid());
+
 	//TODO - This feels inefficient
 	Quaternion q = Quaternion(
 		Math::Sqrt(std::max(0.0f, 1.0f + m[0] + m[4] + m[8])) / 2.0f,

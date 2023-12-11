@@ -10,16 +10,21 @@ using namespace Gadget;
 Euler::Euler(const Vector3& v_) : x(v_.x), y(v_.y), z(v_.z){}
 
 Matrix3 Euler::ToMatrix3() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix3(ToMatrix4());
 }
 
 Matrix4 Euler::ToMatrix4() const{
+	GADGET_BASIC_ASSERT(IsValid());
+
 	return	Matrix4::Rotate(y, Vector3(0.0f, 1.0f, 0.0f)) *
 			Matrix4::Rotate(z, Vector3(0.0f, 0.0f, 1.0f)) * 
 			Matrix4::Rotate(x, Vector3(1.0f, 0.0f, 0.0f));
 }
 
 Quaternion Euler::ToQuaternion() const{
+	GADGET_BASIC_ASSERT(IsValid());
+
 	float bank = x.ToRadians();
 	float heading = y.ToRadians();
 	float attitude = z.ToRadians();

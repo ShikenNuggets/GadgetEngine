@@ -132,14 +132,26 @@ namespace Gadget{
 		}
 
 		constexpr inline uint16_t MergeTwoBytes(const std::vector<uint8_t>& buffer_, size_t offset_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			if(offset_ >= buffer_.size()){
+				return 0;
+			}
+
 			return MergeBytes(buffer_[offset_], buffer_[offset_ + 1], littleEndian_);
 		}
 
 		constexpr inline uint32_t MergeFourBytes(const std::vector<uint8_t>& buffer_, size_t offset_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			if(offset_ >= buffer_.size()){
+				return 0;
+			}
+
 			return MergeBytes(buffer_[offset_], buffer_[offset_ + 1], buffer_[offset_ + 2], buffer_[offset_ + 3], littleEndian_);
 		}
 
 		constexpr inline uint64_t MergeEightBytes(const std::vector<uint8_t>& buffer_, size_t offset_, bool littleEndian_ = (std::endian::native == std::endian::little)){
+			if(offset_ >= buffer_.size()){
+				return 0;
+			}
+
 			return MergeBytes(buffer_[offset_], buffer_[offset_ + 1], buffer_[offset_ + 2], buffer_[offset_ + 3], buffer_[offset_ + 4], buffer_[offset_ + 5], buffer_[offset_ + 6], buffer_[offset_ + 7], littleEndian_);
 		}
 

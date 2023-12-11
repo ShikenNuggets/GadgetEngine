@@ -13,7 +13,11 @@ namespace Gadget{
 
 	class ResourceContainer{
 	public:
-		ResourceContainer(const std::string type_, const std::string& path_) : type(type_), path(path_), resource(nullptr), isLoaded(false), referenceCount(0){}
+		ResourceContainer(const std::string type_, const std::string& path_) : type(type_), path(path_), resource(nullptr), isLoaded(false), referenceCount(0){
+			GADGET_BASIC_ASSERT(!type_.empty());
+			GADGET_BASIC_ASSERT(!path_.empty());
+		}
+
 		virtual ~ResourceContainer(){ delete resource; }
 
 		std::string Type() const{ return type; }

@@ -7,6 +7,9 @@ using namespace Gadget;
 ComponentCollection<Collider> Collider::componentCollection;
 
 Collider::Collider(GameObject* parent_, ColliderShape shape_, bool isTrigger_) : Component(parent_), shape(shape_), isTrigger(isTrigger_), bulletRb(nullptr){
+	GADGET_BASIC_ASSERT(parent_ != nullptr);
+	GADGET_BASIC_ASSERT(shape_ < ColliderShape::ColliderShape_MAX);
+
 	componentCollection.Add(this);
 }
 
@@ -21,9 +24,15 @@ Collider::~Collider(){
 void Collider::OnActivated(){
 	Reset();
 	Component::OnActivated();
+
+	GADGET_BASIC_ASSERT(bulletRb != nullptr);
 }
 
 void Collider::OnTransformModified(){
+	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(parent->GetTransform().position.IsValid());
+	GADGET_BASIC_ASSERT(parent->GetTransform().rotation.IsValid());
+
 	if(bulletRb == nullptr){
 		return;
 	}

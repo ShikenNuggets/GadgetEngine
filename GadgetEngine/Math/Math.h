@@ -13,15 +13,24 @@ namespace Gadget{
 		static constexpr float NearZero = std::numeric_limits<float>::denorm_min();
 		static constexpr float Infinity = std::numeric_limits<float>::infinity();
 
-		static inline constexpr float DegreesToRadians(float angle_){
-			return angle_ * (Pi / 180.0f);
+		static inline bool IsValidNumber(float value_){
+			return !std::isnan(value_) && !std::isinf(value_);
 		}
 
-		static inline constexpr float RadiansToDegrees(float angle_){
-			return angle_ * (180.0f / Pi);
+		static inline bool IsValidNumber(double value_){
+			return !isnan(value_) && !isinf(value_);
 		}
 
-		static inline float Sqrt(float value_){ return static_cast<float>(sqrt(value_)); }
+		static inline constexpr float DegreesToRadians(float angle_){ return angle_ * (Pi / 180.0f); }
+
+		static inline constexpr float RadiansToDegrees(float angle_){ return angle_ * (180.0f / Pi); }
+
+		static inline float Sqrt(float value_){
+			GADGET_BASIC_ASSERT(IsValidNumber(value_));
+			GADGET_BASIC_ASSERT(IsValidNumber(sqrt(value_)));
+
+			return static_cast<float>(sqrt(value_));
+		}
 
 		static inline constexpr bool IsNearZero(float s_){ return s_ <= NearZero && s_ >= -NearZero; }
 		static inline constexpr bool IsNearZero(double s_){ return s_ <= static_cast<double>(NearZero) && s_ >= static_cast<double>(-NearZero); }
@@ -37,7 +46,10 @@ namespace Gadget{
 			return a_ / b_;
 		}
 
-		static inline float Abs(float value_){ return abs(value_); }
+		static inline float Abs(float value_){
+			GADGET_BASIC_ASSERT(IsValidNumber(value_));
+			return abs(value_);
+		}
 
 		static inline constexpr float Dot2D(float aa_, float ab_, float ba_, float bb_){ return (aa_ * ba_) + (ab_ * bb_); }
 		static inline constexpr float Dot3D(float aa_, float ab_, float ac_, float ba_, float bb_, float bc_){ return (aa_ * ba_) + (ab_ * bb_) + (ac_ * bc_); }
@@ -54,18 +66,56 @@ namespace Gadget{
 			return value_;
 		}
 
-		static inline float Sin(Angle angle_){ return SinR(angle_.ToRadians()); }
-		static inline float Cos(Angle angle_){ return CosR(angle_.ToRadians()); }
-		static inline float Tan(Angle angle_){ return TanR(angle_.ToRadians()); }
+		static inline float Sin(Angle angle_){
+			GADGET_BASIC_ASSERT(IsValidNumber(angle_.Get()));
+			return SinR(angle_.ToRadians());
+		}
 
-		static inline float SinR(Radian radian_){ return static_cast<float>(sin(radian_.Get())); }
-		static inline float CosR(Radian radian_){ return static_cast<float>(cos(radian_.Get())); }
-		static inline float TanR(Radian radian_){ return static_cast<float>(tan(radian_.Get())); }
+		static inline float Cos(Angle angle_){
+			GADGET_BASIC_ASSERT(IsValidNumber(angle_.Get()));
+			return CosR(angle_.ToRadians());
+		}
 
-		static inline Angle Asin(float sin_){ return Radian(static_cast<float>(asin(sin_))).ToDegrees(); }
-		static inline Angle Acos(float cos_){ return Radian(static_cast<float>(acos(Clamp(-1.0f, 1.0f, cos_)))).ToDegrees(); }
-		static inline Angle Atan(float tan_){ return Radian(static_cast<float>(atan(tan_))).ToDegrees(); }
-		static inline Angle Atan2(float a_, float b_){ return Radian(static_cast<float>(atan2(a_, b_))).ToDegrees(); }
+		static inline float Tan(Angle angle_){
+			GADGET_BASIC_ASSERT(IsValidNumber(angle_.Get()));
+			return TanR(angle_.ToRadians());
+		}
+
+		static inline float SinR(Radian radian_){
+			GADGET_BASIC_ASSERT(IsValidNumber(radian_.Get()));
+			return static_cast<float>(sin(radian_.Get()));
+		}
+
+		static inline float CosR(Radian radian_){
+			GADGET_BASIC_ASSERT(IsValidNumber(radian_.Get()));
+			return static_cast<float>(cos(radian_.Get()));
+		}
+
+		static inline float TanR(Radian radian_){
+			GADGET_BASIC_ASSERT(IsValidNumber(radian_.Get()));
+			return static_cast<float>(tan(radian_.Get()));
+		}
+
+		static inline Angle Asin(float sin_){
+			GADGET_BASIC_ASSERT(IsValidNumber(sin_));
+			return Radian(static_cast<float>(asin(sin_))).ToDegrees();
+		}
+
+		static inline Angle Acos(float cos_){
+			GADGET_BASIC_ASSERT(IsValidNumber(cos_));
+			return Radian(static_cast<float>(acos(Clamp(-1.0f, 1.0f, cos_)))).ToDegrees();
+		}
+
+		static inline Angle Atan(float tan_){
+			GADGET_BASIC_ASSERT(IsValidNumber(tan_));
+			return Radian(static_cast<float>(atan(tan_))).ToDegrees();
+		}
+
+		static inline Angle Atan2(float a_, float b_){
+			GADGET_BASIC_ASSERT(IsValidNumber(a_));
+			GADGET_BASIC_ASSERT(IsValidNumber(b_));
+			return Radian(static_cast<float>(atan2(a_, b_))).ToDegrees();
+		}
 
 		static inline constexpr bool IsPrime(uint64_t num_){
 			if(num_ == 0 || num_ == 1){
@@ -83,11 +133,25 @@ namespace Gadget{
 
 		static inline constexpr bool IsInteger(double num_){ return Math::Near(static_cast<double>(static_cast<int64_t>(num_)), num_); }
 
-		static inline float Floor(float num_){ return floor(num_); }
-		static inline double Floor(double num_){ return floor(num_); }
+		static inline float Floor(float num_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(num_));
+			return floor(num_);
+		}
 
-		static inline float Ceiling(float num_){ return ceil(num_); }
-		static inline double Ceiling(double num_){ return ceil(num_); }
+		static inline double Floor(double num_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(num_));
+			return floor(num_);
+		}
+
+		static inline float Ceiling(float num_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(num_));
+			return ceil(num_);
+		}
+
+		static inline double Ceiling(double num_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(num_));
+			return ceil(num_);
+		}
 
 		static inline constexpr float RemapRange(float value_, float oldMin_, float oldMax_, float newMin_, float newMax_){
 			if(oldMin_ == oldMax_ || newMin_ == newMax_){
@@ -97,14 +161,6 @@ namespace Gadget{
 			float oldRange = (oldMax_ - oldMin_);
 			float newRange = (newMax_ - newMin_);
 			return (((value_ - oldMin_) * newRange) / oldRange) + newMin_;
-		}
-
-		static inline bool IsValidNumber(float value_){
-			return !std::isnan(value_) && !std::isinf(value_);
-		}
-
-		static inline bool IsValidNumber(double value_){
-			return !isnan(value_) && !isinf(value_);
 		}
 
 		//Delete unwanted compiler-generated constructors, destructors, and assignment operators

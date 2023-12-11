@@ -6,13 +6,19 @@
 namespace Gadget{
 	class CubeCollider : public Collider{
 	public:
-		CubeCollider(GameObject* parent_, float x_ = 1.0f, float y_ = 1.0f, float z_ = 1.0f, bool isTrigger_ = false) : Collider(parent_, ColliderShape::Cube, isTrigger_), size(x_, y_, z_){}
+		CubeCollider(GameObject* parent_, float x_ = 1.0f, float y_ = 1.0f, float z_ = 1.0f, bool isTrigger_ = false) : Collider(parent_, ColliderShape::Cube, isTrigger_), size(x_, y_, z_){
+			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+		}
 
 		float GetX() const{ return size.x; }
 		float GetY() const{ return size.y; }
 		float GetZ() const{ return size.z; }
 
 		virtual Vector3 GetColliderSize() const override{
+			GADGET_BASIC_ASSERT(size.IsValid());
 			return Vector3(
 				(parent->GetScale().x * size.x) / 2.0f,
 				(parent->GetScale().y * size.y) / 2.0f,

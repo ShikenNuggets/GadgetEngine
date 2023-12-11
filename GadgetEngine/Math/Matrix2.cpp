@@ -9,6 +9,11 @@ Matrix2::Matrix2() : m(){
 }
 
 Matrix2::Matrix2(float x1_, float x2_, float y1_, float y2_) : m(){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x1_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x2_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y1_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y2_));
+
 	m[0] = x1_;
 	m[1] = x2_;
 	m[2] = y1_;
@@ -16,22 +21,30 @@ Matrix2::Matrix2(float x1_, float x2_, float y1_, float y2_) : m(){
 }
 
 Matrix2::Matrix2(float fill_) : m(){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
+
 	for(int i = 0; i < mat2Size; i++){
 		m[i] = fill_;
 	}
 }
 
 Matrix2::Matrix2(const Matrix3& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[2] = m_[3];
 	m[1] = m_[1];	m[3] = m_[4];
 }
 
 Matrix2::Matrix2(const Matrix4& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[2] = m_[4];
 	m[1] = m_[1];	m[3] = m_[5];
 }
 
 Matrix2::Matrix2(const Matrix4x3& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[2] = m_[3];
 	m[1] = m_[1];	m[3] = m_[4];
 }
@@ -42,6 +55,9 @@ float& Matrix2::operator [](unsigned int i_){
 }
 
 Matrix2 Matrix2::operator +(const Matrix2& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	Matrix2 result = Matrix2(0.0f);
 	for(unsigned int i = 0; i < mat2Size; i++){
 		result[i] = m[i] + m_[i];
@@ -51,6 +67,9 @@ Matrix2 Matrix2::operator +(const Matrix2& m_) const{
 }
 
 Matrix2 Matrix2::operator -(const Matrix2& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	Matrix2 result = Matrix2(0.0f);
 	for(unsigned int i = 0; i < mat2Size; i++){
 		result[i] = m[i] - m_[i];
@@ -60,10 +79,16 @@ Matrix2 Matrix2::operator -(const Matrix2& m_) const{
 }
 
 Matrix2 Matrix2::operator *(float s_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+
 	return Matrix2(m[0] * s_, m[1] * s_, m[2] * s_, m[3] * s_);
 }
 
 Matrix2 Matrix2::operator *(const Matrix2& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	return Matrix2(
 		//COLUMN 1
 		Math::Dot2D(/*A*/ m[0], m[2], /*B*/ m_[0], m_[1]),
@@ -74,12 +99,15 @@ Matrix2 Matrix2::operator *(const Matrix2& m_) const{
 	);
 }
 
-Matrix2 Matrix2::operator /(const float s) const{
+Matrix2 Matrix2::operator /(const float s_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+
 	return Matrix2(
-		Math::SafeDivide(m[0], s),
-		Math::SafeDivide(m[1], s),
-		Math::SafeDivide(m[2], s),
-		Math::SafeDivide(m[3], s)
+		Math::SafeDivide(m[0], s_),
+		Math::SafeDivide(m[1], s_),
+		Math::SafeDivide(m[2], s_),
+		Math::SafeDivide(m[3], s_)
 	);
 }
 
@@ -93,15 +121,18 @@ Matrix2::operator float*(){ return static_cast<float*>(&m[0]); }
 Matrix2::operator const float*() const{ return static_cast<const float*>(&m[0]); }
 
 Matrix2 Matrix2::Transpose() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix2(	m[0], m[2],
 					m[1], m[3]);
 }
 
 float Matrix2::Determinant() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return (m[0] * m[3]) - (m[2] * m[1]);
 }
 
 Matrix2 Matrix2::Inverse() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	float invdet = Math::SafeDivide(1.0f, Determinant());
 
 	return Matrix2(	m[3] * invdet, -m[1] * invdet,
@@ -109,14 +140,17 @@ Matrix2 Matrix2::Inverse() const{
 }
 
 Matrix3 Matrix2::ToMatrix3() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix3(*this);
 }
 
 Matrix4 Matrix2::ToMatrix4() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix4(*this);
 }
 
 Matrix4x3 Matrix2::ToMatrix4x3() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix4x3(*this);
 }
 

@@ -33,10 +33,15 @@ Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDo
 Input::~Input(){}
 
 bool Input::GetButtonDown(ButtonID id_) const{
+	GADGET_BASIC_ASSERT(id_ < ButtonID::ButtonID_MAX);
+
 	return buttonsDown.find(id_) != buttonsDown.end();
 }
 
 bool Input::GetButtonDown(StringID buttonName_) const{
+	GADGET_BASIC_ASSERT(buttonName_ != StringID::None);
+	GADGET_ASSERT(!definedButtons.empty(), "GetButtonDown called when no buttons are defined!");
+
 	for(const auto& b : definedButtons){
 		if(b.GetName() == buttonName_){
 			for(const auto& id : b.GetButtonIDs()){
@@ -54,11 +59,16 @@ bool Input::GetButtonDown(StringID buttonName_) const{
 }
 
 bool Input::GetButtonUp(ButtonID id_) const{
+	GADGET_BASIC_ASSERT(id_ < ButtonID::ButtonID_MAX);
+
 	return buttonsUp.find(id_) != buttonsUp.end();
 }
 
 //TODO - This is almost identical to the GetButtonDown function, maybe there's a better way to reuse code here?
 bool Input::GetButtonUp(StringID buttonName_) const{
+	GADGET_BASIC_ASSERT(buttonName_ != StringID::None);
+	GADGET_ASSERT(!definedButtons.empty(), "GetButtonUp called when no buttons are defined!");
+
 	for(const auto& b : definedButtons){
 		if(b.GetName() == buttonName_){
 			for(const auto& id : b.GetButtonIDs()){
@@ -76,11 +86,16 @@ bool Input::GetButtonUp(StringID buttonName_) const{
 }
 
 bool Input::GetButtonHeld(ButtonID id_) const{
+	GADGET_BASIC_ASSERT(id_ < ButtonID::ButtonID_MAX);
+
 	return buttonsHeld.find(id_) != buttonsHeld.end();
 }
 
 //TODO - This is almost identical to the GetButtonDown and GetButtonUp functions, maybe there's a better way to reuse code here?
 bool Input::GetButtonHeld(StringID buttonName_) const{
+	GADGET_BASIC_ASSERT(buttonName_ != StringID::None);
+	GADGET_ASSERT(!definedButtons.empty(), "GetButtonHeld called when no buttons are defined!");
+
 	for(const auto& b : definedButtons){
 		if(b.GetName() == buttonName_){
 			for(const auto& id : b.GetButtonIDs()){
@@ -98,6 +113,8 @@ bool Input::GetButtonHeld(StringID buttonName_) const{
 }
 
 float Input::GetAxis(AxisID id_) const{
+	GADGET_BASIC_ASSERT(id_ < AxisID::AxisID_MAX);
+
 	auto it = axes.find(id_);
 	if(it != axes.end()){
 		return axes.at(id_);
@@ -112,6 +129,8 @@ float Input::GetAxis(AxisID id_) const{
 }
 
 float Input::GetAxis(StringID axisName_) const{
+	GADGET_BASIC_ASSERT(axisName_ != StringID::None);
+
 	for(const auto& a : definedAxes){
 		if(a.GetName() == axisName_){
 			float totalAxisValue = 0.0f;
@@ -147,16 +166,25 @@ float Input::GetAxis(StringID axisName_) const{
 }
 
 float Input::GetCurrentMouseXInGUICoordinates() const{
+	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock() != nullptr);
+	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock()->GetWidth() > 0);
+
 	float value = static_cast<float>(currentMouseX) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetWidth());
 	return Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range
 }
 
 float Input::GetCurrentMouseYInGUICoordinates() const{
+	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock() != nullptr);
+	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock()->GetHeight() > 0);
+
 	float value = static_cast<float>(currentMouseY) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetHeight());
 	return -Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range, then invert
 }
 
 bool Input::GetMultiButtonDown(StringID multiButton_) const{
+	GADGET_BASIC_ASSERT(multiButton_ != StringID::None);
+	GADGET_ASSERT(!definedMultiButtons.empty(), "GetMultiButtonDown called when no MultiButtons are defined!");
+
 	for(const auto& mb : definedMultiButtons){
 		if(mb.GetName() == multiButton_){
 			bool anyDownThisFrame = false;
@@ -181,6 +209,9 @@ bool Input::GetMultiButtonDown(StringID multiButton_) const{
 }
 
 bool Input::GetMultiButtonUp(StringID multiButton_) const{
+	GADGET_BASIC_ASSERT(multiButton_ != StringID::None);
+	GADGET_ASSERT(!definedMultiButtons.empty(), "GetMultiButtonUp called when no MultiButtons are defined!");
+
 	for(const auto& mb : definedMultiButtons){
 		if(mb.GetName() == multiButton_){
 			for(const auto& id : mb.GetButtonIDs()){
@@ -198,6 +229,9 @@ bool Input::GetMultiButtonUp(StringID multiButton_) const{
 }
 
 bool Input::GetMultiButtonHeld(StringID multiButton_) const{
+	GADGET_BASIC_ASSERT(multiButton_ != StringID::None);
+	GADGET_ASSERT(!definedMultiButtons.empty(), "GetMultiButtonHeld called when no MultiButtons are defined!");
+
 	for(const auto& mb : definedMultiButtons){
 		if(mb.GetName() == multiButton_){
 			for(const auto& id : mb.GetButtonIDs()){
@@ -278,18 +312,28 @@ void Input::ProcessInputs(){
 			persistentAxes.insert(std::make_pair(a.GetAxisID(), a.Value()));
 		}
 	}
-	axisEvents.clear();
+	persistentAxes.clear();
+
+	GADGET_BASIC_ASSERT(buttonEvents.empty());
+	GADGET_BASIC_ASSERT(axisEvents.empty());
+	GADGET_BASIC_ASSERT(persistentAxes.empty());
 }
 
 void Input::OnEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() < EventType::Count);
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
 	switch(e_.GetEventType()){
 		case EventType::KeyPressed:
+			GADGET_BASIC_ASSERT(dynamic_cast<const KeyPressedEvent*>(&e_) != nullptr);
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyPressedEvent&>(e_).GetKeyCode(), true));
 			break;
 		case EventType::KeyReleased:
+			GADGET_BASIC_ASSERT(dynamic_cast<const KeyReleasedEvent*>(&e_) != nullptr);
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyReleasedEvent&>(e_).GetKeyCode(), false));
 			break;
 		case EventType::MouseMoved:
+			GADGET_BASIC_ASSERT(dynamic_cast<const MouseMovedEvent*>(&e_) != nullptr);
 			App::GetInput().currentMouseX = static_cast<int>(dynamic_cast<const MouseMovedEvent&>(e_).GetXAbsolute());
 			App::GetInput().currentMouseY = static_cast<int>(dynamic_cast<const MouseMovedEvent&>(e_).GetYAbsolute());
 
@@ -297,22 +341,28 @@ void Input::OnEvent(const Event& e_){
 			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, dynamic_cast<const MouseMovedEvent&>(e_).GetY()));
 			break;
 		case EventType::MouseScroll:
+			GADGET_BASIC_ASSERT(dynamic_cast<const MouseScrollEvent*>(&e_) != nullptr);
 			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Horizontal, dynamic_cast<const MouseScrollEvent&>(e_).GetXOffset()));
 			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Vertical, dynamic_cast<const MouseScrollEvent&>(e_).GetYOffset()));
 			break;
 		case EventType::MouseButtonPressed:
+			GADGET_BASIC_ASSERT(dynamic_cast<const MouseButtonPressedEvent*>(&e_) != nullptr);
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonPressedEvent&>(e_).GetButton(), true));
 			break;
 		case EventType::MouseButtonReleased:
+			GADGET_BASIC_ASSERT(dynamic_cast<const MouseButtonReleasedEvent*>(&e_) != nullptr);
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonReleasedEvent&>(e_).GetButton(), false));
 			break;
 		case EventType::GamepadAxis:
+			GADGET_BASIC_ASSERT(dynamic_cast<const GamepadAxisEvent*>(&e_) != nullptr);
 			App::GetInput().persistentAxisEvents.push_back(RawAxis(dynamic_cast<const GamepadAxisEvent&>(e_).GetAxisIndex(), dynamic_cast<const GamepadAxisEvent&>(e_).GetValue()));
 			break;
 		case EventType::GamepadButtonPressed:
+			GADGET_BASIC_ASSERT(dynamic_cast<const GamepadButtonPressedEvent*>(&e_) != nullptr);
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), true));
 			break;
 		case EventType::GamepadButtonReleased:
+			GADGET_BASIC_ASSERT(dynamic_cast<const GamepadButtonReleasedEvent*>(&e_) != nullptr);
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonReleasedEvent&>(e_).GetButton(), false));
 			break;
 		default:

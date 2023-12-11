@@ -14,6 +14,9 @@
 using namespace Gadget;
 
 Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, y_), sdlWindow(nullptr), joysticks(), refreshRate(0.0f){
+	GADGET_BASIC_ASSERT(w_ > 0);
+	GADGET_BASIC_ASSERT(h_ > 0);
+
 	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
 		Debug::ThrowFatalError(SID("RENDER"), "SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}

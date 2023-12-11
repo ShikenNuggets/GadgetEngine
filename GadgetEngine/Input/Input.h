@@ -11,6 +11,12 @@
 namespace Gadget{
 	class Input{
 	public:
+		#if defined GADGET_PLATFORM_SWITCH || defined GAGDET_PLATFORM_XBOX_SERIES
+			static constexpr int MaxGamepads = 8;
+		#else
+			static constexpr int MaxGamepads = 4;
+		#endif
+
 		Input();
 		~Input();
 

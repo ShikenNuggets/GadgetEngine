@@ -10,7 +10,11 @@ namespace Gadget{
 		inline ButtonID GetKeyCode() const{ return keycode; }
 
 	protected:
-		KeyEvent(ButtonID keycode_, StringID name_) : Event(name_), keycode(keycode_){}
+		KeyEvent(ButtonID keycode_, StringID name_) : Event(name_), keycode(keycode_){
+			GADGET_BASIC_ASSERT(keycode_ < ButtonID::ButtonID_MAX);
+			GADGET_BASIC_ASSERT(name_ != StringID::None);
+		}
+
 		virtual ~KeyEvent(){}
 
 		ButtonID keycode;
@@ -18,7 +22,9 @@ namespace Gadget{
 
 	class KeyPressedEvent : public KeyEvent{
 	public:
-		KeyPressedEvent(ButtonID keycode_) : KeyEvent(keycode_, SID("KeyPressedEvent")), repeatCount(0){}
+		KeyPressedEvent(ButtonID keycode_) : KeyEvent(keycode_, SID("KeyPressedEvent")), repeatCount(0){
+			GADGET_BASIC_ASSERT(keycode_ < ButtonID::ButtonID_MAX);
+		}
 
 		static constexpr EventType Type(){ return EventType::KeyPressed; }
 		virtual EventType GetEventType() const final override{ return Type(); }
@@ -31,7 +37,9 @@ namespace Gadget{
 
 	class KeyReleasedEvent : public KeyEvent{
 	public:
-		KeyReleasedEvent(ButtonID keycode_) : KeyEvent(keycode_, SID("KeyReleasedEvent")){}
+		KeyReleasedEvent(ButtonID keycode_) : KeyEvent(keycode_, SID("KeyReleasedEvent")){
+			GADGET_BASIC_ASSERT(keycode_ < ButtonID::ButtonID_MAX);
+		}
 
 		static constexpr EventType Type(){ return EventType::KeyReleased; }
 		virtual EventType GetEventType() const final override{ return Type(); }

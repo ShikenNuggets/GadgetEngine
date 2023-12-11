@@ -1,6 +1,7 @@
 #ifndef GAMEPAD_EVENT_H
 #define GAMEPAD_EVENT_H
 
+#include "Input.h"
 #include "InputEnums.h"
 #include "Events/Event.h"
 
@@ -8,7 +9,11 @@ namespace Gadget{
 	class GamepadEvent : public Event{
 	public:
 	protected:
-		GamepadEvent(StringID name_, int joystickIndex_) : Event(name_), joystickIndex(joystickIndex_){}
+		GamepadEvent(StringID name_, int joystickIndex_) : Event(name_), joystickIndex(joystickIndex_){
+			GADGET_BASIC_ASSERT(name_ != StringID::None);
+			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+		}
+
 		virtual ~GamepadEvent(){}
 
 		int joystickIndex;
@@ -16,7 +21,12 @@ namespace Gadget{
 
 	class GamepadAxisEvent : public GamepadEvent{
 	public:
-		GamepadAxisEvent(int joystickIndex_, AxisID axisID_, float value_) : GamepadEvent(SID("GamepadAxisEvent"), joystickIndex_), axisID(axisID_), value(value_){}
+		GamepadAxisEvent(int joystickIndex_, AxisID axisID_, float value_) : GamepadEvent(SID("GamepadAxisEvent"), joystickIndex_), axisID(axisID_), value(value_){
+			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			GADGET_BASIC_ASSERT(axisID_ < AxisID::AxisID_MAX);
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
+		}
+
 		virtual ~GamepadAxisEvent(){}
 
 		static constexpr EventType Type(){ return EventType::GamepadAxis; }
@@ -37,7 +47,12 @@ namespace Gadget{
 		inline ButtonID GetButton() const{ return button; }
 
 	protected:
-		GamepadButtonEvent(StringID name_, int joystickIndex_, ButtonID button_) : GamepadEvent(name_, joystickIndex_), button(button_){}
+		GamepadButtonEvent(StringID name_, int joystickIndex_, ButtonID button_) : GamepadEvent(name_, joystickIndex_), button(button_){
+			GADGET_BASIC_ASSERT(name_ != StringID::None);
+			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
+		}
+
 		virtual ~GamepadButtonEvent(){}
 
 		ButtonID button;
@@ -45,7 +60,10 @@ namespace Gadget{
 
 	class GamepadButtonPressedEvent : public GamepadButtonEvent{
 	public:
-		GamepadButtonPressedEvent(int joystickIndex_, ButtonID button_) : GamepadButtonEvent(SID("GamepadButtonPressedEvent"), joystickIndex_, button_){}
+		GamepadButtonPressedEvent(int joystickIndex_, ButtonID button_) : GamepadButtonEvent(SID("GamepadButtonPressedEvent"), joystickIndex_, button_){
+			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
+		}
 
 		static constexpr EventType Type(){ return EventType::GamepadButtonPressed; }
 		virtual EventType GetEventType() const final override{ return Type(); }
@@ -55,7 +73,10 @@ namespace Gadget{
 
 	class GamepadButtonReleasedEvent : public GamepadButtonEvent{
 	public:
-		GamepadButtonReleasedEvent(int joystickIndex_, ButtonID button_) : GamepadButtonEvent(SID("MouseButtonReleasedEvent"), joystickIndex_, button_){}
+		GamepadButtonReleasedEvent(int joystickIndex_, ButtonID button_) : GamepadButtonEvent(SID("MouseButtonReleasedEvent"), joystickIndex_, button_){
+			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
+		}
 
 		static constexpr EventType Type(){ return EventType::GamepadButtonReleased; }
 		virtual EventType GetEventType() const final override{ return Type(); }
@@ -64,4 +85,4 @@ namespace Gadget{
 	};
 }
 
-#endif // !GAMEPAD_EVENT_H
+#endif //!GAMEPAD_EVENT_H

@@ -8,6 +8,7 @@ ComponentCollection<Rigidbody> Rigidbody::componentCollection;
 
 Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(parent_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr), freezeRotation(freezeType_){
 	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
 
@@ -22,6 +23,9 @@ Rigidbody::~Rigidbody(){
 
 void Rigidbody::Update([[maybe_unused]] float deltaTime_){
 	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_));
+	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
+
 	if(parent == nullptr){
 		Debug::Log("Update called on Rigidbody with no parent!", Debug::Error, __FILE__, __LINE__);
 		return;
@@ -39,6 +43,7 @@ void Rigidbody::Update([[maybe_unused]] float deltaTime_){
 }
 
 void Rigidbody::AddForce(const Vector3& force_){
+	GADGET_BASIC_ASSERT(force_.IsValid());
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
 	GADGET_BASIC_ASSERT(bulletRb != nullptr);
@@ -52,10 +57,15 @@ void Rigidbody::AddForce(const Vector3& force_){
 }
 
 void Rigidbody::AddVelocity(const Vector3& vel_){
+	GADGET_BASIC_ASSERT(vel_.IsValid());
 	bulletRb->setLinearVelocity(bulletRb->getLinearVelocity() + BulletHelper::ConvertVector3(vel_));
 }
 
 void Rigidbody::AddVelocity(float x_, float y_, float z_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+
 	AddVelocity(Vector3(x_, y_, z_));
 }
 
@@ -68,6 +78,8 @@ Vector3 Rigidbody::GetVelocity() const{
 }
 
 void Rigidbody::SetVelocity(const Vector3& vel_){
+	GADGET_BASIC_ASSERT(vel_.IsValid());
+
 	if(bulletRb == nullptr){
 		//TODO - Set velocity on next update
 		return;
@@ -81,10 +93,15 @@ void Rigidbody::SetVelocity(const Vector3& vel_){
 }
 
 void Rigidbody::SetVelocity(float x_, float y_, float z_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+
 	SetVelocity(Vector3(x_, y_, z_));
 }
 
 void Rigidbody::FreezeRotation(FreezeRotationType type_){
+	GADGET_BASIC_ASSERT(type_ < FreezeRotationType::FreezeRotationType_MAX);
 	freezeRotation = type_;
 
 	if(bulletRb != nullptr){
@@ -129,6 +146,9 @@ void Rigidbody::ClearForces(){
 }
 
 void Rigidbody::CollisionResponse(const Collision& collision_){
+	GADGET_BASIC_ASSERT(collision_.collisionVector.IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(collision_.overlapAmount));
+
 	//TODO - This is obviously not proper collision response
 	parent->Translate(-collision_.collisionVector.Normalized() * collision_.overlapAmount);
 }
