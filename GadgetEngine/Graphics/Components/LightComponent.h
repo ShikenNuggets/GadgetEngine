@@ -8,9 +8,17 @@
 namespace Gadget{
 	class PointLightComponent : public Component{
 	public:
-		PointLightComponent(GameObject* parent_) : Component(parent_), lightSource(){
+		PointLightComponent(GameObject* parent_) : Component(SID("PointLightComponent"), parent_), lightSource(){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
 			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+
+			componentCollection.Add(this);
+
+			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
+		}
+
+		PointLightComponent(GUID parentGUID_) : Component(SID("PointLightComponent"), parentGUID_), lightSource(){
+			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 
 			componentCollection.Add(this);
 

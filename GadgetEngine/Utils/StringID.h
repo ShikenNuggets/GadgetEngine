@@ -18,12 +18,13 @@
 namespace Gadget{
 	class StringID{
 	public:
-		static StringID None;
+		static const StringID None;
 
 		explicit constexpr StringID(uint64_t id_) : id(id_){}
 		void operator =(StringID a_){ id = a_.id; }
 
 		std::string GetString() const;
+		uint64_t GetID() const{ return id; }
 
 		constexpr inline bool operator ==(StringID a_) const{ return id == a_.id; }
 		constexpr inline bool operator !=(StringID a_) const{ return id != a_.id; }

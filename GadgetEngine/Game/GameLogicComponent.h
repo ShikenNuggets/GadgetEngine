@@ -7,8 +7,21 @@
 namespace Gadget{
 	class GameLogicComponent : public Component{
 	public:
-		GameLogicComponent(GameObject* parent_) : Component(parent_), hasStarted(false), collisionsToHandle(){
+		GameLogicComponent(StringID typeName_, GameObject* parent_) : Component(typeName_, parent_), hasStarted(false), collisionsToHandle(){
+			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+
 			componentCollection.Add(this);
+
+			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
+		}
+
+		GameLogicComponent(StringID typeName_, GUID parentGUID_) : Component(typeName_, parentGUID_), hasStarted(false), collisionsToHandle(){
+			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
+
+			componentCollection.Add(this);
+
+			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 		}
 
 		virtual ~GameLogicComponent() override{

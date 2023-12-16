@@ -23,6 +23,7 @@ namespace Gadget{
 	class Rigidbody : public Component{
 	public:
 		Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_ = FreezeRotationType::None);
+		Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_ = FreezeRotationType::None);
 		~Rigidbody();
 
 		static Rigidbody* Get(GUID objectGuid_){

@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-StringID StringID::None = SID("");
+const StringID StringID::None = SID("");
 
 std::string StringID::GetString() const{
 	return GetStringFromID(*this);

@@ -6,7 +6,18 @@ using namespace Gadget;
 
 ComponentCollection<Rigidbody> Rigidbody::componentCollection;
 
-Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(parent_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr), freezeRotation(freezeType_){
+Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr), freezeRotation(freezeType_){
+	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
+	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(mass > 0.0f);
+
+	mass = Math::Clamp(0.0001f, Math::Infinity, mass); //0.0001 is completely arbitrary
+
+	componentCollection.Add(this);
+}
+
+Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr), freezeRotation(freezeType_){
 	GADGET_BASIC_ASSERT(parent != nullptr);
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));

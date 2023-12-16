@@ -7,7 +7,7 @@
 namespace Pong{
 	class PaddleController : public Gadget::GameLogicComponent{
 	public:
-		PaddleController(Gadget::GameObject* parent_, unsigned int player_) : GameLogicComponent(parent_), paddleMoveSpeed(5.0f), player(player_), rigidbody(nullptr){
+		PaddleController(Gadget::GameObject* parent_, unsigned int player_) : GameLogicComponent(SID("PaddleController"), parent_), paddleMoveSpeed(5.0f), player(player_), rigidbody(nullptr){
 			GADGET_BASIC_ASSERT(player == 1 || player == 2);
 		}
 

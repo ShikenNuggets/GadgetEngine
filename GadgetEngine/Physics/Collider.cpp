@@ -6,8 +6,15 @@ using namespace Gadget;
 
 ComponentCollection<Collider> Collider::componentCollection;
 
-Collider::Collider(GameObject* parent_, ColliderShape shape_, bool isTrigger_) : Component(parent_), shape(shape_), isTrigger(isTrigger_), bulletRb(nullptr){
+Collider::Collider(StringID typeName_, GameObject* parent_, ColliderShape shape_, bool isTrigger_) : Component(typeName_, parent_), shape(shape_), isTrigger(isTrigger_), bulletRb(nullptr){
 	GADGET_BASIC_ASSERT(parent_ != nullptr);
+	GADGET_BASIC_ASSERT(shape_ < ColliderShape::ColliderShape_MAX);
+
+	componentCollection.Add(this);
+}
+
+Collider::Collider(StringID typeName_, GUID parentGUID_, ColliderShape shape_, bool isTrigger_) : Component(typeName_, parentGUID_), shape(shape_), isTrigger(isTrigger_), bulletRb(nullptr){
+	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(shape_ < ColliderShape::ColliderShape_MAX);
 
 	componentCollection.Add(this);

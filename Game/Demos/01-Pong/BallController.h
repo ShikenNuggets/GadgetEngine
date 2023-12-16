@@ -10,7 +10,7 @@
 namespace Pong{
 	class BallController : public Gadget::GameLogicComponent{
 	public:
-		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(parent_), initialForce(initialForce_), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_), movingUp(true), movingRight(true), lastCollidedObject(0), roundOver(false){}
+		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(SID("BallController"), parent_), initialForce(initialForce_), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_), movingUp(true), movingRight(true), lastCollidedObject(0), roundOver(false){}
 
 		virtual void OnStart() override{
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();

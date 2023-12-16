@@ -7,7 +7,7 @@
 namespace Example{
 	class ObjectRotator : public Gadget::GameLogicComponent{
 	public:
-		ObjectRotator(Gadget::GameObject* parent_) : GameLogicComponent(parent_){}
+		ObjectRotator(Gadget::GameObject* parent_) : GameLogicComponent(SID("ObjectRotator"), parent_){}
 		virtual ~ObjectRotator() override{}
 
 		virtual void OnUpdate(float deltaTime_) override{

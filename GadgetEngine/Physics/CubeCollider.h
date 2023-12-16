@@ -6,8 +6,15 @@
 namespace Gadget{
 	class CubeCollider : public Collider{
 	public:
-		CubeCollider(GameObject* parent_, float x_ = 1.0f, float y_ = 1.0f, float z_ = 1.0f, bool isTrigger_ = false) : Collider(parent_, ColliderShape::Cube, isTrigger_), size(x_, y_, z_){
+		CubeCollider(GameObject* parent_, float x_ = 1.0f, float y_ = 1.0f, float z_ = 1.0f, bool isTrigger_ = false) : Collider(SID("CubeCollider"), parent_, ColliderShape::Cube, isTrigger_), size(x_, y_, z_){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+		}
+
+		CubeCollider(GUID parentGUID_, float x_ = 1.0f, float y_ = 1.0f, float z_ = 1.0f, bool isTrigger_ = false) : Collider(SID("CubeCollider"), parentGUID_, ColliderShape::Cube, isTrigger_), size(x_, y_, z_){
+			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));

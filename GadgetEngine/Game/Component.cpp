@@ -4,6 +4,15 @@
 
 using namespace Gadget;
 
+Component::Component(StringID typeName_, GUID parentGUID_) : typeName(typeName_), guid(GUID::Generate()), isActivated(false){
+	GADGET_BASIC_ASSERT(typeName_ != StringID::None);
+	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
+	GADGET_BASIC_ASSERT(guid != GUID::Invalid);
+
+	parent = GameObjectCollection::Get(parentGUID_);
+	GADGET_BASIC_ASSERT(parent != nullptr);
+}
+
 StringID Component::GetParentName() const{
 	GADGET_BASIC_ASSERT(parent != nullptr);
 

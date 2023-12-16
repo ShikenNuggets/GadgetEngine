@@ -19,7 +19,8 @@ namespace Gadget{
 
 	class Collider : public Component{
 	public:
-		Collider(GameObject* parent_, ColliderShape shape_, bool isTrigger_);
+		Collider(StringID typeName_, GameObject* parent_, ColliderShape shape_, bool isTrigger_);
+		Collider(StringID typeName_, GUID parentGUID_, ColliderShape shape_, bool isTrigger_);
 		virtual ~Collider();
 
 		static Collider* Get(GUID objectGuid_){

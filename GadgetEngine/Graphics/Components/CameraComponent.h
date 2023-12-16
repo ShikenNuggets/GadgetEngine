@@ -8,6 +8,7 @@ namespace Gadget{
 	class CameraComponent : public Component{
 	public:
 		CameraComponent(GameObject* parent_, Camera::Projection projection_ = Camera::Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);
+		CameraComponent(GUID parentGUID_, Camera::Projection projection_ = Camera::Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);
 		virtual ~CameraComponent() override;
 
 		static CameraComponent* Get(GUID objectGuid_){

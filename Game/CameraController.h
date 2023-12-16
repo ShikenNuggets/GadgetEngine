@@ -10,7 +10,7 @@
 namespace Example{
 	class CameraController : public Gadget::GameLogicComponent{
 	public:
-		CameraController(Gadget::GameObject* parent_) : GameLogicComponent(parent_), input(Gadget::App::GetInput()){}
+		CameraController(Gadget::GameObject* parent_) : GameLogicComponent(SID("CameraController"), parent_), input(Gadget::App::GetInput()){}
 		virtual ~CameraController() override{}
 
 		virtual void OnUpdate(float deltaTime_) override{

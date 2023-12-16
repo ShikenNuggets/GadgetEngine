@@ -6,9 +6,27 @@ using namespace Gadget;
 
 ComponentCollection<CameraComponent> CameraComponent::componentCollection = ComponentCollection<CameraComponent>();
 
-CameraComponent::CameraComponent(GameObject* parent_, Camera::Projection projection_, const Rect& viewRect_) : Component(parent_){
+CameraComponent::CameraComponent(GameObject* parent_, Camera::Projection projection_, const Rect& viewRect_) : Component(SID("CameraComponent"), parent_){
 	GADGET_BASIC_ASSERT(parent_ != nullptr);
 	GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+	GADGET_BASIC_ASSERT(projection_ < Camera::Projection::Projection_MAX);
+	GADGET_BASIC_ASSERT(viewRect_.IsValid());
+
+	camera = Camera(parent->GetPosition(), parent->GetRotation(), projection_, viewRect_);
+	lastPosition = parent->GetPosition();
+	lastRotation = parent->GetRotation();
+	lastAspect = App::GetAspectRatio();
+
+	componentCollection.Add(this);
+
+	GADGET_BASIC_ASSERT(lastPosition.IsValid());
+	GADGET_BASIC_ASSERT(lastRotation.IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(lastAspect));
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
+}
+
+CameraComponent::CameraComponent(GUID parentGUID_, Camera::Projection projection_, const Rect& viewRect_) : Component(SID("CameraComponent"), parentGUID_){
+	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(projection_ < Camera::Projection::Projection_MAX);
 	GADGET_BASIC_ASSERT(viewRect_.IsValid());
 

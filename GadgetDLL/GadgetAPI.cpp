@@ -28,6 +28,8 @@ namespace{
 	};
 
 	struct GameObjectDescriptor{
+		const char* name;
+		//TODO - Array of strings for the tag
 		TransformInfo transform;
 	};
 } //Anonymous Namespace
@@ -58,13 +60,8 @@ WORKBENCH_INTERFACE uint32_t UnloadGameCodeDLL(){
 WORKBENCH_INTERFACE uint64_t CreateGameObject(GameObjectDescriptor* descriptor_){
 	GADGET_BASIC_ASSERT(descriptor_ != nullptr);
 
-	Transform transform = descriptor_->transform.ToTransform();
-
-	GameObject* go = new GameObject();
-	go->SetPosition(transform.position);
-	go->SetRotation(transform.rotation);
-	go->SetScale(transform.scale);
-
+	GameObjectProperties properties = GameObjectProperties(Gadget::GUID::Invalid, StringID::ProcessString(descriptor_->name), std::vector<StringID>(), descriptor_->transform.ToTransform());
+	GameObject* go = new GameObject(properties);
 	return go->GetGUID().Id();
 }
 

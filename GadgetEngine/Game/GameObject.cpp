@@ -31,6 +31,26 @@ GameObject::GameObject(StringID name_) : guid(GUID::Generate()), transform(Vecto
 	GADGET_BASIC_ASSERT(GameObjectCollection::Get(guid) == this);
 }
 
+GameObject::GameObject(const GameObjectProperties& properties_) : guid(properties_.guid), transform(properties_.transform), components(), tags(properties_.tags), name(properties_.name){
+	GADGET_BASIC_ASSERT(properties_.name != StringID::None);
+	GADGET_BASIC_ASSERT(properties_.transform.position.IsValid());
+	GADGET_BASIC_ASSERT(properties_.transform.rotation.IsValid());
+	GADGET_BASIC_ASSERT(properties_.transform.scale.IsValid());
+	for(const auto& tag : properties_.tags){
+		GADGET_BASIC_ASSERT(tag != StringID::None);
+	}
+
+	if(properties_.guid == GUID::Invalid){
+		guid = GUID::Generate();
+	}
+
+	GADGET_ASSERT(GameObjectCollection::Get(properties_.guid) == nullptr, "GameObject being deserialized with a GUID that's already in use!");
+
+	GameObjectCollection::Add(this);
+
+	GADGET_BASIC_ASSERT(GameObjectCollection::Get(guid) == this);
+}
+
 void GameObject::Update([[maybe_unused]] float deltaTime_){
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
 

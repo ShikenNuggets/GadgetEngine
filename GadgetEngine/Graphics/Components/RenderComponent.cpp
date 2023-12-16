@@ -9,9 +9,8 @@ using namespace Gadget;
 
 ComponentCollection<RenderComponent> RenderComponent::componentCollection = ComponentCollection<RenderComponent>();
 
-RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, StringID textureName_, StringID shaderName_) : Component(parent_), meshInfo(nullptr), material(nullptr){
-	GADGET_BASIC_ASSERT(parent_ != nullptr);
-	GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, StringID textureName_, StringID shaderName_) : Component(SID("RenderComponent"), parentGUID_), meshInfo(nullptr), material(nullptr){
+	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(textureName_ != StringID::None);
 	GADGET_BASIC_ASSERT(shaderName_ != StringID::None);
@@ -26,9 +25,8 @@ RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, Strin
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, const Color& color_, StringID shaderName_) : Component(parent_), meshInfo(nullptr), material(nullptr){
-	GADGET_BASIC_ASSERT(parent_ != nullptr);
-	GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, const Color& color_, StringID shaderName_) : Component(SID("RenderComponent"), parentGUID_), meshInfo(nullptr), material(nullptr){
+	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(color_.IsValid());
 	GADGET_BASIC_ASSERT(shaderName_ != StringID::None);
@@ -43,9 +41,8 @@ RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, const
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(GameObject* parent_, StringID modelName_, Material* material_) : Component(parent_), meshInfo(nullptr), material(material_){
-	GADGET_BASIC_ASSERT(parent_ != nullptr);
-	GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, Material* material_) : Component(SID("RenderComponent"), parentGUID_), meshInfo(nullptr), material(material_){
+	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(material_ != nullptr);
 

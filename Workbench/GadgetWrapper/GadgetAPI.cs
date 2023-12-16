@@ -23,6 +23,7 @@ namespace Workbench.GadgetAPIStructs
 	[StructLayout(LayoutKind.Sequential)]
 	class GameObjectDescriptor
 	{
+		public string name = "GameObject";
 		public TransformInfo transform = new TransformInfo();
 	};
 }
@@ -38,7 +39,7 @@ namespace Workbench
         [DllImport(_dllName)]
         public static extern int UnloadGameCodeDLL();
 
-        [DllImport(_dllName)]
+        [DllImport(_dllName, CharSet = CharSet.Ansi)]
 		private static extern ulong CreateGameObject(GameObjectDescriptor descriptor_);
 		[DllImport(_dllName)]
 		private static extern void DestroyGameObject(ulong guid_);
@@ -47,8 +48,13 @@ namespace Workbench
 		{
 			GameObjectDescriptor desc = new GameObjectDescriptor();
 
-			//Transform
-			var transform = gameObject.GetComponent<TransformComponentVM>();
+			if (gameObject.Name != null)
+			{
+                desc.name = gameObject.Name;
+            }
+
+            //Transform
+            var transform = gameObject.GetComponent<TransformComponentVM>();
 			//Debug.Assert(transform != null); //TODO - This assert is currently meaningless, but we'll want it back later
 			if (transform == null)
 			{

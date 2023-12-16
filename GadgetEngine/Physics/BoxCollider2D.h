@@ -6,8 +6,14 @@
 namespace Gadget{
 	class BoxCollider2D : public Collider{
 	public:
-		BoxCollider2D(GameObject* parent_, float width_ = 1.0f, float height_ = 1.0f, bool isTrigger_ = false) : Collider(parent_, ColliderShape::Box2D, isTrigger_), width(width_), height(height_){
+		BoxCollider2D(GameObject* parent_, float width_ = 1.0f, float height_ = 1.0f, bool isTrigger_ = false) : Collider(SID("BoxCollider2D"), parent_, ColliderShape::Box2D, isTrigger_), width(width_), height(height_){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(width_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
+		}
+
+		BoxCollider2D(GUID parentGUID_, float width_ = 1.0f, float height_ = 1.0f, bool isTrigger_ = false) : Collider(SID("BoxCollider2D"), parentGUID_, ColliderShape::Box2D, isTrigger_), width(width_), height(height_){
+			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(width_));
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
 		}

@@ -20,14 +20,28 @@ namespace Gadget{
 		Vector3 scale;
 	};
 
+	struct GameObjectProperties{
+		GameObjectProperties(GUID guid_, StringID name_, const std::vector<StringID>& tags_, const Transform& transform_) : guid(guid_), name(name_), tags(tags_), transform(transform_){}
+
+		GUID guid;
+		StringID name;
+		std::vector<StringID> tags;
+		Transform transform;
+	};
+
 	class GameObject{
 	public:
 		GameObject(StringID name_ = SID("GameObject"));
+		GameObject(const GameObjectProperties& properties_);
 		~GameObject();
 
 		void Update(float deltaTime_);
 
 		void AddComponent(Component* component_);
+
+		GameObjectProperties GetProperties() const{
+			return GameObjectProperties(guid, name, tags, transform);
+		}
 
 		GUID GetGUID() const{ return guid; }
 
