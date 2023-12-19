@@ -16,6 +16,7 @@ namespace Gadget{
 
 		explicit constexpr Var(std::nullptr_t) : type(Type::Null), boolVal(false){}
 		constexpr Var(StringID value_) : type(Type::String), strValue(value_){}
+		Var(const std::string& value_) : type(Type::String), strValue(StringID::ProcessString(value_)){}
 		constexpr Var(bool value_) : type(Type::Bool), boolVal(value_){}
 		constexpr Var(int32_t value_) : type(Type::Number), numVal(static_cast<double>(value_)){}
 		constexpr Var(int64_t value_) : type(Type::Number), numVal(static_cast<double>(value_)){}
@@ -42,6 +43,62 @@ namespace Gadget{
 					GADGET_ASSERT(false, "Unhandled Var type!");
 					break;
 			}
+		}
+
+		constexpr bool operator==(std::nullptr_t){ return type == Type::Null; }
+		constexpr bool operator==(StringID value_){ return type == Type::String && strValue == value_; }
+		constexpr bool operator==(const std::string& value_){ return type == Type::String && strValue.GetString() == value_; }
+		constexpr bool operator==(bool value_){ return type == Type::Bool && boolVal == value_; }
+		constexpr bool operator==(int32_t value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+		constexpr bool operator==(int64_t value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+		constexpr bool operator==(uint32_t value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+		constexpr bool operator==(uint64_t value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+		constexpr bool operator==(double value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+
+		constexpr bool operator==(const Var& var_){
+			switch(type){
+				case Type::Null:
+					return *this == nullptr;
+				case Type::String:
+					return *this == var_.ToStr();
+				case Type::Bool:
+					return *this == var_.ToBool();
+				case Type::Number:
+					return *this == var_.ToNumber();
+				default:
+					GADGET_ASSERT(false, "Unhandled Var Type in operator==");
+					break;
+			}
+
+			return false;
+		}
+
+		constexpr bool operator!=(std::nullptr_t){ return type == Type::Null; }
+		constexpr bool operator!=(StringID value_){ return type == Type::String && strValue != value_; }
+		constexpr bool operator!=(const std::string& value_){ return type == Type::String && strValue.GetString() != value_; }
+		constexpr bool operator!=(bool value_){ return type == Type::Bool && boolVal != value_; }
+		constexpr bool operator!=(int32_t value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+		constexpr bool operator!=(int64_t value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+		constexpr bool operator!=(uint32_t value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+		constexpr bool operator!=(uint64_t value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+		constexpr bool operator!=(double value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+
+		constexpr bool operator!=(const Var& var_){
+			switch(type){
+				case Type::Null:
+					return *this != nullptr;
+				case Type::String:
+					return *this != var_.ToStr();
+				case Type::Bool:
+					return *this != var_.ToBool();
+				case Type::Number:
+					return *this != var_.ToNumber();
+				default:
+					GADGET_ASSERT(false, "Unhandled Var Type in operator!=");
+					break;
+			}
+
+			return false;
 		}
 
 		Type GetType() const{ return type; }

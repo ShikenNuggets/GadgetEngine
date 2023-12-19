@@ -42,6 +42,24 @@ namespace Gadget{
 			return InternString(StringID(Hash::MurmurHash64A(str_.c_str(), str_.length())), str_.c_str());
 		}
 
+		static inline std::vector<std::string> ToStringList(const std::vector<StringID>& stringIds_){
+			std::vector<std::string> strings;
+			for(const auto& sid : stringIds_){
+				strings.push_back(sid.GetString());
+			}
+
+			return strings;
+		}
+
+		static inline std::vector<StringID> ToStringIDList(const std::vector<std::string>& strings_){
+			std::vector<StringID> stringIds;
+			for(const auto& sid : strings_){
+				stringIds.push_back(ProcessString(sid));
+			}
+
+			return stringIds;
+		}
+
 	private:
 		//This is a little silly, but it prevents a static initialization order fiasco
 		static inline std::unordered_map<uint64_t, std::string>& StringIDTable(){
