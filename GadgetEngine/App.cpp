@@ -68,6 +68,8 @@ void App::Initialize(const std::string& name_){
 	Debug::SetLogVerbosity(Debug::Warning);
 	#endif // GADGET_RELEASE
 
+	GUID::SetInitialGUID(); //Temp, in the future we'll pull the number of unique entities from the project files or whatever, and then set that here
+
 	int width = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayWidthKey));
 	int height = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayHeightKey));
 	int x = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowXKey));
