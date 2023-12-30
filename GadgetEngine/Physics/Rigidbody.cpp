@@ -28,6 +28,18 @@ Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRota
 	componentCollection.Add(this);
 }
 
+Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), bulletRb(nullptr){
+	mass = props_.variables.GetValue(SID("Mass")).ToNumber<float>();
+	useGravity = props_.variables.GetValue(SID("UseGravity")).ToBool();
+	freezeRotation = (FreezeRotationType)props_.variables.GetValue(SID("FreezeRotation")).ToNumber<int>();
+
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass));
+	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(mass > 0.0f);
+	GADGET_BASIC_ASSERT((int)freezeRotation >= 0);
+	GADGET_BASIC_ASSERT(freezeRotation < FreezeRotationType::FreezeRotationType_MAX);
+}
+
 Rigidbody::~Rigidbody(){
 	componentCollection.Remove(this);
 }

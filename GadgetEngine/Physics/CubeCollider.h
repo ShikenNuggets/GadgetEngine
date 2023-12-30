@@ -20,6 +20,16 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
 		}
 
+		CubeCollider(const ComponentProperties& props_) : Collider(props_), size(){
+			size.x = props_.variables.GetValue(SID("Size_X")).ToNumber<float>();
+			size.y = props_.variables.GetValue(SID("Size_Y")).ToNumber<float>();
+			size.z = props_.variables.GetValue(SID("Size_Z")).ToNumber<float>();
+
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.x));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.y));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.z));
+		}
+
 		float GetX() const{ return size.x; }
 		float GetY() const{ return size.y; }
 		float GetZ() const{ return size.z; }

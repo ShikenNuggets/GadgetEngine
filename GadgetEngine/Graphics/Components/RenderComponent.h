@@ -11,6 +11,8 @@ namespace Gadget{
 		RenderComponent(GUID parentGUID_, StringID modelName_, StringID textureName_, StringID shaderName_);
 		RenderComponent(GUID parentGUID_, StringID modelName_, const Color& color_, StringID shaderName_);
 		RenderComponent(GUID parentGUID_, StringID modelName_, Material* material_);
+		RenderComponent(const ComponentProperties& props_);
+
 		virtual ~RenderComponent() override;
 
 		static RenderComponent* Get(GUID objectGuid_){

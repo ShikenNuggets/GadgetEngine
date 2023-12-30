@@ -20,6 +20,10 @@ Collider::Collider(StringID typeName_, GUID parentGUID_, ColliderShape shape_, b
 	componentCollection.Add(this);
 }
 
+Collider::Collider(const ComponentProperties& props_) : Component(props_), shape((ColliderShape)props_.variables.GetValue(SID("ColliderShape")).ToNumber<int>()){
+	isTrigger = props_.variables.GetValue(SID("IsTrigger")).ToBool();
+}
+
 Collider::~Collider(){
 	if(bulletRb != nullptr){
 		App::GetPhysics().RemoveFromSimulation(bulletRb);

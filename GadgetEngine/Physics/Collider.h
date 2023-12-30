@@ -21,6 +21,7 @@ namespace Gadget{
 	public:
 		Collider(StringID typeName_, GameObject* parent_, ColliderShape shape_, bool isTrigger_);
 		Collider(StringID typeName_, GUID parentGUID_, ColliderShape shape_, bool isTrigger_);
+		Collider(const ComponentProperties& props_);
 		virtual ~Collider();
 
 		static Collider* Get(GUID objectGuid_){

@@ -18,6 +18,14 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
 		}
 
+		BoxCollider2D(const ComponentProperties& props_) : Collider(props_){
+			width = props_.variables.GetValue(SID("Width")).ToNumber<float>();
+			height = props_.variables.GetValue(SID("Height")).ToNumber<float>();
+
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(width));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(height));
+		}
+
 		float GetWidth() const{ return width; }
 		float GetHeight() const{ return height; }
 		

@@ -55,6 +55,46 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, Material
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
+RenderComponent::RenderComponent(const ComponentProperties& props_) : Component(props_), meshInfo(nullptr), material(nullptr){
+	GADGET_BASIC_ASSERT(props_.parentGuid != GUID::Invalid);
+
+	StringID modelName = props_.variables.GetValue(SID("ModelName")).ToStr();
+	StringID materialType = props_.variables.GetValue(SID("MaterialType")).ToStr();
+	StringID shaderName = props_.variables.GetValue(SID("ShaderName")).ToStr();
+
+	GADGET_BASIC_ASSERT(modelName != StringID::None);
+	GADGET_BASIC_ASSERT(materialType != StringID::None);
+	GADGET_BASIC_ASSERT(shaderName != StringID::None);
+
+	CreateMeshInfo(modelName);
+
+	if(materialType == SID("DiffuseTextureMaterial")){
+		StringID textureName = props_.variables.GetValue(SID("TextureName")).ToStr();
+		
+		GADGET_BASIC_ASSERT(textureName != StringID::None);
+		
+		material = new DiffuseTextureMaterial(textureName, shaderName);
+	}else if(materialType == SID("ColorMaterial")){
+		float colorR = props_.variables.GetValue(SID("Color_R")).ToNumber<float>();
+		float colorG = props_.variables.GetValue(SID("Color_R")).ToNumber<float>();
+		float colorB = props_.variables.GetValue(SID("Color_R")).ToNumber<float>();
+		float colorA = props_.variables.GetValue(SID("Color_R")).ToNumber<float>();
+
+		GADGET_BASIC_ASSERT(Math::IsValidNumber(colorR));
+		GADGET_BASIC_ASSERT(Math::IsValidNumber(colorG));
+		GADGET_BASIC_ASSERT(Math::IsValidNumber(colorB));
+		GADGET_BASIC_ASSERT(Math::IsValidNumber(colorA));
+
+		material = new ColorMaterial(Color(colorR, colorG, colorB, colorA), shaderName);
+	}
+
+	componentCollection.Add(this);
+
+	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr);
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
+}
+
 RenderComponent::~RenderComponent(){
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 
