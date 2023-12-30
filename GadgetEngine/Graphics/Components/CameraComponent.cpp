@@ -4,9 +4,10 @@
 
 using namespace Gadget;
 
+const StringID CameraComponent::type = SID("CameraComponent");
 ComponentCollection<CameraComponent> CameraComponent::componentCollection = ComponentCollection<CameraComponent>();
 
-CameraComponent::CameraComponent(GameObject* parent_, Camera::Projection projection_, const Rect& viewRect_) : Component(SID("CameraComponent"), parent_){
+CameraComponent::CameraComponent(GameObject* parent_, Camera::Projection projection_, const Rect& viewRect_) : Component(type, parent_){
 	GADGET_BASIC_ASSERT(parent_ != nullptr);
 	GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
 	GADGET_BASIC_ASSERT(projection_ < Camera::Projection::Projection_MAX);
@@ -25,7 +26,7 @@ CameraComponent::CameraComponent(GameObject* parent_, Camera::Projection project
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-CameraComponent::CameraComponent(GUID parentGUID_, Camera::Projection projection_, const Rect& viewRect_) : Component(SID("CameraComponent"), parentGUID_){
+CameraComponent::CameraComponent(GUID parentGUID_, Camera::Projection projection_, const Rect& viewRect_) : Component(type, parentGUID_){
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(projection_ < Camera::Projection::Projection_MAX);
 	GADGET_BASIC_ASSERT(viewRect_.IsValid());
@@ -44,6 +45,8 @@ CameraComponent::CameraComponent(GUID parentGUID_, Camera::Projection projection
 }
 
 CameraComponent::CameraComponent(const ComponentProperties& props_) : Component(props_){
+	GADGET_BASIC_ASSERT(props_.typeName == CameraComponent::type);
+
 	Camera::Projection proj = (Camera::Projection)props_.variables.GetValue(SID("Projection")).ToNumber<int>();
 	GADGET_BASIC_ASSERT((int)proj > 0);
 	GADGET_BASIC_ASSERT(proj < Camera::Projection::Projection_MAX);
