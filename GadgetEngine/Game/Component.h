@@ -4,6 +4,7 @@
 #include "Debug.h"
 #include "Math/Quaternion.h"
 #include "Utils/GUID.h"
+#include "Utils/NamedVar.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
@@ -16,6 +17,7 @@ namespace Gadget{
 		GUID guid;
 		GUID parentGuid;
 		bool isActivated;
+		NamedVarList variables;
 	};
 
 	class Component{
@@ -27,6 +29,7 @@ namespace Gadget{
 		}
 
 		Component(StringID typeName_, GUID parentGUID_);
+		Component(const ComponentProperties& props_);
 
 		virtual ~Component(){}
 

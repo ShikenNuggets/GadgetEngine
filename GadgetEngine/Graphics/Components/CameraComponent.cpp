@@ -43,6 +43,37 @@ CameraComponent::CameraComponent(GUID parentGUID_, Camera::Projection projection
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
+CameraComponent::CameraComponent(const ComponentProperties& props_) : Component(props_){
+	Camera::Projection proj = (Camera::Projection)props_.variables.GetValue(SID("Projection")).ToNumber<int>();
+	GADGET_BASIC_ASSERT((int)proj > 0);
+	GADGET_BASIC_ASSERT(proj < Camera::Projection::Projection_MAX);
+	if((int)proj < 0 || proj >= Camera::Projection::Projection_MAX){
+		proj = Camera::Projection::Perspective; //Default to perspective if something went wrong
+	}
+
+	Rect viewRect = Rect();
+	viewRect.x = props_.variables.GetValue(SID("ViewRectX")).ToNumber<float>();
+	viewRect.y = props_.variables.GetValue(SID("ViewRectY")).ToNumber<float>();
+	viewRect.w = props_.variables.GetValue(SID("ViewRectW")).ToNumber<float>();
+	viewRect.h = props_.variables.GetValue(SID("ViewRectH")).ToNumber<float>();
+	GADGET_BASIC_ASSERT(viewRect.IsValid());
+	if(!viewRect.IsValid()){
+		viewRect = Rect();
+	}
+
+	camera = Camera(parent->GetPosition(), parent->GetRotation(), proj, viewRect);
+	lastPosition = parent->GetPosition();
+	lastRotation = parent->GetRotation();
+	lastAspect = App::GetAspectRatio();
+
+	componentCollection.Add(this);
+
+	GADGET_BASIC_ASSERT(lastPosition.IsValid());
+	GADGET_BASIC_ASSERT(lastRotation.IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(lastAspect));
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
+}
+
 CameraComponent::~CameraComponent(){
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 

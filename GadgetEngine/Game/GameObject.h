@@ -30,7 +30,7 @@ namespace Gadget{
 
 		NamedVar guid;
 		NamedVar name;
-		NamedVarList tags;
+		VarList tags;
 		Transform transform;
 	};
 

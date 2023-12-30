@@ -31,7 +31,7 @@ GameObject::GameObject(StringID name_) : guid(GUID::Generate()), transform(Vecto
 	GADGET_BASIC_ASSERT(GameObjectCollection::Get(guid) == this);
 }
 
-GameObject::GameObject(const GameObjectProperties& properties_) : guid(properties_.guid.ToNumber()), transform(properties_.transform), components(), tags(), name(properties_.name.ToStr()){
+GameObject::GameObject(const GameObjectProperties& properties_) : guid(properties_.guid.ToNumber<uint64_t>()), transform(properties_.transform), components(), tags(), name(properties_.name.ToStr()){
 	GADGET_BASIC_ASSERT(properties_.name.Value() != StringID::None);
 	GADGET_BASIC_ASSERT(properties_.transform.position.IsValid());
 	GADGET_BASIC_ASSERT(properties_.transform.rotation.IsValid());
@@ -48,7 +48,7 @@ GameObject::GameObject(const GameObjectProperties& properties_) : guid(propertie
 		guid = GUID::Generate();
 	}
 
-	GADGET_ASSERT(GameObjectCollection::Get(properties_.guid.ToNumber()) == nullptr, "GameObject being deserialized with a GUID that's already in use!");
+	GADGET_ASSERT(GameObjectCollection::Get(properties_.guid.ToNumber<uint64_t>()) == nullptr, "GameObject being deserialized with a GUID that's already in use!");
 
 	GameObjectCollection::Add(this);
 

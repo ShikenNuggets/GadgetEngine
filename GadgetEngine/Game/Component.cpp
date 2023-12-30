@@ -13,6 +13,19 @@ Component::Component(StringID typeName_, GUID parentGUID_) : typeName(typeName_)
 	GADGET_BASIC_ASSERT(parent != nullptr);
 }
 
+Component::Component(const ComponentProperties& props_) : typeName(props_.typeName), guid(props_.guid), isActivated(props_.isActivated){
+	GADGET_BASIC_ASSERT(props_.typeName != StringID::None);
+	GADGET_BASIC_ASSERT(props_.parentGuid != GUID::Invalid);
+	
+	if(props_.guid == GUID::Invalid){
+		guid = GUID::Generate();
+	}
+	GADGET_BASIC_ASSERT(guid != GUID::Invalid);
+
+	parent = GameObjectCollection::Get(props_.parentGuid);
+	GADGET_BASIC_ASSERT(parent != nullptr);
+}
+
 StringID Component::GetParentName() const{
 	GADGET_BASIC_ASSERT(parent != nullptr);
 

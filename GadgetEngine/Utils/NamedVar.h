@@ -15,6 +15,7 @@ namespace Gadget{
 		constexpr NamedVar(StringID name_, uint32_t value_) : name(name_), value(value_){}
 		constexpr NamedVar(StringID name_, uint64_t value_) : name(name_), value(value_){}
 		constexpr NamedVar(StringID name_, double value_) : name(name_), value(value_){}
+		explicit constexpr NamedVar(std::nullptr_t value_) : name(StringID::None), value(value_){}
 
 		constexpr void operator=(const Var& var_){ value = var_; }
 
@@ -25,6 +26,9 @@ namespace Gadget{
 		bool ToBool() const{ return value.ToBool(); }
 		double ToNumber() const{ return value.ToNumber(); }
 
+		template <class T>
+		T ToNumber() const{ return value.ToNumber<T>(); }
+
 	private:
 		StringID name;
 		Var value;
@@ -32,28 +36,38 @@ namespace Gadget{
 
 	class NamedVarList{
 	public:
-		constexpr NamedVarList(StringID name_, const std::vector<Var>& values_) : name(name_), values(values_){}
-
-		constexpr NamedVarList(StringID name_, const std::vector<StringID>& values_) : name(name_), values(){
-			for(const auto& v : values_){
-				values.push_back(Var(v));
-			}
-		}
-
-		constexpr NamedVarList(StringID name_, const std::vector<std::string>& values_) : name(name_), values(){
-			for(const auto& v : values_){
-				values.push_back(Var(v));
-			}
-		}
+		constexpr NamedVarList(StringID name_, const std::vector<NamedVar>& values_) : name(name_), values(values_){}
 
 		constexpr StringID Name() const{ return name; }
-		constexpr const std::vector<Var>& Value() const{ return values; }
+		constexpr const std::vector<NamedVar>& Value() const{ return values; }
 		constexpr size_t Size() const{ return values.size(); }
 
-		constexpr Var GetValue(size_t index_) const{
+		constexpr bool HasValue(StringID name_) const{
+			for(const auto& nv : values){
+				if(nv.Name() == name_){
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		constexpr NamedVar GetValue(StringID name_) const{
+			GADGET_BASIC_ASSERT(HasValue(name_));
+
+			for(const auto& nv : values){
+				if(nv.Name() == name_){
+					return nv;
+				}
+			}
+
+			return NamedVar(nullptr);
+		}
+
+		constexpr NamedVar GetValue(size_t index_) const{
 			GADGET_BASIC_ASSERT(index_ < Size());
 			if(index_ < Size()){
-				return Var(nullptr);
+				return NamedVar(nullptr);
 			}
 
 			return values[index_];
@@ -61,7 +75,7 @@ namespace Gadget{
 
 	private:
 		StringID name;
-		std::vector<Var> values;
+		std::vector<NamedVar> values;
 	};
 }
 

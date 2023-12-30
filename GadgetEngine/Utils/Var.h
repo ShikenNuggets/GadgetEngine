@@ -3,6 +3,7 @@
 
 #include "Debug.h"
 #include "StringID.h"
+#include "Utils.h"
 
 namespace Gadget{
 	class Var{
@@ -127,6 +128,11 @@ namespace Gadget{
 			return 0.0;
 		}
 
+		template <class T>
+		T ToNumber() const{
+			return static_cast<T>(ToNumber());
+		}
+
 		void SetValue(StringID value_){
 			strValue = value_;
 			type = Type::String;
@@ -169,6 +175,40 @@ namespace Gadget{
 			bool boolVal;
 			double numVal;
 		};
+	};
+
+	class VarList{
+	public:
+		constexpr VarList(StringID name_, const std::vector<Var>& values_) : name(name_), values(values_){}
+
+		constexpr VarList(StringID name_, const std::vector<StringID>& values_) : name(name_), values(){
+			for(const auto& v : values_){
+				values.push_back(Var(v));
+			}
+		}
+
+		constexpr VarList(StringID name_, const std::vector<std::string>& values_) : name(name_), values(){
+			for(const auto& v : values_){
+				values.push_back(Var(v));
+			}
+		}
+
+		constexpr StringID Name() const{ return name; }
+		constexpr const std::vector<Var>& Value() const{ return values; }
+		constexpr size_t Size() const{ return values.size(); }
+
+		constexpr Var GetValue(size_t index_) const{
+			GADGET_BASIC_ASSERT(index_ < Size());
+			if(index_ < Size()){
+				return Var(nullptr);
+			}
+
+			return values[index_];
+		}
+
+	private:
+		StringID name;
+		std::vector<Var> values;
 	};
 }
 
