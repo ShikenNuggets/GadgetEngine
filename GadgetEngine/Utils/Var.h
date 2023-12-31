@@ -179,7 +179,7 @@ namespace Gadget{
 
 	class VarList{
 	public:
-		constexpr VarList(StringID name_, const std::vector<Var>& values_) : name(name_), values(values_){}
+		constexpr VarList(StringID name_, const std::vector<Var>& values_ = std::vector<Var>()) : name(name_), values(values_){}
 
 		constexpr VarList(StringID name_, const std::vector<StringID>& values_) : name(name_), values(){
 			for(const auto& v : values_){
@@ -204,6 +204,10 @@ namespace Gadget{
 			}
 
 			return values[index_];
+		}
+
+		constexpr void Add(const Var& value_){
+			values.push_back(value_);
 		}
 
 	private:
