@@ -13,6 +13,10 @@ namespace Pong{
 			GADGET_BASIC_ASSERT(player == 1 || player == 2);
 		}
 
+		PaddleAI(const Gadget::ComponentProperties& props_) : PaddleController(props_), ball(nullptr){
+			Deserialize(props_);
+		}
+
 		virtual void OnStart() override{
 			ball = Gadget::GameObject::FindWithTag(SID("Ball"));
 			PaddleController::OnStart();
@@ -149,6 +153,11 @@ namespace Pong{
 
 			GameLogicComponent::OnUpdate(deltaTime_); //Intentionally bypassing PaddleController::OnUpdate
 		}
+
+		virtual Gadget::ComponentProperties Serialize() const override{ return PaddleController::Serialize(); }
+
+	protected:
+		virtual void Deserialize(const Gadget::ComponentProperties& props_) override{}
 
 	private:
 		Gadget::GameObject* ball;

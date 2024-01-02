@@ -11,6 +11,10 @@ namespace Pong{
 	class BallController : public Gadget::GameLogicComponent{
 	public:
 		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(SID("BallController"), parent_), initialForce(initialForce_), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_), movingUp(true), movingRight(true), lastCollidedObject(0), roundOver(false){}
+		
+		BallController(const Gadget::ComponentProperties& props_) : GameLogicComponent(props_), initialForce(props_.variables.GetValue(SID("InitialForce")).ToNumber<float>()), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(0.0f), playAreaHeight(0.0f), movingUp(true), movingRight(true), lastCollidedObject(0), roundOver(false){
+			Deserialize(props_);
+		}
 
 		virtual void OnStart() override{
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();
@@ -70,6 +74,22 @@ namespace Pong{
 			ApplyNewVelocity(true, true, 0.0f);
 
 			roundOver = false;
+		}
+
+		virtual Gadget::ComponentProperties Serialize() const override{
+			Gadget::ComponentProperties props = GameLogicComponent::Serialize();
+			props.variables.Add(SID("InitialForce"), initialForce);
+			props.variables.Add(SID("PlayAreaWidth"), playAreaWidth);
+			props.variables.Add(SID("PlayAreaHeight"), playAreaHeight);
+
+			return props;
+		}
+
+	protected:
+		virtual void Deserialize(const Gadget::ComponentProperties& props_) override{
+			//initialForce = props_.variables.GetValue(SID("InitialForce")).ToNumber<float>(); //const - constructor only
+			playAreaWidth = props_.variables.GetValue(SID("PlayAreaWidth")).ToNumber<float>();
+			playAreaHeight = props_.variables.GetValue(SID("PlayAreaHeight")).ToNumber<float>();
 		}
 
 	private:

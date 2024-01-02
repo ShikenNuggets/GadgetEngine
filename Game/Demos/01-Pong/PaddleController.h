@@ -11,6 +11,10 @@ namespace Pong{
 			GADGET_BASIC_ASSERT(player == 1 || player == 2);
 		}
 
+		PaddleController(const Gadget::ComponentProperties& props_) : GameLogicComponent(props_), paddleMoveSpeed(5.0f), player(0), rigidbody(nullptr){
+			Deserialize(props_);
+		}
+
 		virtual void OnStart() override{
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();
 			GADGET_BASIC_ASSERT(rigidbody != nullptr);
@@ -41,12 +45,24 @@ namespace Pong{
 			rigidbody->Reset();
 		}
 
+		virtual Gadget::ComponentProperties Serialize() const override{
+			Gadget::ComponentProperties props = GameLogicComponent::Serialize();
+
+			props.variables.Add(SID("Player"), player);
+
+			return props;
+		}
+
 	protected:
 		Gadget::Rigidbody* rigidbody;
 
 		const float paddleMoveSpeed;
-		const unsigned int player;
+		unsigned int player;
 		Gadget::Vector3 startPosition;
+
+		virtual void Deserialize(const Gadget::ComponentProperties& props_) override{
+			player = props_.variables.GetValue(SID("Player")).ToNumber<int>();
+		}
 	};
 }
 
