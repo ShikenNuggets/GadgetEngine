@@ -10,16 +10,18 @@
 namespace Gadget{
 	class DiffuseTextureMaterial : public Material{
 	public:
-		DiffuseTextureMaterial(StringID textureResource_, StringID shaderResource_) : Material(shaderResource_), textureInfo(nullptr){
+		static const StringID type;
+
+		DiffuseTextureMaterial(StringID textureResource_, StringID shaderResource_) : Material(shaderResource_), textureResourceName(textureResource_), textureInfo(nullptr){
 			GADGET_BASIC_ASSERT(textureResource_ != StringID::None);
 			GADGET_BASIC_ASSERT(shaderResource_ != StringID::None);
 
-			Texture* tex = App::GetResourceManager().LoadResource<Texture>(textureResource_);
-			GADGET_ASSERT(tex != nullptr, "Could not load texture [" + textureResource_.GetString() + "]!");
+			Texture* tex = App::GetResourceManager().LoadResource<Texture>(textureResourceName);
+			GADGET_ASSERT(tex != nullptr, "Could not load texture [" + textureResourceName.GetString() + "]!");
 
 			textureInfo = App::GetRenderer().GenerateAPITextureInfo(*tex);
 			GADGET_ASSERT(textureInfo != nullptr, "Could not generate texture info!");
-			App::GetResourceManager().UnloadResource(textureResource_);
+			App::GetResourceManager().UnloadResource(textureResourceName);
 
 			GADGET_BASIC_ASSERT(shader != nullptr);
 			GADGET_BASIC_ASSERT(textureInfo != nullptr);
@@ -45,9 +47,13 @@ namespace Gadget{
 			shader->Unbind();
 		}
 
+		virtual StringID TextureResourceName() const{ return textureResourceName; }
 		virtual bool HasLighting() const override{ return true; }
 
+		virtual StringID Type() const override{ return type; }
+
 	private:
+		StringID textureResourceName;
 		TextureInfo* textureInfo;
 	};
 }

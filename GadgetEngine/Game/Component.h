@@ -57,12 +57,16 @@ namespace Gadget{
 		const Transform& GetTransform() const;
 		Matrix4 GetTransformMatrix() const;
 
+		virtual ComponentProperties Serialize() const = 0;
+
 	protected:
 		const StringID typeName;
 
 		GUID guid;
 		GameObject* parent;
 		bool isActivated;
+
+		virtual void Deserialize(const ComponentProperties& props_) = 0;
 	};
 
 	//TODO - Thread safety

@@ -40,11 +40,17 @@ namespace Gadget{
 			return material->GetShader();
 		}
 
+		virtual ComponentProperties Serialize() const override;
+
+	protected:
+		virtual void Deserialize(const ComponentProperties& props_) override;
+
 	private:
+		StringID modelName;
 		MeshInfo* meshInfo;
 		Material* material;
 
-		void CreateMeshInfo(StringID modelName_);
+		void CreateMeshInfo();
 
 		static ComponentCollection<RenderComponent> componentCollection;
 	};

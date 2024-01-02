@@ -1,9 +1,14 @@
 #include "Material.h"
 
+#include "ColorMaterial.h"
+#include "DiffuseTextureMaterial.h"
 #include "App.h"
 #include "Resource/ResourceManager.h"
 
 using namespace Gadget;
+
+const StringID ColorMaterial::type = SID("ColorMaterial");
+const StringID DiffuseTextureMaterial::type = SID("DiffuseTextureMaterial");
 
 Material::Material(StringID shaderResource_) : shaderResourceName(shaderResource_), shader(nullptr){
 	GADGET_BASIC_ASSERT(shaderResourceName != StringID::None);

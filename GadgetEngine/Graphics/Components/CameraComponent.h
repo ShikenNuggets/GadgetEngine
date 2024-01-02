@@ -29,6 +29,11 @@ namespace Gadget{
 
 		const Camera& GetCamera(){ return camera; }
 
+		virtual ComponentProperties Serialize() const override;
+
+	protected:
+		virtual void Deserialize(const ComponentProperties& props_) override;
+
 	private:
 		Camera camera;
 		Vector3 lastPosition;

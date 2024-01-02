@@ -14,7 +14,10 @@ namespace Gadget{
 
 		virtual bool HasLighting() const = 0;
 
+		inline StringID GetShaderName() const{ return shaderResourceName; }
 		inline Shader* GetShader() const{ return shader; }
+
+		virtual StringID Type() const = 0;
 
 	protected:
 		StringID shaderResourceName;

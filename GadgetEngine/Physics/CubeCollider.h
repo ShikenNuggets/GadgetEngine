@@ -21,13 +21,7 @@ namespace Gadget{
 		}
 
 		CubeCollider(const ComponentProperties& props_) : Collider(props_), size(){
-			size.x = props_.variables.GetValue(SID("Size_X")).ToNumber<float>();
-			size.y = props_.variables.GetValue(SID("Size_Y")).ToNumber<float>();
-			size.z = props_.variables.GetValue(SID("Size_Z")).ToNumber<float>();
-
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.x));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.y));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.z));
+			Deserialize();
 		}
 
 		float GetX() const{ return size.x; }
@@ -46,6 +40,26 @@ namespace Gadget{
 		void SetX(float x_){ size.x = x_; }
 		void SetY(float y_){ size.y = y_; }
 		void SetZ(float z_){ size.z = z_; }
+
+		virtual ComponentProperties Serialize() const override{
+			ComponentProperties props = Collider::Serialize();
+			props.variables.Add(SID("Size_X"), size.x);
+			props.variables.Add(SID("Size_Y"), size.y);
+			props.variables.Add(SID("Size_Z"), size.z);
+
+			return props;
+		}
+
+	protected:
+		virtual void Deserialize(const ComponentProperties& props_) override{
+			size.x = props_.variables.GetValue(SID("Size_X")).ToNumber<float>();
+			size.y = props_.variables.GetValue(SID("Size_Y")).ToNumber<float>();
+			size.z = props_.variables.GetValue(SID("Size_Z")).ToNumber<float>();
+
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.x));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.y));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.z));
+		}
 
 	private:
 		Vector3 size;

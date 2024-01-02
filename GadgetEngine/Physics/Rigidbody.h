@@ -61,6 +61,11 @@ namespace Gadget{
 		//Remove the rigidbody from the physics sim and re-add it
 		void Reset();
 
+		virtual ComponentProperties Serialize() const override;
+
+	protected:
+		virtual void Deserialize(const ComponentProperties& props_) override;
+
 	private:
 		friend class Collider;
 

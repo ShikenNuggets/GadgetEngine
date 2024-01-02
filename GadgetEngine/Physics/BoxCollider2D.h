@@ -19,11 +19,7 @@ namespace Gadget{
 		}
 
 		BoxCollider2D(const ComponentProperties& props_) : Collider(props_){
-			width = props_.variables.GetValue(SID("Width")).ToNumber<float>();
-			height = props_.variables.GetValue(SID("Height")).ToNumber<float>();
-
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(width));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(height));
+			Deserialize(props_);
 		}
 
 		float GetWidth() const{ return width; }
@@ -43,6 +39,23 @@ namespace Gadget{
 
 		void SetWidth(float width_){ width = width_; }
 		void SetHeight(float height_){ height = height_; }
+
+		virtual ComponentProperties Serialize() const override{
+			ComponentProperties props = Collider::Serialize();
+			props.variables.Add(SID("Width"), width);
+			props.variables.Add(SID("Height"), height);
+
+			return props;
+		}
+
+	protected:
+		virtual void Deserialize(const ComponentProperties& props_){
+			width = props_.variables.GetValue(SID("Width")).ToNumber<float>();
+			height = props_.variables.GetValue(SID("Height")).ToNumber<float>();
+
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(width));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(height));
+		}
 
 	private:
 		float width;

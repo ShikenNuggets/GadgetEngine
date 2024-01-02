@@ -60,6 +60,11 @@ namespace Gadget{
 
 		void AddCollisionToHandle(const Collision& col_){ collisionsToHandle.push(col_); }
 
+		virtual ComponentProperties Serialize() const override = 0;
+
+	protected:
+		virtual void Deserialize(const ComponentProperties& props_) override = 0;
+
 	private:
 		bool hasStarted;
 		std::queue<Collision> collisionsToHandle;

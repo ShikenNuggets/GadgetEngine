@@ -29,15 +29,7 @@ Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRota
 }
 
 Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), bulletRb(nullptr){
-	mass = props_.variables.GetValue(SID("Mass")).ToNumber<float>();
-	useGravity = props_.variables.GetValue(SID("UseGravity")).ToBool();
-	freezeRotation = (FreezeRotationType)props_.variables.GetValue(SID("FreezeRotation")).ToNumber<int>();
-
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass));
-	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
-	GADGET_BASIC_ASSERT(mass > 0.0f);
-	GADGET_BASIC_ASSERT((int)freezeRotation >= 0);
-	GADGET_BASIC_ASSERT(freezeRotation < FreezeRotationType::FreezeRotationType_MAX);
+	Deserialize(props_);
 }
 
 Rigidbody::~Rigidbody(){
@@ -183,4 +175,26 @@ void Rigidbody::Reset(){
 	if(collider != nullptr){
 		collider->Reset();
 	}
+}
+
+ComponentProperties Rigidbody::Serialize() const{
+	ComponentProperties props = Component::Serialize();
+
+	props.variables.Add(SID("Mass"), mass);
+	props.variables.Add(SID("UseGravity"), useGravity);
+	props.variables.Add(SID("FreezeRotation"), (int)freezeRotation);
+
+	return props;
+}
+
+void Rigidbody::Deserialize(const ComponentProperties& props_){
+	mass = props_.variables.GetValue(SID("Mass")).ToNumber<float>();
+	useGravity = props_.variables.GetValue(SID("UseGravity")).ToBool();
+	freezeRotation = (FreezeRotationType)props_.variables.GetValue(SID("FreezeRotation")).ToNumber<int>();
+
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass));
+	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(mass > 0.0f);
+	GADGET_BASIC_ASSERT((int)freezeRotation >= 0);
+	GADGET_BASIC_ASSERT(freezeRotation < FreezeRotationType::FreezeRotationType_MAX);
 }

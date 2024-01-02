@@ -49,6 +49,8 @@ namespace Gadget{
 			return parent->GetScale();
 		}
 
+		virtual ComponentProperties Serialize() const override;
+
 	protected:
 		friend class PhysManager;
 		friend struct BulletCollisionResultCallback;
@@ -57,6 +59,8 @@ namespace Gadget{
 		bool isTrigger;
 
 		btRigidBody* bulletRb;
+
+		virtual void Deserialize(const ComponentProperties& props_) override;
 
 	private:
 		static ComponentCollection<Collider> componentCollection;

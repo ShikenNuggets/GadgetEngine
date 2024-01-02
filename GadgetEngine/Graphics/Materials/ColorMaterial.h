@@ -10,6 +10,8 @@
 namespace Gadget{
 	class ColorMaterial : public Material{
 	public:
+		static const StringID type;
+
 		ColorMaterial(const Color& color_, StringID shaderResource_) : Material(shaderResource_), color(color_){
 			GADGET_BASIC_ASSERT(color_.IsValid());
 			GADGET_BASIC_ASSERT(shaderResource_ != StringID::None);
@@ -29,7 +31,15 @@ namespace Gadget{
 			shader->Unbind();
 		}
 
+		Color GetColor() const{ return color; }
 		virtual bool HasLighting() const override{ return false; }
+
+		void SetColor(const Color& color_){
+			color = color_;
+			GADGET_BASIC_ASSERT(color_.IsValid());
+		}
+
+		virtual StringID Type() const override{ return type; }
 
 	private:
 		Color color;
