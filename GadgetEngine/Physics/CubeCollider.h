@@ -21,7 +21,7 @@ namespace Gadget{
 		}
 
 		CubeCollider(const ComponentProperties& props_) : Collider(props_), size(){
-			Deserialize();
+			Deserialize(props_);
 		}
 
 		float GetX() const{ return size.x; }

@@ -52,7 +52,7 @@ namespace Gadget{
 		virtual ComponentProperties Serialize() const override{ return Component::Serialize(); }
 
 	protected:
-		virtual void Deserialize(const ComponentProperties& props_) override{}
+		virtual void Deserialize([[maybe_unused]] const ComponentProperties& props_) override{}
 
 	private:
 		PointLight lightSource;

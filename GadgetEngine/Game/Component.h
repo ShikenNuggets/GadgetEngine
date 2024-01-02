@@ -13,6 +13,8 @@ namespace Gadget{
 	class GameObject;
 
 	struct ComponentProperties{
+		ComponentProperties(StringID typeName_, GUID guid_, GUID parentGuid_) : typeName(typeName_), guid(guid_), parentGuid(parentGuid_), isActivated(true), variables(SID("Variables")){}
+
 		StringID typeName;
 		GUID guid;
 		GUID parentGuid;
@@ -57,7 +59,7 @@ namespace Gadget{
 		const Transform& GetTransform() const;
 		Matrix4 GetTransformMatrix() const;
 
-		virtual ComponentProperties Serialize() const = 0;
+		virtual ComponentProperties Serialize() const;
 
 	protected:
 		const StringID typeName;
@@ -66,7 +68,7 @@ namespace Gadget{
 		GameObject* parent;
 		bool isActivated;
 
-		virtual void Deserialize(const ComponentProperties& props_) = 0;
+		virtual void Deserialize(const ComponentProperties& props_);
 	};
 
 	//TODO - Thread safety

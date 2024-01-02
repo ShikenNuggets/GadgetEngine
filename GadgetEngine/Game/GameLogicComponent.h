@@ -24,7 +24,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 		}
 
-		GameLogicComponent(const ComponentProperties& props_) : Component(props_), hasStarted(false), collisionsToHandle(){}
+		GameLogicComponent(const ComponentProperties& props_) : Component(props_), hasStarted(false), collisionsToHandle(){ Deserialize(props_); }
 
 		virtual ~GameLogicComponent() override{
 			OnDestroy();
@@ -60,10 +60,10 @@ namespace Gadget{
 
 		void AddCollisionToHandle(const Collision& col_){ collisionsToHandle.push(col_); }
 
-		virtual ComponentProperties Serialize() const override = 0;
+		virtual ComponentProperties Serialize() const override{ return Component::Serialize(); }
 
 	protected:
-		virtual void Deserialize(const ComponentProperties& props_) override = 0;
+		virtual void Deserialize([[maybe_unused]] const ComponentProperties& props_) override{}
 
 	private:
 		bool hasStarted;

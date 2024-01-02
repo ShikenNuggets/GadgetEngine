@@ -13,17 +13,8 @@ Component::Component(StringID typeName_, GUID parentGUID_) : typeName(typeName_)
 	GADGET_BASIC_ASSERT(parent != nullptr);
 }
 
-Component::Component(const ComponentProperties& props_) : typeName(props_.typeName), guid(props_.guid), isActivated(props_.isActivated){
-	GADGET_BASIC_ASSERT(props_.typeName != StringID::None);
-	GADGET_BASIC_ASSERT(props_.parentGuid != GUID::Invalid);
-	
-	if(props_.guid == GUID::Invalid){
-		guid = GUID::Generate();
-	}
-	GADGET_BASIC_ASSERT(guid != GUID::Invalid);
-
-	parent = GameObjectCollection::Get(props_.parentGuid);
-	GADGET_BASIC_ASSERT(parent != nullptr);
+Component::Component(const ComponentProperties& props_) : typeName(props_.typeName), guid(GUID::Invalid), isActivated(false){
+	Deserialize(props_);
 }
 
 StringID Component::GetParentName() const{
@@ -73,4 +64,31 @@ Matrix4 Component::GetTransformMatrix() const{
 	GADGET_BASIC_ASSERT(parent != nullptr);
 
 	return parent->GetTransformMatrix();
+}
+
+ComponentProperties Component::Serialize() const{
+	GADGET_BASIC_ASSERT(typeName != StringID::None);
+	GADGET_BASIC_ASSERT(guid != GUID::Invalid);
+	GADGET_BASIC_ASSERT(parent != nullptr && parent->GetGUID() != GUID::Invalid);
+
+	ComponentProperties props = ComponentProperties(typeName, guid, parent->GetGUID());
+	props.isActivated = isActivated;
+
+	return props;
+}
+
+void Component::Deserialize(const ComponentProperties& props_){
+	guid = props_.guid;
+	isActivated = props_.isActivated;
+
+	GADGET_BASIC_ASSERT(props_.typeName != StringID::None);
+	GADGET_BASIC_ASSERT(props_.parentGuid != GUID::Invalid);
+
+	if(props_.guid == GUID::Invalid){
+		guid = GUID::Generate();
+	}
+	GADGET_BASIC_ASSERT(guid != GUID::Invalid);
+
+	parent = GameObjectCollection::Get(props_.parentGuid);
+	GADGET_BASIC_ASSERT(parent != nullptr);
 }

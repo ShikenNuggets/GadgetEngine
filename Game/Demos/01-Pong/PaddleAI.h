@@ -157,7 +157,7 @@ namespace Pong{
 		virtual Gadget::ComponentProperties Serialize() const override{ return PaddleController::Serialize(); }
 
 	protected:
-		virtual void Deserialize(const Gadget::ComponentProperties& props_) override{}
+		virtual void Deserialize([[maybe_unused]] const Gadget::ComponentProperties& props_) override{}
 
 	private:
 		Gadget::GameObject* ball;

@@ -22,7 +22,7 @@ namespace Example{
 		virtual Gadget::ComponentProperties Serialize() const override{ return GameLogicComponent::Serialize(); }
 
 	protected:
-		virtual void Deserialize(const Gadget::ComponentProperties& props_) override{}
+		virtual void Deserialize([[maybe_unused]] const Gadget::ComponentProperties& props_) override{}
 	};
 }
 

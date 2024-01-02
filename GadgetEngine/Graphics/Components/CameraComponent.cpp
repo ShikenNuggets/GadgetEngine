@@ -111,6 +111,8 @@ ComponentProperties CameraComponent::Serialize() const{
 	props.variables.Add(SID("ViewRect_Y"), camera.GetViewportRect().y);
 	props.variables.Add(SID("ViewRect_W"), camera.GetViewportRect().w);
 	props.variables.Add(SID("ViewRect_H"), camera.GetViewportRect().h);
+
+	return props;
 }
 
 void CameraComponent::Deserialize(const ComponentProperties& props_){
