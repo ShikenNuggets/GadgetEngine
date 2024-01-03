@@ -109,20 +109,7 @@ void RenderComponent::CreateMeshInfo(){
 ComponentProperties RenderComponent::Serialize() const{
 	ComponentProperties props = Component::Serialize();
 	props.variables.Add(SID("ModelName"), modelName);
-	props.variables.Add(SID("MaterialType"), material->Type());
-	props.variables.Add(SID("ShaderName"), material->GetShaderName());
-
-	//TODO - Maybe materials should serialize their own darn properties!
-	if(material->Type() == DiffuseTextureMaterial::type){
-		DiffuseTextureMaterial* dtmat = dynamic_cast<DiffuseTextureMaterial*>(material);
-		props.variables.Add(SID("TextureName"), dtmat->TextureResourceName());
-	}else if(material->Type() == ColorMaterial::type){
-		ColorMaterial* cmat = dynamic_cast<ColorMaterial*>(material);
-		props.variables.Add(SID("Color_R"), cmat->GetColor().r);
-		props.variables.Add(SID("Color_G"), cmat->GetColor().g);
-		props.variables.Add(SID("Color_B"), cmat->GetColor().b);
-		props.variables.Add(SID("Color_A"), cmat->GetColor().a);
-	}
+	material->Serialize(props.variables);
 
 	return props;
 }
@@ -139,22 +126,10 @@ void RenderComponent::Deserialize(const ComponentProperties& props_){
 	CreateMeshInfo();
 
 	if(materialType == DiffuseTextureMaterial::type){
-		StringID textureName = props_.variables.GetValue(SID("TextureName")).ToStr();
-
-		GADGET_BASIC_ASSERT(textureName != StringID::None);
-
-		material = new DiffuseTextureMaterial(textureName, shaderName);
+		material = new DiffuseTextureMaterial(props_.variables);
 	}else if(materialType == ColorMaterial::type){
-		float colorR = props_.variables.GetValue(SID("Color_R")).ToNumber<float>();
-		float colorG = props_.variables.GetValue(SID("Color_R")).ToNumber<float>();
-		float colorB = props_.variables.GetValue(SID("Color_R")).ToNumber<float>();
-		float colorA = props_.variables.GetValue(SID("Color_R")).ToNumber<float>();
-
-		GADGET_BASIC_ASSERT(Math::IsValidNumber(colorR));
-		GADGET_BASIC_ASSERT(Math::IsValidNumber(colorG));
-		GADGET_BASIC_ASSERT(Math::IsValidNumber(colorB));
-		GADGET_BASIC_ASSERT(Math::IsValidNumber(colorA));
-
-		material = new ColorMaterial(Color(colorR, colorG, colorB, colorA), shaderName);
+		material = new ColorMaterial(props_.variables);
+	}else{
+		GADGET_ASSERT_NOT_IMPLEMENTED;
 	}
 }

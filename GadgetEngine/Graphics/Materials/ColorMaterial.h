@@ -18,6 +18,10 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(shader != nullptr);
 		}
 
+		ColorMaterial(const NamedVarList& varList_) : Material(varList_), color(Color::Black()){
+			Deserialize(varList_);
+		}
+
 		virtual void Bind() override{
 			GADGET_BASIC_ASSERT(shader != nullptr);
 
@@ -40,6 +44,22 @@ namespace Gadget{
 		}
 
 		virtual StringID Type() const override{ return type; }
+
+		virtual void Serialize(NamedVarList& varList_) const override{
+			Material::Serialize(varList_);
+			varList_.Add(SID("Color_R"), color.r);
+			varList_.Add(SID("Color_G"), color.g);
+			varList_.Add(SID("Color_B"), color.b);
+			varList_.Add(SID("Color_A"), color.a);
+		}
+
+	protected:
+		virtual void Deserialize(const NamedVarList& varList_) override{
+			color.r = varList_.GetValue(SID("Color_R")).ToNumber<float>();
+			color.g = varList_.GetValue(SID("Color_G")).ToNumber<float>();
+			color.b = varList_.GetValue(SID("Color_B")).ToNumber<float>();
+			color.a = varList_.GetValue(SID("Color_A")).ToNumber<float>();
+		}
 
 	private:
 		Color color;

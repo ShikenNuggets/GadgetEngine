@@ -27,6 +27,10 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(textureInfo != nullptr);
 		}
 
+		DiffuseTextureMaterial(const NamedVarList& varList_) : Material(varList_), textureResourceName(StringID::None){
+			Deserialize(varList_);
+		}
+
 		~DiffuseTextureMaterial(){
 			delete textureInfo;
 		}
@@ -51,6 +55,16 @@ namespace Gadget{
 		virtual bool HasLighting() const override{ return true; }
 
 		virtual StringID Type() const override{ return type; }
+
+		virtual void Serialize(NamedVarList& varList_) const override{
+			Material::Serialize(varList_);
+			varList_.Add(SID("TextureName"), textureResourceName);
+		}
+
+	protected:
+		virtual void Deserialize(const NamedVarList& varList_) override{
+			textureResourceName = varList_.GetValue(SID("TextureName")).ToStr();
+		}
 
 	private:
 		StringID textureResourceName;
