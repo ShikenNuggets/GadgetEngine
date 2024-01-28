@@ -57,6 +57,12 @@ WORKBENCH_INTERFACE uint32_t UnloadGameCodeDLL(){
 	return TRUE;
 }
 
+WORKBENCH_INTERFACE bool InitForWorkbench(){
+	//Call anything that needs to be setup before the editor uses it here
+	Gadget::GUID::SetInitialGUID();
+	return true;
+}
+
 WORKBENCH_INTERFACE uint64_t CreateGameObject(GameObjectDescriptor* descriptor_){
 	GADGET_BASIC_ASSERT(descriptor_ != nullptr);
 

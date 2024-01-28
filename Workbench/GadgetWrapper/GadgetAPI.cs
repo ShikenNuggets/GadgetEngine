@@ -39,6 +39,8 @@ namespace Workbench
         [DllImport(_dllName)]
         public static extern int UnloadGameCodeDLL();
 
+		[DllImport(_dllName)]
+		public static extern bool InitForWorkbench();
         [DllImport(_dllName, CharSet = CharSet.Ansi)]
 		private static extern ulong CreateGameObject(GameObjectDescriptor descriptor_);
 		[DllImport(_dllName)]
