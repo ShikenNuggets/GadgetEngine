@@ -61,6 +61,13 @@ namespace Gadget{
 
 		virtual ComponentProperties Serialize() const;
 
+		template <class T>
+		static Component* DeserializeToNewComponent(const ComponentProperties& props_)
+		{
+			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+			return new T(props_);
+		}
+
 	protected:
 		const StringID typeName;
 

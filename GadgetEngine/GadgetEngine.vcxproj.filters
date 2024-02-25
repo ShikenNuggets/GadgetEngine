@@ -380,6 +380,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Window.h" />
+    <ClInclude Include="Game\ComponentFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -565,5 +566,6 @@
     <ClCompile Include="Utils\StringID.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Game\ComponentFactory.cpp" />
   </ItemGroup>
 </Project>
