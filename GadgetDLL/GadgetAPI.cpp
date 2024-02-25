@@ -1,4 +1,4 @@
-//Export functions to the DLL to be used by the 
+//Export functions to the DLL to be used by the editor
 
 #ifndef WORKBENCH_INTERFACE
 #define WORKBENCH_INTERFACE extern "C" __declspec(dllexport)
