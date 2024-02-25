@@ -7,6 +7,7 @@
 			 xmlns:main="clr-namespace:Workbench"
 			 xmlns:components="clr-namespace:Workbench.Editors.Components"
 			 mc:Ignorable="d" 
+			 d:DataContext="{d:DesignInstance Type=local:GameObjectView, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type main:MultiSelectTransformVM}">

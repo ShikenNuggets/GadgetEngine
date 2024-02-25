@@ -26,6 +26,21 @@ namespace Workbench.GadgetAPIStructs
 		public string name = "GameObject";
 		public TransformInfo transform = new TransformInfo();
 	};
+
+	[StructLayout(LayoutKind.Explicit)]
+	public struct Var
+	{
+		[FieldOffset(0)] public ulong strVal;
+		[FieldOffset(0)] public bool boolVal;
+		[FieldOffset(0)] public double numVal;
+	}
+
+	[StructLayout(LayoutKind.Explicit)]
+	public struct NamedVar
+	{
+		[FieldOffset(0)] public ulong name;
+		[FieldOffset(8)] public Var value;
+	}
 }
 
 namespace Workbench
@@ -46,7 +61,19 @@ namespace Workbench
 		[DllImport(_dllName)]
 		private static extern void DestroyGameObject(ulong guid_);
 
-		public static ulong CreateGameObject(GameObjectVM gameObject)
+
+		[DllImport(_dllName)]
+		private static extern ulong GetNumDeclaredComponents();
+
+		[DllImport(_dllName)]
+		private static extern void GetDeclaredComponents(IntPtr handle);
+
+        [DllImport(_dllName, CharSet = CharSet.Ansi)]
+        private static extern void GetStringFromID(ulong stringId, StringBuilder str, ulong length);
+
+        //-------------------------------------------------------------------------------
+
+        public static ulong CreateGameObject(GameObjectVM gameObject)
 		{
 			GameObjectDescriptor desc = new GameObjectDescriptor();
 
@@ -94,5 +121,24 @@ namespace Workbench
                 throw;
             }
         }
+
+		public static List<string> GetDeclaredComponents()
+		{
+			List<string> declaredComponents = new List<string>();
+
+			ulong[] strIds = new ulong[GetNumDeclaredComponents()];
+			GCHandle strHandle = GCHandle.Alloc(strIds, GCHandleType.Pinned);
+			GetDeclaredComponents(strHandle.AddrOfPinnedObject());
+
+			for (int i = 0; i < strIds.Length; i++)
+			{
+				StringBuilder sb = new StringBuilder(64);
+				GetStringFromID(strIds[i], sb, (ulong)sb.Capacity);
+				declaredComponents.Add(sb.ToString().Trim());
+			}
+
+			strHandle.Free();
+			return declaredComponents;
+		}
     }
 }

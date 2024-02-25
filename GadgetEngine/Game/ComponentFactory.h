@@ -11,6 +11,10 @@ namespace Gadget{
 	public:
 		static void Init();
 
+		static constexpr std::vector<StringID> GetAllDeclaredComponents(){
+			return Utils::GetAllKeys(deserializers);
+		}
+
 		static constexpr void DeclareComponentDeserializer(StringID type_, const componentDeserializeFunc& deserializer_){
 			GADGET_BASIC_ASSERT(type_ != StringID::None);
 			

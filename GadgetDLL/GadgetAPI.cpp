@@ -7,6 +7,7 @@
 #include <Windows.h>
 
 #include <App.h>
+#include <Game/ComponentFactory.h>
 
 using namespace Gadget;
 
@@ -60,6 +61,7 @@ WORKBENCH_INTERFACE uint32_t UnloadGameCodeDLL(){
 WORKBENCH_INTERFACE bool InitForWorkbench(){
 	//Call anything that needs to be setup before the editor uses it here
 	Gadget::GUID::SetInitialGUID();
+	Gadget::ComponentFactory::Init();
 	return true;
 }
 
@@ -79,4 +81,29 @@ WORKBENCH_INTERFACE void DestroyGameObject(uint64_t guid_){
 
 	GameObjectCollection::Remove(guid_);
 	delete go;
+}
+
+WORKBENCH_INTERFACE void GetStringFromID(uint64_t sid_, char* str_, uint64_t length_){
+	std::string finalStr = StringID::GetStringFromID(StringID(sid_));
+	GADGET_BASIC_ASSERT(finalStr.size() < length_);
+
+	for(uint64_t i = 0; i < finalStr.size() && i < length_; i++){
+		str_[i] = finalStr[i];
+	}
+
+	for(uint64_t i = finalStr.size(); i < length_; i++){
+		str_[i] = '\0';
+	}
+}
+
+WORKBENCH_INTERFACE uint64_t GetNumDeclaredComponents(){
+	return ComponentFactory::GetAllDeclaredComponents().size();
+}
+
+WORKBENCH_INTERFACE void GetDeclaredComponents(uint64_t* namedVarArray){
+	const auto decl = ComponentFactory::GetAllDeclaredComponents();
+
+	for(uint64_t i = 0; i < decl.size(); i++){
+		namedVarArray[i] = decl[i].GetID();
+	}
 }

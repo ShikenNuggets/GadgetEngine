@@ -37,6 +37,17 @@ namespace Gadget{
 			return false;
 		}
 
+		template <class T, class Y>
+		inline constexpr std::vector<T> GetAllKeys(const std::map<T, Y>& container_){
+			std::vector<T> output;
+
+			for(const auto& i : container_){
+				output.push_back(i.first);
+			}
+
+			return output;
+		}
+
 		//----------Strings----------//
 		//TODO - Nothing here makes any considerations for Unicode
 		inline bool ContainsChar(const std::string& str_, char char_){
