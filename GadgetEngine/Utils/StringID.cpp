@@ -23,11 +23,15 @@ StringID StringID::InternString(StringID sid_, const char* str_){
 }
 
 std::string StringID::GetStringFromID(StringID id_){
+	return GetStringFromID(id_.GetID());
+}
+
+std::string StringID::GetStringFromID(uint64_t id_){
 	auto& stringIdTable = StringIDTable();
 
-	auto find = stringIdTable.find(id_.id);
+	auto find = stringIdTable.find(id_);
 	if(find != stringIdTable.end()){
-		return stringIdTable[id_.id];
+		return stringIdTable[id_];
 	}
 
 	return "";

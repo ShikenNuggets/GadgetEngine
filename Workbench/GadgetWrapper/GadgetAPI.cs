@@ -68,6 +68,9 @@ namespace Workbench
 		[DllImport(_dllName)]
 		private static extern void GetDeclaredComponents(IntPtr handle);
 
+		[DllImport(_dllName)]
+		private static extern ulong GetStringLengthFromID(ulong stringId);
+
         [DllImport(_dllName, CharSet = CharSet.Ansi)]
         private static extern void GetStringFromID(ulong stringId, StringBuilder str, ulong length);
 
@@ -124,20 +127,22 @@ namespace Workbench
 
 		public static List<string> GetDeclaredComponents()
 		{
-			List<string> declaredComponents = new List<string>();
-
+			//Get StringIDs of all declared components
 			ulong[] strIds = new ulong[GetNumDeclaredComponents()];
 			GCHandle strHandle = GCHandle.Alloc(strIds, GCHandleType.Pinned);
 			GetDeclaredComponents(strHandle.AddrOfPinnedObject());
 
-			for (int i = 0; i < strIds.Length; i++)
+            List<string> declaredComponents = new((int)GetNumDeclaredComponents());
+            for (int i = 0; i < strIds.Length; i++)
 			{
-				StringBuilder sb = new StringBuilder(64);
+				//Get the actual string from the StringID
+				int length = (int)GetStringLengthFromID(strIds[i]);
+                StringBuilder sb = new(length + 1); //+ 1 isn't strictly necessary here but it gives the C++ side some breathing room
 				GetStringFromID(strIds[i], sb, (ulong)sb.Capacity);
-				declaredComponents.Add(sb.ToString().Trim());
+				declaredComponents.Add(sb.ToString(0, length).Trim());
 			}
 
-			strHandle.Free();
+			strHandle.Free(); //Don't forget to let the garbage collector know you're done!
 			return declaredComponents;
 		}
     }

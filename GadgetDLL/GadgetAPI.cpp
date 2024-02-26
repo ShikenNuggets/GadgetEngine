@@ -83,16 +83,16 @@ WORKBENCH_INTERFACE void DestroyGameObject(uint64_t guid_){
 	delete go;
 }
 
-WORKBENCH_INTERFACE void GetStringFromID(uint64_t sid_, char* str_, uint64_t length_){
-	std::string finalStr = StringID::GetStringFromID(StringID(sid_));
-	GADGET_BASIC_ASSERT(finalStr.size() < length_);
+WORKBENCH_INTERFACE uint64_t GetStringLengthFromID(uint64_t id_){
+	return StringID::GetStringFromID(id_).size();
+}
 
-	for(uint64_t i = 0; i < finalStr.size() && i < length_; i++){
+WORKBENCH_INTERFACE void GetStringFromID(uint64_t id_, char* str_, uint64_t length_){
+	std::string finalStr = StringID::GetStringFromID(id_);
+	GADGET_BASIC_ASSERT(finalStr.size() <= length_);
+
+	for(uint64_t i = 0; i < finalStr.size(); i++){
 		str_[i] = finalStr[i];
-	}
-
-	for(uint64_t i = finalStr.size(); i < length_; i++){
-		str_[i] = '\0';
 	}
 }
 

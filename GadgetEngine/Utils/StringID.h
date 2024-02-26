@@ -36,6 +36,7 @@ namespace Gadget{
 		//DON'T USE THIS DIRECTLY, USE THE SID() MACRO
 		static StringID InternString(StringID sid_, const char* str_);
 		static std::string GetStringFromID(StringID id_);
+		static std::string GetStringFromID(uint64_t id_);
 
 		//Only use this if the SID() macro cannot be used
 		static inline StringID ProcessString(const std::string& str_){
