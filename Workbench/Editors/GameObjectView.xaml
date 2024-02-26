@@ -36,7 +36,7 @@
 					</ToggleButton.Content>
 				</ToggleButton>
 			</Border>
-			<ListBox x:Name="componentTypeListBox" ItemsSource="{Binding ComponentTypes}" Margin="0,0,0,10" Visibility="Visible" MouseDoubleClick="OnComponentType_ListBox_MouseDoubleClick" />
+			<ListBox x:Name="componentTypeListBox" ItemsSource="{Binding ComponentTypes}" Margin="0,0,0,10" Visibility="Collapsed" MouseDoubleClick="OnComponentType_ListBox_MouseDoubleClick" />
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="78"/>
