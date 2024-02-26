@@ -11,6 +11,7 @@ namespace Workbench
     public interface IUndoRedo
     {
         string Name { get; }
+        bool CanBeSaved { get; }
 
         void Undo();
         void Redo();
@@ -22,19 +23,21 @@ namespace Workbench
         private Action _redoAction;
 
         public string Name { get; }
+        public bool CanBeSaved { get; }
 
         public void Undo() => _undoAction?.Invoke();
         public void Redo() => _redoAction?.Invoke();
 
-        public UndoRedoAction(string name, Action undo, Action redo)
+        public UndoRedoAction(string name, Action undo, Action redo, bool canBeSaved = true)
         {
             Debug.Assert(undo != null && redo != null);
             Name = name;
+            CanBeSaved = canBeSaved;
             _undoAction = undo;
             _redoAction = redo;
         }
 
-        public UndoRedoAction(string name, string property, object instance, object undoValue, object redoValue)
+        public UndoRedoAction(string name, string property, object instance, object undoValue, object redoValue, bool canBeSaved = true)
         {
             Debug.Assert(!string.IsNullOrWhiteSpace(name));
             Debug.Assert(instance != null);
@@ -54,6 +57,8 @@ namespace Workbench
                 Logger.Log(MessageType.Warning, "Invalid name set for UndoRedoAction!");
                 Name = "Unnamed UndoRedoAction";
             }
+
+            CanBeSaved = canBeSaved;
 
             var prop = instance.GetType().GetProperty(property);
             Debug.Assert(prop != null);
@@ -107,6 +112,11 @@ namespace Workbench
 
                 currentIndex++;
 
+                if (!cmd.CanBeSaved)
+                {
+                    checkpoint++;
+                }
+
                 Logger.Log(MessageType.Verbose, cmd.Name);
             }
 
@@ -126,6 +136,11 @@ namespace Workbench
 
                 currentIndex--;
 
+                if (!cmd.CanBeSaved)
+                {
+                    checkpoint--;
+                }
+
                 Logger.Log(MessageType.Verbose, "[Undo] " + cmd.Name);
             }
 
@@ -144,6 +159,11 @@ namespace Workbench
                 _undoList.Add(cmd);
 
                 currentIndex++;
+
+                if (!cmd.CanBeSaved)
+                {
+                    checkpoint++;
+                }
 
                 Logger.Log(MessageType.Verbose, "[Redo] " + cmd.Name);
             }
