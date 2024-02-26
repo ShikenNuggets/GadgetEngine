@@ -152,6 +152,14 @@ namespace Workbench
 
         public List<GameObjectVM> SelectedObjects { get; private set; }
 
+        [DataMember] public static List<string> ComponentTypes
+        {
+            get
+            {
+                return ComponentVM.ComponentTypes;
+            }
+        }
+
         public MultiSelectedObjectVM(List<GameObjectVM> objects)
         {
             Debug.Assert(objects != null && objects.Any() == true);

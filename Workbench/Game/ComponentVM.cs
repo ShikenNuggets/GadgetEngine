@@ -16,6 +16,16 @@ namespace Workbench
     {
         [DataMember] public GameObjectVM Owner { get; private set; }
 
+        [DataMember] public static List<string> ComponentTypes
+        {
+            get
+            {
+                var list = GadgetAPI.GetDeclaredComponents();
+                list.Sort();
+                return list;
+            }
+        }
+
         public ComponentVM(GameObjectVM owner)
         {
             Debug.Assert(owner != null);
