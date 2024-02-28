@@ -133,7 +133,17 @@ namespace Workbench
 			//Get StringIDs of all declared components
 			ulong[] strIds = new ulong[GetNumDeclaredComponents()];
 			GCHandle strHandle = GCHandle.Alloc(strIds, GCHandleType.Pinned);
-			GetDeclaredComponents(strHandle.AddrOfPinnedObject());
+
+			try
+			{
+                GetDeclaredComponents(strHandle.AddrOfPinnedObject());
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(MessageType.Error, $"An error occured while calling external code from {_dllName}: " + ex.Message);
+                MessageBox.Show($"An error occured while calling external code from {_dllName}: " + ex.Message);
+				throw;
+            }
 
             List<string> declaredComponents = new((int)GetNumDeclaredComponents());
             for (int i = 0; i < strIds.Length; i++)
@@ -161,7 +171,16 @@ namespace Workbench
 				return;
 			}
 
-			CreateComponentOfType(componentType, gameObject.GUID);
+            try
+            {
+                CreateComponentOfType(componentType, gameObject.GUID);
+			}
+			catch (Exception ex)
+			{
+				Logger.Log(MessageType.Error, $"An error occured while calling external code from {_dllName}: " + ex.Message);
+                MessageBox.Show($"An error occured while calling external code from {_dllName}: " + ex.Message);
+				throw;
+			}
 		}
 
 		public static void AddNewComponentToGameObjects(MultiSelectedGameObjectVM gameObjects, string componentType)
