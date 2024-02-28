@@ -68,7 +68,10 @@ namespace Workbench
 		[DllImport(_dllName)]
 		private static extern void GetDeclaredComponents(IntPtr handle);
 
-		[DllImport(_dllName)]
+		[DllImport(_dllName, CharSet = CharSet.Ansi)]
+		private static extern ulong CreateComponentOfType(string type, ulong parentObjectGuid);
+
+        [DllImport(_dllName)]
 		private static extern ulong GetStringLengthFromID(ulong stringId);
 
         [DllImport(_dllName, CharSet = CharSet.Ansi)]
@@ -144,6 +147,34 @@ namespace Workbench
 
 			strHandle.Free(); //Don't forget to let the garbage collector know you're done!
 			return declaredComponents;
+		}
+
+		public static void AddNewComponentToGameObject(GameObjectVM gameObject, string componentType)
+		{
+			if (gameObject == null)
+			{
+				return;
+			}
+
+			if (!GetDeclaredComponents().Contains(componentType))
+			{
+				return;
+			}
+
+			CreateComponentOfType(componentType, gameObject.GUID);
+		}
+
+		public static void AddNewComponentToGameObjects(MultiSelectedGameObjectVM gameObjects, string componentType)
+		{
+			if (gameObjects == null || gameObjects.SelectedObjects == null || gameObjects.SelectedObjects.Count == 0)
+			{
+				return;
+			}
+
+			foreach (GameObjectVM gameObject in gameObjects.SelectedObjects)
+			{
+				AddNewComponentToGameObject(gameObject, componentType);
+			}
 		}
     }
 }

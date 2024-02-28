@@ -202,14 +202,14 @@ namespace Workbench.Editors
             }
 
             var listBox = sender as ListBox;
-            if (listBox == null)
+            if (listBox == null || listBox.SelectedItem == null)
             {
                 Logger.Log(MessageType.Error, "Sender was not a valid ListBox!");
                 return;
             }
 
-            //TODO - Actually add the component...
             Logger.Log(MessageType.Info, "Add component of type " + listBox.SelectedItem.ToString());
+            GadgetAPI.AddNewComponentToGameObjects(vm, listBox.SelectedItem.ToString().Trim());
 
             listBox.Visibility = Visibility.Collapsed;
         }

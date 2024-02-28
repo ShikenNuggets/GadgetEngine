@@ -107,3 +107,19 @@ WORKBENCH_INTERFACE void GetDeclaredComponents(uint64_t* namedVarArray){
 		namedVarArray[i] = decl[i].GetID();
 	}
 }
+
+WORKBENCH_INTERFACE uint64_t CreateComponentOfType(const char* type_, uint64_t parentObjectGuid_){
+	GADGET_BASIC_ASSERT(type_ != nullptr);
+	GADGET_BASIC_ASSERT(parentObjectGuid_ != Gadget::GUID::Invalid);
+
+	GameObject* parent = GameObjectCollection::Get(parentObjectGuid_);
+	GADGET_BASIC_ASSERT(parent != nullptr);
+
+	StringID typeName = StringID::ProcessString(type_);
+	Component* comp = ComponentFactory::InstantiateComponentType(typeName, ComponentProperties(typeName, Gadget::GUID::Invalid, parentObjectGuid_));
+	GADGET_BASIC_ASSERT(comp != nullptr);
+
+	parent->AddComponent(comp);
+
+	return comp->GetGUID().Id();
+}
