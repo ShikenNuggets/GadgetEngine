@@ -18,7 +18,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
 		}
 
-		BoxCollider2D(const ComponentProperties& props_) : Collider(props_){
+		BoxCollider2D(const ComponentProperties& props_) : Collider(props_, ColliderShape::Box2D){
 			Deserialize(props_);
 		}
 

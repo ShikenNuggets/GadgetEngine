@@ -20,7 +20,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
 		}
 
-		CubeCollider(const ComponentProperties& props_) : Collider(props_), size(){
+		CubeCollider(const ComponentProperties& props_) : Collider(props_, ColliderShape::Cube), size(){
 			Deserialize(props_);
 		}
 

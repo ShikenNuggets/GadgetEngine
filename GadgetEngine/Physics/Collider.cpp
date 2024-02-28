@@ -20,7 +20,7 @@ Collider::Collider(StringID typeName_, GUID parentGUID_, ColliderShape shape_, b
 	componentCollection.Add(this);
 }
 
-Collider::Collider(const ComponentProperties& props_) : Component(props_), shape((ColliderShape)props_.variables.GetValue(SID("ColliderShape"), 0).ToNumber<int>()), bulletRb(nullptr){
+Collider::Collider(const ComponentProperties& props_, ColliderShape shape_) : Component(props_), shape(shape_), bulletRb(nullptr){
 	Deserialize(props_);
 }
 
