@@ -52,9 +52,9 @@ namespace Gadget{
 
 	protected:
 		virtual void Deserialize(const ComponentProperties& props_) override{
-			size.x = props_.variables.GetValue(SID("Size_X")).ToNumber<float>();
-			size.y = props_.variables.GetValue(SID("Size_Y")).ToNumber<float>();
-			size.z = props_.variables.GetValue(SID("Size_Z")).ToNumber<float>();
+			size.x = props_.variables.GetValue(SID("Size_X"), 1.0f).ToNumber<float>();
+			size.y = props_.variables.GetValue(SID("Size_Y"), 1.0f).ToNumber<float>();
+			size.z = props_.variables.GetValue(SID("Size_Z"), 1.0f).ToNumber<float>();
 
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.x));
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.y));

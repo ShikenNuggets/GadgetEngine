@@ -52,16 +52,14 @@ namespace Gadget{
 			return false;
 		}
 
-		constexpr NamedVar GetValue(StringID name_) const{
-			GADGET_BASIC_ASSERT(HasValue(name_));
-
+		constexpr NamedVar GetValue(StringID name_, Var defaultValue_) const{
 			for(const auto& nv : values){
 				if(nv.Name() == name_){
 					return nv;
 				}
 			}
 
-			return NamedVar(nullptr);
+			return NamedVar(name_, defaultValue_);
 		}
 
 		constexpr NamedVar GetValue(size_t index_) const{

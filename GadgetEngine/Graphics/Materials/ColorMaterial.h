@@ -55,10 +55,10 @@ namespace Gadget{
 
 	protected:
 		virtual void Deserialize(const NamedVarList& varList_) override{
-			color.r = varList_.GetValue(SID("Color_R")).ToNumber<float>();
-			color.g = varList_.GetValue(SID("Color_G")).ToNumber<float>();
-			color.b = varList_.GetValue(SID("Color_B")).ToNumber<float>();
-			color.a = varList_.GetValue(SID("Color_A")).ToNumber<float>();
+			color.r = varList_.GetValue(SID("Color_R"), Color::White().r).ToNumber<float>();
+			color.g = varList_.GetValue(SID("Color_G"), Color::White().g).ToNumber<float>();
+			color.b = varList_.GetValue(SID("Color_B"), Color::White().b).ToNumber<float>();
+			color.a = varList_.GetValue(SID("Color_A"), Color::White().a).ToNumber<float>();
 		}
 
 	private:

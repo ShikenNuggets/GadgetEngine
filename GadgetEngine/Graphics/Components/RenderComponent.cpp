@@ -115,9 +115,9 @@ ComponentProperties RenderComponent::Serialize() const{
 }
 
 void RenderComponent::Deserialize(const ComponentProperties& props_){
-	modelName = props_.variables.GetValue(SID("ModelName")).ToStr();
-	StringID materialType = props_.variables.GetValue(SID("MaterialType")).ToStr();
-	StringID shaderName = props_.variables.GetValue(SID("ShaderName")).ToStr();
+	modelName = props_.variables.GetValue(SID("ModelName"), StringID::None).ToStr();
+	StringID materialType = props_.variables.GetValue(SID("MaterialType"), StringID::None).ToStr();
+	StringID shaderName = props_.variables.GetValue(SID("ShaderName"), StringID::None).ToStr();
 
 	GADGET_BASIC_ASSERT(modelName != StringID::None);
 	GADGET_BASIC_ASSERT(materialType != StringID::None);

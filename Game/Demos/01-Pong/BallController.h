@@ -12,7 +12,7 @@ namespace Pong{
 	public:
 		BallController(Gadget::GameObject* parent_, float initialForce_, float playAreaWidth_, float playAreaHeight_) : GameLogicComponent(SID("BallController"), parent_), initialForce(initialForce_), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(playAreaWidth_), playAreaHeight(playAreaHeight_), movingUp(true), movingRight(true), lastCollidedObject(0), roundOver(false){}
 		
-		BallController(const Gadget::ComponentProperties& props_) : GameLogicComponent(props_), initialForce(props_.variables.GetValue(SID("InitialForce")).ToNumber<float>()), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(0.0f), playAreaHeight(0.0f), movingUp(true), movingRight(true), lastCollidedObject(0), roundOver(false){
+		BallController(const Gadget::ComponentProperties& props_) : GameLogicComponent(props_), initialForce(props_.variables.GetValue(SID("InitialForce"), 2.0f).ToNumber<float>()), currentForce(initialForce), rigidbody(nullptr), sceneHandler(nullptr), playAreaWidth(0.0f), playAreaHeight(0.0f), movingUp(true), movingRight(true), lastCollidedObject(0), roundOver(false){
 			Deserialize(props_);
 		}
 
@@ -88,8 +88,8 @@ namespace Pong{
 	protected:
 		virtual void Deserialize(const Gadget::ComponentProperties& props_) override{
 			//initialForce = props_.variables.GetValue(SID("InitialForce")).ToNumber<float>(); //const - constructor only
-			playAreaWidth = props_.variables.GetValue(SID("PlayAreaWidth")).ToNumber<float>();
-			playAreaHeight = props_.variables.GetValue(SID("PlayAreaHeight")).ToNumber<float>();
+			playAreaWidth = props_.variables.GetValue(SID("PlayAreaWidth"), 21.0f).ToNumber<float>();
+			playAreaHeight = props_.variables.GetValue(SID("PlayAreaHeight"), 12.0f).ToNumber<float>();
 		}
 
 	private:

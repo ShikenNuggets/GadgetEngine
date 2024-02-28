@@ -116,7 +116,7 @@ ComponentProperties CameraComponent::Serialize() const{
 }
 
 void CameraComponent::Deserialize(const ComponentProperties& props_){
-	Camera::Projection proj = (Camera::Projection)props_.variables.GetValue(SID("Projection")).ToNumber<int>();
+	Camera::Projection proj = (Camera::Projection)props_.variables.GetValue(SID("Projection"), (int)Camera::Projection::Perspective).ToNumber<int>();
 	GADGET_BASIC_ASSERT((int)proj > 0);
 	GADGET_BASIC_ASSERT(proj < Camera::Projection::Projection_MAX);
 	if((int)proj < 0 || proj >= Camera::Projection::Projection_MAX){
@@ -124,10 +124,10 @@ void CameraComponent::Deserialize(const ComponentProperties& props_){
 	}
 
 	Rect viewRect = Rect();
-	viewRect.x = props_.variables.GetValue(SID("ViewRectX")).ToNumber<float>();
-	viewRect.y = props_.variables.GetValue(SID("ViewRectY")).ToNumber<float>();
-	viewRect.w = props_.variables.GetValue(SID("ViewRectW")).ToNumber<float>();
-	viewRect.h = props_.variables.GetValue(SID("ViewRectH")).ToNumber<float>();
+	viewRect.x = props_.variables.GetValue(SID("ViewRectX"), ViewportRect::Fullscreen.x).ToNumber<float>();
+	viewRect.y = props_.variables.GetValue(SID("ViewRectY"), ViewportRect::Fullscreen.y).ToNumber<float>();
+	viewRect.w = props_.variables.GetValue(SID("ViewRectW"), ViewportRect::Fullscreen.w).ToNumber<float>();
+	viewRect.h = props_.variables.GetValue(SID("ViewRectH"), ViewportRect::Fullscreen.h).ToNumber<float>();
 	GADGET_BASIC_ASSERT(viewRect.IsValid());
 	if(!viewRect.IsValid()){
 		viewRect = ViewportRect::Fullscreen;

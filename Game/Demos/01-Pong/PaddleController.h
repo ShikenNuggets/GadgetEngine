@@ -61,7 +61,7 @@ namespace Pong{
 		Gadget::Vector3 startPosition;
 
 		virtual void Deserialize(const Gadget::ComponentProperties& props_) override{
-			player = props_.variables.GetValue(SID("Player")).ToNumber<int>();
+			player = props_.variables.GetValue(SID("Player"), 1).ToNumber<int>();
 		}
 	};
 }

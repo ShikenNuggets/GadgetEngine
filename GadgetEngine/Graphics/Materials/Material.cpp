@@ -32,6 +32,6 @@ void Material::Serialize(NamedVarList& varList_) const{
 }
 
 void Material::Deserialize(const NamedVarList& varList_){
-	GADGET_BASIC_ASSERT(Type() == varList_.GetValue(SID("MaterialType")).ToStr());
-	shaderResourceName = varList_.GetValue(SID("ShaderName")).ToStr();
+	GADGET_BASIC_ASSERT(Type() == varList_.GetValue(SID("MaterialType"), StringID::None).ToStr());
+	shaderResourceName = varList_.GetValue(SID("ShaderName"), StringID::None).ToStr();
 }

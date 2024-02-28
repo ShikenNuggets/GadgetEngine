@@ -188,9 +188,9 @@ ComponentProperties Rigidbody::Serialize() const{
 }
 
 void Rigidbody::Deserialize(const ComponentProperties& props_){
-	mass = props_.variables.GetValue(SID("Mass")).ToNumber<float>();
-	useGravity = props_.variables.GetValue(SID("UseGravity")).ToBool();
-	freezeRotation = (FreezeRotationType)props_.variables.GetValue(SID("FreezeRotation")).ToNumber<int>();
+	mass = props_.variables.GetValue(SID("Mass"), 1.0f).ToNumber<float>();
+	useGravity = props_.variables.GetValue(SID("UseGravity"), true).ToBool();
+	freezeRotation = (FreezeRotationType)props_.variables.GetValue(SID("FreezeRotation"), 0).ToNumber<int>();
 
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));

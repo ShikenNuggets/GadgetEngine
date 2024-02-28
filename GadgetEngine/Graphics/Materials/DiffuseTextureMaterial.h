@@ -63,7 +63,8 @@ namespace Gadget{
 
 	protected:
 		virtual void Deserialize(const NamedVarList& varList_) override{
-			textureResourceName = varList_.GetValue(SID("TextureName")).ToStr();
+			textureResourceName = varList_.GetValue(SID("TextureName"), StringID::None).ToStr();
+			GADGET_BASIC_ASSERT(textureResourceName != StringID::None);
 		}
 
 	private:

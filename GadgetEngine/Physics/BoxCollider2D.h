@@ -50,8 +50,8 @@ namespace Gadget{
 
 	protected:
 		virtual void Deserialize(const ComponentProperties& props_){
-			width = props_.variables.GetValue(SID("Width")).ToNumber<float>();
-			height = props_.variables.GetValue(SID("Height")).ToNumber<float>();
+			width = props_.variables.GetValue(SID("Width"), 1.0f).ToNumber<float>();
+			height = props_.variables.GetValue(SID("Height"), 1.0f).ToNumber<float>();
 
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(width));
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(height));

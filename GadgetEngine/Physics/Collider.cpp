@@ -20,7 +20,7 @@ Collider::Collider(StringID typeName_, GUID parentGUID_, ColliderShape shape_, b
 	componentCollection.Add(this);
 }
 
-Collider::Collider(const ComponentProperties& props_) : Component(props_), shape((ColliderShape)props_.variables.GetValue(SID("ColliderShape")).ToNumber<int>()), bulletRb(nullptr){
+Collider::Collider(const ComponentProperties& props_) : Component(props_), shape((ColliderShape)props_.variables.GetValue(SID("ColliderShape"), 0).ToNumber<int>()), bulletRb(nullptr){
 	Deserialize(props_);
 }
 
@@ -86,7 +86,7 @@ ComponentProperties Collider::Serialize() const{
 
 void Collider::Deserialize(const ComponentProperties& props_){
 	//shape = (ColliderShape)props_.variables.GetValue(SID("ColliderShape")).ToNumber<int>(); //Shape can only be constructor initialized
-	isTrigger = props_.variables.GetValue(SID("IsTrigger")).ToBool();
+	isTrigger = props_.variables.GetValue(SID("IsTrigger"), false).ToBool();
 
 	GADGET_BASIC_ASSERT(shape > ColliderShape::None && shape < ColliderShape::ColliderShape_MAX);
 }
