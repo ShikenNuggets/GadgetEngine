@@ -70,6 +70,16 @@ namespace Gadget{
 			return nullptr;
 		}
 
+		Component* GetComponent(GUID componentGuid_){
+			for(const auto& c : components){
+				if(c->GetGUID() == componentGuid_){
+					return c;
+				}
+			}
+
+			return nullptr;
+		}
+
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the results when possible
 		//Unlike GetComponent, this function won't play nice with the whole class hierarchy
 		//If the Component subclass you're trying to use doesn't have a ComponentCollection, you'll need to either give it one or dynamic_cast these yourself
