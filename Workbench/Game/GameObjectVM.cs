@@ -12,6 +12,7 @@ namespace Workbench
 {
     [DataContract]
     [KnownType(typeof(TransformComponentVM))]
+	[KnownType(typeof(CppComponentVM))]
     public class GameObjectVM : BaseViewModel
     {
         private ulong _guid = Utils.InvalidGUID;
@@ -82,6 +83,17 @@ namespace Workbench
         [DataMember] public SceneVM ParentScene { get; private set; }
 
         public ReadOnlyObservableCollection<ComponentVM>? Components { get; private set; } = null;
+
+		public void AddComponent(ComponentVM component)
+		{
+			Debug.Assert(component != null && component.Owner == this);
+			_components.Add(component);
+		}
+
+		public void RemoveComponent(ComponentVM component)
+		{
+			_components.Remove(component);
+		}
 
         public ComponentVM? GetComponent(Type type) => Components?.FirstOrDefault(c => c.GetType() == type);
         public T? GetComponent<T>() where T : ComponentVM => GetComponent(typeof(T)) as T;

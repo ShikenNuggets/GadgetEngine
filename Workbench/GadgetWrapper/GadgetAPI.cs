@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 using Workbench.GadgetAPIStructs;
 
@@ -30,9 +31,10 @@ namespace Workbench.GadgetAPIStructs
 	[StructLayout(LayoutKind.Explicit)]
 	public struct Var
 	{
-		[FieldOffset(0)] public ulong strVal;
-		[FieldOffset(0)] public bool boolVal;
-		[FieldOffset(0)] public double numVal;
+		[FieldOffset(0)] public int type;
+		[FieldOffset(4)] public ulong strVal;
+		[FieldOffset(4)] public bool boolVal;
+		[FieldOffset(4)] public double numVal;
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
@@ -76,6 +78,18 @@ namespace Workbench
 
         [DllImport(_dllName, CharSet = CharSet.Ansi)]
         private static extern void GetStringFromID(ulong stringId, StringBuilder str, ulong length);
+
+		[DllImport(_dllName)]
+		private static extern ulong GetComponentTypeName(ulong componentGuid_, ulong parentGuid_);
+
+		[DllImport(_dllName)]
+		private static extern bool GetComponentIsActivated(ulong componentGuid_, ulong parentGuid_);
+
+		[DllImport(_dllName)]
+		private static extern ulong GetNumComponentProperties(ulong componentGuid_, ulong parentGuid_);
+
+		[DllImport(_dllName)]
+		private static extern void GetComponentProperties(ulong componentGuid_, ulong parentGuid_, IntPtr namedVars);
 
         //-------------------------------------------------------------------------------
 
@@ -166,14 +180,17 @@ namespace Workbench
 				return;
 			}
 
+			//Only continue if the component type is declared as serializable
 			if (!GetDeclaredComponents().Contains(componentType))
 			{
 				return;
 			}
 
+			//Create a new component and add it to the GameObject
+			ulong componentGuid = Utils.InvalidGUID;
             try
             {
-                CreateComponentOfType(componentType, gameObject.GUID);
+				componentGuid = CreateComponentOfType(componentType, gameObject.GUID);
 			}
 			catch (Exception ex)
 			{
@@ -181,6 +198,22 @@ namespace Workbench
                 MessageBox.Show($"An error occured while calling external code from {_dllName}: " + ex.Message);
 				throw;
 			}
+
+			//Get the type name
+			var nameId = GetComponentTypeName(componentGuid, gameObject.GUID);
+			var nameStrLen = GetStringLengthFromID(nameId);
+			StringBuilder sb = new((int)nameStrLen + 1);
+			GetStringFromID(nameId, sb, nameStrLen);
+			var nameStr = sb.ToString(0, (int)nameStrLen).Trim();
+
+			//Get isActivated
+			var isActivated = GetComponentIsActivated(componentGuid, gameObject.GUID);
+
+			//Get properties
+			var properties = GetComponentProperties(componentGuid, gameObject.GUID);
+
+			//Assemble the CppComponentVM and add it to the GameObjectVM
+			gameObject.AddComponent(new CppComponentVM(gameObject, nameStr, componentGuid, isActivated, properties));
 		}
 
 		public static void AddNewComponentToGameObjects(MultiSelectedGameObjectVM gameObjects, string componentType)
@@ -194,6 +227,21 @@ namespace Workbench
 			{
 				AddNewComponentToGameObject(gameObject, componentType);
 			}
+		}
+
+		public static List<NamedVar> GetComponentProperties(ulong componentGuid, ulong parentGuid)
+		{
+			List<NamedVar> final = new List<NamedVar>();
+
+			NamedVar[] namedVars = new NamedVar[GetNumComponentProperties(componentGuid, parentGuid)];
+			GCHandle nvHandle = GCHandle.Alloc(namedVars, GCHandleType.Pinned);
+
+			GetComponentProperties(componentGuid, parentGuid, nvHandle.AddrOfPinnedObject());
+
+			nvHandle.Free();
+
+			final.AddRange(namedVars);
+			return final;
 		}
     }
 }

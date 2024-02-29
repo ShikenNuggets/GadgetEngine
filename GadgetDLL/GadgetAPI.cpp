@@ -123,3 +123,60 @@ WORKBENCH_INTERFACE uint64_t CreateComponentOfType(const char* type_, uint64_t p
 
 	return comp->GetGUID().Id();
 }
+
+WORKBENCH_INTERFACE uint64_t GetComponentTypeName(uint64_t componentGuid_, uint64_t parentGuid_){
+	GADGET_ASSERT(componentGuid_ != Gadget::GUID::Invalid, "Component GUID must be valid");
+	GADGET_ASSERT(parentGuid_ != Gadget::GUID::Invalid, "Parent GameObject GUID must be valid");
+
+	GameObject* parent = GameObjectCollection::Get(parentGuid_);
+	GADGET_ASSERT(parent != nullptr, "GameObject with GUID " + std::to_string(parentGuid_) + " does not exist");
+
+	Component* component = parent->GetComponent(componentGuid_);
+	GADGET_ASSERT(component != nullptr, "Component with GUID " + std::to_string(componentGuid_) + " does not exist on GameObject with GUID " + std::to_string(parentGuid_));
+	GADGET_ASSERT(component->GetType() != StringID::None, "Invalid StringID for type name on component with GUID " + std::to_string(componentGuid_));
+
+	return component->GetType().GetID();
+}
+
+WORKBENCH_INTERFACE bool GetComponentIsActivated(uint64_t componentGuid_, uint64_t parentGuid_){
+	GADGET_ASSERT(componentGuid_ != Gadget::GUID::Invalid, "Component GUID must be valid");
+	GADGET_ASSERT(parentGuid_ != Gadget::GUID::Invalid, "Parent GameObject GUID must be valid");
+
+	GameObject* parent = GameObjectCollection::Get(parentGuid_);
+	GADGET_ASSERT(parent != nullptr, "GameObject with GUID " + std::to_string(parentGuid_) + " does not exist");
+
+	Component* component = parent->GetComponent(componentGuid_);
+	GADGET_ASSERT(component != nullptr, "Component with GUID " + std::to_string(componentGuid_) + " does not exist on GameObject with GUID " + std::to_string(parentGuid_));
+
+	return component->IsActivated();
+}
+
+WORKBENCH_INTERFACE uint64_t GetNumComponentProperties(uint64_t componentGuid_, uint64_t parentGuid_){
+	GADGET_ASSERT(componentGuid_ != Gadget::GUID::Invalid, "Component GUID must be valid");
+	GADGET_ASSERT(parentGuid_ != Gadget::GUID::Invalid, "Parent GameObject GUID must be valid");
+
+	GameObject* parent = GameObjectCollection::Get(parentGuid_);
+	GADGET_ASSERT(parent != nullptr, "GameObject with GUID " + std::to_string(parentGuid_) + " does not exist");
+
+	Component* component = parent->GetComponent(componentGuid_);
+	GADGET_ASSERT(component != nullptr, "Component with GUID " + std::to_string(componentGuid_) + " does not exist on GameObject with GUID " + std::to_string(parentGuid_));
+
+	return component->Serialize().variables.Size();
+}
+
+WORKBENCH_INTERFACE void GetComponentProperties(uint64_t componentGuid_, uint64_t parentGuid_, NamedVar* namedVars){
+	GADGET_ASSERT(componentGuid_ != Gadget::GUID::Invalid, "Component GUID must be valid");
+	GADGET_ASSERT(parentGuid_ != Gadget::GUID::Invalid, "Parent GameObject GUID must be valid");
+	GADGET_ASSERT(namedVars != nullptr, "NamedVars* was null");
+
+	GameObject* parent = GameObjectCollection::Get(parentGuid_);
+	GADGET_ASSERT(parent != nullptr, "GameObject with GUID " + std::to_string(parentGuid_) + " does not exist");
+
+	Component* component = parent->GetComponent(componentGuid_);
+	GADGET_ASSERT(component != nullptr, "Component with GUID " + std::to_string(componentGuid_) + " does not exist on GameObject with GUID " + std::to_string(parentGuid_));
+
+	ComponentProperties props = component->Serialize();
+	for(uint64_t i = 0; i < props.variables.Size(); i++){
+		namedVars[i] = props.variables[i];
+	}
+}
