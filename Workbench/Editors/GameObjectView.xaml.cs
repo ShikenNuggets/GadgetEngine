@@ -202,14 +202,15 @@ namespace Workbench.Editors
             }
 
             var listBox = sender as ListBox;
-            if (listBox == null || listBox.SelectedItem == null)
+            if (listBox == null || listBox.SelectedItem == null || listBox.SelectedItem.ToString() == null)
             {
                 Logger.Log(MessageType.Error, "Sender was not a valid ListBox!");
                 return;
             }
 
-            Logger.Log(MessageType.Info, "Add component of type " + listBox.SelectedItem.ToString());
-            GadgetAPI.AddNewComponentToGameObjects(vm, listBox.SelectedItem.ToString().Trim());
+            string type = (string)listBox.SelectedItem;
+            Logger.Log(MessageType.Info, "Add component of type " + type);
+            GadgetAPI.AddNewComponentToGameObjects(vm, type);
 
             listBox.Visibility = Visibility.Collapsed;
         }
