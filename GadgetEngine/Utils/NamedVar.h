@@ -79,6 +79,16 @@ namespace Gadget{
 			values.push_back(NamedVar(name_, value_));
 		}
 
+		inline constexpr NamedVar operator [](size_t i_) const{
+			GADGET_ASSERT(i_ < values.size(), "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(values.size()) + "!");
+			return values[i_];
+		}
+
+		NamedVar& operator [](size_t i_){
+			GADGET_ASSERT(i_ < values.size(), "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(values.size()) + "!");
+			return values[i_];
+		}
+
 	private:
 		StringID name;
 		std::vector<NamedVar> values;
