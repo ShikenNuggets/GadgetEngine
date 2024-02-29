@@ -13,6 +13,9 @@
 		<DataTemplate DataType="{x:Type main:MultiSelectTransformVM}">
 			<components:TransformComponentView/>
 		</DataTemplate>
+		<DataTemplate DataType="{x:Type main:MultiSelectCppComponentVM}">
+			<components:CppComponentView />
+		</DataTemplate>
 	</UserControl.Resources>
 	
 	<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">

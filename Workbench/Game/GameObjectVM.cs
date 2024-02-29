@@ -220,6 +220,34 @@ namespace Workbench
             return false;
         }
 
+        public static int? GetMixedValues<T>(List<T> objects, Func<T, int> getProperty)
+        {
+            var value = getProperty(objects.First());
+            foreach (var obj in objects.Skip(1))
+            {
+                if (value != getProperty(obj))
+                {
+                    return null;
+                }
+            }
+
+            return value;
+        }
+
+        public static ulong? GetMixedValues<T>(List<T> objects, Func<T, ulong> getProperty)
+        {
+            var value = getProperty(objects.First());
+            foreach (var obj in objects.Skip(1))
+            {
+                if (value != getProperty(obj))
+                {
+                    return null;
+                }
+            }
+
+            return value;
+        }
+
         public static float? GetMixedValues<T>(List<T> objects, Func<T, float> getProperty)
         {
             var value = getProperty(objects.First());

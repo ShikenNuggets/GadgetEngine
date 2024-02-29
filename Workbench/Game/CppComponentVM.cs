@@ -13,24 +13,10 @@ namespace Workbench
 	[DataContract]
     public class CppComponentVM : ComponentVM
     {
-		private List<GadgetAPIStructs.NamedVar> _properties;
 		private string _typeName;
 		private ulong _guid;
 		private bool _isActivated;
-
-        [DataMember]
-		public List<GadgetAPIStructs.NamedVar> Properties
-        {
-			get => _properties;
-            set
-            {
-				if (_properties != value)
-				{
-					_properties = value;
-					OnPropertyChanged(nameof(Properties));
-                }
-            }
-        }
+        private List<NamedVar> _properties;
 
 		[DataMember]
 		public string TypeName
@@ -74,7 +60,21 @@ namespace Workbench
 			}
 		}
 
-		public CppComponentVM(GameObjectVM owner, string type, ulong guid, bool isActivated, List<NamedVar> properties) : base(owner)
+        [DataMember]
+        public List<NamedVar> Properties
+        {
+            get => _properties;
+            set
+            {
+                if (_properties != value)
+                {
+                    _properties = value;
+                    OnPropertyChanged(nameof(Properties));
+                }
+            }
+        }
+
+        public CppComponentVM(GameObjectVM owner, string type, ulong guid, bool isActivated, List<NamedVar> properties) : base(owner)
 		{
 			_typeName = type;
 			_guid = guid;
@@ -87,6 +87,63 @@ namespace Workbench
 
     public sealed class MultiSelectCppComponentVM : MultiSelectComponentVM<CppComponentVM>
     {
+		private string? typeName;
+		private ulong? guid;
+		private bool? isActivated;
+		private List<NamedVar?>? properties;
+
+		public string? TypeName
+		{
+			get => typeName;
+			set
+			{
+				if (typeName != value)
+				{
+					typeName = value;
+					OnPropertyChanged(nameof(TypeName));
+				}
+			}
+		}
+
+		public ulong? GUID
+		{
+			get => guid;
+			set
+			{
+				if (guid != value)
+				{
+					guid = value;
+					OnPropertyChanged(nameof(GUID));
+				}
+			}
+		}
+
+		public bool? IsActivated
+		{
+			get => isActivated;
+			set
+			{
+				if (isActivated != value)
+				{
+					isActivated = value;
+					OnPropertyChanged(nameof(IsActivated));
+				}
+			}
+		}
+
+		public List<NamedVar?>? Properties
+		{
+			get => properties;
+			set
+			{
+				if (properties  != value)
+				{
+					properties = value;
+					OnPropertyChanged(nameof(Properties));
+				}
+			}
+		}
+
         public MultiSelectCppComponentVM(MultiSelectedObjectVM msObj) : base(msObj)
         {
             Refresh();
@@ -94,11 +151,38 @@ namespace Workbench
 
         protected override bool UpdateComponents(string propertyName)
         {
+			switch (propertyName)
+			{
+				case nameof(TypeName):
+					SelectedComponents.ForEach(c => c.TypeName = typeName ?? c.TypeName);
+					break;
+				case nameof(GUID):
+                    SelectedComponents.ForEach(c => c.GUID = guid ?? c.GUID);
+                    break;
+				case nameof(IsActivated):
+                    SelectedComponents.ForEach(c => c.IsActivated = isActivated ?? c.IsActivated);
+                    break;
+				default:
+					SelectedComponents.ForEach(c => {
+						int i = Utils.Contains(c.Properties, propertyName);
+						if (i >= 0 && c.Properties != null && properties != null)
+						{
+							c.Properties[i] = properties[i] ?? c.Properties[i];
+						}
+					});
+					break;
+			}
+
             return false;
         }
 
         protected override bool UpdateMultiSelectComponent()
         {
+			TypeName = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, string>(t => t.TypeName));
+			GUID = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, ulong>(t => t.GUID));
+			IsActivated = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, bool>(t => t.IsActivated));
+            //Properties = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, List<NamedVar>>(t => t.Properties)); //TODO - Not sure how best to handle this
+
             return true;
         }
     }

@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Workbench.Editors.Components.CppComponentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:main="clr-namespace:Workbench"
+             xmlns:editors="clr-namespace:Workbench.Editors"
+             xmlns:controls="clr-namespace:Workbench.Controls"
+             xmlns:local="clr-namespace:Workbench.Editors.Components"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=main:MultiSelectCppComponentVM, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource LightTextBlockStyle}"/>
+	</UserControl.Resources>
+	<editors:ComponentView Header="{Binding TypeName}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="78"/>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			
+			<TextBlock Text="Position" Grid.Column="0" Grid.Row="0"/>
+			<controls:ScalarBox Grid.Column="1" Grid.Row="0" />
+		</Grid>
+	</editors:ComponentView>
+</UserControl>

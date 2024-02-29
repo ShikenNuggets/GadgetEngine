@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Workbench.GadgetAPIStructs;
+
 namespace Workbench
 {
     public static class Utils
@@ -79,6 +81,12 @@ namespace Workbench
                 return false;
             }
             return Near(a_.Value, b_.Value);
+        }
+
+        public static int Contains(List<NamedVar> namedVars, string key)
+        {
+			//TODO
+            return -1;
         }
     }
 }
