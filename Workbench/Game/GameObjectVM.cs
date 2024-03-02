@@ -88,7 +88,8 @@ namespace Workbench
 		{
 			Debug.Assert(component != null && component.Owner == this);
 			_components.Add(component);
-		}
+            OnPropertyChanged(nameof(Components));
+        }
 
 		public void RemoveComponent(ComponentVM component)
 		{

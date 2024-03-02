@@ -212,6 +212,8 @@ namespace Workbench.Editors
             Logger.Log(MessageType.Info, "Add component of type " + type);
             GadgetAPI.AddNewComponentToGameObjects(vm, type);
 
+            vm.Refresh();
+
             listBox.Visibility = Visibility.Collapsed;
         }
     }
