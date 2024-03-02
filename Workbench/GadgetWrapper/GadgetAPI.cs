@@ -31,7 +31,49 @@ namespace Workbench.GadgetAPIStructs
 	[StructLayout(LayoutKind.Explicit)]
 	public struct Var
 	{
-		[FieldOffset(0)] public int type;
+        public enum VarType
+        {
+			Null = 0,
+			String = 1,
+			Bool = 2,
+			Number = 3
+        }
+
+        public Var(int? null_)
+		{
+			type = (int)VarType.Null;
+			strVal = 0;
+		}
+
+        public Var(ulong str)
+		{
+			type = (int)VarType.String;
+			strVal = str;
+		}
+
+        public Var(bool boolean)
+		{
+			type = (int)VarType.Bool;
+			boolVal = boolean;
+		}
+		
+		public Var(double number)
+		{
+			type= (int)VarType.Number;
+			numVal = number;
+		}
+
+		public static bool operator ==(Var a, Var b)
+		{
+			return a.type == b.type && a.strVal == b.strVal;
+		}
+
+		public static bool operator !=(Var a, Var b)
+		{
+            return a.type != b.type || a.strVal != b.strVal;
+        }
+
+        [FieldOffset(0)] public int type;
 		[FieldOffset(4)] public ulong strVal;
 		[FieldOffset(4)] public bool boolVal;
 		[FieldOffset(4)] public double numVal;
@@ -40,6 +82,12 @@ namespace Workbench.GadgetAPIStructs
 	[StructLayout(LayoutKind.Explicit)]
 	public struct NamedVar
 	{
+        public NamedVar(ulong name, Var var)
+		{
+			this.name = name;
+			value = var;
+		}
+
 		[FieldOffset(0)] public ulong name;
 		[FieldOffset(8)] public Var value;
 	}
@@ -162,11 +210,7 @@ namespace Workbench
             List<string> declaredComponents = new((int)GetNumDeclaredComponents());
             for (int i = 0; i < strIds.Length; i++)
 			{
-				//Get the actual string from the StringID
-				int length = (int)GetStringLengthFromID(strIds[i]);
-                StringBuilder sb = new(length + 1); //+ 1 isn't strictly necessary here but it gives the C++ side some breathing room
-				GetStringFromID(strIds[i], sb, (ulong)sb.Capacity);
-				declaredComponents.Add(sb.ToString(0, length).Trim());
+				declaredComponents.Add(GetStringFromID(strIds[i]));
 			}
 
 			strHandle.Free(); //Don't forget to let the garbage collector know you're done!
@@ -243,5 +287,13 @@ namespace Workbench
 			final.AddRange(namedVars);
 			return final;
 		}
+
+		public static string GetStringFromID(ulong id)
+		{
+            int length = (int)GetStringLengthFromID(id);
+            StringBuilder sb = new(length + 1); //+ 1 isn't strictly necessary here but it gives the C++ side some breathing room
+            GetStringFromID(id, sb, (ulong)sb.Capacity);
+            return sb.ToString(0, length).Trim();
+        }
     }
 }

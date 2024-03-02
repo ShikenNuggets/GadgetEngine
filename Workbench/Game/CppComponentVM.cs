@@ -91,7 +91,7 @@ namespace Workbench
 		private string? typeName;
 		private ulong? guid;
 		private bool? isActivated;
-		private List<NamedVar?>? properties;
+		private List<NamedVar> properties;
 
 		public string? TypeName
 		{
@@ -132,7 +132,7 @@ namespace Workbench
 			}
 		}
 
-		public List<NamedVar?>? Properties
+		public List<NamedVar> Properties
 		{
 			get => properties;
 			set
@@ -149,6 +149,7 @@ namespace Workbench
         {
 			Debug.Assert(msObj != null);
 			Debug.Assert(!string.IsNullOrWhiteSpace(subType));
+			properties = new List<NamedVar>();
             Refresh();
         }
 
@@ -164,7 +165,10 @@ namespace Workbench
 						int i = Utils.Contains(c.Properties, propertyName);
 						if (i >= 0 && c.Properties != null && properties != null)
 						{
-							c.Properties[i] = properties[i] ?? c.Properties[i];
+							if (properties[i].value.type != 0)
+							{
+								c.Properties[i] = new NamedVar(c.Properties[i].name, properties[i].value);
+							}
 						}
 					});
 					break;

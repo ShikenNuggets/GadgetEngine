@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Workbench.Controls;
 using Workbench.GadgetAPIStructs;
 
 namespace Workbench.Editors.Components
@@ -39,6 +40,60 @@ namespace Workbench.Editors.Components
             if (DataContext != null && DataContext is MultiSelectCppComponentVM msc)
             {
                 msc.PropertyChanged += (s, e) => _propertyChanged = true;
+
+                var grid = Utils.GetChildOfType<Grid>(componentView);
+                if (grid == null)
+                {
+                    return;
+                }
+                int currentRow = 1;
+
+                foreach (var v in msc.Properties)
+                {
+                    RowDefinition rd = new RowDefinition();
+                    rd.Height = new GridLength(30, GridUnitType.Auto);
+                    grid.RowDefinitions.Add(rd);
+
+                    TextBlock tb = new TextBlock();
+                    grid.Children.Add(new TextBlock());
+                    tb.Text = GadgetAPI.GetStringFromID(v.name);
+                    tb.SetValue(Grid.RowProperty, currentRow);
+                    tb.SetValue(Grid.ColumnProperty, 0);
+
+                    switch (v.value.type)
+                    {
+                        case (int)Var.VarType.Null:
+                            ScalarBox sb = new();
+                            sb.Value = null;
+                            sb.SetValue(Grid.RowProperty, currentRow);
+                            sb.SetValue(Grid.ColumnProperty, 1);
+                            grid.Children.Add(sb);
+                            break;
+                        case (int)Var.VarType.String:
+                            TextBox tBox = new();
+                            tBox.Text = GadgetAPI.GetStringFromID(v.value.strVal);
+                            tBox.SetValue(Grid.RowProperty, currentRow);
+                            tBox.SetValue(Grid.ColumnProperty, 1);
+                            grid.Children.Add(tBox);
+                            break;
+                        case (int)Var.VarType.Bool:
+                            CheckBox cb = new();
+                            cb.IsChecked = v.value.boolVal;
+                            cb.SetValue(Grid.RowProperty, currentRow);
+                            cb.SetValue(Grid.ColumnProperty, 1);
+                            grid.Children.Add(cb);
+                            break;
+                        case (int)Var.VarType.Number:
+                            ScalarBox sb2 = new();
+                            sb2.Value = v.value.numVal.ToString("0.#####");
+                            sb2.SetValue(Grid.RowProperty, currentRow);
+                            sb2.SetValue(Grid.ColumnProperty, 1);
+                            grid.Children.Add(sb2);
+                            break;
+                    }
+
+                    currentRow++;
+                }
             }
         }
 
