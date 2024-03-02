@@ -61,7 +61,7 @@ namespace Workbench
 
         public TransformComponentVM(GameObjectVM owner) : base(owner){}
 
-        public override IMultiSelectComponent GetMultiSelectComponent(MultiSelectedObjectVM msGo) => new MultiSelectTransformVM(msGo);
+        public override IMultiSelectComponent GetMultiSelectComponent(MultiSelectedObjectVM msGo, string? _ = null) => new MultiSelectTransformVM(msGo);
     }
 
     public sealed class MultiSelectTransformVM : MultiSelectComponentVM<TransformComponentVM>
@@ -195,7 +195,7 @@ namespace Workbench
             }
         }
 
-        public MultiSelectTransformVM(MultiSelectedObjectVM obj) : base(obj)
+        public MultiSelectTransformVM(MultiSelectedObjectVM obj) : base(obj, null)
         {
             Refresh();
         }

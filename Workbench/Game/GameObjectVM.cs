@@ -98,6 +98,10 @@ namespace Workbench
 
         public ComponentVM? GetComponent(Type type) => Components?.FirstOrDefault(c => c.GetType() == type);
         public T? GetComponent<T>() where T : ComponentVM => GetComponent(typeof(T)) as T;
+        
+        public CppComponentVM? GetComponent(string cppTypeName) => Components?.FirstOrDefault(c => c is CppComponentVM && (c as CppComponentVM)?.TypeName == cppTypeName) as CppComponentVM;
+
+        public List<T> GetComponents<T>() where T : ComponentVM => Components?.OfType<T>().ToList();
 
         public GameObjectVM(SceneVM scene)
         {
@@ -199,6 +203,12 @@ namespace Workbench
             return (T?)Components.FirstOrDefault(x => x.GetType() == typeof(T));
         }
 
+        public List<T>? GetMultiSelectComponents<T>() where T : IMultiSelectComponent
+        {
+            Debug.Assert(Components != null);
+            return Components.OfType<T>().ToList();
+        }
+
         protected virtual bool UpdateGameObjects(string propertyName)
         {
             switch (propertyName)
@@ -226,6 +236,14 @@ namespace Workbench
             var value = getProperty(objects.First());
             foreach (var obj in objects.Skip(1))
             {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
                 if (value != getProperty(obj))
                 {
                     return null;
@@ -240,6 +258,14 @@ namespace Workbench
             var value = getProperty(objects.First());
             foreach (var obj in objects.Skip(1))
             {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
                 if (value != getProperty(obj))
                 {
                     return null;
@@ -254,6 +280,14 @@ namespace Workbench
             var value = getProperty(objects.First());
             foreach(var obj in objects.Skip(1))
             {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
                 if (!Utils.Near(value, getProperty(obj)))
                 {
                     return null;
@@ -268,6 +302,14 @@ namespace Workbench
             var value = getProperty(objects.First());
             foreach (var obj in objects.Skip(1))
             {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
                 if (value != getProperty(obj))
                 {
                     return null;
@@ -282,6 +324,14 @@ namespace Workbench
             var value = getProperty(objects.First());
             foreach (var obj in objects.Skip(1))
             {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
                 if (value != getProperty(obj))
                 {
                     return null;
@@ -321,7 +371,17 @@ namespace Workbench
             foreach(var component in firstObj.Components)
             {
                 var type = component.GetType();
-                if (!SelectedObjects.Skip(1).Any(obj => obj.GetComponent(type) == null))
+
+                if (component is CppComponentVM cppComponent)
+                {
+                    var cppType = cppComponent.TypeName;
+                    if (!SelectedObjects.Skip(1).Any(obj => obj.GetComponent(cppType) == null))
+                    {
+                        Debug.Assert(Components.FirstOrDefault(x => x.GetType() == type) == null);
+                        _components.Add(component.GetMultiSelectComponent(this, cppComponent.TypeName));
+                    }
+                }
+                else if (!SelectedObjects.Skip(1).Any(obj => obj.GetComponent(type) == null))
                 {
                     Debug.Assert(Components.FirstOrDefault(x => x.GetType() == type) == null);
                     _components.Add(component.GetMultiSelectComponent(this));

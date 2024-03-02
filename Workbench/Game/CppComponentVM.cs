@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.Serialization;
@@ -22,7 +23,7 @@ namespace Workbench
 		public string TypeName
         {
 			get => _typeName;
-			set
+			private set
 			{
 				if (_typeName != value)
 				{
@@ -36,7 +37,7 @@ namespace Workbench
 		public ulong GUID
 		{
 			get => _guid;
-			set
+			private set
 			{
 				if (_guid != value)
 				{
@@ -82,7 +83,7 @@ namespace Workbench
 			_properties = properties;
 		}
 
-        public override IMultiSelectComponent GetMultiSelectComponent(MultiSelectedObjectVM msGo) => new MultiSelectCppComponentVM(msGo);
+        public override IMultiSelectComponent GetMultiSelectComponent(MultiSelectedObjectVM msGo, string? subType) => new MultiSelectCppComponentVM(msGo, subType);
     }
 
     public sealed class MultiSelectCppComponentVM : MultiSelectComponentVM<CppComponentVM>
@@ -95,7 +96,7 @@ namespace Workbench
 		public string? TypeName
 		{
 			get => typeName;
-			set
+			private set
 			{
 				if (typeName != value)
 				{
@@ -108,7 +109,7 @@ namespace Workbench
 		public ulong? GUID
 		{
 			get => guid;
-			set
+			private set
 			{
 				if (guid != value)
 				{
@@ -144,8 +145,10 @@ namespace Workbench
 			}
 		}
 
-        public MultiSelectCppComponentVM(MultiSelectedObjectVM msObj) : base(msObj)
+        public MultiSelectCppComponentVM(MultiSelectedObjectVM msObj, string? subType) : base(msObj, subType)
         {
+			Debug.Assert(msObj != null);
+			Debug.Assert(!string.IsNullOrWhiteSpace(subType));
             Refresh();
         }
 
@@ -153,12 +156,6 @@ namespace Workbench
         {
 			switch (propertyName)
 			{
-				case nameof(TypeName):
-					SelectedComponents.ForEach(c => c.TypeName = typeName ?? c.TypeName);
-					break;
-				case nameof(GUID):
-                    SelectedComponents.ForEach(c => c.GUID = guid ?? c.GUID);
-                    break;
 				case nameof(IsActivated):
                     SelectedComponents.ForEach(c => c.IsActivated = isActivated ?? c.IsActivated);
                     break;
