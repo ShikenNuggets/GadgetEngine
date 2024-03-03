@@ -182,7 +182,7 @@ namespace Workbench
 			TypeName = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, string>(t => t.TypeName));
 			GUID = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, ulong>(t => t.GUID));
 			IsActivated = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, bool>(t => t.IsActivated));
-            //Properties = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, List<NamedVar>>(t => t.Properties)); //TODO - Not sure how best to handle this
+			Properties = MultiSelectedObjectVM.GetMixedValues(SelectedComponents, new Func<CppComponentVM, List<NamedVar>>(t => t.Properties)); //TODO - Not sure how best to handle this
 
             return true;
         }

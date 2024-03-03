@@ -39,10 +39,18 @@ namespace Workbench.GadgetAPIStructs
 			Number = 3
         }
 
-        public Var(int? null_)
+		public Var(Var? var)
 		{
-			type = (int)VarType.Null;
-			strVal = 0;
+			if (var.HasValue == false)
+			{
+				type = (int)VarType.Null;
+				strVal = 0;
+			}
+			else
+			{
+				type = var.Value.type;
+				strVal = var.Value.strVal;
+			}
 		}
 
         public Var(ulong str)
@@ -88,7 +96,17 @@ namespace Workbench.GadgetAPIStructs
 			value = var;
 		}
 
-		[FieldOffset(0)] public ulong name;
+        public static bool operator ==(NamedVar a, NamedVar b)
+        {
+            return a.value == b.value;
+        }
+
+        public static bool operator !=(NamedVar a, NamedVar b)
+        {
+            return a.value != b.value;
+        }
+
+        [FieldOffset(0)] public ulong name;
 		[FieldOffset(8)] public Var value;
 	}
 }

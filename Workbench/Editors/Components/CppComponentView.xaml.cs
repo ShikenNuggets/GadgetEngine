@@ -41,24 +41,25 @@ namespace Workbench.Editors.Components
             {
                 msc.PropertyChanged += (s, e) => _propertyChanged = true;
 
-                var grid = Utils.GetChildOfType<Grid>(componentView);
+                var grid = Utils.GetChildOfType<Grid>(componentViewEditor, x => x.Margin.Top == 1);
                 if (grid == null)
                 {
                     return;
                 }
+
                 int currentRow = 1;
 
                 foreach (var v in msc.Properties)
                 {
                     RowDefinition rd = new RowDefinition();
-                    rd.Height = new GridLength(30, GridUnitType.Auto);
+                    rd.Height = new GridLength(30, GridUnitType.Pixel);
                     grid.RowDefinitions.Add(rd);
 
                     TextBlock tb = new TextBlock();
-                    grid.Children.Add(new TextBlock());
                     tb.Text = GadgetAPI.GetStringFromID(v.name);
                     tb.SetValue(Grid.RowProperty, currentRow);
                     tb.SetValue(Grid.ColumnProperty, 0);
+                    grid.Children.Add(tb);
 
                     switch (v.value.type)
                     {
@@ -79,6 +80,7 @@ namespace Workbench.Editors.Components
                         case (int)Var.VarType.Bool:
                             CheckBox cb = new();
                             cb.IsChecked = v.value.boolVal;
+                            cb.VerticalAlignment = VerticalAlignment.Center;
                             cb.SetValue(Grid.RowProperty, currentRow);
                             cb.SetValue(Grid.ColumnProperty, 1);
                             grid.Children.Add(cb);

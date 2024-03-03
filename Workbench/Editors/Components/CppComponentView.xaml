@@ -13,10 +13,9 @@
 	<UserControl.Resources>
 		<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource LightTextBlockStyle}"/>
 	</UserControl.Resources>
-	<editors:ComponentView x:Name="componentView" Header="{Binding TypeName}">
-		<Grid>
+	<editors:ComponentView x:Name="componentViewEditor" Header="{Binding TypeName}">
+		<Grid Margin="1,1,1,1">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="30" />
 				<RowDefinition Height="30" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
@@ -27,9 +26,6 @@
 
 			<TextBlock Text="Is Activated" Grid.Column="0" Grid.Row="0"/>
 			<CheckBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" IsChecked="{Binding IsActivated, Mode=OneWay, UpdateSourceTrigger=Explicit}"/>
-
-			<TextBlock Text="Position" Grid.Column="0" Grid.Row="1"/>
-			<controls:ScalarBox Grid.Column="1" Grid.Row="1" />
 		</Grid>
 	</editors:ComponentView>
 </UserControl>

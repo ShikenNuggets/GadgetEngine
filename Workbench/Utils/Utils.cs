@@ -91,7 +91,7 @@ namespace Workbench
             return -1;
         }
 
-        public static T? GetChildOfType<T>(this DependencyObject depObj) where T : DependencyObject
+        public static T? GetChildOfType<T>(this DependencyObject depObj, Predicate<T> predicate) where T : DependencyObject
         {
             if (depObj == null)
             {
@@ -102,8 +102,8 @@ namespace Workbench
             {
                 var child = VisualTreeHelper.GetChild(depObj, i);
 
-                var result = (child as T) ?? GetChildOfType<T>(child);
-                if (result != null)
+                var result = (child as T) ?? GetChildOfType<T>(child, predicate);
+                if (result != null && predicate.Invoke(result))
                 {
                     return result;
                 }

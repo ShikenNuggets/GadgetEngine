@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using Workbench.GadgetAPIStructs;
+
 namespace Workbench
 {
     [DataContract]
@@ -339,6 +341,28 @@ namespace Workbench
             }
 
             return value;
+        }
+
+        public static List<NamedVar> GetMixedValues(List<CppComponentVM> objects, Func<CppComponentVM, List<NamedVar>> getProperty)
+        {
+            List<NamedVar> finalValues = getProperty(objects.First());
+            foreach (var obj in objects.Skip(1))
+            {
+                if (objects.First().TypeName != obj.TypeName)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < finalValues.Count; i++)
+                {
+                    if (finalValues[i] != obj.Properties[i])
+                    {
+                        finalValues[i] = new NamedVar(finalValues[i].name, new Var(null));
+                    }
+                }
+            }
+
+            return finalValues;
         }
 
         protected virtual bool UpdateMultiSelectGameEntity()
