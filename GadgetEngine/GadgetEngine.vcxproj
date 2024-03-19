@@ -195,6 +195,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Gadget.h" />
     <ClInclude Include="Game\BasicSceneManager.h" />
     <ClInclude Include="Game\Component.h" />
+    <ClInclude Include="Game\ComponentFactory.h" />
     <ClInclude Include="Game\GameLogicComponent.h" />
     <ClInclude Include="Game\GameLogicManager.h" />
     <ClInclude Include="Game\GameObject.h" />
@@ -288,6 +289,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Utils\ByteSequencer.h" />
     <ClInclude Include="Utils\GUID.h" />
     <ClInclude Include="Utils\Hash.h" />
+    <ClInclude Include="Utils\NamedVar.h" />
     <ClInclude Include="Utils\StringID.h" />
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="Utils\Var.h" />
@@ -305,6 +307,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Events\EventHandler.cpp" />
     <ClCompile Include="Game\BasicSceneManager.cpp" />
     <ClCompile Include="Game\Component.cpp" />
+    <ClCompile Include="Game\ComponentFactory.cpp" />
     <ClCompile Include="Game\GameLogicComponent.cpp" />
     <ClCompile Include="Game\GameLogicManager.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />

@@ -7,6 +7,7 @@
 #include "Math/Quaternion.h"
 #include "Math/Vector.h"
 #include "Utils/GUID.h"
+#include "Utils/NamedVar.h"
 
 namespace Gadget{
 	struct Transform{
@@ -20,14 +21,32 @@ namespace Gadget{
 		Vector3 scale;
 	};
 
+	struct GameObjectProperties{
+		GameObjectProperties(GUID guid_, StringID name_, const std::vector<std::string>& tags_, const Transform& transform_)
+			: guid(SID("GUID"), guid_.Id())
+			, name(SID("Name"), name_)
+			, tags(SID("Tags"), tags_)
+			, transform(transform_){}
+
+		NamedVar guid;
+		NamedVar name;
+		VarList tags;
+		Transform transform;
+	};
+
 	class GameObject{
 	public:
 		GameObject(StringID name_ = SID("GameObject"));
+		GameObject(const GameObjectProperties& properties_);
 		~GameObject();
 
 		void Update(float deltaTime_);
 
 		void AddComponent(Component* component_);
+
+		GameObjectProperties GetProperties() const{
+			return GameObjectProperties(guid, name, StringID::ToStringList(tags), transform);
+		}
 
 		GUID GetGUID() const{ return guid; }
 
@@ -45,6 +64,16 @@ namespace Gadget{
 				comp = dynamic_cast<T*>(c);
 				if(comp != nullptr){
 					return comp;
+				}
+			}
+
+			return nullptr;
+		}
+
+		Component* GetComponent(GUID componentGuid_){
+			for(const auto& c : components){
+				if(c->GetGUID() == componentGuid_){
+					return c;
 				}
 			}
 

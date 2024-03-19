@@ -14,6 +14,23 @@ Matrix4::Matrix4(	float x1_, float x2_, float x3_, float x4_,
 					float y1_, float y2_, float y3_, float y4_,
 					float z1_, float z2_, float z3_, float z4_,
 					float w1_, float w2_, float w3_, float w4_) : m(){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x1_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x2_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x3_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x4_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y1_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y2_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y3_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y4_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(z1_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(z2_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(z3_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(z4_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(w1_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(w2_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(w3_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(w4_));
+
 	m[0] = x1_; m[4] = y1_; m[8] = z1_;  m[12] = w1_;
 	m[1] = x2_; m[5] = y2_; m[9] = z2_;  m[13] = w2_;
 	m[2] = x3_; m[6] = y3_; m[10] = z3_; m[14] = w3_;
@@ -21,12 +38,16 @@ Matrix4::Matrix4(	float x1_, float x2_, float x3_, float x4_,
 }
 
 Matrix4::Matrix4(float fill_) : m(){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
+
 	for(unsigned int i = 0; i < mat4Size; i++){
 		m[i] = fill_;
 	}
 }
 
 Matrix4::Matrix4(const Matrix2& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[4] = m_[2];	m[8] = 0.0f;	m[12] = 0.0f;
 	m[1] = m_[1];	m[5] = m_[3];	m[9] = 0.0f;	m[13] = 0.0f;
 	m[2] = 0.0f;	m[6] = 0.0f;	m[10] = 1.0f;	m[14] = 0.0f;
@@ -34,6 +55,8 @@ Matrix4::Matrix4(const Matrix2& m_) : m(){
 }
 
 Matrix4::Matrix4(const Matrix3& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[4] = m_[3];	m[8] = m_[6];	m[12] = 0.0f;
 	m[1] = m_[1];	m[5] = m_[4];	m[9] = m_[7];	m[13] = 0.0f;
 	m[2] = m_[2];	m[6] = m_[5];	m[10] = m_[8];	m[14] = 0.0f;
@@ -41,6 +64,8 @@ Matrix4::Matrix4(const Matrix3& m_) : m(){
 }
 
 Matrix4::Matrix4(const Matrix4x3& m_) : m(){
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	m[0] = m_[0];	m[4] = m_[3];	m[8] = m_[6];	m[12] = m_[9];
 	m[1] = m_[1];	m[5] = m_[4];	m[9] = m_[7];	m[13] = m_[10];
 	m[2] = m_[2];	m[6] = m_[5];	m[10] = m_[8];	m[14] = m_[11];
@@ -48,11 +73,15 @@ Matrix4::Matrix4(const Matrix4x3& m_) : m(){
 }
 
 float& Matrix4::operator [](unsigned int i_){
+	GADGET_BASIC_ASSERT(IsValid());
 	GADGET_ASSERT(i_ < mat4Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat4Size) + "!");
 	return m[i_];
 }
 
 Matrix4 Matrix4::operator +(const Matrix4& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	Matrix4 result = Matrix4(0.0f);
 	for(unsigned int i = 0; i < mat4Size; i++){
 		result[i] = m[i] + m_[i];
@@ -62,6 +91,9 @@ Matrix4 Matrix4::operator +(const Matrix4& m_) const{
 }
 
 Matrix4 Matrix4::operator -(const Matrix4& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	Matrix4 result = Matrix4(0.0f);
 	for(unsigned int i = 0; i < mat4Size; i++){
 		result[i] = m[i] - m_[i];
@@ -71,6 +103,9 @@ Matrix4 Matrix4::operator -(const Matrix4& m_) const{
 }
 
 Matrix4 Matrix4::operator *(float s_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+
 	return Matrix4(	m[0] * s_,	m[1] * s_,	m[2] * s_,	m[3] * s_,
 					m[4] * s_,	m[5] * s_,	m[6] * s_,	m[7] * s_,
 					m[8] * s_,	m[9] * s_,	m[10] * s_,	m[11] * s_,
@@ -79,6 +114,9 @@ Matrix4 Matrix4::operator *(float s_) const{
 }
 
 Matrix4 Matrix4::operator*(const Matrix4& m_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(m_.IsValid());
+
 	return Matrix4(
 		//COLUMN 1
 		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[0], m_[1], m_[2], m_[3]),
@@ -104,6 +142,9 @@ Matrix4 Matrix4::operator*(const Matrix4& m_) const{
 }
 
 Vector3 Matrix4::operator *(const Vector3& v_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(v_.IsValid());
+
 	return Vector3(
 		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, 1.0f),
 		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, 1.0f),
@@ -112,6 +153,9 @@ Vector3 Matrix4::operator *(const Vector3& v_) const{
 }
 
 Vector4 Matrix4::operator *(const Vector4& v_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(v_.IsValid());
+
 	return Vector4(
 		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, v_.w),
 		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, v_.w),
@@ -121,6 +165,9 @@ Vector4 Matrix4::operator *(const Vector4& v_) const{
 }
 
 Matrix4 Matrix4::operator /(float s_) const{
+	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+
 	return Matrix4(	Math::SafeDivide(m[0], s_), Math::SafeDivide(m[1], s_), Math::SafeDivide(m[2], s_), Math::SafeDivide(m[3], s_),
 					Math::SafeDivide(m[4], s_), Math::SafeDivide(m[5], s_), Math::SafeDivide(m[6], s_), Math::SafeDivide(m[7], s_),
 					Math::SafeDivide(m[8], s_), Math::SafeDivide(m[9], s_), Math::SafeDivide(m[10], s_), Math::SafeDivide(m[11], s_),
@@ -135,6 +182,7 @@ void Matrix4::operator *=(const Matrix4& m_){ *this = *this * m_; }
 void Matrix4::operator /=(float s_){ *this = *this / s_; }
 
 Matrix4 Matrix4::Transpose() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix4(	m[0], m[4], m[8], m[12],
 					m[1], m[5], m[9], m[13],
 					m[2], m[6], m[10], m[14],
@@ -143,6 +191,8 @@ Matrix4 Matrix4::Transpose() const{
 }
 
 Matrix4 Matrix4::Inverse() const{
+	GADGET_BASIC_ASSERT(IsValid());
+
 	Matrix4 inverseM;
 	inverseM[0] =  m[5] * m[10] * m[15] - m[5] * m[11] * m[14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10];
 	inverseM[1] = -m[1] * m[10] * m[15] + m[1] * m[11] * m[14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10];
@@ -168,6 +218,9 @@ Matrix4 Matrix4::Inverse() const{
 }
 
 Matrix4 Matrix4::Rotate(float angle_, const Vector3& v_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(angle_));
+	GADGET_BASIC_ASSERT(v_.IsValid());
+
 	float cosang, sinang, cosm, tempAngle;
 	Vector3 rotAxis(v_.x, v_.y, v_.z);
 
@@ -199,20 +252,33 @@ Matrix4 Matrix4::Rotate(float angle_, const Vector3& v_){
 }
 
 Vector3 Matrix4::GetTranslation() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Vector3(m[12], m[13], m[14]);
 }
 
 Quaternion Matrix4::GetRotation() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return ToQuaternion();
 }
 
 Vector3 Matrix4::GetScale() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Vector3(m[0], m[5], m[10]);
 }
 
 Matrix4 Matrix4::LookAt(float eyeX_, float eyeY_, float eyeZ_,
 	float atX_, float atY_, float atZ_,
 	float upX_, float upY_, float upZ_){
+
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(eyeX_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(eyeY_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(eyeZ_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(atX_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(atY_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(atZ_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(upX_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(upY_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(upZ_));
 
 	Vector3 at(atX_, atY_, atZ_);
 	Vector3 up(upX_, upY_, upZ_);
@@ -245,14 +311,24 @@ Matrix4 Matrix4::LookAt(float eyeX_, float eyeY_, float eyeZ_,
 	result[14] =  Vector3::Dot(forward,eye);
 	result[15] = 1.0;
 
+	GADGET_BASIC_ASSERT(result.IsValid());
 	return result;
 }
 
 Matrix4 Matrix4::LookAt(const Vector3& eye_, const Vector3& at_, const Vector3& up_){
+	GADGET_BASIC_ASSERT(eye_.IsValid());
+	GADGET_BASIC_ASSERT(at_.IsValid());
+	GADGET_BASIC_ASSERT(up_.IsValid());
+
 	return LookAt(eye_.x, eye_.y, eye_.z, at_.x, at_.y, at_.z, up_.x, up_.y, up_.z);
 }
 
 Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float top_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(left_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(right_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(bottom_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(top_));
+
 	Matrix4 ortho = Matrix4(0.0f);
 
 	ortho[0] = 2.0f / (right_ - left_);
@@ -263,10 +339,18 @@ Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float to
 	ortho[14] = -(1.0f + -1.0f) / (1.0f - (-1.0f));
 	ortho[15] = 1.0f;
 
+	GADGET_BASIC_ASSERT(ortho.IsValid());
 	return ortho;
 }
 
 Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float top_, float near_, float far_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(left_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(right_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(bottom_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(top_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(near_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(far_));
+
 	Matrix4 ortho = Matrix4(0.0f);
 
 	ortho[0] = 2.0f / (right_ - left_);
@@ -277,17 +361,24 @@ Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float to
 	ortho[14] = -(far_ + near_) / (far_ - near_);
 	ortho[15] = 1.0f;
 
+	GADGET_BASIC_ASSERT(ortho.IsValid());
 	return ortho;
 }
 
 //TODO - Validate this
 Matrix4 Matrix4::Perspective(float fov_, float aspect_, float nearPlane_, float farPlane_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(fov_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(aspect_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(nearPlane_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(farPlane_));
+
 	float cot = 1.0f / Math::Tan(fov_ * 0.5f);
 	//Don't forget, this looks row centric but it really is a column matrix - right-hand rule rules
 	Matrix4 result(cot / aspect_, 0.0f, 0.0f, 0.0f,
 		0.0f, cot, 0.0f, 0.0f,
 		0.0f, 0.0f, (nearPlane_ + farPlane_) / (nearPlane_ - farPlane_), -1.0,
 		0.0, 0.0, (2.0f * nearPlane_ * farPlane_) / (nearPlane_ - farPlane_), 0.0);
+	GADGET_BASIC_ASSERT(result.IsValid());
 	return result;
 }
 
@@ -297,6 +388,8 @@ Matrix4 Matrix4::Perspective(float fov_, float aspect_, float nearPlane_, float 
 //Here's my unOrtho - It undoes what the orthographic matrix creates
 //Multiply screen coordinates by this matrix and you should get x and y world coordinates
 Matrix4 Matrix4::UnOrtho(const Matrix4& ortho){
+	GADGET_BASIC_ASSERT(ortho.IsValid());
+
 	Matrix4 m;
 	m[0] = 1.0f / ortho[0];
 	m[5] = 1.0f/ ortho[5];
@@ -305,6 +398,7 @@ Matrix4 Matrix4::UnOrtho(const Matrix4& ortho){
 	m[13] = -ortho[13] * m[5];
 	m[14] = -ortho[14] * m[10];
 	m[15] = 1.0f;
+	GADGET_BASIC_ASSERT(m.IsValid());
 	return m;
 }
 
@@ -319,22 +413,27 @@ Matrix4 Matrix4::ViewportNDC(int w_, int h_){
 }
 
 Matrix2 Matrix4::ToMatrix2() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix2(*this);
 }
 
 Matrix3 Matrix4::ToMatrix3() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix3(*this);
 }
 
 Matrix4x3 Matrix4::ToMatrix4x3() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix4x3(*this);
 }
 
 Euler Matrix4::ToEuler() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix3(*this).ToEuler();
 }
 
 Quaternion Matrix4::ToQuaternion() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix3(*this).ToQuaternion();
 }
 

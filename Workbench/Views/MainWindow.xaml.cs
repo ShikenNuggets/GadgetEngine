@@ -32,6 +32,8 @@ namespace Workbench
             InitializeComponent();
             Loaded += OnMainWindowLoaded;
             Closing += OnMainWindowClosing;
+
+            GadgetAPI.InitForWorkbench();
         }
 
         public void UpdateTitleToShowUnsavedChanges()

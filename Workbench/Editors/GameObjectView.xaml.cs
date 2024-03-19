@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -160,6 +161,60 @@ namespace Workbench.Editors
             }
 
             ProjectVM.UndoRedo.Add(new UndoRedoAction(msg, undoAction, redoAction));
+        }
+
+        private void OnAddComponent_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.Assert(sender != null);
+            Debug.Assert(sender is ToggleButton);
+            Debug.Assert(componentTypeListBox != null);
+            if (componentTypeListBox == null)
+            {
+                Logger.Log(MessageType.Error, "componentTypeListBox is null!");
+                return;
+            }
+
+            if (componentTypeListBox.Visibility == Visibility.Visible)
+            {
+                componentTypeListBox.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                componentTypeListBox.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void OnComponentType_ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Debug.Assert(sender != null);
+            Debug.Assert(sender is ListBox);
+            if (DataContext == null || DataContext is not MultiSelectedObjectVM)
+            {
+                return;
+            }
+
+            var vm = DataContext as MultiSelectedGameObjectVM;
+            Debug.Assert(vm != null);
+            if (vm == null)
+            {
+                Logger.Log(MessageType.Error, "DataContext could not be converted to MultiSelectedObjectVM!");
+                return;
+            }
+
+            var listBox = sender as ListBox;
+            if (listBox == null || listBox.SelectedItem == null || listBox.SelectedItem.ToString() == null)
+            {
+                Logger.Log(MessageType.Error, "Sender was not a valid ListBox!");
+                return;
+            }
+
+            string type = (string)listBox.SelectedItem;
+            Logger.Log(MessageType.Info, "Add component of type " + type);
+            GadgetAPI.AddNewComponentToGameObjects(vm, type);
+
+            vm.Refresh();
+
+            listBox.Visibility = Visibility.Collapsed;
         }
     }
 }

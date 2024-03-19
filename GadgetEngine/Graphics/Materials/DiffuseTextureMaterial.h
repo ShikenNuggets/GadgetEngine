@@ -10,19 +10,25 @@
 namespace Gadget{
 	class DiffuseTextureMaterial : public Material{
 	public:
-		DiffuseTextureMaterial(StringID textureResource_, StringID shaderResource_) : Material(shaderResource_), textureInfo(nullptr){
+		static const StringID type;
+
+		DiffuseTextureMaterial(StringID textureResource_, StringID shaderResource_) : Material(shaderResource_), textureResourceName(textureResource_), textureInfo(nullptr){
 			GADGET_BASIC_ASSERT(textureResource_ != StringID::None);
 			GADGET_BASIC_ASSERT(shaderResource_ != StringID::None);
 
-			Texture* tex = App::GetResourceManager().LoadResource<Texture>(textureResource_);
-			GADGET_ASSERT(tex != nullptr, "Could not load texture [" + textureResource_.GetString() + "]!");
+			Texture* tex = App::GetResourceManager().LoadResource<Texture>(textureResourceName);
+			GADGET_ASSERT(tex != nullptr, "Could not load texture [" + textureResourceName.GetString() + "]!");
 
 			textureInfo = App::GetRenderer().GenerateAPITextureInfo(*tex);
 			GADGET_ASSERT(textureInfo != nullptr, "Could not generate texture info!");
-			App::GetResourceManager().UnloadResource(textureResource_);
+			App::GetResourceManager().UnloadResource(textureResourceName);
 
 			GADGET_BASIC_ASSERT(shader != nullptr);
 			GADGET_BASIC_ASSERT(textureInfo != nullptr);
+		}
+
+		DiffuseTextureMaterial(const NamedVarList& varList_) : Material(varList_), textureResourceName(StringID::None){
+			Deserialize(varList_);
 		}
 
 		~DiffuseTextureMaterial(){
@@ -45,9 +51,24 @@ namespace Gadget{
 			shader->Unbind();
 		}
 
+		virtual StringID TextureResourceName() const{ return textureResourceName; }
 		virtual bool HasLighting() const override{ return true; }
 
+		virtual StringID Type() const override{ return type; }
+
+		virtual void Serialize(NamedVarList& varList_) const override{
+			Material::Serialize(varList_);
+			varList_.Add(SID("TextureName"), textureResourceName);
+		}
+
+	protected:
+		virtual void Deserialize(const NamedVarList& varList_) override{
+			textureResourceName = varList_.GetValue(SID("TextureName"), StringID::None).ToStr();
+			GADGET_BASIC_ASSERT(textureResourceName != StringID::None);
+		}
+
 	private:
+		StringID textureResourceName;
 		TextureInfo* textureInfo;
 	};
 }

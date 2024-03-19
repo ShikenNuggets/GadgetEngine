@@ -6,8 +6,9 @@ using namespace Gadget;
 
 ComponentCollection<Rigidbody> Rigidbody::componentCollection;
 
-Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(parent_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr), freezeRotation(freezeType_){
+Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr), freezeRotation(freezeType_){
 	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
 
@@ -16,12 +17,30 @@ Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeR
 	componentCollection.Add(this);
 }
 
+Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), bulletRb(nullptr), freezeRotation(freezeType_){
+	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
+	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(mass > 0.0f);
+
+	mass = Math::Clamp(0.0001f, Math::Infinity, mass); //0.0001 is completely arbitrary
+
+	componentCollection.Add(this);
+}
+
+Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), bulletRb(nullptr){
+	Deserialize(props_);
+}
+
 Rigidbody::~Rigidbody(){
 	componentCollection.Remove(this);
 }
 
 void Rigidbody::Update([[maybe_unused]] float deltaTime_){
 	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_));
+	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
+
 	if(parent == nullptr){
 		Debug::Log("Update called on Rigidbody with no parent!", Debug::Error, __FILE__, __LINE__);
 		return;
@@ -39,6 +58,7 @@ void Rigidbody::Update([[maybe_unused]] float deltaTime_){
 }
 
 void Rigidbody::AddForce(const Vector3& force_){
+	GADGET_BASIC_ASSERT(force_.IsValid());
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
 	GADGET_BASIC_ASSERT(bulletRb != nullptr);
@@ -52,10 +72,15 @@ void Rigidbody::AddForce(const Vector3& force_){
 }
 
 void Rigidbody::AddVelocity(const Vector3& vel_){
+	GADGET_BASIC_ASSERT(vel_.IsValid());
 	bulletRb->setLinearVelocity(bulletRb->getLinearVelocity() + BulletHelper::ConvertVector3(vel_));
 }
 
 void Rigidbody::AddVelocity(float x_, float y_, float z_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+
 	AddVelocity(Vector3(x_, y_, z_));
 }
 
@@ -68,6 +93,8 @@ Vector3 Rigidbody::GetVelocity() const{
 }
 
 void Rigidbody::SetVelocity(const Vector3& vel_){
+	GADGET_BASIC_ASSERT(vel_.IsValid());
+
 	if(bulletRb == nullptr){
 		//TODO - Set velocity on next update
 		return;
@@ -81,10 +108,15 @@ void Rigidbody::SetVelocity(const Vector3& vel_){
 }
 
 void Rigidbody::SetVelocity(float x_, float y_, float z_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+
 	SetVelocity(Vector3(x_, y_, z_));
 }
 
 void Rigidbody::FreezeRotation(FreezeRotationType type_){
+	GADGET_BASIC_ASSERT(type_ < FreezeRotationType::FreezeRotationType_MAX);
 	freezeRotation = type_;
 
 	if(bulletRb != nullptr){
@@ -129,6 +161,9 @@ void Rigidbody::ClearForces(){
 }
 
 void Rigidbody::CollisionResponse(const Collision& collision_){
+	GADGET_BASIC_ASSERT(collision_.collisionVector.IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(collision_.overlapAmount));
+
 	//TODO - This is obviously not proper collision response
 	parent->Translate(-collision_.collisionVector.Normalized() * collision_.overlapAmount);
 }
@@ -140,4 +175,26 @@ void Rigidbody::Reset(){
 	if(collider != nullptr){
 		collider->Reset();
 	}
+}
+
+ComponentProperties Rigidbody::Serialize() const{
+	ComponentProperties props = Component::Serialize();
+
+	props.variables.Add(SID("Mass"), mass);
+	props.variables.Add(SID("UseGravity"), useGravity);
+	props.variables.Add(SID("FreezeRotation"), (int)freezeRotation);
+
+	return props;
+}
+
+void Rigidbody::Deserialize(const ComponentProperties& props_){
+	mass = props_.variables.GetValue(SID("Mass"), 1.0f).ToNumber<float>();
+	useGravity = props_.variables.GetValue(SID("UseGravity"), true).ToBool();
+	freezeRotation = (FreezeRotationType)props_.variables.GetValue(SID("FreezeRotation"), 0).ToNumber<int>();
+
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass));
+	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(mass > 0.0f);
+	GADGET_BASIC_ASSERT((int)freezeRotation >= 0);
+	GADGET_BASIC_ASSERT(freezeRotation < FreezeRotationType::FreezeRotationType_MAX);
 }

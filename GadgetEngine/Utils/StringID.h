@@ -18,12 +18,13 @@
 namespace Gadget{
 	class StringID{
 	public:
-		static StringID None;
+		static const StringID None;
 
 		explicit constexpr StringID(uint64_t id_) : id(id_){}
 		void operator =(StringID a_){ id = a_.id; }
 
 		std::string GetString() const;
+		uint64_t GetID() const{ return id; }
 
 		constexpr inline bool operator ==(StringID a_) const{ return id == a_.id; }
 		constexpr inline bool operator !=(StringID a_) const{ return id != a_.id; }
@@ -35,10 +36,29 @@ namespace Gadget{
 		//DON'T USE THIS DIRECTLY, USE THE SID() MACRO
 		static StringID InternString(StringID sid_, const char* str_);
 		static std::string GetStringFromID(StringID id_);
+		static std::string GetStringFromID(uint64_t id_);
 
 		//Only use this if the SID() macro cannot be used
 		static inline StringID ProcessString(const std::string& str_){
 			return InternString(StringID(Hash::MurmurHash64A(str_.c_str(), str_.length())), str_.c_str());
+		}
+
+		static inline std::vector<std::string> ToStringList(const std::vector<StringID>& stringIds_){
+			std::vector<std::string> strings;
+			for(const auto& sid : stringIds_){
+				strings.push_back(sid.GetString());
+			}
+
+			return strings;
+		}
+
+		static inline std::vector<StringID> ToStringIDList(const std::vector<std::string>& strings_){
+			std::vector<StringID> stringIds;
+			for(const auto& sid : strings_){
+				stringIds.push_back(ProcessString(sid));
+			}
+
+			return stringIds;
 		}
 
 	private:

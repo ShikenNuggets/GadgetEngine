@@ -10,7 +10,12 @@
 namespace Example{
 	class CameraController : public Gadget::GameLogicComponent{
 	public:
-		CameraController(Gadget::GameObject* parent_) : GameLogicComponent(parent_), input(Gadget::App::GetInput()){}
+		CameraController(Gadget::GameObject* parent_) : GameLogicComponent(SID("CameraController"), parent_), input(Gadget::App::GetInput()){}
+		
+		CameraController(const Gadget::ComponentProperties& props_) : GameLogicComponent(props_), input(Gadget::App::GetInput()){
+			Deserialize(props_);
+		}
+		
 		virtual ~CameraController() override{}
 
 		virtual void OnUpdate(float deltaTime_) override{
@@ -45,6 +50,11 @@ namespace Example{
 				Gadget::App::GetSceneManager().RequestSceneLoad(0);
 			}
 		}
+
+		virtual Gadget::ComponentProperties Serialize() const override{ return GameLogicComponent::Serialize(); }
+
+	protected:
+		virtual void Deserialize([[maybe_unused]] const Gadget::ComponentProperties& props_) override{}
 
 	private:
 		Gadget::Input& input;

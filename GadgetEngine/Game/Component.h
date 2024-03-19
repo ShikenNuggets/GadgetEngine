@@ -4,6 +4,7 @@
 #include "Debug.h"
 #include "Math/Quaternion.h"
 #include "Utils/GUID.h"
+#include "Utils/NamedVar.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
@@ -11,12 +12,26 @@ namespace Gadget{
 	struct Transform;
 	class GameObject;
 
+	struct ComponentProperties{
+		ComponentProperties(StringID typeName_, GUID guid_, GUID parentGuid_) : typeName(typeName_), guid(guid_), parentGuid(parentGuid_), isActivated(true), variables(SID("Variables")){}
+
+		StringID typeName;
+		GUID guid;
+		GUID parentGuid;
+		bool isActivated;
+		NamedVarList variables;
+	};
+
 	class Component{
 	public:
-		Component(GameObject* parent_) : guid(GUID::Generate()), parent(parent_), isActivated(false){
+		Component(StringID typeName_, GameObject* parent_) : typeName(typeName_), guid(GUID::Generate()), parent(parent_), isActivated(false){
+			GADGET_BASIC_ASSERT(typeName_ != StringID::None);
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
 			GADGET_BASIC_ASSERT(guid != GUID::Invalid);
 		}
+
+		Component(StringID typeName_, GUID parentGUID_);
+		Component(const ComponentProperties& props_);
 
 		virtual ~Component(){}
 
@@ -28,6 +43,7 @@ namespace Gadget{
 		//Runs when the parent GameObject's transform is modified (i.e. translated, rotated, scale set to a new value)
 		virtual void OnTransformModified(){}
 
+		StringID GetType() const{ return typeName; }
 		GUID GetGUID() const{ return guid; }
 		GameObject* GetParent() const{ return parent; }
 		bool IsActivated() const{ return isActivated; }
@@ -43,10 +59,23 @@ namespace Gadget{
 		const Transform& GetTransform() const;
 		Matrix4 GetTransformMatrix() const;
 
+		virtual ComponentProperties Serialize() const;
+
+		template <class T>
+		static Component* DeserializeToNewComponent(const ComponentProperties& props_)
+		{
+			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+			return new T(props_);
+		}
+
 	protected:
+		const StringID typeName;
+
 		GUID guid;
 		GameObject* parent;
 		bool isActivated;
+
+		virtual void Deserialize(const ComponentProperties& props_);
 	};
 
 	//TODO - Thread safety

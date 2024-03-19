@@ -3,11 +3,17 @@
 
 #include "InputEnums.h"
 #include "Events/Event.h"
+#include "Math/Math.h"
 
 namespace Gadget{
 	class MouseMovedEvent : public Event{
 	public:
-		MouseMovedEvent(float x_, float y_, float xAbs_, float yAbs_) : Event(SID("MouseMovedEvent")), x(x_), y(y_), xAbsolute(xAbs_), yAbsolute(yAbs_){}
+		MouseMovedEvent(float x_, float y_, float xAbs_, float yAbs_) : Event(SID("MouseMovedEvent")), x(x_), y(y_), xAbsolute(xAbs_), yAbsolute(yAbs_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(xAbs_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(yAbs_));
+		}
 
 		static constexpr EventType Type(){ return EventType::MouseMoved; }
 		virtual EventType GetEventType() const final override{ return Type(); }
@@ -28,7 +34,10 @@ namespace Gadget{
 
 	class MouseScrollEvent : public Event{
 	public:
-		MouseScrollEvent(float xOffset_, float yOffset_) : Event(SID("MouseScrollEvent")), xOffset(xOffset_), yOffset(yOffset_){}
+		MouseScrollEvent(float xOffset_, float yOffset_) : Event(SID("MouseScrollEvent")), xOffset(xOffset_), yOffset(yOffset_){
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(xOffset_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(yOffset_));
+		}
 
 		static constexpr EventType Type(){ return EventType::MouseScroll; }
 		virtual EventType GetEventType() const final override{ return Type(); }
@@ -48,7 +57,11 @@ namespace Gadget{
 		inline ButtonID GetButton() const{ return button; }
 
 	protected:
-		MouseButtonEvent(ButtonID button_, StringID name_) : Event(name_), button(button_){}
+		MouseButtonEvent(ButtonID button_, StringID name_) : Event(name_), button(button_){
+			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
+			GADGET_BASIC_ASSERT(name_ != StringID::None);
+		}
+
 		virtual ~MouseButtonEvent(){}
 
 		ButtonID button;
@@ -56,7 +69,9 @@ namespace Gadget{
 
 	class MouseButtonPressedEvent : public MouseButtonEvent{
 	public:
-		MouseButtonPressedEvent(ButtonID button_) : MouseButtonEvent(button_, SID("MouseButtonPressedEvent")){}
+		MouseButtonPressedEvent(ButtonID button_) : MouseButtonEvent(button_, SID("MouseButtonPressedEvent")){
+			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
+		}
 
 		static constexpr EventType Type(){ return EventType::MouseButtonPressed; }
 		virtual EventType GetEventType() const final override{ return Type(); }
@@ -66,7 +81,9 @@ namespace Gadget{
 
 	class MouseButtonReleasedEvent : public MouseButtonEvent{
 	public:
-		MouseButtonReleasedEvent(ButtonID button_) : MouseButtonEvent(button_, SID("MouseButtonReleasedEvent")){}
+		MouseButtonReleasedEvent(ButtonID button_) : MouseButtonEvent(button_, SID("MouseButtonReleasedEvent")){
+			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
+		}
 
 		static constexpr EventType Type(){ return EventType::MouseButtonReleased; }
 		virtual EventType GetEventType() const final override{ return Type(); }

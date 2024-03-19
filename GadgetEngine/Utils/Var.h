@@ -3,6 +3,7 @@
 
 #include "Debug.h"
 #include "StringID.h"
+#include "Utils.h"
 
 namespace Gadget{
 	class Var{
@@ -16,6 +17,7 @@ namespace Gadget{
 
 		explicit constexpr Var(std::nullptr_t) : type(Type::Null), boolVal(false){}
 		constexpr Var(StringID value_) : type(Type::String), strValue(value_){}
+		Var(const std::string& value_) : type(Type::String), strValue(StringID::ProcessString(value_)){}
 		constexpr Var(bool value_) : type(Type::Bool), boolVal(value_){}
 		constexpr Var(int32_t value_) : type(Type::Number), numVal(static_cast<double>(value_)){}
 		constexpr Var(int64_t value_) : type(Type::Number), numVal(static_cast<double>(value_)){}
@@ -44,6 +46,62 @@ namespace Gadget{
 			}
 		}
 
+		constexpr bool operator==(std::nullptr_t){ return type == Type::Null; }
+		constexpr bool operator==(StringID value_){ return type == Type::String && strValue == value_; }
+		constexpr bool operator==(const std::string& value_){ return type == Type::String && strValue.GetString() == value_; }
+		constexpr bool operator==(bool value_){ return type == Type::Bool && boolVal == value_; }
+		constexpr bool operator==(int32_t value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+		constexpr bool operator==(int64_t value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+		constexpr bool operator==(uint32_t value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+		constexpr bool operator==(uint64_t value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+		constexpr bool operator==(double value_){ return type == Type::Number && numVal == static_cast<double>(value_); }
+
+		constexpr bool operator==(const Var& var_){
+			switch(type){
+				case Type::Null:
+					return *this == nullptr;
+				case Type::String:
+					return *this == var_.ToStr();
+				case Type::Bool:
+					return *this == var_.ToBool();
+				case Type::Number:
+					return *this == var_.ToNumber();
+				default:
+					GADGET_ASSERT(false, "Unhandled Var Type in operator==");
+					break;
+			}
+
+			return false;
+		}
+
+		constexpr bool operator!=(std::nullptr_t){ return type == Type::Null; }
+		constexpr bool operator!=(StringID value_){ return type == Type::String && strValue != value_; }
+		constexpr bool operator!=(const std::string& value_){ return type == Type::String && strValue.GetString() != value_; }
+		constexpr bool operator!=(bool value_){ return type == Type::Bool && boolVal != value_; }
+		constexpr bool operator!=(int32_t value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+		constexpr bool operator!=(int64_t value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+		constexpr bool operator!=(uint32_t value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+		constexpr bool operator!=(uint64_t value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+		constexpr bool operator!=(double value_){ return type == Type::Number && numVal != static_cast<double>(value_); }
+
+		constexpr bool operator!=(const Var& var_){
+			switch(type){
+				case Type::Null:
+					return *this != nullptr;
+				case Type::String:
+					return *this != var_.ToStr();
+				case Type::Bool:
+					return *this != var_.ToBool();
+				case Type::Number:
+					return *this != var_.ToNumber();
+				default:
+					GADGET_ASSERT(false, "Unhandled Var Type in operator!=");
+					break;
+			}
+
+			return false;
+		}
+
 		Type GetType() const{ return type; }
 
 		StringID ToStr() const{
@@ -68,6 +126,11 @@ namespace Gadget{
 			}
 
 			return 0.0;
+		}
+
+		template <class T>
+		T ToNumber() const{
+			return static_cast<T>(ToNumber());
 		}
 
 		void SetValue(StringID value_){
@@ -112,6 +175,54 @@ namespace Gadget{
 			bool boolVal;
 			double numVal;
 		};
+	};
+
+	class VarList{
+	public:
+		constexpr VarList(StringID name_, const std::vector<Var>& values_ = std::vector<Var>()) : name(name_), values(values_){}
+
+		constexpr VarList(StringID name_, const std::vector<StringID>& values_) : name(name_), values(){
+			for(const auto& v : values_){
+				values.push_back(Var(v));
+			}
+		}
+
+		constexpr VarList(StringID name_, const std::vector<std::string>& values_) : name(name_), values(){
+			for(const auto& v : values_){
+				values.push_back(Var(v));
+			}
+		}
+
+		constexpr StringID Name() const{ return name; }
+		constexpr const std::vector<Var>& Value() const{ return values; }
+		constexpr size_t Size() const{ return values.size(); }
+
+		constexpr Var GetValue(size_t index_) const{
+			GADGET_BASIC_ASSERT(index_ < Size());
+			if(index_ < Size()){
+				return Var(nullptr);
+			}
+
+			return values[index_];
+		}
+
+		constexpr void Add(const Var& value_){
+			values.push_back(value_);
+		}
+
+		inline constexpr Var operator [](size_t i_) const{
+			GADGET_ASSERT(i_ < values.size(), "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(values.size()) + "!");
+			return values[i_];
+		}
+
+		Var& operator [](size_t i_){
+			GADGET_ASSERT(i_ < values.size(), "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(values.size()) + "!");
+			return values[i_];
+		}
+
+	private:
+		StringID name;
+		std::vector<Var> values;
 	};
 }
 

@@ -12,18 +12,24 @@ constexpr Quaternion::Quaternion(const float w_, const Vector3& v_) : w(w_), x(v
 constexpr Quaternion::Quaternion(const Vector4& v_) : w(v_.w), x(v_.x), y(v_.y), z(v_.z){}
 
 float Quaternion::Magnitude() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Math::Sqrt(SquaredMagnitude());
 }
 
 Quaternion Quaternion::Normalized() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return *this / Magnitude();
 }
 
 void Quaternion::Normalize(){
+	GADGET_BASIC_ASSERT(IsValid());
 	*this = Normalized();
 }
 
 Quaternion Quaternion::Rotate(Angle angle_, const Vector3& axis_){
+	GADGET_BASIC_ASSERT(angle_.IsValid());
+	GADGET_BASIC_ASSERT(axis_.IsValid());
+
 	return Quaternion(
 		Math::CosR(angle_.ToRadians() / 2.0f),
 		axis_.x * Math::SinR(angle_.ToRadians() / 2.0f),
@@ -33,15 +39,21 @@ Quaternion Quaternion::Rotate(Angle angle_, const Vector3& axis_){
 }
 
 Angle Quaternion::GetRotationAngle(const Quaternion& q_){
+	GADGET_BASIC_ASSERT(q_.IsValid());
 	return Math::Acos(q_.w) * 2.0f;
 }
 
 Vector3 Quaternion::GetRotationAxis(const Quaternion& q_){
+	GADGET_BASIC_ASSERT(q_.IsValid());
+
 	Vector3 v = Vector3(q_.x, q_.y, q_.z);
 	return v / Math::SinR((GetRotationAngle(q_) / 2.0f).ToRadians());
 }
 
 Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination_){
+	GADGET_BASIC_ASSERT(source_.IsValid());
+	GADGET_BASIC_ASSERT(destination_.IsValid());
+
 	Vector3 forwardVector = (destination_ - source_).Normalized();
 
 	float dot = Vector3::Dot(Vector3::Forward(), forwardVector);
@@ -60,10 +72,18 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 }
 
 Quaternion Quaternion::Lerp(const Quaternion& q1_, const Quaternion& q2_, float t_){
+	GADGET_BASIC_ASSERT(q1_.IsValid());
+	GADGET_BASIC_ASSERT(q2_.IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(t_));
+
 	return (q1_ * (1 - t_) + q2_ * t_).Normalized();
 }
 
 Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float t_){
+	GADGET_BASIC_ASSERT(q1_.IsValid());
+	GADGET_BASIC_ASSERT(q2_.IsValid());
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(t_));
+
 	if(t_ <= 0.0f){
 		return q1_;
 	}else if(t_ >= 1.0f){
@@ -90,10 +110,13 @@ Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float
 }
 
 Matrix3 Quaternion::ToMatrix3() const{
+	GADGET_BASIC_ASSERT(IsValid());
 	return Matrix3(ToMatrix4());
 }
 
 Matrix4 Quaternion::ToMatrix4() const{
+	GADGET_BASIC_ASSERT(IsValid());
+
 	//TODO - Validate this
 	//squared w,x,y,z
 	//const float w2 = w * w;
@@ -117,6 +140,8 @@ Matrix4 Quaternion::ToMatrix4() const{
 }
 
 Euler Quaternion::ToEuler() const{
+	GADGET_BASIC_ASSERT(IsValid());
+
 	float heading = 0.0f;
 	float attitude = 0.0f;
 	float bank = 0.0f;

@@ -5,6 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows;
+
+using Workbench.GadgetAPIStructs;
 
 namespace Workbench
 {
@@ -79,6 +83,33 @@ namespace Workbench
                 return false;
             }
             return Near(a_.Value, b_.Value);
+        }
+
+        public static int Contains(List<NamedVar> namedVars, string key)
+        {
+			//TODO
+            return -1;
+        }
+
+        public static T? GetChildOfType<T>(this DependencyObject depObj, Predicate<T> predicate) where T : DependencyObject
+        {
+            if (depObj == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetChildOfType<T>(child, predicate);
+                if (result != null && predicate.Invoke(result))
+                {
+                    return result;
+                }
+            }
+
+            return null;
         }
     }
 }

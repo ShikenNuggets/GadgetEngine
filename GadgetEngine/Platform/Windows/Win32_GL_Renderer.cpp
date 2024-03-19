@@ -29,6 +29,9 @@
 using namespace Gadget;
 
 Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr){
+	GADGET_BASIC_ASSERT(w_ > 0);
+	GADGET_BASIC_ASSERT(h_ > 0);
+
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -303,10 +306,12 @@ void Win32_GL_Renderer::ClearScreen(){
 }
 
 void Win32_GL_Renderer::SetClearColor(const Color& color_){
+	GADGET_BASIC_ASSERT(color_.IsValid());
 	glClearColor(color_.r, color_.g, color_.b, color_.a);
 }
 
 void Win32_GL_Renderer::SetViewportRect(const Rect& rect_){
+	GADGET_BASIC_ASSERT(rect_.IsValid());
 	GADGET_ASSERT(rect_.x >= 0.0f && rect_.x <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.y >= 0.0f && rect_.y <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.w >= 0.0f && rect_.w <= 1.0f, "Tried to set invalid viewport rect!");
@@ -319,6 +324,9 @@ void Win32_GL_Renderer::SetViewportRect(const Rect& rect_){
 }
 
 void Win32_GL_Renderer::OnResize(int width_, int height_){
+	GADGET_BASIC_ASSERT(width_ > 0);
+	GADGET_BASIC_ASSERT(height_ > 0);
+
 	if(!postInitComplete){
 		return; //New size will be handled correctly when we finish initializing
 	}
@@ -331,6 +339,8 @@ void Win32_GL_Renderer::OnResize(int width_, int height_){
 }
 
 void Win32_GL_Renderer::SetWindingOrder(WindingOrder order_){
+	GADGET_BASIC_ASSERT(order_ < WindingOrder::WindingOrder_MAX);
+
 	Renderer::SetWindingOrder(order_);
 
 	switch(currentWindingOrder){
@@ -347,6 +357,8 @@ void Win32_GL_Renderer::SetWindingOrder(WindingOrder order_){
 }
 
 void Win32_GL_Renderer::SetCullFace(CullFace cullFace_){
+	GADGET_BASIC_ASSERT(cullFace_ < CullFace::CullFace_MAX);
+
 	Renderer::SetCullFace(cullFace_);
 
 	switch(currentCullFace){
@@ -372,6 +384,7 @@ void Win32_GL_Renderer::SetCullFace(CullFace cullFace_){
 }
 
 Shader* Win32_GL_Renderer::GenerateAPIShader(StringID shaderResource_){
+	GADGET_BASIC_ASSERT(shaderResource_ != StringID::None);
 	return App::GetResourceManager().LoadResource<GL_Shader>(shaderResource_); //TODO - This feels bad...
 }
 

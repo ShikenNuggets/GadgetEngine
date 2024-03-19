@@ -7,9 +7,24 @@
 namespace Gadget{
 	class GameLogicComponent : public Component{
 	public:
-		GameLogicComponent(GameObject* parent_) : Component(parent_), hasStarted(false), collisionsToHandle(){
+		GameLogicComponent(StringID typeName_, GameObject* parent_) : Component(typeName_, parent_), hasStarted(false), collisionsToHandle(){
+			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+
 			componentCollection.Add(this);
+
+			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 		}
+
+		GameLogicComponent(StringID typeName_, GUID parentGUID_) : Component(typeName_, parentGUID_), hasStarted(false), collisionsToHandle(){
+			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
+
+			componentCollection.Add(this);
+
+			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
+		}
+
+		GameLogicComponent(const ComponentProperties& props_) : Component(props_), hasStarted(false), collisionsToHandle(){ Deserialize(props_); }
 
 		virtual ~GameLogicComponent() override{
 			OnDestroy();
@@ -44,6 +59,11 @@ namespace Gadget{
 		}
 
 		void AddCollisionToHandle(const Collision& col_){ collisionsToHandle.push(col_); }
+
+		virtual ComponentProperties Serialize() const override{ return Component::Serialize(); }
+
+	protected:
+		virtual void Deserialize([[maybe_unused]] const ComponentProperties& props_) override{}
 
 	private:
 		bool hasStarted;

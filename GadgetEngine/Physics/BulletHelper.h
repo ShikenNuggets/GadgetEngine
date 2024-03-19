@@ -10,6 +10,7 @@
 #pragma warning(default : 26495)
 #pragma warning(default : 4127)
 
+#include "Math/Math.h"
 #include "Game/GameObject.h"
 
 namespace BulletHelper{
@@ -18,6 +19,7 @@ namespace BulletHelper{
 	}
 
 	inline btVector3 ConvertVector3(const Gadget::Vector3& vec_){
+		GADGET_BASIC_ASSERT(vec_.IsValid());
 		return btVector3(vec_.x, vec_.y, vec_.z);
 	}
 
@@ -26,6 +28,7 @@ namespace BulletHelper{
 	}
 
 	inline btQuaternion ConvertQuaternion(const Gadget::Quaternion& quat_){
+		GADGET_BASIC_ASSERT(quat_.IsValid());
 		return btQuaternion(quat_.x, quat_.y, quat_.z, quat_.w);
 	}
 
@@ -38,6 +41,10 @@ namespace BulletHelper{
 	}
 
 	inline btTransform ConvertTransform(const Gadget::Transform& transform_){
+		GADGET_BASIC_ASSERT(transform_.position.IsValid());
+		GADGET_BASIC_ASSERT(transform_.rotation.IsValid());
+		GADGET_BASIC_ASSERT(transform_.scale.IsValid());
+
 		return btTransform(ConvertQuaternion(transform_.rotation), ConvertVector3(transform_.position));
 	}
 };

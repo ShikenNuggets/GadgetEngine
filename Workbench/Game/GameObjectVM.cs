@@ -8,10 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using Workbench.GadgetAPIStructs;
+
 namespace Workbench
 {
     [DataContract]
     [KnownType(typeof(TransformComponentVM))]
+	[KnownType(typeof(CppComponentVM))]
     public class GameObjectVM : BaseViewModel
     {
         private ulong _guid = Utils.InvalidGUID;
@@ -83,8 +86,24 @@ namespace Workbench
 
         public ReadOnlyObservableCollection<ComponentVM>? Components { get; private set; } = null;
 
+		public void AddComponent(ComponentVM component)
+		{
+			Debug.Assert(component != null && component.Owner == this);
+			_components.Add(component);
+            OnPropertyChanged(nameof(Components));
+        }
+
+		public void RemoveComponent(ComponentVM component)
+		{
+			_components.Remove(component);
+		}
+
         public ComponentVM? GetComponent(Type type) => Components?.FirstOrDefault(c => c.GetType() == type);
         public T? GetComponent<T>() where T : ComponentVM => GetComponent(typeof(T)) as T;
+        
+        public CppComponentVM? GetComponent(string cppTypeName) => Components?.FirstOrDefault(c => c is CppComponentVM && (c as CppComponentVM)?.TypeName == cppTypeName) as CppComponentVM;
+
+        public List<T> GetComponents<T>() where T : ComponentVM => Components?.OfType<T>().ToList();
 
         public GameObjectVM(SceneVM scene)
         {
@@ -152,6 +171,14 @@ namespace Workbench
 
         public List<GameObjectVM> SelectedObjects { get; private set; }
 
+        [DataMember] public static List<string> ComponentTypes
+        {
+            get
+            {
+                return ComponentVM.ComponentTypes;
+            }
+        }
+
         public MultiSelectedObjectVM(List<GameObjectVM> objects)
         {
             Debug.Assert(objects != null && objects.Any() == true);
@@ -178,6 +205,12 @@ namespace Workbench
             return (T?)Components.FirstOrDefault(x => x.GetType() == typeof(T));
         }
 
+        public List<T>? GetMultiSelectComponents<T>() where T : IMultiSelectComponent
+        {
+            Debug.Assert(Components != null);
+            return Components.OfType<T>().ToList();
+        }
+
         protected virtual bool UpdateGameObjects(string propertyName)
         {
             switch (propertyName)
@@ -200,11 +233,63 @@ namespace Workbench
             return false;
         }
 
+        public static int? GetMixedValues<T>(List<T> objects, Func<T, int> getProperty)
+        {
+            var value = getProperty(objects.First());
+            foreach (var obj in objects.Skip(1))
+            {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
+                if (value != getProperty(obj))
+                {
+                    return null;
+                }
+            }
+
+            return value;
+        }
+
+        public static ulong? GetMixedValues<T>(List<T> objects, Func<T, ulong> getProperty)
+        {
+            var value = getProperty(objects.First());
+            foreach (var obj in objects.Skip(1))
+            {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
+                if (value != getProperty(obj))
+                {
+                    return null;
+                }
+            }
+
+            return value;
+        }
+
         public static float? GetMixedValues<T>(List<T> objects, Func<T, float> getProperty)
         {
             var value = getProperty(objects.First());
             foreach(var obj in objects.Skip(1))
             {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
                 if (!Utils.Near(value, getProperty(obj)))
                 {
                     return null;
@@ -219,6 +304,14 @@ namespace Workbench
             var value = getProperty(objects.First());
             foreach (var obj in objects.Skip(1))
             {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
                 if (value != getProperty(obj))
                 {
                     return null;
@@ -233,6 +326,14 @@ namespace Workbench
             var value = getProperty(objects.First());
             foreach (var obj in objects.Skip(1))
             {
+                if (objects.First() is CppComponentVM c1 && obj is CppComponentVM c2)
+                {
+                    if (c1.TypeName != c2.TypeName)
+                    {
+                        continue;
+                    }
+                }
+
                 if (value != getProperty(obj))
                 {
                     return null;
@@ -240,6 +341,28 @@ namespace Workbench
             }
 
             return value;
+        }
+
+        public static List<NamedVar> GetMixedValues(List<CppComponentVM> objects, Func<CppComponentVM, List<NamedVar>> getProperty)
+        {
+            List<NamedVar> finalValues = getProperty(objects.First());
+            foreach (var obj in objects.Skip(1))
+            {
+                if (objects.First().TypeName != obj.TypeName)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < finalValues.Count; i++)
+                {
+                    if (finalValues[i] != obj.Properties[i])
+                    {
+                        finalValues[i] = new NamedVar(finalValues[i].name, new Var(null));
+                    }
+                }
+            }
+
+            return finalValues;
         }
 
         protected virtual bool UpdateMultiSelectGameEntity()
@@ -272,7 +395,17 @@ namespace Workbench
             foreach(var component in firstObj.Components)
             {
                 var type = component.GetType();
-                if (!SelectedObjects.Skip(1).Any(obj => obj.GetComponent(type) == null))
+
+                if (component is CppComponentVM cppComponent)
+                {
+                    var cppType = cppComponent.TypeName;
+                    if (!SelectedObjects.Skip(1).Any(obj => obj.GetComponent(cppType) == null))
+                    {
+                        Debug.Assert(Components.FirstOrDefault(x => x.GetType() == type) == null);
+                        _components.Add(component.GetMultiSelectComponent(this, cppComponent.TypeName));
+                    }
+                }
+                else if (!SelectedObjects.Skip(1).Any(obj => obj.GetComponent(type) == null))
                 {
                     Debug.Assert(Components.FirstOrDefault(x => x.GetType() == type) == null);
                     _components.Add(component.GetMultiSelectComponent(this));

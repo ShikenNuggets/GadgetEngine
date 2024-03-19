@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "Random.h"
 #include "Core/Time.h"
+#include "Game/ComponentFactory.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Graphics/GUI/CanvasSceneComponent.h"
@@ -67,6 +68,10 @@ void App::Initialize(const std::string& name_){
 	#ifdef GADGET_RELEASE
 	Debug::SetLogVerbosity(Debug::Warning);
 	#endif // GADGET_RELEASE
+
+	ComponentFactory::Init();
+
+	GUID::SetInitialGUID(); //Temp, in the future we'll pull the number of unique entities from the project files or whatever, and then set that here
 
 	int width = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayWidthKey));
 	int height = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayHeightKey));

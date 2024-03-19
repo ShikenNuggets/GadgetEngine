@@ -7,7 +7,11 @@
 namespace Gadget{
 	class CameraComponent : public Component{
 	public:
+		static const StringID type;
+
 		CameraComponent(GameObject* parent_, Camera::Projection projection_ = Camera::Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);
+		CameraComponent(GUID parentGUID_, Camera::Projection projection_ = Camera::Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);
+		CameraComponent(const ComponentProperties& props_);
 		virtual ~CameraComponent() override;
 
 		static CameraComponent* Get(GUID objectGuid_){
@@ -24,6 +28,11 @@ namespace Gadget{
 		Matrix4 GetUpdatedProjectionMatrix();
 
 		const Camera& GetCamera(){ return camera; }
+
+		virtual ComponentProperties Serialize() const override;
+
+	protected:
+		virtual void Deserialize(const ComponentProperties& props_) override;
 
 	private:
 		Camera camera;

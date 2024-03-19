@@ -15,7 +15,7 @@ namespace Workbench.Controls
         private bool _mouseCaptured = false;
         private bool _valueChanged = false;
 
-        public string Value
+        public string? Value
         {
             get => (string)GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);

@@ -113,7 +113,8 @@ namespace Workbench.Editors
 
                         listBoxItem.IsSelected = true;
                     });
-                }
+                },
+                false
             ));
 
             MultiSelectedGameObjectVM? msGo = null;

@@ -1,5 +1,7 @@
 #include "Win32_DX12_Renderer.h"
 
+#include <SDL_syswm.h>
+
 #include "Win32_Window.h"
 
 using namespace Gadget;
@@ -9,6 +11,11 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
 	GADGET_ASSERT(win32Window != nullptr, "Win32 Renderer requires a Win32 window!");
+
+	//SDL_SysWMinfo wmInfo{};
+	//SDL_VERSION(&wmInfo.version);
+	//SDL_GetWindowWMInfo(win32Window->GetSDLWindow(), &wmInfo);
+	//HWND hwnd = wmInfo.info.win.window;
 }
 
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
@@ -20,14 +27,18 @@ void Win32_DX12_Renderer::PostInit(){
 }
 
 void Win32_DX12_Renderer::Render(const Scene* scene_){
+	GADGET_ASSERT_NOT_IMPLEMENTED;
+
 	//Do this only at the end
 	window.get()->SwapBuffers();
 }
 
 void Win32_DX12_Renderer::ClearScreen(){
+	GADGET_ASSERT_NOT_IMPLEMENTED;
 }
 
 void Win32_DX12_Renderer::SetClearColor(const Color& color_){
+	GADGET_ASSERT_NOT_IMPLEMENTED;
 }
 
 void Win32_DX12_Renderer::SetViewportRect(const Rect& rect_){
@@ -35,6 +46,8 @@ void Win32_DX12_Renderer::SetViewportRect(const Rect& rect_){
 	GADGET_ASSERT(rect_.y >= 0.0f && rect_.y <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.w >= 0.0f && rect_.w <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.h >= 0.0f && rect_.h <= 1.0f, "Tried to set invalid viewport rect!");
+
+	GADGET_ASSERT_NOT_IMPLEMENTED;
 }
 
 void Win32_DX12_Renderer::OnResize(int width_, int height_){
@@ -45,6 +58,7 @@ void Win32_DX12_Renderer::OnResize(int width_, int height_){
 
 void Win32_DX12_Renderer::SetWindingOrder(WindingOrder order_){
 	Renderer::SetWindingOrder(order_);
+	GADGET_ASSERT_NOT_IMPLEMENTED;
 }
 
 void Win32_DX12_Renderer::SetCullFace(CullFace cullFace_){

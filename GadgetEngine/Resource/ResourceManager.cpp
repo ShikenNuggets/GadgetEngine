@@ -47,6 +47,8 @@ ResourceManager::~ResourceManager(){
 }
 
 void ResourceManager::UnloadResource(StringID name_){
+	GADGET_BASIC_ASSERT(name_ != StringID::None);
+
 	if(resources.find(name_) == resources.end() || resources[name_] == nullptr){
 		Debug::Log(SID("RESOURCE"), "Attempted to unload invalid resource [" + name_.GetString() + "]", Debug::Warning, __FILE__, __LINE__);
 	}
@@ -56,6 +58,9 @@ void ResourceManager::UnloadResource(StringID name_){
 
 void ResourceManager::DeleteAllUnusedResources(){
 	for(auto& c : resources){
-		c.second->DeleteIfUnused();
+		GADGET_BASIC_ASSERT(c.second != nullptr);
+		if(c.second != nullptr){
+			c.second->DeleteIfUnused();
+		}
 	}
 }

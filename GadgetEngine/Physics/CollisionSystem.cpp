@@ -5,29 +5,52 @@
 
 using namespace Gadget;
 
-bool CollisionSystem::TestCollision(const BoxCollider2D& cl1, const BoxCollider2D& cl2){
-	GADGET_BASIC_ASSERT(cl1.GetParent() != nullptr);
-	GADGET_BASIC_ASSERT(cl2.GetParent() != nullptr);
+bool CollisionSystem::TestCollision(const BoxCollider2D& cl1_, const BoxCollider2D& cl2_){
+	GADGET_BASIC_ASSERT(cl1_.GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(cl1_.GetWidth()));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(cl1_.GetHeight()));
+
+	GADGET_BASIC_ASSERT(cl2_.GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(cl2_.GetWidth()));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(cl2_.GetHeight()));
 
 	//This assumes axis-aligned bounding boxes... TODO - allow oriented bounding boxes
-	float c1Left =		cl1.GetParent()->GetPosition().x - (cl1.GetParent()->GetScale().x * (cl1.GetWidth() / 2.0f));
-	float c1Right =		cl1.GetParent()->GetPosition().x + (cl1.GetParent()->GetScale().x * (cl1.GetWidth() / 2.0f));
-	float c1Bottom =	cl1.GetParent()->GetPosition().y - (cl1.GetParent()->GetScale().y * (cl1.GetHeight() / 2.0f));
-	float c1Top =		cl1.GetParent()->GetPosition().y + (cl1.GetParent()->GetScale().y * (cl1.GetHeight() / 2.0f));
+	float c1Left =		cl1_.GetParent()->GetPosition().x - (cl1_.GetParent()->GetScale().x * (cl1_.GetWidth() / 2.0f));
+	float c1Right =		cl1_.GetParent()->GetPosition().x + (cl1_.GetParent()->GetScale().x * (cl1_.GetWidth() / 2.0f));
+	float c1Bottom =	cl1_.GetParent()->GetPosition().y - (cl1_.GetParent()->GetScale().y * (cl1_.GetHeight() / 2.0f));
+	float c1Top =		cl1_.GetParent()->GetPosition().y + (cl1_.GetParent()->GetScale().y * (cl1_.GetHeight() / 2.0f));
 
-	float c2Left =		cl2.GetParent()->GetPosition().x - (cl2.GetParent()->GetScale().x * (cl2.GetWidth() / 2.0f));
-	float c2Right =		cl2.GetParent()->GetPosition().x + (cl2.GetParent()->GetScale().x * (cl2.GetWidth() / 2.0f));
-	float c2Bottom =	cl2.GetParent()->GetPosition().y - (cl2.GetParent()->GetScale().y * (cl2.GetHeight() / 2.0f));
-	float c2Top =		cl2.GetParent()->GetPosition().y + (cl2.GetParent()->GetScale().y * (cl2.GetHeight() / 2.0f));
+	float c2Left =		cl2_.GetParent()->GetPosition().x - (cl2_.GetParent()->GetScale().x * (cl2_.GetWidth() / 2.0f));
+	float c2Right =		cl2_.GetParent()->GetPosition().x + (cl2_.GetParent()->GetScale().x * (cl2_.GetWidth() / 2.0f));
+	float c2Bottom =	cl2_.GetParent()->GetPosition().y - (cl2_.GetParent()->GetScale().y * (cl2_.GetHeight() / 2.0f));
+	float c2Top =		cl2_.GetParent()->GetPosition().y + (cl2_.GetParent()->GetScale().y * (cl2_.GetHeight() / 2.0f));
+
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(c1Left));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(c1Right));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(c1Bottom));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(c1Top));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(c2Left));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(c2Right));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(c2Bottom));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(c2Top));
 
 	return (c1Left <= c2Right && c1Right >= c2Left && c1Bottom <= c2Top && c1Top >= c2Bottom);
 }
 
 Vector3 CollisionSystem::CalculateContactPoint(const Collider* col1_, const Collider* col2_){
+	GADGET_BASIC_ASSERT(col1_->GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(col1_->GetColliderSize().IsValid());
+	GADGET_BASIC_ASSERT(col1_->GetShape() < ColliderShape::ColliderShape_MAX);
+	GADGET_BASIC_ASSERT(col2_->GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(col2_->GetColliderSize().IsValid());
+	GADGET_BASIC_ASSERT(col2_->GetShape() < ColliderShape::ColliderShape_MAX);
+
 	switch(col1_->GetShape()){
 		case ColliderShape::None:
 			break;
 		case ColliderShape::Box2D:
+			GADGET_BASIC_ASSERT(dynamic_cast<const BoxCollider2D*>(col1_) != nullptr);
+			GADGET_BASIC_ASSERT(dynamic_cast<const BoxCollider2D*>(col2_) != nullptr);
 			return CalculateContactPoint(*dynamic_cast<const BoxCollider2D*>(col1_), *dynamic_cast<const BoxCollider2D*>(col2_));
 		case ColliderShape::Cube:
 			break;
@@ -45,10 +68,20 @@ Vector3 CollisionSystem::CalculateContactPoint(const Collider* col1_, const Coll
 }
 
 float CollisionSystem::CalculateOverlapAmount(const Vector3& dir_, const Collider* col1_, const Collider* col2_){
+	GADGET_BASIC_ASSERT(dir_.IsValid());
+	GADGET_BASIC_ASSERT(col1_->GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(col1_->GetColliderSize().IsValid());
+	GADGET_BASIC_ASSERT(col1_->GetShape() < ColliderShape::ColliderShape_MAX);
+	GADGET_BASIC_ASSERT(col2_->GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(col2_->GetColliderSize().IsValid());
+	GADGET_BASIC_ASSERT(col2_->GetShape() < ColliderShape::ColliderShape_MAX);
+
 	switch(col1_->GetShape()){
 		case ColliderShape::None:
 			break;
 		case ColliderShape::Box2D:
+			GADGET_BASIC_ASSERT(dynamic_cast<const BoxCollider2D*>(col1_) != nullptr);
+			GADGET_BASIC_ASSERT(dynamic_cast<const BoxCollider2D*>(col2_) != nullptr);
 			return CalculateOverlapAmount(dir_, *dynamic_cast<const BoxCollider2D*>(col1_), *dynamic_cast<const BoxCollider2D*>(col2_));
 		case ColliderShape::Cube:
 			break;
@@ -65,24 +98,31 @@ float CollisionSystem::CalculateOverlapAmount(const Vector3& dir_, const Collide
 	return 0.0f;
 }
 
-Vector3 CollisionSystem::CalculateContactPoint(const BoxCollider2D& cl1, const BoxCollider2D& cl2){
-	float c1Left = cl1.GetParent()->GetPosition().x - (cl1.GetParent()->GetScale().x * (cl1.GetWidth() / 2.0f));
-	float c1Right = cl1.GetParent()->GetPosition().x + (cl1.GetParent()->GetScale().x * (cl1.GetWidth() / 2.0f));
-	float c1Bottom = cl1.GetParent()->GetPosition().y - (cl1.GetParent()->GetScale().y * (cl1.GetHeight() / 2.0f));
-	float c1Top = cl1.GetParent()->GetPosition().y + (cl1.GetParent()->GetScale().y * (cl1.GetHeight() / 2.0f));
+Vector3 CollisionSystem::CalculateContactPoint(const BoxCollider2D& cl1_, const BoxCollider2D& cl2_){
+	GADGET_BASIC_ASSERT(cl1_.GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(cl1_.GetColliderSize().IsValid());
+	GADGET_BASIC_ASSERT(cl1_.GetShape() < ColliderShape::ColliderShape_MAX);
+	GADGET_BASIC_ASSERT(cl2_.GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(cl2_.GetColliderSize().IsValid());
+	GADGET_BASIC_ASSERT(cl2_.GetShape() < ColliderShape::ColliderShape_MAX);
+
+	float c1Left = cl1_.GetParent()->GetPosition().x - (cl1_.GetParent()->GetScale().x * (cl1_.GetWidth() / 2.0f));
+	float c1Right = cl1_.GetParent()->GetPosition().x + (cl1_.GetParent()->GetScale().x * (cl1_.GetWidth() / 2.0f));
+	float c1Bottom = cl1_.GetParent()->GetPosition().y - (cl1_.GetParent()->GetScale().y * (cl1_.GetHeight() / 2.0f));
+	float c1Top = cl1_.GetParent()->GetPosition().y + (cl1_.GetParent()->GetScale().y * (cl1_.GetHeight() / 2.0f));
 
 	Rect c1Rect = Rect(
-		cl1.GetParent()->GetPosition().x,
-		cl1.GetParent()->GetPosition().y,
-		cl1.GetParent()->GetScale().x * cl1.GetWidth(),
-		cl1.GetParent()->GetScale().y * cl1.GetHeight()
+		cl1_.GetParent()->GetPosition().x,
+		cl1_.GetParent()->GetPosition().y,
+		cl1_.GetParent()->GetScale().x * cl1_.GetWidth(),
+		cl1_.GetParent()->GetScale().y * cl1_.GetHeight()
 	);
 
 	Rect c2Rect = Rect(
-		cl2.GetParent()->GetPosition().x,
-		cl2.GetParent()->GetPosition().y,
-		cl2.GetParent()->GetScale().x * cl2.GetWidth(),
-		cl2.GetParent()->GetScale().y * cl2.GetHeight()
+		cl2_.GetParent()->GetPosition().x,
+		cl2_.GetParent()->GetPosition().y,
+		cl2_.GetParent()->GetScale().x * cl2_.GetWidth(),
+		cl2_.GetParent()->GetScale().y * cl2_.GetHeight()
 	);
 
 	bool topLeft = c2Rect.Intersects(c1Left, c1Top);
@@ -92,7 +132,7 @@ Vector3 CollisionSystem::CalculateContactPoint(const BoxCollider2D& cl1, const B
 
 	if(topLeft && topRight && bottomLeft && bottomRight
 		|| !topLeft && !topRight && !bottomLeft && !bottomRight){
-		return cl1.GetParent()->GetPosition();
+		return cl1_.GetParent()->GetPosition();
 	}
 
 	if(topLeft && !topRight && !bottomLeft){
@@ -115,19 +155,27 @@ Vector3 CollisionSystem::CalculateContactPoint(const BoxCollider2D& cl1, const B
 		return Vector3(c1Left, c1Rect.y);
 	}
 
-	return cl1.GetParent()->GetPosition();
+	return cl1_.GetParent()->GetPosition();
 }
 
-float CollisionSystem::CalculateOverlapAmount(const Vector3& dir_, const BoxCollider2D& cl1, const BoxCollider2D& cl2){
-	float c1Left = cl1.GetParent()->GetPosition().x - (cl1.GetParent()->GetScale().x * (cl1.GetWidth() / 2.0f));
-	float c1Right = cl1.GetParent()->GetPosition().x + (cl1.GetParent()->GetScale().x * (cl1.GetWidth() / 2.0f));
-	float c1Bottom = cl1.GetParent()->GetPosition().y - (cl1.GetParent()->GetScale().y * (cl1.GetHeight() / 2.0f));
-	float c1Top = cl1.GetParent()->GetPosition().y + (cl1.GetParent()->GetScale().y * (cl1.GetHeight() / 2.0f));
+float CollisionSystem::CalculateOverlapAmount(const Vector3& dir_, const BoxCollider2D& cl1_, const BoxCollider2D& cl2_){
+	GADGET_BASIC_ASSERT(dir_.IsValid());
+	GADGET_BASIC_ASSERT(cl1_.GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(cl1_.GetColliderSize().IsValid());
+	GADGET_BASIC_ASSERT(cl1_.GetShape() < ColliderShape::ColliderShape_MAX);
+	GADGET_BASIC_ASSERT(cl2_.GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(cl2_.GetColliderSize().IsValid());
+	GADGET_BASIC_ASSERT(cl2_.GetShape() < ColliderShape::ColliderShape_MAX);
 
-	float c2Left = cl2.GetParent()->GetPosition().x - (cl2.GetParent()->GetScale().x * (cl2.GetWidth() / 2.0f));
-	float c2Right = cl2.GetParent()->GetPosition().x + (cl2.GetParent()->GetScale().x * (cl2.GetWidth() / 2.0f));
-	float c2Bottom = cl2.GetParent()->GetPosition().y - (cl2.GetParent()->GetScale().y * (cl2.GetHeight() / 2.0f));
-	float c2Top = cl2.GetParent()->GetPosition().y + (cl2.GetParent()->GetScale().y * (cl2.GetHeight() / 2.0f));
+	float c1Left = cl1_.GetParent()->GetPosition().x - (cl1_.GetParent()->GetScale().x * (cl1_.GetWidth() / 2.0f));
+	float c1Right = cl1_.GetParent()->GetPosition().x + (cl1_.GetParent()->GetScale().x * (cl1_.GetWidth() / 2.0f));
+	float c1Bottom = cl1_.GetParent()->GetPosition().y - (cl1_.GetParent()->GetScale().y * (cl1_.GetHeight() / 2.0f));
+	float c1Top = cl1_.GetParent()->GetPosition().y + (cl1_.GetParent()->GetScale().y * (cl1_.GetHeight() / 2.0f));
+
+	float c2Left = cl2_.GetParent()->GetPosition().x - (cl2_.GetParent()->GetScale().x * (cl2_.GetWidth() / 2.0f));
+	float c2Right = cl2_.GetParent()->GetPosition().x + (cl2_.GetParent()->GetScale().x * (cl2_.GetWidth() / 2.0f));
+	float c2Bottom = cl2_.GetParent()->GetPosition().y - (cl2_.GetParent()->GetScale().y * (cl2_.GetHeight() / 2.0f));
+	float c2Top = cl2_.GetParent()->GetPosition().y + (cl2_.GetParent()->GetScale().y * (cl2_.GetHeight() / 2.0f));
 
 	float xOverlap = 0.0f;
 	float yOverlap = 0.0f;

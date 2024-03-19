@@ -18,7 +18,10 @@ namespace Gadget{
 		float overlapAmount;
 		bool isTrigger;
 
-		constexpr bool HasTag(StringID tag_) const{ return Utils::Contains(otherTags, tag_); }
+		constexpr bool HasTag(StringID tag_) const{
+			GADGET_BASIC_ASSERT(tag_ != StringID::None);
+			return Utils::Contains(otherTags, tag_);
+		}
 	};
 
 	namespace CollisionSystem{

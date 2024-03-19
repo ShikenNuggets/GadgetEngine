@@ -18,6 +18,8 @@ PhysManager::PhysManager() : bulletDynamicsWorld(nullptr){
 
 	bulletDynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
 	bulletDynamicsWorld->setGravity(btVector3(0.0f, static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::gravityConstantKey)), 0.0f));
+
+	GADGET_BASIC_ASSERT(bulletDynamicsWorld != nullptr);
 }
 
 PhysManager::~PhysManager(){
@@ -36,6 +38,7 @@ PhysManager::~PhysManager(){
 
 void PhysManager::Update(Scene* scene_, float deltaTime_){
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_));
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
 
 	bulletDynamicsWorld->stepSimulation(deltaTime_, 0); //TODO - We should eventually do proper interpolation w/ fixed time step
@@ -61,6 +64,7 @@ btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody*
 	GADGET_BASIC_ASSERT(bulletDynamicsWorld != nullptr);
 	GADGET_BASIC_ASSERT(col_ != nullptr);
 	GADGET_BASIC_ASSERT(col_->GetShape() != ColliderShape::None);
+	GADGET_BASIC_ASSERT(col_->GetShape() < ColliderShape::ColliderShape_MAX);
 	GADGET_ASSERT(rb_ == nullptr || !Math::IsNearZero(rb_->GetMass()), "Rigidbody with mass of 0 is not supported!");
 
 	btCollisionShape* shape = CreateCollisionShape(col_);
@@ -140,11 +144,18 @@ btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody*
 }
 
 void PhysManager::RemoveFromSimulation(btRigidBody* brb_){
+	GADGET_BASIC_ASSERT(brb_ != nullptr);
+
 	bulletDynamicsWorld->removeRigidBody(brb_);
 	delete brb_;
 }
 
 void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_){
+	GADGET_BASIC_ASSERT(collider_ != nullptr);
+	GADGET_BASIC_ASSERT(collider_->GetParent() != nullptr);
+	GADGET_BASIC_ASSERT(other_ != nullptr);
+	GADGET_BASIC_ASSERT(other_->GetParent() != nullptr);
+
 	Collision collision;
 	collision.otherName = other_->GetParent()->GetName();
 	collision.otherTags = other_->GetParent()->GetTags();
@@ -165,8 +176,12 @@ void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_)
 }
 
 btCollisionShape* PhysManager::CreateCollisionShape(const Collider* col_){
-	switch(col_->GetShape())
-	{
+	GADGET_BASIC_ASSERT(col_ != nullptr);
+	GADGET_BASIC_ASSERT(col_->GetShape() != ColliderShape::None);
+	GADGET_BASIC_ASSERT(col_->GetShape() != ColliderShape::ColliderShape_MAX);
+	GADGET_BASIC_ASSERT(col_->GetColliderSize().IsValid());
+
+	switch(col_->GetShape()){
 		case ColliderShape::Box2D:
 		case ColliderShape::Cube:
 			return new btBoxShape(BulletHelper::ConvertVector3(col_->GetColliderSize()));

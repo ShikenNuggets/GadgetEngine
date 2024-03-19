@@ -15,16 +15,27 @@ namespace Gadget{
 		FreezeXY,
 		FreezeXZ,
 		FreezeYZ,
-		FreezeAll
+		FreezeAll,
+
+		FreezeRotationType_MAX //Do not put any values below this!
 	};
 
 	class Rigidbody : public Component{
 	public:
 		Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_ = FreezeRotationType::None);
+		Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_ = FreezeRotationType::None);
+		Rigidbody(const ComponentProperties& props_);
 		~Rigidbody();
 
-		static Rigidbody* Get(GUID objectGuid_){ return componentCollection.Get(objectGuid_); }
-		static std::vector<Rigidbody*> GetComponents(GUID objectGuid_){ return componentCollection.GetComponents(objectGuid_); }
+		static Rigidbody* Get(GUID objectGuid_){
+			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
+			return componentCollection.Get(objectGuid_);
+		}
+
+		static std::vector<Rigidbody*> GetComponents(GUID objectGuid_){
+			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
+			return componentCollection.GetComponents(objectGuid_);
+		}
 
 		void Update(float deltaTime_);
 
@@ -49,6 +60,11 @@ namespace Gadget{
 
 		//Remove the rigidbody from the physics sim and re-add it
 		void Reset();
+
+		virtual ComponentProperties Serialize() const override;
+
+	protected:
+		virtual void Deserialize(const ComponentProperties& props_) override;
 
 	private:
 		friend class Collider;
