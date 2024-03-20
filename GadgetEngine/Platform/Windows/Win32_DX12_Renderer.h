@@ -3,6 +3,11 @@
 
 #include "Graphics/Renderer.h"
 
+struct ID3D12Device8;
+struct IDXGIFactory7;
+struct IDXGIAdapter4;
+enum D3D_FEATURE_LEVEL : int;
+
 namespace Gadget{
 	class Win32_DX12_Renderer : public Renderer{
 	public:
@@ -25,6 +30,13 @@ namespace Gadget{
 		virtual MeshInfo* GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_) override;
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) override;
 		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) override;
+
+	private:
+		ID3D12Device8* mainDevice;
+		IDXGIFactory7* dxgiFactory;
+
+		IDXGIAdapter4* DetermineMainAdapter();
+		D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGIAdapter4* adapter_);
 	};
 }
 

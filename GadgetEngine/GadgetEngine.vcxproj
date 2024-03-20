@@ -209,7 +209,6 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\Components\RenderComponent.h" />
     <ClInclude Include="Graphics\Components\SkyboxComponent.h" />
     <ClInclude Include="Graphics\Cubemap.h" />
-    <ClInclude Include="RenderSurface.h" />
     <ClInclude Include="Graphics\FontInfo.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\GUI\CanvasSceneComponent.h" />
@@ -283,6 +282,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Platform\Windows\Win32_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_Window.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="RenderSurface.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\ResourceManager.h" />
     <ClInclude Include="ScreenCoordinate.h" />

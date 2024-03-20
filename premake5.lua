@@ -257,6 +257,12 @@ project "GadgetDLL"
 		staticruntime "On"
 		buildoptions "/Zl"
 		
+		links
+		{
+			"dxgi.lib",
+			"d3d12.lib",
+		}
+		
 		defines
 		{
 			"GADGET_PLATFORM_WIN32",
@@ -391,6 +397,11 @@ project "Game"
 		systemversion "latest"
 		staticruntime "On"
 		
+		links
+		{
+			"dxgi.lib",
+			"d3d12.lib",
+		}
 		
 		defines
 		{
