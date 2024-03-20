@@ -381,6 +381,7 @@
     </ClInclude>
     <ClInclude Include="Window.h" />
     <ClInclude Include="Game\ComponentFactory.h" />
+    <ClInclude Include="RenderSurface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />

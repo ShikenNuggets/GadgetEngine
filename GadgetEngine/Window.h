@@ -1,35 +1,24 @@
 #ifndef GADGET_WINDOW_H
 #define GADGET_WINDOW_H
 
-#include "Debug.h"
-#include "ScreenCoordinate.h"
+#include "RenderSurface.h"
 
 namespace Gadget{
-	class Window{
+	class Window : public RenderSurface{
 	public:
-		Window(int w_, int h_, int x_, int y_) : size(w_, h_), pos(x_, y_){
+		Window(int w_, int h_, int x_, int y_) : RenderSurface(w_, h_), pos(x_, y_){
 			GADGET_ASSERT(w_ > 0, "Tried to make a window with a width of " + std::to_string(w_) + "!");
 			GADGET_ASSERT(h_ > 0, "Tried to make a window with a height of " + std::to_string(h_) + "!");
 		}
 
-		Window(const ScreenCoordinate& sc_, const ScreenCoordinate& pos_) : size(sc_), pos(pos_){
+		Window(const ScreenCoordinate& sc_, const ScreenCoordinate& pos_) : RenderSurface(sc_), pos(pos_){
 			GADGET_ASSERT(sc_.x > 0, "Tried to make a window with a width of " + std::to_string(sc_.x) + "!");
 			GADGET_ASSERT(sc_.y > 0, "Tried to make a window with a height of " + std::to_string(sc_.y) + "!");
 		}
 
 		virtual ~Window(){}
 
-		inline int GetWidth() const{ return size.x; }
-		inline int GetHeight() const{ return size.y; }
-		inline ScreenCoordinate GetSize() const{ return size; }
-
-		virtual void HandleEvents() = 0;
-		virtual void SwapBuffers() = 0;
-
-		virtual float GetRefreshRate() = 0;
-
 	protected:
-		ScreenCoordinate size;
 		ScreenCoordinate pos;
 	};
 }
