@@ -13,6 +13,7 @@
 #include "Input/Input.h"
 #include "Input/MouseEvent.h"
 #include "Platform/Windows/Win32_GL_Renderer.h"
+#include "Platform/Windows/Win32_DX12_Renderer.h"
 #include "Resource/ResourceManager.h"
 
 using namespace Gadget;
@@ -85,7 +86,8 @@ void App::Initialize(const std::string& name_){
 	}
 
 	#ifdef GADGET_PLATFORM_WIN32
-		renderer = std::make_unique<Win32_GL_Renderer>(width, height, x, y);
+		//renderer = std::make_unique<Win32_GL_Renderer>(width, height, x, y);
+		renderer = std::make_unique<Win32_DX12_Renderer>(width, height, x, y);
 	#else
 		static_assert(false, "Unhandled platform in App::Initialize!")
 	#endif //GADGET_PLATFORM_WIN32

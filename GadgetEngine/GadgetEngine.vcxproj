@@ -209,6 +209,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\Components\RenderComponent.h" />
     <ClInclude Include="Graphics\Components\SkyboxComponent.h" />
     <ClInclude Include="Graphics\Cubemap.h" />
+    <ClInclude Include="Graphics\DX12\DX12_Command.h" />
     <ClInclude Include="Graphics\FontInfo.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\GUI\CanvasSceneComponent.h" />

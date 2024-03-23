@@ -7,6 +7,7 @@
 #include <SDL_syswm.h>
 
 #include "Win32_Window.h"
+#include "Graphics/DX12/DX12_Command.h"
 
 using namespace Gadget;
 

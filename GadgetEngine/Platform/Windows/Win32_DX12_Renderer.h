@@ -2,13 +2,14 @@
 #define GADGET_WIN32_DX12_RENDERER_H
 
 #include "Graphics/Renderer.h"
+#include "Graphics/DX12/DX12_Command.h"
 
-struct ID3D12Device8;
 struct IDXGIFactory7;
 struct IDXGIAdapter4;
-enum D3D_FEATURE_LEVEL : int;
 
 namespace Gadget{
+	class DX12_Command;
+
 	class Win32_DX12_Renderer : public Renderer{
 	public:
 		Win32_DX12_Renderer(int w_ = 800, int h_ = 600, int x_ = 0, int y_ = 0);

@@ -19,6 +19,9 @@
     <Filter Include="Graphics\Components">
       <UniqueIdentifier>{6B5E6BF0-D7BF-48FE-602D-8FB0CC8D7FBD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\DX12">
+      <UniqueIdentifier>{24F78497-90B7-00CE-59F2-494BC57145AA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\GUI">
       <UniqueIdentifier>{2AED684A-1650-F8EE-BFD5-30A5AB17C471}</UniqueIdentifier>
     </Filter>
@@ -135,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\Cubemap.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\DX12_Command.h">
+      <Filter>Graphics\DX12</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\FontInfo.h">
       <Filter>Graphics</Filter>
