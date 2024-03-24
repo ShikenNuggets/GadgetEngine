@@ -13,7 +13,7 @@ using namespace Gadget;
 
 constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_11_0; //TODO - Make this configurable
 
-Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), mainDevice(nullptr), dxgiFactory(nullptr){
+Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), mainDevice(nullptr), dxgiFactory(nullptr), gfxCommand(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
@@ -67,6 +67,8 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	mainDevice->SetName(L"MAIN DEVICE");
 	Debug::Log(SID("RENDER"), "Created new D3D12 device with name [MAIN DEVICE]", Debug::Info, __FILE__, __LINE__);
 
+	gfxCommand = new DX12_Command(mainDevice, D3D12_COMMAND_LIST_TYPE_DIRECT);
+
 #ifdef GADGET_DEBUG
 	{
 		Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
@@ -83,6 +85,11 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 }
 
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
+	if(gfxCommand){
+		delete gfxCommand;
+		gfxCommand = nullptr;
+	}
+
 	if(dxgiFactory){
 		dxgiFactory->Release();
 		dxgiFactory = nullptr;
@@ -133,7 +140,10 @@ void Win32_DX12_Renderer::PostInit(){
 }
 
 void Win32_DX12_Renderer::Render(const Scene* scene_){
-	GADGET_ASSERT_NOT_IMPLEMENTED;
+	gfxCommand->BeginFrame();
+	ID3D12GraphicsCommandList6* cmdList = gfxCommand->CommandList();
+	//Do stuff
+	gfxCommand->EndFrame();
 
 	//Do this only at the end
 	window.get()->SwapBuffers();
