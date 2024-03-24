@@ -30,6 +30,8 @@ namespace Gadget{
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) override;
 		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) override;
 
+		constexpr ID3D12Device8* const MainDevice(){ return mainDevice; }
+
 	private:
 		ID3D12Device8* mainDevice;
 		IDXGIFactory7* dxgiFactory;

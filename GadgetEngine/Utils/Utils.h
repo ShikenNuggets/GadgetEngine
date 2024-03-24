@@ -7,6 +7,12 @@
 #include <map>
 #include <vector>
 
+//--------------------------------------------------------------------
+//Undefine some "standard" macros that tend to cause problems
+#undef min
+#undef max
+//--------------------------------------------------------------------
+
 #ifndef DISABLE_COPY
 #define DISABLE_COPY(T)						\
 			explicit T(const T&) = delete;	\
