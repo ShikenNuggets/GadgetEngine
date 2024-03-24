@@ -34,6 +34,7 @@ namespace Gadget{
 				cmdAllocator->Release();
 				cmdAllocator = nullptr;
 			}
+			fenceValue = 0;
 		}
 	};
 

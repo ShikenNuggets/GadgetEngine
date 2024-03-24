@@ -8,6 +8,7 @@
 #include <d3d12.h>
 
 #include "Debug.h"
+#include "Graphics/DX12/DX12.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
@@ -35,6 +36,7 @@ namespace Gadget{
 		~DX12_DescriptorHeap(){}
 
 		bool Initialize(uint32_t capacity_, bool isShaderVisible_);
+		void ProcessDeferredFree(uint32_t frameIndex_);
 		void Release();
 
 		[[nodiscard]] DX12_DescriptorHandle Allocate();
@@ -54,6 +56,7 @@ namespace Gadget{
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuStart;
 		D3D12_GPU_DESCRIPTOR_HANDLE gpuStart;
 		std::unique_ptr<uint32_t[]> freeHandles;
+		std::vector<uint32_t> deferredFreeIndices[DX12::FrameBufferCount];
 		std::mutex mutex;
 		uint32_t capacity;
 		uint32_t size;

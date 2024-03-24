@@ -9,6 +9,7 @@
 #include "Win32_Window.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
+#include "Graphics/DX12/DX12_DescriptorHeap.h"
 
 using namespace Gadget;
 
@@ -32,14 +33,13 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	{
 		Microsoft::WRL::ComPtr<ID3D12Debug3> debugInterface;
 		result = D3D12GetDebugInterface(IID_PPV_ARGS(&debugInterface));
-		if(FAILED(result)){
-			Debug::ThrowFatalError(SID("RENDER"), "Failed to get D3D12 Debug Interface!", __FILE__, __LINE__);
+		if(SUCCEEDED(result)){
+			debugInterface->EnableDebugLayer();
+			//debugInterface->SetEnableGPUBasedValidation(TRUE); //TODO - Make this configurable since it significantly affects performance
+			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
+		}else{
+			Debug::Log(SID("RENDER"), "Failed to get D3D12 Debug Interface!", Debug::Error, __FILE__, __LINE__);
 		}
-
-		debugInterface->EnableDebugLayer();
-		//debugInterface->SetEnableGPUBasedValidation(TRUE); //TODO - Make this configurable since it significantly affects performance
-
-		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif // GADGET_DEBUG
 	
@@ -69,6 +69,31 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	Debug::Log(SID("RENDER"), "Created new D3D12 device with name [MAIN DEVICE]", Debug::Info, __FILE__, __LINE__);
 
 	gfxCommand = new DX12_Command(mainDevice, D3D12_COMMAND_LIST_TYPE_DIRECT);
+	
+	bool br = rtvDescriptorHeap.Initialize(512, false); //TODO - These numbers are somewhat arbitrary - makes these configurable?
+	if(br == false || rtvDescriptorHeap.Heap() == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize rtvDescriptorHeap!", __FILE__, __LINE__);
+	}
+	rtvDescriptorHeap.Heap()->SetName(L"RTV DescriptorHeap");
+
+	br = dsvDescriptorHeap.Initialize(512, false);
+	if(br == false || dsvDescriptorHeap.Heap() == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize dsvDescriptorHeap!", __FILE__, __LINE__);
+	}
+	dsvDescriptorHeap.Heap()->SetName(L"DSV DescriptorHeap");
+
+	br = srvDescriptorHeap.Initialize(4096, true);
+	if(br == false || srvDescriptorHeap.Heap() == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize srvDescriptorHeap!", __FILE__, __LINE__);
+	}
+	srvDescriptorHeap.Heap()->SetName(L"SRV DescriptorHeap");
+
+	br = uavDescriptorHeap.Initialize(512, false);
+	if(br == false || uavDescriptorHeap.Heap() == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize uavDescriptorHeap!", __FILE__, __LINE__);
+	}
+	uavDescriptorHeap.Heap()->SetName(L"UAV DescriptorHeap");
+
 
 #ifdef GADGET_DEBUG
 	{
@@ -86,6 +111,15 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 }
 
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
+	for(uint32_t i = 0; i < FrameBufferCount; i++){
+		ProcessDeferredReleases(i);
+	}
+
+	rtvDescriptorHeap.Release();
+	dsvDescriptorHeap.Release();
+	srvDescriptorHeap.Release();
+	uavDescriptorHeap.Release();
+
 	if(gfxCommand){
 		delete gfxCommand;
 		gfxCommand = nullptr;
@@ -95,6 +129,8 @@ Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 		dxgiFactory->Release();
 		dxgiFactory = nullptr;
 	}
+
+	ProcessDeferredReleases(0); //Some things can't be released until their depending resources are deleted, so we call this one more time at the end
 
 	#ifdef GADGET_DEBUG
 	{
@@ -143,6 +179,11 @@ void Win32_DX12_Renderer::PostInit(){
 void Win32_DX12_Renderer::Render(const Scene* scene_){
 	gfxCommand->BeginFrame();
 	ID3D12GraphicsCommandList6* cmdList = gfxCommand->CommandList();
+
+	if(deferredReleaseFlag[CurrentFrameIndex()]){
+		DX12::ProcessDeferredReleases(CurrentFrameIndex());
+	}
+
 	//Do stuff
 	gfxCommand->EndFrame();
 

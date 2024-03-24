@@ -1,12 +1,19 @@
 #include "DX12.h"
 
 #include "DX12_Command.h"
+#include "DX12_DescriptorHeap.h"
 
 using namespace Gadget;
 
 ID3D12Device8* DX12::mainDevice = nullptr;
 DX12_Command* DX12::gfxCommand = nullptr;
+DX12_DescriptorHeap DX12::rtvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_RTV };
+DX12_DescriptorHeap DX12::dsvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_DSV };
+DX12_DescriptorHeap DX12::srvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV };
+DX12_DescriptorHeap DX12::uavDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV };
+std::vector<IUnknown*> DX12::deferredReleases[FrameBufferCount]{};
 uint32_t DX12::deferredReleaseFlag[DX12::FrameBufferCount]{};
+std::mutex DX12::deferredReleaseMutex{};
 
 bool DX12::IsInitialized(){ return mainDevice != nullptr && gfxCommand != nullptr; }
 
@@ -20,6 +27,28 @@ uint32_t DX12::CurrentFrameIndex(){
 	return gfxCommand->CurrentFrameIndex();
 }
 
+void DX12::DeferredRelease(IUnknown* resource_){
+	std::lock_guard lock{ deferredReleaseMutex };
+	deferredReleases[CurrentFrameIndex()].push_back(resource_);
+	SetDeferredReleaseFlag();
+}
+
 void DX12::SetDeferredReleaseFlag(){
 	deferredReleaseFlag[CurrentFrameIndex()] = 1;
+}
+
+void DX12::ProcessDeferredReleases(uint32_t frameIndex_){
+	std::lock_guard lock{ deferredReleaseMutex };
+
+	deferredReleaseFlag[frameIndex_] = 0;
+
+	rtvDescriptorHeap.ProcessDeferredFree(frameIndex_);
+	dsvDescriptorHeap.ProcessDeferredFree(frameIndex_);
+	srvDescriptorHeap.ProcessDeferredFree(frameIndex_);
+	uavDescriptorHeap.ProcessDeferredFree(frameIndex_);
+
+	for(const auto& resource : deferredReleases[frameIndex_]){
+		resource->Release();
+	}
+	deferredReleases[frameIndex_].clear();
 }
