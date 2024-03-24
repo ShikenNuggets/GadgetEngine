@@ -4,16 +4,17 @@
 #include <d3d12.h>
 #include <wrl.h>
 
-#include <SDL_syswm.h>
+//#include <SDL_syswm.h>
 
 #include "Win32_Window.h"
+#include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 
 using namespace Gadget;
 
 constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_11_0; //TODO - Make this configurable
 
-Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), mainDevice(nullptr), dxgiFactory(nullptr), gfxCommand(nullptr){
+Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), DX12(), dxgiFactory(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());

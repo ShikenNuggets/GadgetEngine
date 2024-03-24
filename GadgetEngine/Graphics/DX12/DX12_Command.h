@@ -4,11 +4,10 @@
 #include <d3d12.h>
 
 #include "Debug.h"
+#include "Graphics/DX12/DX12.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
-	constexpr uint32_t DX12_FrameBufferCount = 3; //TODO - Find somewhere more appropriate to put this
-
 	struct DX12_CommandFrame{
 		DISABLE_COPY_AND_MOVE(DX12_CommandFrame)
 
@@ -67,7 +66,7 @@ namespace Gadget{
 			}
 			cmdQueue->SetName((typeNamePrefix + L"Queue").c_str());
 
-			for(int i = 0; i < DX12_FrameBufferCount; i++){
+			for(int i = 0; i < DX12::FrameBufferCount; i++){
 				DX12_CommandFrame& frame = cmdFrames[i];
 				result = device_->CreateCommandAllocator(type_, IID_PPV_ARGS(&frame.cmdAllocator));
 				if(FAILED(result) || frame.cmdAllocator == nullptr){
@@ -124,11 +123,11 @@ namespace Gadget{
 			cf.fenceValue = fv;
 			cmdQueue->Signal(fence, fv);
 
-			frameIndex = (frameIndex + 1) % DX12_FrameBufferCount;
+			frameIndex = (frameIndex + 1) % DX12::FrameBufferCount;
 		}
 
 		void Flush(){
-			for(int i = 0; i < DX12_FrameBufferCount; i++){
+			for(int i = 0; i < DX12::FrameBufferCount; i++){
 				cmdFrames[i].Wait(fenceEvent, fence);
 			}
 			frameIndex = 0;
@@ -156,7 +155,7 @@ namespace Gadget{
 				cmdList = nullptr;
 			}
 
-			for(int i = 0; i < DX12_FrameBufferCount; i++){
+			for(int i = 0; i < DX12::FrameBufferCount; i++){
 				cmdFrames[i].Release();
 			}
 		}
@@ -171,7 +170,7 @@ namespace Gadget{
 		ID3D12Fence1* fence;
 		uint64_t fenceValue;
 		HANDLE fenceEvent;
-		DX12_CommandFrame cmdFrames[DX12_FrameBufferCount];
+		DX12_CommandFrame cmdFrames[DX12::FrameBufferCount];
 		uint32_t frameIndex;
 	};
 }

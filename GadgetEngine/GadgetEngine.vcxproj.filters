@@ -139,6 +139,9 @@
     <ClInclude Include="Graphics\Cubemap.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\DX12\DX12.h">
+      <Filter>Graphics\DX12</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\DX12\DX12_Command.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
@@ -450,6 +453,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\Cubemap.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DX12.cpp">
+      <Filter>Graphics\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_DescriptorHeap.cpp">
       <Filter>Graphics\DX12</Filter>

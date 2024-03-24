@@ -2,13 +2,13 @@
 #define GADGET_WIN32_DX12_RENDERER_H
 
 #include "Graphics/Renderer.h"
-#include "Graphics/DX12/DX12_Command.h"
+#include "Graphics/DX12/DX12.h"
 
 struct IDXGIFactory7;
 struct IDXGIAdapter4;
 
 namespace Gadget{
-	class Win32_DX12_Renderer : public Renderer{
+	class Win32_DX12_Renderer : public Renderer, public DX12{
 	public:
 		Win32_DX12_Renderer(int w_ = 800, int h_ = 600, int x_ = 0, int y_ = 0);
 		virtual ~Win32_DX12_Renderer() override;
@@ -33,9 +33,7 @@ namespace Gadget{
 		constexpr ID3D12Device8* const MainDevice(){ return mainDevice; }
 
 	private:
-		ID3D12Device8* mainDevice;
 		IDXGIFactory7* dxgiFactory;
-		DX12_Command* gfxCommand;
 
 		IDXGIAdapter4* DetermineMainAdapter();
 		D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGIAdapter4* adapter_);
