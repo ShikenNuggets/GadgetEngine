@@ -5,21 +5,55 @@ This is mostly just a project for fun, but I want to see exactly how far I can t
 
 At the moment I'm only trying to get it to work for Windows (x64) but I'm abstracting platform specific code where I can, so ideally this can be ported to other platforms in the future.
 
-| Minimum Viable Product (in no particular order) |  |
+| Minimum Viable Product |  |
 |-------------------------------------------------------------|--|
 | Could theoretically be used to make a non-trivial game | *No* |
+
+| Low Level |  |
+|-------------------------------------------------------------|--|
 | Proper Memory Management  |  |
 | Efficient Strings (hashed string IDs) | ✓ |
 | Fully Support UTF-8 Encoding  |  |
-| Engine Configuration (config files, console commands, etc)  |  |
-| Asset Management (at runtime + tool for engine users)  |  |
-| HID Input (gamepads, keyboard, mouse, etc) | ✓ |
-| Debug Tools (logging, drawing, menus, console commands, etc) |  |
-| Basic 3D Rendering (geometry, lighting/shadows, etc)  |  |
+| Engine Configuration (config files, etc)  | ✓ |
+| Debug Tools (logging, console commands, etc) |  |
+| Engine Core (update/render loop, timing, etc) | ✓ |
+| Runtime Resource Management  | ✓ |
+
+| Input |  |
+|-------------------------------------------------------------|--|
+| Keyboard/Mouse | ✓ |
+| Gamepads | ✓ |
+| Handling Input From Multiple Gamepads |  |
+| Input Gestures | ✓ |
+
+| Rendering |  |
+|-------------------------------------------------------------|--|
+| Basic 3D Geometry Rendering with DX12  |  |
+| Raytraced Lighting/Shadows/Reflections  |  |
+| HDR
 | Basic Skeletal Animation  |  |
+| Facial Animation  |  |
+| Debug Drawing  |  |
+| Debug Cameras  |  |
+
+| Physics/Gameplay |  |
+|-------------------------------------------------------------|--|
+| Basic Physics | ✓ |
 | Collision Detection | ✓ |
-| Physics | ✓ |
+| Game Logic Systems  | ✓ |
+
+| Audio |  |
+|-------------------------------------------------------------|--|
 | Basic Audio Processing/Output |  |
 | 3D Audio  |  |
-| Non-C++ Game Data (levels/game objects/etc) and scripting (C#?) |  |
-| Tools for Engine Users (world/object editor, etc) |  |
+
+| Tools (Workbench) |  |
+|-------------------------------------------------------------|--|
+| World Editor |  |
+| Object Editor |  |
+| Asset Management Tool  |  |
+| Asset Conditioning Pipeline  |  |
+| Profiler  |  |
+| Memory Leak/Corruption Detection  |  |
+| Race Condition Detection  |  |
+| Non-C++ Scripting (Python? C#?) |  |
