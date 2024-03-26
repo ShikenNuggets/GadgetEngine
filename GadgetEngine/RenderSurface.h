@@ -23,10 +23,9 @@ namespace Gadget{
 		inline int GetHeight() const{ return size.y; }
 		inline ScreenCoordinate GetSize() const{ return size; }
 
-		virtual void HandleEvents() = 0; //TODO - Not sure if this should be here... we'll leave it here for now
-		virtual void SwapBuffers() = 0;
-
-		virtual float GetRefreshRate() = 0;
+		inline virtual void SetWidth(int width_){ size.x = width_; }
+		inline virtual void SetHeight(int height_){ size.y = height_; }
+		inline virtual void SetSize(const ScreenCoordinate& size_){ size = size_; }
 
 	protected:
 		ScreenCoordinate size;
