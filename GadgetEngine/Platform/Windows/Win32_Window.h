@@ -15,6 +15,7 @@ namespace Gadget{
 		Win32_Window(int w_, int h_, int x_, int y_);
 		virtual ~Win32_Window() override;
 
+		virtual uint64_t GetWindowHandle() const override;
 		SDL_Window* GetSDLWindow() const; //Avoid using the SDL_Window directly outside of this class - ideally create a new getter if you need something
 
 		virtual void HandleEvents() override;

@@ -212,6 +212,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DX12.h" />
     <ClInclude Include="Graphics\DX12\DX12_Command.h" />
     <ClInclude Include="Graphics\DX12\DX12_DescriptorHeap.h" />
+    <ClInclude Include="Graphics\DX12\DX12_RenderSurface.h" />
     <ClInclude Include="Graphics\FontInfo.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\GUI\CanvasSceneComponent.h" />
@@ -324,6 +325,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\Cubemap.cpp" />
     <ClCompile Include="Graphics\DX12\DX12.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_DescriptorHeap.cpp" />
+    <ClCompile Include="Graphics\DX12\DX12_RenderSurface.cpp" />
     <ClCompile Include="Graphics\GUI\CanvasSceneComponent.cpp" />
     <ClCompile Include="Graphics\GUI\GuiCanvas.cpp" />
     <ClCompile Include="Graphics\Loaders\AssimpModelLoader.cpp" />

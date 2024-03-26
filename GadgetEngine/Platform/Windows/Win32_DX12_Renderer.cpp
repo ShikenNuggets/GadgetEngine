@@ -4,8 +4,6 @@
 #include <d3d12.h>
 #include <wrl.h>
 
-//#include <SDL_syswm.h>
-
 #include "Win32_Window.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
@@ -21,10 +19,7 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
 	GADGET_ASSERT(win32Window != nullptr, "Win32 Renderer requires a Win32 window!");
 
-	//SDL_SysWMinfo wmInfo{};
-	//SDL_VERSION(&wmInfo.version);
-	//SDL_GetWindowWMInfo(win32Window->GetSDLWindow(), &wmInfo);
-	//HWND hwnd = wmInfo.info.win.window;
+	
 
 	HRESULT result;
 	uint32_t dxgiFactoryFlags = 0;

@@ -3,6 +3,7 @@
 
 #include <mutex>
 
+#include <dxgi1_6.h>
 #include <d3d12.h>
 
 #include "Utils/Utils.h"
@@ -24,7 +25,13 @@ namespace Gadget{
 		static void SetDeferredReleaseFlag();
 		static void ProcessDeferredReleases(uint32_t frameIndex_);
 
+		static DX12_DescriptorHeap& RTVHeap(){ return rtvDescriptorHeap; }
+		static DX12_DescriptorHeap& DSVHeap(){ return dsvDescriptorHeap; }
+		static DX12_DescriptorHeap& SRVHeap(){ return srvDescriptorHeap; }
+		static DX12_DescriptorHeap& UAVHeap(){ return uavDescriptorHeap; }
+
 		static constexpr uint32_t FrameBufferCount = 3;
+		static constexpr DXGI_FORMAT DefaultRenderTargetFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 
 	protected:
 		static ID3D12Device8* mainDevice;

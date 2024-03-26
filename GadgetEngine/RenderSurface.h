@@ -5,14 +5,18 @@
 #include "ScreenCoordinate.h"
 
 namespace Gadget{
+	class Window;
+
 	class RenderSurface{
 	public:
-		RenderSurface(int w_, int h_) : size(w_, h_){
+		RenderSurface(Window* parent_, int w_, int h_) : parent(parent_), size(w_, h_){
+			GADGET_BASIC_ASSERT(parent_ != nullptr);
 			GADGET_ASSERT(w_ > 0, "Tried to make a RenderSurface with a width of " + std::to_string(w_) + "!");
 			GADGET_ASSERT(h_ > 0, "Tried to make a RenderSurface with a height of " + std::to_string(h_) + "!");
 		}
 
-		RenderSurface(const ScreenCoordinate& sc_) : size(sc_){
+		RenderSurface(Window* parent_, const ScreenCoordinate& sc_) : parent(parent_), size(sc_){
+			GADGET_BASIC_ASSERT(parent_ != nullptr);
 			GADGET_ASSERT(sc_.x > 0, "Tried to make a RenderSurface with a width of " + std::to_string(sc_.x) + "!");
 			GADGET_ASSERT(sc_.y > 0, "Tried to make a RenderSurface with a height of " + std::to_string(sc_.y) + "!");
 		}
@@ -28,6 +32,7 @@ namespace Gadget{
 		inline virtual void SetSize(const ScreenCoordinate& size_){ size = size_; }
 
 	protected:
+		Window* parent;
 		ScreenCoordinate size;
 	};
 }

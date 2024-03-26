@@ -118,7 +118,7 @@ void DX12_DescriptorHeap::Free(DX12_DescriptorHandle& handle_){
 	GADGET_BASIC_ASSERT(handle_.cpuHandle.ptr == cpuStart.ptr);
 	GADGET_BASIC_ASSERT((handle_.cpuHandle.ptr - cpuStart.ptr) % descriptorSize == 0);
 
-	const uint32_t index = (handle_.cpuHandle.ptr - cpuStart.ptr) / descriptorSize;
+	const uint32_t index = static_cast<uint32_t>((handle_.cpuHandle.ptr - cpuStart.ptr)) / descriptorSize;
 #ifdef GADGET_DEBUG
 	GADGET_BASIC_ASSERT(handle_.container == this);
 	GADGET_BASIC_ASSERT(handle_.index < capacity);

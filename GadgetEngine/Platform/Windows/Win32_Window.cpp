@@ -1,5 +1,6 @@
 #include "Win32_Window.h"
 
+#include <SDL_syswm.h>
 #include <glad/glad.h>
 
 #include "App.h"
@@ -40,7 +41,7 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_) : Window(w_, h_, x_, 
 	}
 
 	Uint32 windowFlag = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
-	sdlWindow = SDL_CreateWindow(App::GetGameName().c_str(), pos.x, pos.y, size.x, size.y, windowFlag);
+	sdlWindow = SDL_CreateWindow(App::GetGameName().c_str(), pos.x, pos.y, GetWidth(), GetHeight(), windowFlag);
 	if(sdlWindow == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "Window could not be created! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
 	}
@@ -66,6 +67,13 @@ Win32_Window::~Win32_Window(){
 
 	//Close the SDL Subsystem
 	SDL_Quit();
+}
+
+uint64_t Win32_Window::GetWindowHandle() const{
+	SDL_SysWMinfo wmInfo{};
+	SDL_VERSION(&wmInfo.version);
+	SDL_GetWindowWMInfo(sdlWindow, &wmInfo);
+	return (uint64_t)wmInfo.info.win.window;
 }
 
 SDL_Window* Win32_Window::GetSDLWindow() const{ return sdlWindow; }
@@ -151,8 +159,7 @@ void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 	switch(e_.window.event){
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
 			SDL_GetWindowSize(sdlWindow, &w, &h);
-			size.x = w;
-			size.y = h;
+			renderSurface->SetSize(ScreenCoordinate(w, h));
 			EventHandler::GetInstance()->HandleEvent(WindowResizedEvent(w, h));
 			break;
 		case SDL_WINDOWEVENT_MOVED:

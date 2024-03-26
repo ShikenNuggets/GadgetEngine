@@ -15,8 +15,8 @@ namespace Gadget{
 	class DX12_DescriptorHeap;
 
 	struct DX12_DescriptorHandle{
-		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
-		D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle;
+		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle{};
+		D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle{};
 
 		constexpr bool IsValid() const{ return cpuHandle.ptr != NULL; }
 		constexpr bool IsShaderVisible() const{ return gpuHandle.ptr != NULL; }
