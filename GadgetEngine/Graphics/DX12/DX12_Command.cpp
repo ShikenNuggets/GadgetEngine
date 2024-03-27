@@ -37,14 +37,15 @@ DX12_Command::DX12_Command(ID3D12Device8* const device_, D3D12_COMMAND_LIST_TYPE
 	std::wstring typeNamePrefix;
 	if(type_ == D3D12_COMMAND_LIST_TYPE_DIRECT){
 		typeNamePrefix += L"GFX Command ";
-	} else if(type_ == D3D12_COMMAND_LIST_TYPE_COMPUTE){
+	}else if(type_ == D3D12_COMMAND_LIST_TYPE_COMPUTE){
 		typeNamePrefix += L"Compute Command ";
-	} else{
+	}else{
 		typeNamePrefix += L"Command ";
 	}
 
 	GADGET_BASIC_ASSERT(device_ != nullptr);
 
+	//Create Command Queue
 	D3D12_COMMAND_QUEUE_DESC desc{};
 	desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	desc.NodeMask = 0;
@@ -57,6 +58,7 @@ DX12_Command::DX12_Command(ID3D12Device8* const device_, D3D12_COMMAND_LIST_TYPE
 	}
 	cmdQueue->SetName((typeNamePrefix + L"Queue").c_str());
 
+	//Create Command Frames
 	for(int i = 0; i < DX12::FrameBufferCount; i++){
 		DX12_CommandFrame& frame = cmdFrames[i];
 		result = device_->CreateCommandAllocator(type_, IID_PPV_ARGS(&frame.cmdAllocator));
@@ -66,6 +68,8 @@ DX12_Command::DX12_Command(ID3D12Device8* const device_, D3D12_COMMAND_LIST_TYPE
 		frame.cmdAllocator->SetName((typeNamePrefix + L"Allocator " + std::to_wstring(i)).c_str());
 	}
 
+	GADGET_BASIC_ASSERT(cmdFrames[0].cmdAllocator != nullptr);
+
 	result = device_->CreateCommandList(0, type_, cmdFrames[0].cmdAllocator, nullptr, IID_PPV_ARGS(&cmdList));
 	if(FAILED(result) || cmdList == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandList failed!", __FILE__, __LINE__);
@@ -73,12 +77,14 @@ DX12_Command::DX12_Command(ID3D12Device8* const device_, D3D12_COMMAND_LIST_TYPE
 	cmdList->SetName((typeNamePrefix + L"List").c_str());
 	cmdList->Close();
 
-	device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
+	//Create Fence
+	result = device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 	if(FAILED(result) || fence == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateFence failed!", __FILE__, __LINE__);
 	}
 	fence->SetName(L"D3D12 Fence");
 
+	//Create Fence Event
 	fenceEvent = CreateEventEx(nullptr, nullptr, 0, EVENT_ALL_ACCESS);
 	if(fenceEvent == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "CreateEventEx failed!", __FILE__, __LINE__);
@@ -91,10 +97,9 @@ DX12_Command::~DX12_Command(){
 
 void DX12_Command::BeginFrame(){
 	GADGET_BASIC_ASSERT(frameIndex < DX12::FrameBufferCount);
+	GADGET_BASIC_ASSERT(cmdFrames[frameIndex].cmdAllocator != nullptr);
 
 	cmdFrames[frameIndex].Wait(fenceEvent, fence);
-
-	GADGET_BASIC_ASSERT(cmdFrames[frameIndex].cmdAllocator != nullptr);
 
 	HRESULT result = cmdFrames[frameIndex].cmdAllocator->Reset();
 	if(FAILED(result)){
