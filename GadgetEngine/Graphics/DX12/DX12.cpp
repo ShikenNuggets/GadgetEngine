@@ -2,9 +2,11 @@
 
 #include "DX12_Command.h"
 #include "DX12_DescriptorHeap.h"
+#include "DX12_RenderSurface.h"
 
 using namespace Gadget;
 
+IDXGIFactory7* DX12::dxgiFactory = nullptr;
 ID3D12Device8* DX12::mainDevice = nullptr;
 DX12_Command* DX12::gfxCommand = nullptr;
 DX12_DescriptorHeap DX12::rtvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_RTV };
@@ -25,6 +27,21 @@ uint32_t DX12::CurrentFrameIndex(){
 	}
 
 	return gfxCommand->CurrentFrameIndex();
+}
+
+void DX12::CreateSwapChainForSurface(DX12_RenderSurface* surface_){
+	GADGET_BASIC_ASSERT(surface_ != nullptr);
+	GADGET_BASIC_ASSERT(gfxCommand != nullptr);
+
+	surface_->CreateSwapChain(dxgiFactory, gfxCommand->CommandQueue(), DefaultRenderTargetFormat);
+}
+
+void DX12::ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_){
+	GADGET_BASIC_ASSERT(surface_ != nullptr);
+	GADGET_BASIC_ASSERT(gfxCommand != nullptr);
+
+	gfxCommand->Flush();
+	surface_->SetSize(ScreenCoordinate(width_, height_));
 }
 
 void DX12::DeferredRelease(IUnknown* resource_){

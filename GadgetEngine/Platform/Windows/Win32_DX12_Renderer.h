@@ -4,9 +4,6 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/DX12/DX12.h"
 
-struct IDXGIFactory7;
-struct IDXGIAdapter4;
-
 namespace Gadget{
 	class Win32_DX12_Renderer : public Renderer, public DX12{
 	public:
@@ -30,10 +27,8 @@ namespace Gadget{
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) override;
 		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) override;
 
-		constexpr ID3D12Device8* const MainDevice(){ return mainDevice; }
-
 	private:
-		IDXGIFactory7* dxgiFactory;
+		DX12_RenderSurface* renderSurfacePtr;
 
 		IDXGIAdapter4* DetermineMainAdapter();
 		D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGIAdapter4* adapter_);

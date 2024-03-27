@@ -81,6 +81,7 @@ namespace Gadget{
 				Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandList failed!", __FILE__, __LINE__);
 			}
 			cmdList->SetName((typeNamePrefix + L"List").c_str());
+			cmdList->Close();
 
 			device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 			if(FAILED(result) || fence == nullptr){
@@ -99,15 +100,18 @@ namespace Gadget{
 		}
 
 		void BeginFrame(){
-			DX12_CommandFrame& frame{ cmdFrames[frameIndex] };
-			frame.Wait(fenceEvent, fence);
+			GADGET_BASIC_ASSERT(frameIndex < DX12::FrameBufferCount);
 
-			HRESULT result = frame.cmdAllocator->Reset();
+			cmdFrames[frameIndex].Wait(fenceEvent, fence);
+
+			GADGET_BASIC_ASSERT(cmdFrames[frameIndex].cmdAllocator != nullptr);
+
+			HRESULT result = cmdFrames[frameIndex].cmdAllocator->Reset();
 			if(FAILED(result)){
 				Debug::ThrowFatalError(SID("RENDER"), "ID3D12CommandAllocator::Reset failed!", __FILE__, __LINE__);
 			}
 
-			result = cmdList->Reset(frame.cmdAllocator, nullptr);
+			result = cmdList->Reset(cmdFrames[frameIndex].cmdAllocator, nullptr);
 			if(FAILED(result)){
 				Debug::ThrowFatalError(SID("RENDER"), "ID3D12GraphicsCommandList6::Reset failed!", __FILE__, __LINE__);
 			}
@@ -118,10 +122,8 @@ namespace Gadget{
 			ID3D12CommandList* const cmdLists[]{ cmdList };
 			cmdQueue->ExecuteCommandLists(_countof(cmdLists), &cmdLists[0]);
 
-			uint64_t fv = fenceValue;
-			fv++;
-			DX12_CommandFrame& cf = cmdFrames[frameIndex];
-			cf.fenceValue = fv;
+			uint64_t fv = fenceValue + 1;
+			cmdFrames[frameIndex].fenceValue = fv;
 			cmdQueue->Signal(fence, fv);
 
 			frameIndex = (frameIndex + 1) % DX12::FrameBufferCount;
@@ -135,6 +137,8 @@ namespace Gadget{
 		}
 
 		void Release(){
+			Flush();
+
 			if(fence != nullptr){
 				fence->Release();
 				fence = nullptr;

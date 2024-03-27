@@ -6,16 +6,19 @@
 #include <dxgi1_6.h>
 #include <d3d12.h>
 
+#include "Debug.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
 	class DX12_Command;
 	class DX12_DescriptorHeap;
+	class DX12_RenderSurface;
 
 	class DX12{
 	public:
 		DISABLE_COPY_AND_MOVE(DX12)
-		DX12(){}
+
+		DX12(){ GADGET_BASIC_ASSERT(!IsInitialized()); }
 
 		static bool IsInitialized();
 		static ID3D12Device8* const MainDevice();
@@ -30,10 +33,14 @@ namespace Gadget{
 		static DX12_DescriptorHeap& SRVHeap(){ return srvDescriptorHeap; }
 		static DX12_DescriptorHeap& UAVHeap(){ return uavDescriptorHeap; }
 
+		static void CreateSwapChainForSurface(DX12_RenderSurface* surface_);
+		static void ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_);
+
 		static constexpr uint32_t FrameBufferCount = 3;
 		static constexpr DXGI_FORMAT DefaultRenderTargetFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 
 	protected:
+		static IDXGIFactory7* dxgiFactory;
 		static ID3D12Device8* mainDevice;
 		static DX12_Command* gfxCommand;
 		static DX12_DescriptorHeap rtvDescriptorHeap;

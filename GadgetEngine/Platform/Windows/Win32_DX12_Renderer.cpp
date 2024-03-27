@@ -8,18 +8,17 @@
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
+#include "Graphics/DX12/DX12_RenderSurface.h"
 
 using namespace Gadget;
 
 constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_11_0; //TODO - Make this configurable
 
-Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), DX12(), dxgiFactory(nullptr){
+Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), DX12(){
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
 	GADGET_ASSERT(win32Window != nullptr, "Win32 Renderer requires a Win32 window!");
-
-	
 
 	HRESULT result;
 	uint32_t dxgiFactoryFlags = 0;
@@ -89,6 +88,9 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	}
 	uavDescriptorHeap.Heap()->SetName(L"UAV DescriptorHeap");
 
+	renderSurfacePtr = new DX12_RenderSurface(window.get(), w_, h_);
+	DX12::CreateSwapChainForSurface(renderSurfacePtr);
+	window->SetRenderSurface(renderSurfacePtr);
 
 #ifdef GADGET_DEBUG
 	{
@@ -172,6 +174,14 @@ void Win32_DX12_Renderer::PostInit(){
 }
 
 void Win32_DX12_Renderer::Render(const Scene* scene_){
+	GADGET_BASIC_ASSERT(gfxCommand != nullptr);
+	GADGET_BASIC_ASSERT(scene_ != nullptr);
+
+	if(renderSurfacePtr == nullptr){
+		Debug::Log(SID("RENDER"), "Tried to render with no RenderSurface!", Debug::Warning, __FILE__, __LINE__);
+		return;
+	}
+
 	gfxCommand->BeginFrame();
 	ID3D12GraphicsCommandList6* cmdList = gfxCommand->CommandList();
 
@@ -179,11 +189,13 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 		DX12::ProcessDeferredReleases(CurrentFrameIndex());
 	}
 
+	renderSurfacePtr->Present();
+
 	//Do stuff
 	gfxCommand->EndFrame();
 
 	//Do this only at the end
-	window.get()->SwapBuffers();
+	window->SwapBuffers();
 }
 
 void Win32_DX12_Renderer::ClearScreen(){
@@ -207,6 +219,8 @@ void Win32_DX12_Renderer::OnResize(int width_, int height_){
 	if(!postInitComplete){
 		return; //New size will be handled correctly when we finish initializing
 	}
+
+	DX12::ResizeSurface(renderSurfacePtr, width_, height_);
 }
 
 void Win32_DX12_Renderer::SetWindingOrder(WindingOrder order_){

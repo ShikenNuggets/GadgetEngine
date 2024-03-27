@@ -88,7 +88,7 @@ void DX12_RenderSurface::Release(){
 void DX12_RenderSurface::FinalizeSwapChain(){
 	for(uint32_t i = 0; i < DX12::FrameBufferCount; i++){
 		DX12_RenderTargetData& data = renderTargetData[i];
-		GADGET_BASIC_ASSERT(data.resource != nullptr);
+		//GADGET_BASIC_ASSERT(data.resource != nullptr);
 
 		HRESULT hr = swapChain->GetBuffer(i, IID_PPV_ARGS(&data.resource));
 		if(FAILED(hr)){
