@@ -112,6 +112,12 @@ Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 		ProcessDeferredReleases(i);
 	}
 
+	if(renderSurfacePtr != nullptr){
+		delete renderSurfacePtr;
+		renderSurfacePtr = nullptr;
+		window->SetRenderSurface(nullptr);
+	}
+
 	rtvDescriptorHeap.Release();
 	dsvDescriptorHeap.Release();
 	srvDescriptorHeap.Release();

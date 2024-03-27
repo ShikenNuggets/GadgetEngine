@@ -49,7 +49,6 @@ namespace Gadget{
 		}
 
 		void SetRenderSurface(RenderSurface* surface_){
-			GADGET_BASIC_ASSERT(surface_ != nullptr);
 			renderSurface = surface_;
 		}
 
