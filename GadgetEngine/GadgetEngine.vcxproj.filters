@@ -460,6 +460,9 @@
     <ClCompile Include="Graphics\DX12\DX12.cpp">
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\DX12\DX12_Command.cpp">
+      <Filter>Graphics\DX12</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_DescriptorHeap.cpp">
       <Filter>Graphics\DX12</Filter>
     </ClCompile>

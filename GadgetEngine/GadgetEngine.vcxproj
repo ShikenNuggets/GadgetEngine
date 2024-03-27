@@ -324,6 +324,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\Components\SkyboxComponent.cpp" />
     <ClCompile Include="Graphics\Cubemap.cpp" />
     <ClCompile Include="Graphics\DX12\DX12.cpp" />
+    <ClCompile Include="Graphics\DX12\DX12_Command.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_DescriptorHeap.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_RenderSurface.cpp" />
     <ClCompile Include="Graphics\GUI\CanvasSceneComponent.cpp" />
