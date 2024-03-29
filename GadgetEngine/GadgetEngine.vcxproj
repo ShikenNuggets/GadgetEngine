@@ -371,6 +371,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Resource\ResourceManager.cpp" />
     <ClCompile Include="Utils\ByteSequencer.cpp" />
     <ClCompile Include="Utils\GUID.cpp" />
+    <ClCompile Include="Utils\Profiler.cpp" />
     <ClCompile Include="Utils\StringID.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
