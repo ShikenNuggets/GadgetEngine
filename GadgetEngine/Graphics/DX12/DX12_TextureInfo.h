@@ -24,6 +24,8 @@ namespace Gadget{
 		DISABLE_COPY_AND_MOVE(DX12_TextureInfo);
 		virtual ~DX12_TextureInfo() override;
 
+		void Initialize(const DX12_TextureInitInfo& info_);
+
 		virtual void Bind(int textureIndex_ = 0) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
 		virtual void Unbind() override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
 

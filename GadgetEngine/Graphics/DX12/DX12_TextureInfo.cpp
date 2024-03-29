@@ -9,6 +9,14 @@ using namespace Gadget;
 DX12_TextureInfo::DX12_TextureInfo() : TextureInfo(), resource(nullptr), srvHandle(){}
 
 DX12_TextureInfo::DX12_TextureInfo(const DX12_TextureInitInfo& info_) : TextureInfo(), resource(nullptr), srvHandle(){
+	Initialize(info_);
+}
+
+DX12_TextureInfo::~DX12_TextureInfo(){
+	DX12::DeferredRelease(resource);
+}
+
+void DX12_TextureInfo::Initialize(const DX12_TextureInitInfo& info_){
 	GADGET_BASIC_ASSERT(DX12::IsInitialized());
 	GADGET_BASIC_ASSERT(DX12::MainDevice() != nullptr);
 
@@ -38,10 +46,6 @@ DX12_TextureInfo::DX12_TextureInfo(const DX12_TextureInitInfo& info_) : TextureI
 	GADGET_BASIC_ASSERT(resource != nullptr);
 	srvHandle = DX12::SRVHeap().Allocate();
 	DX12::MainDevice()->CreateShaderResourceView(resource, info_.srvDesc, srvHandle.cpuHandle);
-}
-
-DX12_TextureInfo::~DX12_TextureInfo(){
-	DX12::DeferredRelease(resource);
 }
 
 //----------------------------------------------------------------------------------------------------//
@@ -109,7 +113,7 @@ DX12_DepthBufferTextureInfo::DX12_DepthBufferTextureInfo(DX12_TextureInitInfo in
 	GADGET_BASIC_ASSERT(info_.resource == nullptr);
 	info_.srvDesc = &srvDesc;
 
-	DX12_TextureInfo::DX12_TextureInfo(info_);
+	Initialize(info_);
 
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
