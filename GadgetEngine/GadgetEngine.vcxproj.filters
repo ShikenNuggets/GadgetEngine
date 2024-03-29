@@ -389,6 +389,9 @@
     <ClInclude Include="Utils\NamedVar.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Profiler.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Utils\StringID.h">
       <Filter>Utils</Filter>
     </ClInclude>
