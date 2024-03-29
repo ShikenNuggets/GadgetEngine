@@ -69,3 +69,9 @@ void DX12::ProcessDeferredReleases(uint32_t frameIndex_){
 	}
 	deferredReleases[frameIndex_].clear();
 }
+
+void DX12::ProcessAllDeferredReleases(){
+	for(uint32_t i = 0; i < FrameBufferCount; i++){
+		ProcessDeferredReleases(i);
+	}
+}

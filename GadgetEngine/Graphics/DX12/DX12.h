@@ -27,6 +27,7 @@ namespace Gadget{
 		static void DeferredRelease(IUnknown* resource_);
 		static void SetDeferredReleaseFlag();
 		static void ProcessDeferredReleases(uint32_t frameIndex_);
+		static void ProcessAllDeferredReleases(); //ONLY USE THIS ON SHUTDOWN
 
 		static DX12_DescriptorHeap& RTVHeap(){ return rtvDescriptorHeap; }
 		static DX12_DescriptorHeap& DSVHeap(){ return dsvDescriptorHeap; }
