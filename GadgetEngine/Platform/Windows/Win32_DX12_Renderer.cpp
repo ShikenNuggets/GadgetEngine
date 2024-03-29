@@ -108,9 +108,7 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 }
 
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
-	for(uint32_t i = 0; i < FrameBufferCount; i++){
-		ProcessDeferredReleases(i);
-	}
+	ProcessAllDeferredReleases();
 
 	if(renderSurfacePtr != nullptr){
 		delete renderSurfacePtr;
@@ -133,23 +131,24 @@ Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 		dxgiFactory = nullptr;
 	}
 
-	ProcessDeferredReleases(0); //Some things can't be released until their depending resources are deleted, so we call this one more time at the end
+	ProcessAllDeferredReleases(); //Some things can't be released until their depending resources are deleted, so we call this one more time at the end
 
 	#ifdef GADGET_DEBUG
 	{
-		Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
-		HRESULT result = mainDevice->QueryInterface(IID_PPV_ARGS(&infoQueue));
-		if(FAILED(result) || !infoQueue){
-			Debug::ThrowFatalError(SID("RENDER"), "Failed to query D3D12Device info queue!", __FILE__, __LINE__);
+		{
+			Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
+			HRESULT result = mainDevice->QueryInterface(IID_PPV_ARGS(&infoQueue));
+			if(FAILED(result) || !infoQueue){
+				Debug::ThrowFatalError(SID("RENDER"), "Failed to query D3D12Device info queue!", __FILE__, __LINE__);
+			}
+
+			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, false);
+			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, false);
+			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, false);
 		}
 
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, false);
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, false);
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, false);
-		infoQueue->Release();
-
 		Microsoft::WRL::ComPtr<ID3D12DebugDevice2> debugDevice;
-		result = mainDevice->QueryInterface(IID_PPV_ARGS(&debugDevice));
+		HRESULT result = mainDevice->QueryInterface(IID_PPV_ARGS(&debugDevice));
 		if(FAILED(result)){
 			Debug::ThrowFatalError(SID("RENDER"), "Failed to query D3D12 debug device!", __FILE__, __LINE__);
 		}
