@@ -61,6 +61,69 @@ namespace Gadget{
 			0,	//CreationNodeMask
 			0	//VisibleNodeMask
 		};
+
+		struct DX12_DescriptorRange : public D3D12_DESCRIPTOR_RANGE1{
+			constexpr explicit DX12_DescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE rangeType_,
+													uint32_t descriptorCount_, uint32_t shaderRegister_, uint32_t space_ = 0,
+													D3D12_DESCRIPTOR_RANGE_FLAGS flags_ = D3D12_DESCRIPTOR_RANGE_FLAG_NONE,
+													uint32_t offsetFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+			) : D3D12_DESCRIPTOR_RANGE1{ rangeType_, descriptorCount_, shaderRegister_, space_, flags_, offsetFromTableStart }{}
+		};
+
+		class DX12_RootParameter : public D3D12_ROOT_PARAMETER1{
+		public:
+			constexpr void InitAsConstants(uint32_t numConstants_, D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0){
+				ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+				ShaderVisibility = visibility_;
+				Constants.Num32BitValues = numConstants_;
+				Constants.ShaderRegister = shaderRegister_;
+				Constants.RegisterSpace = space_;
+			}
+
+			constexpr void InitAsCBV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0, D3D12_ROOT_DESCRIPTOR_FLAGS flags_ = D3D12_ROOT_DESCRIPTOR_FLAG_NONE){
+				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_CBV, visibility_, shaderRegister_, space_, flags_);
+			}
+
+			constexpr void InitAsSRV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0, D3D12_ROOT_DESCRIPTOR_FLAGS flags_ = D3D12_ROOT_DESCRIPTOR_FLAG_NONE){
+				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_SRV, visibility_, shaderRegister_, space_, flags_);
+			}
+
+			constexpr void InitAsUAV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0, D3D12_ROOT_DESCRIPTOR_FLAGS flags_ = D3D12_ROOT_DESCRIPTOR_FLAG_NONE){
+				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_UAV, visibility_, shaderRegister_, space_, flags_);
+			}
+
+			constexpr void InitAsTable(D3D12_SHADER_VISIBILITY visibility_, const DX12_DescriptorRange* ranges_, uint32_t rangeCount_){
+				static_assert(sizeof(DX12_DescriptorRange) == sizeof(D3D12_DESCRIPTOR_RANGE1));
+
+				ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+				ShaderVisibility = visibility_;
+				DescriptorTable.NumDescriptorRanges = rangeCount_;
+				DescriptorTable.pDescriptorRanges = ranges_;
+			}
+
+		private:
+			constexpr void InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE type_, D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_, D3D12_ROOT_DESCRIPTOR_FLAGS flags_){
+				ParameterType = type_;
+				ShaderVisibility = visibility_;
+				Descriptor.ShaderRegister = shaderRegister_;
+				Descriptor.RegisterSpace = space_;
+				Descriptor.Flags = flags_;
+			}
+		};
+
+		struct DX12_RootSignatureDesc : public D3D12_ROOT_SIGNATURE_DESC1{
+			constexpr explicit DX12_RootSignatureDesc(const DX12_RootParameter* params_, uint32_t paramCount_,
+														const D3D12_STATIC_SAMPLER_DESC* samplers_ = nullptr,
+														uint32_t samplerCount_ = 0, D3D12_ROOT_SIGNATURE_FLAGS flags_ =
+														D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+														D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+														D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
+														D3D12_ROOT_SIGNATURE_FLAG_DENY_AMPLIFICATION_SHADER_ROOT_ACCESS |
+														D3D12_ROOT_SIGNATURE_FLAG_DENY_MESH_SHADER_ROOT_ACCESS
+			) : D3D12_ROOT_SIGNATURE_DESC1{ paramCount_, params_, samplerCount_, samplers_, flags_ }{}
+
+			ID3D12RootSignature* Create(ID3D12Device* device_) const;
+		};
 	}
 }
 
