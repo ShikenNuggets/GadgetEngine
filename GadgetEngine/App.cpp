@@ -15,6 +15,7 @@
 #include "Platform/Windows/Win32_GL_Renderer.h"
 #include "Platform/Windows/Win32_DX12_Renderer.h"
 #include "Resource/ResourceManager.h"
+#include "Utils/Profiler.h"
 
 using namespace Gadget;
 
@@ -124,6 +125,7 @@ void App::Run(GameInterface& gameInterface_){
 	time->Start();
 	while(isRunning){
 		//Main game loop
+		Profiler::Start(SID("MainLoop"));
 
 		//Clear single frame and two frame allocators
 		//This must be the first thing that happens every frame
@@ -148,9 +150,13 @@ void App::Run(GameInterface& gameInterface_){
 
 		renderer->Render(sceneManager->CurrentScene());
 
+		Profiler::End(SID("MainLoop"));
+
 		//After everything else is done, sleep for the appropriate amount of time (if necessary)
 		time->Delay();
 	}
+
+	Debug::Log("Average Frame Duration: " + std::to_string(Profiler::GetAverage(SID("MainLoop")) * 1000.0) + "ms", Debug::Info, __FILE__, __LINE__);
 }
 
 void App::OnEvent(const Event& e_){

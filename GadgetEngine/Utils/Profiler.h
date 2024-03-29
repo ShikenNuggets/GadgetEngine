@@ -29,8 +29,7 @@ namespace Gadget{
 
 	class Profiler{
 	public:
-		DISABLE_COPY_AND_MOVE(Profiler)
-		Profiler() = delete;
+		STATIC_CLASS(Profiler);
 
 		static void Start(StringID name_);
 		static double End(StringID name_);

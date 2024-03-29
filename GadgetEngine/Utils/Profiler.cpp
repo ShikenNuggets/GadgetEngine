@@ -56,11 +56,11 @@ double Timer::Average(){
 std::map<StringID, Timer> Profiler::profiles;
 
 void Profiler::Start(StringID name_){
-	if(Utils::ContainsKey(profiles, name_)){
-		profiles[name_].StartProfiling();
-	}else{
+	if(!Utils::ContainsKey(profiles, name_)){
 		profiles.emplace(name_, Timer());
 	}
+
+	profiles[name_].StartProfiling();
 }
 
 double Profiler::End(StringID name_){
