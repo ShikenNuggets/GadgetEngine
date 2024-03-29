@@ -29,6 +29,15 @@
 #define DISABLE_COPY_AND_MOVE(T) DISABLE_COPY(T) DISABLE_MOVE(T)
 #endif //!DISABLE_COPY_AND_MOVE
 
+#ifndef DISABLE_DEFAULT_CONSTRUCTOR
+#define DISABLE_DEFAULT_CONSTRUCTOR(T) T() = delete
+#endif //!DISABLE_DEFAULT_CONSTRUCTOR
+
+#ifndef STATIC_CLASS
+#define STATIC_CLASS(T) DISABLE_COPY_AND_MOVE(T) DISABLE_DEFAULT_CONSTRUCTOR(T)
+#endif //!STATIC_CLASS
+
+
 namespace Gadget{
 	namespace Utils{
 		//----------Containers----------//
