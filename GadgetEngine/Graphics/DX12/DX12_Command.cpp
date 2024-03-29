@@ -117,7 +117,8 @@ void DX12_Command::EndFrame(){
 	ID3D12CommandList* const cmdLists[]{ cmdList };
 	cmdQueue->ExecuteCommandLists(_countof(cmdLists), &cmdLists[0]);
 
-	uint64_t fv = fenceValue + 1;
+	uint64_t& fv = fenceValue;
+	++fv;
 	cmdFrames[frameIndex].fenceValue = fv;
 	cmdQueue->Signal(fence, fv);
 
