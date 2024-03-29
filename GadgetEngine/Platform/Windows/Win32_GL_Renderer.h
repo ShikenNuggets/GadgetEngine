@@ -12,6 +12,8 @@
 #include "Graphics/OpenGL/GL_Shader.h"
 #include "Graphics/OpenGL/FrameBuffers/GL_DefaultFrameBuffer.h"
 
+#undef APIENTRY //This just fixes a warning
+
 namespace Gadget{
 	//OpenGL Renderer for Windows
 	class Win32_GL_Renderer : public Renderer{

@@ -188,7 +188,7 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	}
 
 	gfxCommand->BeginFrame();
-	ID3D12GraphicsCommandList6* cmdList = gfxCommand->CommandList();
+	//ID3D12GraphicsCommandList6* cmdList = gfxCommand->CommandList();
 
 	if(deferredReleaseFlag[CurrentFrameIndex()]){
 		DX12::ProcessDeferredReleases(CurrentFrameIndex());
@@ -207,11 +207,11 @@ void Win32_DX12_Renderer::ClearScreen(){
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 }
 
-void Win32_DX12_Renderer::SetClearColor(const Color& color_){
+void Win32_DX12_Renderer::SetClearColor([[maybe_unused]] const Color& color_){
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 }
 
-void Win32_DX12_Renderer::SetViewportRect(const Rect& rect_){
+void Win32_DX12_Renderer::SetViewportRect([[maybe_unused]] const Rect& rect_){
 	GADGET_ASSERT(rect_.x >= 0.0f && rect_.x <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.y >= 0.0f && rect_.y <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.w >= 0.0f && rect_.w <= 1.0f, "Tried to set invalid viewport rect!");
@@ -228,40 +228,40 @@ void Win32_DX12_Renderer::OnResize(int width_, int height_){
 	DX12::ResizeSurface(renderSurfacePtr, width_, height_);
 }
 
-void Win32_DX12_Renderer::SetWindingOrder(WindingOrder order_){
+void Win32_DX12_Renderer::SetWindingOrder([[maybe_unused]] WindingOrder order_){
 	Renderer::SetWindingOrder(order_);
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 }
 
-void Win32_DX12_Renderer::SetCullFace(CullFace cullFace_){
+void Win32_DX12_Renderer::SetCullFace([[maybe_unused]] CullFace cullFace_){
 	Renderer::SetCullFace(cullFace_);
 }
 
-Shader* Win32_DX12_Renderer::GenerateAPIShader(StringID shaderResource_){
+Shader* Win32_DX12_Renderer::GenerateAPIShader([[maybe_unused]] StringID shaderResource_){
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 	return nullptr;
 	//return App::GetResourceManager().LoadResource<GL_Shader>(shaderResource_); //TODO - This feels bad...
 }
 
-MeshInfo* Win32_DX12_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){
+MeshInfo* Win32_DX12_Renderer::GenerateAPIMeshInfo([[maybe_unused]] const Mesh& mesh_){
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 	return nullptr;
 	//return new GL_MeshInfo(mesh_);
 }
 
-MeshInfo* Win32_DX12_Renderer::GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_){
+MeshInfo* Win32_DX12_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t numVertices_, [[maybe_unused]] size_t numIndices_){
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 	return nullptr;
 	//return new GL_DynamicMeshInfo(numVertices_, numIndices_);
 }
 
-TextureInfo* Win32_DX12_Renderer::GenerateAPITextureInfo(const Texture& texture_){
+TextureInfo* Win32_DX12_Renderer::GenerateAPITextureInfo([[maybe_unused]] const Texture& texture_){
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 	return nullptr;
 	//return new GL_TextureInfo(texture_);
 }
 
-FontInfo* Win32_DX12_Renderer::GenerateAPIFontInfo(const FreetypeFont& font_){
+FontInfo* Win32_DX12_Renderer::GenerateAPIFontInfo([[maybe_unused]] const FreetypeFont& font_){
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 	return nullptr;
 	//return new GL_FontInfo(font_);
