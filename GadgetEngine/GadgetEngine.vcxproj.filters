@@ -599,6 +599,9 @@
     <ClCompile Include="Utils\GUID.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Profiler.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Utils\StringID.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
