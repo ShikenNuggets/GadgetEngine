@@ -28,6 +28,8 @@ namespace Gadget{
 	private:
 		IDXGISwapChain4* swapChain;
 		DX12_RenderTargetData renderTargetData[DX12::FrameBufferCount];
+		uint32_t allowTearing;
+		uint32_t presentFlags;
 		D3D12_VIEWPORT viewPort;
 		D3D12_RECT scissorRect;
 

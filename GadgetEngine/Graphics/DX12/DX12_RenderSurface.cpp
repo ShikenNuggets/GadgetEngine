@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-DX12_RenderSurface::DX12_RenderSurface(Window* parent_, int w_, int h_) : RenderSurface(parent_, w_, h_), swapChain(nullptr), renderTargetData(), viewPort(), scissorRect(){}
+DX12_RenderSurface::DX12_RenderSurface(Window* parent_, int w_, int h_) : RenderSurface(parent_, w_, h_), swapChain(nullptr), renderTargetData(), allowTearing(0), presentFlags(0), viewPort(), scissorRect(){}
 
 DX12_RenderSurface::~DX12_RenderSurface(){
 	Release();
@@ -19,10 +19,17 @@ void DX12_RenderSurface::CreateSwapChain(IDXGIFactory7* factory_, ID3D12CommandQ
 	GADGET_BASIC_ASSERT(cmdQueue != nullptr);
 	static_assert(DX12::FrameBufferCount >= 2, "DX12 swap chains require at least two framebuffers");
 
+	HRESULT hr = factory_->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(uint32_t));
+	if(SUCCEEDED(hr) && allowTearing == TRUE){
+		//presentFlags = DXGI_PRESENT_ALLOW_TEARING;
+		presentFlags = 0; //TODO - Disable this to allow disabling vsync
+	}
+
 	DXGI_SWAP_CHAIN_DESC1 desc{};
 	desc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
 	desc.BufferCount = DX12::FrameBufferCount;
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	//desc.Flags = allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0; //TODO - Disable this to allow disabling vsync
 	desc.Flags = 0;
 	desc.Format = format_;
 	desc.Width = size.x;
@@ -35,7 +42,7 @@ void DX12_RenderSurface::CreateSwapChain(IDXGIFactory7* factory_, ID3D12CommandQ
 
 	IDXGISwapChain1* tempSwapChain = nullptr;
 	HWND hwnd = (HWND)parent->GetWindowHandle();
-	HRESULT hr = factory_->CreateSwapChainForHwnd(cmdQueue, hwnd, &desc, nullptr, nullptr, &tempSwapChain);
+	hr = factory_->CreateSwapChainForHwnd(cmdQueue, hwnd, &desc, nullptr, nullptr, &tempSwapChain);
 	if(FAILED(hr) || tempSwapChain == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not create swap chain for HWND [" + std::to_string((uint64_t)hwnd) + "]", __FILE__, __LINE__);
 	}
@@ -63,7 +70,7 @@ void DX12_RenderSurface::Present() const{
 	GADGET_BASIC_ASSERT(swapChain != nullptr);
 
 	if(swapChain != nullptr){
-		swapChain->Present(0, 0);
+		swapChain->Present(0, presentFlags);
 	}
 }
 
