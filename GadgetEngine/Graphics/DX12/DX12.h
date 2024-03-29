@@ -52,6 +52,16 @@ namespace Gadget{
 		static uint32_t deferredReleaseFlag[FrameBufferCount];
 		static std::mutex deferredReleaseMutex;
 	};
+
+	namespace DX12_Helpers{
+		constexpr D3D12_HEAP_PROPERTIES DefaultHeapProperties{
+			D3D12_HEAP_TYPE_DEFAULT,
+			D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
+			D3D12_MEMORY_POOL_UNKNOWN,
+			0,	//CreationNodeMask
+			0	//VisibleNodeMask
+		};
+	}
 }
 
 #endif //!GADGET_DX12_H
