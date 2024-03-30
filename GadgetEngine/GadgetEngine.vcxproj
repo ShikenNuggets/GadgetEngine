@@ -132,7 +132,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d

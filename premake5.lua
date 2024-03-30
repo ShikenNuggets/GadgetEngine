@@ -80,21 +80,7 @@ function GadgetExternalIncludes()
 end
 
 function GadgetExternalLibDirs()
-	filter "configurations:Debug or Develop"
-		libdirs
-		{
-			"Build/SDL2/Debug/",
-			"Build/SDL2main/Debug/",
-			"Build/Glad/Debug/",
-			"SDK/Assimp/lib/x64/",
-			"SDK/freetype/libs/Debug/",
-			"Build/BulletCollision/Debug/",
-			"Build/BulletDynamics/Debug/",
-			"Build/BulletLinearMath/Debug/",
-		}
-		
-	filter "configurations:Release"
-		libdirs
+	libdirs
 		{
 			"Build/SDL2/%{cfg.buildcfg}/",
 			"Build/SDL2main/%{cfg.buildcfg}/",
@@ -105,8 +91,6 @@ function GadgetExternalLibDirs()
 			"Build/BulletDynamics/%{cfg.buildcfg}/",
 			"Build/BulletLinearMath/%{cfg.buildcfg}/",
 		}
-
-	filter {} -- Deactivate filters
 end
 
 function GadgetExternalLibs(options)
