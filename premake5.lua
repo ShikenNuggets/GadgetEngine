@@ -293,3 +293,18 @@ externalproject "Workbench"
 	kind "WindowedApp"
 	language "C#"
 	dependson "GadgetDLL"
+
+-- //-----------------------------------------------------------//
+-- //------------------ DataBuilder ----------------------------//
+-- //-----------------------------------------------------------//
+
+project "DataBuilder"
+	CppProjectDefaults()
+	GadgetExternalIncludes()
+	GadgetExternalLibDirs()
+	GadgetExternalLibs { linkLibs="true" }
+	DependsOnGadgetEngine()
+
+	kind "ConsoleApp"
+
+	debugdir ("%{cfg.targetdir}")
