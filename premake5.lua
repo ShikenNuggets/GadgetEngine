@@ -1,3 +1,162 @@
+-- //-----------------------------------------------------------//
+-- //---------------- Functions --------------------------------//
+-- //-----------------------------------------------------------//
+
+-- Defaults for new C++ projects
+function CppProjectDefaults()
+	location "%{prj.name}"
+	language "C++"
+	cppdialect "C++20"
+	warnings "Extra"
+	
+	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
+	objdir ("Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
+
+	files
+	{
+		"%{prj.name}/**.h",
+		"%{prj.name}/**.cpp",
+	}
+
+	flags
+	{
+		"MultiProcessorCompile",
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		staticruntime "On"
+
+		defines
+		{
+			"GADGET_PLATFORM_WIN32",
+		}
+
+		fatalwarnings
+		{
+			"4715"
+		}
+
+	filter "configurations:Debug"
+		defines "GADGET_DEBUG"
+		symbols "On"
+		runtime "Debug"
+	
+	filter "configurations:Develop"
+		defines "GADGET_DEBUG"
+		symbols "On"
+		optimize "Speed"
+		runtime "Debug"
+	
+		flags
+		{
+			"LinkTimeOptimization"
+		}
+	
+	filter "configurations:Release"
+		defines "GADGET_RELEASE"
+		optimize "Speed"
+		runtime "Release"
+	
+		flags
+		{
+			"LinkTimeOptimization"
+		}
+	
+	filter {} -- Deactivate filters
+end
+
+function GadgetExternalIncludes()
+	includedirs
+	{
+		"%{prj.name}/",
+		"SDK/include",
+		"SDK/Assimp/include",
+		"SDK/Glad/include",
+		"SDK/SDL/include",
+		"SDK/freetype/include",
+		"SDK/bullet3/src",
+	}
+end
+
+function GadgetExternalLibDirs()
+	filter "configurations:Debug or Develop"
+		libdirs
+		{
+			"Build/SDL2/Debug/",
+			"Build/SDL2main/Debug/",
+			"Build/Glad/Debug/",
+			"SDK/Assimp/lib/x64/",
+			"SDK/freetype/libs/Debug/",
+			"Build/BulletCollision/Debug/",
+			"Build/BulletDynamics/Debug/",
+			"Build/BulletLinearMath/Debug/",
+		}
+		
+	filter "configurations:Release"
+		libdirs
+		{
+			"Build/SDL2/%{cfg.buildcfg}/",
+			"Build/SDL2main/%{cfg.buildcfg}/",
+			"Build/Glad/%{cfg.buildcfg}/",
+			"SDK/Assimp/lib/x64/",
+			"SDK/freetype/libs/%{cfg.buildcfg}/",
+			"Build/BulletCollision/%{cfg.buildcfg}/",
+			"Build/BulletDynamics/%{cfg.buildcfg}/",
+			"Build/BulletLinearMath/%{cfg.buildcfg}/",
+		}
+
+	filter {} -- Deactivate filters
+end
+
+function GadgetExternalLibs(options)
+	dependson
+	{
+		"Glad",
+		"SDL2",
+		"SDL2main",
+		"BulletCollision",
+		"BulletDynamics",
+		"BulletLinearMath",
+	}
+
+	options = options or {}
+	if options.linkLibs then
+		links
+		{
+			"assimp-vc143-mt.lib",
+			"Glad.lib",
+			"SDL2.lib",
+			"SDL2main.lib",
+			"freetype.lib",
+			"BulletCollision.lib",
+			"BulletDynamics.lib",
+			"BulletLinearMath.lib",
+		}
+
+		filter "system:windows"
+			links
+			{
+				"dxgi.lib",
+				"d3d12.lib",
+			}
+	end
+
+	filter {} --Deactivate filters
+end
+
+function DependsOnGadgetEngine()
+	includedirs { "GadgetEngine/" }
+	libdirs { "Build/GadgetEngine/%{cfg.buildcfg}/" }
+	links { "GadgetEngine.lib" }
+	dependson { "GadgetEngine" }
+	forceincludes { "Gadget.h" }
+end
+
+-- //-----------------------------------------------------------//
+-- //---------------------- Workspace --------------------------//
+-- //-----------------------------------------------------------//
+
 workspace "GadgetEngine"
 	architecture "x64"
 	
@@ -9,6 +168,10 @@ workspace "GadgetEngine"
 	}
 	
 	startproject "Game"
+
+-- //-----------------------------------------------------------//
+-- //------------------ External Projects ----------------------//
+-- //-----------------------------------------------------------//
 
 externalproject "Glad"
 	location "SDK/_prj"
@@ -50,73 +213,20 @@ externalproject "BulletLinearMath"
 	kind "StaticLib"
 	language "C++"
 	
+-- //-----------------------------------------------------------//
+-- //--------------------- GadgetEngine ------------------------//
+-- //-----------------------------------------------------------//
+
 project "GadgetEngine"
 	location "GadgetEngine"
 	kind "StaticLib"
-	language "C++"
-	warnings "Extra"
-	
-	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
-	objdir ("Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
-	
-	files
-	{
-		"%{prj.name}/**.h",
-		"%{prj.name}/**.cpp",
-	}
-	
-	includedirs
-	{
-		"%{prj.name}/",
-		"SDK/include",
-		"SDK/Assimp/include",
-		"SDK/Glad/include",
-		"SDK/SDL/include",
-		"SDK/freetype/include",
-		"SDK/bullet3/src",
-	}
-	
-	libdirs
-	{
-		"Build/SDL2/%{cfg.buildcfg}/",
-		"Build/SDL2main/%{cfg.buildcfg}/",
-		"SDK/Assimp/lib/x64/",
-		"SDK/freetype/libs/%{cfg.buildcfg}/",
-		"Build/BulletCollision/%{cfg.buildcfg}/",
-		"Build/BulletDynamics/%{cfg.buildcfg}/",
-		"Build/BulletLinearMath/%{cfg.buildcfg}/",
-	}
-	
-	dependson
-	{
-		"Glad",
-		"SDL2",
-		"SDL2main",
-		"BulletCollision",
-		"BulletDynamics",
-		"BulletLinearMath",
-	}
-	
-	flags
-	{
-		"MultiProcessorCompile",
-	}
+
+	CppProjectDefaults()
+	GadgetExternalIncludes()
+	GadgetExternalLibDirs()
+	GadgetExternalLibs()
 	
 	filter "system:windows"
-		cppdialect "C++20"
-		systemversion "latest"
-		staticruntime "On"
-		
-		defines
-		{
-			"GADGET_PLATFORM_WIN32",
-		}
-
-		fatalwarnings
-		{
-			"4715"
-		}
-
 		postbuildcommands
 		{
 			"echo D|xcopy \"$(ProjectDir)*.h*\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
@@ -129,55 +239,22 @@ project "GadgetEngine"
 			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d"
 		}
 		
-	filter "configurations:Debug"
-		defines "GADGET_DEBUG"
-		symbols "On"
-		runtime "Debug"
-		
-	filter "configurations:Develop"
-		defines "GADGET_DEBUG"
-		symbols "On"
-		optimize "Speed"
-		runtime "Debug"
-		
-		flags
-		{
-			"LinkTimeOptimization"
-		}
-		
-		libdirs
-		{
-			"Build/GadgetEngine/Debug/",
-			"Build/Glad/Debug/",
-			"Build/SDL2/Debug/",
-			"Build/SDL2main/Debug/",
-			"SDK/Assimp/lib/x64/",
-			"SDK/freetype/libs/Debug/",
-			"Build/BulletCollision/Debug/",
-			"Build/BulletDynamics/Debug/",
-			"Build/BulletLinearMath/Debug/",
-		}
-		
 	filter "configurations:Release"
-		defines "GADGET_RELEASE"
 		symbols "Off"
-		optimize "Speed"
-		runtime "Release"
-		
-		flags
-		{
-			"LinkTimeOptimization",
-		}
-		
-project "GadgetDLL"
-	location "GadgetDLL"
-	kind "SharedLib"
-	language "C++"
-	warnings "Extra"
 
+-- //-----------------------------------------------------------//
+-- //-------------------- GadgetDLL ----------------------------//
+-- //-----------------------------------------------------------//
+
+project "GadgetDLL"
+	CppProjectDefaults()
+	GadgetExternalIncludes()
+	GadgetExternalLibDirs()
+	GadgetExternalLibs { linkLibs="true" }
+	DependsOnGadgetEngine()
+
+	kind "SharedLib"
 	targetname "Gadget"
-	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
-	objdir ("Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
 
 	defines
 	{
@@ -186,233 +263,29 @@ project "GadgetDLL"
 		"_USRDLL"
 	}
 
-	files
-	{
-		"%{prj.name}/**.h",
-		"%{prj.name}/**.cpp",
-	}
-
-	includedirs
-	{
-		"%{prj.name}/",
-		"GadgetEngine/",
-		"SDK/include/",
-		"SDK/Assimp/include",
-		"SDK/Glad/include",
-		"SDK/SDL/include/",
-		"SDK/freetype/include",
-		"SDK/bullet3/src",
-	}
-
-	libdirs
-	{
-		"Build/GadgetEngine/%{cfg.buildcfg}/",
-		"Build/Glad/%{cfg.buildcfg}/",
-		"Build/SDL2/%{cfg.buildcfg}/",
-		"Build/SDL2main/%{cfg.buildcfg}/",
-		"SDK/Assimp/lib/x64/",
-		"SDK/freetype/libs/%{cfg.buildcfg}/",
-		"Build/BulletCollision/%{cfg.buildcfg}/",
-		"Build/BulletDynamics/%{cfg.buildcfg}/",
-		"Build/BulletLinearMath/%{cfg.buildcfg}/",
-	}
-
-	links
-	{
-		"GadgetEngine.lib",
-		"assimp-vc143-mt.lib",
-		"Glad.lib",
-		"SDL2.lib",
-		"SDL2main.lib",
-		"freetype.lib",
-		"BulletCollision.lib",
-		"BulletDynamics.lib",
-		"BulletLinearMath.lib",
-	}
-
-	dependson
-	{
-		"GadgetEngine",
-		"Glad",
-		"SDL2",
-		"SDL2main",
-		"BulletCollision",
-		"BulletDynamics",
-		"BulletLinearMath",
-	}
-
-	flags
-	{
-		"MultiProcessorCompile"
-	}
-
-	forceincludes
-	{
-		"Gadget.h"
-	}
-
 	filter "system:windows"
-		cppdialect "C++20"
-		systemversion "latest"
-		staticruntime "On"
 		buildoptions "/Zl"
-		
-		links
-		{
-			"dxgi.lib",
-			"d3d12.lib",
-		}
-		
-		defines
-		{
-			"GADGET_PLATFORM_WIN32",
-		}
-
-		fatalwarnings
-		{
-			"4715"
-		}
 
 		postbuildcommands
 		{
 			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
 		}
-		
-	filter "configurations:Debug"
-		defines "GADGET_DEBUG"
-		symbols "On"
-		runtime "Debug"
-		
-	filter "Configurations:Develop"
-		defines "GADGET_DEBUG"
-		symbols "On"
-		optimize "Speed"
-		runtime "Debug"
-		
-		flags
-		{
-			"LinkTimeOptimization"
-		}
-		
-		libdirs
-		{
-			"Build/GadgetEngine/Debug/",
-			"Build/Glad/Debug/",
-			"Build/SDL2/Debug/",
-			"Build/SDL2main/Debug/",
-			"SDK/Assimp/lib/x64/",
-			"SDK/freetype/libs/Debug/",
-			"Build/BulletCollision/Debug/",
-			"Build/BulletDynamics/Debug/",
-			"Build/BulletLinearMath/Debug/",
-		}
-		
-	filter "configurations:Release"
-		defines "GADGET_RELEASE"
-		optimize "Speed"
-		runtime "Release"
-		
-		flags
-		{
-			"LinkTimeOptimization"
-		}
+
+-- //-----------------------------------------------------------//
+-- //----------------------- Game ------------------------------//
+-- //-----------------------------------------------------------//
 
 project "Game"
-	location "Game"
-	language "C++"
-	warnings "Extra"
+	CppProjectDefaults()
+	GadgetExternalIncludes()
+	GadgetExternalLibDirs()
+	GadgetExternalLibs { linkLibs="true" }
+	DependsOnGadgetEngine()
+
 	dpiawareness "HighPerMonitor"
-	
-	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
-	objdir ("Build/Intermediate//%{prj.name}/%{cfg.buildcfg}/") 
 	debugdir ("%{cfg.targetdir}")
 	
-	files
-	{
-		"%{prj.name}/**.h",
-		"%{prj.name}/**.cpp",
-	}
-	
-	includedirs
-	{
-		"%{prj.name}/",
-		"GadgetEngine/",
-		"SDK/include/",
-		"SDK/Assimp/include",
-		"SDK/Glad/include",
-		"SDK/SDL/include/",
-		"SDK/freetype/include",
-		"SDK/bullet3/src",
-	}
-	
-	libdirs
-	{
-		"Build/GadgetEngine/%{cfg.buildcfg}/",
-		"Build/Glad/%{cfg.buildcfg}/",
-		"Build/SDL2/%{cfg.buildcfg}/",
-		"Build/SDL2main/%{cfg.buildcfg}/",
-		"SDK/Assimp/lib/x64/",
-		"SDK/freetype/libs/%{cfg.buildcfg}/",
-		"Build/BulletCollision/%{cfg.buildcfg}/",
-		"Build/BulletDynamics/%{cfg.buildcfg}/",
-		"Build/BulletLinearMath/%{cfg.buildcfg}/",
-	}
-	
-	links
-	{
-		"GadgetEngine.lib",
-		"assimp-vc143-mt.lib",
-		"Glad.lib",
-		"SDL2.lib",
-		"SDL2main.lib",
-		"freetype.lib",
-		"BulletCollision.lib",
-		"BulletDynamics.lib",
-		"BulletLinearMath.lib",
-	}
-	
-	dependson
-	{
-		"GadgetEngine",
-		"Glad",
-		"SDL2",
-		"SDL2main",
-		"BulletCollision",
-		"BulletDynamics",
-		"BulletLinearMath",
-	}
-	
-	flags
-	{
-		"MultiProcessorCompile"
-	}
-
-	forceincludes
-	{
-		"Gadget.h"
-	}
-	
 	filter "system:windows"
-		cppdialect "C++20"
-		systemversion "latest"
-		staticruntime "On"
-		
-		links
-		{
-			"dxgi.lib",
-			"d3d12.lib",
-		}
-		
-		defines
-		{
-			"GADGET_PLATFORM_WIN32",
-		}
-
-		fatalwarnings
-		{
-			"4715"
-		}
-		
 		postbuildcommands
 		{
 			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
@@ -420,48 +293,16 @@ project "Game"
 			"echo D|xcopy \"$(SolutionDir)Build\\Resources\\\" \"$(TargetDir)Resources\\\" /y /E /d",
 		}
 		
-	filter "configurations:Debug"
-		defines "GADGET_DEBUG"
-		symbols "On"
+	filter "configurations:Debug or Develop"
 		kind "ConsoleApp"
-		runtime "Debug"
-		
-	filter "Configurations:Develop"
-		defines "GADGET_DEBUG"
-		symbols "On"
-		optimize "Speed"
-		kind "ConsoleApp"
-		runtime "Debug"
-		
-		flags
-		{
-			"LinkTimeOptimization"
-		}
-		
-		libdirs
-		{
-			"Build/GadgetEngine/Debug/",
-			"Build/Glad/Debug/",
-			"Build/SDL2/Debug/",
-			"Build/SDL2main/Debug/",
-			"SDK/Assimp/lib/x64/",
-			"SDK/freetype/libs/Debug/",
-			"Build/BulletCollision/Debug/",
-			"Build/BulletDynamics/Debug/",
-			"Build/BulletLinearMath/Debug/",
-		}
 		
 	filter "configurations:Release"
-		defines "GADGET_RELEASE"
-		optimize "Speed"
 		kind "WindowedApp"
-		runtime "Release"
 		
-		flags
-		{
-			"LinkTimeOptimization"
-		}
-		
+-- //-----------------------------------------------------------//
+-- //------------------ Workbench ------------------------------//
+-- //-----------------------------------------------------------//
+
 externalproject "Workbench"
 	location "Workbench"
 	filename "Workbench"
