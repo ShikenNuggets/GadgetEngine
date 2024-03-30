@@ -14,6 +14,7 @@ namespace Gadget{
 		~ResourceManager();
 
 		template <class T> T* LoadResource(StringID resourceName_){
+			static_assert(std::is_base_of<Resource, T>::value == true);
 			GADGET_BASIC_ASSERT(resourceName_ != StringID::None);
 
 			if(resources.find(resourceName_) == resources.end() || resources[resourceName_] == nullptr){
