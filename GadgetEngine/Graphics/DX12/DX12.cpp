@@ -35,7 +35,7 @@ void DX12::CreateSwapChainForSurface(DX12_RenderSurface* surface_){
 	GADGET_BASIC_ASSERT(surface_ != nullptr);
 	GADGET_BASIC_ASSERT(gfxCommand != nullptr);
 
-	surface_->CreateSwapChain(dxgiFactory, gfxCommand->CommandQueue(), DefaultRenderTargetFormat);
+	surface_->CreateSwapChain(dxgiFactory, gfxCommand->CommandQueue());
 }
 
 void DX12::ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_){

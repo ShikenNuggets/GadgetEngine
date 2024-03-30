@@ -13,6 +13,8 @@ namespace Gadget{
 
 	class DX12_RenderSurface : public RenderSurface{
 	public:
+		static constexpr DXGI_FORMAT DefaultBackBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+
 		explicit DX12_RenderSurface(Window* parent_, int w_, int h_);
 		virtual ~DX12_RenderSurface() override;
 
@@ -21,7 +23,7 @@ namespace Gadget{
 		constexpr D3D12_VIEWPORT Viewport(){ return viewPort; }
 		constexpr D3D12_RECT ScissorRect(){ return scissorRect; }
 
-		void CreateSwapChain(IDXGIFactory7* factory_, ID3D12CommandQueue* cmdQueue, DXGI_FORMAT format_);
+		void CreateSwapChain(IDXGIFactory7* factory_, ID3D12CommandQueue* cmdQueue, DXGI_FORMAT format_ = DefaultBackBufferFormat);
 		void Present() const;
 		virtual void SetSize(const ScreenCoordinate& sc_) override;
 
@@ -32,6 +34,7 @@ namespace Gadget{
 		uint32_t presentFlags;
 		D3D12_VIEWPORT viewPort;
 		D3D12_RECT scissorRect;
+		DXGI_FORMAT format;
 
 		void Release();
 		void FinalizeSwapChain();

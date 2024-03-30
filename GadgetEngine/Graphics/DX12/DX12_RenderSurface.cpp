@@ -4,13 +4,14 @@
 
 using namespace Gadget;
 
-DX12_RenderSurface::DX12_RenderSurface(Window* parent_, int w_, int h_) : RenderSurface(parent_, w_, h_), swapChain(nullptr), renderTargetData(), allowTearing(0), presentFlags(0), viewPort(), scissorRect(){}
+DX12_RenderSurface::DX12_RenderSurface(Window* parent_, int w_, int h_) : RenderSurface(parent_, w_, h_), swapChain(nullptr), renderTargetData(), allowTearing(0), presentFlags(0), viewPort(), scissorRect(), format(DefaultBackBufferFormat){}
 
 DX12_RenderSurface::~DX12_RenderSurface(){
 	Release();
 }
 
 void DX12_RenderSurface::CreateSwapChain(IDXGIFactory7* factory_, ID3D12CommandQueue* cmdQueue, DXGI_FORMAT format_){
+	format = format_;
 	if(format_ == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB){
 		format_ = DXGI_FORMAT_R8G8B8A8_UNORM;
 	}
@@ -103,7 +104,7 @@ void DX12_RenderSurface::FinalizeSwapChain(){
 		}
 
 		D3D12_RENDER_TARGET_VIEW_DESC desc{};
-		desc.Format = DX12::DefaultRenderTargetFormat;
+		desc.Format = format;
 		desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 		
 		DX12::MainDevice()->CreateRenderTargetView(data.resource, &desc, data.renderTargetView.cpuHandle);
