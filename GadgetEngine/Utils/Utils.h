@@ -130,6 +130,9 @@ namespace Gadget{
 			}
 		}
 
+		inline std::wstring ToWString(const std::string& s_){ return { s_.begin(), s_.end() }; }
+		inline std::wstring ToWString(const char* s_){ return ToWString(std::string(s_)); }
+
 		//----------Binary----------//
 		constexpr inline uint16_t MergeBytes(uint8_t a_, uint8_t b_, bool littleEndian_ = (std::endian::native == std::endian::little)){
 			if(littleEndian_){

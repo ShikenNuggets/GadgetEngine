@@ -307,4 +307,20 @@ project "DataBuilder"
 
 	kind "ConsoleApp"
 
-	debugdir ("%{cfg.targetdir}")
+	debugdir ("%{wks.location}")
+
+	filter "system:windows"
+		postbuildcommands
+		{
+			"echo D|xcopy \"$(SolutionDir)SDK\\dxc\\bin\\x64\\*.dll\" \"$(TargetDir)\" /y /E /d",
+		}
+
+		libdirs
+		{
+			"SDK/dxc/lib/x64"
+		}
+
+		links
+		{
+			"dxcompiler.lib"
+		}
