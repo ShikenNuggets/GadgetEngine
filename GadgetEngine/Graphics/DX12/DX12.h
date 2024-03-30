@@ -9,6 +9,11 @@
 #include "Debug.h"
 #include "Utils/Utils.h"
 
+//These will make it easier to increase interface versions later
+using ID3D12_Device					= ID3D12Device8;
+using ID3D12_GraphicsCommandList	= ID3D12GraphicsCommandList6;
+using IDXGI_Factory					= IDXGIFactory7;
+
 namespace Gadget{
 	class DX12_Command;
 	class DX12_DescriptorHeap;
@@ -21,7 +26,7 @@ namespace Gadget{
 		DX12(){ GADGET_BASIC_ASSERT(!IsInitialized()); }
 
 		static bool IsInitialized();
-		static ID3D12Device8* const MainDevice();
+		static ID3D12_Device* const MainDevice();
 		static uint32_t CurrentFrameIndex();
 
 		static void DeferredRelease(IUnknown* resource_);
@@ -40,8 +45,8 @@ namespace Gadget{
 		static constexpr uint32_t FrameBufferCount = 3;
 
 	protected:
-		static IDXGIFactory7* dxgiFactory;
-		static ID3D12Device8* mainDevice;
+		static IDXGI_Factory* dxgiFactory;
+		static ID3D12_Device* mainDevice;
 		static DX12_Command* gfxCommand;
 		static DX12_DescriptorHeap rtvDescriptorHeap;
 		static DX12_DescriptorHeap dsvDescriptorHeap;

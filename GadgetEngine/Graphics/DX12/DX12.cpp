@@ -9,7 +9,7 @@
 using namespace Gadget;
 
 IDXGIFactory7* DX12::dxgiFactory = nullptr;
-ID3D12Device8* DX12::mainDevice = nullptr;
+ID3D12_Device* DX12::mainDevice = nullptr;
 DX12_Command* DX12::gfxCommand = nullptr;
 DX12_DescriptorHeap DX12::rtvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_RTV };
 DX12_DescriptorHeap DX12::dsvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_DSV };
@@ -21,7 +21,7 @@ std::mutex DX12::deferredReleaseMutex{};
 
 bool DX12::IsInitialized(){ return mainDevice != nullptr && gfxCommand != nullptr; }
 
-ID3D12Device8* const DX12::MainDevice(){ return mainDevice; }
+ID3D12_Device* const DX12::MainDevice(){ return mainDevice; }
 
 uint32_t DX12::CurrentFrameIndex(){
 	if(!IsInitialized()){

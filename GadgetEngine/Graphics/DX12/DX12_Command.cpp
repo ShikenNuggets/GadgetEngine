@@ -33,7 +33,7 @@ void DX12_CommandFrame::Release(){
 //---------- DX12_Command ----------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------//
 
-DX12_Command::DX12_Command(ID3D12Device8* const device_, D3D12_COMMAND_LIST_TYPE type_) : cmdQueue(nullptr), cmdList(nullptr), fence(nullptr), fenceValue(0), fenceEvent(nullptr), cmdFrames(), frameIndex(0){
+DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE type_) : cmdQueue(nullptr), cmdList(nullptr), fence(nullptr), fenceValue(0), fenceEvent(nullptr), cmdFrames(), frameIndex(0){
 	std::wstring typeNamePrefix;
 	if(type_ == D3D12_COMMAND_LIST_TYPE_DIRECT){
 		typeNamePrefix += L"GFX Command ";

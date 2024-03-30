@@ -188,7 +188,7 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	}
 
 	gfxCommand->BeginFrame();
-	//ID3D12GraphicsCommandList6* cmdList = gfxCommand->CommandList();
+	//ID3D12_GraphicsCommandList* cmdList = gfxCommand->CommandList();
 
 	if(deferredReleaseFlag[CurrentFrameIndex()]){
 		DX12::ProcessDeferredReleases(CurrentFrameIndex());

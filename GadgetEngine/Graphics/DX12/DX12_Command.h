@@ -26,7 +26,7 @@ namespace Gadget{
 		//Disable copy and move since this deals with raw DirectX pointers and objects
 		DISABLE_COPY_AND_MOVE(DX12_Command)
 
-		explicit DX12_Command(ID3D12Device8* const device_, D3D12_COMMAND_LIST_TYPE type_);
+		explicit DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE type_);
 		~DX12_Command();
 
 		void BeginFrame();
@@ -34,12 +34,12 @@ namespace Gadget{
 		void Flush();
 
 		constexpr ID3D12CommandQueue* const CommandQueue() const{ return cmdQueue; }
-		constexpr ID3D12GraphicsCommandList6* const CommandList() const{ return cmdList; }
+		constexpr ID3D12_GraphicsCommandList* const CommandList() const{ return cmdList; }
 		constexpr uint32_t CurrentFrameIndex() const{ return frameIndex; }
 
 	private:
 		ID3D12CommandQueue* cmdQueue;
-		ID3D12GraphicsCommandList6* cmdList;
+		ID3D12_GraphicsCommandList* cmdList;
 		ID3D12Fence1* fence;
 		uint64_t fenceValue;
 		HANDLE fenceEvent;
