@@ -373,6 +373,9 @@
     </ClInclude>
     <ClInclude Include="Random.h" />
     <ClInclude Include="RenderSurface.h" />
+    <ClInclude Include="Resource\BinaryBlobResource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
     <ClInclude Include="Resource\Resource.h">
       <Filter>Resource</Filter>
     </ClInclude>
