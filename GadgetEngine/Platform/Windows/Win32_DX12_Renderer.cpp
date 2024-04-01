@@ -10,6 +10,7 @@
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
 #include "Graphics/DX12/DX12_RenderSurface.h"
 #include "Graphics/DX12/DX12_ShaderHandler.h"
+#include "Graphics/DX12/DX12_GeometryPass.h"
 
 using namespace Gadget;
 
@@ -98,6 +99,16 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize shader handler!", __FILE__, __LINE__);
 	}
 
+	Color clearColor = Color::Black();
+	#ifdef GADGET_DEBUG
+	clearColor = Color::DarkGray();
+	#endif //GADGET_DEBUG
+
+	br = DX12_GeometryPass::Initialize(window->GetSize(), clearColor);
+	if(br == false){
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize geometry pass!", __FILE__, __LINE__);
+	}
+
 #ifdef GADGET_DEBUG
 	{
 		Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
@@ -116,6 +127,7 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 	ProcessAllDeferredReleases();
 
+	DX12_GeometryPass::Shutdown();
 	DX12_ShaderHandler::Shutdown();
 
 	if(renderSurfacePtr != nullptr){
@@ -221,7 +233,7 @@ void Win32_DX12_Renderer::ClearScreen(){
 }
 
 void Win32_DX12_Renderer::SetClearColor([[maybe_unused]] const Color& color_){
-	GADGET_ASSERT_NOT_IMPLEMENTED;
+	DX12_GeometryPass::SetClearColor(color_);
 }
 
 void Win32_DX12_Renderer::SetViewportRect([[maybe_unused]] const Rect& rect_){

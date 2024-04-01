@@ -4,10 +4,13 @@ using namespace Gadget;
 
 DX12_RenderTextureInfo* DX12_GeometryPass::mainBuffer = nullptr;
 DX12_DepthBufferTextureInfo* DX12_GeometryPass::depthBuffer = nullptr;
-ScreenCoordinate DX12_GeometryPass::size = initialSize;
+ScreenCoordinate DX12_GeometryPass::size = ScreenCoordinate(0, 0);
+Color DX12_GeometryPass::clearColor = Color::Black();
 
-bool DX12_GeometryPass::Initialize(){
-	return CreateBuffers(size);
+bool DX12_GeometryPass::Initialize(const ScreenCoordinate& size_, const Color& clearColor_){
+	size = size_;
+	clearColor = clearColor_;
+	return CreateBuffers(size, clearColor);
 }
 
 void DX12_GeometryPass::Shutdown(){
@@ -21,7 +24,17 @@ void DX12_GeometryPass::Shutdown(){
 		depthBuffer = nullptr;
 	}
 
-	size = initialSize;
+	size = ScreenCoordinate(0, 0);
+	clearColor = Color::Black();
+}
+
+void DX12_GeometryPass::SetClearColor(const Color& color_){
+	if(color_ == clearColor){
+		return;
+	}
+
+	clearColor = color_;
+	CreateBuffers(size, color_); //This feels like it could be more efficient, but we generally only set the clear color once per session so it's probably fine
 }
 
 void DX12_GeometryPass::OnResize(const ScreenCoordinate& newSize_){
@@ -30,10 +43,10 @@ void DX12_GeometryPass::OnResize(const ScreenCoordinate& newSize_){
 	}
 
 	size = newSize_;
-	CreateBuffers(newSize_);
+	CreateBuffers(newSize_, clearColor);
 }
 
-bool DX12_GeometryPass::CreateBuffers(const ScreenCoordinate& size_){
+bool DX12_GeometryPass::CreateBuffers(const ScreenCoordinate& size_, const Color& clearColor_){
 	GADGET_BASIC_ASSERT(size_.x > 0);
 	GADGET_BASIC_ASSERT(size_.y > 0);
 
@@ -64,10 +77,10 @@ bool DX12_GeometryPass::CreateBuffers(const ScreenCoordinate& size_){
 	info.resourceDesc = &desc;
 	info.initialState = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 	info.clearValue.Format = desc.Format;
-	info.clearValue.Color[0] = 0.0f; //TODO - Renderer::SetClearColor should affect this somehow
-	info.clearValue.Color[1] = 0.0f;
-	info.clearValue.Color[2] = 0.0f;
-	info.clearValue.Color[3] = 0.0f;
+	info.clearValue.Color[0] = clearColor_.r;
+	info.clearValue.Color[1] = clearColor_.g;
+	info.clearValue.Color[2] = clearColor_.b;
+	info.clearValue.Color[3] = clearColor_.a;
 
 	mainBuffer = new DX12_RenderTextureInfo(info);
 	GADGET_BASIC_ASSERT(mainBuffer != nullptr);
