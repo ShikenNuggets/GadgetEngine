@@ -34,16 +34,19 @@ namespace DB{
 		DX12_ShaderCompiler(){
 			HRESULT hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&compiler));
 			if(FAILED(hr)){
+				std::cout << "ERROR: Could not create Dxc Compiler!" << std::endl;
 				throw;
 			}
 
 			hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&utils));
 			if(FAILED(hr)){
+				std::cout << "ERROR: Could not create Dxc Utils!" << std::endl;
 				throw;
 			}
 
 			hr = utils->CreateDefaultIncludeHandler(&includeHandler);
 			if(FAILED(hr)){
+				std::cout << "ERROR: Dxc Utils could not create the default include handler!" << std::endl;
 				throw;
 			}
 		}
@@ -51,7 +54,10 @@ namespace DB{
 		bool AreCompiledEngineShadersUpToDate(){ return false; } //TODO - Optimization!
 
 		bool CompileEngineShaders(const std::string& outputFileName_ = "EngineShaders.bin"){
-			if(AreCompiledEngineShadersUpToDate()){ return true; }
+			if(AreCompiledEngineShadersUpToDate()){
+				std::cout << "Existing compiled shaders are already up to date" << std::endl;
+				return true;
+			}
 
 			ShaderList shaders;
 			std::filesystem::path relPath{};
@@ -64,6 +70,7 @@ namespace DB{
 				relPath += info.file;
 				absPath = std::filesystem::absolute(relPath);
 				if(!std::filesystem::exists(absPath)){
+					std::cout << "ERROR: Shader source path [" + absPath.string() + "] does not exist!" << std::endl;
 					return false;
 				}
 
@@ -71,6 +78,7 @@ namespace DB{
 				if(compiledShader != nullptr && compiledShader->GetBufferPointer() != nullptr && compiledShader->GetBufferSize() > 0){
 					shaders.push_back(std::move(compiledShader));
 				}else{
+					std::cout << "ERROR: Could not compile shaders!" << std::endl;
 					return false;
 				}
 			}
@@ -88,16 +96,19 @@ namespace DB{
 			Microsoft::WRL::ComPtr<IDxcResult> results = nullptr;
 			HRESULT hr = compiler->Compile(&buffer, args_, numArgs_, includeHandler.Get(), IID_PPV_ARGS(&results));
 			if(FAILED(hr) || results == nullptr){
+				std::cout << "ERROR: IDxcCompiler3::Compile failed!" << std::endl;
 				return nullptr;
 			}
 
 			Microsoft::WRL::ComPtr<IDxcBlobUtf8> errors = nullptr;
 			hr = results->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), nullptr);
 			if(FAILED(hr) || errors == nullptr){
+				std::cout << "ERROR: Could not get error blob from Dxc compilation!" << std::endl;
 				return nullptr;
 			}
 
 			if(errors != nullptr && errors->GetStringLength()){
+				std::cout << "Shader Compilation Error: " << errors->GetStringPointer() << std::endl;
 				OutputDebugStringA("\nShader Compilation Error:\n");
 				OutputDebugStringA(errors->GetStringPointer());
 				OutputDebugStringA("\n");
@@ -106,12 +117,14 @@ namespace DB{
 			HRESULT status = S_OK;
 			hr = results->GetStatus(&status);
 			if(FAILED(hr) || FAILED(status)){
+				std::cout << "ERROR: Shader Compilation was not successful!" << std::endl;
 				return nullptr;
 			}
 
 			Shader shader = nullptr;
 			hr = results->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shader), nullptr);
 			if(FAILED(hr) || shader == nullptr){
+				std::cout << "ERROR: Could not get shader compilation output!" << std::endl;
 				return nullptr;
 			}
 
@@ -126,6 +139,7 @@ namespace DB{
 			Microsoft::WRL::ComPtr<IDxcBlobEncoding> sourceBlob = nullptr;
 			HRESULT hr = utils->LoadFile(fullPath_.c_str(), nullptr, &sourceBlob);
 			if(FAILED(hr) || sourceBlob == nullptr){
+				std::cout << "ERROR: Could not load file [ " + fullPath_.string() + "]!" << std::endl;
 				return nullptr;
 			}
 
@@ -165,6 +179,7 @@ namespace DB{
 
 			std::ofstream fileStream(outputPath, std::ios::out | std::ios::binary);
 			if(!fileStream || !std::filesystem::exists(outputPath)){
+				std::cout << "ERROR: Could not create filestream to output shader compilation result!" << std::endl;
 				fileStream.close();
 				return false;
 			}
