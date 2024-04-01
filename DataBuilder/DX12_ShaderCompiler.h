@@ -22,8 +22,10 @@ namespace DB{
 
 	//TODO - Hardcoding this here is obviously not ideal. This is just for testing!
 	constexpr ShaderFileInfo shaderFiles[]{
-		{ "TestShader.hlsl", "TestShaderVS", Gadget::EngineShader::ID::TestShader_VS, Gadget::ShaderType::Type::Vertex }
+		{ "TestShader.hlsl", "TestShaderVS", Gadget::EngineShader::ID::TestShader_VS, Gadget::ShaderType::Type::Vertex },
+		{ "TestPixelShader.hlsl", "TestShaderPS", Gadget::EngineShader::ID::TestShader_PS, Gadget::ShaderType::Type::Pixel }
 	};
+
 	static_assert(_countof(shaderFiles) == (uint32_t)Gadget::EngineShader::ID::ID_MAX);
 	constexpr const char* shaderSourcePath = "Build/Resources/";
 

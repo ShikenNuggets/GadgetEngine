@@ -28,6 +28,7 @@ namespace Gadget{
 	struct EngineShader{ //Does this need to be a struct?
 		enum class ID : uint32_t{
 			TestShader_VS = 0,
+			TestShader_PS,
 
 			ID_MAX //Do not put anything below this!
 		};
