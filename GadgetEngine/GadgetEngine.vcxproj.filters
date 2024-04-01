@@ -148,6 +148,9 @@
     <ClInclude Include="Graphics\DX12\DX12_DescriptorHeap.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\DX12\DX12_GeometryPass.h">
+      <Filter>Graphics\DX12</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\DX12\DX12_Helpers.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
@@ -479,6 +482,9 @@
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_DescriptorHeap.cpp">
+      <Filter>Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DX12_GeometryPass.cpp">
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_Helpers.cpp">
