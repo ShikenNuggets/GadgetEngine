@@ -1,19 +1,47 @@
 #include "DX12_GeometryPass.h"
 
+#include "DX12_Helpers.h"
+#include "DX12_ShaderHandler.h"
+
 using namespace Gadget;
 
 DX12_RenderTextureInfo* DX12_GeometryPass::mainBuffer = nullptr;
 DX12_DepthBufferTextureInfo* DX12_GeometryPass::depthBuffer = nullptr;
+ID3D12RootSignature* DX12_GeometryPass::rootSignature = nullptr;
+ID3D12PipelineState* DX12_GeometryPass::pipelineStateObject = nullptr;
 ScreenCoordinate DX12_GeometryPass::size = ScreenCoordinate(0, 0);
 Color DX12_GeometryPass::clearColor = Color::Black();
 
 bool DX12_GeometryPass::Initialize(const ScreenCoordinate& size_, const Color& clearColor_){
 	size = size_;
 	clearColor = clearColor_;
-	return CreateBuffers(size, clearColor);
+
+	bool wasSuccess = CreateBuffers(size, clearColor);
+	if(!wasSuccess){
+		Debug::Log(SID("RENDER"), "Could not create buffers for geometry pass!", Debug::Error, __FILE__, __LINE__);
+		return false;
+	}
+
+	wasSuccess = CreateRootSignatureAndPSO();
+	if(!wasSuccess){
+		Debug::Log(SID("RENDER"), "Could not create root signature and pipeline state object for geometry pass!", Debug::Error, __FILE__, __LINE__);
+		return false;
+	}
+
+	return true;
 }
 
 void DX12_GeometryPass::Shutdown(){
+	if(pipelineStateObject != nullptr){
+		pipelineStateObject->Release();
+		pipelineStateObject = nullptr;
+	}
+
+	if(rootSignature != nullptr){
+		rootSignature->Release();
+		rootSignature = nullptr;
+	}
+
 	if(mainBuffer != nullptr){
 		delete mainBuffer;
 		mainBuffer = nullptr;
@@ -44,6 +72,13 @@ void DX12_GeometryPass::OnResize(const ScreenCoordinate& newSize_){
 
 	size = newSize_;
 	CreateBuffers(newSize_, clearColor);
+}
+
+void DX12_GeometryPass::DepthPrepass(ID3D12_GraphicsCommandList* cmdList_, const DX12_FrameInfo& frameInfo_){}
+
+void DX12_GeometryPass::Render(ID3D12_GraphicsCommandList* cmdList_, const DX12_FrameInfo& frameInfo_){
+	cmdList_->SetGraphicsRootSignature(rootSignature);
+	cmdList_->SetPipelineState(pipelineStateObject);
 }
 
 bool DX12_GeometryPass::CreateBuffers(const ScreenCoordinate& size_, const Color& clearColor_){
@@ -105,4 +140,49 @@ bool DX12_GeometryPass::CreateBuffers(const ScreenCoordinate& size_, const Color
 	depthBuffer->GetResource()->SetName(L"Geometry Pass Depth Buffer");
 
 	return mainBuffer->GetResource() != nullptr && depthBuffer->GetResource() != nullptr;
+}
+
+bool DX12_GeometryPass::CreateRootSignatureAndPSO(){
+	GADGET_BASIC_ASSERT(rootSignature == nullptr && pipelineStateObject == nullptr);
+
+	//Root Signature
+	DX12_Helpers::DX12_RootParameter params[1]{};
+	params[0].InitAsConstants(1, D3D12_SHADER_VISIBILITY_PIXEL, 1);
+	DX12_Helpers::DX12_RootSignatureDesc desc{ &params[0], _countof(params) };
+
+	rootSignature = desc.Create(DX12::MainDevice());
+	GADGET_BASIC_ASSERT(rootSignature != nullptr);
+	if(rootSignature == nullptr){
+		Debug::Log("Could not create root signature!", Debug::Error, __FILE__, __LINE__);
+		return false;
+	}
+	rootSignature->SetName(L"Geometry Pass RootSignature");
+
+	//Pipeline State Object
+	struct{
+		DX12_Helpers::DX12_PipelineStateSubObject_RootSignature			rootSignaturePSO{ rootSignature };
+		DX12_Helpers::DX12_PipelineStateSubObject_VS					vs{ DX12_ShaderHandler::GetEngineShader(EngineShader::ID::TestShader_VS) };
+		DX12_Helpers::DX12_PipelineStateSubObject_PS					ps{ DX12_ShaderHandler::GetEngineShader(EngineShader::ID::TestShader_PS) };
+		DX12_Helpers::DX12_PipelineStateSubObject_PrimitiveTopology		primitiveTopology{ D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE };
+		DX12_Helpers::DX12_PipelineStateSubObject_RenderTargetFormats	renderTargetFormats;
+		DX12_Helpers::DX12_PipelineStateSubObject_DepthStencilFormat	depthStencilFormat{ depthBufferFormat };
+		DX12_Helpers::DX12_PipelineStateSubObject_Rasterizer			rasterizer{ DX12_Helpers::RasterizerNoCulling };
+		DX12_Helpers::DX12_PipelineStateSubObject_DepthStencil1			depth{ DX12_Helpers::DepthStencilDisabled };
+	} psoStream;
+
+	D3D12_RT_FORMAT_ARRAY rtfArray{};
+	rtfArray.NumRenderTargets = 1;
+	rtfArray.RTFormats[0] = mainBufferFormat;
+
+	psoStream.renderTargetFormats = rtfArray;
+
+	pipelineStateObject = DX12_Helpers::CreatePipelineState(DX12::MainDevice(), &psoStream, sizeof(psoStream));
+	GADGET_BASIC_ASSERT(pipelineStateObject != nullptr);
+	if(pipelineStateObject == nullptr){
+		Debug::Log("Could not create pipeline state object!", Debug::Error, __FILE__, __LINE__);
+		return false;
+	}
+	pipelineStateObject->SetName(L"Geometry Pass PipelineStateObject");
+
+	return true;
 }

@@ -24,6 +24,74 @@ namespace Gadget{
 			0	//VisibleNodeMask
 		};
 
+		constexpr D3D12_RASTERIZER_DESC RasterizerNoCulling{
+			D3D12_FILL_MODE_SOLID,
+			D3D12_CULL_MODE_NONE,
+			0,
+			0,
+			0,
+			0,
+			1, //DepthClipEnable
+			1, //MultisampleEnable
+			0,
+			0,
+			D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF
+		};
+
+		constexpr D3D12_RASTERIZER_DESC RasterizerBackFaceCulling{
+			D3D12_FILL_MODE_SOLID,
+			D3D12_CULL_MODE_BACK,
+			0,
+			0,
+			0,
+			0,
+			1, //DepthClipEnable
+			1, //MultisampleEnable
+			0,
+			0,
+			D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF
+		};
+
+		constexpr D3D12_RASTERIZER_DESC RasterizerFrontFaceCulling{
+			D3D12_FILL_MODE_SOLID,
+			D3D12_CULL_MODE_FRONT,
+			0,
+			0,
+			0,
+			0,
+			1, //DepthClipEnable
+			1, //MultisampleEnable
+			0,
+			0,
+			D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF
+		};
+
+		constexpr D3D12_RASTERIZER_DESC RasterizerWireframe{
+			D3D12_FILL_MODE_WIREFRAME,
+			D3D12_CULL_MODE_NONE,
+			0,
+			0,
+			0,
+			0,
+			1, //DepthClipEnable
+			1, //MultisampleEnable
+			0,
+			0,
+			D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF
+		};
+
+		constexpr D3D12_DEPTH_STENCIL_DESC1 DepthStencilDisabled{
+			0, //DepthEnable
+			D3D12_DEPTH_WRITE_MASK_ZERO,
+			D3D12_COMPARISON_FUNC_LESS_EQUAL,
+			0,
+			0,
+			0,
+			{},
+			{},
+			0
+		};
+
 		//----------------------------------------------------------------------------------------------------//
 		//---------- DX12_DescriptorRange --------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
@@ -103,6 +171,8 @@ namespace Gadget{
 		//---------- DX12_PipelineStateSubObject -------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
 
+		#pragma warning(disable : 4324) //Structure was padded due to alignment specifier - Not a concern here
+
 		template<D3D12_PIPELINE_STATE_SUBOBJECT_TYPE type_, typename T>
 		class alignas(void*) DX12_PipelineStateSubObject{
 		public:
@@ -142,6 +212,8 @@ namespace Gadget{
 		DX12_HELPER_PSSO(ViewInstancing, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_VIEW_INSTANCING, D3D12_VIEW_INSTANCING_DESC);
 		DX12_HELPER_PSSO(AS, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_AS, D3D12_SHADER_BYTECODE);
 		DX12_HELPER_PSSO(MS, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_MS, D3D12_SHADER_BYTECODE);
+
+		#pragma warning(default : 4324)
 
 		#undef DX12_HELPER_PSSO
 
