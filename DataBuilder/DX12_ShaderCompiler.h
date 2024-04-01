@@ -194,7 +194,9 @@ namespace DB{
 			return true;
 		}
 
-		const char* profileStrings[(uint32_t)Gadget::ShaderType::Type::Type_MAX]{ "vs_", "hs_", "ds_", "gs_", "ps_", "cs_", "as_", "ms_" };
+		constexpr static const char* profileStrings[]{ "vs_", "hs_", "ds_", "gs_", "ps_", "cs_", "as_", "ms_" };
+		static_assert(_countof(profileStrings) == (uint32_t)Gadget::ShaderType::Type::Type_MAX);
+
 		const char* versionStr = "6_5";
 
 		Microsoft::WRL::ComPtr<IDxcCompiler3> compiler;
