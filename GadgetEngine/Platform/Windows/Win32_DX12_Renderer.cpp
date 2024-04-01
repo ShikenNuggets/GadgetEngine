@@ -9,6 +9,7 @@
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
 #include "Graphics/DX12/DX12_RenderSurface.h"
+#include "Graphics/DX12/DX12_ShaderHandler.h"
 
 using namespace Gadget;
 
@@ -92,6 +93,11 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	DX12::CreateSwapChainForSurface(renderSurfacePtr);
 	window->SetRenderSurface(renderSurfacePtr);
 
+	br = DX12_ShaderHandler::Initialize();
+	if(br == false){
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize shader handler!", __FILE__, __LINE__);
+	}
+
 #ifdef GADGET_DEBUG
 	{
 		Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
@@ -110,11 +116,18 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 	ProcessAllDeferredReleases();
 
+	DX12_ShaderHandler::Shutdown();
+
 	if(renderSurfacePtr != nullptr){
 		delete renderSurfacePtr;
 		renderSurfacePtr = nullptr;
 		window->SetRenderSurface(nullptr);
 	}
+
+	rtvDescriptorHeap.ProcessDeferredFree(0);
+	dsvDescriptorHeap.ProcessDeferredFree(0);
+	srvDescriptorHeap.ProcessDeferredFree(0);
+	uavDescriptorHeap.ProcessDeferredFree(0);
 
 	rtvDescriptorHeap.Release();
 	dsvDescriptorHeap.Release();

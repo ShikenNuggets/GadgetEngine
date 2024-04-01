@@ -12,8 +12,9 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "BinaryBlob";
 
-		const std::vector<uint8_t>& Data(){ return blob; }
-		const size_t Size(){ return blob.size(); }
+		const std::vector<uint8_t>& Data() const{ return blob;  }
+		std::vector<uint8_t>& Data(){ return blob; }
+		size_t Size() const{ return blob.size(); }
 
 	private:
 		std::vector<uint8_t> blob;

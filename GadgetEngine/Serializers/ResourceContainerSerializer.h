@@ -15,6 +15,7 @@
 #include "Graphics/Text/Font.h"
 #include "Graphics/Text/FreetypeFont.h"
 #include "Graphics/OpenGL/GL_Shader.h"
+#include "Resource/BinaryBlobResource.h"
 #include "Resource/Resource.h"
 
 namespace Gadget{
@@ -34,16 +35,18 @@ namespace Gadget{
 		std::string typeStr = j_.at("resource_type");
 		StringID typeID = StringID::ProcessString(typeStr);
 
-		if(typeID == SID("Mesh")){
+		if(typeID == StringID::ProcessString(Mesh::typeName)){
 			value_ = new MeshResourceContainer(j_.at("path"));
-		}else if(typeID == SID("GL_Shader")){
+		}else if(typeID == StringID::ProcessString(GL_Shader::typeName)){
 			value_ = new GL_ShaderResourceContainer(j_.at("path1"), j_.at("path2"));
-		}else if(typeID == SID("Font")){
+		}else if(typeID == StringID::ProcessString(Font::typeName)){
 			value_ = new FontResourceContainer(j_.at("path"));
-		}else if(typeID == SID("FreetypeFont")){
+		}else if(typeID == StringID::ProcessString(FreetypeFont::typeName)){
 			value_ = new FreetypeFontResourceContainer(j_.at("path"));
-		}else if(typeID == SID("Texture")){
+		}else if(typeID == StringID::ProcessString(Texture::typeName)){
 			value_ = new TextureResourceContainer(j_.at("path"));
+		}else if(typeID == StringID::ProcessString(BinaryBlobResource::typeName)){
+			value_ = new BinaryBlobResourceContainer(j_.at("path"));
 		}else{
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 		}

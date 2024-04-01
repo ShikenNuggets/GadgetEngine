@@ -6,7 +6,7 @@ using namespace Gadget;
 
 const StringID DX12_ShaderHandler::shadersBlobResourceName = SID("EngineShaders_DX12");
 BinaryBlobResource* DX12_ShaderHandler::shadersBlob = nullptr;
-CompiledShaderPtr DX12_ShaderHandler::engineShaders[(uint32_t)EngineShader::ID::ID_MAX];
+CompiledShaderPtr DX12_ShaderHandler::engineShaders[(uint32_t)EngineShader::ID::ID_MAX]{};
 
 bool DX12_ShaderHandler::Initialize(){
 	return LoadEngineShaders();
@@ -46,14 +46,14 @@ bool DX12_ShaderHandler::LoadEngineShaders(){
 	while(offset < shadersBlob->Size() && result == true){
 		GADGET_BASIC_ASSERT(index < (uint32_t)EngineShader::ID::ID_MAX);
 		CompiledShaderPtr& shader = engineShaders[index];
-		GADGET_BASIC_ASSERT(shader != nullptr);
+		GADGET_BASIC_ASSERT(shader == nullptr);
 		result &= index < (uint32_t)EngineShader::ID::ID_MAX && !shader;
 
 		if(!result){
 			break;
 		}
 
-		shader = reinterpret_cast<CompiledShaderPtr>(&shadersBlob[offset]);
+		shader = reinterpret_cast<CompiledShaderPtr>(&shadersBlob->Data()[offset]);
 		offset += sizeof(uint64_t) + shader->size;
 		index++;
 	}
