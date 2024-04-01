@@ -26,7 +26,7 @@ namespace Gadget{
 
 		void Initialize(const DX12_TextureInitInfo& info_);
 
-		virtual void Bind(int textureIndex_ = 0) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
+		virtual void Bind([[maybe_unused]] int textureIndex_ = 0) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
 		virtual void Unbind() override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
 
 		constexpr ID3D12Resource* const GetResource() const{ return resource; }
