@@ -27,9 +27,10 @@ D3D12_SHADER_BYTECODE DX12_ShaderHandler::GetEngineShader(EngineShader::ID id_){
 	GADGET_BASIC_ASSERT(id_ < EngineShader::ID::ID_MAX);
 	CompiledShaderPtr& shader = engineShaders[(uint32_t)id_];
 	GADGET_BASIC_ASSERT(shader != nullptr);
+	GADGET_BASIC_ASSERT(shader->byteCode != nullptr);
 	GADGET_BASIC_ASSERT(shader->size > 0);
 
-	return { &shader->byteCode, shader->size };
+	return { shader->byteCode, shader->size };
 }
 
 bool DX12_ShaderHandler::LoadEngineShaders(){
@@ -53,7 +54,7 @@ bool DX12_ShaderHandler::LoadEngineShaders(){
 			break;
 		}
 
-		shader = reinterpret_cast<CompiledShaderPtr>(&shadersBlob->Data()[offset]);
+		shader = reinterpret_cast<CompiledShaderPtr>(&shadersBlob->Data().data()[offset]);
 		offset += sizeof(uint64_t) + shader->size;
 		index++;
 	}

@@ -219,9 +219,23 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 		DX12::ProcessDeferredReleases(CurrentFrameIndex());
 	}
 
+	DX12_GeometryPass::OnResize(window->GetSize()); //TODO - This is overkill
+
 	renderSurfacePtr->Present();
 
 	//Do stuff
+	gfxCommand->CommandList()->RSSetViewports(1, &renderSurfacePtr->Viewport());
+	gfxCommand->CommandList()->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
+
+	DX12_GeometryPass::SetRenderTargetsForDepthPrepass(gfxCommand->CommandList());
+	DX12_GeometryPass::DepthPrepass(gfxCommand->CommandList(), window->GetSize());
+
+	DX12_GeometryPass::SetRenderTargetsForGeometryPass(gfxCommand->CommandList());
+	DX12_GeometryPass::Render(gfxCommand->CommandList(), window->GetSize());
+	
+	//Post-processing here
+
+	//Done doing stuff
 	gfxCommand->EndFrame();
 
 	//Do this only at the end

@@ -10,8 +10,6 @@
 #include "Utils/Utils.h"
 
 namespace Gadget{
-	struct DX12_FrameInfo;
-
 	class DX12_GeometryPass{
 	public:
 		STATIC_CLASS(DX12_GeometryPass);
@@ -22,8 +20,11 @@ namespace Gadget{
 		static void SetClearColor(const Color& color_);
 		static void OnResize(const ScreenCoordinate& newSize_);
 
-		static void DepthPrepass(ID3D12_GraphicsCommandList* cmdList_, const DX12_FrameInfo& frameInfo_);
-		static void Render(ID3D12_GraphicsCommandList* cmdList_, const DX12_FrameInfo& frameInfo_);
+		static void DepthPrepass(ID3D12_GraphicsCommandList* cmdList_, const ScreenCoordinate& frameInfo_);
+		static void Render(ID3D12_GraphicsCommandList* cmdList_, const ScreenCoordinate& frameInfo_);
+
+		static void SetRenderTargetsForDepthPrepass(ID3D12_GraphicsCommandList* cmdList_);
+		static void SetRenderTargetsForGeometryPass(ID3D12_GraphicsCommandList* cmdList_);
 
 	private:
 		constexpr static DXGI_FORMAT mainBufferFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;

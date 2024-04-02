@@ -20,8 +20,8 @@ namespace Gadget{
 
 		constexpr ID3D12Resource* const CurrentBackBuffer() const{ return renderTargetData[swapChain->GetCurrentBackBufferIndex()].resource; }
 		constexpr D3D12_CPU_DESCRIPTOR_HANDLE CurrentRenderTargetView() const{ return renderTargetData[swapChain->GetCurrentBackBufferIndex()].renderTargetView.cpuHandle; }
-		constexpr D3D12_VIEWPORT Viewport(){ return viewPort; }
-		constexpr D3D12_RECT ScissorRect(){ return scissorRect; }
+		constexpr const D3D12_VIEWPORT& Viewport() const{ return viewPort; }
+		constexpr const D3D12_RECT& ScissorRect() const{ return scissorRect; }
 
 		void CreateSwapChain(IDXGIFactory7* factory_, ID3D12CommandQueue* cmdQueue, DXGI_FORMAT format_ = DefaultBackBufferFormat);
 		void Present() const;

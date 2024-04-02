@@ -7,7 +7,7 @@
 namespace Gadget{
 	class BinaryBlobResource : public Resource{
 	public:
-		BinaryBlobResource(const std::vector<uint8_t>& blob_) : Resource(), blob(blob_){}
+		BinaryBlobResource(const std::vector<uint8_t>& blob_) : Resource(), blob(blob_){ blob.shrink_to_fit(); }
 		virtual ~BinaryBlobResource() override{}
 
 		static constexpr const char* typeName = "BinaryBlob";

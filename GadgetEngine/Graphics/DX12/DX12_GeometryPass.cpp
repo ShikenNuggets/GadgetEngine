@@ -74,11 +74,33 @@ void DX12_GeometryPass::OnResize(const ScreenCoordinate& newSize_){
 	CreateBuffers(newSize_, clearColor);
 }
 
-void DX12_GeometryPass::DepthPrepass(ID3D12_GraphicsCommandList* cmdList_, const DX12_FrameInfo& frameInfo_){}
+void DX12_GeometryPass::DepthPrepass(ID3D12_GraphicsCommandList* cmdList_, const ScreenCoordinate& frameInfo_){}
 
-void DX12_GeometryPass::Render(ID3D12_GraphicsCommandList* cmdList_, const DX12_FrameInfo& frameInfo_){
+void DX12_GeometryPass::Render(ID3D12_GraphicsCommandList* cmdList_, const ScreenCoordinate& frameInfo_){
 	cmdList_->SetGraphicsRootSignature(rootSignature);
 	cmdList_->SetPipelineState(pipelineStateObject);
+
+	//TODO - This is HIGHLY QUESTIONABLE. Basically this whole function is temporary just so I can test stuff while we develop the rest of the renderer
+	static uint32_t frame = 0;
+	frame++;
+	cmdList_->SetGraphicsRoot32BitConstant(0, frame, 0);
+
+	cmdList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	cmdList_->DrawInstanced(3, 1, 0, 0); //TODO - This just draws 1 triangle. More work needed for actual scene rendering
+}
+
+void DX12_GeometryPass::SetRenderTargetsForDepthPrepass(ID3D12_GraphicsCommandList* cmdList_){
+	D3D12_CPU_DESCRIPTOR_HANDLE dsv = depthBuffer->DSV();
+	cmdList_->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 0.0f, 0, 0, nullptr);
+	cmdList_->OMSetRenderTargets(0, nullptr, 0, &dsv);
+}
+
+void DX12_GeometryPass::SetRenderTargetsForGeometryPass(ID3D12_GraphicsCommandList* cmdList_){
+	D3D12_CPU_DESCRIPTOR_HANDLE rtv = mainBuffer->RTV(0);
+	D3D12_CPU_DESCRIPTOR_HANDLE dsv = depthBuffer->DSV();
+
+	cmdList_->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
+	cmdList_->OMSetRenderTargets(1, &rtv, 0, &dsv);
 }
 
 bool DX12_GeometryPass::CreateBuffers(const ScreenCoordinate& size_, const Color& clearColor_){
