@@ -94,14 +94,14 @@ namespace DB{
 			buffer.Size = sourceBlob_->GetBufferSize();
 
 			Microsoft::WRL::ComPtr<IDxcResult> results = nullptr;
-			HRESULT hr = compiler->Compile(&buffer, args_, numArgs_, includeHandler.Get(), IID_PPV_ARGS(&results));
+			HRESULT hr = compiler->Compile(&buffer, args_, numArgs_, includeHandler.Get(), IID_PPV_ARGS(results.GetAddressOf()));
 			if(FAILED(hr) || results == nullptr){
 				std::cout << "ERROR: IDxcCompiler3::Compile failed!" << std::endl;
 				return nullptr;
 			}
 
 			Microsoft::WRL::ComPtr<IDxcBlobUtf8> errors = nullptr;
-			hr = results->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), nullptr);
+			hr = results->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(errors.GetAddressOf()), nullptr);
 			if(FAILED(hr) || errors == nullptr){
 				std::cout << "ERROR: Could not get error blob from Dxc compilation!" << std::endl;
 				return nullptr;
@@ -154,7 +154,7 @@ namespace DB{
 			LPCWSTR args[]
 			{
 				file.c_str(),
-				L"-E", func.c_str(),
+				L"-E ", func.c_str(),
 				L"-T", prof.c_str(),
 				DXC_ARG_ALL_RESOURCES_BOUND,
 
@@ -186,8 +186,12 @@ namespace DB{
 
 			for(const auto& shader : shaders_){
 				const D3D12_SHADER_BYTECODE byteCode{ shader->GetBufferPointer(), shader->GetBufferSize() };
+
+				_ASSERT(byteCode.BytecodeLength == shader->GetBufferSize());
+				_ASSERT(byteCode.pShaderBytecode == shader->GetBufferPointer());
+
 				fileStream.write((char*)&byteCode.BytecodeLength, sizeof(byteCode.BytecodeLength));
-				fileStream.write((char*)&byteCode.pShaderBytecode, byteCode.BytecodeLength);
+				fileStream.write((char*)byteCode.pShaderBytecode, byteCode.BytecodeLength);
 			}
 
 			fileStream.close();
