@@ -5,6 +5,7 @@
 
 #include "Debug.h"
 #include "Graphics/DX12/DX12.h"
+#include "Graphics/DX12/DX12_RenderSurface.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
@@ -30,7 +31,7 @@ namespace Gadget{
 		~DX12_Command();
 
 		void BeginFrame();
-		void EndFrame();
+		void EndFrame(DX12_RenderSurface* renderSurface_);
 		void Flush();
 
 		constexpr ID3D12CommandQueue* const CommandQueue() const{ return cmdQueue; }

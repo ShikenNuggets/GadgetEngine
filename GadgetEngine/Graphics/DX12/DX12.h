@@ -4,6 +4,7 @@
 #include <mutex>
 
 #include "DX12_Defines.h"
+#include "DX12_Helpers.h"
 #include "Debug.h"
 #include "Utils/Utils.h"
 
@@ -41,6 +42,7 @@ namespace Gadget{
 		static IDXGI_Factory* dxgiFactory;
 		static ID3D12_Device* mainDevice;
 		static DX12_Command* gfxCommand;
+		static DX12_Helpers::DX12_ResourceBarriers resourceBarriers;
 		static DX12_DescriptorHeap rtvDescriptorHeap;
 		static DX12_DescriptorHeap dsvDescriptorHeap;
 		static DX12_DescriptorHeap srvDescriptorHeap;

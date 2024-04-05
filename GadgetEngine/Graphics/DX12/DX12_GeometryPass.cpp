@@ -12,6 +12,9 @@ ID3D12PipelineState* DX12_GeometryPass::pipelineStateObject = nullptr;
 ScreenCoordinate DX12_GeometryPass::size = ScreenCoordinate(0, 0);
 Color DX12_GeometryPass::clearColor = Color::Black();
 
+const D3D12_RESOURCE_STATES DX12_GeometryPass::initialMainBufferState = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+const D3D12_RESOURCE_STATES DX12_GeometryPass::initialDepthBufferState = D3D12_RESOURCE_STATE_DEPTH_READ | D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+
 bool DX12_GeometryPass::Initialize(const ScreenCoordinate& size_, const Color& clearColor_){
 	size = size_;
 	clearColor = clearColor_;
@@ -89,6 +92,19 @@ void DX12_GeometryPass::Render(ID3D12_GraphicsCommandList* cmdList_, const Scree
 	cmdList_->DrawInstanced(3, 1, 0, 0); //TODO - This just draws 1 triangle. More work needed for actual scene rendering
 }
 
+void DX12_GeometryPass::AddTransitionsForDepthPrepass(DX12_Helpers::DX12_ResourceBarriers& outResourceBarriers_){
+	outResourceBarriers_.AddTransitionBarrier(depthBuffer->GetResource(), initialDepthBufferState, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+}
+
+void DX12_GeometryPass::AddTransitionsForGeometryPrepass(DX12_Helpers::DX12_ResourceBarriers& outResourceBarriers_){
+	outResourceBarriers_.AddTransitionBarrier(mainBuffer->GetResource(), initialMainBufferState, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	outResourceBarriers_.AddTransitionBarrier(depthBuffer->GetResource(), D3D12_RESOURCE_STATE_DEPTH_WRITE, initialDepthBufferState);
+}
+
+void DX12_GeometryPass::AddTransitionsForPostProcess(DX12_Helpers::DX12_ResourceBarriers& outResourceBarriers_){
+	outResourceBarriers_.AddTransitionBarrier(mainBuffer->GetResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, initialMainBufferState);
+}
+
 void DX12_GeometryPass::SetRenderTargetsForDepthPrepass(ID3D12_GraphicsCommandList* cmdList_){
 	D3D12_CPU_DESCRIPTOR_HANDLE dsv = depthBuffer->DSV();
 	cmdList_->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 0.0f, 0, 0, nullptr);
@@ -132,7 +148,7 @@ bool DX12_GeometryPass::CreateBuffers(const ScreenCoordinate& size_, const Color
 	//Main Buffer
 	DX12_TextureInitInfo info;
 	info.resourceDesc = &desc;
-	info.initialState = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	info.initialState = initialMainBufferState;
 	info.clearValue.Format = desc.Format;
 	info.clearValue.Color[0] = clearColor_.r;
 	info.clearValue.Color[1] = clearColor_.g;
@@ -151,7 +167,7 @@ bool DX12_GeometryPass::CreateBuffers(const ScreenCoordinate& size_, const Color
 
 	DX12_TextureInitInfo info2;
 	info2.resourceDesc = &desc;
-	info.initialState = D3D12_RESOURCE_STATE_DEPTH_READ | D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+	info.initialState = initialDepthBufferState;
 	info.clearValue.Format = desc.Format;
 	info.clearValue.DepthStencil.Depth = 0.0f;
 	info.clearValue.DepthStencil.Stencil = 0;

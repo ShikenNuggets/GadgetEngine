@@ -6,6 +6,7 @@
 #include <dxgi1_6.h>
 #include <d3d12.h>
 
+#include "DX12_Defines.h"
 #include "Debug.h"
 
 namespace Gadget{
@@ -241,6 +242,42 @@ namespace Gadget{
 			desc.SizeInBytes = size_;
 			desc.pPipelineStateSubobjectStream = stream_;
 			return CreatePipelineState(device_, desc);
+		}
+
+		//----------------------------------------------------------------------------------------------------//
+		//-------------------- Resource Barriers -------------------------------------------------------------//
+		//----------------------------------------------------------------------------------------------------//
+
+		class DX12_ResourceBarriers{
+		public:
+			void AddTransitionBarrier(	ID3D12Resource* resource_,
+										D3D12_RESOURCE_STATES before_, D3D12_RESOURCE_STATES after_,
+										D3D12_RESOURCE_BARRIER_FLAGS flags_ = D3D12_RESOURCE_BARRIER_FLAG_NONE,
+										uint32_t subResource_ = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES);
+
+			void AddUAVBarrier(ID3D12Resource* resource_, D3D12_RESOURCE_BARRIER_FLAGS flags_ = D3D12_RESOURCE_BARRIER_FLAG_NONE);
+			void AddAliasingBarrier(ID3D12Resource* beforeResource_, ID3D12Resource* afterResource_, D3D12_RESOURCE_BARRIER_FLAGS flags_ = D3D12_RESOURCE_BARRIER_FLAG_NONE);
+
+			void ApplyAllBarriers(ID3D12_GraphicsCommandList* cmdList_);
+
+		private:
+			std::vector<D3D12_RESOURCE_BARRIER> barriers;
+			uint32_t offset = 0;
+		};
+
+		constexpr inline void TransitionResource(ID3D12_GraphicsCommandList* cmdList_, ID3D12Resource* resource_,
+								D3D12_RESOURCE_STATES before_, D3D12_RESOURCE_STATES after_,
+								D3D12_RESOURCE_BARRIER_FLAGS flags_ = D3D12_RESOURCE_BARRIER_FLAG_NONE,
+								uint32_t subResource_ = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES){
+			D3D12_RESOURCE_BARRIER barrier{};
+			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+			barrier.Flags = flags_;
+			barrier.Transition.pResource = resource_;
+			barrier.Transition.StateBefore = before_;
+			barrier.Transition.StateAfter = after_;
+			barrier.Transition.Subresource = subResource_;
+
+			cmdList_->ResourceBarrier(1, &barrier);
 		}
 	}
 }

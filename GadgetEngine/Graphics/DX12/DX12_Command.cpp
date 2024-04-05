@@ -112,10 +112,14 @@ void DX12_Command::BeginFrame(){
 	}
 }
 
-void DX12_Command::EndFrame(){
+void DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
+	GADGET_BASIC_ASSERT(renderSurface_ != nullptr);
+
 	cmdList->Close();
 	ID3D12CommandList* const cmdLists[]{ cmdList };
 	cmdQueue->ExecuteCommandLists(_countof(cmdLists), &cmdLists[0]);
+
+	renderSurface_->Present();
 
 	uint64_t& fv = fenceValue;
 	++fv;

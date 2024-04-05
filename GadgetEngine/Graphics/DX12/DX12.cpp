@@ -11,6 +11,7 @@ using namespace Gadget;
 IDXGIFactory7* DX12::dxgiFactory = nullptr;
 ID3D12_Device* DX12::mainDevice = nullptr;
 DX12_Command* DX12::gfxCommand = nullptr;
+DX12_Helpers::DX12_ResourceBarriers DX12::resourceBarriers{};
 DX12_DescriptorHeap DX12::rtvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_RTV };
 DX12_DescriptorHeap DX12::dsvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_DSV };
 DX12_DescriptorHeap DX12::srvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV };

@@ -23,6 +23,10 @@ namespace Gadget{
 		static void DepthPrepass(ID3D12_GraphicsCommandList* cmdList_, const ScreenCoordinate& frameInfo_);
 		static void Render(ID3D12_GraphicsCommandList* cmdList_, const ScreenCoordinate& frameInfo_);
 
+		static void AddTransitionsForDepthPrepass(DX12_Helpers::DX12_ResourceBarriers& outResourceBarriers_);
+		static void AddTransitionsForGeometryPrepass(DX12_Helpers::DX12_ResourceBarriers& outResourceBarriers_);
+		static void AddTransitionsForPostProcess(DX12_Helpers::DX12_ResourceBarriers& outResourceBarriers_);
+
 		static void SetRenderTargetsForDepthPrepass(ID3D12_GraphicsCommandList* cmdList_);
 		static void SetRenderTargetsForGeometryPass(ID3D12_GraphicsCommandList* cmdList_);
 
@@ -36,6 +40,9 @@ namespace Gadget{
 		static ID3D12PipelineState* pipelineStateObject;
 		static ScreenCoordinate size;
 		static Color clearColor;
+
+		const static D3D12_RESOURCE_STATES initialMainBufferState;
+		const static D3D12_RESOURCE_STATES initialDepthBufferState;
 
 		static bool CreateBuffers(const ScreenCoordinate& size_, const Color& clearColor_);
 		static bool CreateRootSignatureAndPSO();

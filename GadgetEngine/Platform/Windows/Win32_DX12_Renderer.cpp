@@ -8,6 +8,7 @@
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
+#include "Graphics/DX12/DX12_Helpers.h"
 #include "Graphics/DX12/DX12_RenderSurface.h"
 #include "Graphics/DX12/DX12_ShaderHandler.h"
 #include "Graphics/DX12/DX12_GeometryPass.h"
@@ -213,32 +214,51 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	}
 
 	gfxCommand->BeginFrame();
-	//ID3D12_GraphicsCommandList* cmdList = gfxCommand->CommandList();
+	ID3D12_GraphicsCommandList* const cmdList = gfxCommand->CommandList();
+	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
 	if(deferredReleaseFlag[CurrentFrameIndex()]){
 		DX12::ProcessDeferredReleases(CurrentFrameIndex());
 	}
 
+	ID3D12Resource* const currentBackBuffer = renderSurfacePtr->CurrentBackBuffer();
+
 	DX12_GeometryPass::OnResize(window->GetSize()); //TODO - This is overkill
 
-	renderSurfacePtr->Present();
-
 	//Do stuff
-	gfxCommand->CommandList()->RSSetViewports(1, &renderSurfacePtr->Viewport());
-	gfxCommand->CommandList()->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
+	cmdList->RSSetViewports(1, &renderSurfacePtr->Viewport());
+	cmdList->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
 
-	DX12_GeometryPass::SetRenderTargetsForDepthPrepass(gfxCommand->CommandList());
-	DX12_GeometryPass::DepthPrepass(gfxCommand->CommandList(), window->GetSize());
+	//----------Depth Pre-Pass----------
+	DX12_GeometryPass::AddTransitionsForDepthPrepass(resourceBarriers);
+	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	DX12_GeometryPass::SetRenderTargetsForGeometryPass(gfxCommand->CommandList());
-	DX12_GeometryPass::Render(gfxCommand->CommandList(), window->GetSize());
+	DX12_GeometryPass::SetRenderTargetsForDepthPrepass(cmdList);
+	DX12_GeometryPass::DepthPrepass(cmdList, window->GetSize());
+
+	//----------Geometry Pass-----------
+	DX12_GeometryPass::AddTransitionsForGeometryPrepass(resourceBarriers);
+	resourceBarriers.ApplyAllBarriers(cmdList);
+
+	DX12_GeometryPass::SetRenderTargetsForGeometryPass(cmdList);
+	DX12_GeometryPass::Render(cmdList, window->GetSize());
 	
-	//Post-processing here
+	DX12_Helpers::TransitionResource(cmdList, currentBackBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+	//----------Post-Processing-----------
+	DX12_GeometryPass::AddTransitionsForPostProcess(resourceBarriers);
+	resourceBarriers.ApplyAllBarriers(cmdList);
+	// ...
+	//Afer post-processing
+
+	//----------Finalize Render-----------
+	DX12_Helpers::TransitionResource(cmdList, currentBackBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
 	//Done doing stuff
-	gfxCommand->EndFrame();
+	gfxCommand->EndFrame(renderSurfacePtr);
 
 	//Do this only at the end
+	//TODO - Not actually sure if DX12 needs this, or something else
 	window->SwapBuffers();
 }
 

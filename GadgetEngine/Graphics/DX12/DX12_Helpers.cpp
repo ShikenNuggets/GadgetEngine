@@ -2,6 +2,8 @@
 
 #include <wrl.h>
 
+#include "DX12.h"
+
 using namespace Gadget;
 
 ID3D12RootSignature* DX12_Helpers::DX12_RootSignatureDesc::Create(ID3D12Device* device_) const{
@@ -32,4 +34,49 @@ ID3D12RootSignature* DX12_Helpers::DX12_RootSignatureDesc::Create(ID3D12Device* 
 	}
 
 	return rootSignature;
+}
+
+//----------------------------------------------------------------------------------------------------//
+//-------------------- Resource Barriers -------------------------------------------------------------//
+//----------------------------------------------------------------------------------------------------//
+
+void DX12_Helpers::DX12_ResourceBarriers::AddTransitionBarrier(ID3D12Resource* resource_, D3D12_RESOURCE_STATES before_, D3D12_RESOURCE_STATES after_, D3D12_RESOURCE_BARRIER_FLAGS flags_, uint32_t subResource_){
+	GADGET_BASIC_ASSERT(resource_ != nullptr);
+
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = flags_;
+	barrier.Transition.pResource = resource_;
+	barrier.Transition.StateBefore = before_;
+	barrier.Transition.StateAfter = after_;
+	barrier.Transition.Subresource = subResource_;
+
+	barriers.push_back(barrier);
+}
+
+void DX12_Helpers::DX12_ResourceBarriers::AddUAVBarrier(ID3D12Resource* resource_, D3D12_RESOURCE_BARRIER_FLAGS flags_){
+	GADGET_BASIC_ASSERT(resource_ != nullptr);
+
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+	barrier.Flags = flags_;
+	barrier.UAV.pResource = resource_;
+}
+
+void DX12_Helpers::DX12_ResourceBarriers::AddAliasingBarrier(ID3D12Resource* beforeResource_, ID3D12Resource* afterResource_, D3D12_RESOURCE_BARRIER_FLAGS flags_){
+	GADGET_BASIC_ASSERT(beforeResource_ != nullptr);
+	GADGET_BASIC_ASSERT(afterResource_ != nullptr);
+
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_ALIASING;
+	barrier.Flags = flags_;
+	barrier.Aliasing.pResourceBefore = beforeResource_;
+	barrier.Aliasing.pResourceAfter = afterResource_;
+}
+
+void DX12_Helpers::DX12_ResourceBarriers::ApplyAllBarriers(ID3D12_GraphicsCommandList* cmdList_){
+	GADGET_BASIC_ASSERT(cmdList_ != nullptr);
+
+	cmdList_->ResourceBarrier(barriers.size(), barriers.data());
+	barriers.clear(); //TODO - is this safe?
 }
