@@ -22,6 +22,8 @@ namespace Gadget{
 		constexpr bool IsShaderVisible() const{ return gpuHandle.ptr != NULL; }
 		constexpr uint32_t GetIndex() const{ return index; }
 
+		void SetIndex(uint32_t index_){ index = index_; }
+
 	private:
 		uint32_t index = std::numeric_limits<uint32_t>::max(); //TODO - Check how much memory we could save by calculating this on the fly
 

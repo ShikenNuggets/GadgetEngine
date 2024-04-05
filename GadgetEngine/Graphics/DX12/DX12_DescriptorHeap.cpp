@@ -18,8 +18,6 @@ bool DX12_DescriptorHeap::Initialize(uint32_t capacity_, bool isShaderVisible_){
 		isShaderVisible_ = false;
 	}
 
-	Release(); //Sanity check in case this gets called twice
-
 	ID3D12Device* const device = DX12::MainDevice();
 	GADGET_BASIC_ASSERT(device != nullptr);
 	if(device == nullptr){
@@ -78,6 +76,7 @@ void DX12_DescriptorHeap::ProcessDeferredFree(uint32_t frameIndex_){
 void DX12_DescriptorHeap::Release(){
 	if(heap != nullptr){
 		DX12::DeferredRelease(heap);
+		heap = nullptr;
 	}
 }
 
@@ -98,7 +97,7 @@ DX12_DescriptorHandle DX12_DescriptorHeap::Allocate(){
 		handle.gpuHandle.ptr = gpuStart.ptr + offset;
 	}
 
-	handle.index = index;
+	handle.SetIndex(index);
 #ifdef GADGET_DEBUG
 	handle.container = this;
 #endif //GADGET_DEBUG
@@ -120,8 +119,8 @@ void DX12_DescriptorHeap::Free(DX12_DescriptorHandle& handle_){
 
 	const uint32_t index = static_cast<uint32_t>((handle_.cpuHandle.ptr - cpuStart.ptr)) / descriptorSize;
 
-	GADGET_BASIC_ASSERT(handle_.index < capacity);
-	GADGET_BASIC_ASSERT(handle_.index == index);
+	GADGET_BASIC_ASSERT(handle_.GetIndex() < capacity);
+	GADGET_BASIC_ASSERT(handle_.GetIndex() == index);
 #ifdef GADGET_DEBUG
 	GADGET_BASIC_ASSERT(handle_.container == this);
 #endif //GADGET_DEBUG
