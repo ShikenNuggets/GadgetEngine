@@ -3,16 +3,9 @@
 
 #include <mutex>
 
-#include <dxgi1_6.h>
-#include <d3d12.h>
-
+#include "DX12_Defines.h"
 #include "Debug.h"
 #include "Utils/Utils.h"
-
-//These will make it easier to increase interface versions later
-using ID3D12_Device					= ID3D12Device8;
-using ID3D12_GraphicsCommandList	= ID3D12GraphicsCommandList6;
-using IDXGI_Factory					= IDXGIFactory7;
 
 namespace Gadget{
 	class DX12_Command;

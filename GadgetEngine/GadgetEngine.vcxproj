@@ -214,6 +214,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\Cubemap.h" />
     <ClInclude Include="Graphics\DX12\DX12.h" />
     <ClInclude Include="Graphics\DX12\DX12_Command.h" />
+    <ClInclude Include="Graphics\DX12\DX12_Defines.h" />
     <ClInclude Include="Graphics\DX12\DX12_DescriptorHeap.h" />
     <ClInclude Include="Graphics\DX12\DX12_GeometryPass.h" />
     <ClInclude Include="Graphics\DX12\DX12_Helpers.h" />

@@ -145,6 +145,9 @@
     <ClInclude Include="Graphics\DX12\DX12_Command.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\DX12\DX12_Defines.h">
+      <Filter>Graphics\DX12</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\DX12\DX12_DescriptorHeap.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
