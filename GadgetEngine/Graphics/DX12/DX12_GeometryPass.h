@@ -17,6 +17,9 @@ namespace Gadget{
 		static bool Initialize(const ScreenCoordinate& size_, const Color& clearColor_ = Color::Black());
 		static void Shutdown();
 
+		[[nodiscard]] static const DX12_RenderTextureInfo* MainBuffer(){ return mainBuffer; }
+		[[nodiscard]] static const DX12_DepthBufferTextureInfo* DepthBuffer(){ return depthBuffer; }
+
 		static void SetClearColor(const Color& color_);
 		static void OnResize(const ScreenCoordinate& newSize_);
 

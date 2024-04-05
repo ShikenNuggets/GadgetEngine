@@ -20,13 +20,15 @@ namespace Gadget{
 
 		constexpr bool IsValid() const{ return cpuHandle.ptr != NULL; }
 		constexpr bool IsShaderVisible() const{ return gpuHandle.ptr != NULL; }
+		constexpr uint32_t GetIndex() const{ return index; }
+
+	private:
+		uint32_t index = std::numeric_limits<uint32_t>::max(); //TODO - Check how much memory we could save by calculating this on the fly
 
 #ifdef GADGET_DEBUG
-	private:	
 		friend class DX12_DescriptorHeap;
 		DX12_DescriptorHeap* container = nullptr;
-		uint32_t index = std::numeric_limits<uint32_t>::max();
-#endif // GADGET_DEBUG
+#endif //GADGET_DEBUG
 	};
 
 	class DX12_DescriptorHeap{

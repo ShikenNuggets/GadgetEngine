@@ -12,6 +12,7 @@
 #include "Graphics/DX12/DX12_RenderSurface.h"
 #include "Graphics/DX12/DX12_ShaderHandler.h"
 #include "Graphics/DX12/DX12_GeometryPass.h"
+#include "Graphics/DX12/DX12_PostProcess.h"
 
 using namespace Gadget;
 
@@ -110,6 +111,11 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize geometry pass!", __FILE__, __LINE__);
 	}
 
+	br = DX12_PostProcess::Initialize();
+	if(br == false){
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize post-processing submodule!", __FILE__, __LINE__);
+	}
+
 #ifdef GADGET_DEBUG
 	{
 		Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
@@ -128,6 +134,7 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 	ProcessAllDeferredReleases();
 
+	DX12_PostProcess::Shutdown();
 	DX12_GeometryPass::Shutdown();
 	DX12_ShaderHandler::Shutdown();
 
@@ -226,6 +233,9 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	DX12_GeometryPass::OnResize(window->GetSize()); //TODO - This is overkill
 
 	//Do stuff
+	ID3D12DescriptorHeap* const heaps[]{ srvDescriptorHeap.Heap() };
+	cmdList->SetDescriptorHeaps(1, &heaps[0]);
+
 	cmdList->RSSetViewports(1, &renderSurfacePtr->Viewport());
 	cmdList->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
 
@@ -248,7 +258,7 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	//----------Post-Processing-----------
 	DX12_GeometryPass::AddTransitionsForPostProcess(resourceBarriers);
 	resourceBarriers.ApplyAllBarriers(cmdList);
-	// ...
+	DX12_PostProcess::PostProcess(cmdList, DX12_GeometryPass::MainBuffer(), renderSurfacePtr->CurrentRenderTargetView());
 	//Afer post-processing
 
 	//----------Finalize Render-----------

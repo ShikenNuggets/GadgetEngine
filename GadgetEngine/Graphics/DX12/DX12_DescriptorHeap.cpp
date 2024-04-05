@@ -98,9 +98,9 @@ DX12_DescriptorHandle DX12_DescriptorHeap::Allocate(){
 		handle.gpuHandle.ptr = gpuStart.ptr + offset;
 	}
 
+	handle.index = index;
 #ifdef GADGET_DEBUG
 	handle.container = this;
-	handle.index = index;
 #endif //GADGET_DEBUG
 
 	return handle;
@@ -119,10 +119,11 @@ void DX12_DescriptorHeap::Free(DX12_DescriptorHandle& handle_){
 	GADGET_BASIC_ASSERT((handle_.cpuHandle.ptr - cpuStart.ptr) % descriptorSize == 0);
 
 	const uint32_t index = static_cast<uint32_t>((handle_.cpuHandle.ptr - cpuStart.ptr)) / descriptorSize;
-#ifdef GADGET_DEBUG
-	GADGET_BASIC_ASSERT(handle_.container == this);
+
 	GADGET_BASIC_ASSERT(handle_.index < capacity);
 	GADGET_BASIC_ASSERT(handle_.index == index);
+#ifdef GADGET_DEBUG
+	GADGET_BASIC_ASSERT(handle_.container == this);
 #endif //GADGET_DEBUG
 
 	const uint32_t frameIndex = 0;

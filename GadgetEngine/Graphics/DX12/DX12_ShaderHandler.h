@@ -29,6 +29,7 @@ namespace Gadget{
 		enum class ID : uint32_t{
 			TestShader_VS = 0,
 			TestShader_PS,
+			PostProcess_PS,
 
 			ID_MAX //Do not put anything below this!
 		};
