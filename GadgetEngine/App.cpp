@@ -75,25 +75,9 @@ void App::Initialize(const std::string& name_){
 
 	GUID::SetInitialGUID(); //Temp, in the future we'll pull the number of unique entities from the project files or whatever, and then set that here
 
-	int width = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayWidthKey));
-	int height = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayHeightKey));
-	int x = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowXKey));
-	int y = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowYKey));
+	
 
-	//Use a default value if option is invalid
-	if(width <= 100 || height <= 100){
-		width = 1280;
-		height = 720;
-	}
-
-	#ifdef GADGET_PLATFORM_WIN32
-		//renderer = std::make_unique<Win32_GL_Renderer>(width, height, x, y);
-		renderer = std::make_unique<Win32_DX12_Renderer>(width, height, x, y);
-	#else
-		static_assert(false, "Unhandled platform in App::Initialize!")
-	#endif //GADGET_PLATFORM_WIN32
-
-	renderer->PostInit();
+	InitRenderer();
 
 	physics = std::make_unique<PhysManager>();
 	sceneManager = std::make_unique<BasicSceneManager>();
@@ -115,6 +99,39 @@ void App::Destroy(){
 	resourceMgr.reset();
 
 	GADGET_BASIC_ASSERT(IsFullyDestroyed());
+}
+
+void App::InitRenderer(){
+	GADGET_BASIC_ASSERT(renderer == nullptr);
+	if(renderer != nullptr){
+		Debug::Log("Tried to re-initialize the renderer!", Debug::Warning, __FILE__, __LINE__);
+		return;
+	}
+
+	int width = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayWidthKey));
+	int height = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayHeightKey));
+	int x = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowXKey));
+	int y = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowYKey));
+
+	//Use a default value if option is invalid
+	if(width <= 100 || height <= 100){
+		width = 1280;
+		height = 720;
+	}
+
+#ifdef GADGET_PLATFORM_WIN32
+	//renderer = std::make_unique<Win32_GL_Renderer>(width, height, x, y);
+	renderer = std::make_unique<Win32_DX12_Renderer>(width, height, x, y);
+#else
+	static_assert(false, "Unhandled platform in App::Initialize!")
+#endif //GADGET_PLATFORM_WIN32
+
+	renderer->PostInit();
+}
+
+void App::ResetRenderer(){
+	renderer.reset();
+	InitRenderer();
 }
 
 void App::Run(GameInterface& gameInterface_){
@@ -151,6 +168,12 @@ void App::Run(GameInterface& gameInterface_){
 		renderer->Render(sceneManager->CurrentScene());
 
 		Profiler::End(SID("MainLoop"));
+
+	#ifdef GADGET_DEBUG
+		if(input->GetButtonDown(Gadget::ButtonID::Keyboard_F11)){
+			ResetRenderer();
+		}
+	#endif // GADGET_DEBUG
 
 		//After everything else is done, sleep for the appropriate amount of time (if necessary)
 		time->Delay();

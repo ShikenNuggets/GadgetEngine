@@ -224,7 +224,7 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	ID3D12_GraphicsCommandList* const cmdList = gfxCommand->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
-	if(deferredReleaseFlag[CurrentFrameIndex()]){
+	if(deferredReleaseFlag[CurrentFrameIndex()] != 0){
 		DX12::ProcessDeferredReleases(CurrentFrameIndex());
 	}
 

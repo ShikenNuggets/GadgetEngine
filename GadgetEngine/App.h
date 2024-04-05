@@ -70,6 +70,9 @@ namespace Gadget{
 		void Initialize(const std::string& name_);
 		void Destroy();
 
+		void InitRenderer();
+		void ResetRenderer();
+
 		inline bool IsFullyInitialized() const{
 			return
 				resourceMgr != nullptr
