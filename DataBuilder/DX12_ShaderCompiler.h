@@ -54,10 +54,12 @@ namespace DB{
 
 		bool AreCompiledEngineShadersUpToDate(){ return false; } //TODO - Optimization!
 
-		bool CompileEngineShaders(const std::string& outputFileName_ = "EngineShaders.bin"){
+		//Returns the number of shaders that were compiled
+		//Returns -1 if an error occurs
+		int CompileEngineShaders(const std::string& outputFileName_ = "EngineShaders.bin"){
 			if(AreCompiledEngineShadersUpToDate()){
 				std::cout << "Existing compiled shaders are already up to date" << std::endl;
-				return true;
+				return 0;
 			}
 
 			ShaderList shaders;
@@ -72,7 +74,7 @@ namespace DB{
 				absPath = std::filesystem::absolute(relPath);
 				if(!std::filesystem::exists(absPath)){
 					std::cout << "ERROR: Shader source path [" + absPath.string() + "] does not exist!" << std::endl;
-					return false;
+					return -1;
 				}
 
 				Shader compiledShader = Compile(info, absPath);
@@ -80,11 +82,15 @@ namespace DB{
 					shaders.push_back(std::move(compiledShader));
 				}else{
 					std::cout << "ERROR: Could not compile shaders!" << std::endl;
-					return false;
+					return -1;
 				}
 			}
 
-			return SaveCompiledShaders(shaders, outputFileName_);
+			if(!SaveCompiledShaders(shaders, outputFileName_)){
+				return -1;
+			}
+
+			return shaders.size();
 		}
 
 	private:

@@ -9,9 +9,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]){
 
 	std::cout << "[DX12] Compiling HLSL engine shaders..." << std::endl;
 	DX12_ShaderCompiler compiler;
-	bool result = compiler.CompileEngineShaders();
-	if(result){
-		std::cout << "[DX12] HLSL engine shaders compiled successfully!" << std::endl;
+	int result = compiler.CompileEngineShaders();
+	if(result >= 0){
+		std::cout << "[DX12] " << result << " HLSL engine shaders successfully compiled" << std::endl;
 	}else{
 		std::cout << "[DX12] HLSL engine shader compile failed!" << std::endl;
 		return -1;
