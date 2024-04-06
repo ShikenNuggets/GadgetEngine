@@ -159,7 +159,9 @@ void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 	switch(e_.window.event){
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
 			SDL_GetWindowSize(sdlWindow, &w, &h);
-			renderSurface->SetSize(ScreenCoordinate(w, h));
+			size.x = w;
+			size.y = h;
+			renderSurface->SetSize(size);
 			EventHandler::GetInstance()->HandleEvent(WindowResizedEvent(w, h));
 			break;
 		case SDL_WINDOWEVENT_MOVED:

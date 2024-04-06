@@ -76,7 +76,28 @@ void DX12_RenderSurface::Present() const{
 }
 
 void DX12_RenderSurface::SetSize([[maybe_unused]] const ScreenCoordinate& sc_){
-	//TODO
+	if(sc_.x == size.x && sc_.y == size.y){
+		return; //Size didn't change, no need to do anything
+	}
+
+	GADGET_BASIC_ASSERT(swapChain != nullptr);
+	if(swapChain == nullptr){
+		Debug::Log(SID("RENDER"), "Set Size called on an uninitialized DX12_RenderSurface!", Debug::Warning, __FILE__, __LINE__);
+		return;
+	}
+
+	size = sc_;
+
+	for(uint32_t i = 0; i < DX12::FrameBufferCount; i++){
+		renderTargetData[i].resource->Release();
+	}
+
+	const uint32_t flags = 0; //allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0; //TODO - Disable this to allow disabling vsync
+	swapChain->ResizeBuffers(DX12::FrameBufferCount, 0, 0, DXGI_FORMAT_UNKNOWN, flags);
+
+	FinalizeSwapChain();
+
+	Debug::Log(SID("RENDER"), "DX12_RenderSurface was resized to " + std::to_string(size.x) + "x" + std::to_string(size.y), Debug::Info, __FILE__, __LINE__);
 }
 
 void DX12_RenderSurface::Release(){
