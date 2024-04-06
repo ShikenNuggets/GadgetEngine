@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 
 #include "App.h"
-#include "Win32_Utils.h"
+#include "SDL2_Utils.h"
 #include "Debug.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
@@ -95,20 +95,20 @@ void Win32_Window::HandleEvents(){
 				break;
 			case SDL_KEYDOWN:
 				if(e.key.repeat == 0){ //Ignore key repeats - TODO - maybe repeats should be a separate keyboard event?
-					EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(Win32_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
+					EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(SDL2_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
 				}
 				break;
 			case SDL_KEYUP:
-				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(Win32_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
+				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(SDL2_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
 				break;
 			case SDL_MOUSEMOTION:
 				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(static_cast<float>(e.motion.xrel) / GetWidth(), static_cast<float>(e.motion.yrel) / GetHeight(), static_cast<float>(e.motion.x), static_cast<float>(e.motion.y)));
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				EventHandler::GetInstance()->HandleEvent(MouseButtonPressedEvent(Win32_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));
+				EventHandler::GetInstance()->HandleEvent(MouseButtonPressedEvent(SDL2_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));
 				break;
 			case SDL_MOUSEBUTTONUP:
-				EventHandler::GetInstance()->HandleEvent(MouseButtonReleasedEvent(Win32_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));
+				EventHandler::GetInstance()->HandleEvent(MouseButtonReleasedEvent(SDL2_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));
 				break;
 			case SDL_MOUSEWHEEL:
 				EventHandler::GetInstance()->HandleEvent(MouseScrollEvent(e.wheel.preciseX, e.wheel.preciseY));
@@ -125,7 +125,7 @@ void Win32_Window::HandleEvents(){
 			//TODO - None of the following joystick events know or care WHICH joystick is being used
 			//For a singleplayer game this doesn't really matter but this is a HUGE problem for splitscreen
 			case SDL_JOYAXISMOTION:
-				joystickAxis = Win32_Utils::ConvertSDLJoystickAxisToAxisID(e.jaxis.axis);
+				joystickAxis = SDL2_Utils::ConvertSDLJoystickAxisToAxisID(e.jaxis.axis);
 				range = static_cast<float>(e.jaxis.value) / static_cast<float>(std::numeric_limits<int16_t>::max()); //Convert the quantized value we get from SDL to a float between -1 and 1
 				
 				if(joystickAxis == AxisID::Gamepad_LeftStick_Vertical || joystickAxis == AxisID::Gamepad_RightStick_Vertical){
@@ -136,10 +136,10 @@ void Win32_Window::HandleEvents(){
 				//TODO - Trigger button events here as well
 				break;
 			case SDL_JOYBUTTONDOWN:
-				EventHandler::GetInstance()->HandleEvent(GamepadButtonPressedEvent(e.jbutton.which, Win32_Utils::ConvertSDLJoystickButtonToButtonID(e.jbutton.button)));
+				EventHandler::GetInstance()->HandleEvent(GamepadButtonPressedEvent(e.jbutton.which, SDL2_Utils::ConvertSDLJoystickButtonToButtonID(e.jbutton.button)));
 				break;
 			case SDL_JOYBUTTONUP:
-				EventHandler::GetInstance()->HandleEvent(GamepadButtonReleasedEvent(e.jbutton.which, Win32_Utils::ConvertSDLJoystickButtonToButtonID(e.jbutton.button)));
+				EventHandler::GetInstance()->HandleEvent(GamepadButtonReleasedEvent(e.jbutton.which, SDL2_Utils::ConvertSDLJoystickButtonToButtonID(e.jbutton.button)));
 				break;
 			case SDL_JOYHATMOTION:
 				HandleHatMotionEvent(e);

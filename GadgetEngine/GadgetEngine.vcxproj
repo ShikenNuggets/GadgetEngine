@@ -290,6 +290,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Physics\CubeCollider.h" />
     <ClInclude Include="Physics\PhysManager.h" />
     <ClInclude Include="Physics\Rigidbody.h" />
+    <ClInclude Include="Platform\Windows\SDL2_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_DX12_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_GL_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_Utils.h" />
@@ -379,6 +380,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Physics\CollisionSystem.cpp" />
     <ClCompile Include="Physics\PhysManager.cpp" />
     <ClCompile Include="Physics\Rigidbody.cpp" />
+    <ClCompile Include="Platform\Windows\SDL2_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_DX12_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_GL_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Utils.cpp" />
