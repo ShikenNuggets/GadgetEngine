@@ -241,6 +241,22 @@ bool FileSystem::CreateDir(const std::string& path_){
 	return std::filesystem::create_directory(path_);
 }
 
+bool FileSystem::IsLastWriteTimeNewer(const std::string& basePath_, const std::string& comparePath_){
+	GADGET_BASIC_ASSERT(!basePath_.empty());
+	GADGET_BASIC_ASSERT(!comparePath_.empty());
+	GADGET_BASIC_ASSERT(FileExists(basePath_));
+	GADGET_BASIC_ASSERT(FileExists(comparePath_));
+
+	if(!FileExists(basePath_) || !FileExists(comparePath_)){
+		return false;
+	}
+
+	auto path1WriteTime = std::filesystem::last_write_time(basePath_);
+	auto path2WriteTime = std::filesystem::last_write_time(comparePath_);
+
+	return path2WriteTime < path1WriteTime;
+}
+
 std::string FileSystem::RemoveFileNameFromPath(const std::string& path_){
 	GADGET_BASIC_ASSERT(!path_.empty());
 	return path_.substr(0, path_.find_last_of(PathSeparator));

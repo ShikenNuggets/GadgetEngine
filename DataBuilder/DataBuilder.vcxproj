@@ -99,7 +99,9 @@
       <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\Build\GadgetEngine\Debug;..\SDK\dxc\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d</Command>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -131,7 +133,9 @@
       <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\Build\GadgetEngine\Develop;..\SDK\dxc\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d</Command>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -160,7 +164,9 @@
       <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\Build\GadgetEngine\Release;..\SDK\dxc\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d</Command>
+      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

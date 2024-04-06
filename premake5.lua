@@ -313,6 +313,8 @@ project "DataBuilder"
 		postbuildcommands
 		{
 			"echo D|xcopy \"$(SolutionDir)SDK\\dxc\\bin\\x64\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
 		}
 
 		libdirs

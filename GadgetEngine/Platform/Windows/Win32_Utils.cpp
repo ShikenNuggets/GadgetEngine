@@ -1,6 +1,6 @@
 #include "Win32_Utils.h"
 
-#include <ShlObj.h>
+#include <ShlObj_core.h>
 
 #include "Debug.h"
 
