@@ -151,12 +151,14 @@ namespace DB{
 			std::wstring file = Gadget::Utils::ToWString(info_.file);
 			std::wstring func = Gadget::Utils::ToWString(info_.func);
 			std::wstring prof = Gadget::Utils::ToWString(std::string(profileStrings[(uint32_t)info_.type]) + versionStr);
+			std::wstring incl = Gadget::Utils::ToWString(shaderSourcePath);
 
 			LPCWSTR args[]
 			{
 				file.c_str(),
 				L"-E ", func.c_str(),
 				L"-T", prof.c_str(),
+				L"-I", incl.c_str(),
 				DXC_ARG_ALL_RESOURCES_BOUND,
 
 			#ifdef GADGET_DEBUG
