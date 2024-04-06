@@ -239,6 +239,10 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	cmdList->RSSetViewports(1, &renderSurfacePtr->Viewport());
 	cmdList->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
 
+	//TODO - Splitting barriers (instead of one call, do a BEGIN_ONLY and END_ONLY call separately) could theoretically improve performance
+	//As of right now it doesn't seem to make any difference, but once we have a real workload we should check
+	//Could also make it configurable so engine users can profile and see what makes sense for their game?
+
 	//----------Depth Pre-Pass----------
 	DX12_GeometryPass::AddTransitionsForDepthPrepass(resourceBarriers);
 	resourceBarriers.ApplyAllBarriers(cmdList);
