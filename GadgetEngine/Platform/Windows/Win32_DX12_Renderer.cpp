@@ -17,87 +17,44 @@
 
 using namespace Gadget;
 
-constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_11_0; //TODO - Make this configurable
-
-Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), DX12(){
+Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12){
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
 	GADGET_ASSERT(win32Window != nullptr, "Win32 Renderer requires a Win32 window!");
 
-	HRESULT result;
+	ErrorCode err = ErrorCode::OK;
 	uint32_t dxgiFactoryFlags = 0;
 	
 #ifdef GADGET_DEBUG
-	{
-		Microsoft::WRL::ComPtr<ID3D12Debug3> debugInterface;
-		result = D3D12GetDebugInterface(IID_PPV_ARGS(&debugInterface));
-		if(SUCCEEDED(result)){
-			debugInterface->EnableDebugLayer();
-			debugInterface->SetEnableGPUBasedValidation(App::GetInstance().GetConfig().GetOptionBool(EngineVars::Render::gpuValidationKey));
-			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
-		}else{
-			Debug::Log(SID("RENDER"), "Failed to get D3D12 Debug Interface!", Debug::Error, __FILE__, __LINE__);
-		}
+	err = DX12::EnableDebugLayer(App::GetInstance().GetConfig().GetOptionBool(EngineVars::Render::gpuValidationKey));
+	if(err != ErrorCode::OK){
+		Debug::Log(SID("RENDER"), "[DX12] Could not initialize debug layer!", Debug::Warning, __FILE__, __LINE__);
 	}
+
+	dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 #endif // GADGET_DEBUG
+
+	err = DX12::CreateDevice(dxgiFactoryFlags);
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+	}
+
+	err = DX12::CreateCommandList();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device!" + std::to_string((uint32_t)err), __FILE__, __LINE__);
+	}
 	
-	result = CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&dxgiFactory));
-	if(FAILED(result)){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to create DXGI Factory!", __FILE__, __LINE__);
+	err = DX12::InitializeDescriptorHeaps();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not initialize descriptor heaps!" + std::to_string((uint32_t)err), __FILE__, __LINE__);
 	}
-
-	Microsoft::WRL::ComPtr<IDXGIAdapter4> mainAdapter;
-	mainAdapter.Attach(DetermineMainAdapter());
-	if(!mainAdapter){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to determine main DXGI adapter! You may need to update your graphics card drivers", __FILE__, __LINE__);
-	}
-
-	D3D_FEATURE_LEVEL maxFeatureLevel = GetMaxFeatureLevel(mainAdapter.Get());
-	GADGET_BASIC_ASSERT(maxFeatureLevel >= minimumFeatureLevel);
-	if(maxFeatureLevel < minimumFeatureLevel){
-		Debug::ThrowFatalError(SID("RENDER"), "Max supported feature level is too low, something is wrong with Win32_DX12_Renderer::DetermineMainAdapter. Also, you may need to update your graphics card drivers", __FILE__, __LINE__);
-	}
-
-	result = D3D12CreateDevice(mainAdapter.Get(), maxFeatureLevel, IID_PPV_ARGS(&mainDevice));
-	if(FAILED(result) || !mainDevice){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to create D3D12Device!", __FILE__, __LINE__);
-	}
-
-	mainDevice->SetName(L"MAIN DEVICE");
-	Debug::Log(SID("RENDER"), "Created new D3D12 device with name [MAIN DEVICE]", Debug::Info, __FILE__, __LINE__);
-
-	gfxCommand = new DX12_Command(mainDevice, D3D12_COMMAND_LIST_TYPE_DIRECT);
-	
-	bool br = rtvDescriptorHeap.Initialize(512, false); //TODO - These numbers are somewhat arbitrary - makes these configurable?
-	if(br == false || rtvDescriptorHeap.Heap() == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize rtvDescriptorHeap!", __FILE__, __LINE__);
-	}
-	rtvDescriptorHeap.Heap()->SetName(L"RTV DescriptorHeap");
-
-	br = dsvDescriptorHeap.Initialize(512, false);
-	if(br == false || dsvDescriptorHeap.Heap() == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize dsvDescriptorHeap!", __FILE__, __LINE__);
-	}
-	dsvDescriptorHeap.Heap()->SetName(L"DSV DescriptorHeap");
-
-	br = srvDescriptorHeap.Initialize(4096, true);
-	if(br == false || srvDescriptorHeap.Heap() == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize srvDescriptorHeap!", __FILE__, __LINE__);
-	}
-	srvDescriptorHeap.Heap()->SetName(L"SRV DescriptorHeap");
-
-	br = uavDescriptorHeap.Initialize(512, false);
-	if(br == false || uavDescriptorHeap.Heap() == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize uavDescriptorHeap!", __FILE__, __LINE__);
-	}
-	uavDescriptorHeap.Heap()->SetName(L"UAV DescriptorHeap");
 
 	renderSurfacePtr = new DX12_RenderSurface(window.get(), w_, h_);
 	DX12::CreateSwapChainForSurface(renderSurfacePtr);
 	window->SetRenderSurface(renderSurfacePtr);
 
-	br = DX12_ShaderHandler::Initialize();
+	bool br = DX12_ShaderHandler::Initialize();
 	if(br == false){
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize shader handler!", __FILE__, __LINE__);
 	}
@@ -118,22 +75,20 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	}
 
 #ifdef GADGET_DEBUG
-	{
-		Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
-		result = mainDevice->QueryInterface(IID_PPV_ARGS(&infoQueue));
-		if(FAILED(result)){
-			Debug::ThrowFatalError(SID("RENDER"), "Failed to query D3D12Device!", __FILE__, __LINE__);
-		}
-
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+	err = DX12::BreakOnWarningsAndErrors(true);
+	if(err != ErrorCode::OK){
+		Debug::Log(SID("RENDER"), "Program will not debug break on DX12 warnings and errors!", Debug::Warning, __FILE__, __LINE__);
 	}
 #endif // GADGET_DEBUG
+
+	GADGET_BASIC_ASSERT(DX12::IsInitialized());
 }
 
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
-	ProcessAllDeferredReleases();
+	auto err = DX12::PreShutdown();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "An error occurred in the pre-shutdown stage!", __FILE__, __LINE__);
+	}
 
 	DX12_PostProcess::Shutdown();
 	DX12_GeometryPass::Shutdown();
@@ -145,64 +100,9 @@ Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 		window->SetRenderSurface(nullptr);
 	}
 
-	rtvDescriptorHeap.ProcessDeferredFree(0);
-	dsvDescriptorHeap.ProcessDeferredFree(0);
-	srvDescriptorHeap.ProcessDeferredFree(0);
-	uavDescriptorHeap.ProcessDeferredFree(0);
-
-	rtvDescriptorHeap.Release();
-	dsvDescriptorHeap.Release();
-	srvDescriptorHeap.Release();
-	uavDescriptorHeap.Release();
-
-	if(gfxCommand){
-		delete gfxCommand;
-		gfxCommand = nullptr;
-	}
-
-	if(dxgiFactory){
-		dxgiFactory->Release();
-		dxgiFactory = nullptr;
-	}
-
-	ProcessAllDeferredReleases(); //Some things can't be released until their depending resources are deleted, so we call this one more time at the end
-
-	#ifdef GADGET_DEBUG
-	{
-		{
-			Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
-			HRESULT result = mainDevice->QueryInterface(IID_PPV_ARGS(&infoQueue));
-			if(FAILED(result) || !infoQueue){
-				Debug::ThrowFatalError(SID("RENDER"), "Failed to query D3D12Device info queue!", __FILE__, __LINE__);
-			}
-
-			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, false);
-			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, false);
-			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, false);
-		}
-
-		Microsoft::WRL::ComPtr<ID3D12DebugDevice2> debugDevice;
-		HRESULT result = mainDevice->QueryInterface(IID_PPV_ARGS(&debugDevice));
-		if(FAILED(result)){
-			Debug::ThrowFatalError(SID("RENDER"), "Failed to query D3D12 debug device!", __FILE__, __LINE__);
-		}
-
-		if(mainDevice){
-			mainDevice->Release();
-			mainDevice = nullptr;
-		}
-
-		//Check for leaks
-		result = debugDevice->ReportLiveDeviceObjects(D3D12_RLDO_SUMMARY | D3D12_RLDO_DETAIL | D3D12_RLDO_IGNORE_INTERNAL);
-		if(FAILED(result)){
-			Debug::ThrowFatalError(SID("RENDER"), "Failed to report live objects from D3D12 debug device!", __FILE__, __LINE__);
-		}
-	}
-	#endif // GADGET_DEBUG
-
-	if(mainDevice){
-		mainDevice->Release();
-		mainDevice = nullptr;
+	err = DX12::Shutdown();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "An error occurred in the pre-shutdown stage!", __FILE__, __LINE__);
 	}
 
 	window.reset();
@@ -213,8 +113,15 @@ void Win32_DX12_Renderer::PostInit(){
 }
 
 void Win32_DX12_Renderer::Render(const Scene* scene_){
-	GADGET_BASIC_ASSERT(gfxCommand != nullptr);
+	GADGET_BASIC_ASSERT(DX12::IsInitialized());
+	GADGET_BASIC_ASSERT(DX12::GfxCommand() != nullptr);
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
+
+	auto gfxCommand = DX12::GfxCommand();
+	if(gfxCommand == nullptr){
+		Debug::Log(SID("RENDER"), "Tried to render with no command list, is DX12 initialized?", Debug::Warning, __FILE__, __LINE__);
+		return;
+	}
 
 	if(renderSurfacePtr == nullptr){
 		Debug::Log(SID("RENDER"), "Tried to render with no RenderSurface!", Debug::Warning, __FILE__, __LINE__);
@@ -225,16 +132,14 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	ID3D12_GraphicsCommandList* const cmdList = gfxCommand->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
-	if(deferredReleaseFlag[CurrentFrameIndex()] != 0){
-		DX12::ProcessDeferredReleases(CurrentFrameIndex());
-	}
+	DX12::ProcessDeferredReleases(DX12::CurrentFrameIndex());
 
 	ID3D12Resource* const currentBackBuffer = renderSurfacePtr->CurrentBackBuffer();
 
 	DX12_GeometryPass::OnResize(window->GetSize()); //TODO - This is overkill
 
 	//Do stuff
-	ID3D12DescriptorHeap* const heaps[]{ srvDescriptorHeap.Heap() };
+	ID3D12DescriptorHeap* const heaps[]{ DX12::SRVHeap().Heap() };
 	cmdList->SetDescriptorHeaps(1, &heaps[0]);
 
 	cmdList->RSSetViewports(1, &renderSurfacePtr->Viewport());
@@ -245,6 +150,8 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	//Could also make it configurable so engine users can profile and see what makes sense for their game?
 
 	//----------Depth Pre-Pass----------
+	auto& resourceBarriers = DX12::ResourceBarriers();
+
 	DX12_GeometryPass::AddTransitionsForDepthPrepass(resourceBarriers);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
@@ -339,52 +246,4 @@ FontInfo* Win32_DX12_Renderer::GenerateAPIFontInfo([[maybe_unused]] const Freety
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 	return nullptr;
 	//return new GL_FontInfo(font_);
-}
-
-//------------------------------------------------------------------------------------------------------------
-
-IDXGIAdapter4* Win32_DX12_Renderer::DetermineMainAdapter(){
-	IDXGIAdapter4* adapter = nullptr;
-
-	for(int i = 0; dxgiFactory->EnumAdapterByGpuPreference(i, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&adapter)) != DXGI_ERROR_NOT_FOUND; i++){
-		if(SUCCEEDED(D3D12CreateDevice(adapter, minimumFeatureLevel, __uuidof(ID3D12Device), nullptr))){
-			return adapter;
-		}
-
-		if(adapter != nullptr){
-			adapter->Release();
-		}
-	}
-
-	Debug::Log(SID("RENDER"), "Could not find a device adapter that supports the minimum DirectX feature level!", Debug::Warning, __FILE__, __LINE__);
-	return nullptr;
-}
-
-D3D_FEATURE_LEVEL Win32_DX12_Renderer::GetMaxFeatureLevel(IDXGIAdapter4* adapter_){
-	GADGET_BASIC_ASSERT(adapter_ != nullptr);
-
-	//TODO - Should this be configurable?
-	constexpr D3D_FEATURE_LEVEL featureLevels[4]{
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_11_1,
-		D3D_FEATURE_LEVEL_12_0,
-		D3D_FEATURE_LEVEL_12_1,
-	};
-
-	D3D12_FEATURE_DATA_FEATURE_LEVELS featureLevelInfo{};
-	featureLevelInfo.NumFeatureLevels = _countof(featureLevels);
-	featureLevelInfo.pFeatureLevelsRequested = featureLevels;
-
-	Microsoft::WRL::ComPtr<ID3D12Device> device;
-	HRESULT result = D3D12CreateDevice(adapter_, minimumFeatureLevel, IID_PPV_ARGS(&device));
-	if(FAILED(result) || !device){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to create D3D12 device at requested minimum feature level!", __FILE__, __LINE__);
-	}
-
-	result = device->CheckFeatureSupport(D3D12_FEATURE_FEATURE_LEVELS, &featureLevelInfo, sizeof(featureLevelInfo));
-	if(FAILED(result)){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to check feature level support on D3D12 device!", __FILE__, __LINE__);
-	}
-
-	return featureLevelInfo.MaxSupportedFeatureLevel;
 }

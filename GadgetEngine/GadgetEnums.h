@@ -2,9 +2,11 @@
 #define GADGET_ENUMS_H
 
 namespace Gadget{
-	enum class ErrorCode{
+	enum class ErrorCode : uint32_t{
 		OK = 0,
-		UnknownError = 1
+		Unknown = 1,
+		D3D12_Error,
+		Invalid_State
 	};
 }
 

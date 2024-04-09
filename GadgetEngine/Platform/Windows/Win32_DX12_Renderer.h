@@ -5,7 +5,7 @@
 #include "Graphics/DX12/DX12.h"
 
 namespace Gadget{
-	class Win32_DX12_Renderer : public Renderer, public DX12{
+	class Win32_DX12_Renderer : public Renderer{
 	public:
 		Win32_DX12_Renderer(int w_ = 800, int h_ = 600, int x_ = 0, int y_ = 0);
 		virtual ~Win32_DX12_Renderer() override;
@@ -29,9 +29,6 @@ namespace Gadget{
 
 	private:
 		DX12_RenderSurface* renderSurfacePtr;
-
-		IDXGIAdapter4* DetermineMainAdapter();
-		D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGIAdapter4* adapter_);
 	};
 }
 
