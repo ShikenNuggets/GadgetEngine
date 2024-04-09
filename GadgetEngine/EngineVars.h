@@ -103,9 +103,11 @@ namespace Gadget{
 				if(section_ == s->name){
 					if(Utils::ContainsKey(s->vars, key_)){
 						s->vars.at(key_) = value_;
-					} else{
+					}else{
 						s->vars.emplace(key_, value_);
 					}
+
+					return;
 				}
 			}
 
