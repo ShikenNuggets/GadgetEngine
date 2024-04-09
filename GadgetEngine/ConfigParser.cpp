@@ -41,10 +41,15 @@ void ConfigParser::SerializeConfigs(const std::string& path_, const EngineVars& 
 	GADGET_BASIC_ASSERT(!path_.empty());
 
 	std::string output = "";
-	output += SerializeSection(EngineVars::Core::sectionName, vars_.core.vars);
-	output += SerializeSection(EngineVars::Display::sectionName, vars_.display.vars);
-	output += SerializeSection(EngineVars::Physics::sectionName, vars_.physics.vars);
-	output += SerializeSection(EngineVars::Render::sectionName, vars_.render.vars);
+	for(const auto& s : vars_.sections){
+		GADGET_BASIC_ASSERT(s != nullptr);
+		if(s == nullptr){
+			Debug::Log(SID("CONFIG"), "nullptr found in log sections!", Debug::Error, __FILE__, __LINE__);
+			continue;
+		}
+
+		output += SerializeSection(s->name, s->vars);
+	}
 
 	FileSystem::WriteToFile(path_, Utils::Trim(output), FileSystem::WriteType::Overwrite);
 }

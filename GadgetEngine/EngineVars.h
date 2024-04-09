@@ -6,18 +6,26 @@
 #include "Utils/Var.h"
 
 namespace Gadget{
-	struct EngineVars{
-		struct Core{
+	struct ConfigSection{
+		ConfigSection(StringID name_) : name(name_), vars(){}
+
+		const StringID name;
+		std::map<StringID, Var> vars;
+	};
+
+	class EngineVars{
+	public:
+		struct Core : public ConfigSection{
 			static const StringID sectionName;
 
 			static const StringID languageKey;
 
-			std::map<StringID, Var> vars = {
-				{ languageKey, SID("ENG")},
-			};
+			Core() : ConfigSection(sectionName){
+				vars.emplace(languageKey, SID("ENG")); //TODO - Don't hardcode the default language key here
+			}
 		};
 
-		struct Display{
+		struct Display : public ConfigSection{
 			static const StringID sectionName;
 
 			static const StringID fullscreenKey;
@@ -28,92 +36,81 @@ namespace Gadget{
 			static const StringID targetFPSKey;
 			static const StringID vsyncKey;
 
-			std::map<StringID, Var> vars = {
-				{ fullscreenKey, false },
-				{ displayWidthKey, 1920 },
-				{ displayHeightKey, 1080 },
-				{ lastWindowXKey, 0 },
-				{ lastWindowYKey, 0 },
-				{ targetFPSKey, 0 }, //0 is treated as no framerate cap
-				{ vsyncKey, false },
-			};
+			Display() : ConfigSection(sectionName){
+				vars.emplace(fullscreenKey, false);
+				vars.emplace(displayWidthKey, 1920);
+				vars.emplace(displayHeightKey, 1080);
+				vars.emplace(lastWindowXKey, 0);
+				vars.emplace(lastWindowYKey, 0);
+				vars.emplace(targetFPSKey, 0); //0 is treated as no framerate cap
+				vars.emplace(vsyncKey, false);
+			}
 		};
 
-		struct Physics{
+		struct Physics : public ConfigSection{
 			static const StringID sectionName;
 
 			static const StringID gravityConstantKey;
 			static const StringID physicsUpdatesKey;
 
-			std::map<StringID, Var> vars = {
-				{ gravityConstantKey, -9.81 },
-				{ physicsUpdatesKey, 240 }
-			};
+			Physics() : ConfigSection(sectionName){
+				vars.emplace(gravityConstantKey, -9.81);
+				vars.emplace(physicsUpdatesKey, 240);
+			}
 		};
 
-		struct Render{
+		struct Render : ConfigSection{
 			static const StringID sectionName;
 
 			static const StringID gpuValidationKey;
 
-			std::map<StringID, Var> vars = {
-				{ gpuValidationKey, false }
-			};
+			Render() : ConfigSection(sectionName){
+				vars.emplace(gpuValidationKey, false);
+			}
 		};
 
-		Core core;
-		Display display;
-		Physics physics;
-		Render render;
+		std::vector<ConfigSection*> sections{
+			new Core(),
+			new Display(),
+			new Physics(),
+			new Render()
+		};
 
 		constexpr Var GetValue(StringID key_) const{
-			if(Utils::ContainsKey(core.vars, key_)){
-				return core.vars.at(key_);
-			}
+			for(const auto& s : sections){
+				GADGET_BASIC_ASSERT(s != nullptr);
+				if(s == nullptr){
+					Debug::Log(SID("CONFIG"), "nullptr found in log sections!", Debug::Error, __FILE__, __LINE__);
+					continue;
+				}
 
-			if(Utils::ContainsKey(display.vars, key_)){
-				return display.vars.at(key_);
-			}
-
-			if(Utils::ContainsKey(physics.vars, key_)){
-				return physics.vars.at(key_);
-			}
-
-			if(Utils::ContainsKey(render.vars, key_)){
-				return render.vars.at(key_);
+				if(Utils::ContainsKey(s->vars, key_)){
+					return s->vars.at(key_);
+				}
 			}
 
 			return Var(nullptr);
 		}
 
-		constexpr void SetValue(StringID section_, StringID key_, Var value_){
-			if(section_ == Core::sectionName){
-				if(Utils::ContainsKey(core.vars, key_)){
-					core.vars.at(key_) = value_;
-				}else{
-					core.vars.emplace(key_, value_);
+		void SetValue(StringID section_, StringID key_, Var value_){
+			for(const auto& s : sections){
+				GADGET_BASIC_ASSERT(s != nullptr);
+				if(s == nullptr){
+					Debug::Log(SID("CONFIG"), "nullptr found in log sections!", Debug::Error, __FILE__, __LINE__);
+					continue;
 				}
-			}else if(section_ == Display::sectionName){
-				if(Utils::ContainsKey(display.vars, key_)){
-					display.vars.at(key_) = value_;
-				}else{
-					display.vars.emplace(key_, value_);
+
+				if(section_ == s->name){
+					if(Utils::ContainsKey(s->vars, key_)){
+						s->vars.at(key_) = value_;
+					} else{
+						s->vars.emplace(key_, value_);
+					}
 				}
-			}else if(section_ == Physics::sectionName){
-				if(Utils::ContainsKey(physics.vars, key_)){
-					physics.vars.at(key_) = value_;
-				}else{
-					physics.vars.emplace(key_, value_);
-				}
-			}else if(section_ == Render::sectionName){
-				if(Utils::ContainsKey(render.vars, key_)){
-					render.vars.at(key_) = value_;
-				}else{
-					render.vars.emplace(key_, value_);
-				}
-			}else{
-				GADGET_ASSERT(false, "Unrecognized EngineVars section[" + section_.GetString() + "]!");
 			}
+
+			GADGET_ASSERT(false, "Unrecognized EngineVars section[" + section_.GetString() + "]!");
+			Debug::Log(SID("CONFIG"), "", Debug::Warning, __FILE__, __LINE__);
 		}
 	};
 }
