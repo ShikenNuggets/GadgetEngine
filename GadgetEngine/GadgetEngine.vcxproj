@@ -196,6 +196,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Events\EventHandler.h" />
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="GadgetEnums.h" />
     <ClInclude Include="Game\BasicSceneManager.h" />
     <ClInclude Include="Game\Component.h" />
     <ClInclude Include="Game\ComponentFactory.h" />

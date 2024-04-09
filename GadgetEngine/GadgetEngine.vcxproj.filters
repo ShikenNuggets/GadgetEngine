@@ -93,6 +93,7 @@
       <Filter>Events</Filter>
     </ClInclude>
     <ClInclude Include="Gadget.h" />
+    <ClInclude Include="GadgetEnums.h" />
     <ClInclude Include="Game\BasicSceneManager.h">
       <Filter>Game</Filter>
     </ClInclude>
