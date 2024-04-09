@@ -43,6 +43,8 @@ void ConfigParser::SerializeConfigs(const std::string& path_, const EngineVars& 
 	std::string output = "";
 	output += SerializeSection(EngineVars::Core::sectionName, vars_.core.vars);
 	output += SerializeSection(EngineVars::Display::sectionName, vars_.display.vars);
+	output += SerializeSection(EngineVars::Physics::sectionName, vars_.physics.vars);
+	output += SerializeSection(EngineVars::Render::sectionName, vars_.render.vars);
 
 	FileSystem::WriteToFile(path_, Utils::Trim(output), FileSystem::WriteType::Overwrite);
 }

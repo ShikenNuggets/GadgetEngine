@@ -51,9 +51,20 @@ namespace Gadget{
 			};
 		};
 
+		struct Render{
+			static const StringID sectionName;
+
+			static const StringID gpuValidationKey;
+
+			std::map<StringID, Var> vars = {
+				{ gpuValidationKey, false }
+			};
+		};
+
 		Core core;
 		Display display;
 		Physics physics;
+		Render render;
 
 		constexpr Var GetValue(StringID key_) const{
 			if(Utils::ContainsKey(core.vars, key_)){
@@ -66,6 +77,10 @@ namespace Gadget{
 
 			if(Utils::ContainsKey(physics.vars, key_)){
 				return physics.vars.at(key_);
+			}
+
+			if(Utils::ContainsKey(render.vars, key_)){
+				return render.vars.at(key_);
 			}
 
 			return Var(nullptr);
@@ -89,6 +104,12 @@ namespace Gadget{
 					physics.vars.at(key_) = value_;
 				}else{
 					physics.vars.emplace(key_, value_);
+				}
+			}else if(section_ == Render::sectionName){
+				if(Utils::ContainsKey(render.vars, key_)){
+					render.vars.at(key_) = value_;
+				}else{
+					render.vars.emplace(key_, value_);
 				}
 			}else{
 				GADGET_ASSERT(false, "Unrecognized EngineVars section[" + section_.GetString() + "]!");

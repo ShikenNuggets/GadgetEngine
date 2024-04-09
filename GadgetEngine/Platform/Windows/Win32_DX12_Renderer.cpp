@@ -4,6 +4,7 @@
 #include <d3d12.h>
 #include <wrl.h>
 
+#include "App.h"
 #include "Win32_Window.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
@@ -33,7 +34,7 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 		result = D3D12GetDebugInterface(IID_PPV_ARGS(&debugInterface));
 		if(SUCCEEDED(result)){
 			debugInterface->EnableDebugLayer();
-			//debugInterface->SetEnableGPUBasedValidation(TRUE); //TODO - Make this configurable since it significantly affects performance
+			debugInterface->SetEnableGPUBasedValidation(App::GetInstance().GetConfig().GetOptionBool(EngineVars::Render::gpuValidationKey));
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}else{
 			Debug::Log(SID("RENDER"), "Failed to get D3D12 Debug Interface!", Debug::Error, __FILE__, __LINE__);
