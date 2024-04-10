@@ -84,6 +84,35 @@ void Config::SaveConfigs() const{
 	ConfigParser::SerializeConfigs(engineConfigPath, vars);
 }
 
+void Config::ResetOptionToDefault(StringID option_){
+	const auto eVarsDefault = EngineVars();
+	for(const auto& s : vars.sections){
+		if(s == nullptr){
+			Debug::Log(SID("CONFIG"), "nullptr found in config sections!", Debug::Error, __FILE__, __LINE__);
+			continue;
+		}
+
+		if(Utils::ContainsKey(s->vars, option_)){
+			vars.SetValue(s->name, option_, eVarsDefault.GetValue(option_));
+			return;
+		}
+	}
+}
+
+void Config::ResetSectionToDefault(StringID section_){
+	const auto eVarsDefault = EngineVars();
+	for(const auto& s : eVarsDefault.sections){
+		if(s == nullptr){
+			Debug::Log(SID("CONFIG"), "nullptr found in config sections!", Debug::Error, __FILE__, __LINE__);
+			continue;
+		}
+
+		for(const auto& o : s->vars){
+			vars.SetValue(o.first, o.second);
+		}
+	}
+}
+
 void Config::ResetAllOptionsToDefault(){
 	vars = EngineVars();
 }

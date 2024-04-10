@@ -80,7 +80,7 @@ namespace Gadget{
 			for(const auto& s : sections){
 				GADGET_BASIC_ASSERT(s != nullptr);
 				if(s == nullptr){
-					Debug::Log(SID("CONFIG"), "nullptr found in log sections!", Debug::Error, __FILE__, __LINE__);
+					Debug::Log(SID("CONFIG"), "nullptr found in config sections!", Debug::Error, __FILE__, __LINE__);
 					continue;
 				}
 
@@ -92,11 +92,26 @@ namespace Gadget{
 			return Var(nullptr);
 		}
 
+		void SetValue(StringID key_, Var value_){
+			for(const auto& s : sections){
+				if(s == nullptr){
+					Debug::Log(SID("CONFIG"), "nullptr found in config sections!", Debug::Error, __FILE__, __LINE__);
+					continue;
+				}
+
+				if(Utils::ContainsKey(s->vars, key_)){
+					s->vars.at(key_) = value_;
+				}else{
+					s->vars.emplace(key_, value_);
+				}
+			}
+		}
+
 		void SetValue(StringID section_, StringID key_, Var value_){
 			for(const auto& s : sections){
 				GADGET_BASIC_ASSERT(s != nullptr);
 				if(s == nullptr){
-					Debug::Log(SID("CONFIG"), "nullptr found in log sections!", Debug::Error, __FILE__, __LINE__);
+					Debug::Log(SID("CONFIG"), "nullptr found in config sections!", Debug::Error, __FILE__, __LINE__);
 					continue;
 				}
 

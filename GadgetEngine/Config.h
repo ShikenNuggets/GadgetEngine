@@ -30,9 +30,9 @@ namespace Gadget{
 
 		void SaveConfigs() const;
 
-		//This will reset ALL EngineVars values in ALL subcategories
-		//TODO - Create a version that lets you reset only specific subcategories, or specific options
-		void ResetAllOptionsToDefault();
+		void ResetOptionToDefault(StringID option_);
+		void ResetSectionToDefault(StringID section_);
+		void ResetAllOptionsToDefault(); //This will reset ALL EngineVars values in ALL subcategories
 
 		static void OnEvent(const Event& e_);
 
