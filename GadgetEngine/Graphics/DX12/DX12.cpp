@@ -9,20 +9,82 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-bool DX12::debugLayerEnabled = false;
-ComPtr<IDXGI_Factory> DX12::dxgiFactory = nullptr;
-ComPtr<ID3D12_Device> DX12::mainDevice = nullptr;
-DX12_Command* DX12::gfxCommand = nullptr;
-DX12_Helpers::DX12_ResourceBarriers DX12::resourceBarriers{};
-DX12_DescriptorHeap DX12::rtvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_RTV };
-DX12_DescriptorHeap DX12::dsvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_DSV };
-DX12_DescriptorHeap DX12::srvDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV };
-DX12_DescriptorHeap DX12::uavDescriptorHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV };
-std::vector<IUnknown*> DX12::deferredReleases[FrameBufferCount]{};
-uint32_t DX12::deferredReleaseFlag[DX12::FrameBufferCount]{};
-std::mutex DX12::deferredReleaseMutex{};
-
 constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_11_0; //TODO - Make this configurable
+
+std::unique_ptr<DX12> DX12::instance = nullptr;
+
+DX12::DX12(const DX12_StartupOptions& options_) :	debugLayerEnabled(options_.isDebug), dxgiFactory(nullptr), mainDevice(nullptr), gfxCommand(nullptr), resourceBarriers(),
+				rtvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), dsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV),
+				srvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), uavDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV),
+				deferredReleases(), deferredReleaseFlag(), deferredReleaseMutex(){
+
+	auto err = EnableDebugLayer(options_.gpuBasedValidation);
+	if(err != ErrorCode::OK){
+		Debug::Log(SID("RENDER"), "[DX12] Could not enable debug layer! Error Code: " + std::to_string((uint32_t)err), Debug::Error, __FILE__, __LINE__);
+	}
+
+	err = CreateDevice(options_.dxgiFactoryFlags);
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+	}
+
+	err = BreakOnWarningsAndErrors(options_.isDebug);
+	if(err != ErrorCode::OK){
+		Debug::Log(SID("RENDER"), "DX12 code will not break on warnings or errors! Error Code: " + std::to_string((uint32_t)err), Debug::Error, __FILE__, __LINE__);
+	}
+
+	err = CreateCommandList();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create command list! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+	}
+	
+	err = InitializeDescriptorHeaps();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not initialize descriptor heaps! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+	}
+}
+
+DX12::~DX12(){
+	//Destructor should not be called directly
+	GADGET_BASIC_ASSERT(dxgiFactory == nullptr);
+	GADGET_BASIC_ASSERT(mainDevice == nullptr);
+	GADGET_BASIC_ASSERT(gfxCommand == nullptr);
+
+	//Play nice and call shutdown functions anyway
+	if(dxgiFactory != nullptr || mainDevice != nullptr || gfxCommand != nullptr){
+		(void)PreShutdown();
+		(void)Shutdown();
+	}
+}
+
+DX12& DX12::GetInstance(const DX12_StartupOptions& options_){
+	if(instance == nullptr){
+		instance = std::make_unique<DX12>(options_);
+	}
+
+	GADGET_ASSERT(instance != nullptr, "App instance was somehow nullptr! Nothing will work!");
+	return *instance;
+}
+
+ErrorCode DX12::DeleteInstance(){
+	if(instance != nullptr){
+		auto err = instance->PreShutdown();
+		if(err != ErrorCode::OK){
+			Debug::Log(SID("RENDER"), "DX12::PreShutdown failed!", Debug::Error, __FILE__, __LINE__);
+			return err;
+		}
+
+		err = instance->Shutdown();
+		if(err != ErrorCode::OK){
+			Debug::Log(SID("RENDER"), "DX12::Shutdown failed!", Debug::Error, __FILE__, __LINE__);
+			return err;
+		}
+
+		instance.reset();
+	}
+
+	return ErrorCode::OK;
+}
 
 ErrorCode DX12::EnableDebugLayer(bool gpuValidation_){
 #ifdef GADGET_DEBUG
@@ -44,7 +106,7 @@ ErrorCode DX12::EnableDebugLayer(bool gpuValidation_){
 }
 
 ErrorCode DX12::PreShutdown(){
-	DX12::ProcessAllDeferredReleases();
+	ProcessAllDeferredReleases();
 	return ErrorCode::OK;
 }
 
@@ -127,28 +189,28 @@ ErrorCode DX12::CreateCommandList(){
 }
 
 ErrorCode DX12::InitializeDescriptorHeaps(){
-	bool br = rtvDescriptorHeap.Initialize(512, false); //TODO - These capacity numbers are somewhat arbitrary - makes these configurable?
+	bool br = rtvDescriptorHeap.Initialize(mainDevice.Get(), 512, false); //TODO - These capacity numbers are somewhat arbitrary - makes these configurable?
 	if(br == false || rtvDescriptorHeap.Heap() == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to initialize rtvDescriptorHeap!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 	rtvDescriptorHeap.Heap()->SetName(L"RTV DescriptorHeap");
 
-	br = dsvDescriptorHeap.Initialize(512, false);
+	br = dsvDescriptorHeap.Initialize(mainDevice.Get(), 512, false);
 	if(br == false || dsvDescriptorHeap.Heap() == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to initialize dsvDescriptorHeap!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 	dsvDescriptorHeap.Heap()->SetName(L"DSV DescriptorHeap");
 
-	br = srvDescriptorHeap.Initialize(4096, true);
+	br = srvDescriptorHeap.Initialize(mainDevice.Get(), 4096, true);
 	if(br == false || srvDescriptorHeap.Heap() == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to initialize srvDescriptorHeap!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 	srvDescriptorHeap.Heap()->SetName(L"SRV DescriptorHeap");
 
-	br = uavDescriptorHeap.Initialize(512, false);
+	br = uavDescriptorHeap.Initialize(mainDevice.Get(), 512, false);
 	if(br == false || uavDescriptorHeap.Heap() == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to initialize uavDescriptorHeap!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
@@ -220,6 +282,10 @@ void DX12::DeferredRelease(IUnknown* resource_){
 	std::lock_guard lock{ deferredReleaseMutex };
 	deferredReleases[CurrentFrameIndex()].push_back(resource_);
 	SetDeferredReleaseFlag();
+}
+
+uint32_t DX12::GetDeferredReleaseFlag(){
+	return deferredReleaseFlag[CurrentFrameIndex()];
 }
 
 void DX12::SetDeferredReleaseFlag(){

@@ -77,9 +77,9 @@ void DX12_GeometryPass::OnResize(const ScreenCoordinate& newSize_){
 	CreateBuffers(newSize_, clearColor);
 }
 
-void DX12_GeometryPass::DepthPrepass(ID3D12_GraphicsCommandList* cmdList_, const ScreenCoordinate& frameInfo_){}
+void DX12_GeometryPass::DepthPrepass([[maybe_unused]] ID3D12_GraphicsCommandList* cmdList_, [[maybe_unused]] const ScreenCoordinate& frameInfo_){}
 
-void DX12_GeometryPass::Render(ID3D12_GraphicsCommandList* cmdList_, const ScreenCoordinate& frameInfo_){
+void DX12_GeometryPass::Render(ID3D12_GraphicsCommandList* cmdList_, [[maybe_unused]] const ScreenCoordinate& frameInfo_){
 	cmdList_->SetGraphicsRootSignature(rootSignature);
 	cmdList_->SetPipelineState(pipelineStateObject);
 
@@ -188,7 +188,7 @@ bool DX12_GeometryPass::CreateRootSignatureAndPSO(){
 	params[0].InitAsConstants(1, D3D12_SHADER_VISIBILITY_PIXEL, 1);
 	DX12_Helpers::DX12_RootSignatureDesc desc{ &params[0], _countof(params) };
 
-	rootSignature = desc.Create(DX12::MainDevice());
+	rootSignature = desc.Create(DX12::GetInstance().MainDevice());
 	GADGET_BASIC_ASSERT(rootSignature != nullptr);
 	if(rootSignature == nullptr){
 		Debug::Log("Could not create root signature!", Debug::Error, __FILE__, __LINE__);
@@ -214,7 +214,7 @@ bool DX12_GeometryPass::CreateRootSignatureAndPSO(){
 
 	psoStream.renderTargetFormats = rtfArray;
 
-	pipelineStateObject = DX12_Helpers::CreatePipelineState(DX12::MainDevice(), &psoStream, sizeof(psoStream));
+	pipelineStateObject = DX12_Helpers::CreatePipelineState(DX12::GetInstance().MainDevice(), &psoStream, sizeof(psoStream));
 	GADGET_BASIC_ASSERT(pipelineStateObject != nullptr);
 	if(pipelineStateObject == nullptr){
 		Debug::Log("Could not create pipeline state object!", Debug::Error, __FILE__, __LINE__);

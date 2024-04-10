@@ -43,7 +43,7 @@ void DX12_PostProcess::PostProcess(ID3D12_GraphicsCommandList* cmdList_, const D
 	cmdList_->SetPipelineState(pso);
 
 	cmdList_->SetGraphicsRoot32BitConstant(ID_RootConstants, geometryPassMainBuffer_->SRV().GetIndex(), 0);
-	cmdList_->SetGraphicsRootDescriptorTable(ID_DescriptorTable, DX12::SRVHeap().GPUStart());
+	cmdList_->SetGraphicsRootDescriptorTable(ID_DescriptorTable, DX12::GetInstance().SRVHeap().GPUStart());
 
 	cmdList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	cmdList_->OMSetRenderTargets(1, &renderTargetView_, 1, nullptr);
@@ -66,7 +66,7 @@ bool DX12_PostProcess::CreateRootSignatureAndPSO(){
 	rootParams[ID_DescriptorTable].InitAsTable(D3D12_SHADER_VISIBILITY_PIXEL, &range, 1);
 	DX12_Helpers::DX12_RootSignatureDesc rsDesc{ &rootParams[0], _countof(rootParams) };
 
-	rootSignature = rsDesc.Create(DX12::MainDevice());
+	rootSignature = rsDesc.Create(DX12::GetInstance().MainDevice());
 	GADGET_BASIC_ASSERT(rootSignature != nullptr);
 	if(rootSignature == nullptr){
 		Debug::Log(SID("RENDER"), "PostProcess - Could not create root signature!", Debug::Error, __FILE__, __LINE__);
@@ -90,7 +90,7 @@ bool DX12_PostProcess::CreateRootSignatureAndPSO(){
 	rtfArray.RTFormats[0] = DX12_RenderSurface::DefaultBackBufferFormat;
 	psoStream.renderTargetFormats = rtfArray;
 
-	pso = DX12_Helpers::CreatePipelineState(DX12::MainDevice(), &psoStream, sizeof(psoStream));
+	pso = DX12_Helpers::CreatePipelineState(DX12::GetInstance().MainDevice(), &psoStream, sizeof(psoStream));
 	GADGET_BASIC_ASSERT(pso != nullptr);
 	if(pso == nullptr){
 		Debug::Log(SID("RENDER"), "PostProcess - Could not create pipeline state object!", Debug::Error, __FILE__, __LINE__);

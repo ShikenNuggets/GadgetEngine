@@ -76,7 +76,8 @@ void DX12_Helpers::DX12_ResourceBarriers::AddAliasingBarrier(ID3D12Resource* bef
 
 void DX12_Helpers::DX12_ResourceBarriers::ApplyAllBarriers(ID3D12_GraphicsCommandList* cmdList_){
 	GADGET_BASIC_ASSERT(cmdList_ != nullptr);
+	GADGET_ASSERT(barriers.size() <= std::numeric_limits<uint32_t>::max(), "D3D12 command list cannot accept more than uint32_t max barriers - tried to pass " + std::to_string(barriers.size()));
 
-	cmdList_->ResourceBarrier(barriers.size(), barriers.data());
+	cmdList_->ResourceBarrier(static_cast<uint32_t>(barriers.size()), barriers.data());
 	barriers.clear(); //TODO - is this safe?
 }

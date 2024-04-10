@@ -1,5 +1,6 @@
 #include "DX12_TextureInfo.h"
 
+#include "DX12.h"
 #include "DX12_Helpers.h"
 
 using namespace Gadget;
@@ -15,12 +16,12 @@ DX12_TextureInfo::DX12_TextureInfo(const DX12_TextureInitInfo& info_) : TextureI
 }
 
 DX12_TextureInfo::~DX12_TextureInfo(){
-	DX12::DeferredRelease(resource);
+	DX12::GetInstance().DeferredRelease(resource);
 }
 
 void DX12_TextureInfo::Initialize(const DX12_TextureInitInfo& info_){
-	GADGET_BASIC_ASSERT(DX12::IsInitialized());
-	GADGET_BASIC_ASSERT(DX12::MainDevice() != nullptr);
+	GADGET_BASIC_ASSERT(DX12::GetInstance().IsInitialized());
+	GADGET_BASIC_ASSERT(DX12::GetInstance().MainDevice() != nullptr);
 
 	const D3D12_CLEAR_VALUE* clearValue = nullptr;
 	if(info_.resourceDesc != nullptr && (info_.resourceDesc->Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET || info_.resourceDesc->Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)){
@@ -32,22 +33,22 @@ void DX12_TextureInfo::Initialize(const DX12_TextureInitInfo& info_){
 	}else if(info_.heap != nullptr){
 		GADGET_BASIC_ASSERT(info_.resourceDesc != nullptr);
 
-		HRESULT result = DX12::MainDevice()->CreatePlacedResource(info_.heap, info_.allocationInfo.Offset, info_.resourceDesc, info_.initialState, clearValue, IID_PPV_ARGS(&resource));
+		HRESULT result = DX12::GetInstance().MainDevice()->CreatePlacedResource(info_.heap, info_.allocationInfo.Offset, info_.resourceDesc, info_.initialState, clearValue, IID_PPV_ARGS(&resource));
 		if(FAILED(result)){
 			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device::CreatePlacedResource failed!", __FILE__, __LINE__);
 		}
 	}else{
 		GADGET_BASIC_ASSERT(info_.resourceDesc != nullptr);
 
-		HRESULT result = DX12::MainDevice()->CreateCommittedResource(&DX12_Helpers::DefaultHeapProperties, D3D12_HEAP_FLAG_NONE, info_.resourceDesc, info_.initialState, clearValue, IID_PPV_ARGS(&resource));
+		HRESULT result = DX12::GetInstance().MainDevice()->CreateCommittedResource(&DX12_Helpers::DefaultHeapProperties, D3D12_HEAP_FLAG_NONE, info_.resourceDesc, info_.initialState, clearValue, IID_PPV_ARGS(&resource));
 		if(FAILED(result)){
 			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device::CreateCommittedResource failed!", __FILE__, __LINE__);
 		}
 	}
 
 	GADGET_BASIC_ASSERT(resource != nullptr);
-	srvHandle = DX12::SRVHeap().Allocate();
-	DX12::MainDevice()->CreateShaderResourceView(resource, info_.srvDesc, srvHandle.cpuHandle);
+	srvHandle = DX12::GetInstance().SRVHeap().Allocate();
+	DX12::GetInstance().MainDevice()->CreateShaderResourceView(resource, info_.srvDesc, srvHandle.cpuHandle);
 }
 
 //----------------------------------------------------------------------------------------------------//
@@ -67,14 +68,14 @@ DX12_RenderTextureInfo::DX12_RenderTextureInfo(const DX12_TextureInitInfo& info_
 	desc.Texture2D.MipSlice = 0;
 
 	for(; desc.Texture2D.MipSlice < mipCount; desc.Texture2D.MipSlice++){
-		rtvHandles[desc.Texture2D.MipSlice] = DX12::RTVHeap().Allocate();
-		DX12::MainDevice()->CreateRenderTargetView(resource, &desc, rtvHandles[desc.Texture2D.MipSlice].cpuHandle);
+		rtvHandles[desc.Texture2D.MipSlice] = DX12::GetInstance().RTVHeap().Allocate();
+		DX12::GetInstance().MainDevice()->CreateRenderTargetView(resource, &desc, rtvHandles[desc.Texture2D.MipSlice].cpuHandle);
 	}
 }
 
 DX12_RenderTextureInfo::~DX12_RenderTextureInfo(){
 	for(uint32_t i = 0; i < mipCount; i++){
-		DX12::RTVHeap().Free(rtvHandles[i]);
+		DX12::GetInstance().RTVHeap().Free(rtvHandles[i]);
 	}
 	mipCount = 0;
 }
@@ -123,10 +124,10 @@ DX12_DepthBufferTextureInfo::DX12_DepthBufferTextureInfo(DX12_TextureInitInfo in
 	dsvDesc.Format = dsvFormat;
 	dsvDesc.Texture2D.MipSlice = 0;
 
-	dsvHandle = DX12::DSVHeap().Allocate();
-	DX12::MainDevice()->CreateDepthStencilView(resource, &dsvDesc, dsvHandle.cpuHandle);
+	dsvHandle = DX12::GetInstance().DSVHeap().Allocate();
+	DX12::GetInstance().MainDevice()->CreateDepthStencilView(resource, &dsvDesc, dsvHandle.cpuHandle);
 }
 
 DX12_DepthBufferTextureInfo::~DX12_DepthBufferTextureInfo(){
-	DX12::DSVHeap().Free(dsvHandle);
+	DX12::GetInstance().DSVHeap().Free(dsvHandle);
 }

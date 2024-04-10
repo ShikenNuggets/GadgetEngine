@@ -7,8 +7,8 @@
 
 #include <d3d12.h>
 
+#include "DX12_Defines.h"
 #include "Debug.h"
-#include "Graphics/DX12/DX12.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
@@ -39,7 +39,7 @@ namespace Gadget{
 		explicit DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_);
 		~DX12_DescriptorHeap(){}
 
-		bool Initialize(uint32_t capacity_, bool isShaderVisible_);
+		bool Initialize(ID3D12_Device* device_, uint32_t capacity_, bool isShaderVisible_);
 		void ProcessDeferredFree(uint32_t frameIndex_);
 		void Release();
 
@@ -60,7 +60,7 @@ namespace Gadget{
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuStart;
 		D3D12_GPU_DESCRIPTOR_HANDLE gpuStart;
 		std::unique_ptr<uint32_t[]> freeHandles;
-		std::vector<uint32_t> deferredFreeIndices[DX12::FrameBufferCount];
+		std::vector<uint32_t> deferredFreeIndices[3]; //TODO - Remove this magic number. Referencing DX12::FrameBufferCount in this header would be a circular dependency
 		std::mutex mutex;
 		uint32_t capacity;
 		uint32_t size;

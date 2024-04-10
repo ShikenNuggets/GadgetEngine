@@ -1,5 +1,6 @@
 #include "DX12_RenderSurface.h"
 
+#include "DX12.h"
 #include "Platform/Windows/Win32_Window.h"
 
 using namespace Gadget;
@@ -61,7 +62,7 @@ void DX12_RenderSurface::CreateSwapChain(IDXGIFactory7* factory_, ID3D12CommandQ
 	tempSwapChain->Release();
 
 	for(uint32_t i = 0; i < DX12::FrameBufferCount; i++){
-		renderTargetData[i].renderTargetView = DX12::RTVHeap().Allocate();
+		renderTargetData[i].renderTargetView = DX12::GetInstance().RTVHeap().Allocate();
 	}
 
 	FinalizeSwapChain();
@@ -106,7 +107,7 @@ void DX12_RenderSurface::Release(){
 		if(data.resource != nullptr){
 			data.resource->Release();
 		}
-		DX12::RTVHeap().Free(data.renderTargetView);
+		DX12::GetInstance().RTVHeap().Free(data.renderTargetView);
 	}
 
 	if(swapChain != nullptr){
@@ -128,7 +129,7 @@ void DX12_RenderSurface::FinalizeSwapChain(){
 		desc.Format = format;
 		desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 		
-		DX12::MainDevice()->CreateRenderTargetView(data.resource, &desc, data.renderTargetView.cpuHandle);
+		DX12::GetInstance().MainDevice()->CreateRenderTargetView(data.resource, &desc, data.renderTargetView.cpuHandle);
 	}
 
 	DXGI_SWAP_CHAIN_DESC desc;

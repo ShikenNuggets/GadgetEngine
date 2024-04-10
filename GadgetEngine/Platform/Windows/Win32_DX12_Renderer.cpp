@@ -23,35 +23,18 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
 	GADGET_ASSERT(win32Window != nullptr, "Win32 Renderer requires a Win32 window!");
 
-	ErrorCode err = ErrorCode::OK;
-	uint32_t dxgiFactoryFlags = 0;
+	DX12_StartupOptions options;
 	
 #ifdef GADGET_DEBUG
-	err = DX12::EnableDebugLayer(App::GetInstance().GetConfig().GetOptionBool(EngineVars::Render::gpuValidationKey));
-	if(err != ErrorCode::OK){
-		Debug::Log(SID("RENDER"), "[DX12] Could not initialize debug layer!", Debug::Warning, __FILE__, __LINE__);
-	}
-
-	dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
+	options.isDebug = true;
+	options.gpuBasedValidation = App::GetInstance().GetConfig().GetOptionBool(EngineVars::Render::gpuValidationKey);
+	options.dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 #endif // GADGET_DEBUG
 
-	err = DX12::CreateDevice(dxgiFactoryFlags);
-	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
-	}
-
-	err = DX12::CreateCommandList();
-	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device!" + std::to_string((uint32_t)err), __FILE__, __LINE__);
-	}
-	
-	err = DX12::InitializeDescriptorHeaps();
-	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not initialize descriptor heaps!" + std::to_string((uint32_t)err), __FILE__, __LINE__);
-	}
+	auto& dx12 = DX12::GetInstance(options);
 
 	renderSurfacePtr = new DX12_RenderSurface(window.get(), w_, h_);
-	DX12::CreateSwapChainForSurface(renderSurfacePtr);
+	dx12.CreateSwapChainForSurface(renderSurfacePtr);
 	window->SetRenderSurface(renderSurfacePtr);
 
 	bool br = DX12_ShaderHandler::Initialize();
@@ -74,18 +57,13 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize post-processing submodule!", __FILE__, __LINE__);
 	}
 
-#ifdef GADGET_DEBUG
-	err = DX12::BreakOnWarningsAndErrors(true);
-	if(err != ErrorCode::OK){
-		Debug::Log(SID("RENDER"), "Program will not debug break on DX12 warnings and errors!", Debug::Warning, __FILE__, __LINE__);
-	}
-#endif // GADGET_DEBUG
-
-	GADGET_BASIC_ASSERT(DX12::IsInitialized());
+	GADGET_BASIC_ASSERT(dx12.IsInitialized());
 }
 
 Win32_DX12_Renderer::~Win32_DX12_Renderer(){
-	auto err = DX12::PreShutdown();
+	auto& dx12 = DX12::GetInstance();
+
+	auto err = dx12.PreShutdown();
 	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "An error occurred in the pre-shutdown stage!", __FILE__, __LINE__);
 	}
@@ -100,11 +78,7 @@ Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 		window->SetRenderSurface(nullptr);
 	}
 
-	err = DX12::Shutdown();
-	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "An error occurred in the pre-shutdown stage!", __FILE__, __LINE__);
-	}
-
+	DX12::DeleteInstance();
 	window.reset();
 }
 
@@ -113,11 +87,13 @@ void Win32_DX12_Renderer::PostInit(){
 }
 
 void Win32_DX12_Renderer::Render(const Scene* scene_){
-	GADGET_BASIC_ASSERT(DX12::IsInitialized());
-	GADGET_BASIC_ASSERT(DX12::GfxCommand() != nullptr);
+	auto& dx12 = DX12::GetInstance();
+
+	GADGET_BASIC_ASSERT(dx12.IsInitialized());
+	GADGET_BASIC_ASSERT(dx12.GfxCommand() != nullptr);
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
 
-	auto gfxCommand = DX12::GfxCommand();
+	auto gfxCommand = dx12.GfxCommand();
 	if(gfxCommand == nullptr){
 		Debug::Log(SID("RENDER"), "Tried to render with no command list, is DX12 initialized?", Debug::Warning, __FILE__, __LINE__);
 		return;
@@ -132,14 +108,14 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	ID3D12_GraphicsCommandList* const cmdList = gfxCommand->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
-	DX12::ProcessDeferredReleases(DX12::CurrentFrameIndex());
+	dx12.ProcessDeferredReleases(dx12.CurrentFrameIndex());
 
 	ID3D12Resource* const currentBackBuffer = renderSurfacePtr->CurrentBackBuffer();
 
 	DX12_GeometryPass::OnResize(window->GetSize()); //TODO - This is overkill
 
 	//Do stuff
-	ID3D12DescriptorHeap* const heaps[]{ DX12::SRVHeap().Heap() };
+	ID3D12DescriptorHeap* const heaps[]{ dx12.SRVHeap().Heap() };
 	cmdList->SetDescriptorHeaps(1, &heaps[0]);
 
 	cmdList->RSSetViewports(1, &renderSurfacePtr->Viewport());
@@ -150,7 +126,7 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	//Could also make it configurable so engine users can profile and see what makes sense for their game?
 
 	//----------Depth Pre-Pass----------
-	auto& resourceBarriers = DX12::ResourceBarriers();
+	auto& resourceBarriers = dx12.ResourceBarriers();
 
 	DX12_GeometryPass::AddTransitionsForDepthPrepass(resourceBarriers);
 	resourceBarriers.ApplyAllBarriers(cmdList);
@@ -206,7 +182,7 @@ void Win32_DX12_Renderer::OnResize(int width_, int height_){
 		return; //New size will be handled correctly when we finish initializing
 	}
 
-	DX12::ResizeSurface(renderSurfacePtr, width_, height_);
+	DX12::GetInstance().ResizeSurface(renderSurfacePtr, width_, height_);
 }
 
 void Win32_DX12_Renderer::SetWindingOrder([[maybe_unused]] WindingOrder order_){

@@ -7,9 +7,10 @@ using namespace Gadget;
 
 DX12_DescriptorHeap::DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_) : heap(nullptr), cpuStart(), gpuStart(), freeHandles(), deferredFreeIndices(), capacity(0), size(0), descriptorSize(0), type(type_){}
 
-bool DX12_DescriptorHeap::Initialize(uint32_t capacity_, bool isShaderVisible_){
+bool DX12_DescriptorHeap::Initialize(ID3D12_Device* device_, uint32_t capacity_, bool isShaderVisible_){
 	std::lock_guard lock{ mutex };
 
+	GADGET_BASIC_ASSERT(device_ != nullptr);
 	GADGET_BASIC_ASSERT(capacity_ > 0);
 	GADGET_BASIC_ASSERT(capacity_ < D3D12_MAX_SHADER_VISIBLE_DESCRIPTOR_HEAP_SIZE_TIER_2);
 	GADGET_BASIC_ASSERT(!(type == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER && capacity_ > D3D12_MAX_SHADER_VISIBLE_SAMPLER_HEAP_SIZE));
@@ -18,21 +19,13 @@ bool DX12_DescriptorHeap::Initialize(uint32_t capacity_, bool isShaderVisible_){
 		isShaderVisible_ = false;
 	}
 
-	ID3D12Device* const device = DX12::MainDevice();
-	GADGET_BASIC_ASSERT(device != nullptr);
-	if(device == nullptr){
-		Debug::Log(SID("RENDER"), "An error occured while grabbing the main device", Debug::Error, __FILE__, __LINE__);
-		Release();
-		return false;
-	}
-
 	D3D12_DESCRIPTOR_HEAP_DESC desc{};
 	desc.Flags = isShaderVisible_ ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	desc.NumDescriptors = capacity_;
 	desc.Type = type;
 	desc.NodeMask = 0;
 
-	HRESULT result = device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));
+	HRESULT result = device_->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));
 	if(FAILED(result) || heap == nullptr){
 		Debug::Log(SID("RENDER"), "An error occured while creating the descriptor heap!", Debug::Error, __FILE__, __LINE__);
 		Release();
@@ -52,7 +45,7 @@ bool DX12_DescriptorHeap::Initialize(uint32_t capacity_, bool isShaderVisible_){
 		deferredFreeIndices[i].clear(); //Clearing this is not good, but memory leak is better than garbage data
 	}
 
-	descriptorSize = device->GetDescriptorHandleIncrementSize(type);
+	descriptorSize = device_->GetDescriptorHandleIncrementSize(type);
 	cpuStart = heap->GetCPUDescriptorHandleForHeapStart();
 	if(isShaderVisible_){
 		gpuStart = heap->GetGPUDescriptorHandleForHeapStart();
@@ -75,7 +68,7 @@ void DX12_DescriptorHeap::ProcessDeferredFree(uint32_t frameIndex_){
 
 void DX12_DescriptorHeap::Release(){
 	if(heap != nullptr){
-		DX12::DeferredRelease(heap);
+		DX12::GetInstance().DeferredRelease(heap);
 		heap = nullptr;
 	}
 }

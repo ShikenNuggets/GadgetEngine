@@ -6,6 +6,7 @@
 #include <wrl/client.h>
 
 #include "DX12_Defines.h"
+#include "DX12_DescriptorHeap.h"
 #include "DX12_Helpers.h"
 #include "Debug.h"
 #include "GadgetEnums.h"
@@ -13,64 +14,74 @@
 
 namespace Gadget{
 	class DX12_Command;
-	class DX12_DescriptorHeap;
 	class DX12_RenderSurface;
+
+	struct DX12_StartupOptions{
+		bool isDebug = true;
+		bool gpuBasedValidation = false;
+		uint32_t dxgiFactoryFlags = 0;
+	};
 
 	class DX12{
 	public:
-		DISABLE_COPY_AND_MOVE(DX12)
+		DX12(const DX12_StartupOptions& options_);
+		~DX12();
+		DISABLE_COPY_AND_MOVE(DX12);
 
-		DX12(){ GADGET_BASIC_ASSERT(!IsInitialized()); }
+		static DX12& GetInstance(const DX12_StartupOptions& options_ = DX12_StartupOptions());
+		static ErrorCode DeleteInstance();
 
-		[[nodiscard]] static ErrorCode EnableDebugLayer(bool gpuValidation_ = false);
-		[[nodiscard]] static ErrorCode CreateDevice(uint32_t dxgiFactoryFlags_ = 0);
-		[[nodiscard]] static ErrorCode CreateCommandList();
-		[[nodiscard]] static ErrorCode InitializeDescriptorHeaps();
-		[[nodiscard]] static ErrorCode BreakOnWarningsAndErrors(bool enabled_);
+		[[nodiscard]] ErrorCode EnableDebugLayer(bool gpuValidation_ = false);
+		[[nodiscard]] ErrorCode CreateDevice(uint32_t dxgiFactoryFlags_ = 0);
+		[[nodiscard]] ErrorCode CreateCommandList();
+		[[nodiscard]] ErrorCode InitializeDescriptorHeaps();
+		[[nodiscard]] ErrorCode BreakOnWarningsAndErrors(bool enabled_);
 
-		[[nodiscard]] static ErrorCode PreShutdown();
-		[[nodiscard]] static ErrorCode Shutdown();
+		[[nodiscard]] ErrorCode PreShutdown();
+		[[nodiscard]] ErrorCode Shutdown();
 
-		static bool IsInitialized();
-		static ID3D12_Device* const MainDevice();
-		static DX12_Command* const GfxCommand(){ return gfxCommand; }
-		static uint32_t CurrentFrameIndex();
+		bool IsInitialized();
+		ID3D12_Device* const MainDevice();
+		DX12_Command* const GfxCommand(){ return gfxCommand; }
+		uint32_t CurrentFrameIndex();
 
-		static void DeferredRelease(IUnknown* resource_);
-		static uint32_t GetDeferredReleaseFlag();
-		static void SetDeferredReleaseFlag();
-		static void ProcessDeferredReleases(uint32_t frameIndex_);
-		static void ProcessAllDeferredReleases(); //ONLY USE THIS ON SHUTDOWN
+		void DeferredRelease(IUnknown* resource_);
+		uint32_t GetDeferredReleaseFlag();
+		void SetDeferredReleaseFlag();
+		void ProcessDeferredReleases(uint32_t frameIndex_);
+		void ProcessAllDeferredReleases(); //ONLY USE THIS ON SHUTDOWN
 
-		static DX12_DescriptorHeap& RTVHeap(){ return rtvDescriptorHeap; }
-		static DX12_DescriptorHeap& DSVHeap(){ return dsvDescriptorHeap; }
-		static DX12_DescriptorHeap& SRVHeap(){ return srvDescriptorHeap; }
-		static DX12_DescriptorHeap& UAVHeap(){ return uavDescriptorHeap; }
-		static DX12_Helpers::DX12_ResourceBarriers& ResourceBarriers(){ return resourceBarriers; }
+		DX12_DescriptorHeap& RTVHeap(){ return rtvDescriptorHeap; }
+		DX12_DescriptorHeap& DSVHeap(){ return dsvDescriptorHeap; }
+		DX12_DescriptorHeap& SRVHeap(){ return srvDescriptorHeap; }
+		DX12_DescriptorHeap& UAVHeap(){ return uavDescriptorHeap; }
+		DX12_Helpers::DX12_ResourceBarriers& ResourceBarriers(){ return resourceBarriers; }
 
-		static void CreateSwapChainForSurface(DX12_RenderSurface* surface_);
-		static void ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_);
+		void CreateSwapChainForSurface(DX12_RenderSurface* surface_);
+		void ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_);
 
 		static constexpr uint32_t FrameBufferCount = 3;
 
-	protected:
-		static bool debugLayerEnabled;
-		static Microsoft::WRL::ComPtr<IDXGI_Factory> dxgiFactory;
-		static Microsoft::WRL::ComPtr<ID3D12_Device> mainDevice;
-		static DX12_Command* gfxCommand;
-		static DX12_Helpers::DX12_ResourceBarriers resourceBarriers;
-		static DX12_DescriptorHeap rtvDescriptorHeap;
-		static DX12_DescriptorHeap dsvDescriptorHeap;
-		static DX12_DescriptorHeap srvDescriptorHeap;
-		static DX12_DescriptorHeap uavDescriptorHeap;
-		static std::vector<IUnknown*> deferredReleases[FrameBufferCount];
-		static uint32_t deferredReleaseFlag[FrameBufferCount];
-		static std::mutex deferredReleaseMutex;
+	private:
+		static std::unique_ptr<DX12> instance;
 
-		[[nodiscard]] static ErrorCode DebugShutdown();
+		bool debugLayerEnabled;
+		Microsoft::WRL::ComPtr<IDXGI_Factory> dxgiFactory;
+		Microsoft::WRL::ComPtr<ID3D12_Device> mainDevice;
+		DX12_Command* gfxCommand;
+		DX12_Helpers::DX12_ResourceBarriers resourceBarriers;
+		DX12_DescriptorHeap rtvDescriptorHeap;
+		DX12_DescriptorHeap dsvDescriptorHeap;
+		DX12_DescriptorHeap srvDescriptorHeap;
+		DX12_DescriptorHeap uavDescriptorHeap;
+		std::vector<IUnknown*> deferredReleases[FrameBufferCount];
+		uint32_t deferredReleaseFlag[FrameBufferCount];
+		std::mutex deferredReleaseMutex;
 
-		static IDXGI_Adapter* DetermineMainAdapter();
-		static D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGI_Adapter* adapter_);
+		[[nodiscard]] ErrorCode DebugShutdown();
+
+		IDXGI_Adapter* DetermineMainAdapter();
+		D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGI_Adapter* adapter_);
 	};
 }
 
