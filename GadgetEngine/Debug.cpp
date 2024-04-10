@@ -21,6 +21,12 @@ std::set<StringID> Debug::logChannelFilter = std::set<StringID>();
 std::queue<std::string> Debug::queuedLogsForFileWrite;
 
 void Debug::Init(){
+	GADGET_BASIC_ASSERT(!isInitialized);
+	if(isInitialized){
+		std::cout << "Tried to initialize debug subsystem twice!" << std::endl;
+		return;
+	}
+
 #ifdef GADGET_DEBUG
 	constexpr auto writeType = FileSystem::WriteType::Append; //Keeping all session logs is ideal for debugging
 	logFilePath = logFileName;
@@ -29,7 +35,12 @@ void Debug::Init(){
 	logFilePath = FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetGameName() + FileSystem::PathSeparator + logFileName;
 #endif //GADGET_DEBUG
 
-	FileSystem::WriteToFile(logFilePath, "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + " GMT\n", writeType);
+	std::string message = "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + " GMT\n";
+	auto err = FileSystem::WriteToFile(logFilePath, message, writeType);
+	if(err != ErrorCode::OK){
+		std::cout << "ERROR: Could not write initial log message to " << FileSystem::GetFileNameFromPath(logFilePath) << "! We'll try again later..." << std::endl;
+		queuedLogsForFileWrite.push(message);
+	}
 
 	isInitialized = true;
 	WriteQueuedLogs();
@@ -80,6 +91,7 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 void Debug::Log(StringID channel_, const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
 	GADGET_BASIC_ASSERT(channel_ != StringID::None);
 	GADGET_BASIC_ASSERT(!message_.empty());
+	GADGET_BASIC_ASSERT(type_ < LogType::LogType_MAX);
 
 	if(logChannelFilter.empty() || logChannelFilter.find(channel_) != logChannelFilter.end()){
 		Debug::Log("[" + channel_.GetString() + "] " + message_, type_, fileName_, lineNumber_); //Only print if there is no filter set or if this channel is in the filter list
@@ -134,7 +146,12 @@ void Debug::QueueLogForFileWrite(const std::string& message_){
 
 void Debug::WriteQueuedLogs(){
 	while(isInitialized && !queuedLogsForFileWrite.empty()){
-		FileSystem::WriteToFile(logFilePath, queuedLogsForFileWrite.front());
+		auto err = FileSystem::WriteToFile(logFilePath, queuedLogsForFileWrite.front());
+		if(err != ErrorCode::OK){
+			std::cout << "ERROR: Could not write log messages to " << FileSystem::GetFileNameFromPath(logFilePath) << "! We'll try again later..." << std::endl;
+			break;
+		}
+
 		queuedLogsForFileWrite.pop();
 	}
 }

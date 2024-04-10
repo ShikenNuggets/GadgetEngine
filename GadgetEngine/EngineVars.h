@@ -1,8 +1,8 @@
 #ifndef GADGET_ENGINE_VARS_H
 #define GADGET_ENGINE_VARS_H
 
-#include "Utils/Utils.h"
 #include "Utils/StringID.h"
+#include "Utils/Utils.h"
 #include "Utils/Var.h"
 
 namespace Gadget{

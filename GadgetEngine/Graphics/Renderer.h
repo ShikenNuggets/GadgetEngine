@@ -20,7 +20,7 @@ namespace Gadget{
 
 	class Renderer{
 	public:
-		enum class API{
+		enum class API : uint8_t{
 			None = 0,
 			OpenGL,
 			DX12,
@@ -28,14 +28,14 @@ namespace Gadget{
 			API_MAX //Do not put any values below this
 		};
 
-		enum class WindingOrder{
+		enum class WindingOrder : uint8_t{
 			Clockwise,
 			CounterClockwise,
 
 			WindingOrder_MAX //Do not put any values below this
 		};
 
-		enum class CullFace{
+		enum class CullFace : uint8_t{
 			None,
 			Back,
 			Front,
@@ -62,6 +62,12 @@ namespace Gadget{
 		virtual void SetClearColor(const Color& color_) = 0;
 		virtual void SetViewportRect(const Rect& rect_) = 0;
 
+		virtual void HandleWindowEvents(){
+			if(window != nullptr){
+				window->HandleEvents();
+			}
+		}
+
 		virtual void OnResize(int newWidth_, int newHeight_) = 0; //TODO - Update all camera projection matrices
 
 		virtual void SetWindingOrder(WindingOrder order_){
@@ -74,7 +80,24 @@ namespace Gadget{
 			currentCullFace = cullFace_;
 		}
 
-		float GetAspectRatio(){ return static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()); }
+		float GetRefreshRate(){
+			if(window != nullptr){
+				return window->GetRefreshRate();
+			}
+
+			Debug::Log(SID("RENDER"), "Renderer::GetRefreshRate called, but there was no window", Debug::Warning, __FILE__, __LINE__);
+			return 0.0f;
+		}
+
+		float GetAspectRatio(){
+			if(window != nullptr){
+				return static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight());
+			}
+
+			Debug::Log(SID("RENDER"), "Renderer::GetAspectRatio called, but there was no window", Debug::Warning, __FILE__, __LINE__);
+			return 0.0f;
+		}
+
 		void ResetViewportRect(){ SetViewportRect(ViewportRect::Fullscreen); }
 
 		virtual Shader* GenerateAPIShader(StringID shaderResource_) = 0;

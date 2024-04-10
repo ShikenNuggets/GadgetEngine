@@ -5,12 +5,15 @@
 #include <string>
 
 #include "EngineVars.h"
+#include "GadgetEnums.h"
 #include "Utils/StringID.h"
 
 namespace Gadget{
+	//Helper functions for reading from/writing to config files
+	//Used by the Config system
 	namespace ConfigParser{
-		void ParseConfigFile(const std::string& path_, EngineVars& vars_);
-		void SerializeConfigs(const std::string& path_, const EngineVars& vars_);
+		ErrorCode ParseConfigFile(const std::string& path_, EngineVars& vars_);
+		ErrorCode SerializeConfigs(const std::string& path_, const EngineVars& vars_);
 
 		std::string SerializeSection(StringID section_, const std::map<StringID, Var>& vars_);
 	}

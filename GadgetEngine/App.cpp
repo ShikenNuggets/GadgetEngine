@@ -75,8 +75,6 @@ void App::Initialize(const std::string& name_){
 
 	GUID::SetInitialGUID(); //Temp, in the future we'll pull the number of unique entities from the project files or whatever, and then set that here
 
-	
-
 	InitRenderer();
 
 	physics = std::make_unique<PhysManager>();
@@ -136,7 +134,15 @@ void App::ResetRenderer(){
 
 void App::Run(GameInterface& gameInterface_){
 	Initialize(gameInterface_.GetName()); //Init engine
+	GADGET_BASIC_ASSERT(IsFullyInitialized());
+
 	gameInterface_.LoadGame(); //Init game
+
+	GADGET_BASIC_ASSERT(sceneManager->GetNumScenes() > 0);
+	if(sceneManager->GetNumScenes() == 0){
+		Debug::ThrowFatalError(SID("CORE"), "No scenes were added to the scene manager!", __FILE__, __LINE__);
+	}
+
 	sceneManager->LoadScene(0);
 
 	time->Start();
@@ -155,7 +161,7 @@ void App::Run(GameInterface& gameInterface_){
 
 		//Regular update follows
 		time->Update();
-		renderer->GetWindow().lock()->HandleEvents();
+		renderer->HandleWindowEvents();
 
 		input->ProcessInputs();
 
@@ -171,7 +177,7 @@ void App::Run(GameInterface& gameInterface_){
 
 	#ifdef GADGET_DEBUG
 		if(input->GetButtonDown(Gadget::ButtonID::Keyboard_F11)){
-			ResetRenderer();
+			ResetRenderer(); //TODO - Temp code, being able to hot reload the renderer is just useful for testing
 		}
 	#endif // GADGET_DEBUG
 
@@ -208,7 +214,13 @@ void App::OnEvent(const Event& e_){
 void* App::AllocateSingleFrameMemory(size_t bytes_){
 	GADGET_BASIC_ASSERT(IsFullyInitialized());
 
-	if(bytes_ == 0 || !singleFrameAllocator.CanAllocate(bytes_)){
+	if(bytes_ == 0){
+		Debug::Log(SID("CORE"), "Tried to allocate 0 bytes!", Debug::Warning, __FILE__, __LINE__);
+		return nullptr;
+	}
+
+	if(!singleFrameAllocator.CanAllocate(bytes_)){
+		Debug::Log(SID("CORE"), "Single frame allocator is low on memory, cannot allocate " + std::to_string(bytes_) + " bytes!", Debug::Warning, __FILE__, __LINE__);
 		return nullptr;
 	}
 
@@ -218,7 +230,13 @@ void* App::AllocateSingleFrameMemory(size_t bytes_){
 void* App::AllocateTwoFrameMemory(size_t bytes_){
 	GADGET_BASIC_ASSERT(IsFullyInitialized());
 
-	if(bytes_ == 0 || !twoFrameAllocator.CurrentBuffer().CanAllocate(bytes_)){
+	if(bytes_ == 0){
+		Debug::Log(SID("CORE"), "Tried to allocate 0 bytes!", Debug::Warning, __FILE__, __LINE__);
+		return nullptr;
+	}
+
+	if(!twoFrameAllocator.CurrentBuffer().CanAllocate(bytes_)){
+		Debug::Log(SID("CORE"), "Two frame allocator is low on memory, cannot allocate " + std::to_string(bytes_) + " bytes!", Debug::Warning, __FILE__, __LINE__);
 		return nullptr;
 	}
 
@@ -226,11 +244,12 @@ void* App::AllocateTwoFrameMemory(size_t bytes_){
 }
 
 Renderer::API App::GetCurrentRenderAPI(){
-	GADGET_BASIC_ASSERT(instance != nullptr);
+	GADGET_BASIC_ASSERT(instance != nullptr && instance->renderer != nullptr);
 
 	if(GetInstance().renderer != nullptr){
 		return GetInstance().renderer->GetRenderAPI();
 	}else{
+		Debug::Log(SID("CORE"), "GetCurrentRenderAPI called with no renderer loaded", Debug::Warning, __FILE__, __LINE__);
 		return Renderer::API::None;
 	}
 }
@@ -240,7 +259,7 @@ float App::GetFixedDeltaTime(){
 
 	const float physicsUpdatesPerSecond = static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey));
 	GADGET_BASIC_ASSERT(physicsUpdatesPerSecond > 0.0f);
-	if(physicsUpdatesPerSecond > 0.0f){
+	if(physicsUpdatesPerSecond <= 0.0f){
 		Debug::Log("PhysicsUpdates was an invalid value!", Debug::Warning, __FILE__, __LINE__);
 		return 0.0f; //Avoid divide by 0, or wonkiness caused by negative number
 	}
@@ -258,7 +277,7 @@ float App::GetCurrentFramerateCap(){
 		return 0.0f;
 	}
 
-	float vsyncFPS = GetRenderer().GetWindow().lock()->GetRefreshRate();
+	float vsyncFPS = GetRenderer().GetRefreshRate();
 	if(vsyncFPS != 0.0f && (targetFPS == 0.0f || vsyncFPS < targetFPS)){
 		return vsyncFPS;
 	}

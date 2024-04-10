@@ -6,6 +6,7 @@
 #include "Config.h"
 #include "Debug.h"
 #include "EngineVars.h"
+#include "GadgetEnums.h"
 #include "Random.h"
 
 #include "Core/Time.h"

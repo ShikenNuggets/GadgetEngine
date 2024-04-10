@@ -15,10 +15,13 @@
 #include "Resource/ResourceManager.h"
 
 namespace Gadget{
+	//App is the core of the engine
+	//All major engine subsystems are created and destroyed through here
 	class App{
 	public:
 		App();
 		~App();
+		DISABLE_COPY_AND_MOVE(App);
 
 		static App& GetInstance();
 		static void DeleteInstance();
@@ -96,12 +99,6 @@ namespace Gadget{
 				&& sceneManager == nullptr
 				&& gameLogicManager == nullptr;
 		}
-
-		//Delete unwanted compiler-generated copy/move constructors and assignment operators
-		App(const App&) = delete;
-		App(App&&) = delete;
-		App& operator=(const App&) = delete;
-		App& operator=(App&&) = delete;
 	};
 }
 

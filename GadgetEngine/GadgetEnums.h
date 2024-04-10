@@ -6,7 +6,8 @@ namespace Gadget{
 		OK = 0,
 		Unknown = 1,
 		D3D12_Error,
-		Invalid_State
+		Invalid_State,
+		FileIO
 	};
 }
 

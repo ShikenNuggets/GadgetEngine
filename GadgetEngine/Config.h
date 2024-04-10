@@ -8,6 +8,8 @@
 #include "Utils/StringID.h"
 
 namespace Gadget{
+	//Keeps track of all of the engine's configurable options
+	//If something about the engine should be customizable by a game developer or the end-user, you should get/set it through here
 	class Config{
 	public:
 		Config();

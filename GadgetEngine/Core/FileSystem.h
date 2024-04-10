@@ -13,13 +13,16 @@
 #pragma warning(default : 26800)
 #pragma warning(default : 26819)
 
+#include "GadgetEnums.h"
+
 namespace Gadget{
 	class FileSystem{
 	public:
-		enum class WriteType{
+		enum class WriteType : uint8_t{
 			Append,
 			Clear,
 			Overwrite,
+
 			WriteType_MAX //Put new values ABOVE this, nothing should be below
 		};
 
@@ -38,18 +41,17 @@ namespace Gadget{
 		static nlohmann::json ReadPlainTextJSONFile(const std::string& filePath_);
 		static nlohmann::json ReadBinaryJSONFile(const std::string& filePath_);
 		
-		//Returns true when file write was successful
-		static bool WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_ = WriteType::Append);
-		static bool WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_ = WriteType::Overwrite);
-		static bool WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
-		static bool WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
+		[[nodiscard]] static ErrorCode WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_ = WriteType::Append);
+		[[nodiscard]] static ErrorCode WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_ = WriteType::Overwrite);
+		[[nodiscard]] static ErrorCode WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
+		[[nodiscard]] static ErrorCode WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
 
 		static std::string GetFileNameFromPath(const std::string& path_);
 
 		static std::string GetPersistentDataDir();
 
-		static bool CreateFile(const std::string& path_);
-		static bool CreateDir(const std::string& path_);
+		[[nodiscard]] static ErrorCode CreateFile(const std::string& path_);
+		[[nodiscard]] static ErrorCode CreateDir(const std::string& path_);
 
 		static bool IsLastWriteTimeNewer(const std::string& basePath_, const std::string& comparePath_);
 

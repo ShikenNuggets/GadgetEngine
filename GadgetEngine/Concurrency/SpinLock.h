@@ -3,10 +3,13 @@
 
 #include <atomic>
 
+#include "Utils/Utils.h"
+
 namespace Gadget{
 	class SpinLock{
 	public:
 		SpinLock() = default;
+		DISABLE_COPY_AND_MOVE(SpinLock);
 
 		void Acquire();
 		bool TryAcquire();
@@ -14,12 +17,6 @@ namespace Gadget{
 	
 	private:
 		std::atomic_flag atomicFlag;
-
-		//Delete unwanted compiler-generated copy/move constructors and assignment operators
-		SpinLock(const SpinLock&) = delete;
-		SpinLock(SpinLock&&) = delete;
-		SpinLock& operator=(const SpinLock&) = delete;
-		SpinLock& operator=(SpinLock&&) = delete;
 	};
 
 	//Lightweight spinlock used specifically for detecting race conditions
@@ -28,18 +25,13 @@ namespace Gadget{
 	class RaceConditionDetector{
 	public:
 		RaceConditionDetector();
+		DISABLE_COPY_AND_MOVE(RaceConditionDetector);
 
 		void Acquire();
 		void Release();
 
 	private:
 		volatile bool flag; //Does not need to be atomic since this is just to detect races and not prevent them. Volatile so it doesn't get optimized out
-
-		//Delete unwanted compiler-generated copy/move constructors and assignment operators
-		RaceConditionDetector(const RaceConditionDetector&) = delete;
-		RaceConditionDetector(RaceConditionDetector&&) = delete;
-		RaceConditionDetector& operator=(const RaceConditionDetector&) = delete;
-		RaceConditionDetector& operator=(RaceConditionDetector&&) = delete;
 	};
 
 #ifdef GADGET_DEBUG

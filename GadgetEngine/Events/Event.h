@@ -4,7 +4,7 @@
 #include "Utils/StringID.h"
 
 namespace Gadget{
-	enum class EventType{
+	enum class EventType : uint8_t{
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		KeyPressed, KeyReleased,

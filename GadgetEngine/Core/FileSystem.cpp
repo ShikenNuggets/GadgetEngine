@@ -98,14 +98,17 @@ nlohmann::json FileSystem::ReadBinaryJSONFile(const std::string& filePath_){
 	return nlohmann::json::from_bson(ReadBinaryFile(filePath_)); //We're gonna use BSON https://bsonspec.org/
 }
 
-bool FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){
+ErrorCode FileSystem::WriteToFile(const std::string& filePath_, const std::string& content_, WriteType type_){
 	GADGET_BASIC_ASSERT(!filePath_.empty());
 	//TODO - Check if file path is valid
 	GADGET_BASIC_ASSERT(!content_.empty());
 	GADGET_BASIC_ASSERT(type_ < WriteType::WriteType_MAX);
 
 	if(!FileExists(filePath_)){
-		CreateFile(filePath_);
+		auto err = CreateFile(filePath_);
+		if(err != ErrorCode::OK){
+			return err;
+		}
 	}
 
 	std::fstream filestream;
@@ -127,7 +130,7 @@ bool FileSystem::WriteToFile(const std::string& filePath_, const std::string& co
 
 	if(!filestream.is_open()){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
-		return false;
+		return ErrorCode::FileIO;
 	}
 
 	filestream << content_;
@@ -135,25 +138,27 @@ bool FileSystem::WriteToFile(const std::string& filePath_, const std::string& co
 
 	if(!filestream){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
-		return false;
+		return ErrorCode::FileIO;
 	}
 
-	return true;
+	return ErrorCode::OK;
 }
 
-bool FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_){
+ErrorCode FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vector<uint8_t>& data_, WriteType type_){
 	GADGET_BASIC_ASSERT(!filePath_.empty());
 	//TODO - Check if file path is valid
 	GADGET_BASIC_ASSERT(!data_.empty());
 	GADGET_BASIC_ASSERT(type_ < WriteType::WriteType_MAX);
 
 	if(!FileExists(filePath_)){
-		CreateFile(filePath_);
+		auto err = CreateFile(filePath_);
+		if(err != ErrorCode::OK){
+			return err;
+		}
 	}
 
 	std::ofstream outfile;
-	switch(type_)
-	{
+	switch(type_){
 		case WriteType::Append:
 			Debug::Log("Appending to binary files is not recommended.", Debug::Warning, __FILE__, __LINE__);
 			outfile.open(filePath_, std::ios::out | std::ios_base::app | std::ios::binary);
@@ -171,7 +176,7 @@ bool FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vect
 
 	if(!outfile.is_open()){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
-		return false;
+		return ErrorCode::FileIO;
 	}
 	
 	outfile.write(reinterpret_cast<const char*>(&data_[0]), data_.size());
@@ -179,17 +184,17 @@ bool FileSystem::WriteToBinaryFile(const std::string& filePath_, const std::vect
 	
 	if(!outfile){
 		Debug::Log(SID("FILESYSTEM"), "An error occurred while writing to file " + filePath_ + "!", Debug::Error, __FILE__, __LINE__);
-		return false;
+		return ErrorCode::FileIO;
 	}
 
-	return true;
+	return ErrorCode::OK;
 }
 
-bool FileSystem::WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
+ErrorCode FileSystem::WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
 	return FileSystem::WriteToFile(filePath_, json_.dump(4), type_);
 }
 
-bool FileSystem::WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
+ErrorCode FileSystem::WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_){
 	return WriteToBinaryFile(filePath_, nlohmann::json::to_bson(json_), type_);
 }
 
@@ -210,35 +215,38 @@ std::string FileSystem::GetPersistentDataDir(){
 	#endif //!GADGET_PLATFORM_WIN32
 }
 
-bool FileSystem::CreateFile(const std::string& file_){
+ErrorCode FileSystem::CreateFile(const std::string& file_){
 	GADGET_BASIC_ASSERT(!file_.empty());
 	//TODO - Check if file name is valid
 
 	std::string dir = RemoveFileNameFromPath(file_);
 	if(Utils::ContainsChar(dir, PathSeparator) && !DirExists(dir)){
-		CreateDir(dir);
+		auto err = CreateDir(dir);
+		if(err != ErrorCode::OK){
+			return err;
+		}
 	}
 
 	std::fstream filestream;
 	filestream.open(file_, std::ios::out | std::ios_base::trunc);
 	if(!filestream.is_open()){
-		return false;
+		return ErrorCode::FileIO;
 	}
 
 	filestream.flush();
 	filestream.close();
-	return true;
+	return ErrorCode::FileIO;
 }
 
-bool FileSystem::CreateDir(const std::string& path_){
+ErrorCode FileSystem::CreateDir(const std::string& path_){
 	GADGET_BASIC_ASSERT(!path_.empty());
 	//TODO - Check if path is valid
 
 	if(DirExists(path_)){
-		return false;
+		return ErrorCode::OK;
 	}
 
-	return std::filesystem::create_directory(path_);
+	return std::filesystem::create_directory(path_) ? ErrorCode::OK : ErrorCode::FileIO;
 }
 
 bool FileSystem::IsLastWriteTimeNewer(const std::string& basePath_, const std::string& comparePath_){

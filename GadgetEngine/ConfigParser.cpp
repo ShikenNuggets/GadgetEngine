@@ -9,10 +9,10 @@
 
 using namespace Gadget;
 
-void ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& vars_){
+ErrorCode ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& vars_){
 	GADGET_BASIC_ASSERT(!path_.empty());
 	if(!FileSystem::FileExists(path_)){
-		return;
+		return ErrorCode::Invalid_State;
 	}
 
 	StringID currentSection = StringID::None;
@@ -35,10 +35,15 @@ void ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& vars_){
 
 		vars_.SetValue(currentSection, keyID, value);
 	}
+
+	return ErrorCode::OK;
 }
 
-void ConfigParser::SerializeConfigs(const std::string& path_, const EngineVars& vars_){
+ErrorCode ConfigParser::SerializeConfigs(const std::string& path_, const EngineVars& vars_){
 	GADGET_BASIC_ASSERT(!path_.empty());
+	if(path_.empty()){
+		return ErrorCode::Invalid_State;
+	}
 
 	std::string output = "";
 	for(const auto& s : vars_.sections){
@@ -51,7 +56,7 @@ void ConfigParser::SerializeConfigs(const std::string& path_, const EngineVars& 
 		output += SerializeSection(s->name, s->vars);
 	}
 
-	FileSystem::WriteToFile(path_, Utils::Trim(output), FileSystem::WriteType::Overwrite);
+	return FileSystem::WriteToFile(path_, Utils::Trim(output), FileSystem::WriteType::Overwrite);
 }
 
 std::string ConfigParser::SerializeSection(StringID section_, const std::map<StringID, Var>& vars_){

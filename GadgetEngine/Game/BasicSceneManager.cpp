@@ -39,6 +39,7 @@ void BasicSceneManager::LoadScene(size_t index_){
 	CurrentScene()->SetToDefaultState();
 
 	GADGET_BASIC_ASSERT(index_ < scenes.size());
+	GADGET_BASIC_ASSERT(scenes.size() > 0);
 	if(index_ >= scenes.size()){
 		sceneIndex = scenes.size() - 1;
 	}else{

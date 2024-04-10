@@ -1,9 +1,9 @@
 #ifndef GADGET_DEBUG_H
 #define GADGET_DEBUG_H
 
+#include <queue>
 #include <set>
 #include <string>
-#include <queue>
 
 #include "Utils/StringID.h"
 
@@ -25,7 +25,7 @@
 #endif //GADGET_RELEASE || !GADGET_PLATFORM_WIN32
 
 #define GADGET_BASIC_ASSERT(expr) GADGET_ASSERT(expr, "Condition Failed: " ## #expr)
-#define GADGET_ASSERT_NOT_IMPLEMENTED GADGET_ASSERT(false, "Case not implemented - Ask a dev!");
+#define GADGET_ASSERT_NOT_IMPLEMENTED GADGET_ASSERT(false, "Case not implemented - Ask a dev!")
 
 #if defined GADGET_DEBUG
 	#define GADGET_DEBUG_INT(var) int var
@@ -36,7 +36,7 @@
 namespace Gadget{
 	class Debug{
 	public:
-		enum LogType{
+		enum LogType : uint8_t{
 			Verbose		= 0,
 			Info		= 1,
 			Warning		= 2,
@@ -73,5 +73,18 @@ namespace Gadget{
 		static void WriteQueuedLogs();
 	};
 }
+
+#ifndef GADGET_LOG
+	#define GADGET_LOG(C, M) Gadget::Debug::Log(SID(C), M, Gadget::Debug::Log, __FILE__, __LINE__)
+#endif //!GADGET_LOG
+
+#ifndef GADGET_LOG_WARNING
+	#define GADGET_LOG_WARNING(C, M) Gadget::Debug::Log(SID(C), M, Gadget::Debug::Warning, __FILE__, __LINE__)
+#endif //!G_WARNING
+
+#ifndef GADGET_LOG_ERROR
+	#define GADGET_LOG_ERROR(C, M) Gadget::Debug::Log(SID(C), M, Gadget::Debug::Error, __FILE__, __LINE__)
+#endif //!GADGET_LOG_ERROR
+
 
 #endif //!GADGET_DEBUG_H

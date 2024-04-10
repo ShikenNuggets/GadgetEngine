@@ -22,6 +22,7 @@ namespace Gadget{
 		void RequestSceneLoad(StringID name_);
 
 		Scene* CurrentScene();
+		inline constexpr size_t GetNumScenes(){ return scenes.size(); }
 
 	private:
 		std::vector<Scene*> scenes;

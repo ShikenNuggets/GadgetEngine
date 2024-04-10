@@ -12,7 +12,7 @@ using namespace Gadget;
 
 Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
 #ifdef GADGET_DEBUG
-	engineConfigPath = engineConfigFileName; //Makes debugging easier to store the file in the same directory
+	engineConfigPath = engineConfigFileName; //Storing the config file in the same directory makes debugging much easier
 #endif //GADGET_DEBUG
 
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowMoved, &OnEvent);
