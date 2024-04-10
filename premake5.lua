@@ -34,7 +34,8 @@ function CppProjectDefaults()
 
 		fatalwarnings
 		{
-			"4715"
+			"4715", -- Not all control paths return a value
+			"4834", -- Discarding return value of function with [[nodiscard]] attribute
 		}
 
 	filter "configurations:Debug"
