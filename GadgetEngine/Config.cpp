@@ -107,9 +107,11 @@ void Config::ResetSectionToDefault(StringID section_){
 			continue;
 		}
 
-		for(const auto& o : s->vars){
-			vars.SetValue(o.first, o.second);
-		}
+		if(s->name == section_){
+			for(const auto& o : s->vars){
+				vars.SetValue(o.first, o.second);
+			}
+		}	
 	}
 }
 
