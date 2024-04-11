@@ -37,8 +37,8 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	(void)dx12.CreateSwapChainForSurface(renderSurfacePtr);
 	window->SetRenderSurface(renderSurfacePtr);
 
-	bool br = DX12_ShaderHandler::Initialize();
-	if(br == false){
+	auto err = DX12_ShaderHandler::Initialize();
+	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize shader handler!", __FILE__, __LINE__);
 	}
 
@@ -47,13 +47,13 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	clearColor = Color::DarkGray();
 	#endif //GADGET_DEBUG
 
-	br = DX12_GeometryPass::Initialize(window->GetSize(), clearColor);
-	if(br == false){
+	err = DX12_GeometryPass::Initialize(window->GetSize(), clearColor);
+	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize geometry pass!", __FILE__, __LINE__);
 	}
 
-	br = DX12_PostProcess::Initialize();
-	if(br == false){
+	err = DX12_PostProcess::Initialize();
+	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize post-processing submodule!", __FILE__, __LINE__);
 	}
 

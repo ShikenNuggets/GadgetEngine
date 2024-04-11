@@ -13,7 +13,7 @@ namespace Gadget{
 	public:
 		STATIC_CLASS(DX12_PostProcess);
 
-		static bool Initialize();
+		[[nodiscard]] static ErrorCode Initialize();
 		static void Shutdown();
 
 		static void PostProcess(ID3D12_GraphicsCommandList* cmdList_, const DX12_RenderTextureInfo* geometryPassMainBuffer_, D3D12_CPU_DESCRIPTOR_HANDLE renderTargetView_);
@@ -22,7 +22,7 @@ namespace Gadget{
 		static Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 		static Microsoft::WRL::ComPtr<ID3D12PipelineState> pso;
 
-		static bool CreateRootSignatureAndPSO();
+		[[nodiscard]] static ErrorCode CreateRootSignatureAndPSO();
 	};
 }
 

@@ -8,7 +8,7 @@ const StringID DX12_ShaderHandler::shadersBlobResourceName = SID("EngineShaders_
 BinaryBlobResource* DX12_ShaderHandler::shadersBlob = nullptr;
 CompiledShaderPtr DX12_ShaderHandler::engineShaders[(uint32_t)EngineShader::ID::ID_MAX]{};
 
-bool DX12_ShaderHandler::Initialize(){
+ErrorCode DX12_ShaderHandler::Initialize(){
 	return LoadEngineShaders();
 }
 
@@ -33,7 +33,7 @@ D3D12_SHADER_BYTECODE DX12_ShaderHandler::GetEngineShader(EngineShader::ID id_){
 	return { &shader->byteCode, shader->size };
 }
 
-bool DX12_ShaderHandler::LoadEngineShaders(){
+ErrorCode DX12_ShaderHandler::LoadEngineShaders(){
 	GADGET_BASIC_ASSERT(shadersBlob == nullptr);
 
 	shadersBlob = App::GetResourceManager().LoadResource<BinaryBlobResource>(shadersBlobResourceName);
@@ -51,7 +51,7 @@ bool DX12_ShaderHandler::LoadEngineShaders(){
 		result &= index < (uint32_t)EngineShader::ID::ID_MAX && !shader;
 
 		if(!result){
-			break;
+			return ErrorCode::Unknown;
 		}
 
 		shader = reinterpret_cast<CompiledShaderPtr>(&shadersBlob->Data()[offset]);
@@ -61,5 +61,5 @@ bool DX12_ShaderHandler::LoadEngineShaders(){
 
 	GADGET_BASIC_ASSERT(offset == shadersBlob->Size() && index == (uint32_t)EngineShader::ID::ID_MAX);
 
-	return result;
+	return ErrorCode::OK;
 }

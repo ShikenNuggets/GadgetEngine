@@ -5,6 +5,7 @@
 
 #include <d3d12.h>
 
+#include "GadgetEnums.h"
 #include "Resource/BinaryBlobResource.h"
 #include "Utils/StringID.h"
 #include "Utils/Utils.h"
@@ -45,7 +46,7 @@ namespace Gadget{
 	public:
 		STATIC_CLASS(DX12_ShaderHandler);
 
-		static bool Initialize();
+		[[nodiscard]] static ErrorCode Initialize();
 		static void Shutdown();
 
 		static D3D12_SHADER_BYTECODE GetEngineShader(EngineShader::ID id_);
@@ -55,7 +56,7 @@ namespace Gadget{
 		static BinaryBlobResource* shadersBlob;
 		static CompiledShaderPtr engineShaders[(uint32_t)EngineShader::ID::ID_MAX];
 
-		static bool LoadEngineShaders();
+		[[nodiscard]] static ErrorCode LoadEngineShaders();
 	};
 }
 

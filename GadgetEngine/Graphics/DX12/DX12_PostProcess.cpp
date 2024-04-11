@@ -19,7 +19,7 @@ enum PostProcessRootParamIndices : uint32_t{
 	ID_MAX //DO NOT PUT ANYTHING BELOW THIS!!!
 };
 
-bool DX12_PostProcess::Initialize(){
+ErrorCode DX12_PostProcess::Initialize(){
 	return CreateRootSignatureAndPSO();
 }
 
@@ -30,6 +30,7 @@ void DX12_PostProcess::Shutdown(){
 
 void DX12_PostProcess::PostProcess(ID3D12_GraphicsCommandList* cmdList_, const DX12_RenderTextureInfo* geometryPassMainBuffer_, D3D12_CPU_DESCRIPTOR_HANDLE renderTargetView_){
 	GADGET_BASIC_ASSERT(cmdList_ != nullptr);
+	GADGET_BASIC_ASSERT(geometryPassMainBuffer_ != nullptr);
 	GADGET_BASIC_ASSERT(rootSignature != nullptr);
 	GADGET_BASIC_ASSERT(pso != nullptr);
 
@@ -44,7 +45,7 @@ void DX12_PostProcess::PostProcess(ID3D12_GraphicsCommandList* cmdList_, const D
 	cmdList_->DrawInstanced(3, 1, 0, 0);
 }
 
-bool DX12_PostProcess::CreateRootSignatureAndPSO(){
+ErrorCode DX12_PostProcess::CreateRootSignatureAndPSO(){
 	GADGET_BASIC_ASSERT(rootSignature == nullptr);
 	GADGET_BASIC_ASSERT(pso == nullptr);
 
@@ -64,7 +65,7 @@ bool DX12_PostProcess::CreateRootSignatureAndPSO(){
 	GADGET_BASIC_ASSERT(rootSignature != nullptr);
 	if(rootSignature == nullptr){
 		Debug::Log(SID("RENDER"), "PostProcess - Could not create root signature!", Debug::Error, __FILE__, __LINE__);
-		return false;
+		return ErrorCode::D3D12_Error;
 	}
 
 	rootSignature->SetName(L"PostProcess Root Signature");
@@ -88,10 +89,10 @@ bool DX12_PostProcess::CreateRootSignatureAndPSO(){
 	GADGET_BASIC_ASSERT(pso != nullptr);
 	if(pso == nullptr){
 		Debug::Log(SID("RENDER"), "PostProcess - Could not create pipeline state object!", Debug::Error, __FILE__, __LINE__);
-		return false;
+		return ErrorCode::D3D12_Error;
 	}
 
 	pso->SetName(L"PostProcess Pipeline State Object");
 
-	return true;
+	return ErrorCode::OK;
 }

@@ -3,6 +3,7 @@
 
 #include <d3d12.h>
 
+#include "GadgetEnums.h"
 #include "ScreenCoordinate.h"
 #include "Graphics/Color.h"
 #include "Graphics/DX12/DX12.h"
@@ -14,8 +15,10 @@ namespace Gadget{
 	public:
 		STATIC_CLASS(DX12_GeometryPass);
 
-		static bool Initialize(const ScreenCoordinate& size_, const Color& clearColor_ = Color::Black());
+		[[nodiscard]] static ErrorCode Initialize(const ScreenCoordinate& size_, const Color& clearColor_ = Color::Black());
 		static void Shutdown();
+
+		static bool IsInitialized();
 
 		[[nodiscard]] static const DX12_RenderTextureInfo* MainBuffer(){ return mainBuffer; }
 		[[nodiscard]] static const DX12_DepthBufferTextureInfo* DepthBuffer(){ return depthBuffer; }
@@ -39,16 +42,16 @@ namespace Gadget{
 
 		static DX12_RenderTextureInfo* mainBuffer;
 		static DX12_DepthBufferTextureInfo* depthBuffer;
-		static ID3D12RootSignature* rootSignature;
-		static ID3D12PipelineState* pipelineStateObject;
+		static Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
+		static Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineStateObject;
 		static ScreenCoordinate size;
 		static Color clearColor;
 
 		const static D3D12_RESOURCE_STATES initialMainBufferState;
 		const static D3D12_RESOURCE_STATES initialDepthBufferState;
 
-		static bool CreateBuffers(const ScreenCoordinate& size_, const Color& clearColor_);
-		static bool CreateRootSignatureAndPSO();
+		static ErrorCode CreateBuffers(const ScreenCoordinate& size_, const Color& clearColor_);
+		static ErrorCode CreateRootSignatureAndPSO();
 	};
 }
 

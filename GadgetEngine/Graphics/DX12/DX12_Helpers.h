@@ -269,6 +269,8 @@ namespace Gadget{
 								D3D12_RESOURCE_STATES before_, D3D12_RESOURCE_STATES after_,
 								D3D12_RESOURCE_BARRIER_FLAGS flags_ = D3D12_RESOURCE_BARRIER_FLAG_NONE,
 								uint32_t subResource_ = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES){
+			GADGET_BASIC_ASSERT(cmdList_ != nullptr);
+			GADGET_BASIC_ASSERT(resource_ != nullptr);
 			D3D12_RESOURCE_BARRIER barrier{};
 			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 			barrier.Flags = flags_;
