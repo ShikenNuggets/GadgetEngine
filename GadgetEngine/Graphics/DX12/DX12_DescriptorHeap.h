@@ -7,13 +7,12 @@
 
 #include <d3d12.h>
 
-#include "DX12_Defines.h"
 #include "Debug.h"
+#include "GadgetEnums.h"
+#include "Graphics/DX12/DX12_Defines.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
-	class DX12_DescriptorHeap;
-
 	struct DX12_DescriptorHandle{
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle{};
 		D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle{};
@@ -35,11 +34,10 @@ namespace Gadget{
 
 	class DX12_DescriptorHeap{
 	public:
-		DISABLE_COPY_AND_MOVE(DX12_DescriptorHeap)
 		explicit DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_);
-		~DX12_DescriptorHeap(){}
+		DISABLE_COPY_AND_MOVE(DX12_DescriptorHeap)
 
-		bool Initialize(ID3D12_Device* device_, uint32_t capacity_, bool isShaderVisible_);
+		ErrorCode Initialize(ID3D12_Device* const device_, uint32_t capacity_, bool isShaderVisible_);
 		void ProcessDeferredFree(uint32_t frameIndex_);
 		void Release();
 
@@ -56,7 +54,8 @@ namespace Gadget{
 		constexpr bool IsShaderVisible() const{ return gpuStart.ptr != 0; }
 
 	private:
-		ID3D12DescriptorHeap* heap;
+		const D3D12_DESCRIPTOR_HEAP_TYPE type;
+		ID3D12DescriptorHeap* heap; //NOT a ComPtr since the release needs to be deferred
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuStart;
 		D3D12_GPU_DESCRIPTOR_HANDLE gpuStart;
 		std::unique_ptr<uint32_t[]> freeHandles;
@@ -65,7 +64,6 @@ namespace Gadget{
 		uint32_t capacity;
 		uint32_t size;
 		uint32_t descriptorSize;
-		const D3D12_DESCRIPTOR_HEAP_TYPE type;
 	};
 }
 

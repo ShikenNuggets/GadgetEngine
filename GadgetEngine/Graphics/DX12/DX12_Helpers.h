@@ -6,8 +6,8 @@
 #include <dxgi1_6.h>
 #include <d3d12.h>
 
-#include "DX12_Defines.h"
 #include "Debug.h"
+#include "Graphics/DX12/DX12_Defines.h"
 
 namespace Gadget{
 	//Some of these are loosely based on Microsoft's d3dx12 helper library: https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/d3dx12.h
@@ -218,7 +218,7 @@ namespace Gadget{
 
 		#undef DX12_HELPER_PSSO
 
-		constexpr inline ID3D12PipelineState* CreatePipelineState(ID3D12Device8* device_, const D3D12_PIPELINE_STATE_STREAM_DESC& desc_){
+		constexpr inline ID3D12PipelineState* CreatePipelineState(ID3D12Device2* device_, const D3D12_PIPELINE_STATE_STREAM_DESC& desc_){
 			GADGET_BASIC_ASSERT(device_ != nullptr);
 			GADGET_BASIC_ASSERT(desc_.pPipelineStateSubobjectStream != nullptr);
 			GADGET_BASIC_ASSERT(desc_.SizeInBytes > 0);
@@ -233,7 +233,7 @@ namespace Gadget{
 			return pso;
 		}
 
-		constexpr inline ID3D12PipelineState* CreatePipelineState(ID3D12Device8* device_, void* stream_, uint64_t size_){
+		constexpr inline ID3D12PipelineState* CreatePipelineState(ID3D12Device2* device_, void* stream_, uint64_t size_){
 			GADGET_BASIC_ASSERT(device_ != nullptr);
 			GADGET_BASIC_ASSERT(stream_ != nullptr);
 			GADGET_BASIC_ASSERT(size_ > 0);

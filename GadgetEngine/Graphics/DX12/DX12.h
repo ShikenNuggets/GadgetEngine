@@ -5,11 +5,11 @@
 
 #include <wrl/client.h>
 
-#include "DX12_Defines.h"
-#include "DX12_DescriptorHeap.h"
-#include "DX12_Helpers.h"
 #include "Debug.h"
 #include "GadgetEnums.h"
+#include "Graphics/DX12/DX12_Defines.h"
+#include "Graphics/DX12/DX12_DescriptorHeap.h"
+#include "Graphics/DX12/DX12_Helpers.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
@@ -22,6 +22,13 @@ namespace Gadget{
 		uint32_t dxgiFactoryFlags = 0;
 	};
 
+	struct DX12_DeferredRelease{
+		uint32_t flag = 0;
+		std::vector<IUnknown*> resources;
+	};
+
+	//Singleton responsible for managing the global DirectX 12 state
+	//High level renderer should generally avoid directly calling D3D12 functions and go through this instead
 	class DX12{
 	public:
 		DX12(const DX12_StartupOptions& options_);
@@ -40,10 +47,10 @@ namespace Gadget{
 		[[nodiscard]] ErrorCode PreShutdown();
 		[[nodiscard]] ErrorCode Shutdown();
 
-		bool IsInitialized();
-		ID3D12_Device* const MainDevice();
-		DX12_Command* const GfxCommand(){ return gfxCommand; }
-		uint32_t CurrentFrameIndex();
+		bool IsInitialized() const;
+		ID3D12_Device* const MainDevice() const;
+		DX12_Command* const GfxCommand() const{ return gfxCommand; }
+		uint32_t CurrentFrameIndex() const;
 
 		void DeferredRelease(IUnknown* resource_);
 		uint32_t GetDeferredReleaseFlag();
@@ -57,15 +64,14 @@ namespace Gadget{
 		DX12_DescriptorHeap& UAVHeap(){ return uavDescriptorHeap; }
 		DX12_Helpers::DX12_ResourceBarriers& ResourceBarriers(){ return resourceBarriers; }
 
-		void CreateSwapChainForSurface(DX12_RenderSurface* surface_);
-		void ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_);
+		[[nodiscard]] ErrorCode CreateSwapChainForSurface(DX12_RenderSurface* surface_);
+		[[nodiscard]] ErrorCode ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_);
 
 		static constexpr uint32_t FrameBufferCount = 3;
 
 	private:
 		static std::unique_ptr<DX12> instance;
 
-		bool debugLayerEnabled;
 		Microsoft::WRL::ComPtr<IDXGI_Factory> dxgiFactory;
 		Microsoft::WRL::ComPtr<ID3D12_Device> mainDevice;
 		DX12_Command* gfxCommand;
@@ -74,8 +80,7 @@ namespace Gadget{
 		DX12_DescriptorHeap dsvDescriptorHeap;
 		DX12_DescriptorHeap srvDescriptorHeap;
 		DX12_DescriptorHeap uavDescriptorHeap;
-		std::vector<IUnknown*> deferredReleases[FrameBufferCount];
-		uint32_t deferredReleaseFlag[FrameBufferCount];
+		std::vector<DX12_DeferredRelease> deferredReleases;
 		std::mutex deferredReleaseMutex;
 
 		[[nodiscard]] ErrorCode DebugShutdown();

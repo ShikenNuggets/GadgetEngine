@@ -1,19 +1,23 @@
 #include "DX12_DescriptorHeap.h"
 
-#include "App.h"
-#include "Platform/Windows/Win32_DX12_Renderer.h"
+#include "Graphics/DX12/DX12.h"
 
 using namespace Gadget;
 
-DX12_DescriptorHeap::DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_) : heap(nullptr), cpuStart(), gpuStart(), freeHandles(), deferredFreeIndices(), capacity(0), size(0), descriptorSize(0), type(type_){}
+DX12_DescriptorHeap::DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_) : type(type_), heap(nullptr), cpuStart(), gpuStart(), freeHandles(), deferredFreeIndices(), capacity(0), size(0), descriptorSize(0){}
 
-bool DX12_DescriptorHeap::Initialize(ID3D12_Device* device_, uint32_t capacity_, bool isShaderVisible_){
+ErrorCode DX12_DescriptorHeap::Initialize(ID3D12_Device* const device_, uint32_t capacity_, bool isShaderVisible_){
 	std::lock_guard lock{ mutex };
 
 	GADGET_BASIC_ASSERT(device_ != nullptr);
 	GADGET_BASIC_ASSERT(capacity_ > 0);
 	GADGET_BASIC_ASSERT(capacity_ < D3D12_MAX_SHADER_VISIBLE_DESCRIPTOR_HEAP_SIZE_TIER_2);
 	GADGET_BASIC_ASSERT(!(type == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER && capacity_ > D3D12_MAX_SHADER_VISIBLE_SAMPLER_HEAP_SIZE));
+
+	if(device_ == nullptr || capacity_ == 0){
+		Debug::Log(SID("RENDER"), "Tried to initialize DX12_DescriptorHeap with invalid arguments", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::Invalid_Args;
+	}
 
 	if(type == D3D12_DESCRIPTOR_HEAP_TYPE_DSV || type == D3D12_DESCRIPTOR_HEAP_TYPE_RTV){
 		isShaderVisible_ = false;
@@ -29,7 +33,7 @@ bool DX12_DescriptorHeap::Initialize(ID3D12_Device* device_, uint32_t capacity_,
 	if(FAILED(result) || heap == nullptr){
 		Debug::Log(SID("RENDER"), "An error occured while creating the descriptor heap!", Debug::Error, __FILE__, __LINE__);
 		Release();
-		return false;
+		return ErrorCode::D3D12_Error;
 	}
 
 	freeHandles = std::move(std::make_unique<uint32_t[]>(capacity_));
@@ -42,7 +46,11 @@ bool DX12_DescriptorHeap::Initialize(ID3D12_Device* device_, uint32_t capacity_,
 
 	for(uint32_t i = 0; i < DX12::FrameBufferCount; i++){
 		GADGET_BASIC_ASSERT(deferredFreeIndices[i].empty());
-		deferredFreeIndices[i].clear(); //Clearing this is not good, but memory leak is better than garbage data
+
+		if(!deferredFreeIndices[i].empty()){
+			Debug::Log(SID("RENDER"), "Memory leak detected in DX12_DescriptorHeap::Initialize", Debug::Warning, __FILE__, __LINE__);
+			deferredFreeIndices[i].clear(); //Clearing this is not good, but memory leak is better than garbage data
+		}
 	}
 
 	descriptorSize = device_->GetDescriptorHandleIncrementSize(type);
@@ -51,7 +59,7 @@ bool DX12_DescriptorHeap::Initialize(ID3D12_Device* device_, uint32_t capacity_,
 		gpuStart = heap->GetGPUDescriptorHandleForHeapStart();
 	}
 
-	return true;
+	return ErrorCode::OK;
 }
 
 void DX12_DescriptorHeap::ProcessDeferredFree(uint32_t frameIndex_){

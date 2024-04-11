@@ -1,13 +1,15 @@
 #ifndef GADGET_DX12_RENDER_SURFACE_H
 #define GADGET_DX12_RENDER_SURFACE_H
 
+#include <wrl/client.h>
+
+#include "GadgetEnums.h"
 #include "RenderSurface.h"
-#include "DX12.h"
-#include "DX12_DescriptorHeap.h"
+#include "Graphics/DX12/DX12_DescriptorHeap.h"
 
 namespace Gadget{
 	struct DX12_RenderTargetData{
-		ID3D12Resource* resource = nullptr;
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
 		DX12_DescriptorHandle renderTargetView{};
 	};
 
@@ -18,18 +20,18 @@ namespace Gadget{
 		explicit DX12_RenderSurface(Window* parent_, int w_, int h_);
 		virtual ~DX12_RenderSurface() override;
 
-		constexpr ID3D12Resource* const CurrentBackBuffer() const{ return renderTargetData[swapChain->GetCurrentBackBufferIndex()].resource; }
+		ID3D12Resource* const CurrentBackBuffer() const{ return renderTargetData[swapChain->GetCurrentBackBufferIndex()].resource.Get(); }
 		constexpr D3D12_CPU_DESCRIPTOR_HANDLE CurrentRenderTargetView() const{ return renderTargetData[swapChain->GetCurrentBackBufferIndex()].renderTargetView.cpuHandle; }
 		constexpr const D3D12_VIEWPORT& Viewport() const{ return viewPort; }
 		constexpr const D3D12_RECT& ScissorRect() const{ return scissorRect; }
 
-		void CreateSwapChain(IDXGIFactory7* factory_, ID3D12CommandQueue* cmdQueue, DXGI_FORMAT format_ = DefaultBackBufferFormat);
-		void Present() const;
-		virtual void SetSize(const ScreenCoordinate& sc_) override;
+		[[nodiscard]] ErrorCode CreateSwapChain(IDXGI_Factory* factory_, ID3D12CommandQueue* cmdQueue, DXGI_FORMAT format_ = DefaultBackBufferFormat);
+		[[nodiscard]] ErrorCode Present() const;
+		[[nodiscard]] virtual ErrorCode SetSize(const ScreenCoordinate& sc_) override;
 
 	private:
-		IDXGISwapChain4* swapChain;
-		DX12_RenderTargetData renderTargetData[DX12::FrameBufferCount];
+		Microsoft::WRL::ComPtr<IDXGI_SwapChain> swapChain;
+		std::vector<DX12_RenderTargetData> renderTargetData;
 		uint32_t allowTearing;
 		uint32_t presentFlags;
 		D3D12_VIEWPORT viewPort;
@@ -37,7 +39,7 @@ namespace Gadget{
 		DXGI_FORMAT format;
 
 		void Release();
-		void FinalizeSwapChain();
+		[[nodiscard]] ErrorCode FinalizeSwapChain();
 	};
 }
 

@@ -10,13 +10,17 @@
 #undef max
 //--------------------------------------------------------------------
 
-//These will make it easier to increase interface versions later
-using ID3D12_Debug					= ID3D12Debug3;
-using ID3D12_DebugDevice			= ID3D12DebugDevice2;
-using ID3D12_Device					= ID3D12Device8;
-using ID3D12_GraphicsCommandList	= ID3D12GraphicsCommandList6;
+//Using these will make it easier to update interface versions later
+//Avoid increasing these if it's not absolutely necessary
+//Higher version = more features, lower version = better compatibility
+using ID3D12_Debug					= ID3D12Debug1;
+using ID3D12_DebugDevice			= ID3D12DebugDevice1;
+using ID3D12_Device					= ID3D12Device2;
+using ID3D12_Fence					= ID3D12Fence1;
+using ID3D12_GraphicsCommandList	= ID3D12GraphicsCommandList1;
 
-using IDXGI_Adapter					= IDXGIAdapter4;
-using IDXGI_Factory					= IDXGIFactory7;
+using IDXGI_Adapter					= IDXGIAdapter1;
+using IDXGI_Factory					= IDXGIFactory6;
+using IDXGI_SwapChain				= IDXGISwapChain3;
 
 #endif //!GADGET_DX12_DEFINES_H

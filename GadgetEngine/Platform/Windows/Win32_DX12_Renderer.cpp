@@ -34,7 +34,7 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	auto& dx12 = DX12::GetInstance(options);
 
 	renderSurfacePtr = new DX12_RenderSurface(window.get(), w_, h_);
-	dx12.CreateSwapChainForSurface(renderSurfacePtr);
+	(void)dx12.CreateSwapChainForSurface(renderSurfacePtr);
 	window->SetRenderSurface(renderSurfacePtr);
 
 	bool br = DX12_ShaderHandler::Initialize();
@@ -104,7 +104,7 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 		return;
 	}
 
-	gfxCommand->BeginFrame();
+	(void)gfxCommand->BeginFrame();
 	ID3D12_GraphicsCommandList* const cmdList = gfxCommand->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
@@ -153,7 +153,7 @@ void Win32_DX12_Renderer::Render(const Scene* scene_){
 	DX12_Helpers::TransitionResource(cmdList, currentBackBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
 	//Done doing stuff
-	gfxCommand->EndFrame(renderSurfacePtr);
+	(void)gfxCommand->EndFrame(renderSurfacePtr);
 
 	//Do this only at the end
 	//TODO - Not actually sure if DX12 needs this, or something else
@@ -182,7 +182,7 @@ void Win32_DX12_Renderer::OnResize(int width_, int height_){
 		return; //New size will be handled correctly when we finish initializing
 	}
 
-	DX12::GetInstance().ResizeSurface(renderSurfacePtr, width_, height_);
+	(void)DX12::GetInstance().ResizeSurface(renderSurfacePtr, width_, height_);
 }
 
 void Win32_DX12_Renderer::SetWindingOrder([[maybe_unused]] WindingOrder order_){

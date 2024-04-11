@@ -8,24 +8,29 @@ using namespace Gadget;
 
 DX12_CommandFrame::DX12_CommandFrame() : cmdAllocator(nullptr), fenceValue(0){}
 
-void DX12_CommandFrame::Wait(HANDLE fenceEvent_, ID3D12Fence1* fence_) const{
+ErrorCode DX12_CommandFrame::Wait(HANDLE fenceEvent_, ID3D12Fence1* fence_) const{
 	GADGET_BASIC_ASSERT(fence_ != nullptr);
 	GADGET_BASIC_ASSERT(fenceEvent_ != nullptr);
 
 	if(fence_->GetCompletedValue() < fenceValue){
 		HRESULT result = fence_->SetEventOnCompletion(fenceValue, fenceEvent_);
 		if(FAILED(result)){
-			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Fence1::SetEventOnCompletion failed!", __FILE__, __LINE__);
+			Debug::Log(SID("RENDER"), "ID3D12Fence1::SetEventOnCompletion failed!", Debug::Error, __FILE__, __LINE__);
+			return ErrorCode::D3D12_Error;
 		}
-		WaitForSingleObject(fenceEvent_, INFINITE); //TODO - Not sure if infinite is wise here
+
+		DWORD err = WaitForSingleObject(fenceEvent_, INFINITE); //TODO - Infinite may not be wise here
+		if(err != 0){
+			Debug::Log(SID("RENDER"), "An error occurred while waiting for the fence event!", Debug::Error, __FILE__, __LINE__);
+			return ErrorCode::D3D12_Error;
+		}
 	}
+
+	return ErrorCode::OK;
 }
 
 void DX12_CommandFrame::Release(){
-	if(cmdAllocator != nullptr){
-		cmdAllocator->Release();
-		cmdAllocator = nullptr;
-	}
+	cmdAllocator.Reset();
 	fenceValue = 0;
 }
 
@@ -44,6 +49,9 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 	}
 
 	GADGET_BASIC_ASSERT(device_ != nullptr);
+	if(device_ == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Tried creating command list with null device!", __FILE__, __LINE__);
+	}
 
 	//Create Command Queue
 	D3D12_COMMAND_QUEUE_DESC desc{};
@@ -52,25 +60,26 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 	desc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
 	desc.Type = type_;
 
-	HRESULT result = device_->CreateCommandQueue(&desc, IID_PPV_ARGS(&cmdQueue));
+	HRESULT result = device_->CreateCommandQueue(&desc, IID_PPV_ARGS(cmdQueue.ReleaseAndGetAddressOf()));
 	if(FAILED(result) || cmdQueue == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create command queue!", __FILE__, __LINE__);
 	}
 	cmdQueue->SetName((typeNamePrefix + L"Queue").c_str());
 
 	//Create Command Frames
 	for(int i = 0; i < DX12::FrameBufferCount; i++){
 		DX12_CommandFrame& frame = cmdFrames[i];
-		result = device_->CreateCommandAllocator(type_, IID_PPV_ARGS(&frame.cmdAllocator));
+		result = device_->CreateCommandAllocator(type_, IID_PPV_ARGS(frame.cmdAllocator.ReleaseAndGetAddressOf()));
 		if(FAILED(result) || frame.cmdAllocator == nullptr){
 			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandAllocator failed!", __FILE__, __LINE__);
 		}
+
 		frame.cmdAllocator->SetName((typeNamePrefix + L"Allocator " + std::to_wstring(i)).c_str());
 	}
 
 	GADGET_BASIC_ASSERT(cmdFrames[0].cmdAllocator != nullptr);
 
-	result = device_->CreateCommandList(0, type_, cmdFrames[0].cmdAllocator, nullptr, IID_PPV_ARGS(&cmdList));
+	result = device_->CreateCommandList(0, type_, cmdFrames[0].cmdAllocator.Get(), nullptr, IID_PPV_ARGS(cmdList.ReleaseAndGetAddressOf()));
 	if(FAILED(result) || cmdList == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandList failed!", __FILE__, __LINE__);
 	}
@@ -78,7 +87,7 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 	cmdList->Close();
 
 	//Create Fence
-	result = device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
+	result = device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence.ReleaseAndGetAddressOf()));
 	if(FAILED(result) || fence == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateFence failed!", __FILE__, __LINE__);
 	}
@@ -95,70 +104,115 @@ DX12_Command::~DX12_Command(){
 	Release();
 }
 
-void DX12_Command::BeginFrame(){
+ErrorCode DX12_Command::BeginFrame(){
+	GADGET_BASIC_ASSERT(cmdList != nullptr);
 	GADGET_BASIC_ASSERT(frameIndex < DX12::FrameBufferCount);
 	GADGET_BASIC_ASSERT(cmdFrames[frameIndex].cmdAllocator != nullptr);
 
-	cmdFrames[frameIndex].Wait(fenceEvent, fence);
+	if(frameIndex >= DX12::FrameBufferCount){
+		Debug::Log(SID("RENDER"), "Frame index was invalid", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::Invalid_State;
+	}
+
+	if(cmdList == nullptr || cmdFrames[frameIndex].cmdAllocator == nullptr){
+		Debug::Log(SID("RENDER"), "Command list/allocators were not initialized correctly", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::Invalid_State;
+	}
+
+	auto err = cmdFrames[frameIndex].Wait(fenceEvent, fence.Get());
+	if(err != ErrorCode::OK){
+		Debug::Log(SID("RENDER"), "Command Frame Wait failed", Debug::Error, __FILE__, __LINE__);
+		return err;
+	}
 
 	HRESULT result = cmdFrames[frameIndex].cmdAllocator->Reset();
 	if(FAILED(result)){
-		Debug::ThrowFatalError(SID("RENDER"), "ID3D12CommandAllocator::Reset failed!", __FILE__, __LINE__);
+		Debug::Log(SID("RENDER"), "ID3D12CommandAllocator Reset failed!", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::D3D12_Error;
 	}
 
-	result = cmdList->Reset(cmdFrames[frameIndex].cmdAllocator, nullptr);
+	result = cmdList->Reset(cmdFrames[frameIndex].cmdAllocator.Get(), nullptr);
 	if(FAILED(result)){
-		Debug::ThrowFatalError(SID("RENDER"), "ID3D12GraphicsCommandList6::Reset failed!", __FILE__, __LINE__);
+		Debug::Log(SID("RENDER"), "ID3D12GraphicsCommandList Reset failed!", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::D3D12_Error;
 	}
+
+	return ErrorCode::OK;
 }
 
-void DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
+ErrorCode DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
+	GADGET_BASIC_ASSERT(cmdList != nullptr);
+	GADGET_BASIC_ASSERT(cmdQueue != nullptr);
 	GADGET_BASIC_ASSERT(renderSurface_ != nullptr);
 
-	cmdList->Close();
-	ID3D12CommandList* const cmdLists[]{ cmdList };
-	cmdQueue->ExecuteCommandLists(_countof(cmdLists), &cmdLists[0]);
+	if(cmdList == nullptr || cmdQueue == nullptr){
+		Debug::Log(SID("RENDER"), "Command list/queue were not initialized correctly");
+		return ErrorCode::Invalid_State;
+	}
 
-	renderSurface_->Present();
+	if(renderSurface_ == nullptr){
+		Debug::Log(SID("RENDER"), "Cannot end the frame with a null render surface!");
+		return ErrorCode::Invalid_Args;
+	}
 
-	uint64_t& fv = fenceValue;
-	++fv;
+	if(FAILED(cmdList->Close())){
+		Debug::Log("Could not close the command list before ending the frame", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::D3D12_Error;
+	}
+
+	ID3D12CommandList* const cmdLists[]{ cmdList.Get() };
+	cmdQueue->ExecuteCommandLists(static_cast<uint32_t>(std::size(cmdLists)), &cmdLists[0]);
+
+	auto err = renderSurface_->Present();
+	if(err != ErrorCode::OK){
+		Debug::Log("Could not present the render surface", Debug::Error, __FILE__, __LINE__);
+		return err;
+	}
+
+	const uint64_t fv = ++fenceValue;
 	cmdFrames[frameIndex].fenceValue = fv;
-	cmdQueue->Signal(fence, fv);
+
+	if(FAILED(cmdQueue->Signal(fence.Get(), fv))){
+		Debug::Log("Could not signal the command queue", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::D3D12_Error;
+	}
 
 	frameIndex = (frameIndex + 1) % DX12::FrameBufferCount;
+	GADGET_BASIC_ASSERT(frameIndex < DX12::FrameBufferCount);
+
+	return ErrorCode::OK;
 }
 
-void DX12_Command::Flush(){
+ErrorCode DX12_Command::Flush(){
 	for(int i = 0; i < DX12::FrameBufferCount; i++){
-		cmdFrames[i].Wait(fenceEvent, fence);
+		auto err = cmdFrames[i].Wait(fenceEvent, fence.Get());
+		if(err != ErrorCode::OK){
+			Debug::Log("An error occurred while flushing command frames", Debug::Error, __FILE__, __LINE__);
+			return err;
+		}
 	}
+
 	frameIndex = 0;
+
+	return ErrorCode::OK;
 }
 
 void DX12_Command::Release(){
-	Flush();
-
-	if(fence != nullptr){
-		fence->Release();
-		fence = nullptr;
-		fenceValue = 0;
+	auto err = Flush();
+	if(err != ErrorCode::OK){
+		Debug::Log("Command frames could not be flushed before shutdown", Debug::Warning, __FILE__, __LINE__);
+		//Not continuing from here would just mean memory leaks... might as well try to continue as normal
 	}
+
+	fence.Reset();
 
 	if(fenceEvent != nullptr){
 		CloseHandle(fenceEvent);
 		fenceEvent = nullptr;
 	}
 
-	if(cmdQueue != nullptr){
-		cmdQueue->Release();
-		cmdQueue = nullptr;
-	}
-
-	if(cmdList != nullptr){
-		cmdList->Release();
-		cmdList = nullptr;
-	}
+	cmdQueue.Reset();
+	cmdList.Reset();
 
 	for(int i = 0; i < DX12::FrameBufferCount; i++){
 		cmdFrames[i].Release();

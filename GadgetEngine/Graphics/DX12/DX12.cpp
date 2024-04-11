@@ -2,9 +2,9 @@
 
 #include <wrl.h>
 
-#include "DX12_Command.h"
-#include "DX12_DescriptorHeap.h"
-#include "DX12_RenderSurface.h"
+#include "Graphics/DX12/DX12_Command.h"
+#include "Graphics/DX12/DX12_DescriptorHeap.h"
+#include "Graphics/DX12/DX12_RenderSurface.h"
 
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
@@ -13,14 +13,15 @@ constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_11_0; //TODO
 
 std::unique_ptr<DX12> DX12::instance = nullptr;
 
-DX12::DX12(const DX12_StartupOptions& options_) :	debugLayerEnabled(options_.isDebug), dxgiFactory(nullptr), mainDevice(nullptr), gfxCommand(nullptr), resourceBarriers(),
-				rtvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), dsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV),
-				srvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), uavDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV),
-				deferredReleases(), deferredReleaseFlag(), deferredReleaseMutex(){
+DX12::DX12(const DX12_StartupOptions& options_) :	dxgiFactory(nullptr), mainDevice(nullptr), gfxCommand(nullptr), resourceBarriers(),
+													rtvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), dsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV),
+													srvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), uavDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV),
+													deferredReleases(FrameBufferCount), deferredReleaseMutex(){
+	GADGET_BASIC_ASSERT(deferredReleases.size() == FrameBufferCount);
 
 	auto err = EnableDebugLayer(options_.gpuBasedValidation);
 	if(err != ErrorCode::OK){
-		Debug::Log(SID("RENDER"), "[DX12] Could not enable debug layer! Error Code: " + std::to_string((uint32_t)err), Debug::Error, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not enable debug layer! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
 	}
 
 	err = CreateDevice(options_.dxgiFactoryFlags);
@@ -88,6 +89,11 @@ ErrorCode DX12::DeleteInstance(){
 
 ErrorCode DX12::EnableDebugLayer(bool gpuValidation_){
 #ifdef GADGET_DEBUG
+	GADGET_BASIC_ASSERT(mainDevice == nullptr);
+	if(mainDevice != nullptr){
+		Debug::Log(SID("RENDER"), "[DX12] Debug layer cannot be enabled after the device has been created", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::Invalid_State;
+	}
 
 	Microsoft::WRL::ComPtr<ID3D12_Debug> debugInterface;
 	if(SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(debugInterface.ReleaseAndGetAddressOf())))){
@@ -97,8 +103,6 @@ ErrorCode DX12::EnableDebugLayer(bool gpuValidation_){
 		Debug::Log(SID("RENDER"), "Failed to get D3D12 Debug Interface!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
-
-	debugLayerEnabled = true;
 
 #endif //GADGET_DEBUG
 
@@ -135,16 +139,12 @@ ErrorCode DX12::Shutdown(){
 	#ifdef GADGET_DEBUG
 	auto err = DebugShutdown();
 	if(err != ErrorCode::OK){
-		Debug::Log(SID("RENDER"), "An error occurred in DX12::DebugShutdown! Error Code: " + std::to_string((uint32_t)err), Debug::Error, __FILE__, __LINE__);
-		return err;
+		Debug::Log(SID("RENDER"), "An error occurred in DX12::DebugShutdown! Error Code: " + std::to_string((uint32_t)err), Debug::Warning, __FILE__, __LINE__);
 	}
 
 	#endif // GADGET_DEBUG
 
-	if(mainDevice){
-		mainDevice->Release();
-		mainDevice = nullptr;
-	}
+	mainDevice.Reset();
 
 	return ErrorCode::OK;
 }
@@ -155,18 +155,18 @@ ErrorCode DX12::CreateDevice(uint32_t dxgiFactoryFlags_){
 		return ErrorCode::D3D12_Error;
 	}
 
-	Microsoft::WRL::ComPtr<IDXGIAdapter4> mainAdapter;
+	Microsoft::WRL::ComPtr<IDXGI_Adapter> mainAdapter;
 	mainAdapter.Attach(DetermineMainAdapter());
 	if(mainAdapter == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to determine main DXGI adapter! You may need to update your graphics card drivers", Debug::Error, __FILE__, __LINE__);
-		return ErrorCode::D3D12_Error;
+		return ErrorCode::D3D12_NoValidAdapter;
 	}
 
 	D3D_FEATURE_LEVEL maxFeatureLevel = GetMaxFeatureLevel(mainAdapter.Get());
 	GADGET_BASIC_ASSERT(maxFeatureLevel >= minimumFeatureLevel);
 	if(maxFeatureLevel < minimumFeatureLevel){
-		Debug::Log(SID("RENDER"), "Max supported feature level is too low, something is wrong with Win32_DX12_Renderer::DetermineMainAdapter. Also, you may need to update your graphics card drivers", Debug::Error, __FILE__, __LINE__);
-		return ErrorCode::D3D12_Error;
+		Debug::Log(SID("RENDER"), "Max supported feature level is too low, something is wrong with the DetermineMainAdapter logic. You also may need to update your graphics card drivers", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::D3D12_BadFeatureLevel;
 	}
 
 	if(FAILED(D3D12CreateDevice(mainAdapter.Get(), maxFeatureLevel, IID_PPV_ARGS(&mainDevice))) || !mainDevice){
@@ -180,40 +180,52 @@ ErrorCode DX12::CreateDevice(uint32_t dxgiFactoryFlags_){
 }
 
 ErrorCode DX12::CreateCommandList(){
-	gfxCommand = new DX12_Command(DX12::MainDevice(), D3D12_COMMAND_LIST_TYPE_DIRECT);
+	GADGET_BASIC_ASSERT(mainDevice != nullptr);
+	if(mainDevice == nullptr){
+		Debug::Log(SID("RENDER"), "[DX12] Tried to create command list, but the device was not initialized", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::Invalid_State;
+	}
+
+	gfxCommand = new DX12_Command(mainDevice.Get(), D3D12_COMMAND_LIST_TYPE_DIRECT);
 	if(gfxCommand == nullptr){
-		return ErrorCode::D3D12_Error;
+		return ErrorCode::Constructor_Failed;
 	}
 
 	return ErrorCode::OK;
 }
 
 ErrorCode DX12::InitializeDescriptorHeaps(){
-	bool br = rtvDescriptorHeap.Initialize(mainDevice.Get(), 512, false); //TODO - These capacity numbers are somewhat arbitrary - makes these configurable?
-	if(br == false || rtvDescriptorHeap.Heap() == nullptr){
+	GADGET_BASIC_ASSERT(mainDevice != nullptr);
+	if(mainDevice == nullptr){
+		Debug::Log(SID("RENDER"), "Tried to initialize descriptor heaps, but the device was not initialized", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::Invalid_State;
+	}
+
+	auto err = rtvDescriptorHeap.Initialize(mainDevice.Get(), 512, false); //TODO - These capacity numbers are somewhat arbitrary - makes these configurable?
+	if(err != ErrorCode::OK || rtvDescriptorHeap.Heap() == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to initialize rtvDescriptorHeap!", Debug::Error, __FILE__, __LINE__);
-		return ErrorCode::D3D12_Error;
+		return err;
 	}
 	rtvDescriptorHeap.Heap()->SetName(L"RTV DescriptorHeap");
 
-	br = dsvDescriptorHeap.Initialize(mainDevice.Get(), 512, false);
-	if(br == false || dsvDescriptorHeap.Heap() == nullptr){
+	err = dsvDescriptorHeap.Initialize(mainDevice.Get(), 512, false);
+	if(err != ErrorCode::OK || dsvDescriptorHeap.Heap() == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to initialize dsvDescriptorHeap!", Debug::Error, __FILE__, __LINE__);
-		return ErrorCode::D3D12_Error;
+		return err;
 	}
 	dsvDescriptorHeap.Heap()->SetName(L"DSV DescriptorHeap");
 
-	br = srvDescriptorHeap.Initialize(mainDevice.Get(), 4096, true);
-	if(br == false || srvDescriptorHeap.Heap() == nullptr){
+	err = srvDescriptorHeap.Initialize(mainDevice.Get(), 4096, true);
+	if(err != ErrorCode::OK || srvDescriptorHeap.Heap() == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to initialize srvDescriptorHeap!", Debug::Error, __FILE__, __LINE__);
-		return ErrorCode::D3D12_Error;
+		return err;
 	}
 	srvDescriptorHeap.Heap()->SetName(L"SRV DescriptorHeap");
 
-	br = uavDescriptorHeap.Initialize(mainDevice.Get(), 512, false);
-	if(br == false || uavDescriptorHeap.Heap() == nullptr){
+	err = uavDescriptorHeap.Initialize(mainDevice.Get(), 512, false);
+	if(err != ErrorCode::OK || uavDescriptorHeap.Heap() == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to initialize uavDescriptorHeap!", Debug::Error, __FILE__, __LINE__);
-		return ErrorCode::D3D12_Error;
+		return err;
 	}
 	uavDescriptorHeap.Heap()->SetName(L"UAV DescriptorHeap");
 
@@ -223,12 +235,12 @@ ErrorCode DX12::InitializeDescriptorHeaps(){
 ErrorCode DX12::BreakOnWarningsAndErrors(bool enabled_){
 	GADGET_BASIC_ASSERT(mainDevice != nullptr);
 	if(mainDevice == nullptr){
-		Debug::Log(SID("RENDER"), "", Debug::Warning, __FILE__, __LINE__);
+		Debug::Log(SID("RENDER"), "BreakOnWarningsAndErrors requires the device to be initialized", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::Invalid_State;
 	}
 
 	Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
-	if(FAILED(mainDevice->QueryInterface(IID_PPV_ARGS(infoQueue.ReleaseAndGetAddressOf())))){
+	if(FAILED(mainDevice.As(&infoQueue))){
 		Debug::Log(SID("RENDER"), "Failed to query D3D12Device!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
@@ -251,11 +263,11 @@ ErrorCode DX12::BreakOnWarningsAndErrors(bool enabled_){
 	return ErrorCode::OK;
 }
 
-bool DX12::IsInitialized(){ return mainDevice != nullptr && gfxCommand != nullptr; }
+bool DX12::IsInitialized() const{ return mainDevice != nullptr && gfxCommand != nullptr; }
 
-ID3D12_Device* const DX12::MainDevice(){ return mainDevice.Get(); }
+ID3D12_Device* const DX12::MainDevice() const{ return mainDevice.Get(); }
 
-uint32_t DX12::CurrentFrameIndex(){
+uint32_t DX12::CurrentFrameIndex() const{
 	if(!IsInitialized()){
 		return 0;
 	}
@@ -263,53 +275,73 @@ uint32_t DX12::CurrentFrameIndex(){
 	return gfxCommand->CurrentFrameIndex();
 }
 
-void DX12::CreateSwapChainForSurface(DX12_RenderSurface* surface_){
+ErrorCode DX12::CreateSwapChainForSurface(DX12_RenderSurface* surface_){
 	GADGET_BASIC_ASSERT(surface_ != nullptr);
+	GADGET_BASIC_ASSERT(dxgiFactory != nullptr);
 	GADGET_BASIC_ASSERT(gfxCommand != nullptr);
 
-	surface_->CreateSwapChain(dxgiFactory.Get(), gfxCommand->CommandQueue());
+	if(surface_ == nullptr){
+		Debug::Log(SID("RENDER"), "Tried to create a swapchain for a null surface", Debug::Warning, __FILE__, __LINE__);
+		return ErrorCode::OK; //Could return Invalid_Args, but since we're only logging a warning we should treat this as a non-fail state
+	}
+
+	if(dxgiFactory == nullptr || gfxCommand == nullptr){
+		Debug::Log(SID("RENDER"), "Tried to create a swapchain while DX12 was not fully initialized", Debug::Error, __FILE__, __LINE__);
+		return ErrorCode::Invalid_State;
+	}
+
+	return surface_->CreateSwapChain(dxgiFactory.Get(), gfxCommand->CommandQueue());
 }
 
-void DX12::ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_){
+ErrorCode DX12::ResizeSurface(DX12_RenderSurface* surface_, int width_, int height_){
 	GADGET_BASIC_ASSERT(surface_ != nullptr);
 	GADGET_BASIC_ASSERT(gfxCommand != nullptr);
 
-	gfxCommand->Flush();
-	surface_->SetSize(ScreenCoordinate(width_, height_));
+	ErrorCode err = gfxCommand->Flush();
+	if(err != ErrorCode::OK){
+		Debug::Log(SID("RENDER"), "Could not flush command list", Debug::Error, __FILE__, __LINE__);
+		return err;
+	}
+
+	return surface_->SetSize(ScreenCoordinate(width_, height_));
 }
 
 void DX12::DeferredRelease(IUnknown* resource_){
+	GADGET_BASIC_ASSERT(CurrentFrameIndex() < deferredReleases.size());
+	GADGET_BASIC_ASSERT(deferredReleases.size() == FrameBufferCount);
+
 	std::lock_guard lock{ deferredReleaseMutex };
-	deferredReleases[CurrentFrameIndex()].push_back(resource_);
+
+	deferredReleases[CurrentFrameIndex()].resources.push_back(resource_);
 	SetDeferredReleaseFlag();
 }
 
 uint32_t DX12::GetDeferredReleaseFlag(){
-	return deferredReleaseFlag[CurrentFrameIndex()];
+	return deferredReleases[CurrentFrameIndex()].flag;
 }
 
 void DX12::SetDeferredReleaseFlag(){
-	deferredReleaseFlag[CurrentFrameIndex()] = 1;
+	deferredReleases[CurrentFrameIndex()].flag = 1;
 }
 
 void DX12::ProcessDeferredReleases(uint32_t frameIndex_){
-	if(deferredReleaseFlag[frameIndex_] == 0){
+	if(deferredReleases[frameIndex_].flag == 0){
 		return;
 	}
 
 	std::lock_guard lock{ deferredReleaseMutex };
 
-	deferredReleaseFlag[frameIndex_] = 0;
+	deferredReleases[frameIndex_].flag = 0;
 
 	rtvDescriptorHeap.ProcessDeferredFree(frameIndex_);
 	dsvDescriptorHeap.ProcessDeferredFree(frameIndex_);
 	srvDescriptorHeap.ProcessDeferredFree(frameIndex_);
 	uavDescriptorHeap.ProcessDeferredFree(frameIndex_);
 
-	for(const auto& resource : deferredReleases[frameIndex_]){
+	for(const auto& resource : deferredReleases[frameIndex_].resources){
 		resource->Release();
 	}
-	deferredReleases[frameIndex_].clear();
+	deferredReleases[frameIndex_].resources.clear();
 }
 
 void DX12::ProcessAllDeferredReleases(){
@@ -319,10 +351,6 @@ void DX12::ProcessAllDeferredReleases(){
 }
 
 ErrorCode DX12::DebugShutdown(){
-	if(!debugLayerEnabled){
-		return ErrorCode::OK;
-	}
-
 #ifdef GADGET_DEBUG
 	auto err = BreakOnWarningsAndErrors(false);
 	if(err != ErrorCode::OK){
@@ -330,20 +358,20 @@ ErrorCode DX12::DebugShutdown(){
 	}
 
 	Microsoft::WRL::ComPtr<ID3D12_DebugDevice> debugDevice;
-	if(FAILED(mainDevice->QueryInterface(IID_PPV_ARGS(debugDevice.ReleaseAndGetAddressOf())))){
+	if(FAILED(mainDevice.As(&debugDevice))){
 		Debug::Log(SID("RENDER"), "Failed to query D3D12 debug device!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 
-	if(mainDevice){
-		mainDevice.Reset();
-	}
+	mainDevice.Reset();
 
 	//Check for leaks
 	if(FAILED(debugDevice->ReportLiveDeviceObjects(D3D12_RLDO_SUMMARY | D3D12_RLDO_DETAIL | D3D12_RLDO_IGNORE_INTERNAL))){
 		Debug::Log(SID("RENDER"), "Failed to report live objects from D3D12 debug device!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
+
+	debugDevice.Reset();
 
 #endif //GADGET_DEBUG
 
@@ -370,20 +398,20 @@ IDXGI_Adapter* DX12::DetermineMainAdapter(){
 D3D_FEATURE_LEVEL DX12::GetMaxFeatureLevel(IDXGI_Adapter* adapter_){
 	GADGET_BASIC_ASSERT(adapter_ != nullptr);
 
-	//TODO - Should this be configurable?
-	constexpr D3D_FEATURE_LEVEL featureLevels[4]{
+	constexpr D3D_FEATURE_LEVEL featureLevels[5]{
 		D3D_FEATURE_LEVEL_11_0,
 		D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_12_0,
 		D3D_FEATURE_LEVEL_12_1,
+		D3D_FEATURE_LEVEL_12_2
 	};
 
 	D3D12_FEATURE_DATA_FEATURE_LEVELS featureLevelInfo{};
-	featureLevelInfo.NumFeatureLevels = _countof(featureLevels);
+	featureLevelInfo.NumFeatureLevels = static_cast<uint32_t>(std::size(featureLevels));
 	featureLevelInfo.pFeatureLevelsRequested = featureLevels;
 
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
-	HRESULT result = D3D12CreateDevice(adapter_, minimumFeatureLevel, IID_PPV_ARGS(&device));
+	HRESULT result = D3D12CreateDevice(adapter_, minimumFeatureLevel, IID_PPV_ARGS(device.ReleaseAndGetAddressOf()));
 	if(FAILED(result) || !device){
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to create D3D12 device at requested minimum feature level!", __FILE__, __LINE__);
 	}

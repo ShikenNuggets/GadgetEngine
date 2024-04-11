@@ -1,8 +1,8 @@
 #ifndef GADGET_DX12_TEXTURE_INFO_H
 #define GADGET_DX12_TEXTURE_INFO_H
 
-#include "DX12_DescriptorHeap.h"
 #include "Graphics/TextureInfo.h"
+#include "Graphics/DX12/DX12_DescriptorHeap.h"
 
 namespace Gadget{
 	struct DX12_TextureInitInfo{

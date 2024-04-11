@@ -75,15 +75,15 @@ namespace Gadget{
 }
 
 #ifndef GADGET_LOG
-	#define GADGET_LOG(C, M) Gadget::Debug::Log(SID(C), M, Gadget::Debug::Log, __FILE__, __LINE__)
+	#define GADGET_LOG(channel, message) Gadget::Debug::Log(channel, message, Gadget::Debug::Info, __FILE__, __LINE__)
 #endif //!GADGET_LOG
 
 #ifndef GADGET_LOG_WARNING
-	#define GADGET_LOG_WARNING(C, M) Gadget::Debug::Log(SID(C), M, Gadget::Debug::Warning, __FILE__, __LINE__)
+	#define GADGET_LOG_WARNING(channel, message) Gadget::Debug::Log(channel, message, Gadget::Debug::Warning, __FILE__, __LINE__)
 #endif //!G_WARNING
 
 #ifndef GADGET_LOG_ERROR
-	#define GADGET_LOG_ERROR(C, M) Gadget::Debug::Log(SID(C), M, Gadget::Debug::Error, __FILE__, __LINE__)
+	#define GADGET_LOG_ERROR(channel, message) Gadget::Debug::Log(channel, message, Gadget::Debug::Error, __FILE__, __LINE__)
 #endif //!GADGET_LOG_ERROR
 
 

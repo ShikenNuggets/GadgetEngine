@@ -3,10 +3,10 @@
 
 #include <d3d12.h>
 
-#include "DX12.h"
-#include "DX12_TextureInfo.h"
 #include "ScreenCoordinate.h"
 #include "Graphics/Color.h"
+#include "Graphics/DX12/DX12.h"
+#include "Graphics/DX12/DX12_TextureInfo.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{

@@ -1,6 +1,7 @@
 #ifndef GADGET_RENDER_SURFACE_H
 #define GADGET_RENDER_SURFACE_H
 
+#include "GadgetEnums.h"
 #include "Debug.h"
 #include "ScreenCoordinate.h"
 
@@ -29,7 +30,11 @@ namespace Gadget{
 
 		inline virtual void SetWidth(int width_){ size.x = width_; }
 		inline virtual void SetHeight(int height_){ size.y = height_; }
-		inline virtual void SetSize(const ScreenCoordinate& size_){ size = size_; }
+
+		inline virtual ErrorCode SetSize(const ScreenCoordinate& size_){
+			size = size_;
+			return ErrorCode::OK;
+		}
 
 	protected:
 		Window* parent;

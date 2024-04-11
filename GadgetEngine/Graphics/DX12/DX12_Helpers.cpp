@@ -2,7 +2,7 @@
 
 #include <wrl.h>
 
-#include "DX12.h"
+#include "Graphics/DX12/DX12.h"
 
 using namespace Gadget;
 

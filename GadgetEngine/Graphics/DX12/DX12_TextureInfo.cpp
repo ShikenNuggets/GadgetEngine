@@ -1,7 +1,7 @@
 #include "DX12_TextureInfo.h"
 
-#include "DX12.h"
-#include "DX12_Helpers.h"
+#include "Graphics/DX12/DX12.h"
+#include "Graphics/DX12/DX12_Helpers.h"
 
 using namespace Gadget;
 
