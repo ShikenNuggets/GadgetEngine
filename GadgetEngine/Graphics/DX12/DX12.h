@@ -36,7 +36,7 @@ namespace Gadget{
 		DISABLE_COPY_AND_MOVE(DX12);
 
 		static DX12& GetInstance(const DX12_StartupOptions& options_ = DX12_StartupOptions());
-		static ErrorCode DeleteInstance();
+		[[nodiscard]] static ErrorCode DeleteInstance();
 
 		[[nodiscard]] ErrorCode EnableDebugLayer(bool gpuValidation_ = false);
 		[[nodiscard]] ErrorCode CreateDevice(uint32_t dxgiFactoryFlags_ = 0);

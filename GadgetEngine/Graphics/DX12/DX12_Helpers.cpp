@@ -86,7 +86,7 @@ void DX12_Helpers::DX12_ResourceBarriers::ApplyAllBarriers(ID3D12_GraphicsComman
 //-------------------- Buffers -----------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------//
 
-ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, uint32_t bufferSize_, const void* data_, bool isCpuAccessible_, D3D12_RESOURCE_STATES state_, D3D12_RESOURCE_FLAGS flags_, ID3D12Heap* heap_, uint64_t heapOffset_){
+ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, const void* data_, uint32_t bufferSize_, bool isCpuAccessible_, D3D12_RESOURCE_STATES state_, D3D12_RESOURCE_FLAGS flags_, ID3D12Heap* heap_, uint64_t heapOffset_){
 	GADGET_BASIC_ASSERT(device_ != nullptr);
 	GADGET_BASIC_ASSERT(bufferSize_ > 0);
 
@@ -130,7 +130,7 @@ ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, uint32_t buff
 			resource->Unmap(0, nullptr);
 
 		}else{
-			DX12_UploadContext context = DX12_UploadContext(bufferSize_);
+			DX12_UploadContext context = DX12_UploadContext(device_, bufferSize_);
 			memcpy(context.CPUAddress(), data_, bufferSize_);
 			context.CommandList()->CopyResource(resource, context.UploadBuffer());
 			context.EndUpload();

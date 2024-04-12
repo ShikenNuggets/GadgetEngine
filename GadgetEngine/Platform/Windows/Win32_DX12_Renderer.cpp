@@ -78,7 +78,7 @@ Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 		window->SetRenderSurface(nullptr);
 	}
 
-	DX12::DeleteInstance();
+	(void)DX12::DeleteInstance();
 	window.reset();
 }
 

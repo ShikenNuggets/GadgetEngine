@@ -295,7 +295,7 @@ namespace Gadget{
 		//-------------------- Buffers -----------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
 
-		ID3D12Resource* CreateBuffer(ID3D12_Device* device_, uint32_t bufferSize_, const void* data_ = nullptr, bool isCpuAccessible_ = false,
+		ID3D12Resource* CreateBuffer(ID3D12_Device* device_, const void* data_, uint32_t bufferSize_, bool isCpuAccessible_ = false,
 									 D3D12_RESOURCE_STATES state_ = D3D12_RESOURCE_STATE_COMMON,
 									 D3D12_RESOURCE_FLAGS flags_ = D3D12_RESOURCE_FLAG_NONE,
 									 ID3D12Heap* heap_ = nullptr, uint64_t heapOffset_ = 0);

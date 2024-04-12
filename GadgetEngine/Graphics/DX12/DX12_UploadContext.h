@@ -9,22 +9,18 @@
 namespace Gadget{
 	class DX12_UploadContext{
 	public:
-		DX12_UploadContext(uint32_t alignedSize_);
+		DX12_UploadContext(ID3D12_Device* device_, uint32_t alignedSize_);
 		DISABLE_COPY_AND_MOVE(DX12_UploadContext);
 		~DX12_UploadContext();
 
 		void EndUpload();
 
-		ID3D12_GraphicsCommandList* const CommandList() const{ return cmdList; }
-		ID3D12Resource* const UploadBuffer() const{ return uploadBuffer; }
-		void* const CPUAddress() const{ return cpuAddress; }
-		uint32_t FrameIndex() const{ return frameIndex; }
+		ID3D12_GraphicsCommandList* const CommandList() const;
+		ID3D12Resource* const UploadBuffer() const;
+		void* const CPUAddress() const;
 
 	private:
-		ID3D12_GraphicsCommandList* cmdList;
-		ID3D12Resource* uploadBuffer;
-		void* cpuAddress;
-		uint32_t frameIndex;
+		struct DX12_UploadFrame* uploadFrame;
 	};
 }
 

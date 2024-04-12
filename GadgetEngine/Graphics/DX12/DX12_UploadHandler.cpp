@@ -1,6 +1,7 @@
 #include "DX12_UploadHandler.h"
 
 #include "Debug.h"
+#include "Concurrency/SpinLock.h"
 
 using namespace Gadget;
 
@@ -21,6 +22,8 @@ DX12_UploadFrame::DX12_UploadFrame() : cmdAllocator(nullptr), cmdList(nullptr), 
 
 	uploadBuffer.Reset();
 	cpuAddress = nullptr;
+
+	return ErrorCode::OK;
 }
 
 void DX12_UploadFrame::Release(){
@@ -32,7 +35,9 @@ void DX12_UploadFrame::Release(){
 //---------- DX12_UploadHandler ----------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------//
 
-DX12_UploadHandler::DX12_UploadHandler(ID3D12_Device* device_) : uploadFrames(), cmdQueue(nullptr), fence(nullptr), fenceValue(0), fenceEvent(nullptr){
+std::unique_ptr<DX12_UploadHandler> DX12_UploadHandler::instance = nullptr;
+
+DX12_UploadHandler::DX12_UploadHandler(ID3D12_Device* device_) : uploadFrames(), cmdQueue(nullptr), fence(nullptr), fenceValue(0), fenceEvent(nullptr), frameMutex(), queueMutex(){
 	GADGET_BASIC_ASSERT(device_ != nullptr);
 
 	HRESULT hr = S_OK;
@@ -89,5 +94,61 @@ DX12_UploadHandler::~DX12_UploadHandler(){
 	fenceValue = 0;
 	fence.Reset();
 	cmdQueue.Reset();
+}
 
+DX12_UploadHandler& DX12_UploadHandler::GetInstance(ID3D12_Device* device_){
+	GADGET_BASIC_ASSERT(instance != nullptr || device_ != nullptr);
+	if(instance == nullptr){
+		instance = std::make_unique<DX12_UploadHandler>(device_);
+	}
+
+	GADGET_BASIC_ASSERT(instance != nullptr);
+	return *instance;
+}
+
+void DX12_UploadHandler::DeleteInstance(){
+	instance.reset();
+}
+
+RaceConditionDetector gSpinLock; //TODO - This is not ideal
+
+DX12_UploadFrame* DX12_UploadHandler::ReserveAvailableUploadFrame(){
+	std::lock_guard lock{ frameMutex };
+
+	for(uint32_t i = 0; i < MaxUploads; i++){
+		if(uploadFrames[i].IsReady()){
+			return &uploadFrames[i];
+		}
+	}
+
+	int index = 0;
+	while(!uploadFrames[index].IsReady()){
+		index = (index + 1) % MaxUploads;
+		BEGIN_RACE_CONDITION_DETECTION(gSpinLock);
+	}
+
+	END_RACE_CONDITION_DETECTION(gSpinLock);
+
+	GADGET_BASIC_ASSERT(index < MaxUploads);
+
+	uploadFrames[index].uploadBuffer = (ID3D12_Resource*)1; //TODO - This feels REALLY GROSS
+	return &uploadFrames[index];
+}
+
+ErrorCode DX12_UploadHandler::EndFrameUpload(DX12_UploadFrame* frame_){
+	GADGET_BASIC_ASSERT(frame_ != nullptr);
+	if(frame_ == nullptr){
+		return ErrorCode::Invalid_Args;
+	}
+
+	frame_->cmdList->Close();
+
+	std::lock_guard lock{ queueMutex };
+	ID3D12CommandList* const cmdLists[]{ frame_->cmdList.Get() };
+	cmdQueue->ExecuteCommandLists((uint32_t)std::size(cmdLists), cmdLists);
+
+	fenceValue++;
+	cmdQueue->Signal(fence.Get(), fenceValue);
+
+	return frame_->WaitAndReset(fenceEvent, fence.Get());
 }
