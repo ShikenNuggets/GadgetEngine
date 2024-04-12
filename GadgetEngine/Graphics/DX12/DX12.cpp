@@ -88,7 +88,7 @@ ErrorCode DX12::DeleteInstance(){
 	return ErrorCode::OK;
 }
 
-ErrorCode DX12::EnableDebugLayer(bool gpuValidation_){
+ErrorCode DX12::EnableDebugLayer([[maybe_unused]] bool gpuValidation_){
 #ifdef GADGET_DEBUG
 	GADGET_BASIC_ASSERT(mainDevice == nullptr);
 	if(mainDevice != nullptr){
