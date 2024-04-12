@@ -18,6 +18,7 @@ using ID3D12_DebugDevice			= ID3D12DebugDevice1;
 using ID3D12_Device					= ID3D12Device2;
 using ID3D12_Fence					= ID3D12Fence1;
 using ID3D12_GraphicsCommandList	= ID3D12GraphicsCommandList1;
+using ID3D12_Resource				= ID3D12Resource;
 
 using IDXGI_Adapter					= IDXGIAdapter1;
 using IDXGI_Factory					= IDXGIFactory6;

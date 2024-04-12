@@ -37,8 +37,8 @@ namespace Gadget{
 		static void SetRenderTargetsForGeometryPass(ID3D12_GraphicsCommandList* cmdList_);
 
 	private:
-		constexpr static DXGI_FORMAT mainBufferFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
-		constexpr static DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT;
+		static constexpr DXGI_FORMAT mainBufferFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		static constexpr DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT;
 
 		static DX12_RenderTextureInfo* mainBuffer;
 		static DX12_DepthBufferTextureInfo* depthBuffer;

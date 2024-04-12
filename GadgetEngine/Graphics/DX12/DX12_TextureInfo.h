@@ -17,7 +17,7 @@ namespace Gadget{
 
 	class DX12_TextureInfo : public TextureInfo{
 	public:
-		constexpr static uint32_t maxMips = 14;
+		static constexpr uint32_t maxMips = 14;
 
 		DX12_TextureInfo();
 		explicit DX12_TextureInfo(const DX12_TextureInitInfo& info_);

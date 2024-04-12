@@ -8,6 +8,7 @@
 
 #include "Debug.h"
 #include "Graphics/DX12/DX12_Defines.h"
+#include "Graphics/DX12/DX12_UploadContext.h"
 
 namespace Gadget{
 	//Some of these are loosely based on Microsoft's d3dx12 helper library: https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/d3dx12.h
@@ -19,6 +20,14 @@ namespace Gadget{
 
 		constexpr D3D12_HEAP_PROPERTIES DefaultHeapProperties{
 			D3D12_HEAP_TYPE_DEFAULT,
+			D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
+			D3D12_MEMORY_POOL_UNKNOWN,
+			0,	//CreationNodeMask
+			0	//VisibleNodeMask
+		};
+
+		constexpr D3D12_HEAP_PROPERTIES UploadHeapProperties{
+			D3D12_HEAP_TYPE_UPLOAD,
 			D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
 			D3D12_MEMORY_POOL_UNKNOWN,
 			0,	//CreationNodeMask
@@ -281,6 +290,15 @@ namespace Gadget{
 
 			cmdList_->ResourceBarrier(1, &barrier);
 		}
+
+		//----------------------------------------------------------------------------------------------------//
+		//-------------------- Buffers -----------------------------------------------------------------------//
+		//----------------------------------------------------------------------------------------------------//
+
+		ID3D12Resource* CreateBuffer(ID3D12_Device* device_, uint32_t bufferSize_, const void* data_ = nullptr, bool isCpuAccessible_ = false,
+									 D3D12_RESOURCE_STATES state_ = D3D12_RESOURCE_STATE_COMMON,
+									 D3D12_RESOURCE_FLAGS flags_ = D3D12_RESOURCE_FLAG_NONE,
+									 ID3D12Heap* heap_ = nullptr, uint64_t heapOffset_ = 0);
 	}
 }
 

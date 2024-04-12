@@ -81,3 +81,62 @@ void DX12_Helpers::DX12_ResourceBarriers::ApplyAllBarriers(ID3D12_GraphicsComman
 	cmdList_->ResourceBarrier(static_cast<uint32_t>(barriers.size()), barriers.data());
 	barriers.clear(); //TODO - is this safe?
 }
+
+//----------------------------------------------------------------------------------------------------//
+//-------------------- Buffers -----------------------------------------------------------------------//
+//----------------------------------------------------------------------------------------------------//
+
+ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, uint32_t bufferSize_, const void* data_, bool isCpuAccessible_, D3D12_RESOURCE_STATES state_, D3D12_RESOURCE_FLAGS flags_, ID3D12Heap* heap_, uint64_t heapOffset_){
+	GADGET_BASIC_ASSERT(device_ != nullptr);
+	GADGET_BASIC_ASSERT(bufferSize_ > 0);
+
+	D3D12_RESOURCE_DESC desc{};
+	desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	desc.Alignment = 0;
+	desc.Width = bufferSize_;
+	desc.Height = 1;
+	desc.DepthOrArraySize = 1;
+	desc.MipLevels = 1;
+	desc.Format = DXGI_FORMAT_UNKNOWN;
+	desc.SampleDesc = { 1, 0 };
+	desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	desc.Flags = isCpuAccessible_ ? D3D12_RESOURCE_FLAG_NONE : flags_;
+
+	GADGET_BASIC_ASSERT(desc.Flags == D3D12_RESOURCE_FLAG_NONE || desc.Flags == D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+	ID3D12Resource* resource = nullptr;
+	const D3D12_RESOURCE_STATES resourceState = isCpuAccessible_ ? D3D12_RESOURCE_STATE_GENERIC_READ : state_;
+
+	HRESULT result = S_OK;
+	if(heap_ != nullptr){
+		result = device_->CreatePlacedResource(heap_, heapOffset_, &desc, resourceState, nullptr, IID_PPV_ARGS(&resource));
+	}else{
+		const D3D12_HEAP_PROPERTIES heapProps = isCpuAccessible_ ? UploadHeapProperties : DefaultHeapProperties;
+		result = device_->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, resourceState, nullptr, IID_PPV_ARGS(&resource));
+	}
+
+	if(FAILED(result) || resource == nullptr){
+		GADGET_LOG_ERROR(SID("RENDER"), "Could not create resource buffer!");
+		return nullptr;
+	}
+
+	if(data_){
+		if(isCpuAccessible_){
+			D3D12_RANGE range{};
+			void* cpuAddress = nullptr;
+			resource->Map(0, &range, reinterpret_cast<void**>(&cpuAddress));
+			GADGET_BASIC_ASSERT(cpuAddress != nullptr);
+			memcpy(cpuAddress, data_, bufferSize_);
+			resource->Unmap(0, nullptr);
+
+		}else{
+			DX12_UploadContext context = DX12_UploadContext(bufferSize_);
+			memcpy(context.CPUAddress(), data_, bufferSize_);
+			context.CommandList()->CopyResource(resource, context.UploadBuffer());
+			context.EndUpload();
+		}
+	}
+
+	GADGET_BASIC_ASSERT(resource != nullptr);
+	return resource;
+}
