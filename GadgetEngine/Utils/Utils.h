@@ -205,6 +205,25 @@ namespace Gadget{
 			return (byte_ & flag_);
 		}
 
+		//----------Memory----------//
+		template<uint64_t alignment>
+		constexpr uint64_t AlignSizeUp(uint64_t size_){
+			static_assert(alignment > 0, "Alignment must be non-zero");
+			constexpr uint64_t mask = alignment - 1;
+			static_assert(!(alignment & mask), "Alignment must be ^2");
+
+			return (size_ + mask) & ~mask;
+		}
+
+		template<uint64_t alignment>
+		constexpr uint64_t AlignSizeDown(uint64_t size_){
+			static_assert(alignment > 0, "Alignment must be non-zero");
+			constexpr uint64_t mask = alignment - 1;
+			static_assert(!(alignment & mask), "Alignment must be ^2");
+
+			return size_ & ~mask;
+		}
+
 		//----------Other----------//
 		inline std::string GetCurrentDateAndTimeString(){
 			return std::format("{:%Y-%m-%d %X}", std::chrono::system_clock::now());

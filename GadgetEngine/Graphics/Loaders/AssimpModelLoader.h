@@ -3,6 +3,12 @@
 
 #include <string>
 
+//--------------------------------------------------------------------
+//Undefine some "standard" macros that tend to cause problems
+#undef min
+#undef max
+//--------------------------------------------------------------------
+
 //Hide warnings from external code that we can't/won't modify - WNF
 #pragma warning(disable : 4244)		//Possible loss of data from type conversion
 #pragma warning(disable : 26451)	//Possible arithmetic overflow

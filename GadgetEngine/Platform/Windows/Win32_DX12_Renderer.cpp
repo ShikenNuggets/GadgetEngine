@@ -10,10 +10,12 @@
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
 #include "Graphics/DX12/DX12_Helpers.h"
+#include "Graphics/DX12/DX12_MeshInfo.h"
 #include "Graphics/DX12/DX12_RenderSurface.h"
 #include "Graphics/DX12/DX12_ShaderHandler.h"
 #include "Graphics/DX12/DX12_GeometryPass.h"
 #include "Graphics/DX12/DX12_PostProcess.h"
+#include "Graphics/DX12/DX12_UploadHandler.h"
 
 using namespace Gadget;
 
@@ -57,6 +59,8 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize post-processing submodule!", __FILE__, __LINE__);
 	}
 
+	DX12_UploadHandler::GetInstance(dx12.MainDevice());
+
 	GADGET_BASIC_ASSERT(dx12.IsInitialized());
 }
 
@@ -68,6 +72,7 @@ Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 		Debug::ThrowFatalError(SID("RENDER"), "An error occurred in the pre-shutdown stage!", __FILE__, __LINE__);
 	}
 
+	DX12_UploadHandler::DeleteInstance();
 	DX12_PostProcess::Shutdown();
 	DX12_GeometryPass::Shutdown();
 	DX12_ShaderHandler::Shutdown();
@@ -201,9 +206,7 @@ Shader* Win32_DX12_Renderer::GenerateAPIShader([[maybe_unused]] StringID shaderR
 }
 
 MeshInfo* Win32_DX12_Renderer::GenerateAPIMeshInfo([[maybe_unused]] const Mesh& mesh_){
-	GADGET_ASSERT_NOT_IMPLEMENTED;
-	return nullptr;
-	//return new GL_MeshInfo(mesh_);
+	return new DX12_MeshInfo(mesh_);
 }
 
 MeshInfo* Win32_DX12_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t numVertices_, [[maybe_unused]] size_t numIndices_){

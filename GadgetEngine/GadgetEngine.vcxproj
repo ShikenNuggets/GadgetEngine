@@ -219,6 +219,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DX12_DescriptorHeap.h" />
     <ClInclude Include="Graphics\DX12\DX12_GeometryPass.h" />
     <ClInclude Include="Graphics\DX12\DX12_Helpers.h" />
+    <ClInclude Include="Graphics\DX12\DX12_MeshInfo.h" />
     <ClInclude Include="Graphics\DX12\DX12_PostProcess.h" />
     <ClInclude Include="Graphics\DX12\DX12_RenderSurface.h" />
     <ClInclude Include="Graphics\DX12\DX12_ShaderHandler.h" />
@@ -343,6 +344,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\DX12\DX12_DescriptorHeap.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_GeometryPass.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_Helpers.cpp" />
+    <ClCompile Include="Graphics\DX12\DX12_MeshInfo.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_PostProcess.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_RenderSurface.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_ShaderHandler.cpp" />

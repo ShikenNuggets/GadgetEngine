@@ -158,6 +158,9 @@
     <ClInclude Include="Graphics\DX12\DX12_Helpers.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\DX12\DX12_MeshInfo.h">
+      <Filter>Graphics\DX12</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\DX12\DX12_PostProcess.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
@@ -504,6 +507,9 @@
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_Helpers.cpp">
+      <Filter>Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DX12_MeshInfo.cpp">
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_PostProcess.cpp">
