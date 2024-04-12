@@ -87,6 +87,8 @@ namespace Gadget{
 
 		IDXGI_Adapter* DetermineMainAdapter();
 		D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGI_Adapter* adapter_);
+
+		bool DoesDeviceSupportRaytracing(ID3D12_Device* device_) const;
 	};
 }
 

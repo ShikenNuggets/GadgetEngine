@@ -2,6 +2,7 @@
 
 #include <wrl.h>
 
+#include "Debug.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
 #include "Graphics/DX12/DX12_RenderSurface.h"
@@ -9,7 +10,7 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_11_0; //TODO - Make this configurable
+constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_12_1;
 
 std::unique_ptr<DX12> DX12::instance = nullptr;
 
@@ -382,8 +383,11 @@ IDXGI_Adapter* DX12::DetermineMainAdapter(){
 	IDXGI_Adapter* adapter = nullptr;
 
 	for(int i = 0; dxgiFactory->EnumAdapterByGpuPreference(i, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&adapter)) != DXGI_ERROR_NOT_FOUND; i++){
-		if(SUCCEEDED(D3D12CreateDevice(adapter, minimumFeatureLevel, __uuidof(ID3D12Device), nullptr))){
-			return adapter;
+		ComPtr<ID3D12_Device> tempDevice;
+		if(SUCCEEDED(D3D12CreateDevice(adapter, minimumFeatureLevel, IID_PPV_ARGS(tempDevice.ReleaseAndGetAddressOf())))){
+			if(DoesDeviceSupportRaytracing(tempDevice.Get())){
+				return adapter;
+			}
 		}
 
 		if(adapter != nullptr){
@@ -399,11 +403,8 @@ D3D_FEATURE_LEVEL DX12::GetMaxFeatureLevel(IDXGI_Adapter* adapter_){
 	GADGET_BASIC_ASSERT(adapter_ != nullptr);
 
 	constexpr D3D_FEATURE_LEVEL featureLevels[5]{
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_11_1,
-		D3D_FEATURE_LEVEL_12_0,
 		D3D_FEATURE_LEVEL_12_1,
-		D3D_FEATURE_LEVEL_12_2
+		D3D_FEATURE_LEVEL_12_2,
 	};
 
 	D3D12_FEATURE_DATA_FEATURE_LEVELS featureLevelInfo{};
@@ -422,4 +423,14 @@ D3D_FEATURE_LEVEL DX12::GetMaxFeatureLevel(IDXGI_Adapter* adapter_){
 	}
 
 	return featureLevelInfo.MaxSupportedFeatureLevel;
+}
+
+bool DX12::DoesDeviceSupportRaytracing(ID3D12_Device* device_) const{
+	D3D12_FEATURE_DATA_D3D12_OPTIONS5 options5 = {};
+	if(FAILED(device_->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS5, &options5, sizeof(options5)))){
+		GADGET_LOG_ERROR(SID("RENDER"), "");
+		return false;
+	}
+
+	return options5.RaytracingTier >= D3D12_RAYTRACING_TIER_1_0;
 }
