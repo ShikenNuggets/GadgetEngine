@@ -226,7 +226,7 @@ namespace DB{
 		constexpr static const char* profileStrings[]{ "vs_", "hs_", "ds_", "gs_", "ps_", "cs_", "as_", "ms_" };
 		static_assert(_countof(profileStrings) == (uint32_t)Gadget::ShaderType::Type::Type_MAX);
 
-		const char* versionStr = "6_5";
+		const char* versionStr = "6_6";
 
 		Microsoft::WRL::ComPtr<IDxcCompiler3> compiler;
 		Microsoft::WRL::ComPtr<IDxcUtils> utils;
