@@ -222,6 +222,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DX12_MeshInfo.h" />
     <ClInclude Include="Graphics\DX12\DX12_PostProcess.h" />
     <ClInclude Include="Graphics\DX12\DX12_RenderSurface.h" />
+    <ClInclude Include="Graphics\DX12\DX12_RootSignature.h" />
     <ClInclude Include="Graphics\DX12\DX12_ShaderHandler.h" />
     <ClInclude Include="Graphics\DX12\DX12_TextureInfo.h" />
     <ClInclude Include="Graphics\DX12\DX12_UploadContext.h" />
@@ -347,6 +348,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\DX12\DX12_MeshInfo.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_PostProcess.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_RenderSurface.cpp" />
+    <ClCompile Include="Graphics\DX12\DX12_RootSignature.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_ShaderHandler.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_TextureInfo.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_UploadContext.cpp" />

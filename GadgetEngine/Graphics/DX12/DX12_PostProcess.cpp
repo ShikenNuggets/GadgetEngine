@@ -14,7 +14,6 @@ ComPtr<ID3D12PipelineState> DX12_PostProcess::pso = nullptr;
 
 enum PostProcessRootParamIndices : uint32_t{
 	ID_RootConstants = 0,
-	ID_DescriptorTable,
 
 	ID_MAX //DO NOT PUT ANYTHING BELOW THIS!!!
 };
@@ -38,7 +37,6 @@ void DX12_PostProcess::PostProcess(ID3D12_GraphicsCommandList* cmdList_, const D
 	cmdList_->SetPipelineState(pso.Get());
 
 	cmdList_->SetGraphicsRoot32BitConstant(ID_RootConstants, geometryPassMainBuffer_->SRV().GetIndex(), 0);
-	cmdList_->SetGraphicsRootDescriptorTable(ID_DescriptorTable, DX12::GetInstance().SRVHeap().GPUStart());
 
 	cmdList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	cmdList_->OMSetRenderTargets(1, &renderTargetView_, 1, nullptr);
@@ -49,17 +47,11 @@ ErrorCode DX12_PostProcess::CreateRootSignatureAndPSO(){
 	GADGET_BASIC_ASSERT(rootSignature == nullptr);
 	GADGET_BASIC_ASSERT(pso == nullptr);
 
-	DX12_Helpers::DX12_DescriptorRange range{
-		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
-		D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND, 0, 0,
-		D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE
-	};
-
 	//Root Signature
 	DX12_Helpers::DX12_RootParameter rootParams[ID_MAX]{};
 	rootParams[ID_RootConstants].InitAsConstants(1, D3D12_SHADER_VISIBILITY_PIXEL, 1);
-	rootParams[ID_DescriptorTable].InitAsTable(D3D12_SHADER_VISIBILITY_PIXEL, &range, 1);
 	DX12_Helpers::DX12_RootSignatureDesc rsDesc{ &rootParams[0], _countof(rootParams) };
+	rsDesc.Flags &= ~D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
 	rootSignature.Attach(rsDesc.Create(DX12::GetInstance().MainDevice()));
 	GADGET_BASIC_ASSERT(rootSignature != nullptr);

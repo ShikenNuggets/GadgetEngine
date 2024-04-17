@@ -1,6 +1,7 @@
 #include "DX12_GeometryPass.h"
 
 #include "Graphics/DX12/DX12_Helpers.h"
+#include "Graphics/DX12/DX12_MeshInfo.h"
 #include "Graphics/DX12/DX12_ShaderHandler.h"
 
 using namespace Gadget;
@@ -219,6 +220,7 @@ ErrorCode DX12_GeometryPass::CreateRootSignatureAndPSO(){
 	DX12_Helpers::DX12_RootParameter params[1]{};
 	params[0].InitAsConstants(1, D3D12_SHADER_VISIBILITY_PIXEL, 1);
 	DX12_Helpers::DX12_RootSignatureDesc desc{ &params[0], _countof(params) };
+	desc.Flags &= ~D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
 	rootSignature.Attach(desc.Create(DX12::GetInstance().MainDevice()));
 	GADGET_BASIC_ASSERT(rootSignature != nullptr);

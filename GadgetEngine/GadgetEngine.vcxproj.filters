@@ -167,6 +167,9 @@
     <ClInclude Include="Graphics\DX12\DX12_RenderSurface.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\DX12\DX12_RootSignature.h">
+      <Filter>Graphics\DX12</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\DX12\DX12_ShaderHandler.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
@@ -516,6 +519,9 @@
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_RenderSurface.cpp">
+      <Filter>Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DX12_RootSignature.cpp">
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_ShaderHandler.cpp">
