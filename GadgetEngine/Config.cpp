@@ -30,6 +30,10 @@ Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
 
 Config::~Config(){
 	SaveConfigs();
+
+#ifdef GADGET_DEBUG
+	LocManager::DeleteInstance();
+#endif //GADGET_DEBUG
 }
 
 Var Config::GetOption(StringID key_) const{

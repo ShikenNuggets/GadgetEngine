@@ -8,8 +8,8 @@
 namespace Gadget{
 	class Camera{
 	public:
-		enum class Projection{
-			Orthographic,
+		enum class Projection : uint8_t{
+			Orthographic = 0,
 			Perspective,
 
 			Projection_MAX //Do not put any values below this!

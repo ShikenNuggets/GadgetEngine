@@ -14,6 +14,8 @@ DX12_MeshInfo::DX12_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size())
 	}
 	positions.shrink_to_fit();
 
+	GADGET_BASIC_ASSERT(positions.size() * sizeof(Vector3) < std::numeric_limits<UINT>::max());
+
 	constexpr auto alignment = D3D12_RAW_UAV_SRV_BYTE_ALIGNMENT;
 	const uint32_t alignedVertexSize = static_cast<uint32_t>(Utils::AlignSizeUp<alignment>(positions.size() * sizeof(Vector3)));
 	vertexBuffer = DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), positions.data(), alignedVertexSize);
@@ -23,7 +25,7 @@ DX12_MeshInfo::DX12_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size())
 
 	vertexBufferView = D3D12_VERTEX_BUFFER_VIEW{};
 	vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = positions.size() * sizeof(Vector3);
+	vertexBufferView.SizeInBytes = static_cast<UINT>(positions.size() * sizeof(Vector3));
 	vertexBufferView.StrideInBytes = sizeof(Vector3);
 
 	indexBufferView.BufferLocation = indexBuffer->GetGPUVirtualAddress();

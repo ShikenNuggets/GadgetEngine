@@ -34,6 +34,10 @@ App::~App(){
 	if(IsFullyInitialized()){
 		Destroy();
 	}
+
+#ifdef GADGET_DEBUG
+	EventHandler::DeleteInstance();
+#endif //GADGET_DEBUG
 }
 
 App& App::GetInstance(){

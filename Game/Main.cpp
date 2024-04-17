@@ -18,6 +18,10 @@
 using namespace Example;
 
 int main(int argc, char* argv[]){
+#ifdef GADGET_DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif // GADGET_DEBUG
+
 	if(argc > 0){
 		std::cout << "Launching with arguments: " << std::endl;
 	}
@@ -38,8 +42,6 @@ int main(int argc, char* argv[]){
 #ifdef GADGET_DEBUG
 	Gadget::App::DeleteInstance();
 	std::cout << "The program is now complete." << std::endl;
-
-	_CrtDumpMemoryLeaks();
 #endif //_DEBUG
 
 	return 0;

@@ -14,10 +14,14 @@
 #pragma warning(default : 26819)
 
 #include "GadgetEnums.h"
+#include "Utils/Utils.h"
 
 namespace Gadget{
+	//This should ideally be the only place in the code that directly interacts with the file system
 	class FileSystem{
 	public:
+		STATIC_CLASS(FileSystem);
+
 		enum class WriteType : uint8_t{
 			Append,
 			Clear,
