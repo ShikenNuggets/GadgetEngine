@@ -22,6 +22,9 @@
     <Filter Include="Graphics\DX12">
       <UniqueIdentifier>{24F78497-90B7-00CE-59F2-494BC57145AA}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\DX12\LowLevel">
+      <UniqueIdentifier>{1D189A11-0912-C363-F27E-5974DE1729D0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\GUI">
       <UniqueIdentifier>{2AED684A-1650-F8EE-BFD5-30A5AB17C471}</UniqueIdentifier>
     </Filter>
@@ -167,7 +170,7 @@
     <ClInclude Include="Graphics\DX12\DX12_RenderSurface.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\DX12\DX12_RootSignature.h">
+    <ClInclude Include="Graphics\DX12\DX12_Shader.h">
       <Filter>Graphics\DX12</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\DX12\DX12_ShaderHandler.h">
@@ -181,6 +184,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\DX12\DX12_UploadHandler.h">
       <Filter>Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\LowLevel\DX12_PSO.h">
+      <Filter>Graphics\DX12\LowLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\LowLevel\DX12_RootSignature.h">
+      <Filter>Graphics\DX12\LowLevel</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\FontInfo.h">
       <Filter>Graphics</Filter>
@@ -521,7 +530,7 @@
     <ClCompile Include="Graphics\DX12\DX12_RenderSurface.cpp">
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\DX12\DX12_RootSignature.cpp">
+    <ClCompile Include="Graphics\DX12\DX12_Shader.cpp">
       <Filter>Graphics\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_ShaderHandler.cpp">
@@ -535,6 +544,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_UploadHandler.cpp">
       <Filter>Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\LowLevel\DX12_PSO.cpp">
+      <Filter>Graphics\DX12\LowLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\LowLevel\DX12_RootSignature.cpp">
+      <Filter>Graphics\DX12\LowLevel</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\GUI\CanvasSceneComponent.cpp">
       <Filter>Graphics\GUI</Filter>

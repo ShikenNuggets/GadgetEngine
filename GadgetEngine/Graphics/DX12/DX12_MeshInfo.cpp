@@ -15,6 +15,7 @@ DX12_MeshInfo::DX12_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size())
 	positions.shrink_to_fit();
 
 	GADGET_BASIC_ASSERT(positions.size() * sizeof(Vector3) < std::numeric_limits<UINT>::max());
+	GADGET_BASIC_ASSERT(sizeof(uint32_t) * mesh_.indices.size() < std::numeric_limits<UINT>::max());
 
 	constexpr auto alignment = D3D12_RAW_UAV_SRV_BYTE_ALIGNMENT;
 	const uint32_t alignedVertexSize = static_cast<uint32_t>(Utils::AlignSizeUp<alignment>(positions.size() * sizeof(Vector3)));
@@ -30,7 +31,7 @@ DX12_MeshInfo::DX12_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size())
 
 	indexBufferView.BufferLocation = indexBuffer->GetGPUVirtualAddress();
 	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
-	indexBufferView.SizeInBytes = sizeof(uint32_t) * mesh_.indices.size();
+	indexBufferView.SizeInBytes = static_cast<UINT>(sizeof(uint32_t) * mesh_.indices.size());
 
 	primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }

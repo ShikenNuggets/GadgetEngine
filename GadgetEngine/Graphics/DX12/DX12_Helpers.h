@@ -12,7 +12,7 @@
 
 namespace Gadget{
 	//Some of these are loosely based on Microsoft's d3dx12 helper library: https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/d3dx12.h
-	//TODO - I wanted to implement these myself while I'm learning how DX12 works, but we should eventually start using the "official" helpers once I'm more comfortable with it
+	//TODO - I wanted to implement these myself while I'm learning how DX12 works, but we should consider using the "official" helpers
 	namespace DX12_Helpers{
 		//----------------------------------------------------------------------------------------------------//
 		//---------- Default Properties ----------------------------------------------------------------------//
@@ -100,6 +100,134 @@ namespace Gadget{
 			{},
 			{},
 			0
+		};
+
+		constexpr D3D12_DEPTH_STENCIL_DESC1 DepthStencilEnabled{
+			1, //DepthEnable
+			D3D12_DEPTH_WRITE_MASK_ALL,
+			D3D12_COMPARISON_FUNC_LESS_EQUAL,
+			0,
+			0,
+			0,
+			{},
+			{},
+			0
+		};
+
+		constexpr D3D12_DEPTH_STENCIL_DESC1 DepthStencilEnabledReadOnly{
+			1, //DepthEnable
+			D3D12_DEPTH_WRITE_MASK_ZERO,
+			D3D12_COMPARISON_FUNC_LESS_EQUAL,
+			0,
+			0,
+			0,
+			{},
+			{},
+			0
+		};
+
+		constexpr D3D12_DEPTH_STENCIL_DESC1 DepthStencilReversed{
+			1, //DepthEnable
+			D3D12_DEPTH_WRITE_MASK_ALL,
+			D3D12_COMPARISON_FUNC_GREATER_EQUAL,
+			0,
+			0,
+			0,
+			{},
+			{},
+			0
+		};
+
+		constexpr D3D12_DEPTH_STENCIL_DESC1 DepthStencilReversedReadOnly{
+			1, //DepthEnable
+			D3D12_DEPTH_WRITE_MASK_ZERO,
+			D3D12_COMPARISON_FUNC_GREATER_EQUAL,
+			0,
+			0,
+			0,
+			{},
+			{},
+			0
+		};
+
+		constexpr D3D12_BLEND_DESC BlendDisabled{
+			0,										//AlphaToCoverageEnable
+			0,										//IndependentBlendEnable
+			{
+				{
+					0,								//BlendEnable
+					0,								//LogicOpEnable
+					D3D12_BLEND_SRC_ALPHA,			//SrcBlend
+					D3D12_BLEND_INV_SRC_ALPHA,		//DestBlend
+					D3D12_BLEND_OP_ADD,				//BlendOp
+					D3D12_BLEND_ONE,				//SrcBlendAlpha
+					D3D12_BLEND_INV_SRC_ALPHA,		//DestBlendAlpha
+					D3D12_BLEND_OP_ADD,				//BlendOpAlpha
+					D3D12_LOGIC_OP_NOOP,			//LogicOp
+					D3D12_COLOR_WRITE_ENABLE_ALL	//RenderTargetWriteMask
+				},
+				{},{},{},{},{},{},{}
+			}
+		};
+
+		constexpr D3D12_BLEND_DESC BlendAlpha{
+			0,										//AlphaToCoverageEnable
+			0,										//IndependentBlendEnable
+			{
+				{
+					1,								//BlendEnable
+					0,								//LogicOpEnable
+					D3D12_BLEND_SRC_ALPHA,			//SrcBlend
+					D3D12_BLEND_INV_SRC_ALPHA,		//DestBlend
+					D3D12_BLEND_OP_ADD,				//BlendOp
+					D3D12_BLEND_ONE,				//SrcBlendAlpha
+					D3D12_BLEND_ONE,				//DestBlendAlpha
+					D3D12_BLEND_OP_ADD,				//BlendOpAlpha
+					D3D12_LOGIC_OP_NOOP,			//LogicOp
+					D3D12_COLOR_WRITE_ENABLE_ALL	//RenderTargetWriteMask
+				},
+				{},{},{},{},{},{},{}
+			}
+		};
+
+		constexpr D3D12_BLEND_DESC BlendAdditive{
+			0,										//AlphaToCoverageEnable
+			0,										//IndependentBlendEnable
+			{
+				{
+					1,								//BlendEnable
+					0,								//LogicOpEnable
+					D3D12_BLEND_ONE,				//SrcBlend
+					D3D12_BLEND_ONE,				//DestBlend
+					D3D12_BLEND_OP_ADD,				//BlendOp
+					D3D12_BLEND_ONE,				//SrcBlendAlpha
+					D3D12_BLEND_ONE,				//DestBlendAlpha
+					D3D12_BLEND_OP_ADD,				//BlendOpAlpha
+					D3D12_LOGIC_OP_NOOP,			//LogicOp
+					D3D12_COLOR_WRITE_ENABLE_ALL	//RenderTargetWriteMask
+				},
+				{},{},{},{},{},{},{}
+			}
+		};
+
+		constexpr D3D12_BLEND_DESC BlendPreMultiplied{
+			0,										//AlphaToCoverageEnable
+			0,										//IndependentBlendEnable
+			{
+				{
+					0,								//BlendEnable
+					0,								//LogicOpEnable
+					D3D12_BLEND_ONE,				//SrcBlend
+					D3D12_BLEND_INV_SRC_ALPHA,		//DestBlend
+					D3D12_BLEND_OP_ADD,				//BlendOp
+					D3D12_BLEND_ONE,				//SrcBlendAlpha
+					D3D12_BLEND_ONE,				//DestBlendAlpha
+					D3D12_BLEND_OP_ADD,				//BlendOpAlpha
+					D3D12_LOGIC_OP_NOOP,			//LogicOp
+					D3D12_COLOR_WRITE_ENABLE_ALL	//RenderTargetWriteMask
+				},
+				{},{},{},{},{},{},{}
+			}
 		};
 
 		//----------------------------------------------------------------------------------------------------//
@@ -234,6 +362,33 @@ namespace Gadget{
 		#pragma warning(default : 4324)
 
 		#undef DX12_HELPER_PSSO
+
+		struct DX12_PipelineStateSubobjectStream{
+			DX12_PipelineStateSubObject_RootSignature rootSignature{ nullptr };
+			DX12_PipelineStateSubObject_VS vs{};
+			DX12_PipelineStateSubObject_PS ps{};
+			DX12_PipelineStateSubObject_DS ds{};
+			DX12_PipelineStateSubObject_HS hs{};
+			DX12_PipelineStateSubObject_GS gs{};
+			DX12_PipelineStateSubObject_CS cs{};
+			DX12_PipelineStateSubObject_StreamOutput		streamOutput{};
+			DX12_PipelineStateSubObject_Blend				blend{ BlendDisabled };
+			DX12_PipelineStateSubObject_SampleMask			sampleMask{ std::numeric_limits<UINT>::max() };
+			DX12_PipelineStateSubObject_Rasterizer			rasterizer{ RasterizerNoCulling };
+			DX12_PipelineStateSubObject_InputLayout			inputLayout{};
+			DX12_PipelineStateSubObject_IBStripCutValue		ibStripCutValue{};
+			DX12_PipelineStateSubObject_PrimitiveTopology	primitiveTopology{};
+			DX12_PipelineStateSubObject_RenderTargetFormats	renderTargetFormats{};
+			DX12_PipelineStateSubObject_DepthStencilFormat	depthStencilFormat{};
+			DX12_PipelineStateSubObject_SampleDesc			sampleDesc{{ 1, 0 }};
+			DX12_PipelineStateSubObject_NodeMask			nodeMask{};
+			DX12_PipelineStateSubObject_CachedPSO			cachedPSO{};
+			DX12_PipelineStateSubObject_Flags				flags{};
+			DX12_PipelineStateSubObject_DepthStencil1		depthStencil1{ DepthStencilDisabled };
+			DX12_PipelineStateSubObject_ViewInstancing		viewInstancing{};
+			DX12_PipelineStateSubObject_AS					as{};
+			DX12_PipelineStateSubObject_MS					ms{};
+		};
 
 		constexpr inline ID3D12PipelineState* CreatePipelineState(ID3D12Device2* device_, const D3D12_PIPELINE_STATE_STREAM_DESC& desc_){
 			GADGET_BASIC_ASSERT(device_ != nullptr);

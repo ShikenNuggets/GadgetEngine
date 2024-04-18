@@ -24,6 +24,8 @@ namespace Gadget{
 	public:
 		DX12_RootSignature(const std::vector<ShaderType::Type>& types_);
 
+		ID3D12RootSignature* RootSignature() const{ return rootSignature.Get(); }
+
 	private:
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 
