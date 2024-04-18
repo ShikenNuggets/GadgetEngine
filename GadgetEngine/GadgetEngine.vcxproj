@@ -227,6 +227,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DX12_TextureInfo.h" />
     <ClInclude Include="Graphics\DX12\DX12_UploadContext.h" />
     <ClInclude Include="Graphics\DX12\DX12_UploadHandler.h" />
+    <ClInclude Include="Graphics\DX12\DXR\DXR.h" />
     <ClInclude Include="Graphics\DX12\LowLevel\DX12_PSO.h" />
     <ClInclude Include="Graphics\DX12\LowLevel\DX12_RootSignature.h" />
     <ClInclude Include="Graphics\FontInfo.h" />
@@ -355,6 +356,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\DX12\DX12_TextureInfo.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_UploadContext.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_UploadHandler.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\DXR.cpp" />
     <ClCompile Include="Graphics\DX12\LowLevel\DX12_PSO.cpp" />
     <ClCompile Include="Graphics\DX12\LowLevel\DX12_RootSignature.cpp" />
     <ClCompile Include="Graphics\GUI\CanvasSceneComponent.cpp" />

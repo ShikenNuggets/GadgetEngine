@@ -22,6 +22,9 @@
     <Filter Include="Graphics\DX12">
       <UniqueIdentifier>{24F78497-90B7-00CE-59F2-494BC57145AA}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\DX12\DXR">
+      <UniqueIdentifier>{E1DBCE31-4DF2-CCC7-9669-58E902BF9D4F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\DX12\LowLevel">
       <UniqueIdentifier>{1D189A11-0912-C363-F27E-5974DE1729D0}</UniqueIdentifier>
     </Filter>
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\DX12\DX12_UploadHandler.h">
       <Filter>Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\DXR.h">
+      <Filter>Graphics\DX12\DXR</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\DX12\LowLevel\DX12_PSO.h">
       <Filter>Graphics\DX12\LowLevel</Filter>
@@ -544,6 +550,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DX12_UploadHandler.cpp">
       <Filter>Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DXR\DXR.cpp">
+      <Filter>Graphics\DX12\DXR</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\LowLevel\DX12_PSO.cpp">
       <Filter>Graphics\DX12\LowLevel</Filter>

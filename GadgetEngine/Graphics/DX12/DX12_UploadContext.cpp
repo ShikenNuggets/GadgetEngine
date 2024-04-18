@@ -6,7 +6,7 @@
 
 using namespace Gadget;
 
-DX12_UploadContext::DX12_UploadContext(ID3D12_Device* device_, uint32_t alignedSize_) : uploadFrame(nullptr){
+DX12_UploadContext::DX12_UploadContext(ID3D12_Device* device_, uint64_t alignedSize_) : uploadFrame(nullptr){
 	DX12_UploadHandler& uploadHandler = DX12_UploadHandler::GetInstance();
 	uploadFrame = uploadHandler.ReserveAvailableUploadFrame();
 

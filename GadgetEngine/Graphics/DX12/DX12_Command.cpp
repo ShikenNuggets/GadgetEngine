@@ -143,16 +143,10 @@ ErrorCode DX12_Command::BeginFrame(){
 ErrorCode DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 	GADGET_BASIC_ASSERT(cmdQueue != nullptr);
-	GADGET_BASIC_ASSERT(renderSurface_ != nullptr);
 
 	if(cmdList == nullptr || cmdQueue == nullptr){
 		Debug::Log(SID("RENDER"), "Command list/queue were not initialized correctly");
 		return ErrorCode::Invalid_State;
-	}
-
-	if(renderSurface_ == nullptr){
-		Debug::Log(SID("RENDER"), "Cannot end the frame with a null render surface!");
-		return ErrorCode::Invalid_Args;
 	}
 
 	if(FAILED(cmdList->Close())){
@@ -163,10 +157,12 @@ ErrorCode DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
 	ID3D12CommandList* const cmdLists[]{ cmdList.Get() };
 	cmdQueue->ExecuteCommandLists(static_cast<uint32_t>(std::size(cmdLists)), &cmdLists[0]);
 
-	auto err = renderSurface_->Present();
-	if(err != ErrorCode::OK){
-		Debug::Log("Could not present the render surface", Debug::Error, __FILE__, __LINE__);
-		return err;
+	if(renderSurface_ != nullptr){
+		auto err = renderSurface_->Present();
+		if(err != ErrorCode::OK){
+			Debug::Log("Could not present the render surface", Debug::Error, __FILE__, __LINE__);
+			return err;
+		}
 	}
 
 	const uint64_t fv = ++fenceValue;

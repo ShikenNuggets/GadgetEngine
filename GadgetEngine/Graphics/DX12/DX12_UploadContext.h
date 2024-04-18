@@ -9,7 +9,7 @@
 namespace Gadget{
 	class DX12_UploadContext{
 	public:
-		DX12_UploadContext(ID3D12_Device* device_, uint32_t alignedSize_);
+		DX12_UploadContext(ID3D12_Device* device_, uint64_t alignedSize_);
 		DISABLE_COPY_AND_MOVE(DX12_UploadContext);
 		~DX12_UploadContext();
 
