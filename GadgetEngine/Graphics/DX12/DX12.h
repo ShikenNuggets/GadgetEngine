@@ -19,6 +19,7 @@ namespace Gadget{
 	struct DX12_StartupOptions{
 		bool isDebug = true;
 		bool gpuBasedValidation = false;
+		bool requireDXR = false;
 		uint32_t dxgiFactoryFlags = 0;
 	};
 
@@ -39,7 +40,7 @@ namespace Gadget{
 		[[nodiscard]] static ErrorCode DeleteInstance();
 
 		[[nodiscard]] ErrorCode EnableDebugLayer(bool gpuValidation_ = false);
-		[[nodiscard]] ErrorCode CreateDevice(uint32_t dxgiFactoryFlags_ = 0);
+		[[nodiscard]] ErrorCode CreateDevice(uint32_t dxgiFactoryFlags_ = 0, bool requireDXR_ = false);
 		[[nodiscard]] ErrorCode CreateCommandList();
 		[[nodiscard]] ErrorCode InitializeDescriptorHeaps();
 		[[nodiscard]] ErrorCode BreakOnWarningsAndErrors(bool enabled_);
@@ -72,6 +73,7 @@ namespace Gadget{
 	private:
 		static std::unique_ptr<DX12> instance;
 
+		D3D_FEATURE_LEVEL minimumFeatureLevel;
 		Microsoft::WRL::ComPtr<IDXGI_Factory> dxgiFactory;
 		Microsoft::WRL::ComPtr<ID3D12_Device> mainDevice;
 		DX12_Command* gfxCommand;
@@ -85,7 +87,7 @@ namespace Gadget{
 
 		[[nodiscard]] ErrorCode DebugShutdown();
 
-		IDXGI_Adapter* DetermineMainAdapter();
+		IDXGI_Adapter* DetermineMainAdapter(bool requireDXR_);
 		D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGI_Adapter* adapter_);
 
 		bool DoesDeviceSupportRaytracing(ID3D12_Device* device_) const;

@@ -10,22 +10,24 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-constexpr D3D_FEATURE_LEVEL minimumFeatureLevel = D3D_FEATURE_LEVEL_12_1;
-
 std::unique_ptr<DX12> DX12::instance = nullptr;
 
-DX12::DX12(const DX12_StartupOptions& options_) :	dxgiFactory(nullptr), mainDevice(nullptr), gfxCommand(nullptr), resourceBarriers(),
+DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATURE_LEVEL_12_0), dxgiFactory(nullptr), mainDevice(nullptr), gfxCommand(nullptr), resourceBarriers(),
 													rtvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), dsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV),
 													srvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), uavDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV),
 													deferredReleases(FrameBufferCount), deferredReleaseMutex(){
 	GADGET_BASIC_ASSERT(deferredReleases.size() == FrameBufferCount);
+
+	if(options_.requireDXR){
+		minimumFeatureLevel = D3D_FEATURE_LEVEL_12_1;
+	}
 
 	auto err = EnableDebugLayer(options_.gpuBasedValidation);
 	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not enable debug layer! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
 	}
 
-	err = CreateDevice(options_.dxgiFactoryFlags);
+	err = CreateDevice(options_.dxgiFactoryFlags, options_.requireDXR);
 	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
 	}
@@ -150,14 +152,14 @@ ErrorCode DX12::Shutdown(){
 	return ErrorCode::OK;
 }
 
-ErrorCode DX12::CreateDevice(uint32_t dxgiFactoryFlags_){
+ErrorCode DX12::CreateDevice(uint32_t dxgiFactoryFlags_, bool requireDXR_){
 	if(FAILED(CreateDXGIFactory2(dxgiFactoryFlags_, IID_PPV_ARGS(dxgiFactory.ReleaseAndGetAddressOf())))){
 		Debug::Log(SID("RENDER"), "Failed to create DXGI Factory!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 
 	Microsoft::WRL::ComPtr<IDXGI_Adapter> mainAdapter;
-	mainAdapter.Attach(DetermineMainAdapter());
+	mainAdapter.Attach(DetermineMainAdapter(requireDXR_));
 	if(mainAdapter == nullptr){
 		Debug::Log(SID("RENDER"), "Failed to determine main DXGI adapter! You may need to update your graphics card drivers", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_NoValidAdapter;
@@ -379,13 +381,14 @@ ErrorCode DX12::DebugShutdown(){
 	return ErrorCode::OK;
 }
 
-IDXGI_Adapter* DX12::DetermineMainAdapter(){
+IDXGI_Adapter* DX12::DetermineMainAdapter(bool requireDXR_){
 	IDXGI_Adapter* adapter = nullptr;
 
 	for(int i = 0; dxgiFactory->EnumAdapterByGpuPreference(i, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&adapter)) != DXGI_ERROR_NOT_FOUND; i++){
 		ComPtr<ID3D12_Device> tempDevice;
 		if(SUCCEEDED(D3D12CreateDevice(adapter, minimumFeatureLevel, IID_PPV_ARGS(tempDevice.ReleaseAndGetAddressOf())))){
-			if(DoesDeviceSupportRaytracing(tempDevice.Get())){
+			//If we need DXR, make sure the device actually supports it
+			if(!requireDXR_ || DoesDeviceSupportRaytracing(tempDevice.Get())){
 				return adapter;
 			}
 		}
