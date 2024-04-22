@@ -84,7 +84,6 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandList failed!", __FILE__, __LINE__);
 	}
 	cmdList->SetName((typeNamePrefix + L"List").c_str());
-	cmdList->Close();
 
 	//Create Fence
 	result = device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence.ReleaseAndGetAddressOf()));
@@ -189,6 +188,16 @@ ErrorCode DX12_Command::Flush(){
 	}
 
 	frameIndex = 0;
+
+	return ErrorCode::OK;
+}
+
+ErrorCode DX12_Command::CloseList(){
+	GADGET_BASIC_ASSERT(cmdList != nullptr);
+	HRESULT result = cmdList->Close();
+	if(FAILED(result)){
+		return ErrorCode::D3D12_Error;
+	}
 
 	return ErrorCode::OK;
 }

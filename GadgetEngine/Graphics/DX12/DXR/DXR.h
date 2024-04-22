@@ -9,16 +9,12 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
-//Hide warnings from external code that we can't/won't modify - WNF
-#pragma warning(disable : 26495) //Uninitialized member variable
-#include <nv_helpers_dx12/TopLevelASGenerator.h>
-#include <nv_helpers_dx12/ShaderBindingTableGenerator.h>
-#pragma warning(default : 26819)
-
 #include "GadgetEnums.h"
 #include "ScreenCoordinate.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/TopLevelASGenerator.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/ShaderBindingTableGenerator.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
@@ -30,12 +26,17 @@ namespace Gadget{
 
 	class DXR{
 	public:
-		DXR(ScreenCoordinate frameSize_);
+		DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_);
 		DISABLE_COPY_AND_MOVE(DXR);
 
 		static DXR& GetInstance();
-		static DXR& GetInstance(ScreenCoordinate frameSize_);
+		static DXR& GetInstance(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_);
 		[[nodiscard]] static ErrorCode DeleteInstance();
+
+		ID3D12StateObject* RTStateObject(){ return rtStateObject.Get(); }
+		ID3D12Resource* OutputResource(){ return outputResource.Get(); }
+		nv_helpers_dx12::ShaderBindingTableGenerator& SBTHelper(){ return sbtHelper; }
+		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
 
 	private:
 		static std::unique_ptr<DXR> instance;
@@ -77,6 +78,8 @@ namespace Gadget{
 
 		nv_helpers_dx12::ShaderBindingTableGenerator sbtHelper;
 		Microsoft::WRL::ComPtr<ID3D12Resource> sbtStorage;
+
+		Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
 	};
 }
 

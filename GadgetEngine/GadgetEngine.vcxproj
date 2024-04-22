@@ -228,6 +228,11 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DX12_UploadContext.h" />
     <ClInclude Include="Graphics\DX12\DX12_UploadHandler.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR.h" />
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.h" />
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\RaytracingPipelineGenerator.h" />
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\RootSignatureGenerator.h" />
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\ShaderBindingTableGenerator.h" />
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\TopLevelASGenerator.h" />
     <ClInclude Include="Graphics\DX12\LowLevel\DX12_PSO.h" />
     <ClInclude Include="Graphics\DX12\LowLevel\DX12_RootSignature.h" />
     <ClInclude Include="Graphics\FontInfo.h" />
@@ -300,6 +305,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Physics\Rigidbody.h" />
     <ClInclude Include="Platform\Windows\SDL2_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_DX12_Renderer.h" />
+    <ClInclude Include="Platform\Windows\Win32_DXR_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_GL_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_Window.h" />
@@ -357,6 +363,11 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\DX12\DX12_UploadContext.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_UploadHandler.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\RaytracingPipelineGenerator.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\RootSignatureGenerator.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\ShaderBindingTableGenerator.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\TopLevelASGenerator.cpp" />
     <ClCompile Include="Graphics\DX12\LowLevel\DX12_PSO.cpp" />
     <ClCompile Include="Graphics\DX12\LowLevel\DX12_RootSignature.cpp" />
     <ClCompile Include="Graphics\GUI\CanvasSceneComponent.cpp" />
@@ -397,6 +408,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Physics\Rigidbody.cpp" />
     <ClCompile Include="Platform\Windows\SDL2_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_DX12_Renderer.cpp" />
+    <ClCompile Include="Platform\Windows\Win32_DXR_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_GL_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_Window.cpp" />

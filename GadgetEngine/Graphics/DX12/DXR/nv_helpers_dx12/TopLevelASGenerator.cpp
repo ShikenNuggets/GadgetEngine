@@ -47,6 +47,8 @@ buffer needs to be kept until the command list execution is finished.
 
 #include "TopLevelASGenerator.h"
 
+#include <stdexcept>
+
 // Helper to compute aligned buffer sizes
 #ifndef ROUND_UP
 #define ROUND_UP(v, powerOf2Alignment) (((v) + (powerOf2Alignment)-1) & ~((powerOf2Alignment)-1))
@@ -160,7 +162,7 @@ void TopLevelASGenerator::Generate(
 )
 {
   // Copy the descriptors in the target descriptor buffer
-  D3D12_RAYTRACING_INSTANCE_DESC* instanceDescs;
+  D3D12_RAYTRACING_INSTANCE_DESC* instanceDescs{};
   descriptorsBuffer->Map(0, nullptr, reinterpret_cast<void**>(&instanceDescs));
   if (!instanceDescs)
   {
@@ -206,7 +208,7 @@ void TopLevelASGenerator::Generate(
   // The stored flags represent whether the AS has been built for updates or
   // not. If yes and an update is requested, the builder is told to only update
   // the AS instead of fully rebuilding it
-  if (flags == D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_ALLOW_UPDATE && updateOnly)
+  if (flags & D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_ALLOW_UPDATE && updateOnly)
   {
     flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PERFORM_UPDATE;
   }
@@ -241,7 +243,7 @@ void TopLevelASGenerator::Generate(
   // Wait for the builder to complete by setting a barrier on the resulting
   // buffer. This can be important in case the rendering is triggered
   // immediately afterwards, without executing the command list
-  D3D12_RESOURCE_BARRIER uavBarrier;
+  D3D12_RESOURCE_BARRIER uavBarrier{};
   uavBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
   uavBarrier.UAV.pResource = resultBuffer;
   uavBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;

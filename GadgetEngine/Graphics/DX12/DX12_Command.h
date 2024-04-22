@@ -29,6 +29,7 @@ namespace Gadget{
 		[[nodiscard]] ErrorCode BeginFrame();
 		[[nodiscard]] ErrorCode EndFrame(DX12_RenderSurface* renderSurface_);
 		[[nodiscard]] ErrorCode Flush();
+		[[nodiscard]] ErrorCode CloseList();
 
 		ID3D12CommandQueue* const CommandQueue() const{ return cmdQueue.Get(); }
 		ID3D12_GraphicsCommandList* const CommandList() const{ return cmdList.Get(); }

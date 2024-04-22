@@ -37,7 +37,7 @@ DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATUR
 		Debug::Log(SID("RENDER"), "DX12 code will not break on warnings or errors! Error Code: " + std::to_string((uint32_t)err), Debug::Error, __FILE__, __LINE__);
 	}
 
-	err = CreateCommandList();
+	err = CreateCommandList(options_.closeCommandListOnInit);
 	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create command list! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
 	}
@@ -182,7 +182,7 @@ ErrorCode DX12::CreateDevice(uint32_t dxgiFactoryFlags_, bool requireDXR_){
 	return ErrorCode::OK;
 }
 
-ErrorCode DX12::CreateCommandList(){
+ErrorCode DX12::CreateCommandList(bool closeCommandListOnInit_){
 	GADGET_BASIC_ASSERT(mainDevice != nullptr);
 	if(mainDevice == nullptr){
 		Debug::Log(SID("RENDER"), "[DX12] Tried to create command list, but the device was not initialized", Debug::Error, __FILE__, __LINE__);
@@ -192,6 +192,13 @@ ErrorCode DX12::CreateCommandList(){
 	gfxCommand = new DX12_Command(mainDevice.Get(), D3D12_COMMAND_LIST_TYPE_DIRECT);
 	if(gfxCommand == nullptr){
 		return ErrorCode::Constructor_Failed;
+	}
+
+	if(closeCommandListOnInit_){
+		auto err = gfxCommand->CloseList();
+		if(err != ErrorCode::OK){
+			return err;
+		}
 	}
 
 	return ErrorCode::OK;

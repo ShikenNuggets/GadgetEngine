@@ -17,9 +17,10 @@ namespace Gadget{
 	class DX12_RenderSurface;
 
 	struct DX12_StartupOptions{
-		bool isDebug = true;
+		bool isDebug = false;
 		bool gpuBasedValidation = false;
 		bool requireDXR = false;
+		bool closeCommandListOnInit = true;
 		uint32_t dxgiFactoryFlags = 0;
 	};
 
@@ -41,7 +42,7 @@ namespace Gadget{
 
 		[[nodiscard]] ErrorCode EnableDebugLayer(bool gpuValidation_ = false);
 		[[nodiscard]] ErrorCode CreateDevice(uint32_t dxgiFactoryFlags_ = 0, bool requireDXR_ = false);
-		[[nodiscard]] ErrorCode CreateCommandList();
+		[[nodiscard]] ErrorCode CreateCommandList(bool closeCommandListOnInit_ = true);
 		[[nodiscard]] ErrorCode InitializeDescriptorHeaps();
 		[[nodiscard]] ErrorCode BreakOnWarningsAndErrors(bool enabled_);
 

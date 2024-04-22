@@ -42,6 +42,7 @@ compiling in debug mode.
 #include "RaytracingPipelineGenerator.h"
 
 #include "dxcapi.h"
+#include <stdexcept>
 #include <unordered_set>
 
 namespace nv_helpers_dx12
@@ -239,7 +240,7 @@ ID3D12StateObject* RayTracingPipelineGenerator::Generate()
   }
 
   // The pipeline construction always requires an empty global root signature
-  D3D12_STATE_SUBOBJECT globalRootSig;
+  D3D12_STATE_SUBOBJECT globalRootSig{};
   globalRootSig.Type = D3D12_STATE_SUBOBJECT_TYPE_GLOBAL_ROOT_SIGNATURE;
   ID3D12RootSignature* dgSig = m_dummyGlobalRootSignature;
   globalRootSig.pDesc = &dgSig;
@@ -247,7 +248,7 @@ ID3D12StateObject* RayTracingPipelineGenerator::Generate()
   subobjects[currentIndex++] = globalRootSig;
 
   // The pipeline construction always requires an empty local root signature
-  D3D12_STATE_SUBOBJECT dummyLocalRootSig;
+  D3D12_STATE_SUBOBJECT dummyLocalRootSig{};
   dummyLocalRootSig.Type = D3D12_STATE_SUBOBJECT_TYPE_LOCAL_ROOT_SIGNATURE;
   ID3D12RootSignature* dlSig = m_dummyLocalRootSignature;
   dummyLocalRootSig.pDesc = &dlSig;

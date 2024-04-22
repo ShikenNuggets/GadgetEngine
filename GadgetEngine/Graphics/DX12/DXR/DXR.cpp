@@ -1,30 +1,26 @@
 #include "DXR.h"
 
-#include <nv_helpers_dx12/BottomLevelASGenerator.h>
-#include <nv_helpers_dx12/RaytracingPipelineGenerator.h>
-#include <nv_helpers_dx12/RootSignatureGenerator.h>
-
 #include "Debug.h"
 #include "Graphics/Vertex.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/BottomLevelASGenerator.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/RaytracingPipelineGenerator.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/RootSignatureGenerator.h"
 
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DXR> DXR::instance = nullptr;
 
-//TODO - This obviously doesn't work
-ComPtr<ID3D12Resource> vertexBuffer;
-D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
-
-DXR::DXR(ScreenCoordinate frameSize_) : dx12(DX12::GetInstance()), frameSize(frameSize_), srvUavHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV){
+DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12::GetInstance()), frameSize(frameSize_), vertexBuffer(vertexBuffer_), srvUavHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0);
 	GADGET_BASIC_ASSERT(frameSize_.y > 0);
+	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
 
 	CreateAccelerationStructures();
 
-	dx12.GfxCommand()->CommandList()->Close();
+	//dx12.GfxCommand()->CommandList()->Close();
 
 	CreateRaytracingPipeline();
 	CreateRaytracingOutputBuffer();
@@ -36,9 +32,9 @@ DXR& DXR::GetInstance(){
 	return *instance;
 }
 
-DXR& DXR::GetInstance(ScreenCoordinate frameSize_){
+DXR& DXR::GetInstance(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_){
 	if(instance == nullptr){
-		instance = std::make_unique<DXR>(frameSize_);
+		instance = std::make_unique<DXR>(frameSize_, vertexBuffer_);
 	}
 
 	GADGET_ASSERT(instance != nullptr, "App instance was somehow nullptr! Nothing will work!");
@@ -82,9 +78,9 @@ void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, D
 	uint64_t instanceDescsSize = 0;
 	topLevelASGenerator.ComputeASBufferSizes(dx12.MainDevice(), true, &scratchSize, &resultSize, &instanceDescsSize);
 
-	topLevelASBuffers.pScratch = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, false, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-	topLevelASBuffers.pResult = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-	topLevelASBuffers.pInstanceDesc = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, instanceDescsSize, false, D3D12_RESOURCE_STATE_GENERIC_READ);
+	topLevelASBuffers.pScratch = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, true, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	topLevelASBuffers.pResult = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSize, true, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	topLevelASBuffers.pInstanceDesc = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ);
 
 	topLevelASGenerator.Generate(dx12.GfxCommand()->CommandList(), topLevelASBuffers.pScratch.Get(), topLevelASBuffers.pResult.Get(), topLevelASBuffers.pInstanceDesc.Get());
 }
@@ -198,7 +194,7 @@ void DXR::CreateShaderBindingTable(){
 
 	uint32_t sbtSize = sbtHelper.ComputeSBTSize();
 
-	sbtStorage = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, sbtSize, false, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE);
+	sbtStorage = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, sbtSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE);
 	if(!sbtStorage){
 		throw std::logic_error("Could not allocate the shader binding table");
 	}

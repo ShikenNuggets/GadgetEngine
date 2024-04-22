@@ -25,6 +25,9 @@
     <Filter Include="Graphics\DX12\DXR">
       <UniqueIdentifier>{E1DBCE31-4DF2-CCC7-9669-58E902BF9D4F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\DX12\DXR\nv_helpers_dx12">
+      <UniqueIdentifier>{640CE869-D07A-3DE9-1964-F8E885113385}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\DX12\LowLevel">
       <UniqueIdentifier>{1D189A11-0912-C363-F27E-5974DE1729D0}</UniqueIdentifier>
     </Filter>
@@ -190,6 +193,21 @@
     </ClInclude>
     <ClInclude Include="Graphics\DX12\DXR\DXR.h">
       <Filter>Graphics\DX12\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.h">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\RaytracingPipelineGenerator.h">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\RootSignatureGenerator.h">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\ShaderBindingTableGenerator.h">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\TopLevelASGenerator.h">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\DX12\LowLevel\DX12_PSO.h">
       <Filter>Graphics\DX12\LowLevel</Filter>
@@ -405,6 +423,9 @@
     <ClInclude Include="Platform\Windows\Win32_DX12_Renderer.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Windows\Win32_DXR_Renderer.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="Platform\Windows\Win32_GL_Renderer.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -554,6 +575,21 @@
     <ClCompile Include="Graphics\DX12\DXR\DXR.cpp">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.cpp">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\RaytracingPipelineGenerator.cpp">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\RootSignatureGenerator.cpp">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\ShaderBindingTableGenerator.cpp">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\TopLevelASGenerator.cpp">
+      <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\DX12\LowLevel\DX12_PSO.cpp">
       <Filter>Graphics\DX12\LowLevel</Filter>
     </ClCompile>
@@ -670,6 +706,9 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Platform\Windows\Win32_DX12_Renderer.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\Win32_DXR_Renderer.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Platform\Windows\Win32_GL_Renderer.cpp">

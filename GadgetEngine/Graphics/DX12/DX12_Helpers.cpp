@@ -10,8 +10,8 @@ ID3D12RootSignature* DX12_Helpers::DX12_RootSignatureDesc::Create(ID3D12Device* 
 	GADGET_BASIC_ASSERT(device_ != nullptr);
 
 	D3D12_VERSIONED_ROOT_SIGNATURE_DESC rsDesc{};
-	rsDesc.Version = D3D_ROOT_SIGNATURE_VERSION_1_1;
-	rsDesc.Desc_1_1 = *this;
+	rsDesc.Version = D3D_ROOT_SIGNATURE_VERSION_1_0;
+	rsDesc.Desc_1_0 = *this;
 
 	Microsoft::WRL::ComPtr<ID3DBlob> rootSignatureBlob = nullptr;
 	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;

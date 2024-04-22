@@ -234,19 +234,19 @@ namespace Gadget{
 		//---------- DX12_DescriptorRange --------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
 
-		struct DX12_DescriptorRange : public D3D12_DESCRIPTOR_RANGE1{
+		struct DX12_DescriptorRange : public D3D12_DESCRIPTOR_RANGE{
 			constexpr explicit DX12_DescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE rangeType_,
 				uint32_t descriptorCount_, uint32_t shaderRegister_, uint32_t space_ = 0,
-				D3D12_DESCRIPTOR_RANGE_FLAGS flags_ = D3D12_DESCRIPTOR_RANGE_FLAG_NONE,
+				/*D3D12_DESCRIPTOR_RANGE_FLAGS flags_ = D3D12_DESCRIPTOR_RANGE_FLAG_NONE,*/
 				uint32_t offsetFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
-			) : D3D12_DESCRIPTOR_RANGE1{ rangeType_, descriptorCount_, shaderRegister_, space_, flags_, offsetFromTableStart }{}
+			) : D3D12_DESCRIPTOR_RANGE{ rangeType_, descriptorCount_, shaderRegister_, space_, /*flags_,*/ offsetFromTableStart }{}
 		};
 
 		//----------------------------------------------------------------------------------------------------//
 		//---------- DX12_RootParameter ----------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
 
-		class DX12_RootParameter : public D3D12_ROOT_PARAMETER1{
+		class DX12_RootParameter : public D3D12_ROOT_PARAMETER{
 		public:
 			constexpr void InitAsConstants(uint32_t numConstants_, D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0){
 				ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
@@ -256,20 +256,20 @@ namespace Gadget{
 				Constants.RegisterSpace = space_;
 			}
 
-			constexpr void InitAsCBV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0, D3D12_ROOT_DESCRIPTOR_FLAGS flags_ = D3D12_ROOT_DESCRIPTOR_FLAG_NONE){
-				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_CBV, visibility_, shaderRegister_, space_, flags_);
+			constexpr void InitAsCBV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0){
+				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_CBV, visibility_, shaderRegister_, space_);
 			}
 
-			constexpr void InitAsSRV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0, D3D12_ROOT_DESCRIPTOR_FLAGS flags_ = D3D12_ROOT_DESCRIPTOR_FLAG_NONE){
-				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_SRV, visibility_, shaderRegister_, space_, flags_);
+			constexpr void InitAsSRV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0){
+				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_SRV, visibility_, shaderRegister_, space_);
 			}
 
-			constexpr void InitAsUAV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0, D3D12_ROOT_DESCRIPTOR_FLAGS flags_ = D3D12_ROOT_DESCRIPTOR_FLAG_NONE){
-				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_UAV, visibility_, shaderRegister_, space_, flags_);
+			constexpr void InitAsUAV(D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_ = 0){
+				InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE_UAV, visibility_, shaderRegister_, space_);
 			}
 
 			constexpr void InitAsTable(D3D12_SHADER_VISIBILITY visibility_, const DX12_DescriptorRange* ranges_, uint32_t rangeCount_){
-				static_assert(sizeof(DX12_DescriptorRange) == sizeof(D3D12_DESCRIPTOR_RANGE1));
+				static_assert(sizeof(DX12_DescriptorRange) == sizeof(D3D12_DESCRIPTOR_RANGE));
 
 				ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 				ShaderVisibility = visibility_;
@@ -278,12 +278,11 @@ namespace Gadget{
 			}
 
 		private:
-			constexpr void InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE type_, D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_, D3D12_ROOT_DESCRIPTOR_FLAGS flags_){
+			constexpr void InitAsDescriptor(D3D12_ROOT_PARAMETER_TYPE type_, D3D12_SHADER_VISIBILITY visibility_, uint32_t shaderRegister_, uint32_t space_){
 				ParameterType = type_;
 				ShaderVisibility = visibility_;
 				Descriptor.ShaderRegister = shaderRegister_;
 				Descriptor.RegisterSpace = space_;
-				Descriptor.Flags = flags_;
 			}
 		};
 
@@ -291,7 +290,7 @@ namespace Gadget{
 		//---------- DX12_RootSignatureDesc ------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
 
-		struct DX12_RootSignatureDesc : public D3D12_ROOT_SIGNATURE_DESC1{
+		struct DX12_RootSignatureDesc : public D3D12_ROOT_SIGNATURE_DESC{
 			constexpr static D3D12_ROOT_SIGNATURE_FLAGS DefaultFlags =
 				D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS
 				| D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS
@@ -308,7 +307,7 @@ namespace Gadget{
 				D3D12_ROOT_SIGNATURE_FLAGS flags_ = DefaultFlags,
 				const D3D12_STATIC_SAMPLER_DESC* samplers_ = nullptr,
 				uint32_t samplerCount_ = 0
-			) : D3D12_ROOT_SIGNATURE_DESC1{ paramCount_, params_, samplerCount_, samplers_, flags_ }{}
+			) : D3D12_ROOT_SIGNATURE_DESC{ paramCount_, params_, samplerCount_, samplers_, flags_ }{}
 
 			ID3D12RootSignature* Create(ID3D12Device* device_) const;
 		};

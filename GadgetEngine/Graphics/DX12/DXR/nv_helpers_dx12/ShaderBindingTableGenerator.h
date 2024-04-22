@@ -109,6 +109,7 @@ desc.HitGroupTable.StrideInBytes = m_sbtHelper.GetHitGroupEntrySize();
 
 #include "d3d12.h"
 
+#include <string>
 #include <vector>
 
 namespace nv_helpers_dx12
