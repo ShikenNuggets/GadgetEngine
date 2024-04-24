@@ -165,7 +165,10 @@ void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 			SDL_GetWindowSize(sdlWindow, &w, &h);
 			size.x = w;
 			size.y = h;
-			err = renderSurface->SetSize(size);
+			if(renderSurface != nullptr){
+				err = renderSurface->SetSize(size);
+			}
+			
 			if(err != ErrorCode::OK){
 				GADGET_LOG_ERROR(SID("CORE"), "An error occurred on resizing the render surface!");
 			}
