@@ -1,7 +1,7 @@
 #ifndef GADGET_CUBE_COLLIDER_H
 #define GADGET_CUBE_COLLIDER_H
 
-#include "Collider.h"
+#include "Physics/Collider.h"
 
 namespace Gadget{
 	class CubeCollider : public Collider{

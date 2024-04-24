@@ -1,11 +1,8 @@
 #include "PhysManager.h"
 
 #include "App.h"
-#include "BulletHelper.h"
 #include "Config.h"
-#include "Collider.h"
-#include "CollisionSystem.h"
-#include "Rigidbody.h"
+#include "Physics/CollisionSystem.h"
 #include "Game/GameLogicComponent.h"
 
 using namespace Gadget;

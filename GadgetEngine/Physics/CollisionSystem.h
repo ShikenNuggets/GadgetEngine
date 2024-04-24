@@ -1,8 +1,8 @@
 #ifndef GADGET_COLLISION_SYSTEM_H
 #define GADGET_COLLISION_SYSTEM_H
 
-#include "BoxCollider2D.h"
 #include "Math/Vector.h"
+#include "Physics/BoxCollider2D.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{

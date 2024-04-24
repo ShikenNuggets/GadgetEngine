@@ -1,9 +1,9 @@
 #ifndef GAMEPAD_EVENT_H
 #define GAMEPAD_EVENT_H
 
-#include "Input.h"
-#include "InputEnums.h"
 #include "Events/Event.h"
+#include "Input/Input.h"
+#include "Input/InputEnums.h"
 
 namespace Gadget{
 	class GamepadEvent : public Event{

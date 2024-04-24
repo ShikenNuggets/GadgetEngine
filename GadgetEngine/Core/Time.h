@@ -3,10 +3,13 @@
 
 #include <chrono>
 
+#include "Utils/Utils.h"
+
 namespace Gadget{
 	class Time{
 	public:
 		Time();
+		DISABLE_COPY_AND_MOVE(Time);
 
 		void Start();
 		void Update();
@@ -30,12 +33,6 @@ namespace Gadget{
 		std::chrono::milliseconds currentTicks;
 
 		std::chrono::milliseconds GetSleepTime() const;
-
-		//Delete unwanted compiler-generated copy/move constructors and assignment operators
-		Time(const Time&) = delete;
-		Time(Time&&) = delete;
-		Time& operator=(const Time&) = delete;
-		Time& operator=(Time&&) = delete;
 	};
 }
 

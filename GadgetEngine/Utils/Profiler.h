@@ -4,8 +4,8 @@
 #include <chrono>
 
 #include "Debug.h"
-#include "StringID.h"
-#include "Utils.h"
+#include "Utils/StringID.h"
+#include "Utils/Utils.h"
 
 namespace Gadget{
 	class Timer{

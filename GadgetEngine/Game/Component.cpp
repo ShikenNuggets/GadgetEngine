@@ -1,6 +1,6 @@
 #include "Component.h"
 
-#include "GameObject.h"
+#include "Game/GameObject.h"
 
 using namespace Gadget;
 

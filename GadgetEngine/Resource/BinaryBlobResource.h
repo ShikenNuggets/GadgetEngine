@@ -1,8 +1,8 @@
 #ifndef GADGET_BINARY_BLOB_RESOURCE_H
 #define GADGET_BINARY_BLOB_RESOURCE_H
 
-#include "Resource.h"
 #include "Core/FileSystem.h"
+#include "Resource/Resource.h"
 
 namespace Gadget{
 	class BinaryBlobResource : public Resource{

@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "Angle.h"
-#include "Math.h"
+#include "Math/Angle.h"
+#include "Math/Math.h"
 
 namespace Gadget{
 	//Forward Declarations

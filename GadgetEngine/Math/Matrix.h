@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Debug.h"
-#include "Vector.h"
+#include "Math/Vector.h"
 
 namespace Gadget{
 	//Forward declarations

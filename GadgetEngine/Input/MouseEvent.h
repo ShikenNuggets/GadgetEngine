@@ -1,8 +1,8 @@
 #ifndef GADGET_MOUSE_EVENT_H
 #define GADGET_MOUSE_EVENT_H
 
-#include "InputEnums.h"
 #include "Events/Event.h"
+#include "Input/InputEnums.h"
 #include "Math/Math.h"
 
 namespace Gadget{

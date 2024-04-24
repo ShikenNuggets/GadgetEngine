@@ -5,7 +5,6 @@
 #include <wrl.h>
 
 #include "App.h"
-#include "Win32_Window.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
@@ -16,6 +15,7 @@
 #include "Graphics/DX12/DX12_GeometryPass.h"
 #include "Graphics/DX12/DX12_PostProcess.h"
 #include "Graphics/DX12/DX12_UploadHandler.h"
+#include "Platform/Windows/Win32_Window.h"
 
 using namespace Gadget;
 

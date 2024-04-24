@@ -1,10 +1,10 @@
 #ifndef GADGET_COLLIDER_H
 #define GADGET_COLLIDER_H
 
-#include "BulletHelper.h"
 #include "Game/Component.h"
 #include "Game/GameObject.h"
 #include "Math/Vector.h"
+#include "Physics/BulletHelper.h"
 
 namespace Gadget{
 	enum class ColliderShape{

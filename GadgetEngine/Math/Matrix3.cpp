@@ -1,7 +1,7 @@
 #include "Matrix.h"
 
-#include "Euler.h"
-#include "Quaternion.h"
+#include "Math/Euler.h"
+#include "Math/Quaternion.h"
 
 using namespace Gadget;
 

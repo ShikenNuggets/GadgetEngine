@@ -1,9 +1,9 @@
 #ifndef GADGET_PHYS_MANAGER_H
 #define GADGET_PHYS_MANAGER_H
 
-#include "BulletHelper.h"
-#include "Collider.h"
-#include "Rigidbody.h"
+#include "Physics/BulletHelper.h"
+#include "Physics/Collider.h"
+#include "Physics/Rigidbody.h"
 #include "Game/Scene.h"
 
 namespace Gadget{

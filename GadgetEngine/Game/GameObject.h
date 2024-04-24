@@ -1,7 +1,7 @@
 #ifndef GADGET_GAME_OBJECT_H
 #define GADGET_GAME_OBJECT_H
 
-#include "Component.h"
+#include "Game/Component.h"
 #include "Math/Euler.h"
 #include "Math/Matrix.h"
 #include "Math/Quaternion.h"
@@ -100,6 +100,7 @@ namespace Gadget{
 				}
 			}
 
+			comps.shrink_to_fit();
 			return comps;
 		}
 

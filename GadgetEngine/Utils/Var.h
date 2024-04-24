@@ -2,8 +2,8 @@
 #define GADGET_VAR_H
 
 #include "Debug.h"
-#include "StringID.h"
-#include "Utils.h"
+#include "Utils/StringID.h"
+#include "Utils/Utils.h"
 
 namespace Gadget{
 	class Var{
@@ -41,7 +41,7 @@ namespace Gadget{
 					numVal = var_.numVal;
 					break;
 				default:
-					GADGET_ASSERT(false, "Unhandled Var type!");
+					GADGET_ASSERT_NOT_IMPLEMENTED;
 					break;
 			}
 		}
@@ -67,7 +67,7 @@ namespace Gadget{
 				case Type::Number:
 					return *this == var_.ToNumber();
 				default:
-					GADGET_ASSERT(false, "Unhandled Var Type in operator==");
+					GADGET_ASSERT_NOT_IMPLEMENTED
 					break;
 			}
 
@@ -95,7 +95,7 @@ namespace Gadget{
 				case Type::Number:
 					return *this != var_.ToNumber();
 				default:
-					GADGET_ASSERT(false, "Unhandled Var Type in operator!=");
+					GADGET_ASSERT_NOT_IMPLEMENTED
 					break;
 			}
 

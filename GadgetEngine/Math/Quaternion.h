@@ -1,7 +1,7 @@
 #ifndef GADGET_QUATERNION_H
 #define GADGET_QUATERNION_H
 
-#include "Math.h"
+#include "Math/Math.h"
 
 namespace Gadget{
 	//Forward declarations

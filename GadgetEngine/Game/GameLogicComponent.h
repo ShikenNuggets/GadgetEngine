@@ -1,7 +1,7 @@
 #ifndef GADGET_GAME_LOGIC_COMPONENT_H
 #define GADGET_GAME_LOGIC_COMPONENT_H
 
-#include "Component.h"
+#include "Game/Component.h"
 #include "Physics/CollisionSystem.h"
 
 namespace Gadget{

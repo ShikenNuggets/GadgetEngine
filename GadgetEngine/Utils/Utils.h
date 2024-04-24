@@ -1,6 +1,9 @@
 #ifndef GADGET_UTILS_H
 #define GADGET_UTILS_H
 
+//----- ONLY include standard library headers here!!! DO NOT include GadgetEngine code!!! -----
+//A LOT of engine code depends on this header, so it would quickly become circular dependency city
+
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
@@ -38,10 +41,11 @@
 #define STATIC_CLASS(T) DISABLE_COPY_AND_MOVE(T) DISABLE_DEFAULT_CONSTRUCTOR(T)
 #endif //!STATIC_CLASS
 
-
 namespace Gadget{
 	namespace Utils{
-		//----------Containers----------//
+		//----------------------------------------------------------------------------------------------------//
+		//---------- Containers ------------------------------------------------------------------------------//
+		//----------------------------------------------------------------------------------------------------//
 		template <class T>
 		inline constexpr bool Contains(const std::vector<T>& container_, const T& value_){
 			for(const auto& v : container_){
@@ -80,9 +84,11 @@ namespace Gadget{
 			return output;
 		}
 
-		//----------Strings----------//
-		//TODO - Nothing here makes any considerations for Unicode
-		inline bool ContainsChar(const std::string& str_, char char_){
+		//----------------------------------------------------------------------------------------------------//
+		//---------- Strings ---------------------------------------------------------------------------------//
+		//----------------------------------------------------------------------------------------------------//
+		//TODO - Pretty much all of these functions assume ASCII. Make sure they work for UTF-8 too!
+		inline constexpr bool ContainsChar(const std::string& str_, char char_){
 			return str_.find(char_) != std::string::npos;
 		}
 
@@ -96,13 +102,13 @@ namespace Gadget{
 			return str_;
 		}
 
-		inline std::string ExtractString(const std::string& str_, char beginAfterDelimeter, char endBeforeDelimeter){
+		inline constexpr std::string ExtractString(const std::string& str_, char beginAfterDelimeter, char endBeforeDelimeter){
 			size_t first = str_.find_first_of(beginAfterDelimeter);
 			size_t last = str_.find_last_of(endBeforeDelimeter);
 			return str_.substr(first + 1, last - first - 1);
 		}
 
-		inline std::string Trim(const std::string& str_){
+		inline constexpr std::string Trim(const std::string& str_){
 			std::string ret = str_;
 			ret.erase(ret.begin(), std::find_if(ret.begin(), ret.end(), [](unsigned char ch){ return !std::isspace(ch); }));
 			ret.erase(std::find_if(ret.rbegin(), ret.rend(), [](unsigned char ch){ return !std::isspace(ch); }).base(), ret.end());
@@ -131,10 +137,12 @@ namespace Gadget{
 			}
 		}
 
-		inline std::wstring ToWString(const std::string& s_){ return { s_.begin(), s_.end() }; }
-		inline std::wstring ToWString(const char* s_){ return ToWString(std::string(s_)); }
+		inline constexpr std::wstring ToWString(const std::string& s_){ return { s_.begin(), s_.end() }; }
+		inline constexpr std::wstring ToWString(const char* s_){ return ToWString(std::string(s_)); }
 
-		//----------Binary----------//
+		//----------------------------------------------------------------------------------------------------//
+		//---------- Binary ----------------------------------------------------------------------------------//
+		//----------------------------------------------------------------------------------------------------//
 		constexpr inline uint16_t MergeBytes(uint8_t a_, uint8_t b_, bool littleEndian_ = (std::endian::native == std::endian::little)){
 			if(littleEndian_){
 				return (b_ << 8) | a_;
@@ -205,7 +213,9 @@ namespace Gadget{
 			return (byte_ & flag_);
 		}
 
-		//----------Memory----------//
+		//----------------------------------------------------------------------------------------------------//
+		//---------- Memory ----------------------------------------------------------------------------------//
+		//----------------------------------------------------------------------------------------------------//
 		template<uint64_t alignment>
 		constexpr uint64_t AlignSizeUp(uint64_t size_){
 			static_assert(alignment > 0, "Alignment must be non-zero");
@@ -224,7 +234,9 @@ namespace Gadget{
 			return size_ & ~mask;
 		}
 
-		//----------Other----------//
+		//----------------------------------------------------------------------------------------------------//
+		//---------- Misc ------------------------------------------------------------------------------------//
+		//----------------------------------------------------------------------------------------------------//
 		inline std::string GetCurrentDateAndTimeString(){
 			return std::format("{:%Y-%m-%d %X}", std::chrono::system_clock::now());
 		}

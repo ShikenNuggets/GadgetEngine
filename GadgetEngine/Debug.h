@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Utils/StringID.h"
+#include "Utils/Utils.h"
 
 #ifdef GADGET_PLATFORM_WIN32
 	#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
@@ -36,12 +37,15 @@
 namespace Gadget{
 	class Debug{
 	public:
+		STATIC_CLASS(Debug);
+
 		enum LogType : uint8_t{
 			Verbose		= 0,
 			Info		= 1,
 			Warning		= 2,
 			Error		= 3,
 			FatalError	= 4,
+
 			LogType_MAX //Put new values ABOVE this, nothing should be below
 		};
 

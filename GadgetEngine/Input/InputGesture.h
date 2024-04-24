@@ -1,7 +1,7 @@
 #ifndef GADGET_INPUT_GESTURE_H
 #define GADGET_INPUT_GESTURE_H
 
-#include "InputType.h"
+#include "Input/InputType.h"
 #include "Utils/StringID.h"
 
 namespace Gadget{

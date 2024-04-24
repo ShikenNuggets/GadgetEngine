@@ -3,15 +3,17 @@
 
 #include <map>
 
-#include "Resource.h"
 #include "Debug.h"
+#include "Resource/Resource.h"
 #include "Utils/StringID.h"
+#include "Utils/Utils.h"
 
 namespace Gadget{
 	class ResourceManager{
 	public:
 		ResourceManager();
 		~ResourceManager();
+		DISABLE_COPY_AND_MOVE(ResourceManager);
 
 		template <class T> T* LoadResource(StringID resourceName_){
 			static_assert(std::is_base_of<Resource, T>::value == true);
@@ -42,12 +44,6 @@ namespace Gadget{
 
 	private:
 		std::map<StringID, ResourceContainer*> resources;
-
-		//Delete unwanted compiler-generated copy/move constructors and assignment operators
-		ResourceManager(const ResourceManager&) = delete;
-		ResourceManager(ResourceManager&&) = delete;
-		ResourceManager& operator=(const ResourceManager&) = delete;
-		ResourceManager& operator=(ResourceManager&&) = delete;
 	};
 }
 

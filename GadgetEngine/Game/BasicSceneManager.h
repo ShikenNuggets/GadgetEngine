@@ -1,13 +1,14 @@
 #ifndef GADGET_BASIC_SCENE_MANAGER_H
 #define GADGET_BASIC_SCENE_MANAGER_H
 
-#include "Scene.h"
+#include "Game/Scene.h"
 
 namespace Gadget{
 	class BasicSceneManager{
 	public:
 		BasicSceneManager();
 		~BasicSceneManager();
+		DISABLE_COPY_AND_MOVE(BasicSceneManager);
 
 		void Update(float deltaTime_);
 

@@ -1,8 +1,6 @@
 #ifndef GADGET_RESOURCE_H
 #define GADGET_RESOURCE_H
 
-#include <typeinfo>
-
 #include "Debug.h"
 
 namespace Gadget{

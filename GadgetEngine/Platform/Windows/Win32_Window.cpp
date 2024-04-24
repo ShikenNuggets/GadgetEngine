@@ -4,13 +4,13 @@
 #include <glad/glad.h>
 
 #include "App.h"
-#include "SDL2_Utils.h"
 #include "Debug.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Input/KeyEvent.h"
 #include "Input/MouseEvent.h"
 #include "Input/GamepadEvent.h"
+#include "Platform/Windows/SDL2_Utils.h"
 
 using namespace Gadget;
 
@@ -156,12 +156,17 @@ void Win32_Window::SwapBuffers(){
 
 void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 	int w = 0, h = 0;
+	ErrorCode err = ErrorCode::OK;
 	switch(e_.window.event){
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
 			SDL_GetWindowSize(sdlWindow, &w, &h);
 			size.x = w;
 			size.y = h;
-			(void)renderSurface->SetSize(size); //TODO
+			err = renderSurface->SetSize(size);
+			if(err != ErrorCode::OK){
+				GADGET_LOG_ERROR(SID("CORE"), "An error occurred on resizing the render surface!");
+			}
+
 			EventHandler::GetInstance()->HandleEvent(WindowResizedEvent(w, h));
 			break;
 		case SDL_WINDOWEVENT_MOVED:
@@ -173,27 +178,35 @@ void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 	}
 }
 
-//TODO - Trigger button events here as well
 void Win32_Window::HandleHatMotionEvent(const SDL_Event& e_){
 	if(e_.jhat.hat != 0){
-		return; //TODO - Handling for multiple hats, for now we'll just ignore them
+		return; //TODO - Handling for multiple hats, for now we'll just ignore them. Most gamepads only have one
 	}
 
 	float xAxis = 0.0f;
 	float yAxis = 0.0f;
+	ButtonID button = ButtonID::None;
 
 	if(e_.jhat.value & SDL_HAT_UP){
 		yAxis = 1.0f;
+		button = ButtonID::Gamepad_DPad_Up;
 	}else if(e_.jhat.value & SDL_HAT_DOWN){
 		yAxis = -1.0f;
+		button = ButtonID::Gamepad_DPad_Down;
 	}
 	
 	if(e_.jhat.value & SDL_HAT_RIGHT){
 		xAxis = 1.0f;
+		button = ButtonID::Gamepad_DPad_Right;
 	}else if(e_.jhat.value & SDL_HAT_LEFT){
 		xAxis = -1.0f;
+		button = ButtonID::Gamepad_DPad_Left;
 	}
 
+	GADGET_BASIC_ASSERT(button != ButtonID::None);
+
+	EventHandler::GetInstance()->HandleEvent(GamepadButtonPressedEvent(e_.jhat.which, button));
+	EventHandler::GetInstance()->HandleEvent(GamepadButtonReleasedEvent(e_.jhat.which, button));
 	EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e_.jhat.which, AxisID::Gamepad_DPad_Horizontal, xAxis));
 	EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e_.jhat.which, AxisID::Gamepad_DPad_Vertical, yAxis));
 }

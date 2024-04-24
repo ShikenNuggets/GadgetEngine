@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Math.h"
+#include "Math/Math.h"
 
 namespace Gadget{
 	struct Vector2;

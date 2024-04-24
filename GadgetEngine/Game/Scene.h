@@ -1,8 +1,8 @@
 #ifndef GADGET_SCENE_H
 #define GADGET_SCENE_H
 
-#include "GameObject.h"
-#include "SceneComponent.h"
+#include "Game/GameObject.h"
+#include "Game/SceneComponent.h"
 #include "Utils/GUID.h"
 
 namespace Gadget{
@@ -49,6 +49,7 @@ namespace Gadget{
 				}
 			}
 
+			comps.shrink_to_fit();
 			return comps;
 		}
 

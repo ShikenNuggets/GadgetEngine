@@ -13,7 +13,7 @@
 #pragma warning(default : 26800)
 #pragma warning(default : 26819)
 
-#include "Hash.h"
+#include "Utils/Hash.h"
 
 namespace Gadget{
 	class StringID{

@@ -1,7 +1,7 @@
 #ifndef GADGET_APP_EVENT_H
 #define GADGET_APP_EVENT_H
 
-#include "Event.h"
+#include "Events/Event.h"
 
 namespace Gadget{
 	class WindowResizedEvent : public Event{

@@ -14,6 +14,7 @@
 #include "Input/MouseEvent.h"
 #include "Platform/Windows/Win32_GL_Renderer.h"
 #include "Platform/Windows/Win32_DX12_Renderer.h"
+#include "Platform/Windows/Win32_DXR_Renderer.h"
 #include "Resource/ResourceManager.h"
 #include "Utils/Profiler.h"
 
@@ -123,7 +124,8 @@ void App::InitRenderer(){
 
 #ifdef GADGET_PLATFORM_WIN32
 	//renderer = std::make_unique<Win32_GL_Renderer>(width, height, x, y);
-	renderer = std::make_unique<Win32_DX12_Renderer>(width, height, x, y);
+	//renderer = std::make_unique<Win32_DX12_Renderer>(width, height, x, y);
+	renderer = std::make_unique<Win32_DXR_Renderer>(width, height, x, y);
 #else
 	static_assert(false, "Unhandled platform in App::Initialize!")
 #endif //GADGET_PLATFORM_WIN32

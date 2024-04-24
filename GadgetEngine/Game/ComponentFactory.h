@@ -1,7 +1,7 @@
 #ifndef GADGET_COMPONENT_FACTORY_H
 #define GADGET_COMPONENT_FACTORY_H
 
-#include "Component.h"
+#include "Game/Component.h"
 #include "Utils/StringID.h"
 
 namespace Gadget{

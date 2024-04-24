@@ -1,8 +1,8 @@
 #ifndef GADGET_KEY_EVENT_H
 #define GADGET_KEY_EVENT_H
 
-#include "InputEnums.h"
 #include "Events/Event.h"
+#include "Input/InputEnums.h"
 
 namespace Gadget{
 	class KeyEvent : public Event{

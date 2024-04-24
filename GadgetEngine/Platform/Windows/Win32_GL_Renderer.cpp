@@ -3,7 +3,6 @@
 #include <glad/glad.h>
 
 #include "App.h"
-#include "Win32_Window.h"
 #include "Config.h"
 #include "Debug.h"
 #include "Game/Scene.h"
@@ -18,13 +17,9 @@
 #include "Graphics/GUI/CanvasSceneComponent.h"
 #include "Graphics/GUI/GuiTextElement.h"
 #include "Graphics/GUI/GuiTextureElement.h"
-#include "Resource/ResourceManager.h"
-
 #include "Graphics/Text/TextMesh.h"
-
-//Just for testing things - TODO, remove these later
-#include "Core/Time.h"
-#include "Input/Input.h"
+#include "Platform/Windows/Win32_Window.h"
+#include "Resource/ResourceManager.h"
 
 using namespace Gadget;
 

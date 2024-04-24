@@ -1,6 +1,6 @@
 #include "Angle.h"
 
-#include "Math.h"
+#include "Math/Math.h"
 
 using namespace Gadget;
 

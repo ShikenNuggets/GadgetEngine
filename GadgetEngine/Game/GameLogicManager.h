@@ -1,7 +1,7 @@
 #ifndef GADGET_GAME_LOGIC_MANAGER_H
 #define GADGET_GAME_LOGIC_MANAGER_H
 
-#include "Scene.h"
+#include "Game/Scene.h"
 
 namespace Gadget{
 	class GameLogicManager{

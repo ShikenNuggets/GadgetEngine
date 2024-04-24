@@ -160,13 +160,13 @@ void Rigidbody::ClearForces(){
 	bulletRb->clearForces();
 }
 
-void Rigidbody::CollisionResponse(const Collision& collision_){
-	GADGET_BASIC_ASSERT(collision_.collisionVector.IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(collision_.overlapAmount));
-
-	//TODO - This is obviously not proper collision response
-	parent->Translate(-collision_.collisionVector.Normalized() * collision_.overlapAmount);
-}
+//void Rigidbody::CollisionResponse(const Collision& collision_){
+//	GADGET_BASIC_ASSERT(collision_.collisionVector.IsValid());
+//	GADGET_BASIC_ASSERT(Math::IsValidNumber(collision_.overlapAmount));
+//
+//	//TODO - This is obviously not proper collision response
+//	parent->Translate(-collision_.collisionVector.Normalized() * collision_.overlapAmount);
+//}
 
 void Rigidbody::Reset(){
 	Collider* collider = parent->GetComponent<Collider>();

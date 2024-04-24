@@ -5,8 +5,9 @@
 #include <set>
 #include <vector>
 
-#include "InputType.h"
 #include "Events/Event.h"
+#include "Input/InputType.h"
+#include "Utils/Utils.h"
 
 namespace Gadget{
 	class Input{
@@ -19,6 +20,7 @@ namespace Gadget{
 
 		Input();
 		~Input();
+		DISABLE_COPY_AND_MOVE(Input);
 
 		bool GetButtonDown(ButtonID id_) const;
 		bool GetButtonDown(StringID buttonName_) const;
@@ -66,12 +68,6 @@ namespace Gadget{
 		std::vector<Button> definedButtons;
 		std::vector<Axis> definedAxes;
 		std::vector<MultiButton> definedMultiButtons;
-
-		//Delete unwanted compiler-generated copy/move constructors and assignment operators
-		Input(const Input&) = delete;
-		Input(Input&&) = delete;
-		Input& operator=(const Input&) = delete;
-		Input& operator=(Input&&) = delete;
 	};
 }
 

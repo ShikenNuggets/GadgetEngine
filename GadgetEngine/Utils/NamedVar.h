@@ -1,7 +1,7 @@
 #ifndef GADGET_NAMED_VAR_H
 #define GADGET_NAMED_VAR_H
 
-#include "Var.h"
+#include "Utils/Var.h"
 
 namespace Gadget{
 	class NamedVar{

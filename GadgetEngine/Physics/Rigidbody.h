@@ -1,10 +1,10 @@
 #ifndef GADGET_RIGIDBODY_H
 #define GADGET_RIGIDBODY_H
 
-#include "BulletHelper.h"
-#include "CollisionSystem.h"
 #include "Game/Component.h"
 #include "Math/Vector.h"
+#include "Physics/BulletHelper.h"
+#include "Physics/CollisionSystem.h"
 
 namespace Gadget{
 	enum class FreezeRotationType{
@@ -56,7 +56,7 @@ namespace Gadget{
 
 		void ClearForces();
 
-		void CollisionResponse(const Collision& collision_);
+		//void CollisionResponse(const Collision& collision_);
 
 		//Remove the rigidbody from the physics sim and re-add it
 		void Reset();
