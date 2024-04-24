@@ -15,14 +15,14 @@ namespace Gadget{
 		virtual void Bind() override{}
 		virtual void Unbind() override{}
 
-		virtual void BindInt(StringID uniformName_, int value_) override{}
-		virtual void BindFloat(StringID uniformName_, float value_) override{}
-		virtual void BindVector2(StringID uniformName_, const Vector2& vec_) override{}
-		virtual void BindVector3(StringID uniformName_, const Vector3& vec_) override{}
-		virtual void BindVector4(StringID uniformName_, const Vector4& vec_) override{}
-		virtual void BindMatrix3(StringID uniformName_, const Matrix3& mat3_) override{}
-		virtual void BindMatrix4(StringID uniformName_, const Matrix4& mat4_) override{}
-		virtual void BindColor(StringID uniformName_, const Color& color_) override{}
+		virtual void BindInt([[maybe_unused]] StringID uniformName_, [[maybe_unused]] int value_) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
+		virtual void BindFloat([[maybe_unused]] StringID uniformName_, [[maybe_unused]] float value_) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
+		virtual void BindVector2([[maybe_unused]] StringID uniformName_, [[maybe_unused]] const Vector2& vec_) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
+		virtual void BindVector3([[maybe_unused]] StringID uniformName_, [[maybe_unused]] const Vector3& vec_) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
+		virtual void BindVector4([[maybe_unused]] StringID uniformName_, [[maybe_unused]] const Vector4& vec_) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
+		virtual void BindMatrix3([[maybe_unused]] StringID uniformName_, [[maybe_unused]] const Matrix3& mat3_) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
+		virtual void BindMatrix4([[maybe_unused]] StringID uniformName_, [[maybe_unused]] const Matrix4& mat4_) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
+		virtual void BindColor([[maybe_unused]] StringID uniformName_, [[maybe_unused]] const Color& color_) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
 
 	private:
 		DX12_RootSignature rootSignature;

@@ -96,7 +96,7 @@ Win32_DXR_Renderer::~Win32_DXR_Renderer(){
 
 void Win32_DXR_Renderer::PostInit(){}
 
-void Win32_DXR_Renderer::Render(const Scene* scene_){
+void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	(void)dx12->GfxCommand()->BeginFrame();
 	auto* cmdList = dx12->GfxCommand()->CommandList();
 
