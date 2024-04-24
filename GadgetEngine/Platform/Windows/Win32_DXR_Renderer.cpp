@@ -19,7 +19,7 @@ constexpr DXGI_FORMAT mainBufferFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
 constexpr D3D12_RESOURCE_STATES initialMainBufferState = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 
 Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), dx12(nullptr), dxr(nullptr), renderSurfacePtr(nullptr), rootSignature(nullptr), pipelineState(nullptr), vertexBuffer(nullptr), mainBuffer(nullptr){
-	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
+	window = std::make_unique<Win32_Window>(w_, h_, x_, y_, renderAPI);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
 	GADGET_ASSERT(win32Window != nullptr, "Win32 Renderer requires a Win32 window!");
@@ -157,25 +157,25 @@ void Win32_DXR_Renderer::Render(const Scene* scene_){
 
 void Win32_DXR_Renderer::ClearScreen(){}
 
-void Win32_DXR_Renderer::SetClearColor(const Color& color_){}
+void Win32_DXR_Renderer::SetClearColor([[maybe_unused]] const Color& color_){}
 
-void Win32_DXR_Renderer::SetViewportRect(const Rect& rect_){}
+void Win32_DXR_Renderer::SetViewportRect([[maybe_unused]] const Rect& rect_){}
 
-void Win32_DXR_Renderer::OnResize(int newWidth_, int newHeight_){}
+void Win32_DXR_Renderer::OnResize([[maybe_unused]] int newWidth_, [[maybe_unused]] int newHeight_){}
 
-void Win32_DXR_Renderer::SetWindingOrder(WindingOrder order_){}
+void Win32_DXR_Renderer::SetWindingOrder([[maybe_unused]] WindingOrder order_){}
 
-void Win32_DXR_Renderer::SetCullFace(CullFace cullFace_){}
+void Win32_DXR_Renderer::SetCullFace([[maybe_unused]] CullFace cullFace_){}
 
-Shader* Win32_DXR_Renderer::GenerateAPIShader(StringID shaderResource_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+Shader* Win32_DXR_Renderer::GenerateAPIShader([[maybe_unused]] StringID shaderResource_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
-MeshInfo* Win32_DXR_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+MeshInfo* Win32_DXR_Renderer::GenerateAPIMeshInfo([[maybe_unused]] const Mesh& mesh_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
-MeshInfo* Win32_DXR_Renderer::GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+MeshInfo* Win32_DXR_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t numVertices_, [[maybe_unused]] size_t numIndices_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
-TextureInfo* Win32_DXR_Renderer::GenerateAPITextureInfo(const Texture& texture_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+TextureInfo* Win32_DXR_Renderer::GenerateAPITextureInfo([[maybe_unused]] const Texture& texture_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
-FontInfo* Win32_DXR_Renderer::GenerateAPIFontInfo(const FreetypeFont& font_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+FontInfo* Win32_DXR_Renderer::GenerateAPIFontInfo([[maybe_unused]] const FreetypeFont& font_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
 ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	GADGET_BASIC_ASSERT(dx12 != nullptr);

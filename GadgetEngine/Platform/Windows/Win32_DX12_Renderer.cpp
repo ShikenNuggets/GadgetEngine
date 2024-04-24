@@ -20,7 +20,7 @@
 using namespace Gadget;
 
 Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12){
-	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
+	window = std::make_unique<Win32_Window>(w_, h_, x_, y_, renderAPI);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
 	GADGET_ASSERT(win32Window != nullptr, "Win32 Renderer requires a Win32 window!");

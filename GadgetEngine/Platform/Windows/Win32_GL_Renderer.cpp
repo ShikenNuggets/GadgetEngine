@@ -27,7 +27,7 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 	GADGET_BASIC_ASSERT(w_ > 0);
 	GADGET_BASIC_ASSERT(h_ > 0);
 
-	window = std::make_unique<Win32_Window>(w_, h_, x_, y_);
+	window = std::make_unique<Win32_Window>(w_, h_, x_, y_, renderAPI);
 
 	GADGET_ASSERT(dynamic_cast<Win32_Window*>(window.get()) != nullptr, "Win32 Renderer requires a Win32 window!");
 	glContext = SDL_GL_CreateContext(dynamic_cast<Win32_Window*>(window.get())->GetSDLWindow());

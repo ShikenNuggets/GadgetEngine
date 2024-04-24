@@ -9,11 +9,12 @@
 #pragma warning(default : 26819)
 
 #include "Window.h"
+#include "Graphics/Renderer.h"
 
 namespace Gadget{
 	class Win32_Window : public Window{
 	public:
-		Win32_Window(int w_, int h_, int x_, int y_);
+		Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderAPI_);
 		virtual ~Win32_Window() override;
 
 		virtual uint64_t GetWindowHandle() const override;
