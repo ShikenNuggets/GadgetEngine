@@ -10,15 +10,7 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-struct TestVertex{
-	Vector3 position;
-	Color color;
-};
-
-constexpr DXGI_FORMAT mainBufferFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
-constexpr D3D12_RESOURCE_STATES initialMainBufferState = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
-
-Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), dx12(nullptr), dxr(nullptr), renderSurfacePtr(nullptr), rootSignature(nullptr), pipelineState(nullptr), vertexBuffer(nullptr), mainBuffer(nullptr){
+Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), dx12(nullptr), dxr(nullptr), renderSurfacePtr(nullptr), rootSignature(nullptr), pipelineState(nullptr), vertexBuffer(nullptr)/*, mainBuffer(nullptr)*/{
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_, renderAPI);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
@@ -47,43 +39,6 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 	clearColor = Color::DarkGray();
 #endif //GADGET_DEBUG
 
-	//------------------------------------------------------------------------------------------------------//
-	//-----------------------------------Main Buffer--------------------------------------------------------//
-	//------------------------------------------------------------------------------------------------------//
-	D3D12_RESOURCE_DESC desc{};
-	desc.Alignment = 0;
-	desc.DepthOrArraySize = 1;
-	desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-	desc.Format = mainBufferFormat;
-	desc.Width = x_;
-	desc.Height = y_;
-	desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-	desc.MipLevels = 0;
-	desc.SampleDesc = { 1, 0 };
-
-	//Main Buffer
-	DX12_TextureInitInfo info;
-	info.resourceDesc = &desc;
-	info.initialState = initialMainBufferState;
-	info.clearValue.Format = desc.Format;
-	info.clearValue.Color[0] = clearColor.r;
-	info.clearValue.Color[1] = clearColor.g;
-	info.clearValue.Color[2] = clearColor.b;
-	info.clearValue.Color[3] = clearColor.a;
-
-	mainBuffer = new DX12_RenderTextureInfo(info);
-	GADGET_BASIC_ASSERT(mainBuffer != nullptr);
-	GADGET_BASIC_ASSERT(mainBuffer->GetResource() != nullptr);
-	if(mainBuffer->GetResource() == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Couuld not create DX12_RenderTextureInfo for the main geometry buffer!", __FILE__, __LINE__);
-	}
-
-	mainBuffer->GetResource()->SetName(L"DXR Renderer Main Buffer");
-	//------------------------------------------------------------------------------------------------------//
-	//------------------------------------------------------------------------------------------------------//
-	//------------------------------------------------------------------------------------------------------//
-
 	(void)DX12_ShaderHandler::Initialize();
 	SetupTestAssets();
 
@@ -98,6 +53,10 @@ void Win32_DXR_Renderer::PostInit(){}
 
 void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	(void)dx12->GfxCommand()->BeginFrame();
+
+	dx12->ProcessDeferredReleases(dx12->CurrentFrameIndex());
+
+	auto* mainBuffer = renderSurfacePtr->CurrentBackBuffer();
 	auto* cmdList = dx12->GfxCommand()->CommandList();
 
 	cmdList->SetGraphicsRootSignature(rootSignature.Get());
@@ -106,7 +65,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	cmdList->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
 
 	auto& resourceBarriers = dx12->ResourceBarriers();
-	resourceBarriers.AddTransitionBarrier(mainBuffer->GetResource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
 	auto cpuStart = dx12->RTVHeap().CPUStart();
@@ -144,12 +103,15 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	resourceBarriers.AddTransitionBarrier(dxr->OutputResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COPY_SOURCE);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	resourceBarriers.AddTransitionBarrier(mainBuffer->GetResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_DEST);
+	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_DEST);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	cmdList->CopyResource(mainBuffer->GetResource(), dxr->OutputResource());
+	cmdList->CopyResource(mainBuffer, dxr->OutputResource());
 
-	resourceBarriers.AddTransitionBarrier(mainBuffer->GetResource(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	resourceBarriers.ApplyAllBarriers(cmdList);
+
+	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
 	(void)dx12->GfxCommand()->EndFrame(renderSurfacePtr);
@@ -176,6 +138,11 @@ MeshInfo* Win32_DXR_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t
 TextureInfo* Win32_DXR_Renderer::GenerateAPITextureInfo([[maybe_unused]] const Texture& texture_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
 FontInfo* Win32_DXR_Renderer::GenerateAPIFontInfo([[maybe_unused]] const FreetypeFont& font_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+
+struct TestVertex{
+	Vector3 position;
+	Color color;
+};
 
 ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	GADGET_BASIC_ASSERT(dx12 != nullptr);

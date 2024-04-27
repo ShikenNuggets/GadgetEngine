@@ -20,9 +20,6 @@ DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12
 	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
 
 	CreateAccelerationStructures();
-
-	//dx12.GfxCommand()->CommandList()->Close();
-
 	CreateRaytracingPipeline();
 	CreateRaytracingOutputBuffer();
 	CreateShaderResourceHeap();
