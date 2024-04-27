@@ -20,6 +20,9 @@ DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12
 	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
 
 	CreateAccelerationStructures();
+
+	(void)dx12.GfxCommand()->CloseList();
+
 	CreateRaytracingPipeline();
 	CreateRaytracingOutputBuffer();
 	CreateShaderResourceHeap();
@@ -84,13 +87,14 @@ void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, D
 }
 
 void DXR::CreateAccelerationStructures(){
-	(void)dx12.GfxCommand()->BeginFrame();
+	auto* cmdList = dx12.GfxCommand()->CommandList();
+	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
 	AccelerationStructureBuffers bottomLevelBuffers = CreateBottomLevelAS({{ vertexBuffer.Get(), 3 }});
 	instances = {{ bottomLevelBuffers.pResult, DirectX::XMMatrixIdentity() }};
 	CreateTopLevelAS(instances);
 
-	(void)dx12.GfxCommand()->EndFrame(nullptr);
+	(void)dx12.GfxCommand()->ExecuteCommandsImmediate();
 
 	bottomLevelAS = bottomLevelBuffers.pResult;
 }

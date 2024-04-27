@@ -68,7 +68,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	auto cpuStart = dx12->RTVHeap().CPUStart();
+	D3D12_CPU_DESCRIPTOR_HANDLE cpuStart = D3D12_CPU_DESCRIPTOR_HANDLE(dx12->RTVHeap().CPUStart().ptr + (static_cast<SIZE_T>(renderSurfacePtr->CurrentBackBufferIndex()) * dx12->MainDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)));
 	cmdList->OMSetRenderTargets(1, &cpuStart, FALSE, nullptr);
 
 	//The Actual Rendering Part
@@ -198,7 +198,7 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 
 	vertexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), triangleVertices, vertexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
-	(void)dx12->GfxCommand()->EndFrame(nullptr);
+	(void)dx12->GfxCommand()->ExecuteCommandsImmediate();
 
 	return ErrorCode::OK;
 }

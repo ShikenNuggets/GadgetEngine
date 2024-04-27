@@ -31,6 +31,9 @@ namespace Gadget{
 		[[nodiscard]] ErrorCode Flush();
 		[[nodiscard]] ErrorCode CloseList();
 
+		//Use to execute commands immediately without incrementing the frame index
+		[[nodiscard]] ErrorCode ExecuteCommandsImmediate();
+
 		ID3D12CommandQueue* const CommandQueue() const{ return cmdQueue.Get(); }
 		ID3D12_GraphicsCommandList* const CommandList() const{ return cmdList.Get(); }
 		constexpr uint32_t CurrentFrameIndex() const{ return frameIndex; }

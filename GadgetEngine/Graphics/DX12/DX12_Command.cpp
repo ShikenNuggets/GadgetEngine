@@ -140,6 +140,7 @@ ErrorCode DX12_Command::BeginFrame(){
 }
 
 ErrorCode DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
+	GADGET_ASSERT(renderSurface_ != nullptr, "Do not call DX12_Command::EndFrame without a render surface! Call ExecuteCommandsImmediate instead!");
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 	GADGET_BASIC_ASSERT(cmdQueue != nullptr);
 
@@ -172,7 +173,15 @@ ErrorCode DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
 		return ErrorCode::D3D12_Error;
 	}
 
-	frameIndex = (frameIndex + 1) % DX12::FrameBufferCount;
+	Debug::Log("Frame Index (Before): " + std::to_string(frameIndex));
+	if(renderSurface_ != nullptr){
+		frameIndex = renderSurface_->CurrentBackBufferIndex();
+	}else{
+		Debug::Log("Test");
+		frameIndex = (frameIndex + 1) % DX12::FrameBufferCount;
+	}
+	Debug::Log("Frame Index (After): " + std::to_string(frameIndex));
+
 	GADGET_BASIC_ASSERT(frameIndex < DX12::FrameBufferCount);
 
 	return ErrorCode::OK;
@@ -196,6 +205,26 @@ ErrorCode DX12_Command::CloseList(){
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 	HRESULT result = cmdList->Close();
 	if(FAILED(result)){
+		return ErrorCode::D3D12_Error;
+	}
+
+	return ErrorCode::OK;
+}
+
+ErrorCode DX12_Command::ExecuteCommandsImmediate(){
+	(void)CloseList();
+	ID3D12CommandList* ppCommandLists[] = { CommandList() };
+	static_assert(std::size(ppCommandLists) > 0);
+	cmdQueue->ExecuteCommandLists(std::size(ppCommandLists), &ppCommandLists[0]);
+
+	const uint64_t fv = ++fenceValue;
+	cmdQueue->Signal(fence.Get(), fv);
+
+	fence->SetEventOnCompletion(fenceValue, fenceEvent);
+	WaitForSingleObject(fenceEvent, INFINITE);
+
+	HRESULT hr = cmdList->Reset(cmdFrames[frameIndex].cmdAllocator.Get(), nullptr);
+	if(FAILED(hr)){
 		return ErrorCode::D3D12_Error;
 	}
 
