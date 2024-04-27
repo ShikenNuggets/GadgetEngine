@@ -173,6 +173,7 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
     <ClInclude Include="DX12_ShaderCompiler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DX12_ShaderCompiler.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

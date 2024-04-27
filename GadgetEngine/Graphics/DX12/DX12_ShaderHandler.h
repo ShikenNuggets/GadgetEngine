@@ -22,6 +22,8 @@ namespace Gadget{
 			Amplification,
 			Mesh,
 
+			Library,
+
 			Type_MAX //Do not put anything below this!
 		};
 	};
@@ -31,6 +33,10 @@ namespace Gadget{
 			TestShader_VS = 0,
 			TestShader_PS,
 			PostProcess_PS,
+
+			Hit_Lib,
+			Miss_Lib,
+			RayGen_Lib,
 
 			ID_MAX //Do not put anything below this!
 		};
