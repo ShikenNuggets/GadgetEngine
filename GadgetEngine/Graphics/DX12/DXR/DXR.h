@@ -62,9 +62,9 @@ namespace Gadget{
 		AccelerationStructureBuffers topLevelASBuffers;
 		std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectX::XMMATRIX>> instances;
 
-		Microsoft::WRL::ComPtr<IDxcBlob> rayGenLibrary;
-		Microsoft::WRL::ComPtr<IDxcBlob> hitLibrary;
-		Microsoft::WRL::ComPtr<IDxcBlob> missLibrary;
+		D3D12_SHADER_BYTECODE rayGenLibrary;
+		D3D12_SHADER_BYTECODE hitLibrary;
+		D3D12_SHADER_BYTECODE missLibrary;
 
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> rayGenSignature;
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> hitSignature;

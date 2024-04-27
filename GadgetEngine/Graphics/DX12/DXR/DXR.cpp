@@ -4,6 +4,7 @@
 #include "Graphics/Vertex.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
+#include "Graphics/DX12/DX12_ShaderHandler.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/BottomLevelASGenerator.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/RaytracingPipelineGenerator.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/RootSignatureGenerator.h"
@@ -78,9 +79,9 @@ void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, D
 	uint64_t instanceDescsSize = 0;
 	topLevelASGenerator.ComputeASBufferSizes(dx12.MainDevice(), true, &scratchSize, &resultSize, &instanceDescsSize);
 
-	topLevelASBuffers.pScratch = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, true, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-	topLevelASBuffers.pResult = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSize, true, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-	topLevelASBuffers.pInstanceDesc = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ);
+	topLevelASBuffers.pScratch = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, false, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	topLevelASBuffers.pResult = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	topLevelASBuffers.pInstanceDesc = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE);
 
 	topLevelASGenerator.Generate(dx12.GfxCommand()->CommandList(), topLevelASBuffers.pScratch.Get(), topLevelASBuffers.pResult.Get(), topLevelASBuffers.pInstanceDesc.Get());
 }
@@ -123,14 +124,13 @@ ComPtr<ID3D12RootSignature> DXR::CreateHitSignature(){
 void DXR::CreateRaytracingPipeline(){
 	nv_helpers_dx12::RayTracingPipelineGenerator pipeline(dx12.MainDevice());
 
-	//TODO
-	//rayGenLibrary = nv_helpers_dx12::CompileShaderLibrary(L"RayGen.hlsl");
-	//missLibrary = nv_helpers_dx12::CompileShaderLibrary(L"Miss.hlsl");
-	//hitLibrary = nv_helpers_dx12::CompileShaderLibrary(L"Hit.hlsl");
+	rayGenLibrary = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::RayGen_Lib);
+	missLibrary = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::Miss_Lib);
+	hitLibrary = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::Hit_Lib);
 
-	pipeline.AddLibrary(rayGenLibrary.Get(), { L"RayGen" });
-	pipeline.AddLibrary(missLibrary.Get(), { L"Miss" });
-	pipeline.AddLibrary(hitLibrary.Get(), { L"ClosestHit" });
+	pipeline.AddLibrary(rayGenLibrary, { L"RayGen" });
+	pipeline.AddLibrary(missLibrary, { L"Miss" });
+	pipeline.AddLibrary(hitLibrary, { L"ClosestHit" });
 
 	rayGenSignature = CreateRayGenSignature();
 	missSignature = CreateMissSignature();

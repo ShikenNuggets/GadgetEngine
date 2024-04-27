@@ -83,6 +83,7 @@ public:
   /// compiled with dxc, using a lib_6_3 target. The exported symbols must correspond exactly to the
   /// names of the shaders declared in the library, although unused ones can be omitted.
   void AddLibrary(IDxcBlob* dxilLibrary, const std::vector<std::wstring>& symbolExports);
+  void AddLibrary(D3D12_SHADER_BYTECODE shaderByteCode, const std::vector<std::wstring>& symbolExports); //GADGET NOTE - This overload was added by me so that this can use a pre-compiled library
 
   /// In DXR the hit-related shaders are grouped into hit groups. Such shaders are:
   /// - The intersection shader, which can be used to intersect custom geometry, and is called upon
@@ -126,11 +127,11 @@ private:
   /// Storage for DXIL libraries and their exported symbols
   struct Library
   {
-    Library(IDxcBlob* dxil, const std::vector<std::wstring>& exportedSymbols);
-
+    Library(IDxcBlob* dxil, D3D12_SHADER_BYTECODE shaderByteCode, const std::vector<std::wstring>& exportedSymbols);
     Library(const Library& source);
 
     IDxcBlob* m_dxil;
+    D3D12_SHADER_BYTECODE m_shaderByteCode;
     const std::vector<std::wstring> m_exportedSymbols;
 
     std::vector<D3D12_EXPORT_DESC> m_exports;

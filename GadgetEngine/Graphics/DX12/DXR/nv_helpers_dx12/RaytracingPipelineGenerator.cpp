@@ -67,7 +67,13 @@ RayTracingPipelineGenerator::RayTracingPipelineGenerator(ID3D12Device5* device)
 void RayTracingPipelineGenerator::AddLibrary(IDxcBlob* dxilLibrary,
                                              const std::vector<std::wstring>& symbolExports)
 {
-  m_libraries.emplace_back(Library(dxilLibrary, symbolExports));
+  m_libraries.emplace_back(Library(dxilLibrary, D3D12_SHADER_BYTECODE(), symbolExports));
+}
+
+void RayTracingPipelineGenerator::AddLibrary(D3D12_SHADER_BYTECODE shaderByteCode,
+    const std::vector<std::wstring>& symbolExports)
+{
+    m_libraries.emplace_back(Library(nullptr, shaderByteCode, symbolExports));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -434,9 +440,9 @@ void RayTracingPipelineGenerator::BuildShaderExportList(std::vector<std::wstring
 //
 // Store data related to a DXIL library: the library itself, the exported symbols, and the
 // associated descriptors
-RayTracingPipelineGenerator::Library::Library(IDxcBlob* dxil,
+RayTracingPipelineGenerator::Library::Library(IDxcBlob* dxil, D3D12_SHADER_BYTECODE shaderByteCode,
                                               const std::vector<std::wstring>& exportedSymbols)
-    : m_dxil(dxil), m_exportedSymbols(exportedSymbols), m_exports(exportedSymbols.size())
+    : m_dxil(dxil), m_shaderByteCode(shaderByteCode), m_exportedSymbols(exportedSymbols), m_exports(exportedSymbols.size())
 {
   // Create one export descriptor per symbol
   for (size_t i = 0; i < m_exportedSymbols.size(); i++)
@@ -448,8 +454,16 @@ RayTracingPipelineGenerator::Library::Library(IDxcBlob* dxil,
   }
 
   // Create a library descriptor combining the DXIL code and the export names
-  m_libDesc.DXILLibrary.BytecodeLength = dxil->GetBufferSize();
-  m_libDesc.DXILLibrary.pShaderBytecode = dxil->GetBufferPointer();
+  if (dxil != nullptr)
+  {
+      m_libDesc.DXILLibrary.BytecodeLength = dxil->GetBufferSize();
+      m_libDesc.DXILLibrary.pShaderBytecode = dxil->GetBufferPointer();
+  }
+  else
+  {
+      m_libDesc.DXILLibrary = shaderByteCode;
+  }
+  
   m_libDesc.NumExports = static_cast<UINT>(m_exportedSymbols.size());
   m_libDesc.pExports = m_exports.data();
 }
@@ -460,7 +474,7 @@ RayTracingPipelineGenerator::Library::Library(IDxcBlob* dxil,
 // the default constructor would copy the string pointers of the symbols into the descriptors, which
 // would cause issues when the original Library object gets out of scope
 RayTracingPipelineGenerator::Library::Library(const Library& source)
-    : Library(source.m_dxil, source.m_exportedSymbols)
+    : Library(source.m_dxil, source.m_shaderByteCode, source.m_exportedSymbols)
 {
 }
 
