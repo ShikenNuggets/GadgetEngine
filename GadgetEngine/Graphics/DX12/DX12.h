@@ -58,6 +58,7 @@ namespace Gadget{
 		uint32_t GetDeferredReleaseFlag();
 		void SetDeferredReleaseFlag();
 		void ProcessDeferredReleases(uint32_t frameIndex_);
+		void ProcessDeferredReleasesForCurrentFrame();
 		void ProcessAllDeferredReleases(); //ONLY USE THIS ON SHUTDOWN
 
 		DX12_DescriptorHeap& RTVHeap(){ return rtvDescriptorHeap; }

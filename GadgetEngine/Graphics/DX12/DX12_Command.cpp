@@ -205,6 +205,7 @@ ErrorCode DX12_Command::CloseList(){
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 	HRESULT result = cmdList->Close();
 	if(FAILED(result)){
+		GADGET_LOG_ERROR(SID("RENDER"), "Could not close the command list!");
 		return ErrorCode::D3D12_Error;
 	}
 
@@ -212,18 +213,31 @@ ErrorCode DX12_Command::CloseList(){
 }
 
 ErrorCode DX12_Command::ExecuteCommandsImmediate(){
-	(void)CloseList();
+	auto err = CloseList();
+	if(err != ErrorCode::OK){
+		return err;
+	}
+
 	ID3D12CommandList* ppCommandLists[] = { CommandList() };
 	static_assert(std::size(ppCommandLists) > 0);
 	cmdQueue->ExecuteCommandLists(std::size(ppCommandLists), &ppCommandLists[0]);
 
 	const uint64_t fv = ++fenceValue;
-	cmdQueue->Signal(fence.Get(), fv);
+	HRESULT hr = cmdQueue->Signal(fence.Get(), fv);
+	if(FAILED(hr)){
+		GADGET_LOG_ERROR(SID("RENDER"), "An error occurred on signalling the command queue fence!");
+		return ErrorCode::D3D12_Error;
+	}
 
-	fence->SetEventOnCompletion(fenceValue, fenceEvent);
+	hr = fence->SetEventOnCompletion(fenceValue, fenceEvent);
+	if(FAILED(hr)){
+		GADGET_LOG_ERROR(SID("RENDER"), "Could not set fence event!");
+		return ErrorCode::D3D12_Error;
+	}
+
 	WaitForSingleObject(fenceEvent, INFINITE);
 
-	HRESULT hr = cmdList->Reset(cmdFrames[frameIndex].cmdAllocator.Get(), nullptr);
+	hr = cmdList->Reset(cmdFrames[frameIndex].cmdAllocator.Get(), nullptr);
 	if(FAILED(hr)){
 		return ErrorCode::D3D12_Error;
 	}

@@ -21,7 +21,10 @@ DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12
 
 	CreateAccelerationStructures();
 
-	(void)dx12.GfxCommand()->CloseList();
+	auto err = dx12.GfxCommand()->CloseList();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not close command list after creating acceleration structures!", __FILE__, __LINE__);
+	}
 
 	CreateRaytracingPipeline();
 	CreateRaytracingOutputBuffer();
@@ -34,6 +37,9 @@ DXR& DXR::GetInstance(){
 }
 
 DXR& DXR::GetInstance(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_){
+	GADGET_BASIC_ASSERT(frameSize_.x > 0 && frameSize_.y > 0);
+	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
+
 	if(instance == nullptr){
 		instance = std::make_unique<DXR>(frameSize_, vertexBuffer_);
 	}
@@ -94,7 +100,10 @@ void DXR::CreateAccelerationStructures(){
 	instances = {{ bottomLevelBuffers.pResult, DirectX::XMMatrixIdentity() }};
 	CreateTopLevelAS(instances);
 
-	(void)dx12.GfxCommand()->ExecuteCommandsImmediate();
+	auto err = dx12.GfxCommand()->ExecuteCommandsImmediate();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not execute commands for creating acceleration structures!", __FILE__, __LINE__);
+	}
 
 	bottomLevelAS = bottomLevelBuffers.pResult;
 }
@@ -148,7 +157,10 @@ void DXR::CreateRaytracingPipeline(){
 	pipeline.SetMaxRecursionDepth(1);
 
 	rtStateObject = pipeline.Generate();
-	rtStateObject->QueryInterface(IID_PPV_ARGS(&rtStateObjectProperties));
+	HRESULT hr = rtStateObject->QueryInterface(IID_PPV_ARGS(rtStateObjectProperties.ReleaseAndGetAddressOf()));
+	if(FAILED(hr) || rtStateObjectProperties == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not query interface for rtStateObject!", __FILE__, __LINE__);
+	}
 }
 
 void DXR::CreateRaytracingOutputBuffer(){
@@ -162,7 +174,11 @@ void DXR::CreateRaytracingOutputBuffer(){
 	resDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 	resDesc.MipLevels = 1;
 	resDesc.SampleDesc.Count = 1;
-	dx12.MainDevice()->CreateCommittedResource(&DX12_Helpers::DefaultHeapProperties, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_COPY_SOURCE, nullptr, IID_PPV_ARGS(&outputResource));
+
+	HRESULT hr = dx12.MainDevice()->CreateCommittedResource(&DX12_Helpers::DefaultHeapProperties, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_COPY_SOURCE, nullptr, IID_PPV_ARGS(outputResource.ReleaseAndGetAddressOf()));
+	if(FAILED(hr)){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create output resource!", __FILE__, __LINE__);
+	}
 }
 
 void DXR::CreateShaderResourceHeap(){
@@ -197,7 +213,7 @@ void DXR::CreateShaderBindingTable(){
 
 	sbtStorage = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, sbtSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE);
 	if(!sbtStorage){
-		throw std::logic_error("Could not allocate the shader binding table");
+		Debug::ThrowFatalError(SID("RENDER"), "Could not allocate the shader binding table!", __FILE__, __LINE__);
 	}
 
 	sbtHelper.Generate(sbtStorage.Get(), rtStateObjectProperties.Get());

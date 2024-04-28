@@ -39,8 +39,15 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 	clearColor = Color::DarkGray();
 #endif //GADGET_DEBUG
 
-	(void)DX12_ShaderHandler::Initialize();
-	SetupTestAssets();
+	err = DX12_ShaderHandler::Initialize();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not initialize shader handler! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+	}
+
+	err = SetupTestAssets();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not set up test assets!", __FILE__, __LINE__);
+	}
 
 	dxr = &DXR::GetInstance(window->GetSize(), vertexBuffer.Get());
 }
@@ -52,12 +59,40 @@ Win32_DXR_Renderer::~Win32_DXR_Renderer(){
 void Win32_DXR_Renderer::PostInit(){}
 
 void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
-	(void)dx12->GfxCommand()->BeginFrame();
+	GADGET_BASIC_ASSERT(scene_ != nullptr);
+	GADGET_BASIC_ASSERT(dx12 != nullptr && dx12->IsInitialized());
+	GADGET_BASIC_ASSERT(renderSurfacePtr != nullptr);
 
-	dx12->ProcessDeferredReleases(dx12->CurrentFrameIndex());
+	if(dx12 == nullptr || !dx12->IsInitialized() || dx12->GfxCommand() == nullptr){
+		GADGET_LOG_ERROR(SID("RENDER"), "DX12 was not correctly initialized, cannot render!");
+		return;
+	}
 
-	auto* mainBuffer = renderSurfacePtr->CurrentBackBuffer();
-	auto* cmdList = dx12->GfxCommand()->CommandList();
+	if(renderSurfacePtr == nullptr){
+		GADGET_LOG_ERROR(SID("RENDER"), "DX12 render surface was not correctly initialized, cannot render!");
+		return;
+	}
+
+	auto err = dx12->GfxCommand()->BeginFrame();
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not setup DX12_Command for the next frame!", __FILE__, __LINE__);
+	}
+
+	dx12->ProcessDeferredReleasesForCurrentFrame();
+
+	ID3D12Resource* backBuffer = renderSurfacePtr->CurrentBackBuffer();
+	GADGET_BASIC_ASSERT(backBuffer != nullptr);
+	if(backBuffer == nullptr){
+		GADGET_LOG_ERROR(SID("RENDER"), "Back buffer for current frame was null, cannot render!");
+		return;
+	}
+
+	ID3D12_GraphicsCommandList* cmdList = dx12->GfxCommand()->CommandList();
+	GADGET_BASIC_ASSERT(cmdList != nullptr);
+	if(cmdList == nullptr){
+		GADGET_LOG_ERROR(SID("RENDER"), "DX12 was not correctly initialized, cannot render!");
+		return;
+	}
 
 	cmdList->SetGraphicsRootSignature(rootSignature.Get());
 	cmdList->SetPipelineState(pipelineState.Get());
@@ -65,7 +100,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	cmdList->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
 
 	auto& resourceBarriers = dx12->ResourceBarriers();
-	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	resourceBarriers.AddTransitionBarrier(backBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuStart = D3D12_CPU_DESCRIPTOR_HANDLE(dx12->RTVHeap().CPUStart().ptr + (static_cast<SIZE_T>(renderSurfacePtr->CurrentBackBufferIndex()) * dx12->MainDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)));
@@ -103,18 +138,21 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	resourceBarriers.AddTransitionBarrier(dxr->OutputResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COPY_SOURCE);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_DEST);
+	resourceBarriers.AddTransitionBarrier(backBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_DEST);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	cmdList->CopyResource(mainBuffer, dxr->OutputResource());
+	cmdList->CopyResource(backBuffer, dxr->OutputResource());
 
-	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	resourceBarriers.AddTransitionBarrier(backBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	resourceBarriers.AddTransitionBarrier(mainBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	resourceBarriers.AddTransitionBarrier(backBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	(void)dx12->GfxCommand()->EndFrame(renderSurfacePtr);
+	err = dx12->GfxCommand()->EndFrame(renderSurfacePtr);
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not end command setup for the current frame!", __FILE__, __LINE__);
+	}
 }
 
 void Win32_DXR_Renderer::ClearScreen(){}
@@ -140,12 +178,12 @@ TextureInfo* Win32_DXR_Renderer::GenerateAPITextureInfo([[maybe_unused]] const T
 FontInfo* Win32_DXR_Renderer::GenerateAPIFontInfo([[maybe_unused]] const FreetypeFont& font_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
 struct TestVertex{
-	Vector3 position;
-	Color color;
+	Gadget::Vector3 position;
+	Gadget::Color color;
 };
 
 ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
-	GADGET_BASIC_ASSERT(dx12 != nullptr);
+	GADGET_BASIC_ASSERT(dx12 != nullptr && dx12->IsInitialized());
 	DX12_Helpers::DX12_RootSignatureDesc rootSignatureDesc = DX12_Helpers::DX12_RootSignatureDesc(nullptr, 0, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
 	ComPtr<ID3DBlob> signatureBlob;
@@ -188,17 +226,22 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 
 	dx12->GfxCommand()->CommandList()->SetPipelineState(pipelineState.Get());
 
+	float aspect = 16.0f / 9.0f;
+
 	TestVertex triangleVertices[]{
-		{ Vector3(0.0f, 0.25f, 0.0f), Color(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ Vector3(0.25f, -0.25f, 0.0f), Color(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ Vector3(-0.25f, -0.25f, 0.0f), Color(0.0f, 0.0f, 1.0f, 1.0f) }
+		{ Vector3(0.0f, 0.25f * aspect, 0.0f), Color(1.0f, 0.0f, 0.0f, 1.0f) },
+		{ Vector3(0.25f, -0.25f * aspect, 0.0f), Color(0.0f, 1.0f, 0.0f, 1.0f) },
+		{ Vector3(-0.25f, -0.25f * aspect, 0.0f), Color(0.0f, 0.0f, 1.0f, 1.0f) }
 	};
 
 	const UINT vertexBufferSize = sizeof(triangleVertices);
 
 	vertexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), triangleVertices, vertexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
-	(void)dx12->GfxCommand()->ExecuteCommandsImmediate();
+	auto err = dx12->GfxCommand()->ExecuteCommandsImmediate();
+	if(err != ErrorCode::OK){
+		return err;
+	}
 
 	return ErrorCode::OK;
 }
