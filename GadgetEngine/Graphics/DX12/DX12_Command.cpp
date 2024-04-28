@@ -173,14 +173,9 @@ ErrorCode DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
 		return ErrorCode::D3D12_Error;
 	}
 
-	Debug::Log("Frame Index (Before): " + std::to_string(frameIndex));
 	if(renderSurface_ != nullptr){
 		frameIndex = renderSurface_->CurrentBackBufferIndex();
-	}else{
-		Debug::Log("Test");
-		frameIndex = (frameIndex + 1) % DX12::FrameBufferCount;
 	}
-	Debug::Log("Frame Index (After): " + std::to_string(frameIndex));
 
 	GADGET_BASIC_ASSERT(frameIndex < DX12::FrameBufferCount);
 
