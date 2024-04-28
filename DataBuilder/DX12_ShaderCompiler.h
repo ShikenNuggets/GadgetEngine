@@ -24,6 +24,14 @@ namespace DB{
 		Gadget::ShaderType::Type type;
 	};
 
+	constexpr const char* shaderSourcePath = "Build/Resources/";
+
+	//This is just used for AreCompiledEngineShadersUpToDate check
+	//The include handler figures out the actual inclusion logic on its own
+	constexpr ShaderIncludeInfo shaderIncludes[]{
+		{ "Common.hlsl" },
+	};
+
 	constexpr ShaderFileInfo shaderFiles[]{
 		{ "TestShader.hlsl", "TestShaderVS", Gadget::EngineShader::ID::TestShader_VS, Gadget::ShaderType::Type::Vertex },
 		{ "TestPixelShader.hlsl", "TestShaderPS", Gadget::EngineShader::ID::TestShader_PS, Gadget::ShaderType::Type::Pixel },
@@ -35,7 +43,6 @@ namespace DB{
 	};
 
 	static_assert(_countof(shaderFiles) == (uint32_t)Gadget::EngineShader::ID::ID_MAX);
-	constexpr const char* shaderSourcePath = "Build/Resources/";
 
 	class DX12_ShaderCompiler{
 	public:

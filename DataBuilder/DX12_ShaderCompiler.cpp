@@ -25,14 +25,25 @@ DX12_ShaderCompiler::DX12_ShaderCompiler(){
 }
 
 bool DX12_ShaderCompiler::AreCompiledEngineShadersUpToDate(const std::string& outputFileName_){
-	for(int i = 0; i < (uint32_t)Gadget::EngineShader::ID::ID_MAX; i++){
-		std::string outPath = shaderSourcePath + outputFileName_;
+	std::string outPath = shaderSourcePath + outputFileName_;
+	if(!Gadget::FileSystem::FileExists(outPath)){
+		return false; //Writing to the shader output for the first time
+	}
+
+	//Check last write time against includes
+	for(int i = 0; i < std::size(shaderIncludes); i++){
+		std::string incPath = std::string(shaderSourcePath) + shaderIncludes[i].file;
+		_ASSERT(Gadget::FileSystem::FileExists(incPath));
+
+		if(!Gadget::FileSystem::IsLastWriteTimeNewer(outPath, incPath)){
+			return false;
+		}
+	}
+
+	//Check last write time against engine shaders
+	for(int i = 0; i < std::size(shaderFiles); i++){
 		std::string inPath = std::string(shaderSourcePath) + shaderFiles[i].file;
 		_ASSERT(Gadget::FileSystem::FileExists(inPath));
-
-		if(!Gadget::FileSystem::FileExists(outPath)){
-			return false; //Writing to the shader output for the first time
-		}
 
 		if(!Gadget::FileSystem::IsLastWriteTimeNewer(outPath, inPath)){
 			return false;
