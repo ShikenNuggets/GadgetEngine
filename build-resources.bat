@@ -1,7 +1,7 @@
 xcopy /s "GadgetEngine\Graphics\OpenGL\Shaders" "Build\Resources\" /Y
 xcopy /s "GadgetEngine\Graphics\DX12\Shaders" "Build\Resources\" /Y
 
-START /WAIT /B DataBuilder.lnk
+START /WAIT /B DataBuilder.lnk -f
 
 xcopy /s "Build\Resources\" "Build\Game\Debug\Resources" /Y /d
 xcopy /s "Build\Resources\" "Build\Game\Develop\Resources" /Y /d

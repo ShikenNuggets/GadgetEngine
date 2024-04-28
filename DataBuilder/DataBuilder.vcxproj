@@ -170,9 +170,11 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BuildOptions.h" />
     <ClInclude Include="DX12_ShaderCompiler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BuildOptions.cpp" />
     <ClCompile Include="DX12_ShaderCompiler.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>

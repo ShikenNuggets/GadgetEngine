@@ -9,6 +9,8 @@
 
 #include <Graphics/DX12/DX12_ShaderHandler.h>
 
+#include "BuildOptions.h"
+
 namespace DB{
 	using Shader = Microsoft::WRL::ComPtr<IDxcBlob>;
 	using ShaderList = std::vector<Shader>;
@@ -52,7 +54,7 @@ namespace DB{
 
 		//Returns the number of shaders that were compiled
 		//Returns -1 if an error occurs
-		int CompileEngineShaders(const std::string& outputFileName_ = "EngineShaders.bin");
+		int CompileEngineShaders(const BuildOptions& options_, const std::string& outputFileName_ = "EngineShaders.bin");
 
 	private:
 		IDxcBlob* Compile(IDxcBlobEncoding* sourceBlob_, LPCWSTR* args_, uint32_t numArgs_);

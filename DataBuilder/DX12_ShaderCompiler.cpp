@@ -55,8 +55,8 @@ bool DX12_ShaderCompiler::AreCompiledEngineShadersUpToDate(const std::string& ou
 
 //Returns the number of shaders that were compiled
 //Returns -1 if an error occurs
-int DX12_ShaderCompiler::CompileEngineShaders(const std::string& outputFileName_){
-	if(AreCompiledEngineShadersUpToDate(outputFileName_)){
+int DX12_ShaderCompiler::CompileEngineShaders(const BuildOptions& options_, const std::string& outputFileName_){
+	if(!options_.forceRebuild && AreCompiledEngineShadersUpToDate(outputFileName_)){
 		std::cout << "[DX12] Existing compiled shaders are already up to date" << std::endl;
 		return 0;
 	}
