@@ -50,7 +50,7 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 
 	GADGET_BASIC_ASSERT(device_ != nullptr);
 	if(device_ == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Tried creating command list with null device!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Tried creating command list with null device!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 	}
 
 	//Create Command Queue
@@ -62,7 +62,7 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 
 	HRESULT result = device_->CreateCommandQueue(&desc, IID_PPV_ARGS(cmdQueue.ReleaseAndGetAddressOf()));
 	if(FAILED(result) || cmdQueue == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create command queue!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create command queue!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 	cmdQueue->SetName((typeNamePrefix + L"Queue").c_str());
 
@@ -71,7 +71,7 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 		DX12_CommandFrame& frame = cmdFrames[i];
 		result = device_->CreateCommandAllocator(type_, IID_PPV_ARGS(frame.cmdAllocator.ReleaseAndGetAddressOf()));
 		if(FAILED(result) || frame.cmdAllocator == nullptr){
-			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandAllocator failed!", __FILE__, __LINE__);
+			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandAllocator failed!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 		}
 
 		frame.cmdAllocator->SetName((typeNamePrefix + L"Allocator " + std::to_wstring(i)).c_str());
@@ -81,21 +81,21 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 
 	result = device_->CreateCommandList(0, type_, cmdFrames[0].cmdAllocator.Get(), nullptr, IID_PPV_ARGS(cmdList.ReleaseAndGetAddressOf()));
 	if(FAILED(result) || cmdList == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandList failed!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateCommandList failed!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 	cmdList->SetName((typeNamePrefix + L"List").c_str());
 
 	//Create Fence
 	result = device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence.ReleaseAndGetAddressOf()));
 	if(FAILED(result) || fence == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateFence failed!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device8::CreateFence failed!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 	fence->SetName(L"D3D12 Fence");
 
 	//Create Fence Event
 	fenceEvent = CreateEventEx(nullptr, nullptr, 0, EVENT_ALL_ACCESS);
 	if(fenceEvent == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "CreateEventEx failed!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "CreateEventEx failed!", ErrorCode::Win32_Error, __FILE__, __LINE__);
 	}
 }
 

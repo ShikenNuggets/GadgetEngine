@@ -31,7 +31,7 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 	renderSurfacePtr = new DX12_RenderSurface(window.get(), w_, h_);
 	auto err = dx12->CreateSwapChainForSurface(renderSurfacePtr);
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create swapchain! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create swapchain!", err, __FILE__, __LINE__);
 	}
 
 	Color clearColor = Color::Black();
@@ -41,12 +41,12 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 
 	err = DX12_ShaderHandler::Initialize();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not initialize shader handler! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not initialize shader handler!", err, __FILE__, __LINE__);
 	}
 
 	err = SetupTestAssets();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not set up test assets!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not set up test assets!", err, __FILE__, __LINE__);
 	}
 
 	dxr = &DXR::GetInstance(window->GetSize(), vertexBuffer.Get());
@@ -75,7 +75,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 
 	auto err = dx12->GfxCommand()->BeginFrame();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not setup DX12_Command for the next frame!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not setup DX12_Command for the next frame!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 
 	dx12->ProcessDeferredReleasesForCurrentFrame();
@@ -151,7 +151,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 
 	err = dx12->GfxCommand()->EndFrame(renderSurfacePtr);
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not end command setup for the current frame!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not end command setup for the current frame!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 }
 

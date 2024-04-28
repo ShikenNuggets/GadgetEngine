@@ -129,13 +129,17 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 	#endif //GADGET_PLATFORM_WIN32
 }
 
-void Debug::ThrowFatalError(StringID channel_, const std::string& message_, const std::string& file_, int line_){
+void Debug::ThrowFatalError(StringID channel_, const std::string& message_, ErrorCode err_, const std::string& file_, int line_){
 	GADGET_BASIC_ASSERT(channel_ != StringID::None);
 	GADGET_BASIC_ASSERT(!message_.empty());
+	GADGET_BASIC_ASSERT(err_ > ErrorCode::OK && err_ < ErrorCode::ErrorCode_MAX);
 
-	Debug::Log(channel_, message_, FatalError, file_, line_);
-	PopupErrorMessage("Fatal Error! [" + channel_.GetString() + "]", message_ + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_));
-	throw std::runtime_error(message_ + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_));
+	std::string messageWithErr = message_ + std::string(" Error Code: ") + ErrorCodeStr[static_cast<size_t>(err_)];
+	std::string finalMessage = messageWithErr + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_);
+
+	Debug::Log(channel_, messageWithErr, FatalError, file_, line_);
+	PopupErrorMessage("Fatal Error! [" + channel_.GetString() + "]", finalMessage);
+	throw std::runtime_error(finalMessage);
 }
 
 void Debug::QueueLogForFileWrite(const std::string& message_){

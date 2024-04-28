@@ -24,27 +24,27 @@ DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATUR
 
 	auto err = EnableDebugLayer(options_.gpuBasedValidation);
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not enable debug layer! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not enable debug layer!", err, __FILE__, __LINE__);
 	}
 
 	err = CreateDevice(options_.dxgiFactoryFlags, options_.requireDXR);
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device!", err, __FILE__, __LINE__);
 	}
 
 	err = BreakOnWarningsAndErrors(options_.isDebug);
 	if(err != ErrorCode::OK){
-		Debug::Log(SID("RENDER"), "DX12 code will not break on warnings or errors! Error Code: " + std::to_string((uint32_t)err), Debug::Error, __FILE__, __LINE__);
+		Debug::Log(SID("RENDER"), "DX12 code will not break on warnings or errors!", Debug::Error, __FILE__, __LINE__);
 	}
 
 	err = CreateCommandList(options_.closeCommandListOnInit);
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create command list! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create command list!", err, __FILE__, __LINE__);
 	}
 	
 	err = InitializeDescriptorHeaps();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not initialize descriptor heaps! Error Code: " + std::to_string((uint32_t)err), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not initialize descriptor heaps!", err, __FILE__, __LINE__);
 	}
 }
 
@@ -428,12 +428,12 @@ D3D_FEATURE_LEVEL DX12::GetMaxFeatureLevel(IDXGI_Adapter* adapter_){
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
 	HRESULT result = D3D12CreateDevice(adapter_, minimumFeatureLevel, IID_PPV_ARGS(device.ReleaseAndGetAddressOf()));
 	if(FAILED(result) || !device){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to create D3D12 device at requested minimum feature level!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to create D3D12 device at requested minimum feature level!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 
 	result = device->CheckFeatureSupport(D3D12_FEATURE_FEATURE_LEVELS, &featureLevelInfo, sizeof(featureLevelInfo));
 	if(FAILED(result)){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to check feature level support on D3D12 device!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to check feature level support on D3D12 device!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 
 	return featureLevelInfo.MaxSupportedFeatureLevel;

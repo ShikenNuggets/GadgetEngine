@@ -31,7 +31,7 @@ void DX12_UploadContext::EndUpload(){
 	DX12_UploadHandler& uploadHandler = DX12_UploadHandler::GetInstance();
 	auto err = uploadHandler.EndFrameUpload(uploadFrame);
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "An error occured while uploading the frame!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "An error occured while uploading the frame!", err, __FILE__, __LINE__);
 	}
 
 	uploadFrame = nullptr;

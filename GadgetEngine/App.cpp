@@ -146,7 +146,7 @@ void App::Run(GameInterface& gameInterface_){
 
 	GADGET_BASIC_ASSERT(sceneManager->GetNumScenes() > 0);
 	if(sceneManager->GetNumScenes() == 0){
-		Debug::ThrowFatalError(SID("CORE"), "No scenes were added to the scene manager!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("CORE"), "No scenes were added to the scene manager!", ErrorCode::Invalid_State, __FILE__, __LINE__);
 	}
 
 	sceneManager->LoadScene(0);

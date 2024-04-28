@@ -53,19 +53,19 @@ ErrorCode DX12_RenderSurface::CreateSwapChain(IDXGI_Factory* factory_, ID3D12Com
 	HWND hwnd = (HWND)parent->GetWindowHandle();
 	hr = factory_->CreateSwapChainForHwnd(cmdQueue, hwnd, &desc, nullptr, nullptr, &tempSwapChain);
 	if(FAILED(hr) || tempSwapChain == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create swap chain for HWND [" + std::to_string((uint64_t)hwnd) + "]", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create swap chain for HWND [" + std::to_string((uint64_t)hwnd) + "]", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 
 	hr = factory_->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER);
 	if(FAILED(hr)){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not make window association to HWND [" + std::to_string((uint64_t)hwnd) + "]", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not make window association to HWND [" + std::to_string((uint64_t)hwnd) + "]", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 
 	hr = tempSwapChain.As(&swapChain);
 	if(FAILED(hr)){
-		Debug::ThrowFatalError(SID("RENDER"), "IDXGISwapChain1 could not be queried as IDXGISwapChain3", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "IDXGISwapChain1 could not be queried as IDXGISwapChain3", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 

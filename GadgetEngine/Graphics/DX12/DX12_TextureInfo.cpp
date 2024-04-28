@@ -35,14 +35,14 @@ void DX12_TextureInfo::Initialize(const DX12_TextureInitInfo& info_){
 
 		HRESULT result = DX12::GetInstance().MainDevice()->CreatePlacedResource(info_.heap, info_.allocationInfo.Offset, info_.resourceDesc, info_.initialState, clearValue, IID_PPV_ARGS(&resource));
 		if(FAILED(result)){
-			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device::CreatePlacedResource failed!", __FILE__, __LINE__);
+			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device::CreatePlacedResource failed!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 		}
 	}else{
 		GADGET_BASIC_ASSERT(info_.resourceDesc != nullptr);
 
 		HRESULT result = DX12::GetInstance().MainDevice()->CreateCommittedResource(&DX12_Helpers::DefaultHeapProperties, D3D12_HEAP_FLAG_NONE, info_.resourceDesc, info_.initialState, clearValue, IID_PPV_ARGS(&resource));
 		if(FAILED(result)){
-			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device::CreateCommittedResource failed!", __FILE__, __LINE__);
+			Debug::ThrowFatalError(SID("RENDER"), "ID3D12Device::CreateCommittedResource failed!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 		}
 	}
 

@@ -16,26 +16,26 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	std::string vertCodeStr = FileSystem::ReadFileToString(vertPath_);
 	GADGET_BASIC_ASSERT(!vertCodeStr.empty());
 	if(vertCodeStr.empty()){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not load vertex shader code from [" + vertPath_ + "]!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not load vertex shader code from [" + vertPath_ + "]!", ErrorCode::FileIO, __FILE__, __LINE__);
 	}
 
 	std::string fragCodeStr = FileSystem::ReadFileToString(fragPath_);
 	GADGET_BASIC_ASSERT(!fragCodeStr.empty());
 	if(fragCodeStr.empty()){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not load fragment shader code from [" + fragPath_ + "]!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not load fragment shader code from [" + fragPath_ + "]!", ErrorCode::FileIO, __FILE__, __LINE__);
 		//TODO - Handle fatal error
 	}
 
 	GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
 	GADGET_BASIC_ASSERT(vertShader != 0);
 	if(vertShader == 0){
-		Debug::ThrowFatalError(SID("RENDER"), "Can't create a new vertex shader!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Can't create a new vertex shader!", ErrorCode::OpenGL_Error, __FILE__, __LINE__);
 	}
 
 	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 	GADGET_BASIC_ASSERT(fragShader != 0);
 	if(fragShader == 0){
-		Debug::ThrowFatalError(SID("RENDER"), "Can't create a new shader!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Can't create a new shader!", ErrorCode::OpenGL_Error, __FILE__, __LINE__);
 	}
 
 	const char* vertCode = vertCodeStr.c_str();
@@ -49,14 +49,14 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	glGetShaderiv(vertShader, GL_COMPILE_STATUS, &status);
 	GADGET_BASIC_ASSERT(status != GL_FALSE);
 	if(status == GL_FALSE){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Vertex Shader! GL Error: " + GetShaderLog(vertShader), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Vertex Shader! GL Error: " + GetShaderLog(vertShader), ErrorCode::OpenGL_ShaderCompileFailed, __FILE__, __LINE__);
 	}
 
 	glCompileShader(fragShader);
 	glGetShaderiv(fragShader, GL_COMPILE_STATUS, &status);
 	GADGET_BASIC_ASSERT(status != GL_FALSE);
 	if(status == GL_FALSE){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Fragment Shader! GL Error: " + GetShaderLog(fragShader), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Fragment Shader! GL Error: " + GetShaderLog(fragShader), ErrorCode::OpenGL_ShaderCompileFailed, __FILE__, __LINE__);
 	}
 
 	shader = glCreateProgram();
@@ -67,7 +67,7 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	glGetProgramiv(shader, GL_LINK_STATUS, &status);
 	GADGET_BASIC_ASSERT(status != GL_FALSE);
 	if(status == GL_FALSE){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not link Shader! GL Error: " + GetShaderLog(shader), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not link Shader! GL Error: " + GetShaderLog(shader), ErrorCode::OpenGL_Error, __FILE__, __LINE__);
 	}
 
 	glDetachShader(shader, fragShader);

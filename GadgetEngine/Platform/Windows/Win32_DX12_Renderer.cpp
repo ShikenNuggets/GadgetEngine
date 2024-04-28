@@ -41,7 +41,7 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 
 	auto err = DX12_ShaderHandler::Initialize();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize shader handler!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize shader handler!", err, __FILE__, __LINE__);
 	}
 
 	Color clearColor = Color::Black();
@@ -51,12 +51,12 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 
 	err = DX12_GeometryPass::Initialize(window->GetSize(), clearColor);
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize geometry pass!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize geometry pass!", err, __FILE__, __LINE__);
 	}
 
 	err = DX12_PostProcess::Initialize();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize post-processing submodule!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize post-processing submodule!", err, __FILE__, __LINE__);
 	}
 
 	DX12_UploadHandler::GetInstance(dx12.MainDevice());
@@ -69,7 +69,7 @@ Win32_DX12_Renderer::~Win32_DX12_Renderer(){
 
 	auto err = dx12.PreShutdown();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "An error occurred in the pre-shutdown stage!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "An error occurred in the pre-shutdown stage!", err, __FILE__, __LINE__);
 	}
 
 	DX12_UploadHandler::DeleteInstance();

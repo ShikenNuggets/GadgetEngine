@@ -45,12 +45,12 @@ DX12_UploadHandler::DX12_UploadHandler(ID3D12_Device* device_) : uploadFrames(),
 		DX12_UploadFrame& frame = uploadFrames[i];
 		hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_COPY, IID_PPV_ARGS(frame.cmdAllocator.ReleaseAndGetAddressOf()));
 		if(FAILED(hr) || frame.cmdAllocator == nullptr){
-			Debug::ThrowFatalError(SID("RENDER"), "Could not create command allocator for upload frame!", __FILE__, __LINE__);
+			Debug::ThrowFatalError(SID("RENDER"), "Could not create command allocator for upload frame!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 		}
 
 		hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_COPY, frame.cmdAllocator.Get(), nullptr, IID_PPV_ARGS(frame.cmdList.ReleaseAndGetAddressOf()));
 		if(FAILED(hr) || frame.cmdList == nullptr){
-			Debug::ThrowFatalError(SID("RENDER"), "Could not create command allocator for upload frame!", __FILE__, __LINE__);
+			Debug::ThrowFatalError(SID("RENDER"), "Could not create command allocator for upload frame!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 		}
 
 		frame.cmdList->Close();
@@ -66,13 +66,13 @@ DX12_UploadHandler::DX12_UploadHandler(ID3D12_Device* device_) : uploadFrames(),
 
 	hr = device_->CreateCommandQueue(&desc, IID_PPV_ARGS(cmdQueue.ReleaseAndGetAddressOf()));
 	if(FAILED(hr) || cmdQueue == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create upload command queue!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create upload command queue!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 	cmdQueue->SetName(L"Upload Command Queue");
 
 	hr = device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence.ReleaseAndGetAddressOf()));
 	if(FAILED(hr) || fence == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create upload fence!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create upload fence!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 	fence->SetName(L"Upload Fence");
 

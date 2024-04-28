@@ -19,7 +19,7 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderA
 	GADGET_BASIC_ASSERT(h_ > 0);
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
-		Debug::ThrowFatalError(SID("RENDER"), "SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 	}
 
 	Uint32 windowFlag = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
@@ -27,15 +27,15 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderA
 		windowFlag |= SDL_WINDOW_OPENGL;
 
 		if(SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1) != 0){
-			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
+			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) != 0){
-			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
+			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6) != 0){
-			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
+			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 	}
 
@@ -46,12 +46,12 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderA
 
 	sdlWindow = SDL_CreateWindow(App::GetGameName().c_str(), pos.x, pos.y, GetWidth(), GetHeight(), windowFlag);
 	if(sdlWindow == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Window could not be created! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Window could not be created! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 	}
 
 	//This is enabled by default but it's good to be explicit
 	if(SDL_JoystickEventState(SDL_ENABLE) != 1){
-		Debug::ThrowFatalError(SID("INPUT"), "Joystick events could not be enabled! SDL Error: " + std::string(SDL_GetError()), __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("INPUT"), "Joystick events could not be enabled! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 	}
 
 	SDL_DisplayMode mode;

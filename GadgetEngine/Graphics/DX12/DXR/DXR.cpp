@@ -23,7 +23,7 @@ DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12
 
 	auto err = dx12.GfxCommand()->CloseList();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not close command list after creating acceleration structures!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not close command list after creating acceleration structures!", err, __FILE__, __LINE__);
 	}
 
 	CreateRaytracingPipeline();
@@ -102,7 +102,7 @@ void DXR::CreateAccelerationStructures(){
 
 	auto err = dx12.GfxCommand()->ExecuteCommandsImmediate();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not execute commands for creating acceleration structures!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not execute commands for creating acceleration structures!", err, __FILE__, __LINE__);
 	}
 
 	bottomLevelAS = bottomLevelBuffers.pResult;
@@ -159,7 +159,7 @@ void DXR::CreateRaytracingPipeline(){
 	rtStateObject = pipeline.Generate();
 	HRESULT hr = rtStateObject->QueryInterface(IID_PPV_ARGS(rtStateObjectProperties.ReleaseAndGetAddressOf()));
 	if(FAILED(hr) || rtStateObjectProperties == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not query interface for rtStateObject!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not query interface for rtStateObject!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 }
 
@@ -177,7 +177,7 @@ void DXR::CreateRaytracingOutputBuffer(){
 
 	HRESULT hr = dx12.MainDevice()->CreateCommittedResource(&DX12_Helpers::DefaultHeapProperties, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_COPY_SOURCE, nullptr, IID_PPV_ARGS(outputResource.ReleaseAndGetAddressOf()));
 	if(FAILED(hr)){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create output resource!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create output resource!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 }
 
@@ -213,7 +213,7 @@ void DXR::CreateShaderBindingTable(){
 
 	sbtStorage = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, sbtSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE);
 	if(!sbtStorage){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not allocate the shader binding table!", __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not allocate the shader binding table!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
 
 	sbtHelper.Generate(sbtStorage.Get(), rtStateObjectProperties.Get());
