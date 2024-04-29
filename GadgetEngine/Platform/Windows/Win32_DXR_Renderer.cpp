@@ -1,6 +1,7 @@
 #include "Win32_DXR_Renderer.h"
 
 #include "App.h"
+#include "Graphics/Components/CameraComponent.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_ShaderHandler.h"
@@ -95,7 +96,12 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 		return;
 	}
 
-	dxr->UpdateCameraBuffer();
+	auto cams = scene_->GetAllComponentsInScene<CameraComponent>();
+	if(cams.size() <= 0){
+		return;
+	}
+
+	dxr->UpdateCameraBuffer(cams[0]->GetUpdatedViewMatrix(), cams[0]->GetUpdatedProjectionMatrix());
 
 	auto err = dx12->GfxCommand()->BeginFrame();
 	if(err != ErrorCode::OK){

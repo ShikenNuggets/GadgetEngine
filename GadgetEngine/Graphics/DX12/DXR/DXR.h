@@ -15,6 +15,7 @@
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/TopLevelASGenerator.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/ShaderBindingTableGenerator.h"
+#include "Math/Matrix.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{
@@ -38,7 +39,7 @@ namespace Gadget{
 		nv_helpers_dx12::ShaderBindingTableGenerator& SBTHelper(){ return sbtHelper; }
 		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
 
-		void UpdateCameraBuffer();
+		void UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_);
 
 	private:
 		static std::unique_ptr<DXR> instance;

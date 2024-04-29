@@ -267,25 +267,29 @@ void DXR::CreateCameraBuffer(){
 	dx12.MainDevice()->CreateConstantBufferView(&cbvDesc, srvHandle);
 }
 
-void DXR::UpdateCameraBuffer(){
-	std::vector<DirectX::XMMATRIX> matrices;
-	matrices.reserve(numMatrices);
+void DXR::UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_){
+	//std::vector<DirectX::XMMATRIX> matrices;
+	//matrices.reserve(numMatrices);
 
-	//View Matrix
-	DirectX::XMVECTOR eye = DirectX::XMVectorSet(1.5f, 1.5f, 1.5f, 0.0f);
-	DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	auto viewMatrix = DirectX::XMMatrixLookAtRH(eye, at, up);
+	////View Matrix
+	//DirectX::XMVECTOR eye = DirectX::XMVectorSet(1.5f, 1.5f, 1.5f, 0.0f);
+	//DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	//DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	//auto viewMatrix = DirectX::XMMatrixLookAtRH(eye, at, up);
 
-	//Projection Matrix
-	float fovAngleY = 45.0f * DirectX::XM_PI / 180.0f;
-	auto projMatrix = DirectX::XMMatrixPerspectiveFovRH(fovAngleY, 16.0f / 9.0f, 0.1f, 1000.0f);
+	////Projection Matrix
+	//float fovAngleY = 45.0f * DirectX::XM_PI / 180.0f;
+	//auto projMatrix = DirectX::XMMatrixPerspectiveFovRH(fovAngleY, 16.0f / 9.0f, 0.1f, 1000.0f);
 
-	//View Inverse
-	DirectX::XMVECTOR det{};
-	matrices.push_back(DirectX::XMMatrixInverse(&det, viewMatrix));
-	//Perspective Inverse
-	matrices.push_back(DirectX::XMMatrixInverse(&det, projMatrix));
+	////View Inverse
+	//DirectX::XMVECTOR det{};
+	//matrices.push_back(DirectX::XMMatrixInverse(&det, viewMatrix));
+	////Perspective Inverse
+	//matrices.push_back(DirectX::XMMatrixInverse(&det, projMatrix));
+
+	std::vector<Matrix4> matrices;
+	matrices.push_back(view_.Inverse());
+	matrices.push_back(perspective_.Inverse());
 
 	uint8_t* pData = nullptr;
 	cameraBuffer->Map(0, nullptr, (void**)&pData);
