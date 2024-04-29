@@ -14,10 +14,15 @@ using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DXR> DXR::instance = nullptr;
 
-DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12::GetInstance()), frameSize(frameSize_), vertexBuffer(vertexBuffer_){
+DXR::DXR(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertexBuffers_) : dx12(DX12::GetInstance()), frameSize(frameSize_), vertexBuffers(){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0);
 	GADGET_BASIC_ASSERT(frameSize_.y > 0);
-	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
+	GADGET_BASIC_ASSERT(vertexBuffers_.size() > 0);
+
+	for(size_t i = 0; i < vertexBuffers_.size(); i++){
+		GADGET_BASIC_ASSERT(vertexBuffers_[i] != nullptr);
+		vertexBuffers.push_back(vertexBuffers_[i]);
+	}
 
 	CreateAccelerationStructures();
 
@@ -28,6 +33,9 @@ DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12
 
 	CreateRaytracingPipeline();
 	CreateRaytracingOutputBuffer();
+
+	CreateCameraBuffer();
+
 	CreateShaderResourceHeap();
 	CreateShaderBindingTable();
 }
@@ -36,12 +44,15 @@ DXR& DXR::GetInstance(){
 	return *instance;
 }
 
-DXR& DXR::GetInstance(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_){
+DXR& DXR::GetInstance(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertexBuffers_){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0 && frameSize_.y > 0);
-	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
+	GADGET_BASIC_ASSERT(vertexBuffers_.size() > 0);
+	for(size_t i = 0; i < vertexBuffers_.size(); i++){
+		GADGET_BASIC_ASSERT(vertexBuffers_[i] != nullptr);
+	}
 
 	if(instance == nullptr){
-		instance = std::make_unique<DXR>(frameSize_, vertexBuffer_);
+		instance = std::make_unique<DXR>(frameSize_, vertexBuffers_);
 	}
 
 	GADGET_ASSERT(instance != nullptr, "App instance was somehow nullptr! Nothing will work!");
@@ -96,8 +107,23 @@ void DXR::CreateAccelerationStructures(){
 	auto* cmdList = dx12.GfxCommand()->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
-	AccelerationStructureBuffers bottomLevelBuffers = CreateBottomLevelAS({{ vertexBuffer.Get(), 3 }});
-	instances = {{ bottomLevelBuffers.pResult, DirectX::XMMatrixIdentity() }};
+	std::vector<std::pair<ComPtr<ID3D12Resource>, uint32_t>> buffers;
+	buffers.push_back({ vertexBuffers[0].Get(), 3 });
+	buffers.push_back({ vertexBuffers[1].Get(), 3});
+
+	std::vector<AccelerationStructureBuffers> bottomLevelBuffers;
+
+	for(const auto& b : buffers){
+		bottomLevelBuffers.push_back(CreateBottomLevelAS({ b }));
+	}
+
+	instances = {
+		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixIdentity()},
+		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(-0.6f, 0.0f, 0.0f) },
+		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(0.6f, 0.0f, 0.0f) },
+
+		//{ bottomLevelBuffers[1].pResult, DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f) },
+	};
 	CreateTopLevelAS(instances);
 
 	auto err = dx12.GfxCommand()->ExecuteCommandsImmediate();
@@ -105,15 +131,16 @@ void DXR::CreateAccelerationStructures(){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not execute commands for creating acceleration structures!", err, __FILE__, __LINE__);
 	}
 
-	bottomLevelAS = bottomLevelBuffers.pResult;
+	bottomLevelAS = bottomLevelBuffers[0].pResult;
 }
 
 ComPtr<ID3D12RootSignature> DXR::CreateRayGenSignature(){
 	nv_helpers_dx12::RootSignatureGenerator rsg;
 	rsg.AddHeapRangesParameter(
 		{
-			{ 0, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0 },
-			{ 0, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1 }
+			{ 0, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0 }, //Output buffer
+			{ 0, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1 }, //Top-level acceleration structure
+			{ 0, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 2 }, //Camera parameters
 		}
 	);
 
@@ -196,6 +223,13 @@ void DXR::CreateShaderResourceHeap(){
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.RaytracingAccelerationStructure.Location = topLevelASBuffers.pResult->GetGPUVirtualAddress();
 	dx12.MainDevice()->CreateShaderResourceView(nullptr, &srvDesc, srvHandle);
+
+	srvHandle.ptr += dx12.SRVHeap().DescriptorSize();
+
+	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+	cbvDesc.BufferLocation = cameraBuffer->GetGPUVirtualAddress();
+	cbvDesc.SizeInBytes = cameraBufferSize; 
+	dx12.MainDevice()->CreateConstantBufferView(&cbvDesc, srvHandle);
 }
 
 void DXR::CreateShaderBindingTable(){
@@ -206,7 +240,7 @@ void DXR::CreateShaderBindingTable(){
 
 	sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });
 	sbtHelper.AddMissProgram(L"Miss", {});
-	sbtHelper.AddHitGroup(L"HitGroup", { (void*)(vertexBuffer->GetGPUVirtualAddress()) });
+	sbtHelper.AddHitGroup(L"HitGroup", { (void*)(vertexBuffers[0]->GetGPUVirtualAddress())});
 
 	uint32_t sbtSize = sbtHelper.ComputeSBTSize();
 
@@ -216,4 +250,45 @@ void DXR::CreateShaderBindingTable(){
 	}
 
 	sbtHelper.Generate(sbtStorage.Get(), rtStateObjectProperties.Get());
+}
+
+constexpr uint32_t numMatrices = 2; //View inverse, projection inverse
+
+void DXR::CreateCameraBuffer(){
+	cameraBufferSize = Utils::AlignSizeUp<256>(numMatrices * sizeof(DirectX::XMMATRIX)); //TODO - Apparently the device requires SizeInBytes be a multiple of 256. What if that changes?
+
+	cameraBuffer.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, cameraBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+	cbvDesc.BufferLocation = cameraBuffer->GetGPUVirtualAddress();
+	cbvDesc.SizeInBytes = cameraBufferSize;
+
+	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = dx12.SRVHeap().CPUStart();
+	dx12.MainDevice()->CreateConstantBufferView(&cbvDesc, srvHandle);
+}
+
+void DXR::UpdateCameraBuffer(){
+	std::vector<DirectX::XMMATRIX> matrices;
+	matrices.reserve(numMatrices);
+
+	//View Matrix
+	DirectX::XMVECTOR eye = DirectX::XMVectorSet(1.5f, 1.5f, 1.5f, 0.0f);
+	DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	auto viewMatrix = DirectX::XMMatrixLookAtRH(eye, at, up);
+
+	//Projection Matrix
+	float fovAngleY = 45.0f * DirectX::XM_PI / 180.0f;
+	auto projMatrix = DirectX::XMMatrixPerspectiveFovRH(fovAngleY, 16.0f / 9.0f, 0.1f, 1000.0f);
+
+	//View Inverse
+	DirectX::XMVECTOR det{};
+	matrices.push_back(DirectX::XMMatrixInverse(&det, viewMatrix));
+	//Perspective Inverse
+	matrices.push_back(DirectX::XMMatrixInverse(&det, projMatrix));
+
+	uint8_t* pData = nullptr;
+	cameraBuffer->Map(0, nullptr, (void**)&pData);
+	memcpy(pData, matrices.data(), cameraBufferSize);
+	cameraBuffer->Unmap(0, nullptr);
 }

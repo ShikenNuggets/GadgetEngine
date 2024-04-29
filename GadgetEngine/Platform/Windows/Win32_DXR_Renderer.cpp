@@ -57,7 +57,11 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 		Debug::ThrowFatalError(SID("RENDER"), "Could not set up test assets!", err, __FILE__, __LINE__);
 	}
 
-	dxr = &DXR::GetInstance(window->GetSize(), vertexBuffer.Get());
+	std::vector<ID3D12Resource*> vertexBuffers;
+	vertexBuffers.push_back(vertexBuffer.Get());
+	vertexBuffers.push_back(planeVertexBuffer.Get());
+
+	dxr = &DXR::GetInstance(window->GetSize(), vertexBuffers);
 }
 
 Win32_DXR_Renderer::~Win32_DXR_Renderer(){
@@ -91,6 +95,8 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 		return;
 	}
 
+	dxr->UpdateCameraBuffer();
+
 	auto err = dx12->GfxCommand()->BeginFrame();
 	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not setup DX12_Command for the next frame!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
@@ -113,7 +119,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	}
 
 	cmdList->SetGraphicsRootSignature(rootSignature.Get());
-	cmdList->SetPipelineState(pipelineState.Get());
+	//cmdList->SetPipelineState(pipelineState.Get());
 	cmdList->RSSetViewports(1, &renderSurfacePtr->Viewport());
 	cmdList->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
 
@@ -201,11 +207,22 @@ struct TestVertex{
 };
 
 ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
+	//------------------------------------------------------------//
+	//------------------ Root Signature --------------------------//
+	//------------------------------------------------------------//
 	GADGET_BASIC_ASSERT(dx12 != nullptr && dx12->IsInitialized());
-	DX12_Helpers::DX12_RootSignatureDesc rootSignatureDesc = DX12_Helpers::DX12_RootSignatureDesc(nullptr, 0, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	DX12_Helpers::DX12_RootParameter constantParameter{};
+	DX12_Helpers::DX12_DescriptorRange range = DX12_Helpers::DX12_DescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
+	constantParameter.InitAsTable(D3D12_SHADER_VISIBILITY_ALL, &range, 1);
+
+	DX12_Helpers::DX12_RootSignatureDesc rootSignatureDesc = DX12_Helpers::DX12_RootSignatureDesc(&constantParameter, 1, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
 	rootSignature.Attach(rootSignatureDesc.Create(dx12->MainDevice()));
 
+	//------------------------------------------------------------//
+	//------------------ Pipeline State --------------------------//
+	//------------------------------------------------------------//
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
@@ -233,6 +250,9 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 
 	dx12->GfxCommand()->CommandList()->SetPipelineState(pipelineState.Get());
 
+	//------------------------------------------------------------//
+	//------------------ Triangles -------------------------------//
+	//------------------------------------------------------------//
 	float aspect = 16.0f / 9.0f;
 
 	TestVertex triangleVertices[]{
@@ -241,10 +261,29 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 		{ Vector3(-0.25f, -0.25f * aspect, 0.0f), Color(0.0f, 0.0f, 1.0f, 1.0f) }
 	};
 
-	const UINT vertexBufferSize = sizeof(triangleVertices);
+	constexpr UINT vertexBufferSize = sizeof(triangleVertices);
 
 	vertexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), triangleVertices, vertexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
+	//------------------------------------------------------------//
+	//------------------ Plane -----------------------------------//
+	//------------------------------------------------------------//
+	TestVertex planeVertices[] = {
+		{ Vector3{-1.5f, -.8f, 01.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 0
+		{ Vector3{-1.5f, -.8f, -1.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 1
+		{ Vector3{01.5f, -.8f, 01.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 2
+		{ Vector3{01.5f, -.8f, 01.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 2
+		{ Vector3{-1.5f, -.8f, -1.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 1
+		{ Vector3{01.5f, -.8f, -1.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}  // 4
+	};
+
+	constexpr UINT planeBufferSize = sizeof(planeVertices);
+
+	planeVertexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), planeVertices, planeBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	//------------------------------------------------------------//
+	//------------------ Execute Commands ------------------------//
+	//------------------------------------------------------------//
 	auto err = dx12->GfxCommand()->ExecuteCommandsImmediate();
 	if(err != ErrorCode::OK){
 		return err;

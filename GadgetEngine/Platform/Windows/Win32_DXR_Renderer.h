@@ -39,6 +39,7 @@ namespace Gadget{
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 		Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
+		Microsoft::WRL::ComPtr<ID3D12Resource> planeVertexBuffer;
 
 		ErrorCode SetupTestAssets();
 	};

@@ -26,17 +26,19 @@ namespace Gadget{
 
 	class DXR{
 	public:
-		DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_);
+		DXR(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertexBuffers_);
 		DISABLE_COPY_AND_MOVE(DXR);
 
 		static DXR& GetInstance();
-		static DXR& GetInstance(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_);
+		static DXR& GetInstance(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertexBuffers_);
 		[[nodiscard]] static ErrorCode DeleteInstance();
 
 		ID3D12StateObject* RTStateObject(){ return rtStateObject.Get(); }
 		ID3D12Resource* OutputResource(){ return outputResource.Get(); }
 		nv_helpers_dx12::ShaderBindingTableGenerator& SBTHelper(){ return sbtHelper; }
 		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
+
+		void UpdateCameraBuffer();
 
 	private:
 		static std::unique_ptr<DXR> instance;
@@ -53,6 +55,8 @@ namespace Gadget{
 		void CreateRaytracingOutputBuffer();
 		void CreateShaderResourceHeap();
 		void CreateShaderBindingTable();
+
+		void CreateCameraBuffer();
 
 		DX12& dx12;
 		ScreenCoordinate frameSize;
@@ -78,7 +82,9 @@ namespace Gadget{
 		nv_helpers_dx12::ShaderBindingTableGenerator sbtHelper;
 		Microsoft::WRL::ComPtr<ID3D12Resource> sbtStorage;
 
-		Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
+		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexBuffers;
+		Microsoft::WRL::ComPtr<ID3D12Resource> cameraBuffer;
+		uint32_t cameraBufferSize;
 	};
 }
 

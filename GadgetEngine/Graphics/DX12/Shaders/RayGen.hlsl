@@ -13,10 +13,13 @@ void RayGen()
     uint2 launchIndex = DispatchRaysIndex().xy;
     float2 dims = float2(DispatchRaysDimensions().xy);
     float2 d = (((launchIndex.xy + 0.5f) / dims.xy) * 2.0f - 1.0f);
+    
+    float aspectRatio = dims.x / dims.y;
+    float4 target = mul(projInv, float4(d.x, -d.y, 1.0f, 1.0f));
 
     RayDesc ray;
-    ray.Origin = float3(d.x, -d.y, 1.0f);
-    ray.Direction = float3(0.0f, 0.0f, -1.0f);
+    ray.Origin = mul(viewInv, float4(0.0f, 0.0f, 0.0f, 1.0f)).xyz;
+    ray.Direction = mul(viewInv, float4(target.xyz, 0.0f)).xyz;
     ray.TMin = 0;
     ray.TMax = 100000;
 

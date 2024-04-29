@@ -32,10 +32,10 @@ DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATUR
 		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device!", err, __FILE__, __LINE__);
 	}
 
-	err = BreakOnWarningsAndErrors(options_.isDebug);
+	/*err = BreakOnWarningsAndErrors(options_.isDebug);
 	if(err != ErrorCode::OK){
 		Debug::Log(SID("RENDER"), "DX12 code will not break on warnings or errors!", Debug::Error, __FILE__, __LINE__);
-	}
+	}*/
 
 	err = CreateCommandList(options_.closeCommandListOnInit);
 	if(err != ErrorCode::OK){
