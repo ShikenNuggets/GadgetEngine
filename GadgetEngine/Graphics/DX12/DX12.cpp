@@ -75,7 +75,7 @@ ErrorCode DX12::DeleteInstance(){
 		auto err = instance->PreShutdown();
 		if(err != ErrorCode::OK){
 			Debug::Log(SID("RENDER"), "DX12::PreShutdown failed!", Debug::Error, __FILE__, __LINE__);
-			return err;
+			//We should try to shutdown anyway even if something goes wrong in PreShutdown
 		}
 
 		err = instance->Shutdown();

@@ -4,6 +4,7 @@
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_ShaderHandler.h"
+#include "Graphics/DX12/DX12_UploadHandler.h"
 #include "Graphics/DX12/DXR/DXR.h"
 #include "Platform/Windows/Win32_Window.h"
 
@@ -44,6 +45,8 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 		Debug::ThrowFatalError(SID("RENDER"), "Could not initialize shader handler!", err, __FILE__, __LINE__);
 	}
 
+	DX12_UploadHandler::GetInstance(dx12->MainDevice());
+
 	err = SetupTestAssets();
 	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not set up test assets!", err, __FILE__, __LINE__);
@@ -53,7 +56,17 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 }
 
 Win32_DXR_Renderer::~Win32_DXR_Renderer(){
+	DX12_UploadHandler::DeleteInstance();
 	DX12_ShaderHandler::Shutdown();
+
+	//TODO - The ownership semantics for the renderSurfacePtr are kinda weird
+	if(renderSurfacePtr != nullptr){
+		delete renderSurfacePtr;
+		renderSurfacePtr = nullptr;
+		window->SetRenderSurface(nullptr);
+	}
+
+	(void)DX12::DeleteInstance(); //Not a whole lot we can do for error handling in a destructor
 }
 
 void Win32_DXR_Renderer::PostInit(){}
