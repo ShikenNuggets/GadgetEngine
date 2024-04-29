@@ -74,7 +74,6 @@ namespace Gadget{
 		Microsoft::WRL::ComPtr<ID3D12StateObjectProperties> rtStateObjectProperties;
 
 		Microsoft::WRL::ComPtr<ID3D12Resource> outputResource;
-		DX12_DescriptorHeap srvUavHeap;
 
 		nv_helpers_dx12::ShaderBindingTableGenerator sbtHelper;
 		Microsoft::WRL::ComPtr<ID3D12Resource> sbtStorage;

@@ -30,8 +30,8 @@ namespace Gadget{
 			D3D12_HEAP_TYPE_UPLOAD,
 			D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
 			D3D12_MEMORY_POOL_UNKNOWN,
-			0,	//CreationNodeMask
-			0	//VisibleNodeMask
+			1,	//CreationNodeMask
+			1	//VisibleNodeMask
 		};
 
 		constexpr D3D12_RASTERIZER_DESC RasterizerNoCulling{

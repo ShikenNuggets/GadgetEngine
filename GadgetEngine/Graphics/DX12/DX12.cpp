@@ -285,6 +285,21 @@ uint32_t DX12::CurrentFrameIndex() const{
 	return gfxCommand->CurrentFrameIndex();
 }
 
+ErrorCode DX12::FlushAndSetFrameIndex(uint32_t frameIndex_){
+	if(!IsInitialized()){
+		return ErrorCode::Invalid_State;
+	}
+
+	auto err = gfxCommand->Flush();
+	if(err != ErrorCode::OK){
+		GADGET_LOG_ERROR(SID("RENDER"), "Could not flush commands before setting the new frame index!");
+		return err;
+	}
+
+	gfxCommand->SetCurrentFrameIndex(frameIndex_);
+	return ErrorCode::OK;
+}
+
 ErrorCode DX12::CreateSwapChainForSurface(DX12_RenderSurface* surface_){
 	GADGET_BASIC_ASSERT(surface_ != nullptr);
 	GADGET_BASIC_ASSERT(dxgiFactory != nullptr);

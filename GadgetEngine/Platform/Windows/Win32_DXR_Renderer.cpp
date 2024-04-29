@@ -35,6 +35,11 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 		Debug::ThrowFatalError(SID("RENDER"), "Could not create swapchain!", err, __FILE__, __LINE__);
 	}
 
+	err = dx12->FlushAndSetFrameIndex(renderSurfacePtr->CurrentBackBufferIndex()); //This SHOULD always be zero on startup... but just in case it's not
+	if(err != ErrorCode::OK){
+		Debug::ThrowFatalError(SID("RENDER"), "Something went wrong when setting the new frame index!", err, __FILE__, __LINE__);
+	}
+
 	Color clearColor = Color::Black();
 #ifdef GADGET_DEBUG
 	clearColor = Color::DarkGray();
@@ -116,7 +121,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	resourceBarriers.AddTransitionBarrier(backBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE cpuStart = D3D12_CPU_DESCRIPTOR_HANDLE(dx12->RTVHeap().CPUStart().ptr + (static_cast<SIZE_T>(renderSurfacePtr->CurrentBackBufferIndex()) * dx12->MainDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)));
+	D3D12_CPU_DESCRIPTOR_HANDLE cpuStart = D3D12_CPU_DESCRIPTOR_HANDLE(dx12->RTVHeap().CPUStart().ptr + (static_cast<SIZE_T>(renderSurfacePtr->CurrentBackBufferIndex()) * dx12->RTVHeap().DescriptorSize()));
 	cmdList->OMSetRenderTargets(1, &cpuStart, FALSE, nullptr);
 
 	//The Actual Rendering Part
@@ -199,18 +204,7 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	GADGET_BASIC_ASSERT(dx12 != nullptr && dx12->IsInitialized());
 	DX12_Helpers::DX12_RootSignatureDesc rootSignatureDesc = DX12_Helpers::DX12_RootSignatureDesc(nullptr, 0, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
-	ComPtr<ID3DBlob> signatureBlob;
-	ComPtr<ID3DBlob> errorBlob;
-	
-	HRESULT hr = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, signatureBlob.ReleaseAndGetAddressOf(), errorBlob.ReleaseAndGetAddressOf());
-	if(FAILED(hr) || signatureBlob == nullptr){
-		return ErrorCode::D3D12_Error;
-	}
-
-	hr = dx12->MainDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(rootSignature.ReleaseAndGetAddressOf()));
-	if(FAILED(hr) || rootSignature == nullptr){
-		return ErrorCode::D3D12_Error;
-	}
+	rootSignature.Attach(rootSignatureDesc.Create(dx12->MainDevice()));
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
@@ -222,7 +216,7 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	psoDesc.pRootSignature = rootSignature.Get();
 	psoDesc.VS = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::TestShader_VS);
 	psoDesc.PS = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::TestShader_PS);
-	psoDesc.RasterizerState = DX12_Helpers::RasterizerNoCulling;
+	psoDesc.RasterizerState = DX12_Helpers::RasterizerBackFaceCulling;
 	psoDesc.BlendState = DX12_Helpers::BlendDisabled;
 	psoDesc.DepthStencilState.DepthEnable = FALSE;
 	psoDesc.DepthStencilState.StencilEnable = FALSE;
@@ -232,7 +226,7 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.SampleDesc.Count = 1;
 
-	hr = dx12->MainDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
+	HRESULT hr = dx12->MainDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
 	if(FAILED(hr) || pipelineState == nullptr){
 		return ErrorCode::D3D12_Error;
 	}

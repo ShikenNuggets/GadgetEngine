@@ -14,7 +14,7 @@ using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DXR> DXR::instance = nullptr;
 
-DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12::GetInstance()), frameSize(frameSize_), vertexBuffer(vertexBuffer_), srvUavHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV){
+DXR::DXR(ScreenCoordinate frameSize_, ID3D12Resource* vertexBuffer_) : dx12(DX12::GetInstance()), frameSize(frameSize_), vertexBuffer(vertexBuffer_){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0);
 	GADGET_BASIC_ASSERT(frameSize_.y > 0);
 	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
@@ -60,7 +60,7 @@ AccelerationStructureBuffers DXR::CreateBottomLevelAS(std::vector<std::pair<ComP
 	nv_helpers_dx12::BottomLevelASGenerator blas;
 
 	for(const auto& buffer : vVertexBuffers_){
-		blas.AddVertexBuffer(buffer.first.Get(), 0, buffer.second, sizeof(Vertex), nullptr, 0);
+		blas.AddVertexBuffer(buffer.first.Get(), 0, buffer.second, 28, nullptr, 0); //TODO - Hardcoding the test vertex size here (28) is obviously no good
 	}
 
 	uint64_t scratchSizeInBytes = 0;
@@ -182,14 +182,13 @@ void DXR::CreateRaytracingOutputBuffer(){
 }
 
 void DXR::CreateShaderResourceHeap(){
-	srvUavHeap.Initialize(dx12.MainDevice(), 2, true);
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = srvUavHeap.CPUStart();
+	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = dx12.SRVHeap().CPUStart();
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 	dx12.MainDevice()->CreateUnorderedAccessView(outputResource.Get(), nullptr, &uavDesc, srvHandle);
 
-	srvHandle.ptr += dx12.MainDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	srvHandle.ptr += dx12.SRVHeap().DescriptorSize();
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -202,7 +201,7 @@ void DXR::CreateShaderResourceHeap(){
 void DXR::CreateShaderBindingTable(){
 	sbtHelper.Reset();
 
-	D3D12_GPU_DESCRIPTOR_HANDLE srvUavHeapHandle = srvUavHeap.GPUStart();
+	D3D12_GPU_DESCRIPTOR_HANDLE srvUavHeapHandle = dx12.SRVHeap().GPUStart();
 	auto heapPointer = reinterpret_cast<UINT64*>(srvUavHeapHandle.ptr);
 
 	sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });

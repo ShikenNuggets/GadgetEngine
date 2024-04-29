@@ -54,6 +54,8 @@ namespace Gadget{
 		DX12_Command* const GfxCommand() const{ return gfxCommand; }
 		uint32_t CurrentFrameIndex() const;
 
+		[[nodiscard]] ErrorCode FlushAndSetFrameIndex(uint32_t frameIndex_); //Calling this in the main render loop is not recommended, it should only be used on startup
+
 		void DeferredRelease(IUnknown* resource_);
 		uint32_t GetDeferredReleaseFlag();
 		void SetDeferredReleaseFlag();

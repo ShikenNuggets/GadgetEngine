@@ -24,8 +24,8 @@ ErrorCode DX12_RenderSurface::CreateSwapChain(IDXGI_Factory* factory_, ID3D12Com
 	}
 
 	format = format_;
-	if(format_ == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB){
-		format_ = DXGI_FORMAT_R8G8B8A8_UNORM;
+	if(format == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB){
+		format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	}
 
 	HRESULT hr = factory_->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(uint32_t));
@@ -40,7 +40,7 @@ ErrorCode DX12_RenderSurface::CreateSwapChain(IDXGI_Factory* factory_, ID3D12Com
 	desc.BufferCount = DX12::FrameBufferCount;
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.Flags = allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
-	desc.Format = format_;
+	desc.Format = format;
 	desc.Width = size.x;
 	desc.Height = size.y;
 	desc.SampleDesc.Count = 1;
@@ -50,7 +50,7 @@ ErrorCode DX12_RenderSurface::CreateSwapChain(IDXGI_Factory* factory_, ID3D12Com
 	desc.Stereo = false;
 
 	ComPtr<IDXGISwapChain1> tempSwapChain = nullptr;
-	HWND hwnd = (HWND)parent->GetWindowHandle();
+	HWND hwnd = reinterpret_cast<HWND>(parent->GetWindowHandle());
 	hr = factory_->CreateSwapChainForHwnd(cmdQueue, hwnd, &desc, nullptr, nullptr, &tempSwapChain);
 	if(FAILED(hr) || tempSwapChain == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not create swap chain for HWND [" + std::to_string((uint64_t)hwnd) + "]", ErrorCode::D3D12_Error, __FILE__, __LINE__);

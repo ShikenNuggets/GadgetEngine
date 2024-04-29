@@ -122,7 +122,7 @@ ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, const void* d
 
 	if(data_){
 		if(isCpuAccessible_){
-			D3D12_RANGE range{};
+			D3D12_RANGE range{ 0, 0 };
 			void* cpuAddress = nullptr;
 			resource->Map(0, &range, reinterpret_cast<void**>(&cpuAddress));
 			GADGET_BASIC_ASSERT(cpuAddress != nullptr);

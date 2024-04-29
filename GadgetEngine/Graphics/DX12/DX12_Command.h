@@ -38,6 +38,10 @@ namespace Gadget{
 		ID3D12_GraphicsCommandList* const CommandList() const{ return cmdList.Get(); }
 		constexpr uint32_t CurrentFrameIndex() const{ return frameIndex; }
 
+		//Avoid calling this directly if you don't know exactly what you're doing
+		//You probably want to use DX12::FlushAndSetFrameIndex
+		constexpr void SetCurrentFrameIndex(uint32_t frameIndex_){ frameIndex = frameIndex_; }
+
 	private:
 		Microsoft::WRL::ComPtr<ID3D12CommandQueue> cmdQueue;
 		Microsoft::WRL::ComPtr<ID3D12_GraphicsCommandList> cmdList;
