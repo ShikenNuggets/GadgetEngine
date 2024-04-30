@@ -7,6 +7,7 @@
 #include "Graphics/DX12/DX12_ShaderHandler.h"
 #include "Graphics/DX12/DX12_UploadHandler.h"
 #include "Graphics/DX12/DXR/DXR.h"
+#include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 #include "Platform/Windows/Win32_Window.h"
 
 using namespace Gadget;
@@ -199,7 +200,7 @@ void Win32_DXR_Renderer::SetCullFace([[maybe_unused]] CullFace cullFace_){}
 
 Shader* Win32_DXR_Renderer::GenerateAPIShader([[maybe_unused]] StringID shaderResource_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
-MeshInfo* Win32_DXR_Renderer::GenerateAPIMeshInfo([[maybe_unused]] const Mesh& mesh_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+MeshInfo* Win32_DXR_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){ return new DXR_MeshInfo(mesh_); }
 
 MeshInfo* Win32_DXR_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t numVertices_, [[maybe_unused]] size_t numIndices_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
@@ -275,12 +276,12 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	//------------------ Plane -----------------------------------//
 	//------------------------------------------------------------//
 	TestVertex planeVertices[] = {
-		{ Vector3{-1.5f, -.8f, 01.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 0
-		{ Vector3{-1.5f, -.8f, -1.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 1
-		{ Vector3{01.5f, -.8f, 01.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 2
-		{ Vector3{01.5f, -.8f, 01.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 2
-		{ Vector3{-1.5f, -.8f, -1.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}, // 1
-		{ Vector3{01.5f, -.8f, -1.5f}, Color{1.0f, 1.0f, 1.0f, 1.0f}}  // 4
+		{ Vector3(-1.5f, -0.8f, 1.5f), Color::White() }, // 0
+		{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
+		{ Vector3(01.5f, -0.8f, 1.5f), Color::White() }, // 2
+		{ Vector3(01.5f, -0.8f, 1.5f), Color::White() }, // 2
+		{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
+		{ Vector3(1.5f, -0.8f, -1.5f), Color::White() }  // 4
 	};
 
 	constexpr UINT planeBufferSize = sizeof(planeVertices);

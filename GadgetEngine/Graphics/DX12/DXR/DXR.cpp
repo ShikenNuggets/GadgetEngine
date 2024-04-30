@@ -24,7 +24,7 @@ DXR::DXR(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertex
 		vertexBuffers.push_back(vertexBuffers_[i]);
 	}
 
-	CreateAccelerationStructures();
+	CreateAccelerationStructures({});
 
 	auto err = dx12.GfxCommand()->CloseList();
 	if(err != ErrorCode::OK){
@@ -103,13 +103,13 @@ void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, D
 	topLevelASGenerator.Generate(dx12.GfxCommand()->CommandList(), topLevelASBuffers.pScratch.Get(), topLevelASBuffers.pResult.Get(), topLevelASBuffers.pInstanceDesc.Get());
 }
 
-void DXR::CreateAccelerationStructures(){
+void DXR::CreateAccelerationStructures(const std::vector<ID3D12_Resource*>& resources_){
 	auto* cmdList = dx12.GfxCommand()->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
 	std::vector<std::pair<ComPtr<ID3D12Resource>, uint32_t>> buffers;
 	buffers.push_back({ vertexBuffers[0].Get(), 3 });
-	buffers.push_back({ vertexBuffers[1].Get(), 3});
+	buffers.push_back({ vertexBuffers[1].Get(), 6 });
 
 	std::vector<AccelerationStructureBuffers> bottomLevelBuffers;
 
@@ -122,7 +122,7 @@ void DXR::CreateAccelerationStructures(){
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(-0.6f, 0.0f, 0.0f) },
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(0.6f, 0.0f, 0.0f) },
 
-		//{ bottomLevelBuffers[1].pResult, DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f) },
+		{ bottomLevelBuffers[1], DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f) },
 	};
 	CreateTopLevelAS(instances);
 
@@ -255,7 +255,7 @@ void DXR::CreateShaderBindingTable(){
 constexpr uint32_t numMatrices = 2; //View inverse, projection inverse
 
 void DXR::CreateCameraBuffer(){
-	cameraBufferSize = Utils::AlignSizeUp<256>(numMatrices * sizeof(DirectX::XMMATRIX)); //TODO - Apparently the device requires SizeInBytes be a multiple of 256. What if that changes?
+	cameraBufferSize = static_cast<uint32_t>(Utils::AlignSizeUp<256>(numMatrices * sizeof(DirectX::XMMATRIX))); //TODO - Apparently the device requires SizeInBytes be a multiple of 256. What if that changes?
 
 	cameraBuffer.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, cameraBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
@@ -268,25 +268,6 @@ void DXR::CreateCameraBuffer(){
 }
 
 void DXR::UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_){
-	//std::vector<DirectX::XMMATRIX> matrices;
-	//matrices.reserve(numMatrices);
-
-	////View Matrix
-	//DirectX::XMVECTOR eye = DirectX::XMVectorSet(1.5f, 1.5f, 1.5f, 0.0f);
-	//DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	//DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	//auto viewMatrix = DirectX::XMMatrixLookAtRH(eye, at, up);
-
-	////Projection Matrix
-	//float fovAngleY = 45.0f * DirectX::XM_PI / 180.0f;
-	//auto projMatrix = DirectX::XMMatrixPerspectiveFovRH(fovAngleY, 16.0f / 9.0f, 0.1f, 1000.0f);
-
-	////View Inverse
-	//DirectX::XMVECTOR det{};
-	//matrices.push_back(DirectX::XMMatrixInverse(&det, viewMatrix));
-	////Perspective Inverse
-	//matrices.push_back(DirectX::XMMatrixInverse(&det, projMatrix));
-
 	std::vector<Matrix4> matrices;
 	matrices.push_back(view_.Inverse());
 	matrices.push_back(perspective_.Inverse());

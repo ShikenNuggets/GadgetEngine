@@ -189,12 +189,12 @@ private:
   /// For each category, the size of an entry in the SBT depends on the maximum number of resources
   /// used by the shaders in that category.The helper computes those values automatically in
   /// GetEntrySize()
-  uint32_t m_rayGenEntrySize;
-  uint32_t m_missEntrySize;
-  uint32_t m_hitGroupEntrySize;
+  uint32_t m_rayGenEntrySize = 0;
+  uint32_t m_missEntrySize = 0;
+  uint32_t m_hitGroupEntrySize = 0;
 
   /// The program names are translated into program identifiers.The size in bytes of an identifier
   /// is provided by the device and is the same for all categories.
-  UINT m_progIdSize;
+  UINT m_progIdSize = 0;
 };
 } // namespace nv_helpers_dx12

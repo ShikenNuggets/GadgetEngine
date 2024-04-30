@@ -10,10 +10,13 @@ namespace Gadget{
 	class DXR_MeshInfo : public MeshInfo{
 	public:
 		DXR_MeshInfo(const Mesh& mesh_);
-		virtual ~DXR_MeshInfo() override;
+		virtual ~DXR_MeshInfo() override = default;
 
 		virtual void Bind() override{}
 		virtual void Unbind() override{}
+
+		ID3D12_Resource* VertexBuffer(){ return vertexBuffer.Get(); }
+		ID3D12_Resource* BottomLevelAS(){ return bottomLevelAS.Get(); }
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D12_Resource> vertexBuffer;

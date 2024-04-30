@@ -39,14 +39,15 @@ namespace Gadget{
 		nv_helpers_dx12::ShaderBindingTableGenerator& SBTHelper(){ return sbtHelper; }
 		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
 
+		AccelerationStructureBuffers CreateBottomLevelAS(std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, uint32_t>> vVertexBuffers_);
+		void CreateAccelerationStructures(const std::vector<ID3D12_Resource*>& resources_);
+
 		void UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_);
 
 	private:
 		static std::unique_ptr<DXR> instance;
 
-		AccelerationStructureBuffers CreateBottomLevelAS(std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, uint32_t>> vVertexBuffers_);
 		void CreateTopLevelAS(const std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectX::XMMATRIX>>& instances_);
-		void CreateAccelerationStructures();
 
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateRayGenSignature();
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateMissSignature();

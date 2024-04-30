@@ -102,7 +102,9 @@ ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, const void* d
 	desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	desc.Flags = isCpuAccessible_ ? D3D12_RESOURCE_FLAG_NONE : flags_;
 
+#pragma warning(disable : 26813) //Use 'bitwise and' to check if a flag is set - == is intentional in this case
 	GADGET_BASIC_ASSERT(desc.Flags == D3D12_RESOURCE_FLAG_NONE || desc.Flags == D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+#pragma warning(default : 26813)
 
 	ID3D12Resource* resource = nullptr;
 	const D3D12_RESOURCE_STATES resourceState = isCpuAccessible_ ? D3D12_RESOURCE_STATE_GENERIC_READ : state_;

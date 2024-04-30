@@ -147,15 +147,15 @@ private:
   };
 
   /// Construction flags, indicating whether the AS supports iterative updates
-  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAGS m_flags;
+  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAGS m_flags = D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_NONE;
   /// Instances contained in the top-level AS
   std::vector<Instance> m_instances;
 
   /// Size of the temporary memory used by the TLAS builder
-  UINT64 m_scratchSizeInBytes;
+  UINT64 m_scratchSizeInBytes = 0;
   /// Size of the buffer containing the instance descriptors
-  UINT64 m_instanceDescsSizeInBytes;
+  UINT64 m_instanceDescsSizeInBytes = 0;
   /// Size of the buffer containing the TLAS
-  UINT64 m_resultSizeInBytes;
+  UINT64 m_resultSizeInBytes = 0;
 };
 } // namespace nv_helpers_dx12
