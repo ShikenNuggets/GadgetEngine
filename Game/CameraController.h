@@ -19,28 +19,40 @@ namespace Example{
 		virtual ~CameraController() override{}
 
 		virtual void OnUpdate(float deltaTime_) override{
+			constexpr float moveSpeed = 2.5f;
+			constexpr float rotateSpeed = 45.0f;
+
 			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_W)){
-				parent->Translate(parent->GetTransform().Forward() * 2.5f * deltaTime_);
+				parent->Translate(parent->GetTransform().Forward() * moveSpeed * deltaTime_);
 			}else if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_S)){
-				parent->Translate(parent->GetTransform().Forward() * -2.5f * deltaTime_);
+				parent->Translate(parent->GetTransform().Forward() * -moveSpeed * deltaTime_);
 			}
 
 			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_A)){
-				parent->Translate(parent->GetTransform().Right() * -2.5f * deltaTime_);
+				parent->Translate(parent->GetTransform().Right() * -moveSpeed * deltaTime_);
 			}else if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_D)){
-				parent->Translate(parent->GetTransform().Right() * 2.5f * deltaTime_);
+				parent->Translate(parent->GetTransform().Right() * moveSpeed * deltaTime_);
 			}
 
+			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_Q)){
+				parent->Translate(Gadget::Vector3::Up() * -moveSpeed * deltaTime_);
+			}else if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_E)){
+				parent->Translate(Gadget::Vector3::Up() * moveSpeed * deltaTime_);
+			}
+
+			const Gadget::Euler oldRotation = parent->GetRotation().ToEuler();
+
 			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_Arrow_Up)){
-				parent->Rotate(Gadget::Euler(30 * deltaTime_, 0.0f, 0.0f));
+				//This is a little unorthodox but working with Euler angles directly ensures that the camera never rolls
+				parent->SetRotation(Gadget::Euler(oldRotation.x + rotateSpeed * deltaTime_, oldRotation.y, 0.0f));
 			}else if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_Arrow_Down)){
-				parent->Rotate(Gadget::Euler(-30 * deltaTime_, 0.0f, 0.0f));
+				parent->SetRotation(Gadget::Euler(oldRotation.x - rotateSpeed * deltaTime_, oldRotation.y, 0.0f));
 			}
 
 			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_Arrow_Left)){
-				parent->Rotate(Gadget::Euler(0.0f, 30 * deltaTime_, 0.0f));
+				parent->SetRotation(Gadget::Euler(oldRotation.x, oldRotation.y + rotateSpeed * deltaTime_, 0.0f));
 			}else if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_Arrow_Right)){
-				parent->Rotate(Gadget::Euler(0.0f, -30 * deltaTime_, 0.0f));
+				parent->SetRotation(Gadget::Euler(oldRotation.x, oldRotation.y - rotateSpeed * deltaTime_, 0.0f));
 			}
 
 			if(input.GetButtonDown(Gadget::ButtonID::Keyboard_R)){
