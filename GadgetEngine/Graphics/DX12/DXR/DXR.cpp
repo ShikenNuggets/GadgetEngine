@@ -122,7 +122,7 @@ void DXR::CreateAccelerationStructures(const std::vector<ID3D12_Resource*>& reso
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(-0.6f, 0.0f, 0.0f) },
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(0.6f, 0.0f, 0.0f) },
 
-		{ bottomLevelBuffers[1], DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f) },
+		{ bottomLevelBuffers[1].pResult, DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f)},
 	};
 	CreateTopLevelAS(instances);
 
