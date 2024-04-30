@@ -2,6 +2,7 @@
 #define GADGET_QUATERNION_H
 
 #include "Math/Math.h"
+#include "Math/Vector.h"
 
 namespace Gadget{
 	//Forward declarations
@@ -22,7 +23,7 @@ namespace Gadget{
 		float z;
 
 		explicit constexpr Quaternion(float w_ = 1.0f, float x_ = 0.0f, float y_ = 0.0f, float z_ = 0.0f) : w(w_), x(x_), y(y_), z(z_){}
-		constexpr Quaternion(float w_, const Vector3& v_);
+		explicit constexpr Quaternion(float w_, const Vector3& v_);
 		explicit constexpr Quaternion(const Vector4& v_);
 
 		static inline constexpr Quaternion Identity(){ return Quaternion(1.0f, 0.0f, 0.0f, 0.0f); }
@@ -36,6 +37,13 @@ namespace Gadget{
 				-x * q_.z + y * q_.w + z * q_.x + w * q_.y,
 				x * q_.y - y * q_.x + z * q_.w + w * q_.z
 			);
+		}
+
+		inline constexpr Vector3 operator *(const Vector3& v_) const{
+			Vector3 u = Vector3(x, y, z);
+			float s = w;
+
+			return 2.0f * Vector3::Dot(u, v_) * u + (s * s - Vector3::Dot(u, u)) * v_ + 2.0f * s * Vector3::Cross(u, v_);
 		}
 		
 		inline constexpr Quaternion operator *(float f_) const{ return Quaternion(w * f_, x * f_, y * f_, z * f_); }

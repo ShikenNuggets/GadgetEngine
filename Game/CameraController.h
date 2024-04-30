@@ -20,15 +20,15 @@ namespace Example{
 
 		virtual void OnUpdate(float deltaTime_) override{
 			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_W)){
-				parent->Translate(Gadget::Vector3(0.0f, 0.0f, -2.5f * deltaTime_));
+				parent->Translate(parent->GetTransform().Forward() * 2.5f * deltaTime_);
 			}else if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_S)){
-				parent->Translate(Gadget::Vector3(0.0f, 0.0f, 2.5f * deltaTime_));
+				parent->Translate(parent->GetTransform().Forward() * -2.5f * deltaTime_);
 			}
 
 			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_A)){
-				parent->Translate(Gadget::Vector3(-2.5f * deltaTime_, 0.0f, 0.0f));
+				parent->Translate(parent->GetTransform().Right() * -2.5f * deltaTime_);
 			}else if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_D)){
-				parent->Translate(Gadget::Vector3(2.5f * deltaTime_, 0.0f));
+				parent->Translate(parent->GetTransform().Right() * 2.5f * deltaTime_);
 			}
 
 			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_Arrow_Up)){

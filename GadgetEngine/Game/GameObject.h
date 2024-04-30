@@ -19,6 +19,10 @@ namespace Gadget{
 		Vector3 position;
 		Quaternion rotation;
 		Vector3 scale;
+
+		inline constexpr Vector3 Forward() const{ return rotation * Vector3::Forward(); }
+		inline constexpr Vector3 Up() const{ return rotation * Vector3::Up(); }
+		inline constexpr Vector3 Right() const{ return rotation * Vector3::Right(); }
 	};
 
 	struct GameObjectProperties{
