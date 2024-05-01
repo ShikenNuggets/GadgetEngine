@@ -130,6 +130,11 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 }
 
 void Debug::ThrowFatalError(StringID channel_, const std::string& message_, ErrorCode err_, const std::string& file_, int line_){
+#ifndef GADGET_RELEASE
+	//This is redundant, but it helps devs get the current callstack. You won't get if you wait for the throw to play out
+	GADGET_ASSERT(false, "A fatal error was thrown from " + FileSystem::GetFileNameFromPath(file_) + "!");
+#endif //!GADGET_RELEASE
+
 	GADGET_BASIC_ASSERT(channel_ != StringID::None);
 	GADGET_BASIC_ASSERT(!message_.empty());
 	GADGET_BASIC_ASSERT(err_ > ErrorCode::OK && err_ < ErrorCode::ErrorCode_MAX);
