@@ -110,7 +110,7 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;GADGET_DEVELOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
