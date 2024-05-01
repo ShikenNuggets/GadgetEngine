@@ -28,10 +28,14 @@ Win32_DX12_Renderer::Win32_DX12_Renderer(int w_, int h_, int x_, int y_) : Rende
 	DX12_StartupOptions options;
 	
 #ifdef GADGET_DEBUG
-	options.isDebug = true;
+	options.breakOnErrors = true;
 	options.gpuBasedValidation = App::GetInstance().GetConfig().GetOptionBool(EngineVars::Render::gpuValidationKey);
 	options.dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 #endif // GADGET_DEBUG
+
+#if defined(GADGET_DEBUG) && not defined(GADGET_DEVELOP)
+	options.breakOnWarnings = true;
+#endif //GADGET_DEBUG && !GADGET_RELEASE
 
 	auto& dx12 = DX12::GetInstance(options);
 

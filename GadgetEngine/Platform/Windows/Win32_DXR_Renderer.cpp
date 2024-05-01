@@ -13,7 +13,7 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), dx12(nullptr), dxr(nullptr), renderSurfacePtr(nullptr), rootSignature(nullptr), pipelineState(nullptr), vertexBuffer(nullptr)/*, mainBuffer(nullptr)*/{
+Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), dx12(nullptr), dxr(nullptr), renderSurfacePtr(nullptr), rootSignature(nullptr), pipelineState(nullptr), vertexBuffer(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_, renderAPI);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
@@ -24,10 +24,14 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 	options.closeCommandListOnInit = false;
 
 #ifdef GADGET_DEBUG
-	options.isDebug = true;
+	options.breakOnErrors = true;
 	options.gpuBasedValidation = App::GetInstance().GetConfig().GetOptionBool(EngineVars::Render::gpuValidationKey);
 	options.dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
-#endif // GADGET_DEBUG
+#endif //GADGET_DEBUG
+
+#if defined(GADGET_DEBUG) && not defined(GADGET_DEVELOP)
+	options.breakOnWarnings = true;
+#endif //GADGET_DEBUG && !GADGET_RELEASE
 
 	dx12 = &DX12::GetInstance(options);
 
@@ -106,7 +110,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 
 	auto err = dx12->GfxCommand()->BeginFrame();
 	if(err != ErrorCode::OK){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not setup DX12_Command for the next frame!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not setup DX12_Command for the next frame!", err, __FILE__, __LINE__);
 	}
 
 	dx12->ProcessDeferredReleasesForCurrentFrame();
@@ -174,6 +178,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 
 	cmdList->CopyResource(backBuffer, dxr->OutputResource());
 
+	//TODO - We can transition directly to the present state. Is there any reason why we shouldn't?
 	resourceBarriers.AddTransitionBarrier(backBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	resourceBarriers.ApplyAllBarriers(cmdList);
 
@@ -263,9 +268,9 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	float aspect = 16.0f / 9.0f;
 
 	TestVertex triangleVertices[]{
-		{ Vector3(0.0f, 0.25f * aspect, 0.0f), Color(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ Vector3(0.25f, -0.25f * aspect, 0.0f), Color(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ Vector3(-0.25f, -0.25f * aspect, 0.0f), Color(0.0f, 0.0f, 1.0f, 1.0f) }
+		{ Vector3(0.0f, 0.25f * aspect, 0.0f), Color::Red() },
+		{ Vector3(0.25f, -0.25f * aspect, 0.0f), Color::Green() },
+		{ Vector3(-0.25f, -0.25f * aspect, 0.0f), Color::Blue() }
 	};
 
 	constexpr UINT vertexBufferSize = sizeof(triangleVertices);
@@ -276,12 +281,12 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	//------------------ Plane -----------------------------------//
 	//------------------------------------------------------------//
 	TestVertex planeVertices[] = {
-		{ Vector3(-1.5f, -0.8f, 1.5f), Color::White() }, // 0
+		{ Vector3(-1.5f, -0.8f,  1.5f), Color::White() }, // 0
 		{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
-		{ Vector3(01.5f, -0.8f, 1.5f), Color::White() }, // 2
-		{ Vector3(01.5f, -0.8f, 1.5f), Color::White() }, // 2
+		{ Vector3( 1.5f, -0.8f,  1.5f), Color::White() }, // 2
+		{ Vector3( 1.5f, -0.8f,  1.5f), Color::White() }, // 2
 		{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
-		{ Vector3(1.5f, -0.8f, -1.5f), Color::White() }  // 4
+		{ Vector3( 1.5f, -0.8f, -1.5f), Color::White() }  // 4
 	};
 
 	constexpr UINT planeBufferSize = sizeof(planeVertices);

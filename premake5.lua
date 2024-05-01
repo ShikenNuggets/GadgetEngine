@@ -44,7 +44,12 @@ function CppProjectDefaults()
 		runtime "Debug"
 	
 	filter "configurations:Develop"
-		defines "GADGET_DEBUG"
+		defines
+		{
+			"GADGET_DEBUG",
+			"GADGET_DEVELOP",
+		}
+		
 		symbols "On"
 		optimize "Speed"
 		runtime "Debug"

@@ -96,7 +96,7 @@ void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, D
 	uint64_t instanceDescsSize = 0;
 	topLevelASGenerator.ComputeASBufferSizes(dx12.MainDevice(), true, &scratchSize, &resultSize, &instanceDescsSize);
 
-	topLevelASBuffers.pScratch = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, false, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	topLevelASBuffers.pScratch = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, true, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	topLevelASBuffers.pResult = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	topLevelASBuffers.pInstanceDesc = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE);
 
@@ -107,22 +107,16 @@ void DXR::CreateAccelerationStructures(const std::vector<ID3D12_Resource*>& reso
 	auto* cmdList = dx12.GfxCommand()->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
-	std::vector<std::pair<ComPtr<ID3D12Resource>, uint32_t>> buffers;
-	buffers.push_back({ vertexBuffers[0].Get(), 3 });
-	buffers.push_back({ vertexBuffers[1].Get(), 6 });
-
 	std::vector<AccelerationStructureBuffers> bottomLevelBuffers;
-
-	for(const auto& b : buffers){
-		bottomLevelBuffers.push_back(CreateBottomLevelAS({ b }));
-	}
+	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ vertexBuffers[0].Get(), 3 }}));
+	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ vertexBuffers[1].Get(), 6 }}));
 
 	instances = {
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixIdentity()},
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(-0.6f, 0.0f, 0.0f) },
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(0.6f, 0.0f, 0.0f) },
 
-		{ bottomLevelBuffers[1].pResult, DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f)},
+		{ bottomLevelBuffers[1].pResult, DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f) },
 	};
 	CreateTopLevelAS(instances);
 
@@ -132,6 +126,7 @@ void DXR::CreateAccelerationStructures(const std::vector<ID3D12_Resource*>& reso
 	}
 
 	bottomLevelAS = bottomLevelBuffers[0].pResult;
+	bottomLevelAS2 = bottomLevelBuffers[1].pResult;
 }
 
 ComPtr<ID3D12RootSignature> DXR::CreateRayGenSignature(){
@@ -167,17 +162,18 @@ void DXR::CreateRaytracingPipeline(){
 
 	pipeline.AddLibrary(rayGenLibrary, { L"RayGen" });
 	pipeline.AddLibrary(missLibrary, { L"Miss" });
-	pipeline.AddLibrary(hitLibrary, { L"ClosestHit" });
+	pipeline.AddLibrary(hitLibrary, { L"ClosestHit", L"PlaneClosestHit"});
 
 	rayGenSignature = CreateRayGenSignature();
 	missSignature = CreateMissSignature();
 	hitSignature = CreateHitSignature();
 
 	pipeline.AddHitGroup(L"HitGroup", L"ClosestHit");
+	pipeline.AddHitGroup(L"PlaneHitGroup", L"PlaneClosestHit");
 
 	pipeline.AddRootSignatureAssociation(rayGenSignature.Get(), { L"RayGen" });
 	pipeline.AddRootSignatureAssociation(missSignature.Get(), { L"Miss" });
-	pipeline.AddRootSignatureAssociation(hitSignature.Get(), { L"HitGroup" });
+	pipeline.AddRootSignatureAssociation(hitSignature.Get(), { L"HitGroup", L"PlaneHitGroup"});
 
 	pipeline.SetMaxPayloadSize(4 * sizeof(float));
 	pipeline.SetMaxAttributeSize(2 * sizeof(float));
@@ -240,7 +236,8 @@ void DXR::CreateShaderBindingTable(){
 
 	sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });
 	sbtHelper.AddMissProgram(L"Miss", {});
-	sbtHelper.AddHitGroup(L"HitGroup", { (void*)(vertexBuffers[0]->GetGPUVirtualAddress())});
+	sbtHelper.AddHitGroup(L"HitGroup", { (void*)(vertexBuffers[0]->GetGPUVirtualAddress()) });
+	sbtHelper.AddHitGroup(L"PlaneHitGroup", {});
 
 	uint32_t sbtSize = sbtHelper.ComputeSBTSize();
 

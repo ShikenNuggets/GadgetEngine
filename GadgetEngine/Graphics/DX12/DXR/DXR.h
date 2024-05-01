@@ -64,6 +64,7 @@ namespace Gadget{
 		ScreenCoordinate frameSize;
 
 		Microsoft::WRL::ComPtr<ID3D12Resource> bottomLevelAS;
+		Microsoft::WRL::ComPtr<ID3D12Resource> bottomLevelAS2;
 		nv_helpers_dx12::TopLevelASGenerator topLevelASGenerator;
 		AccelerationStructureBuffers topLevelASBuffers;
 		std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectX::XMMATRIX>> instances;

@@ -17,7 +17,8 @@ namespace Gadget{
 	class DX12_RenderSurface;
 
 	struct DX12_StartupOptions{
-		bool isDebug = false;
+		bool breakOnWarnings = false;
+		bool breakOnErrors = false;
 		bool gpuBasedValidation = false;
 		bool requireDXR = false;
 		bool closeCommandListOnInit = true;
@@ -45,7 +46,7 @@ namespace Gadget{
 		[[nodiscard]] ErrorCode RegisterDebugCallback();
 		[[nodiscard]] ErrorCode CreateCommandList(bool closeCommandListOnInit_ = true);
 		[[nodiscard]] ErrorCode InitializeDescriptorHeaps();
-		[[nodiscard]] ErrorCode BreakOnWarningsAndErrors(bool enabled_);
+		[[nodiscard]] ErrorCode BreakOnWarningsAndErrors(bool breakOnWarnings_, bool breakOnErrors_);
 
 		[[nodiscard]] ErrorCode PreShutdown();
 		[[nodiscard]] ErrorCode Shutdown();

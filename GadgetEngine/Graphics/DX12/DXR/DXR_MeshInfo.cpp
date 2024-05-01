@@ -25,7 +25,8 @@ DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()){
 
 	vertexBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), dxrVerts.data(), dxrVerts.size() * sizeof(DXR_Vertex), true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
-	std::pair<ComPtr<ID3D12Resource>, uint32_t> buffers = { vertexBuffer.Get(), numIndices };
+	GADGET_BASIC_ASSERT(numIndices < std::numeric_limits<uint32_t>::max());
+	std::pair<ComPtr<ID3D12Resource>, uint32_t> buffers = { vertexBuffer.Get(), static_cast<uint32_t>(numIndices) };
 
 	AccelerationStructureBuffers bottomLevelBuffers = DXR::GetInstance().CreateBottomLevelAS({ buffers });
 	bottomLevelAS.Attach(bottomLevelBuffers.pResult.Get());

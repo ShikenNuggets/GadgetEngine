@@ -4,6 +4,12 @@ RWTexture2D<float4> gOutput : register(u0);
 
 RaytracingAccelerationStructure SceneBVH : register(t0);
 
+cbuffer RTCameraParams : register(b0)
+{
+    float4x4 viewInv;
+    float4x4 projInv;
+}
+
 [shader("raygeneration")]
 void RayGen()
 {

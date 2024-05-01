@@ -37,10 +37,10 @@ DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATUR
 		GADGET_LOG_WARNING(SID("RENDER"), "D3D12 messages will not be logged to the console!");
 	}
 
-	/*err = BreakOnWarningsAndErrors(options_.isDebug);
+	err = BreakOnWarningsAndErrors(options_.breakOnWarnings, options_.breakOnErrors);
 	if(err != ErrorCode::OK){
 		Debug::Log(SID("RENDER"), "DX12 code will not break on warnings or errors!", Debug::Error, __FILE__, __LINE__);
-	}*/
+	}
 
 	err = CreateCommandList(options_.closeCommandListOnInit);
 	if(err != ErrorCode::OK){
@@ -286,7 +286,7 @@ ErrorCode DX12::InitializeDescriptorHeaps(){
 	return ErrorCode::OK;
 }
 
-ErrorCode DX12::BreakOnWarningsAndErrors(bool enabled_){
+ErrorCode DX12::BreakOnWarningsAndErrors(bool breakOnWarnings_, bool breakOnErrors_){
 	GADGET_BASIC_ASSERT(mainDevice != nullptr);
 	if(mainDevice == nullptr){
 		Debug::Log(SID("RENDER"), "BreakOnWarningsAndErrors requires the device to be initialized", Debug::Error, __FILE__, __LINE__);
@@ -299,17 +299,17 @@ ErrorCode DX12::BreakOnWarningsAndErrors(bool enabled_){
 		return ErrorCode::D3D12_Error;
 	}
 
-	if(FAILED(infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, enabled_))){
+	if(FAILED(infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, breakOnErrors_))){
 		Debug::Log(SID("RENDER"), "Debug break on DX12 corruption could not be set!", Debug::Warning, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 
-	if(FAILED(infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, enabled_))){
+	if(FAILED(infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, breakOnErrors_))){
 		Debug::Log(SID("RENDER"), "Debug break on DX12 error could not be set!", Debug::Warning, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
 
-	if(FAILED(infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, enabled_))){
+	if(FAILED(infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, breakOnWarnings_))){
 		Debug::Log(SID("RENDER"), "Debug break on DX12 warning could not be set!", Debug::Warning, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
@@ -430,7 +430,7 @@ ErrorCode DX12::DebugShutdown(){
 		return err;
 	}
 
-	err = BreakOnWarningsAndErrors(false);
+	err = BreakOnWarningsAndErrors(false, false);
 	if(err != ErrorCode::OK){
 		return err;
 	}

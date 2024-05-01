@@ -22,3 +22,12 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 
     payload.colorAndDistance = float4(hitColor, RayTCurrent());
 }
+
+[shader("closesthit")]
+void PlaneClosestHit(inout HitInfo payload, Attributes attrib)
+{
+    //float3 barycentrics = float3(1.0f - attrib.barycentric.x - attrib.barycentric.y, attrib.barycentric.x, attrib.barycentric.y);
+    float3 hitColor = float3(0.75f, 0.75f, 0.75f);
+    
+    payload.colorAndDistance = float4(hitColor, RayTCurrent());
+}
