@@ -15,7 +15,7 @@ std::unique_ptr<DX12> DX12::instance = nullptr;
 DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATURE_LEVEL_12_0), dxgiFactory(nullptr), mainDevice(nullptr), gfxCommand(nullptr), resourceBarriers(),
 													rtvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), dsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV),
 													srvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), uavDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV),
-													deferredReleases(FrameBufferCount), deferredReleaseMutex(){
+													deferredReleases(FrameBufferCount), deferredReleaseMutex(), callbackCookie(0){
 	GADGET_BASIC_ASSERT(deferredReleases.size() == FrameBufferCount);
 
 	if(options_.requireDXR){
@@ -30,6 +30,11 @@ DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATUR
 	err = CreateDevice(options_.dxgiFactoryFlags, options_.requireDXR);
 	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "[DX12] Could not create device!", err, __FILE__, __LINE__);
+	}
+
+	err = RegisterDebugCallback();
+	if(err != ErrorCode::OK){
+		GADGET_LOG_WARNING(SID("RENDER"), "D3D12 messages will not be logged to the console!");
 	}
 
 	/*err = BreakOnWarningsAndErrors(options_.isDebug);
@@ -106,7 +111,46 @@ ErrorCode DX12::EnableDebugLayer([[maybe_unused]] bool gpuValidation_){
 		Debug::Log(SID("RENDER"), "Failed to get D3D12 Debug Interface!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
+#endif //GADGET_DEBUG
 
+	return ErrorCode::OK;
+}
+
+ErrorCode DX12::RegisterDebugCallback(){
+#ifdef GADGET_DEBUG
+	Microsoft::WRL::ComPtr<ID3D12InfoQueue1> infoQueue;
+	if(FAILED(mainDevice.As(&infoQueue) || infoQueue == nullptr)){
+		GADGET_LOG_ERROR(SID("RENDER"), "D3D12Device could not be queried as ID3D12InfoQueue1! D3D12 messages will not be debug logged.");
+		return ErrorCode::D3D12_Error;
+	}
+	
+	HRESULT hr = infoQueue->RegisterMessageCallback(&DebugMessageCallback, D3D12_MESSAGE_CALLBACK_FLAG_NONE, nullptr, &callbackCookie);
+	if(FAILED(hr) || callbackCookie == 0){
+		GADGET_LOG_ERROR(SID("RENDER"), "Could not register message callback. D3D12 messages will not be debug logged.");
+		return ErrorCode::D3D12_Error;
+	}
+#endif //GADGET_DEBUG
+
+	return ErrorCode::OK;
+}
+
+ErrorCode DX12::UnregisterDebugCallback(){
+#ifdef GADGET_DEBUG
+	if(callbackCookie == 0){
+		return ErrorCode::OK; //We never registered the callback
+	}
+
+	Microsoft::WRL::ComPtr<ID3D12InfoQueue1> infoQueue;
+	if(FAILED(mainDevice.As(&infoQueue) || infoQueue == nullptr)){
+		GADGET_LOG_ERROR(SID("RENDER"), "D3D12Device could not be queried as ID3D12InfoQueue1! We won't be able to unregister the debug message callback!");
+		return ErrorCode::D3D12_Error;
+	}
+	
+	HRESULT hr = infoQueue->RegisterMessageCallback(&DebugMessageCallback, D3D12_MESSAGE_CALLBACK_FLAG_NONE, nullptr, &callbackCookie);
+	if(FAILED(hr) || callbackCookie == 0){
+		GADGET_LOG_ERROR(SID("RENDER"), "Could not register message callback. D3D12 messages will not be debug logged.");
+		return ErrorCode::D3D12_Error;
+	}
 #endif //GADGET_DEBUG
 
 	return ErrorCode::OK;
@@ -381,7 +425,12 @@ void DX12::ProcessAllDeferredReleases(){
 
 ErrorCode DX12::DebugShutdown(){
 #ifdef GADGET_DEBUG
-	auto err = BreakOnWarningsAndErrors(false);
+	auto err = UnregisterDebugCallback();
+	if(err != ErrorCode::OK){
+		return err;
+	}
+
+	err = BreakOnWarningsAndErrors(false);
 	if(err != ErrorCode::OK){
 		return err;
 	}
@@ -462,4 +511,24 @@ bool DX12::DoesDeviceSupportRaytracing(ID3D12_Device* device_) const{
 	}
 
 	return options5.RaytracingTier >= D3D12_RAYTRACING_TIER_1_0;
+}
+
+void DX12::DebugMessageCallback(D3D12_MESSAGE_CATEGORY category_, D3D12_MESSAGE_SEVERITY severity_, D3D12_MESSAGE_ID id_, LPCSTR pDescription_, void* pContext_){
+	switch(severity_){
+		case D3D12_MESSAGE_SEVERITY_CORRUPTION: [[fallthrough]];
+		case D3D12_MESSAGE_SEVERITY_ERROR:
+			Debug::Log(SID("D3D12"), pDescription_, Debug::Error); //Leaving out file and line since they won't mean anything here
+			break;
+		case D3D12_MESSAGE_SEVERITY_WARNING:
+			Debug::Log(SID("D3D12"), pDescription_, Debug::Warning); //Leaving out file and line since they won't mean anything here
+			break;
+		case D3D12_MESSAGE_SEVERITY_INFO:
+			Debug::Log(SID("D3D12"), pDescription_, Debug::Info); //Leaving out file and line since they won't mean anything here
+			break;
+		case D3D12_MESSAGE_SEVERITY_MESSAGE:
+			Debug::Log(SID("D3D12"), pDescription_, Debug::Verbose); //Leaving out file and line since they won't mean anything here
+			break;
+		default:
+			break;
+	}
 }

@@ -42,6 +42,7 @@ namespace Gadget{
 
 		[[nodiscard]] ErrorCode EnableDebugLayer(bool gpuValidation_ = false);
 		[[nodiscard]] ErrorCode CreateDevice(uint32_t dxgiFactoryFlags_ = 0, bool requireDXR_ = false);
+		[[nodiscard]] ErrorCode RegisterDebugCallback();
 		[[nodiscard]] ErrorCode CreateCommandList(bool closeCommandListOnInit_ = true);
 		[[nodiscard]] ErrorCode InitializeDescriptorHeaps();
 		[[nodiscard]] ErrorCode BreakOnWarningsAndErrors(bool enabled_);
@@ -90,11 +91,15 @@ namespace Gadget{
 		std::mutex deferredReleaseMutex;
 
 		[[nodiscard]] ErrorCode DebugShutdown();
+		[[nodiscard]] ErrorCode UnregisterDebugCallback();
 
 		IDXGI_Adapter* DetermineMainAdapter(bool requireDXR_);
 		D3D_FEATURE_LEVEL GetMaxFeatureLevel(IDXGI_Adapter* adapter_);
 
 		bool DoesDeviceSupportRaytracing(ID3D12_Device* device_) const;
+
+		DWORD callbackCookie;
+		static void DebugMessageCallback(D3D12_MESSAGE_CATEGORY category_, D3D12_MESSAGE_SEVERITY severity_, D3D12_MESSAGE_ID id_, LPCSTR pDescription_, void* pContext_);
 	};
 }
 
