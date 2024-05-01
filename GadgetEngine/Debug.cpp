@@ -7,6 +7,8 @@
 #pragma warning(disable : 26819) //Unnanotated fallthrough in switch statement
 #include <SDL_messagebox.h>
 #pragma warning(default : 26819)
+
+#include "Platform/Windows/Win32_Utils.h"
 #endif //GADGET_PLATFORM_WIN32
 
 #include "App.h"
@@ -85,7 +87,31 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 		finalMessage += ")";
 	}
 
+#ifdef GADGET_PLATFORM_WIN32
+	switch(type_){
+		case Verbose: [[fallthrough]];
+		case Info:
+			Win32_Utils::SetConsoleColorWhite();
+			break;
+		case Warning:
+			Win32_Utils::SetConsoleColorYellow();
+			break;
+		case Error: [[fallthrough]];
+		case FatalError:
+			Win32_Utils::SetConsoleColorRed();
+			break;
+		default:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			break;
+	}
+#endif //GADGET_PLATFORM_WIN32
+
 	std::cout << finalMessage << std::endl;
+
+#ifdef GADGET_PLATFORM_WIN32
+	Win32_Utils::SetConsoleColorWhite();
+#endif //GADGET_PLATFORM_WIN32
+
 	QueueLogForFileWrite(finalMessage + "\n");
 }
 

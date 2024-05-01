@@ -6,6 +6,12 @@
 namespace Gadget{
 	namespace Win32_Utils{
 		std::string GetUserDocumentsPath();
+
+		void SetConsoleColorWhite();
+		void SetConsoleColorRed();
+		void SetConsoleColorYellow();
+		void SetConsoleColorGreen();
+		void SetConsoleColorBlue();
 	};
 }
 

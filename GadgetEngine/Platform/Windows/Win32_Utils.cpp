@@ -6,6 +6,8 @@
 
 using namespace Gadget;
 
+const HANDLE gConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
 std::string Win32_Utils::GetUserDocumentsPath(){
 	WCHAR* path;
 	auto result = SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &path);
@@ -21,3 +23,13 @@ std::string Win32_Utils::GetUserDocumentsPath(){
 	}
 	return resultStr;
 }
+
+void Win32_Utils::SetConsoleColorWhite(){ if(gConsole){ SetConsoleTextAttribute(gConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); }}
+
+void Win32_Utils::SetConsoleColorRed(){ if(gConsole){ SetConsoleTextAttribute(gConsole, FOREGROUND_RED | FOREGROUND_INTENSITY); }}
+
+void Win32_Utils::SetConsoleColorYellow(){ if(gConsole){ SetConsoleTextAttribute(gConsole, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY); }}
+
+void Win32_Utils::SetConsoleColorGreen(){ if(gConsole){ SetConsoleTextAttribute(gConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY); }}
+
+void Win32_Utils::SetConsoleColorBlue(){ if(gConsole){ SetConsoleTextAttribute(gConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY); }}
