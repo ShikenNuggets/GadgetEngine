@@ -38,6 +38,8 @@ namespace Gadget{
 		DX12_RenderSurface* renderSurfacePtr;
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 		Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
+
+		//Test Assets
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D12Resource> planeVertexBuffer;
 

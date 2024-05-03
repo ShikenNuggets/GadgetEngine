@@ -14,17 +14,16 @@ using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DXR> DXR::instance = nullptr;
 
-DXR::DXR(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertexBuffers_) : dx12(DX12::GetInstance()), frameSize(frameSize_), vertexBuffers(){
+DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), frameSize(frameSize_), vertexBuffers(), meshInfos(meshInfo_){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0);
 	GADGET_BASIC_ASSERT(frameSize_.y > 0);
-	GADGET_BASIC_ASSERT(vertexBuffers_.size() > 0);
+	GADGET_BASIC_ASSERT(meshInfo_.size() > 0);
 
-	for(size_t i = 0; i < vertexBuffers_.size(); i++){
-		GADGET_BASIC_ASSERT(vertexBuffers_[i] != nullptr);
-		vertexBuffers.push_back(vertexBuffers_[i]);
+	for(size_t i = 0; i < meshInfo_.size(); i++){
+		GADGET_BASIC_ASSERT(meshInfo_[i] != nullptr);
 	}
 
-	CreateAccelerationStructures({});
+	CreateAccelerationStructures(vertexBuffers);
 
 	auto err = dx12.GfxCommand()->CloseList();
 	if(err != ErrorCode::OK){
@@ -44,15 +43,15 @@ DXR& DXR::GetInstance(){
 	return *instance;
 }
 
-DXR& DXR::GetInstance(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertexBuffers_){
+DXR& DXR::GetInstance(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0 && frameSize_.y > 0);
-	GADGET_BASIC_ASSERT(vertexBuffers_.size() > 0);
-	for(size_t i = 0; i < vertexBuffers_.size(); i++){
-		GADGET_BASIC_ASSERT(vertexBuffers_[i] != nullptr);
+	GADGET_BASIC_ASSERT(meshInfo_.size() > 0);
+	for(size_t i = 0; i < meshInfo_.size(); i++){
+		GADGET_BASIC_ASSERT(meshInfo_[i] != nullptr);
 	}
 
 	if(instance == nullptr){
-		instance = std::make_unique<DXR>(frameSize_, vertexBuffers_);
+		instance = std::make_unique<DXR>(frameSize_, meshInfo_);
 	}
 
 	GADGET_ASSERT(instance != nullptr, "App instance was somehow nullptr! Nothing will work!");
@@ -88,7 +87,7 @@ AccelerationStructureBuffers DXR::CreateBottomLevelAS(std::vector<std::pair<ComP
 
 void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, DirectX::XMMATRIX>>& instances_){
 	for(size_t i = 0; i < instances_.size(); i++){
-		topLevelASGenerator.AddInstance(instances_[i].first.Get(), instances_[i].second, static_cast<UINT>(i), static_cast<UINT>(0));
+		topLevelASGenerator.AddInstance(instances_[i].first.Get(), instances_[i].second, static_cast<UINT>(i), static_cast<UINT>(i));
 	}
 
 	uint64_t scratchSize = 0;
@@ -103,13 +102,13 @@ void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, D
 	topLevelASGenerator.Generate(dx12.GfxCommand()->CommandList(), topLevelASBuffers.pScratch.Get(), topLevelASBuffers.pResult.Get(), topLevelASBuffers.pInstanceDesc.Get());
 }
 
-void DXR::CreateAccelerationStructures(const std::vector<ID3D12_Resource*>& resources_){
+void DXR::CreateAccelerationStructures(const std::vector<ComPtr<ID3D12_Resource>>& resources_){
 	auto* cmdList = dx12.GfxCommand()->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
 	std::vector<AccelerationStructureBuffers> bottomLevelBuffers;
-	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ vertexBuffers[0].Get(), 3 }}));
-	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ vertexBuffers[1].Get(), 6 }}));
+	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[0]->VertexBuffer(), 3}}));
+	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[1]->VertexBuffer(), 6}}));
 
 	instances = {
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixIdentity()},
@@ -149,6 +148,7 @@ ComPtr<ID3D12RootSignature> DXR::CreateMissSignature(){
 
 ComPtr<ID3D12RootSignature> DXR::CreateHitSignature(){
 	nv_helpers_dx12::RootSignatureGenerator rsg;
+	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);
 	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV);
 	return rsg.Generate(dx12.MainDevice(), true);
 }
@@ -229,6 +229,34 @@ void DXR::CreateShaderResourceHeap(){
 }
 
 void DXR::CreateShaderBindingTable(){
+	//Test Stuff
+	DirectX::XMVECTOR bufferDataA[] = {
+		// A
+		DirectX::XMVECTOR{1.0f, 0.0f, 0.0f, 1.0f},
+		DirectX::XMVECTOR{1.0f, 0.4f, 0.0f, 1.0f},
+		DirectX::XMVECTOR{1.f, 0.7f, 0.0f, 1.0f},
+	};
+
+	DirectX::XMVECTOR bufferDataB[] = {
+		// B
+		DirectX::XMVECTOR{0.0f, 1.0f, 0.0f, 1.0f},
+		DirectX::XMVECTOR{0.0f, 1.0f, 0.4f, 1.0f},
+		DirectX::XMVECTOR{0.0f, 1.0f, 0.7f, 1.0f},
+	};
+
+	DirectX::XMVECTOR bufferDataC[] = {
+		// C
+		DirectX::XMVECTOR{0.0f, 0.0f, 1.0f, 1.0f},
+		DirectX::XMVECTOR{0.4f, 0.0f, 1.0f, 1.0f},
+		DirectX::XMVECTOR{0.7f, 0.0f, 1.0f, 1.0f},
+	};
+
+	std::vector<ID3D12Resource*> resources;
+	resources.push_back(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataA, sizeof(bufferDataA), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	resources.push_back(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataB, sizeof(bufferDataB), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	resources.push_back(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataC, sizeof(bufferDataC), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	//End Test Stuff
+
 	sbtHelper.Reset();
 
 	D3D12_GPU_DESCRIPTOR_HANDLE srvUavHeapHandle = dx12.SRVHeap().GPUStart();
@@ -236,8 +264,11 @@ void DXR::CreateShaderBindingTable(){
 
 	sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });
 	sbtHelper.AddMissProgram(L"Miss", {});
-	sbtHelper.AddHitGroup(L"HitGroup", { (void*)(vertexBuffers[0]->GetGPUVirtualAddress()) });
-	sbtHelper.AddHitGroup(L"PlaneHitGroup", {});
+	for(int i = 0; i < 3; i++){
+		sbtHelper.AddHitGroup(L"HitGroup", { (void*)(resources[i]->GetGPUVirtualAddress()) });
+	}
+
+	sbtHelper.AddHitGroup(L"PlaneHitGroup", { (void*)(resources[0]->GetGPUVirtualAddress()) });
 
 	uint32_t sbtSize = sbtHelper.ComputeSBTSize();
 

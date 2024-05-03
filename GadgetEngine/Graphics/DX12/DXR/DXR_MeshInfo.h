@@ -10,6 +10,7 @@ namespace Gadget{
 	class DXR_MeshInfo : public MeshInfo{
 	public:
 		DXR_MeshInfo(const Mesh& mesh_);
+		DXR_MeshInfo(size_t indexCount_, ID3D12_Resource* vertexBuffer_);
 		virtual ~DXR_MeshInfo() override = default;
 
 		virtual void Bind() override{}

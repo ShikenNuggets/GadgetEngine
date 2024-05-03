@@ -8,17 +8,20 @@ struct STriVertex
 
 StructuredBuffer<STriVertex> BTriVertex : register(t0);
 
+cbuffer Colors : register(b0)
+{
+    float3 A;
+    float3 B;
+    float3 C;
+}
+
 [shader("closesthit")]
 void ClosestHit(inout HitInfo payload, Attributes attrib)
 {
     float3 barycentrics = float3(1.0f - attrib.barycentric.x - attrib.barycentric.y, attrib.barycentric.x, attrib.barycentric.y);
     uint vertId = 3 * PrimitiveIndex();
 
-    float3 hitColor = (
-        (BTriVertex[vertId + 0].color * barycentrics.x) +
-        (BTriVertex[vertId + 1].color * barycentrics.y) +
-        (BTriVertex[vertId + 2].color * barycentrics.z)
-    ).xyz;
+    float3 hitColor = A * barycentrics.x + B * barycentrics.y + C * barycentrics.z;
 
     payload.colorAndDistance = float4(hitColor, RayTCurrent());
 }
@@ -27,7 +30,7 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 void PlaneClosestHit(inout HitInfo payload, Attributes attrib)
 {
     //float3 barycentrics = float3(1.0f - attrib.barycentric.x - attrib.barycentric.y, attrib.barycentric.x, attrib.barycentric.y);
-    float3 hitColor = float3(0.75f, 0.75f, 0.75f);
+    float3 hitColor = float3(0.75f, 0.75f, 0.3f);
     
     payload.colorAndDistance = float4(hitColor, RayTCurrent());
 }

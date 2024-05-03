@@ -63,11 +63,16 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 		Debug::ThrowFatalError(SID("RENDER"), "Could not set up test assets!", err, __FILE__, __LINE__);
 	}
 
-	std::vector<ID3D12Resource*> vertexBuffers;
-	vertexBuffers.push_back(vertexBuffer.Get());
-	vertexBuffers.push_back(planeVertexBuffer.Get());
+	//TODO - Test stuff. This leaks memory
+	DXR_MeshInfo* triangle1Mesh = new DXR_MeshInfo(3, vertexBuffer.Get());
+	DXR_MeshInfo* planeMesh = new DXR_MeshInfo(6, planeVertexBuffer.Get());
 
-	dxr = &DXR::GetInstance(window->GetSize(), vertexBuffers);
+	std::vector<DXR_MeshInfo*> meshes;
+	meshes.push_back(triangle1Mesh);
+	meshes.push_back(planeMesh);
+	meshes.shrink_to_fit();
+
+	dxr = &DXR::GetInstance(window->GetSize(), meshes);
 }
 
 Win32_DXR_Renderer::~Win32_DXR_Renderer(){

@@ -15,6 +15,7 @@
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/TopLevelASGenerator.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/ShaderBindingTableGenerator.h"
+#include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 #include "Math/Matrix.h"
 #include "Utils/Utils.h"
 
@@ -27,11 +28,11 @@ namespace Gadget{
 
 	class DXR{
 	public:
-		DXR(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertexBuffers_);
+		DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_);
 		DISABLE_COPY_AND_MOVE(DXR);
 
 		static DXR& GetInstance();
-		static DXR& GetInstance(ScreenCoordinate frameSize_, const std::vector<ID3D12Resource*>& vertexBuffers_);
+		static DXR& GetInstance(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_);
 		[[nodiscard]] static ErrorCode DeleteInstance();
 
 		ID3D12StateObject* RTStateObject(){ return rtStateObject.Get(); }
@@ -40,7 +41,7 @@ namespace Gadget{
 		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
 
 		AccelerationStructureBuffers CreateBottomLevelAS(std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, uint32_t>> vVertexBuffers_);
-		void CreateAccelerationStructures(const std::vector<ID3D12_Resource*>& resources_);
+		void CreateAccelerationStructures(const std::vector<Microsoft::WRL::ComPtr<ID3D12_Resource>>& resources_);
 
 		void UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_);
 
@@ -86,6 +87,7 @@ namespace Gadget{
 		Microsoft::WRL::ComPtr<ID3D12Resource> sbtStorage;
 
 		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexBuffers;
+		std::vector<DXR_MeshInfo*> meshInfos;
 		Microsoft::WRL::ComPtr<ID3D12Resource> cameraBuffer;
 		uint32_t cameraBufferSize;
 	};
