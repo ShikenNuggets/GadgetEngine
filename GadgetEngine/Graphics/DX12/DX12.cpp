@@ -146,11 +146,13 @@ ErrorCode DX12::UnregisterDebugCallback(){
 		return ErrorCode::D3D12_Error;
 	}
 	
-	HRESULT hr = infoQueue->RegisterMessageCallback(&DebugMessageCallback, D3D12_MESSAGE_CALLBACK_FLAG_NONE, nullptr, &callbackCookie);
-	if(FAILED(hr) || callbackCookie == 0){
-		GADGET_LOG_ERROR(SID("RENDER"), "Could not register message callback. D3D12 messages will not be debug logged.");
-		return ErrorCode::D3D12_Error;
+	HRESULT hr = infoQueue->UnregisterMessageCallback(callbackCookie);
+	if(FAILED(hr)){
+		GADGET_LOG_ERROR(SID("RENDER"), "Could not unregister message callback.");
+		//Oh well
 	}
+
+	callbackCookie = 0;
 #endif //GADGET_DEBUG
 
 	return ErrorCode::OK;
@@ -425,12 +427,14 @@ void DX12::ProcessAllDeferredReleases(){
 
 ErrorCode DX12::DebugShutdown(){
 #ifdef GADGET_DEBUG
-	auto err = UnregisterDebugCallback();
-	if(err != ErrorCode::OK){
-		return err;
-	}
+	//Unregistering would prevent us from logging the live device objects report, so...
+	//TODO - Is there any workaround for this? Does it even matter?
+	//auto err = UnregisterDebugCallback();
+	//if(err != ErrorCode::OK){
+	//	return err;
+	//}
 
-	err = BreakOnWarningsAndErrors(false, false);
+	auto err = BreakOnWarningsAndErrors(false, false);
 	if(err != ErrorCode::OK){
 		return err;
 	}
@@ -514,6 +518,10 @@ bool DX12::DoesDeviceSupportRaytracing(ID3D12_Device* device_) const{
 }
 
 void DX12::DebugMessageCallback(D3D12_MESSAGE_CATEGORY category_, D3D12_MESSAGE_SEVERITY severity_, D3D12_MESSAGE_ID id_, LPCSTR pDescription_, void* pContext_){
+	//Note 1 -	We cannot guarantee that this is being called on the render thread (or any particular thread)
+	//Note 2 -	We cannot guarantee anything about the internal D3D runtime state when this gets called.
+	//			Calling D3D functions here could cause deadlocks, crashes, or undefined behaviour
+
 	switch(severity_){
 		case D3D12_MESSAGE_SEVERITY_CORRUPTION: [[fallthrough]];
 		case D3D12_MESSAGE_SEVERITY_ERROR:
