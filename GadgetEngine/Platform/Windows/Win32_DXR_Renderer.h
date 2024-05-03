@@ -41,7 +41,9 @@ namespace Gadget{
 
 		//Test Assets
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
+		Microsoft::WRL::ComPtr<ID3D12Resource> indexBuffer;
 		Microsoft::WRL::ComPtr<ID3D12Resource> planeVertexBuffer;
+		Microsoft::WRL::ComPtr<ID3D12Resource> planeIndexBuffer;
 
 		ErrorCode SetupTestAssets();
 	};

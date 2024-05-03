@@ -64,8 +64,8 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 	}
 
 	//TODO - Test stuff. This leaks memory
-	DXR_MeshInfo* triangle1Mesh = new DXR_MeshInfo(3, vertexBuffer.Get());
-	DXR_MeshInfo* planeMesh = new DXR_MeshInfo(6, planeVertexBuffer.Get());
+	DXR_MeshInfo* triangle1Mesh = new DXR_MeshInfo(3, vertexBuffer.Get(), indexBuffer.Get());
+	DXR_MeshInfo* planeMesh = new DXR_MeshInfo(6, planeVertexBuffer.Get(), planeIndexBuffer.Get());
 
 	std::vector<DXR_MeshInfo*> meshes;
 	meshes.push_back(triangle1Mesh);
@@ -277,10 +277,13 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 		{ Vector3(0.25f, -0.25f * aspect, 0.0f), Color::Green() },
 		{ Vector3(-0.25f, -0.25f * aspect, 0.0f), Color::Blue() }
 	};
+	std::vector<UINT> indices = { 0, 1, 2 };
 
 	constexpr UINT vertexBufferSize = sizeof(triangleVertices);
+	const UINT indexBufferSize = static_cast<UINT>(indices.size()) * sizeof(UINT);
 
 	vertexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), triangleVertices, vertexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	indexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), indices.data(), indexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
 	//------------------------------------------------------------//
 	//------------------ Plane -----------------------------------//
@@ -289,14 +292,17 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 		{ Vector3(-1.5f, -0.8f,  1.5f), Color::White() }, // 0
 		{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
 		{ Vector3( 1.5f, -0.8f,  1.5f), Color::White() }, // 2
-		{ Vector3( 1.5f, -0.8f,  1.5f), Color::White() }, // 2
-		{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
+		//{ Vector3( 1.5f, -0.8f,  1.5f), Color::White() }, // 2
+		//{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
 		{ Vector3( 1.5f, -0.8f, -1.5f), Color::White() }  // 4
 	};
+	std::vector<UINT> planeIndices = { 0, 1, 2, 2, 1, 3 };
 
 	constexpr UINT planeBufferSize = sizeof(planeVertices);
+	const UINT planeIndexBufferSize = static_cast<UINT>(planeIndices.size()) * sizeof(UINT);
 
 	planeVertexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), planeVertices, planeBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	planeIndexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), planeIndices.data(), planeIndexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
 	//------------------------------------------------------------//
 	//------------------ Execute Commands ------------------------//

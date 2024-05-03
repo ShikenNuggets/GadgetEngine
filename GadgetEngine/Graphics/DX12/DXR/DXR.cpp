@@ -66,11 +66,15 @@ ErrorCode DXR::DeleteInstance(){
 	return ErrorCode::OK;
 }
 
-AccelerationStructureBuffers DXR::CreateBottomLevelAS(std::vector<std::pair<ComPtr<ID3D12Resource>, uint32_t>> vVertexBuffers_){
+AccelerationStructureBuffers DXR::CreateBottomLevelAS(std::vector<std::pair<ComPtr<ID3D12Resource>, uint32_t>> vVertexBuffers_, std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, uint32_t>> vIndexBuffers_){
 	nv_helpers_dx12::BottomLevelASGenerator blas;
 
-	for(const auto& buffer : vVertexBuffers_){
-		blas.AddVertexBuffer(buffer.first.Get(), 0, buffer.second, 28, nullptr, 0); //TODO - Hardcoding the test vertex size here (28) is obviously no good
+	for(size_t i = 0; i < vVertexBuffers_.size(); i++){
+		if(i < vIndexBuffers_.size() && vIndexBuffers_[i].second > 0){
+			blas.AddVertexBuffer(vVertexBuffers_[i].first.Get(), 0, vVertexBuffers_[i].second, 28, vIndexBuffers_[i].first.Get(), 0, vIndexBuffers_[i].second, nullptr, 0, true);
+		}else{
+			blas.AddVertexBuffer(vVertexBuffers_[i].first.Get(), 0, vVertexBuffers_[i].second, 28, nullptr, 0);
+		}
 	}
 
 	uint64_t scratchSizeInBytes = 0;
@@ -107,8 +111,8 @@ void DXR::CreateAccelerationStructures(const std::vector<ComPtr<ID3D12_Resource>
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
 	std::vector<AccelerationStructureBuffers> bottomLevelBuffers;
-	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[0]->VertexBuffer(), 3}}));
-	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[1]->VertexBuffer(), 6}}));
+	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[0]->VertexBuffer(), 3}}, {{ meshInfos[0]->IndexBuffer(), meshInfos[0]->GetNumIndices() }}));
+	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[1]->VertexBuffer(), 4}}, {{ meshInfos[1]->IndexBuffer(), meshInfos[1]->GetNumIndices() }}));
 
 	instances = {
 		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixIdentity()},
@@ -148,8 +152,9 @@ ComPtr<ID3D12RootSignature> DXR::CreateMissSignature(){
 
 ComPtr<ID3D12RootSignature> DXR::CreateHitSignature(){
 	nv_helpers_dx12::RootSignatureGenerator rsg;
-	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);
-	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV);
+	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 0); //Vertices
+	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 1); //Indices
+	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0); //Colors
 	return rsg.Generate(dx12.MainDevice(), true);
 }
 
@@ -265,10 +270,10 @@ void DXR::CreateShaderBindingTable(){
 	sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });
 	sbtHelper.AddMissProgram(L"Miss", {});
 	for(int i = 0; i < 3; i++){
-		sbtHelper.AddHitGroup(L"HitGroup", { (void*)(resources[i]->GetGPUVirtualAddress()) });
+		sbtHelper.AddHitGroup(L"HitGroup", { (void*)(meshInfos[0]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[0]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(resources[i]->GetGPUVirtualAddress()) });
 	}
 
-	sbtHelper.AddHitGroup(L"PlaneHitGroup", { (void*)(resources[0]->GetGPUVirtualAddress()) });
+	sbtHelper.AddHitGroup(L"PlaneHitGroup", { (void*)(meshInfos[1]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[1]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(resources[0]->GetGPUVirtualAddress()) });
 
 	uint32_t sbtSize = sbtHelper.ComputeSBTSize();
 

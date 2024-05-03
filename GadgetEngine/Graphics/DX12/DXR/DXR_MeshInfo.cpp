@@ -15,8 +15,11 @@ struct DXR_Vertex{
 	Color color;
 };
 
-DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()){
-	//Create Vertex Buffer
+DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), vertexBuffer(nullptr), indexBuffer(nullptr), bottomLevelAS(nullptr){
+	GADGET_BASIC_ASSERT(mesh_.vertices.size() > 0);
+	GADGET_BASIC_ASSERT(mesh_.indices.size() > 0);
+
+	//Vertex Buffer
 	std::vector<DXR_Vertex> dxrVerts;
 	dxrVerts.reserve(numIndices);
 
@@ -26,17 +29,30 @@ DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()){
 
 	vertexBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), dxrVerts.data(), dxrVerts.size() * sizeof(DXR_Vertex), true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
-	//Create Bottom Level Acceleration Structure
+	//Index Buffer
+	std::vector<uint32_t> dxrIndices;
+	dxrIndices.reserve(numIndices);
+
+	for(const auto& i : mesh_.indices){
+		dxrIndices.push_back(i);
+	}
+
+	indexBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), dxrIndices.data(), dxrIndices.size() * sizeof(uint32_t), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	//Bottom Level Acceleration Structure
 	GADGET_BASIC_ASSERT(numIndices < std::numeric_limits<uint32_t>::max());
-	std::pair<ComPtr<ID3D12Resource>, uint32_t> buffers = { vertexBuffer.Get(), static_cast<uint32_t>(numIndices) };
+	std::pair<ComPtr<ID3D12Resource>, uint32_t> vertBuffers = { vertexBuffer.Get(), static_cast<uint32_t>(dxrVerts.size()) };
+	std::pair<ComPtr<ID3D12Resource>, uint32_t> idxBuffers = { indexBuffer.Get(), static_cast<uint32_t>(dxrIndices.size()) };
 	
-	AccelerationStructureBuffers bottomLevelBuffers = DXR::GetInstance().CreateBottomLevelAS({ buffers });
+	AccelerationStructureBuffers bottomLevelBuffers = DXR::GetInstance().CreateBottomLevelAS({ vertBuffers }, { idxBuffers });
 	bottomLevelAS.Attach(bottomLevelBuffers.pResult.Get());
 }
 
-DXR_MeshInfo::DXR_MeshInfo(size_t indexCount_, ID3D12_Resource* vertexBuffer_) : MeshInfo(indexCount_), vertexBuffer(nullptr), bottomLevelAS(nullptr){
+DXR_MeshInfo::DXR_MeshInfo(size_t indexCount_, ID3D12_Resource* vertexBuffer_, ID3D12_Resource* indexBuffer_) : MeshInfo(indexCount_), vertexBuffer(nullptr), indexBuffer(nullptr), bottomLevelAS(nullptr){
 	GADGET_BASIC_ASSERT(indexCount_ > 0);
 	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
+	GADGET_BASIC_ASSERT(indexBuffer_ != nullptr);
 
 	vertexBuffer.Attach(vertexBuffer_);
+	indexBuffer.Attach(indexBuffer_);
 }

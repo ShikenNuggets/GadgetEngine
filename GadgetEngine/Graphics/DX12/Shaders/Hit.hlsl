@@ -7,6 +7,7 @@ struct STriVertex
 };
 
 StructuredBuffer<STriVertex> BTriVertex : register(t0);
+StructuredBuffer<int> indices : register(t1);
 
 cbuffer Colors : register(b0)
 {
