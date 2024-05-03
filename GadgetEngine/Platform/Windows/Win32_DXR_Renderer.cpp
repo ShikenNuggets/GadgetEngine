@@ -147,6 +147,8 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	cmdList->OMSetRenderTargets(1, &cpuStart, FALSE, nullptr);
 
 	//The Actual Rendering Part
+	dxr->UpdateTopLevelAS();
+
 	std::vector<ID3D12DescriptorHeap*> heaps = { dx12->SRVHeap().Heap() };
 	cmdList->SetDescriptorHeaps(static_cast<UINT>(heaps.size()), heaps.data());
 
