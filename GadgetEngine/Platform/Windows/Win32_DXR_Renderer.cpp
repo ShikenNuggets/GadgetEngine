@@ -13,7 +13,7 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), dx12(nullptr), dxr(nullptr), renderSurfacePtr(nullptr), rootSignature(nullptr), pipelineState(nullptr), vertexBuffer(nullptr){
+Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::DX12), dx12(nullptr), dxr(nullptr), renderSurfacePtr(nullptr), vertexBuffer(nullptr){
 	window = std::make_unique<Win32_Window>(w_, h_, x_, y_, renderAPI);
 
 	Win32_Window* win32Window = dynamic_cast<Win32_Window*>(window.get());
@@ -63,19 +63,25 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 		Debug::ThrowFatalError(SID("RENDER"), "Could not set up test assets!", err, __FILE__, __LINE__);
 	}
 
-	//TODO - Test stuff. This leaks memory
+	//TODO - Test stuff
 	DXR_MeshInfo* triangle1Mesh = new DXR_MeshInfo(3, vertexBuffer.Get(), indexBuffer.Get());
 	DXR_MeshInfo* planeMesh = new DXR_MeshInfo(6, planeVertexBuffer.Get(), planeIndexBuffer.Get());
 
-	std::vector<DXR_MeshInfo*> meshes;
-	meshes.push_back(triangle1Mesh);
-	meshes.push_back(planeMesh);
-	meshes.shrink_to_fit();
+	meshInfos.push_back(triangle1Mesh);
+	meshInfos.push_back(planeMesh);
+	meshInfos.shrink_to_fit();
 
-	dxr = &DXR::GetInstance(window->GetSize(), meshes);
+	dxr = &DXR::GetInstance(window->GetSize(), meshInfos);
 }
 
 Win32_DXR_Renderer::~Win32_DXR_Renderer(){
+	for(auto& mesh : meshInfos){
+		delete mesh;
+		mesh = nullptr;
+	}
+
+	(void)DXR::DeleteInstance(); //Not a whole lot we can do for error handling in a destructor
+
 	DX12_UploadHandler::DeleteInstance();
 	DX12_ShaderHandler::Shutdown();
 
@@ -134,7 +140,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 		return;
 	}
 
-	cmdList->SetGraphicsRootSignature(rootSignature.Get());
+	//cmdList->SetGraphicsRootSignature(rootSignature.Get());
 	//cmdList->SetPipelineState(pipelineState.Get());
 	cmdList->RSSetViewports(1, &renderSurfacePtr->Viewport());
 	cmdList->RSSetScissorRects(1, &renderSurfacePtr->ScissorRect());
@@ -227,49 +233,6 @@ struct TestVertex{
 
 ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	//------------------------------------------------------------//
-	//------------------ Root Signature --------------------------//
-	//------------------------------------------------------------//
-	GADGET_BASIC_ASSERT(dx12 != nullptr && dx12->IsInitialized());
-
-	DX12_Helpers::DX12_RootParameter constantParameter{};
-	DX12_Helpers::DX12_DescriptorRange range = DX12_Helpers::DX12_DescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
-	constantParameter.InitAsTable(D3D12_SHADER_VISIBILITY_ALL, &range, 1);
-
-	DX12_Helpers::DX12_RootSignatureDesc rootSignatureDesc = DX12_Helpers::DX12_RootSignatureDesc(&constantParameter, 1, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	rootSignature.Attach(rootSignatureDesc.Create(dx12->MainDevice()));
-
-	//------------------------------------------------------------//
-	//------------------ Pipeline State --------------------------//
-	//------------------------------------------------------------//
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
-	};
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
-	psoDesc.InputLayout = { inputElementDescs, static_cast<UINT>(std::size(inputElementDescs)) };
-	psoDesc.pRootSignature = rootSignature.Get();
-	psoDesc.VS = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::TestShader_VS);
-	psoDesc.PS = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::TestShader_PS);
-	psoDesc.RasterizerState = DX12_Helpers::RasterizerBackFaceCulling;
-	psoDesc.BlendState = DX12_Helpers::BlendDisabled;
-	psoDesc.DepthStencilState.DepthEnable = FALSE;
-	psoDesc.DepthStencilState.StencilEnable = FALSE;
-	psoDesc.SampleMask = UINT_MAX;
-	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	psoDesc.NumRenderTargets = 1;
-	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-	psoDesc.SampleDesc.Count = 1;
-
-	HRESULT hr = dx12->MainDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
-	if(FAILED(hr) || pipelineState == nullptr){
-		return ErrorCode::D3D12_Error;
-	}
-
-	dx12->GfxCommand()->CommandList()->SetPipelineState(pipelineState.Get());
-
-	//------------------------------------------------------------//
 	//------------------ Triangles -------------------------------//
 	//------------------------------------------------------------//
 	float aspect = 16.0f / 9.0f;
@@ -285,7 +248,16 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	const UINT indexBufferSize = static_cast<UINT>(indices.size()) * sizeof(UINT);
 
 	vertexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), triangleVertices, vertexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	if(vertexBuffer == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create vertex buffer for triangle mesh!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
+	}
+	vertexBuffer->SetName(L"Triangle Vertex Buffer");
+
 	indexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), indices.data(), indexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	if(indexBuffer == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create index buffer for triangle mesh!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
+	}
+	indexBuffer->SetName(L"Triangle Index Buffer");
 
 	//------------------------------------------------------------//
 	//------------------ Plane -----------------------------------//
@@ -304,7 +276,16 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	const UINT planeIndexBufferSize = static_cast<UINT>(planeIndices.size()) * sizeof(UINT);
 
 	planeVertexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), planeVertices, planeBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	if(planeVertexBuffer == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create vertex buffer for plane mesh!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
+	}
+	planeVertexBuffer->SetName(L"Plane Vertex Buffer");
+
 	planeIndexBuffer.Attach(DX12_Helpers::CreateBuffer(dx12->MainDevice(), planeIndices.data(), planeIndexBufferSize, true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	if(planeIndexBuffer == nullptr){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not create index buffer for plane mesh!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
+	}
+	planeIndexBuffer->SetName(L"Plane Index Buffer");
 
 	//------------------------------------------------------------//
 	//------------------ Execute Commands ------------------------//

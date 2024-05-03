@@ -24,11 +24,32 @@ namespace Gadget{
 		Microsoft::WRL::ComPtr<ID3D12Resource> pScratch;
 		Microsoft::WRL::ComPtr<ID3D12Resource> pResult;
 		Microsoft::WRL::ComPtr<ID3D12Resource> pInstanceDesc;
+
+		~AccelerationStructureBuffers(){
+			pScratch.ReleaseAndGetAddressOf();
+			pResult.ReleaseAndGetAddressOf();
+			pInstanceDesc.ReleaseAndGetAddressOf();
+		}
+
+		void SetName(const std::wstring& namePrefix_){
+			if(pScratch != nullptr){
+				pScratch->SetName((namePrefix_ + L"_Scratch").c_str());
+			}
+
+			if(pResult != nullptr){
+				pResult->SetName((namePrefix_ + L"_Result").c_str());
+			}
+
+			if(pInstanceDesc != nullptr){
+				pInstanceDesc->SetName((namePrefix_ + L"_InstanceDesc").c_str());
+			}
+		}
 	};
 
 	class DXR{
 	public:
 		DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_);
+		~DXR();
 		DISABLE_COPY_AND_MOVE(DXR);
 
 		static DXR& GetInstance();

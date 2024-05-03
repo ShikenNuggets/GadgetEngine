@@ -4,6 +4,7 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/DX12/DX12_RenderSurface.h"
 #include "Graphics/DX12/DX12_TextureInfo.h"
+#include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 
 namespace Gadget{
 	class DX12;
@@ -36,14 +37,14 @@ namespace Gadget{
 		DXR* dxr;
 
 		DX12_RenderSurface* renderSurfacePtr;
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
-		Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
 
 		//Test Assets
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexBuffer;
 		Microsoft::WRL::ComPtr<ID3D12Resource> planeVertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D12Resource> planeIndexBuffer;
+
+		std::vector<DXR_MeshInfo*> meshInfos;
 
 		ErrorCode SetupTestAssets();
 	};
