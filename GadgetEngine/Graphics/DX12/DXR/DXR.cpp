@@ -269,6 +269,7 @@ void DXR::CreateShaderBindingTable(){
 
 	sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });
 	sbtHelper.AddMissProgram(L"Miss", {});
+	sbtHelper.AddMissProgram(L"Miss", {}); //This is silly, but having (a multiple of) 2 miss programs honors an alignment requirement for the hit group table start address
 	for(int i = 0; i < 3; i++){
 		sbtHelper.AddHitGroup(L"HitGroup", { (void*)(meshInfos[0]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[0]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(resources[i]->GetGPUVirtualAddress()) });
 	}
