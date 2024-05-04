@@ -39,14 +39,6 @@ DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo
 	CreateShaderBindingTable();
 }
 
-DXR::~DXR(){
-	meshInfos.clear();
-
-	outputResource.Reset();
-	rtStateObjectProperties.Reset();
-	rtStateObject.Reset();
-}
-
 DXR& DXR::GetInstance(){
 	return *instance;
 }
@@ -90,8 +82,8 @@ AccelerationStructureBuffers DXR::CreateBottomLevelAS(std::vector<std::pair<ComP
 	blas.ComputeASBufferSizes(dx12.MainDevice(), false, &scratchSizeInBytes, &resultSizeInBytes);
 
 	AccelerationStructureBuffers buffers;
-	buffers.pScratch = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSizeInBytes, false, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-	buffers.pResult = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSizeInBytes, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	buffers.pScratch.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSizeInBytes, false, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+	buffers.pResult.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSizeInBytes, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
 
 	blas.Generate(dx12.GfxCommand()->CommandList(), buffers.pScratch.Get(), buffers.pResult.Get(), false, nullptr);
 	return buffers;
@@ -108,9 +100,9 @@ void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, D
 		uint64_t instanceDescsSize = 0;
 		topLevelASGenerator.ComputeASBufferSizes(dx12.MainDevice(), true, &scratchSize, &resultSize, &instanceDescsSize);
 
-		topLevelASBuffers.pScratch = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, true, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-		topLevelASBuffers.pResult = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-		topLevelASBuffers.pInstanceDesc = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE);
+		topLevelASBuffers.pScratch.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, true, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+		topLevelASBuffers.pResult.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+		topLevelASBuffers.pInstanceDesc.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE));
 	}
 
 	topLevelASGenerator.Generate(dx12.GfxCommand()->CommandList(), topLevelASBuffers.pScratch.Get(), topLevelASBuffers.pResult.Get(), topLevelASBuffers.pInstanceDesc.Get(), updateOnly_, topLevelASBuffers.pResult.Get());
@@ -150,7 +142,7 @@ void DXR::CreateAccelerationStructures(const std::vector<ComPtr<ID3D12_Resource>
 	bottomLevelAS2 = bottomLevelBuffers[1].pResult;
 }
 
-ComPtr<ID3D12RootSignature> DXR::CreateRayGenSignature(){
+ID3D12RootSignature* DXR::CreateRayGenSignature(){
 	nv_helpers_dx12::RootSignatureGenerator rsg;
 	rsg.AddHeapRangesParameter(
 		{
@@ -169,7 +161,7 @@ ComPtr<ID3D12RootSignature> DXR::CreateRayGenSignature(){
 	return rootSig;
 }
 
-ComPtr<ID3D12RootSignature> DXR::CreateMissSignature(){
+ID3D12RootSignature* DXR::CreateMissSignature(){
 	nv_helpers_dx12::RootSignatureGenerator rsg;
 
 	ID3D12RootSignature* rootSig = rsg.Generate(dx12.MainDevice(), true);
@@ -181,7 +173,7 @@ ComPtr<ID3D12RootSignature> DXR::CreateMissSignature(){
 	return rootSig;
 }
 
-ComPtr<ID3D12RootSignature> DXR::CreateHitSignature(){
+ID3D12RootSignature* DXR::CreateHitSignature(){
 	nv_helpers_dx12::RootSignatureGenerator rsg;
 	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 0); //Vertices
 	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 1); //Indices
@@ -211,9 +203,9 @@ void DXR::CreateRaytracingPipeline(){
 	pipeline.AddLibrary(missLibrary, { L"Miss" });
 	pipeline.AddLibrary(hitLibrary, { L"ClosestHit", L"PlaneClosestHit" });
 
-	rayGenSignature = CreateRayGenSignature();
-	missSignature = CreateMissSignature();
-	hitSignature = CreateHitSignature();
+	rayGenSignature.Attach(CreateRayGenSignature());
+	missSignature.Attach(CreateMissSignature());
+	hitSignature.Attach(CreateHitSignature());
 
 	GADGET_BASIC_ASSERT(rayGenSignature != nullptr);
 	GADGET_BASIC_ASSERT(missSignature != nullptr);
@@ -230,7 +222,7 @@ void DXR::CreateRaytracingPipeline(){
 	pipeline.SetMaxAttributeSize(2 * sizeof(float));
 	pipeline.SetMaxRecursionDepth(1);
 
-	rtStateObject = pipeline.Generate();
+	rtStateObject.Attach(pipeline.Generate());
 	if(rtStateObject == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not generate raytracing pipeline!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
@@ -309,10 +301,12 @@ void DXR::CreateShaderBindingTable(){
 		DirectX::XMVECTOR{0.7f, 0.0f, 1.0f, 1.0f},
 	};
 
-	std::vector<ID3D12Resource*> resources;
-	resources.push_back(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataA, sizeof(bufferDataA), true, D3D12_RESOURCE_STATE_GENERIC_READ));
-	resources.push_back(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataB, sizeof(bufferDataB), true, D3D12_RESOURCE_STATE_GENERIC_READ));
-	resources.push_back(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataC, sizeof(bufferDataC), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	colorConstBuffers.clear();
+	colorConstBuffers = std::vector<ComPtr<ID3D12Resource>>(3);
+
+	colorConstBuffers[0].Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataA, sizeof(bufferDataA), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	colorConstBuffers[1].Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataB, sizeof(bufferDataB), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	colorConstBuffers[2].Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataC, sizeof(bufferDataC), true, D3D12_RESOURCE_STATE_GENERIC_READ));
 	//End Test Stuff
 
 	sbtHelper.Reset();
@@ -324,14 +318,14 @@ void DXR::CreateShaderBindingTable(){
 	sbtHelper.AddMissProgram(L"Miss", {});
 	sbtHelper.AddMissProgram(L"Miss", {}); //This is silly, but having (a multiple of) 2 miss programs honors an alignment requirement for the hit group table start address
 	for(int i = 0; i < 3; i++){
-		sbtHelper.AddHitGroup(L"HitGroup", { (void*)(meshInfos[0]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[0]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(resources[i]->GetGPUVirtualAddress()) });
+		sbtHelper.AddHitGroup(L"HitGroup", { (void*)(meshInfos[0]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[0]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(colorConstBuffers[i]->GetGPUVirtualAddress()) });
 	}
 
-	sbtHelper.AddHitGroup(L"PlaneHitGroup", { (void*)(meshInfos[1]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[1]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(resources[0]->GetGPUVirtualAddress()) });
+	sbtHelper.AddHitGroup(L"PlaneHitGroup", { (void*)(meshInfos[1]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[1]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(colorConstBuffers[0]->GetGPUVirtualAddress()) });
 
 	uint32_t sbtSize = sbtHelper.ComputeSBTSize();
 
-	sbtStorage = DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, sbtSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE);
+	sbtStorage.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, sbtSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE));
 	if(!sbtStorage){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not allocate the shader binding table!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}

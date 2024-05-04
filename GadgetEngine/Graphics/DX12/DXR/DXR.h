@@ -25,12 +25,6 @@ namespace Gadget{
 		Microsoft::WRL::ComPtr<ID3D12Resource> pResult;
 		Microsoft::WRL::ComPtr<ID3D12Resource> pInstanceDesc;
 
-		~AccelerationStructureBuffers(){
-			pScratch.ReleaseAndGetAddressOf();
-			pResult.ReleaseAndGetAddressOf();
-			pInstanceDesc.ReleaseAndGetAddressOf();
-		}
-
 		void SetName(const std::wstring& namePrefix_){
 			if(pScratch != nullptr){
 				pScratch->SetName((namePrefix_ + L"_Scratch").c_str());
@@ -49,7 +43,6 @@ namespace Gadget{
 	class DXR{
 	public:
 		DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_);
-		~DXR();
 		DISABLE_COPY_AND_MOVE(DXR);
 
 		static DXR& GetInstance();
@@ -72,9 +65,9 @@ namespace Gadget{
 
 		void CreateTopLevelAS(const std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectX::XMMATRIX>>& instances_, bool updateOnly_ = false);
 
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateRayGenSignature();
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateMissSignature();
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateHitSignature();
+		ID3D12RootSignature* CreateRayGenSignature();
+		ID3D12RootSignature* CreateMissSignature();
+		ID3D12RootSignature* CreateHitSignature();
 
 		void CreateRaytracingPipeline();
 		void CreateRaytracingOutputBuffer();
@@ -108,7 +101,7 @@ namespace Gadget{
 		nv_helpers_dx12::ShaderBindingTableGenerator sbtHelper;
 		Microsoft::WRL::ComPtr<ID3D12Resource> sbtStorage;
 
-		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexBuffers;
+		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> colorConstBuffers;
 		std::vector<DXR_MeshInfo*> meshInfos;
 		Microsoft::WRL::ComPtr<ID3D12Resource> cameraBuffer;
 		uint32_t cameraBufferSize;
