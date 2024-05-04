@@ -49,7 +49,7 @@ void Debug::Init(){
 	WriteQueuedLogs();
 }
 
-void Debug::Log(const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
+void Debug::Log(const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_, bool writeToLogFile_){
 	GADGET_BASIC_ASSERT(!message_.empty());
 	GADGET_BASIC_ASSERT(type_ < LogType_MAX);
 
@@ -112,17 +112,23 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	Win32_Utils::SetConsoleColorWhite();
 #endif //GADGET_PLATFORM_WIN32
 
-	QueueLogForFileWrite(finalMessage + "\n");
+	if(writeToLogFile_){
+		QueueLogForFileWrite(finalMessage + "\n");
+	}
 }
 
-void Debug::Log(StringID channel_, const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
+void Debug::Log(StringID channel_, const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_, bool writeToLogFile_){
 	GADGET_BASIC_ASSERT(channel_ != StringID::None);
 	GADGET_BASIC_ASSERT(!message_.empty());
 	GADGET_BASIC_ASSERT(type_ < LogType::LogType_MAX);
 
 	if(logChannelFilter.empty() || logChannelFilter.find(channel_) != logChannelFilter.end()){
-		Debug::Log("[" + channel_.GetString() + "] " + message_, type_, fileName_, lineNumber_); //Only print if there is no filter set or if this channel is in the filter list
+		Debug::Log("[" + channel_.GetString() + "] " + message_, type_, fileName_, lineNumber_, writeToLogFile_); //Only print if there is no filter set or if this channel is in the filter list
 	}
+}
+
+void Debug::LogToConsoleOnly(StringID channel_, const std::string& message_, LogType type_, const std::string& fileName_, int lineNumber_){
+	Debug::Log(channel_, message_, type_, fileName_, lineNumber_, false);
 }
 
 Debug::LogType Debug::GetLogVerbosity(){ return logLevel; }
@@ -184,7 +190,7 @@ void Debug::WriteQueuedLogs(){
 	while(isInitialized && !queuedLogsForFileWrite.empty()){
 		auto err = FileSystem::WriteToFile(logFilePath, queuedLogsForFileWrite.front());
 		if(err != ErrorCode::OK){
-			std::cout << "ERROR: Could not write log messages to " << FileSystem::GetFileNameFromPath(logFilePath) << "! We'll try again later..." << std::endl;
+			Debug::LogToConsoleOnly(SID("DEBUG"), "Could not write log messages to " + FileSystem::GetFileNameFromPath(logFilePath) + "! We'll try again later...", Debug::Error, __FILE__, __LINE__);
 			break;
 		}
 

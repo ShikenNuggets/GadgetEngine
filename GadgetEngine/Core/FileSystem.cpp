@@ -129,7 +129,7 @@ ErrorCode FileSystem::WriteToFile(const std::string& filePath_, const std::strin
 	}
 
 	if(!filestream.is_open()){
-		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
+		Debug::LogToConsoleOnly(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::FileIO;
 	}
 
@@ -137,7 +137,7 @@ ErrorCode FileSystem::WriteToFile(const std::string& filePath_, const std::strin
 	filestream.close();
 
 	if(!filestream){
-		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
+		Debug::LogToConsoleOnly(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::FileIO;
 	}
 
@@ -160,7 +160,7 @@ ErrorCode FileSystem::WriteToBinaryFile(const std::string& filePath_, const std:
 	std::ofstream outfile;
 	switch(type_){
 		case WriteType::Append:
-			Debug::Log("Appending to binary files is not recommended.", Debug::Warning, __FILE__, __LINE__);
+			Debug::LogToConsoleOnly(SID("FILESYSTEM"), "Appending to binary files is not recommended.", Debug::Warning, __FILE__, __LINE__);
 			outfile.open(filePath_, std::ios::out | std::ios_base::app | std::ios::binary);
 			break;
 		case WriteType::Clear:
@@ -175,7 +175,7 @@ ErrorCode FileSystem::WriteToBinaryFile(const std::string& filePath_, const std:
 	}
 
 	if(!outfile.is_open()){
-		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
+		Debug::LogToConsoleOnly(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::FileIO;
 	}
 	
@@ -183,7 +183,7 @@ ErrorCode FileSystem::WriteToBinaryFile(const std::string& filePath_, const std:
 	outfile.close();
 	
 	if(!outfile){
-		Debug::Log(SID("FILESYSTEM"), "An error occurred while writing to file " + filePath_ + "!", Debug::Error, __FILE__, __LINE__);
+		Debug::LogToConsoleOnly(SID("FILESYSTEM"), "An error occurred while writing to file " + filePath_ + "!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::FileIO;
 	}
 
@@ -235,7 +235,7 @@ ErrorCode FileSystem::CreateFile(const std::string& file_){
 
 	filestream.flush();
 	filestream.close();
-	return ErrorCode::FileIO;
+	return ErrorCode::OK;
 }
 
 ErrorCode FileSystem::CreateDir(const std::string& path_){
