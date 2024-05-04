@@ -450,13 +450,6 @@ void DX12::ProcessAllDeferredReleases(){
 
 ErrorCode DX12::DebugShutdown(){
 #ifdef GADGET_DEBUG
-	//Unregistering would prevent us from logging the live device objects report, so...
-	//TODO - Is there any workaround for this? Does it even matter?
-	//auto err = UnregisterDebugCallback();
-	//if(err != ErrorCode::OK){
-	//	return err;
-	//}
-
 	auto err = BreakOnWarningsAndErrors(false, false);
 	if(err != ErrorCode::OK){
 		return err;
