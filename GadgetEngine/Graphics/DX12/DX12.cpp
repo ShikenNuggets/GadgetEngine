@@ -312,6 +312,7 @@ ErrorCode DX12::InitializeDescriptorHeaps(){
 }
 
 ErrorCode DX12::BreakOnWarningsAndErrors(bool breakOnWarnings_, bool breakOnErrors_){
+#ifdef GADGET_DEBUG
 	GADGET_BASIC_ASSERT(mainDevice != nullptr);
 	if(mainDevice == nullptr){
 		Debug::Log(SID("RENDER"), "BreakOnWarningsAndErrors requires the device to be initialized", Debug::Error, __FILE__, __LINE__);
@@ -338,6 +339,7 @@ ErrorCode DX12::BreakOnWarningsAndErrors(bool breakOnWarnings_, bool breakOnErro
 		Debug::Log(SID("RENDER"), "Debug break on DX12 warning could not be set!", Debug::Warning, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;
 	}
+#endif //GADGET_DEBUG
 
 	return ErrorCode::OK;
 }
