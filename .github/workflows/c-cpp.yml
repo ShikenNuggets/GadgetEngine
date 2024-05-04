@@ -22,4 +22,4 @@ jobs:
         msbuild-architecture: x64
           
     - name: Build Solution
-      run: MSBuild.exe GadgetEngine.sln
+      run: MSBuild.exe -restore GadgetEngine.sln
