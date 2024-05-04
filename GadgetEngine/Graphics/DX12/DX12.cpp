@@ -11,11 +11,12 @@ using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DX12> DX12::instance = nullptr;
+DWORD DX12::callbackCookie = 0;
 
 DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATURE_LEVEL_12_0), dxgiFactory(nullptr), mainDevice(nullptr), gfxCommand(nullptr), resourceBarriers(),
 													rtvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), dsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV),
 													srvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), uavDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV),
-													deferredReleases(FrameBufferCount), deferredReleaseMutex(), callbackCookie(0){
+													deferredReleases(FrameBufferCount), deferredReleaseMutex(){
 	GADGET_BASIC_ASSERT(deferredReleases.size() == FrameBufferCount);
 
 	if(options_.requireDXR){
@@ -118,9 +119,25 @@ ErrorCode DX12::EnableDebugLayer([[maybe_unused]] bool gpuValidation_){
 
 ErrorCode DX12::RegisterDebugCallback(){
 #ifdef GADGET_DEBUG
-	Microsoft::WRL::ComPtr<ID3D12InfoQueue1> infoQueue;
-	if(FAILED(mainDevice.As(&infoQueue) || infoQueue == nullptr)){
-		GADGET_LOG_ERROR(SID("RENDER"), "D3D12Device could not be queried as ID3D12InfoQueue1! D3D12 messages will not be debug logged.");
+	GADGET_BASIC_ASSERT(mainDevice != nullptr);
+	if(mainDevice == nullptr){
+		GADGET_LOG_WARNING(SID("RENDER"), "Cannot register debug callback before the main device has been created!");
+		return ErrorCode::Invalid_State;
+	}
+
+	//Unregister the existing callback if one's already registered
+	//We could just do nothing and return here, but this feels more correct
+	if(callbackCookie != 0){
+		auto err = UnregisterDebugCallback();
+		if(err != ErrorCode::OK){
+			GADGET_LOG_ERROR(SID("RENDER"), "D3D12 had an existing debug callback set, but it could not be unregistered.");
+			return err;
+		}
+	}
+
+	Microsoft::WRL::ComPtr<ID3D12_InfoQueue> infoQueue;
+	if(FAILED(mainDevice.As(&infoQueue)) || infoQueue == nullptr){
+		GADGET_LOG_ERROR(SID("RENDER"), "D3D12Device could not be queried as ID3D12InfoQueue! D3D12 messages will not be debug logged.");
 		return ErrorCode::D3D12_Error;
 	}
 	
@@ -140,9 +157,15 @@ ErrorCode DX12::UnregisterDebugCallback(){
 		return ErrorCode::OK; //We never registered the callback
 	}
 
-	Microsoft::WRL::ComPtr<ID3D12InfoQueue1> infoQueue;
-	if(FAILED(mainDevice.As(&infoQueue) || infoQueue == nullptr)){
-		GADGET_LOG_ERROR(SID("RENDER"), "D3D12Device could not be queried as ID3D12InfoQueue1! We won't be able to unregister the debug message callback!");
+	GADGET_BASIC_ASSERT(mainDevice != nullptr);
+	if(mainDevice == nullptr){
+		GADGET_LOG_WARNING(SID("RENDER"), "Cannot unregister debug callback if the main device is not set!");
+		return ErrorCode::OK;
+	}
+
+	Microsoft::WRL::ComPtr<ID3D12_InfoQueue> infoQueue;
+	if(FAILED(mainDevice.As(&infoQueue)) || infoQueue == nullptr){
+		GADGET_LOG_ERROR(SID("RENDER"), "D3D12Device could not be queried as ID3D12InfoQueue! We won't be able to unregister the debug message callback!");
 		return ErrorCode::D3D12_Error;
 	}
 	

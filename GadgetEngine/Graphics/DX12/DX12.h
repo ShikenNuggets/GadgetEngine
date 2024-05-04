@@ -99,7 +99,7 @@ namespace Gadget{
 
 		bool DoesDeviceSupportRaytracing(ID3D12_Device* device_) const;
 
-		DWORD callbackCookie;
+		static DWORD callbackCookie;
 		static void DebugMessageCallback(D3D12_MESSAGE_CATEGORY category_, D3D12_MESSAGE_SEVERITY severity_, D3D12_MESSAGE_ID id_, LPCSTR pDescription_, void* pContext_);
 	};
 }
