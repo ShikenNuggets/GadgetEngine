@@ -143,6 +143,24 @@ function DependsOnGadgetEngine()
 	forceincludes { "Gadget.h" }
 end
 
+function IgnoreDefaultLibrariesForDebug()
+	ignoredefaultlibraries
+	{
+		"libcmt",
+		"msvcrt", 
+		"msvcrtd"
+	}
+end
+
+function IgnoreDefaultLibrariesForRelease()
+	ignoredefaultlibraries
+	{
+		"libcmtd",
+		"msvcrt",
+		"msvcrtd"
+	}
+end
+
 -- //-----------------------------------------------------------//
 -- //---------------------- Workspace --------------------------//
 -- //-----------------------------------------------------------//
@@ -261,6 +279,12 @@ project "GadgetDLL"
 			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
 		}
 
+	filter "configurations:Debug or Develop"
+		IgnoreDefaultLibrariesForDebug()
+
+	filter "configurations:Release"
+		IgnoreDefaultLibrariesForRelease()
+
 -- //-----------------------------------------------------------//
 -- //----------------------- Game ------------------------------//
 -- //-----------------------------------------------------------//
@@ -285,9 +309,11 @@ project "Game"
 		
 	filter "configurations:Debug or Develop"
 		kind "ConsoleApp"
+		IgnoreDefaultLibrariesForDebug()
 		
 	filter "configurations:Release"
 		kind "WindowedApp"
+		IgnoreDefaultLibrariesForRelease()
 		
 -- //-----------------------------------------------------------//
 -- //------------------ Workbench ------------------------------//
