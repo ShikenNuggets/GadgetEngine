@@ -33,3 +33,7 @@ void Win32_Utils::SetConsoleColorYellow(){ if(gConsole){ SetConsoleTextAttribute
 void Win32_Utils::SetConsoleColorGreen(){ if(gConsole){ SetConsoleTextAttribute(gConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY); }}
 
 void Win32_Utils::SetConsoleColorBlue(){ if(gConsole){ SetConsoleTextAttribute(gConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY); }}
+
+void Win32_Utils::OutputToDebuggerConsole(const std::string& output_){
+	OutputDebugStringA(output_.c_str());
+}

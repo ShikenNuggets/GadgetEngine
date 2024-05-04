@@ -110,6 +110,8 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 
 #ifdef GADGET_PLATFORM_WIN32
 	Win32_Utils::SetConsoleColorWhite();
+
+	Win32_Utils::OutputToDebuggerConsole(finalMessage + "\n");
 #endif //GADGET_PLATFORM_WIN32
 
 	if(writeToLogFile_){

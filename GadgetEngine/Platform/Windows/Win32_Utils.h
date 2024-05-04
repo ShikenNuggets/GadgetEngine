@@ -12,6 +12,8 @@ namespace Gadget{
 		void SetConsoleColorYellow();
 		void SetConsoleColorGreen();
 		void SetConsoleColorBlue();
+
+		void OutputToDebuggerConsole(const std::string& output);
 	};
 }
 
