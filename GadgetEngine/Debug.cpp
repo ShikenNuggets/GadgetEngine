@@ -173,7 +173,7 @@ void Debug::ThrowFatalError(StringID channel_, const std::string& message_, Erro
 	GADGET_BASIC_ASSERT(!message_.empty());
 	GADGET_BASIC_ASSERT(err_ > ErrorCode::OK && err_ < ErrorCode::ErrorCode_MAX);
 
-	std::string messageWithErr = message_ + std::string("\nError Code: ") + ErrorCodeStr[static_cast<size_t>(err_)];
+	std::string messageWithErr = message_ + std::string("\nError Code: ") + GetErrorCodeString(err_);
 	std::string finalMessage = messageWithErr + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_);
 
 	Debug::Log(channel_, messageWithErr, FatalError, file_, line_);

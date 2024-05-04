@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cstdint>
+#include <string>
 
 namespace Gadget{
 	enum class ErrorCode : uint32_t{
@@ -59,6 +60,16 @@ namespace Gadget{
 	};
 
 	static_assert(std::size(ErrorCodeStr) == static_cast<size_t>(ErrorCode::ErrorCode_MAX));
+
+	//Safe function for getting the error code string
+	//Invalid error codes will return "Unknown_Error_Code"
+	constexpr inline std::string GetErrorCodeString(ErrorCode err_){
+		if(err_ <= ErrorCode::OK || err_ >= ErrorCode::ErrorCode_MAX){
+			return "Unknown_Error_Code";
+		}
+
+		return ErrorCodeStr[static_cast<size_t>(err_)];
+	}
 }
 
 #endif //!GADGET_ENUMS_H
