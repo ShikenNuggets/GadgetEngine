@@ -215,7 +215,8 @@ ErrorCode DX12_Command::ExecuteCommandsImmediate(){
 
 	ID3D12CommandList* ppCommandLists[] = { CommandList() };
 	static_assert(std::size(ppCommandLists) > 0);
-	cmdQueue->ExecuteCommandLists(std::size(ppCommandLists), &ppCommandLists[0]);
+	static_assert(std::size(ppCommandLists) < std::numeric_limits<uint32_t>::max()); //I don't expect this to ever actually be a problem, but it clarifies intent
+	cmdQueue->ExecuteCommandLists(static_cast<uint32_t>(std::size(ppCommandLists)), &ppCommandLists[0]);
 
 	const uint64_t fv = ++fenceValue;
 	HRESULT hr = cmdQueue->Signal(fence.Get(), fv);

@@ -117,8 +117,8 @@ void DXR::CreateAccelerationStructures(const std::vector<ComPtr<ID3D12_Resource>
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
 	std::vector<AccelerationStructureBuffers> bottomLevelBuffers;
-	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[0]->VertexBuffer(), 3}}, {{ meshInfos[0]->IndexBuffer(), meshInfos[0]->GetNumIndices() }}));
-	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[1]->VertexBuffer(), 4}}, {{ meshInfos[1]->IndexBuffer(), meshInfos[1]->GetNumIndices() }}));
+	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[0]->VertexBuffer(), 3}}, {{ meshInfos[0]->IndexBuffer(), static_cast<uint32_t>(meshInfos[0]->GetNumIndices()) }}));
+	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[1]->VertexBuffer(), 4}}, {{ meshInfos[1]->IndexBuffer(), static_cast<uint32_t>(meshInfos[1]->GetNumIndices()) }}));
 
 	bottomLevelBuffers[0].SetName(L"Triangle BLAS");
 	bottomLevelBuffers[1].SetName(L"Plane BLAS");

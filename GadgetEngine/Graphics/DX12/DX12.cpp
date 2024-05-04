@@ -311,7 +311,7 @@ ErrorCode DX12::InitializeDescriptorHeaps(){
 	return ErrorCode::OK;
 }
 
-ErrorCode DX12::BreakOnWarningsAndErrors(bool breakOnWarnings_, bool breakOnErrors_){
+ErrorCode DX12::BreakOnWarningsAndErrors([[maybe_unused]] bool breakOnWarnings_, [[maybe_unused]] bool breakOnErrors_){
 #ifdef GADGET_DEBUG
 	GADGET_BASIC_ASSERT(mainDevice != nullptr);
 	if(mainDevice == nullptr){
@@ -535,7 +535,7 @@ bool DX12::DoesDeviceSupportRaytracing(ID3D12_Device* device_) const{
 	return options5.RaytracingTier >= D3D12_RAYTRACING_TIER_1_0;
 }
 
-void DX12::DebugMessageCallback(D3D12_MESSAGE_CATEGORY category_, D3D12_MESSAGE_SEVERITY severity_, D3D12_MESSAGE_ID id_, LPCSTR pDescription_, void* pContext_){
+void DX12::DebugMessageCallback([[maybe_unused]] D3D12_MESSAGE_CATEGORY category_, D3D12_MESSAGE_SEVERITY severity_, [[maybe_unused]] D3D12_MESSAGE_ID id_, LPCSTR pDescription_, [[maybe_unused]] void* pContext_){
 	//Note 1 -	We cannot guarantee that this is being called on the render thread (or any particular thread)
 	//Note 2 -	We cannot guarantee anything about the internal D3D runtime state when this gets called.
 	//			Calling D3D functions here could cause deadlocks, crashes, or undefined behaviour
