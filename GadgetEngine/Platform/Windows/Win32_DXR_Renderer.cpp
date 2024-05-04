@@ -80,6 +80,12 @@ Win32_DXR_Renderer::~Win32_DXR_Renderer(){
 		mesh = nullptr;
 	}
 
+	//meshInfos owns these buffers
+	vertexBuffer.Detach();
+	indexBuffer.Detach();
+	planeVertexBuffer.Detach();
+	planeIndexBuffer.Detach();
+
 	(void)DXR::DeleteInstance(); //Not a whole lot we can do for error handling in a destructor
 
 	DX12_UploadHandler::DeleteInstance();
