@@ -360,8 +360,12 @@ void DXR::UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_){
 	matrices.push_back(view_.Inverse());
 	matrices.push_back(perspective_.Inverse());
 
+	GADGET_BASIC_ASSERT(sizeof(Matrix4) * matrices.size() <= cameraBufferSize);
+
 	uint8_t* pData = nullptr;
-	cameraBuffer->Map(0, nullptr, (void**)&pData);
-	memcpy(pData, matrices.data(), cameraBufferSize);
+	D3D12_RANGE range{ 0, 0 };
+	cameraBuffer->Map(0, &range, reinterpret_cast<void**>(&pData));
+	GADGET_BASIC_ASSERT(pData != nullptr);
+	memcpy(pData, matrices.data(), sizeof(Matrix4) * matrices.size());
 	cameraBuffer->Unmap(0, nullptr);
 }
