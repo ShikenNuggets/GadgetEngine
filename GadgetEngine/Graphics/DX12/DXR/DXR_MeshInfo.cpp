@@ -41,11 +41,7 @@ DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), 
 
 	//Bottom Level Acceleration Structure
 	GADGET_BASIC_ASSERT(numIndices < std::numeric_limits<uint32_t>::max());
-	std::pair<ComPtr<ID3D12Resource>, uint32_t> vertBuffers = { vertexBuffer.Get(), static_cast<uint32_t>(dxrVerts.size()) };
-	std::pair<ComPtr<ID3D12Resource>, uint32_t> idxBuffers = { indexBuffer.Get(), static_cast<uint32_t>(dxrIndices.size()) };
-	
-	AccelerationStructureBuffers bottomLevelBuffers = DXR::GetInstance().CreateBottomLevelAS({ vertBuffers }, { idxBuffers });
-	bottomLevelAS.Attach(bottomLevelBuffers.pResult.Get());
+	bottomLevelAS = new DXR_BottomLevelAS(vertexBuffer.Get(), dxrVerts.size(), indexBuffer.Get(), dxrIndices.size());
 }
 
 DXR_MeshInfo::DXR_MeshInfo(size_t indexCount_, ID3D12_Resource* vertexBuffer_, ID3D12_Resource* indexBuffer_) : MeshInfo(indexCount_), vertexBuffer(nullptr), indexBuffer(nullptr), bottomLevelAS(nullptr){
@@ -55,4 +51,9 @@ DXR_MeshInfo::DXR_MeshInfo(size_t indexCount_, ID3D12_Resource* vertexBuffer_, I
 
 	vertexBuffer.Attach(vertexBuffer_);
 	indexBuffer.Attach(indexBuffer_);
+}
+
+DXR_MeshInfo::~DXR_MeshInfo(){
+	delete bottomLevelAS;
+	bottomLevelAS = nullptr;
 }

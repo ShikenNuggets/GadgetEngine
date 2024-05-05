@@ -5,25 +5,26 @@
 
 #include "Graphics/MeshInfo.h"
 #include "Graphics/DX12/DX12_Defines.h"
+#include "Graphics/DX12/DXR/DXR_BottomLevelAS.h"
 
 namespace Gadget{
 	class DXR_MeshInfo : public MeshInfo{
 	public:
 		DXR_MeshInfo(const Mesh& mesh_);
 		DXR_MeshInfo(size_t indexCount_, ID3D12_Resource* vertexBuffer_, ID3D12_Resource* indexBuffer_);
-		virtual ~DXR_MeshInfo() override = default;
+		virtual ~DXR_MeshInfo() override;
 
 		virtual void Bind() override{}
 		virtual void Unbind() override{}
 
 		ID3D12_Resource* VertexBuffer(){ return vertexBuffer.Get(); }
 		ID3D12_Resource* IndexBuffer(){ return indexBuffer.Get(); }
-		ID3D12_Resource* BottomLevelAS(){ return bottomLevelAS.Get(); }
+		ID3D12_Resource* BottomLevelAS(){ return bottomLevelAS->Buffer(); }
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D12_Resource> vertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D12_Resource> indexBuffer;
-		Microsoft::WRL::ComPtr<ID3D12_Resource> bottomLevelAS;
+		DXR_BottomLevelAS* bottomLevelAS;
 	};
 }
 

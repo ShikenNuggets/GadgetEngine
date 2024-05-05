@@ -1,0 +1,47 @@
+#include "DXR_BottomLevelAS.h"
+
+#include "Graphics/DX12/DX12.h"
+#include "Graphics/DX12/DX12_Command.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/BottomLevelASGenerator.h"
+
+using namespace Gadget;
+using Microsoft::WRL::ComPtr;
+
+constexpr size_t vertexSize = 28;
+//constexpr size_t vertexSize = sizeof(Vertex); //TODO - Switch over to this vertex size once everything's set up to use the normal and texcoords
+
+DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numVertices_, ID3D12_Resource* indexBuffer_, size_t numIndices_){
+	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
+	GADGET_BASIC_ASSERT(numVertices_ > 0);
+	GADGET_BASIC_ASSERT(numVertices_ <= std::numeric_limits<uint32_t>::max());
+	GADGET_BASIC_ASSERT(numIndices_ <= std::numeric_limits<uint32_t>::max());
+
+	nv_helpers_dx12::BottomLevelASGenerator blas;
+
+	if(indexBuffer_ != nullptr && numIndices_ > 0){
+		blas.AddVertexBuffer(vertexBuffer_, 0, static_cast<uint32_t>(numVertices_), vertexSize, indexBuffer_, 0, static_cast<uint32_t>(numIndices_), nullptr, 0, true);
+	}else{
+		blas.AddVertexBuffer(vertexBuffer_, 0, static_cast<uint32_t>(numVertices_), vertexSize, nullptr, 0);
+	}
+
+	uint64_t scratchSizeInBytes = 0;
+	uint64_t resultSizeInBytes = 0;
+	blas.ComputeASBufferSizes(DX12::GetInstance().MainDevice(), false, &scratchSizeInBytes, &resultSizeInBytes);
+
+	ComPtr<ID3D12_Resource> scratchBuffer;
+	scratchBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, scratchSizeInBytes, false, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+	buffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, resultSizeInBytes, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+	
+	GADGET_BASIC_ASSERT(scratchBuffer != nullptr);
+	GADGET_BASIC_ASSERT(buffer != nullptr);
+
+	if(scratchBuffer != nullptr){
+		scratchBuffer->SetName(L"BLAS_ScratchBuffer");
+	}
+
+	if(buffer != nullptr){
+		buffer->SetName(L"BLAS_MainBuffer");
+	}
+
+	blas.Generate(DX12::GetInstance().GfxCommand()->CommandList(), scratchBuffer.Get(), buffer.Get(), false, nullptr);
+}
