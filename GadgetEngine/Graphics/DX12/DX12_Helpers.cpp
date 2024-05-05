@@ -142,3 +142,17 @@ ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, const void* d
 	GADGET_BASIC_ASSERT(resource != nullptr);
 	return resource;
 }
+
+void DX12_Helpers::UpdateBuffer(ID3D12_Resource* buffer_, const void* data_, uint64_t bufferSize_, UINT subResource_){
+	if(buffer_ == nullptr){
+		GADGET_LOG_WARNING(SID("RENDER"), "Tried to update a D3D12 buffer that was nullptr!");
+		return;
+	}
+
+	uint8_t* pData = nullptr;
+	D3D12_RANGE range{ 0, 0 };
+	buffer_->Map(subResource_, &range, reinterpret_cast<void**>(&pData));
+	GADGET_BASIC_ASSERT(pData != nullptr);
+	memcpy(pData, data_, bufferSize_);
+	buffer_->Unmap(subResource_, nullptr);
+}

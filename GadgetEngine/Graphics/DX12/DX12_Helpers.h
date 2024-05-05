@@ -461,6 +461,8 @@ namespace Gadget{
 									 D3D12_RESOURCE_STATES state_ = D3D12_RESOURCE_STATE_COMMON,
 									 D3D12_RESOURCE_FLAGS flags_ = D3D12_RESOURCE_FLAG_NONE,
 									 ID3D12Heap* heap_ = nullptr, uint64_t heapOffset_ = 0);
+
+		void UpdateBuffer(ID3D12_Resource* buffer_, const void* data_, uint64_t bufferSize_, UINT subResource_ = 0);
 	}
 }
 
