@@ -230,6 +230,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DXR\DXR.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_BottomLevelAS.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInfo.h" />
+    <ClInclude Include="Graphics\DX12\DXR\DXR_PipelineStateObject.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_TopLevelAS.h" />
     <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.h" />
     <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\RaytracingPipelineGenerator.h" />
@@ -368,6 +369,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\DX12\DXR\DXR.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_BottomLevelAS.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_MeshInfo.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\DXR_PipelineStateObject.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_TopLevelAS.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\RaytracingPipelineGenerator.cpp" />
