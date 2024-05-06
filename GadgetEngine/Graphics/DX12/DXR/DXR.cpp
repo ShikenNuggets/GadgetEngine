@@ -14,7 +14,7 @@ using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DXR> DXR::instance = nullptr;
 
-DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), meshInfos(meshInfo_), cameraBufferHandle(), topLevelASHandle(), outputResourceHandle(){
+DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), meshInfos(meshInfo_){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0);
 	GADGET_BASIC_ASSERT(frameSize_.y > 0);
 	GADGET_BASIC_ASSERT(meshInfo_.size() > 0);
@@ -40,6 +40,15 @@ DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo
 }
 
 DXR::~DXR(){
+	delete shaderBindingTable;
+	shaderBindingTable = nullptr;
+
+	if(heap != nullptr){
+		heap->Release();
+		delete heap;
+		heap = nullptr;
+	}
+
 	delete outputResource;
 	outputResource = nullptr;
 
@@ -152,29 +161,13 @@ void DXR::CreateShaderBindingTable(){
 	colorConstBuffers[2].Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), bufferDataC, sizeof(bufferDataC), true, D3D12_RESOURCE_STATE_GENERIC_READ));
 	//End Test Stuff
 
-	sbtHelper.Reset();
+	std::vector<HitGroupInfo> hitGroupInfos;
+	hitGroupInfos.push_back(HitGroupInfo(0, meshInfos[0]->VertexBuffer(), meshInfos[0]->IndexBuffer(), colorConstBuffers[0].Get()));
+	hitGroupInfos.push_back(HitGroupInfo(0, meshInfos[0]->VertexBuffer(), meshInfos[0]->IndexBuffer(), colorConstBuffers[1].Get()));
+	hitGroupInfos.push_back(HitGroupInfo(0, meshInfos[0]->VertexBuffer(), meshInfos[0]->IndexBuffer(), colorConstBuffers[2].Get()));
+	hitGroupInfos.push_back(HitGroupInfo(1, meshInfos[1]->VertexBuffer(), meshInfos[1]->IndexBuffer(), colorConstBuffers[0].Get()));
 
-	D3D12_GPU_DESCRIPTOR_HANDLE srvUavHeapHandle = heap->GPUStart();
-	UINT64* heapPointer = reinterpret_cast<UINT64*>(srvUavHeapHandle.ptr);
-
-	sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });
-	sbtHelper.AddMissProgram(L"Miss", {});
-	sbtHelper.AddMissProgram(L"Miss", {}); //This is silly, but having (a multiple of) 2 miss programs honors an alignment requirement for the hit group table start address
-	for(int i = 0; i < 3; i++){
-		sbtHelper.AddHitGroup(L"HitGroup", { (void*)(meshInfos[0]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[0]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(colorConstBuffers[i]->GetGPUVirtualAddress()) });
-	}
-
-	sbtHelper.AddHitGroup(L"PlaneHitGroup", { (void*)(meshInfos[1]->VertexBuffer()->GetGPUVirtualAddress()), (void*)(meshInfos[1]->IndexBuffer()->GetGPUVirtualAddress()), (void*)(colorConstBuffers[0]->GetGPUVirtualAddress()) });
-
-	uint32_t sbtSize = sbtHelper.ComputeSBTSize();
-
-	sbtStorage.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, sbtSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE));
-	if(!sbtStorage){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not allocate the shader binding table!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
-	}
-	sbtStorage->SetName(L"Shader Binding Table Storage Buffer");
-
-	sbtHelper.Generate(sbtStorage.Get(), pso->Properties());
+	shaderBindingTable = new DXR_ShaderBindingTable(pso, heap, hitGroupInfos);
 }
 
 constexpr uint32_t numMatrices = 2; //View inverse, projection inverse

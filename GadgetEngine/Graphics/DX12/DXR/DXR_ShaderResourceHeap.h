@@ -10,7 +10,6 @@ namespace Gadget{
 	class DXR_ShaderResourceHeap : public DX12_DescriptorHeap{
 	public:
 		DXR_ShaderResourceHeap(DXR_OutputResource* outputResource_, DXR_TopLevelAS* topLevelAS_);
-		~DXR_ShaderResourceHeap();
 
 		void CreateCBV(ID3D12_Resource* buffer_, size_t size_);
 

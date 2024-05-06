@@ -35,6 +35,7 @@ namespace Gadget{
 	class DX12_DescriptorHeap{
 	public:
 		explicit DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_);
+		virtual ~DX12_DescriptorHeap() = default;
 		DISABLE_COPY_AND_MOVE(DX12_DescriptorHeap)
 
 		ErrorCode Initialize(ID3D12_Device* const device_, uint32_t capacity_, bool isShaderVisible_);
@@ -53,9 +54,11 @@ namespace Gadget{
 		constexpr uint32_t DescriptorSize() const{ return descriptorSize; }
 		constexpr bool IsShaderVisible() const{ return gpuStart.ptr != 0; }
 
+	protected:
+		ID3D12DescriptorHeap* heap; //NOT a ComPtr since the release needs to be deferred
+
 	private:
 		const D3D12_DESCRIPTOR_HEAP_TYPE type;
-		ID3D12DescriptorHeap* heap; //NOT a ComPtr since the release needs to be deferred
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuStart;
 		D3D12_GPU_DESCRIPTOR_HANDLE gpuStart;
 		std::unique_ptr<uint32_t[]> freeHandles;

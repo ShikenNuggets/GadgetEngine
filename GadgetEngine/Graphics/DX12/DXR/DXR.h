@@ -56,8 +56,8 @@ namespace Gadget{
 		ID3D12StateObject* RTStateObject(){ return pso->StateObject(); }
 		ID3D12Resource* OutputResource(){ return outputResource->Resource(); }
 		ID3D12DescriptorHeap* Heap(){ return heap->Heap(); }
-		nv_helpers_dx12::ShaderBindingTableGenerator& SBTHelper(){ return sbtHelper; }
-		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
+		nv_helpers_dx12::ShaderBindingTableGenerator& SBTHelper(){ return shaderBindingTable->SBTHelper(); }
+		ID3D12Resource* SBTStorage() const{ return shaderBindingTable->Storage(); }
 
 		void UpdateTopLevelAS();
 		void CreateAccelerationStructures(const std::vector<Microsoft::WRL::ComPtr<ID3D12_Resource>>& resources_);
@@ -83,17 +83,10 @@ namespace Gadget{
 		DXR_ShaderResourceHeap* heap;
 		DXR_ShaderBindingTable* shaderBindingTable;
 
-		nv_helpers_dx12::ShaderBindingTableGenerator sbtHelper;
-		Microsoft::WRL::ComPtr<ID3D12Resource> sbtStorage;
-
 		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> colorConstBuffers;
 		std::vector<DXR_MeshInfo*> meshInfos;
 		Microsoft::WRL::ComPtr<ID3D12Resource> cameraBuffer;
 		uint32_t cameraBufferSize;
-
-		DX12_DescriptorHandle outputResourceHandle;
-		DX12_DescriptorHandle topLevelASHandle;
-		DX12_DescriptorHandle cameraBufferHandle;
 	};
 }
 

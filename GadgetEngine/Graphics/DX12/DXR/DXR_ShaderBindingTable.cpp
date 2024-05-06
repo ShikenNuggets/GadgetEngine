@@ -6,10 +6,10 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-DXR_ShaderBindingTable::DXR_ShaderBindingTable(DXR_PipelineStateObject* pso_, DXR_ShaderResourceHeap* heap_, const std::vector<HitGroupInfo>& hitGroupInfos_){
+DXR_ShaderBindingTable::DXR_ShaderBindingTable(DXR_PipelineStateObject* pso_, DX12_DescriptorHeap* heap_, const std::vector<HitGroupInfo>& hitGroupInfos_){
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 	GADGET_BASIC_ASSERT(pso_ != nullptr);
-	GADGET_BASIC_ASSERT(heap_ != nullptr && heap_->Type() == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	GADGET_BASIC_ASSERT(heap_ != nullptr && heap_->Type() == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV && heap_->IsShaderVisible());
 
 	sbtHelper.Reset();
 

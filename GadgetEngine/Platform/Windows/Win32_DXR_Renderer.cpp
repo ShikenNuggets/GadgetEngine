@@ -165,7 +165,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	//The Actual Rendering Part
 	dxr->UpdateTopLevelAS();
 
-	std::vector<ID3D12DescriptorHeap*> heaps = { dx12->SRVHeap().Heap() };
+	std::vector<ID3D12DescriptorHeap*> heaps = { dxr->Heap() };
 	cmdList->SetDescriptorHeaps(static_cast<UINT>(heaps.size()), heaps.data());
 
 	resourceBarriers.AddTransitionBarrier(dxr->OutputResource(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
