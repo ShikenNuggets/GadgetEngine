@@ -91,6 +91,10 @@ namespace Gadget{
 		std::vector<DXR_MeshInfo*> meshInfos;
 		Microsoft::WRL::ComPtr<ID3D12Resource> cameraBuffer;
 		uint32_t cameraBufferSize;
+
+		DX12_DescriptorHandle outputResourceHandle;
+		DX12_DescriptorHandle topLevelASHandle;
+		DX12_DescriptorHandle cameraBufferHandle;
 	};
 }
 

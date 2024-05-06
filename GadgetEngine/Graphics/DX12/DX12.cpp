@@ -459,6 +459,34 @@ void DX12::ProcessAllDeferredReleases(){
 	}
 }
 
+DX12_DescriptorHandle DX12::CreateUAV(ID3D12_Resource* resource_, ID3D12_Resource* counterResource_, const D3D12_UNORDERED_ACCESS_VIEW_DESC* desc_, DX12_DescriptorHeap& heap_){
+	GADGET_BASIC_ASSERT(mainDevice != nullptr);
+	GADGET_BASIC_ASSERT(desc_ != nullptr);
+	GADGET_BASIC_ASSERT(heap_.Type() == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	DX12_DescriptorHandle handle = heap_.Allocate();
+	mainDevice->CreateUnorderedAccessView(resource_, counterResource_, desc_, handle.cpuHandle);
+	return handle;
+}
+
+DX12_DescriptorHandle DX12::CreateSRV(ID3D12_Resource* resource_, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc_){
+	GADGET_BASIC_ASSERT(mainDevice != nullptr);
+	GADGET_BASIC_ASSERT(desc_ != nullptr);
+
+	DX12_DescriptorHandle handle = srvDescriptorHeap.Allocate();
+	mainDevice->CreateShaderResourceView(resource_, desc_, handle.cpuHandle);
+	return handle;
+}
+
+DX12_DescriptorHandle DX12::CreateCBV(const D3D12_CONSTANT_BUFFER_VIEW_DESC* desc_){
+	GADGET_BASIC_ASSERT(mainDevice != nullptr);
+	GADGET_BASIC_ASSERT(desc_ != nullptr);
+
+	DX12_DescriptorHandle handle = srvDescriptorHeap.Allocate();
+	mainDevice->CreateConstantBufferView(desc_, handle.cpuHandle);
+	return handle;
+}
+
 ErrorCode DX12::DebugShutdown(){
 #ifdef GADGET_DEBUG
 	auto err = BreakOnWarningsAndErrors(false, false);

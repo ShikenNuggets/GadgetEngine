@@ -40,6 +40,10 @@ DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo
 }
 
 DXR::~DXR(){
+	dx12.SRVHeap().Free(cameraBufferHandle);
+	dx12.SRVHeap().Free(topLevelASHandle);
+	dx12.SRVHeap().Free(outputResourceHandle);
+
 	delete outputResource;
 	outputResource = nullptr;
 
@@ -153,27 +157,21 @@ void DXR::CreateAccelerationStructures(const std::vector<ComPtr<ID3D12_Resource>
 void DXR::CreateShaderResourceHeap(){
 	GADGET_BASIC_ASSERT(outputResource != nullptr);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = dx12.SRVHeap().CPUStart();
-
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
-	dx12.MainDevice()->CreateUnorderedAccessView(outputResource->Resource(), nullptr, &uavDesc, srvHandle);
-
-	srvHandle.ptr += dx12.SRVHeap().DescriptorSize();
+	outputResourceHandle = dx12.CreateUAV(outputResource->Resource(), nullptr, &uavDesc);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_RAYTRACING_ACCELERATION_STRUCTURE;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.RaytracingAccelerationStructure.Location = topLevelASBuffers.pResult->GetGPUVirtualAddress();
-	dx12.MainDevice()->CreateShaderResourceView(nullptr, &srvDesc, srvHandle);
-
-	srvHandle.ptr += dx12.SRVHeap().DescriptorSize();
+	topLevelASHandle = dx12.CreateSRV(nullptr, &srvDesc);
 
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 	cbvDesc.BufferLocation = cameraBuffer->GetGPUVirtualAddress();
-	cbvDesc.SizeInBytes = cameraBufferSize; 
-	dx12.MainDevice()->CreateConstantBufferView(&cbvDesc, srvHandle);
+	cbvDesc.SizeInBytes = cameraBufferSize;
+	cameraBufferHandle = dx12.CreateCBV(&cbvDesc);
 }
 
 void DXR::CreateShaderBindingTable(){
