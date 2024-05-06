@@ -43,6 +43,14 @@ namespace Gadget{
 		int x;
 		int y;
 	};
+
+	class WindowRestartedEvent : public Event{
+	public:
+		WindowRestartedEvent() : Event(SID("WindowRestartedEvent")){}
+
+		static constexpr EventType Type(){ return EventType::WindowRestarted; }
+		virtual EventType GetEventType() const final override{ return Type(); }
+	};
 }
 
 #endif //!GADGET_APP_EVENT_H

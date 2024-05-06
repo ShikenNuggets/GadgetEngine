@@ -6,7 +6,7 @@
 namespace Gadget{
 	enum class EventType : uint8_t{
 		None = 0,
-		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
+		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved, WindowRestarted,
 		KeyPressed, KeyReleased,
 		MouseMoved, MouseScroll,
 		MouseButtonPressed, MouseButtonReleased,

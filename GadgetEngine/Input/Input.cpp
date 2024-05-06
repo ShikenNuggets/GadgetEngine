@@ -11,6 +11,7 @@
 using namespace Gadget;
 
 Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), persistentAxes(), definedButtons(), definedAxes(), currentMouseX(0), currentMouseY(0){
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowRestarted, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased, OnEvent);
 	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, OnEvent);
@@ -324,6 +325,17 @@ void Input::OnEvent(const Event& e_){
 	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
 
 	switch(e_.GetEventType()){
+		case EventType::WindowRestarted:
+			//Clear everything on a window restart
+			App::GetInput().axisEvents.clear();
+			App::GetInput().buttonEvents.clear();
+			App::GetInput().persistentAxisEvents.clear();
+			App::GetInput().buttonsDown.clear();
+			App::GetInput().buttonsHeld.clear();
+			App::GetInput().buttonsUp.clear();
+			App::GetInput().axes.clear();
+			App::GetInput().persistentAxes.clear();
+			break;
 		case EventType::KeyPressed:
 			GADGET_BASIC_ASSERT(dynamic_cast<const KeyPressedEvent*>(&e_) != nullptr);
 			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyPressedEvent&>(e_).GetKeyCode(), true));

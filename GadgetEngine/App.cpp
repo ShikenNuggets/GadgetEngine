@@ -184,6 +184,7 @@ void App::Run(GameInterface& gameInterface_){
 	#ifdef GADGET_DEBUG
 		if(input->GetButtonDown(Gadget::ButtonID::Keyboard_F11)){
 			ResetRenderer(); //TODO - Temp code, being able to hot reload the renderer is just useful for testing
+			EventHandler::GetInstance()->HandleEvent(WindowRestartedEvent());
 		}
 	#endif // GADGET_DEBUG
 
