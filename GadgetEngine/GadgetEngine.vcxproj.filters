@@ -197,6 +197,9 @@
     <ClInclude Include="Graphics\DX12\DXR\DXR_BottomLevelAS.h">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\DXR_MaterialInfo.h">
+      <Filter>Graphics\DX12\DXR</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInfo.h">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClInclude>
@@ -290,7 +293,13 @@
     <ClInclude Include="Graphics\Materials\DiffuseTextureMaterial.h">
       <Filter>Graphics\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Materials\EngineMaterial.h">
+      <Filter>Graphics\Materials</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Materials\Material.h">
+      <Filter>Graphics\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Materials\MaterialInfo.h">
       <Filter>Graphics\Materials</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Mesh.h">
@@ -599,6 +608,9 @@
     <ClCompile Include="Graphics\DX12\DXR\DXR_BottomLevelAS.cpp">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\DX12\DXR\DXR_MaterialInfo.cpp">
+      <Filter>Graphics\DX12\DXR</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\DX12\DXR\DXR_MeshInfo.cpp">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClCompile>
@@ -658,6 +670,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Materials\EngineMaterial.cpp">
+      <Filter>Graphics\Materials</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Materials\Material.cpp">
       <Filter>Graphics\Materials</Filter>

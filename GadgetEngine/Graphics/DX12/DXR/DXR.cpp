@@ -5,9 +5,6 @@
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DX12_ShaderHandler.h"
-#include "Graphics/DX12/DXR/nv_helpers_dx12/BottomLevelASGenerator.h"
-#include "Graphics/DX12/DXR/nv_helpers_dx12/RaytracingPipelineGenerator.h"
-#include "Graphics/DX12/DXR/nv_helpers_dx12/RootSignatureGenerator.h"
 
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;

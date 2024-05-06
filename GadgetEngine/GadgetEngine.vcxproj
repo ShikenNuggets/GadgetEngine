@@ -229,6 +229,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DX12_UploadHandler.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_BottomLevelAS.h" />
+    <ClInclude Include="Graphics\DX12\DXR\DXR_MaterialInfo.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInfo.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_OutputResource.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_PipelineStateObject.h" />
@@ -260,7 +261,9 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\Loaders\ObjLoader.h" />
     <ClInclude Include="Graphics\Materials\ColorMaterial.h" />
     <ClInclude Include="Graphics\Materials\DiffuseTextureMaterial.h" />
+    <ClInclude Include="Graphics\Materials\EngineMaterial.h" />
     <ClInclude Include="Graphics\Materials\Material.h" />
+    <ClInclude Include="Graphics\Materials\MaterialInfo.h" />
     <ClInclude Include="Graphics\Mesh.h" />
     <ClInclude Include="Graphics\MeshInfo.h" />
     <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.h" />
@@ -371,6 +374,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\DX12\DX12_UploadHandler.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_BottomLevelAS.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\DXR_MaterialInfo.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_MeshInfo.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_OutputResource.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_PipelineStateObject.cpp" />
@@ -391,6 +395,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\Loaders\FontLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\FreetypeFontLoader.cpp" />
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />
+    <ClCompile Include="Graphics\Materials\EngineMaterial.cpp" />
     <ClCompile Include="Graphics\Materials\Material.cpp" />
     <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.cpp" />
     <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DepthFrameBuffer.cpp" />
