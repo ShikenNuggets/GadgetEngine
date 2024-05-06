@@ -87,7 +87,8 @@ Win32_DXR_Renderer::~Win32_DXR_Renderer(){
 	planeVertexBuffer.Detach();
 	planeIndexBuffer.Detach();
 
-	(void)DXR::DeleteInstance(); //Not a whole lot we can do for error handling in a destructor
+	(void)dx12->GfxCommand()->Flush(); //Not a whole lot we can do for error handling in a destructor
+	(void)DXR::DeleteInstance();
 
 	DX12_UploadHandler::DeleteInstance();
 	DX12_ShaderHandler::Shutdown();
