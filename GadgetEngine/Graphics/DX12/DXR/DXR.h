@@ -13,9 +13,11 @@
 #include "ScreenCoordinate.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
+#include "Graphics/DX12/DXR/DXR_MeshInfo.h"
+#include "Graphics/DX12/DXR/DXR_PipelineStateObject.h"
+#include "Graphics/DX12/DXR/DXR_OutputResource.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/TopLevelASGenerator.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/ShaderBindingTableGenerator.h"
-#include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 #include "Math/Matrix.h"
 #include "Utils/Utils.h"
 
@@ -43,14 +45,15 @@ namespace Gadget{
 	class DXR{
 	public:
 		DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_);
+		~DXR();
 		DISABLE_COPY_AND_MOVE(DXR);
 
 		static DXR& GetInstance();
 		static DXR& GetInstance(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_);
 		[[nodiscard]] static ErrorCode DeleteInstance();
 
-		ID3D12StateObject* RTStateObject(){ return rtStateObject.Get(); }
-		ID3D12Resource* OutputResource(){ return outputResource.Get(); }
+		ID3D12StateObject* RTStateObject(){ return pso->StateObject(); }
+		ID3D12Resource* OutputResource(){ return outputResource->Resource(); }
 		nv_helpers_dx12::ShaderBindingTableGenerator& SBTHelper(){ return sbtHelper; }
 		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
 
@@ -65,19 +68,12 @@ namespace Gadget{
 
 		void CreateTopLevelAS(const std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectX::XMMATRIX>>& instances_, bool updateOnly_ = false);
 
-		ID3D12RootSignature* CreateRayGenSignature();
-		ID3D12RootSignature* CreateMissSignature();
-		ID3D12RootSignature* CreateHitSignature();
-
-		void CreateRaytracingPipeline();
-		void CreateRaytracingOutputBuffer();
 		void CreateShaderResourceHeap();
 		void CreateShaderBindingTable();
 
 		void CreateCameraBuffer();
 
 		DX12& dx12;
-		ScreenCoordinate frameSize;
 
 		Microsoft::WRL::ComPtr<ID3D12Resource> bottomLevelAS;
 		Microsoft::WRL::ComPtr<ID3D12Resource> bottomLevelAS2;
@@ -85,18 +81,8 @@ namespace Gadget{
 		AccelerationStructureBuffers topLevelASBuffers;
 		std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectX::XMMATRIX>> instances;
 
-		D3D12_SHADER_BYTECODE rayGenLibrary;
-		D3D12_SHADER_BYTECODE hitLibrary;
-		D3D12_SHADER_BYTECODE missLibrary;
-
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> rayGenSignature;
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> hitSignature;
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> missSignature;
-
-		Microsoft::WRL::ComPtr<ID3D12StateObject> rtStateObject;
-		Microsoft::WRL::ComPtr<ID3D12StateObjectProperties> rtStateObjectProperties;
-
-		Microsoft::WRL::ComPtr<ID3D12Resource> outputResource;
+		DXR_PipelineStateObject* pso;
+		DXR_OutputResource* outputResource;
 
 		nv_helpers_dx12::ShaderBindingTableGenerator sbtHelper;
 		Microsoft::WRL::ComPtr<ID3D12Resource> sbtStorage;

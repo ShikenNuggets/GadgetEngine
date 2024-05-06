@@ -12,6 +12,8 @@ namespace Gadget{
 	public:
 		DXR_OutputResource(const ScreenCoordinate& frameSize_);
 
+		ID3D12_Resource* Resource(){ return outputResource.Get(); }
+
 	private:
 		Microsoft::WRL::ComPtr<ID3D12_Resource> outputResource;
 	};

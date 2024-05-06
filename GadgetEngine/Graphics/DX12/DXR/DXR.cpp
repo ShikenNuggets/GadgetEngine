@@ -14,7 +14,7 @@ using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DXR> DXR::instance = nullptr;
 
-DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), frameSize(frameSize_), meshInfos(meshInfo_){
+DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), meshInfos(meshInfo_){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0);
 	GADGET_BASIC_ASSERT(frameSize_.y > 0);
 	GADGET_BASIC_ASSERT(meshInfo_.size() > 0);
@@ -30,13 +30,21 @@ DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo
 		Debug::ThrowFatalError(SID("RENDER"), "Could not close command list after creating acceleration structures!", err, __FILE__, __LINE__);
 	}
 
-	CreateRaytracingPipeline();
-	CreateRaytracingOutputBuffer();
+	pso = new DXR_PipelineStateObject();
+	outputResource = new DXR_OutputResource(frameSize_);
 
 	CreateCameraBuffer();
 
 	CreateShaderResourceHeap();
 	CreateShaderBindingTable();
+}
+
+DXR::~DXR(){
+	delete outputResource;
+	outputResource = nullptr;
+
+	delete pso;
+	pso = nullptr;
 }
 
 DXR& DXR::GetInstance(){
@@ -142,124 +150,14 @@ void DXR::CreateAccelerationStructures(const std::vector<ComPtr<ID3D12_Resource>
 	bottomLevelAS2 = bottomLevelBuffers[1].pResult;
 }
 
-ID3D12RootSignature* DXR::CreateRayGenSignature(){
-	nv_helpers_dx12::RootSignatureGenerator rsg;
-	rsg.AddHeapRangesParameter(
-		{
-			{ 0, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 0 }, //Output buffer
-			{ 0, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1 }, //Top-level acceleration structure
-			{ 0, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 2 }, //Camera parameters
-		}
-	);
-
-	ID3D12RootSignature* rootSig = rsg.Generate(dx12.MainDevice(), true);
-	if(rootSig == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create ray generation signature!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
-	}
-
-	rootSig->SetName(L"RayGen Root Signature");
-	return rootSig;
-}
-
-ID3D12RootSignature* DXR::CreateMissSignature(){
-	nv_helpers_dx12::RootSignatureGenerator rsg;
-
-	ID3D12RootSignature* rootSig = rsg.Generate(dx12.MainDevice(), true);
-	if(rootSig == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create miss signature!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
-	}
-
-	rootSig->SetName(L"Miss Root Signature");
-	return rootSig;
-}
-
-ID3D12RootSignature* DXR::CreateHitSignature(){
-	nv_helpers_dx12::RootSignatureGenerator rsg;
-	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 0); //Vertices
-	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 1); //Indices
-	rsg.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0); //Colors
-
-	ID3D12RootSignature* rootSig = rsg.Generate(dx12.MainDevice(), true);
-	if(rootSig == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create hit signature!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
-	}
-
-	rootSig->SetName(L"Hit Root Signature");
-	return rootSig;
-}
-
-void DXR::CreateRaytracingPipeline(){
-	nv_helpers_dx12::RayTracingPipelineGenerator pipeline(dx12.MainDevice());
-
-	rayGenLibrary = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::RayGen_Lib);
-	missLibrary = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::Miss_Lib);
-	hitLibrary = DX12_ShaderHandler::GetEngineShader(EngineShader::ID::Hit_Lib);
-
-	GADGET_BASIC_ASSERT(rayGenLibrary.BytecodeLength > 0 && rayGenLibrary.pShaderBytecode != nullptr);
-	GADGET_BASIC_ASSERT(missLibrary.BytecodeLength > 0 && missLibrary.pShaderBytecode != nullptr);
-	GADGET_BASIC_ASSERT(hitLibrary.BytecodeLength > 0 && hitLibrary.pShaderBytecode != nullptr);
-
-	pipeline.AddLibrary(rayGenLibrary, { L"RayGen" });
-	pipeline.AddLibrary(missLibrary, { L"Miss" });
-	pipeline.AddLibrary(hitLibrary, { L"ClosestHit", L"PlaneClosestHit" });
-
-	rayGenSignature.Attach(CreateRayGenSignature());
-	missSignature.Attach(CreateMissSignature());
-	hitSignature.Attach(CreateHitSignature());
-
-	GADGET_BASIC_ASSERT(rayGenSignature != nullptr);
-	GADGET_BASIC_ASSERT(missSignature != nullptr);
-	GADGET_BASIC_ASSERT(hitSignature != nullptr);
-
-	pipeline.AddHitGroup(L"HitGroup", L"ClosestHit");
-	pipeline.AddHitGroup(L"PlaneHitGroup", L"PlaneClosestHit");
-
-	pipeline.AddRootSignatureAssociation(rayGenSignature.Get(), { L"RayGen" });
-	pipeline.AddRootSignatureAssociation(missSignature.Get(), { L"Miss" });
-	pipeline.AddRootSignatureAssociation(hitSignature.Get(), { L"HitGroup", L"PlaneHitGroup"});
-
-	pipeline.SetMaxPayloadSize(4 * sizeof(float));
-	pipeline.SetMaxAttributeSize(2 * sizeof(float));
-	pipeline.SetMaxRecursionDepth(1);
-
-	rtStateObject.Attach(pipeline.Generate());
-	if(rtStateObject == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not generate raytracing pipeline!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
-	}
-	rtStateObject->SetName(L"Raytracing Pipeline State Object");
-
-	HRESULT hr = rtStateObject->QueryInterface(IID_PPV_ARGS(rtStateObjectProperties.ReleaseAndGetAddressOf()));
-	if(FAILED(hr) || rtStateObjectProperties == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not query interface for rtStateObject!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
-	}
-}
-
-void DXR::CreateRaytracingOutputBuffer(){
-	D3D12_RESOURCE_DESC resDesc = {};
-	resDesc.DepthOrArraySize = 1;
-	resDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	resDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	resDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-	resDesc.Width = frameSize.x;
-	resDesc.Height = frameSize.y;
-	resDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-	resDesc.MipLevels = 1;
-	resDesc.SampleDesc.Count = 1;
-
-	HRESULT hr = dx12.MainDevice()->CreateCommittedResource(&DX12_Helpers::DefaultHeapProperties, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_COPY_SOURCE, nullptr, IID_PPV_ARGS(outputResource.ReleaseAndGetAddressOf()));
-	if(FAILED(hr) || outputResource == nullptr){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not create output resource!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
-	}
-	
-	outputResource->SetName(L"DXR Output Resource");
-}
-
 void DXR::CreateShaderResourceHeap(){
+	GADGET_BASIC_ASSERT(outputResource != nullptr);
+
 	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = dx12.SRVHeap().CPUStart();
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
-	dx12.MainDevice()->CreateUnorderedAccessView(outputResource.Get(), nullptr, &uavDesc, srvHandle);
+	dx12.MainDevice()->CreateUnorderedAccessView(outputResource->Resource(), nullptr, &uavDesc, srvHandle);
 
 	srvHandle.ptr += dx12.SRVHeap().DescriptorSize();
 
@@ -279,6 +177,8 @@ void DXR::CreateShaderResourceHeap(){
 }
 
 void DXR::CreateShaderBindingTable(){
+	GADGET_BASIC_ASSERT(pso != nullptr);
+
 	//Test Stuff
 	DirectX::XMVECTOR bufferDataA[] = {
 		// A
@@ -331,7 +231,7 @@ void DXR::CreateShaderBindingTable(){
 	}
 	sbtStorage->SetName(L"Shader Binding Table Storage Buffer");
 
-	sbtHelper.Generate(sbtStorage.Get(), rtStateObjectProperties.Get());
+	sbtHelper.Generate(sbtStorage.Get(), pso->Properties());
 }
 
 constexpr uint32_t numMatrices = 2; //View inverse, projection inverse

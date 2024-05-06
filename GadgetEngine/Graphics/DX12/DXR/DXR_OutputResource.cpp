@@ -7,6 +7,8 @@ using namespace Gadget;
 
 DXR_OutputResource::DXR_OutputResource(const ScreenCoordinate& frameSize_) : outputResource(nullptr){
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
+	GADGET_BASIC_ASSERT(frameSize_.x > 0);
+	GADGET_BASIC_ASSERT(frameSize_.y > 0);
 
 	D3D12_RESOURCE_DESC resDesc = {};
 	resDesc.DepthOrArraySize = 1;

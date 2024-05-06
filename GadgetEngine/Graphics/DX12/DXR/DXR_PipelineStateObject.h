@@ -9,6 +9,9 @@ namespace Gadget{
 	public:
 		DXR_PipelineStateObject();
 
+		ID3D12StateObject* StateObject(){ return rtStateObject.Get(); }
+		ID3D12StateObjectProperties* Properties(){ return rtStateObjectProperties.Get(); }
+
 	private:
 		D3D12_SHADER_BYTECODE rayGenLibrary;
 		D3D12_SHADER_BYTECODE hitLibrary;
