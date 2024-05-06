@@ -12,11 +12,12 @@ using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
 DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), vertexBuffer(nullptr), indexBuffer(nullptr), bottomLevelAS(nullptr){
+	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 	GADGET_BASIC_ASSERT(mesh_.vertices.size() > 0);
 	GADGET_BASIC_ASSERT(mesh_.indices.size() > 0);
 
 	//Vertex Buffer
-	vertexBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), mesh_.vertices.data(), mesh_.vertices.size() * sizeof(Vertex), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	vertexBuffer.Attach(DX12::GetInstance().CreateBuffer(mesh_.vertices.data(), mesh_.vertices.size() * sizeof(Vertex), true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
 	//Index Buffer
 	std::vector<uint32_t> dxrIndices;
@@ -26,7 +27,7 @@ DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), 
 		dxrIndices.push_back(i);
 	}
 
-	indexBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), dxrIndices.data(), dxrIndices.size() * sizeof(uint32_t), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	indexBuffer.Attach(DX12::GetInstance().CreateBuffer(dxrIndices.data(), dxrIndices.size() * sizeof(uint32_t), true, D3D12_RESOURCE_STATE_GENERIC_READ));
 
 	//Bottom Level Acceleration Structure
 	bottomLevelAS = new DXR_BottomLevelAS(vertexBuffer.Get(), mesh_.vertices.size(), indexBuffer.Get(), dxrIndices.size());

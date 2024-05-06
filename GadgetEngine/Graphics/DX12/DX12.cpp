@@ -406,6 +406,11 @@ ErrorCode DX12::ResizeSurface(DX12_RenderSurface* surface_, int width_, int heig
 	return surface_->SetSize(ScreenCoordinate(width_, height_));
 }
 
+ID3D12_Resource* DX12::CreateBuffer(const void* data_, uint64_t bufferSize_, bool isCpuAccessible_, D3D12_RESOURCE_STATES state_, D3D12_RESOURCE_FLAGS flags_, ID3D12Heap* heap_, uint64_t heapOffset_){
+	GADGET_BASIC_ASSERT(mainDevice != nullptr);
+	return DX12_Helpers::CreateBuffer(mainDevice.Get(), data_, bufferSize_, isCpuAccessible_, state_, flags_, heap_, heapOffset_);
+}
+
 void DX12::DeferredRelease(IUnknown* resource_){
 	GADGET_BASIC_ASSERT(CurrentFrameIndex() < deferredReleases.size());
 	GADGET_BASIC_ASSERT(deferredReleases.size() == FrameBufferCount);

@@ -23,9 +23,9 @@ void DXR_TopLevelAS::Regenerate(const std::vector<DXR_MeshInstance>& meshInstanc
 	uint64_t instanceDescsSize = 0;
 	topLevelASGenerator.ComputeASBufferSizes(DX12::GetInstance().MainDevice(), true, &scratchSize, &resultSize, &instanceDescsSize);
 
-	scratchBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, scratchSize, true, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
-	mainBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
-	instanceDescBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE));
+	scratchBuffer.Attach(DX12::GetInstance().CreateBuffer(nullptr, scratchSize, true, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+	mainBuffer.Attach(DX12::GetInstance().CreateBuffer(nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+	instanceDescBuffer.Attach(DX12::GetInstance().CreateBuffer(nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE));
 
 	GADGET_BASIC_ASSERT(scratchBuffer != nullptr);
 	GADGET_BASIC_ASSERT(mainBuffer != nullptr);

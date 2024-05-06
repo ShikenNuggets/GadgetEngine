@@ -28,8 +28,8 @@ DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numV
 	blas.ComputeASBufferSizes(DX12::GetInstance().MainDevice(), false, &scratchSizeInBytes, &resultSizeInBytes);
 
 	ComPtr<ID3D12_Resource> scratchBuffer;
-	scratchBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, scratchSizeInBytes, false, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
-	buffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, resultSizeInBytes, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+	scratchBuffer.Attach(DX12::GetInstance().CreateBuffer(nullptr, scratchSizeInBytes, false, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+	buffer.Attach(DX12::GetInstance().CreateBuffer(nullptr, resultSizeInBytes, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
 	
 	GADGET_BASIC_ASSERT(scratchBuffer != nullptr);
 	GADGET_BASIC_ASSERT(buffer != nullptr);

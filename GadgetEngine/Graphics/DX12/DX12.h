@@ -59,6 +59,11 @@ namespace Gadget{
 
 		[[nodiscard]] ErrorCode FlushAndSetFrameIndex(uint32_t frameIndex_); //Calling this in the main render loop is not recommended, it should only be used on startup
 
+		ID3D12_Resource* CreateBuffer(const void* data_, uint64_t bufferSize_, bool isCpuAccessible_ = false,
+			D3D12_RESOURCE_STATES state_ = D3D12_RESOURCE_STATE_COMMON,
+			D3D12_RESOURCE_FLAGS flags_ = D3D12_RESOURCE_FLAG_NONE,
+			ID3D12Heap* heap_ = nullptr, uint64_t heapOffset_ = 0);
+
 		void DeferredRelease(IUnknown* resource_);
 		uint32_t GetDeferredReleaseFlag();
 		void SetDeferredReleaseFlag();
