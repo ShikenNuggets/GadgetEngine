@@ -12,6 +12,8 @@ namespace Gadget{
 		ID3D12StateObject* StateObject(){ return rtStateObject.Get(); }
 		ID3D12StateObjectProperties* Properties(){ return rtStateObjectProperties.Get(); }
 
+		LPCWSTR HitGroupName(size_t index_);
+
 	private:
 		D3D12_SHADER_BYTECODE rayGenLibrary;
 		D3D12_SHADER_BYTECODE hitLibrary;

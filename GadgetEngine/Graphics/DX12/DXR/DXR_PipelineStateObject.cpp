@@ -7,6 +7,11 @@
 
 using namespace Gadget;
 
+const std::vector<std::wstring> hitGroupNames = {{
+	L"HitGroup",
+	L"PlaneHitGroup"
+}};
+
 DXR_PipelineStateObject::DXR_PipelineStateObject(){
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 
@@ -32,12 +37,12 @@ DXR_PipelineStateObject::DXR_PipelineStateObject(){
 	GADGET_BASIC_ASSERT(missSignature != nullptr);
 	GADGET_BASIC_ASSERT(hitSignature != nullptr);
 
-	pipeline.AddHitGroup(L"HitGroup", L"ClosestHit");
-	pipeline.AddHitGroup(L"PlaneHitGroup", L"PlaneClosestHit");
+	pipeline.AddHitGroup(hitGroupNames[0], L"ClosestHit");
+	pipeline.AddHitGroup(hitGroupNames[1], L"PlaneClosestHit");
 
 	pipeline.AddRootSignatureAssociation(rayGenSignature.Get(), { L"RayGen" });
 	pipeline.AddRootSignatureAssociation(missSignature.Get(), { L"Miss" });
-	pipeline.AddRootSignatureAssociation(hitSignature.Get(), { L"HitGroup", L"PlaneHitGroup" });
+	pipeline.AddRootSignatureAssociation(hitSignature.Get(), { hitGroupNames });
 
 	pipeline.SetMaxPayloadSize(4 * sizeof(float));
 	pipeline.SetMaxAttributeSize(2 * sizeof(float));
@@ -53,6 +58,17 @@ DXR_PipelineStateObject::DXR_PipelineStateObject(){
 	if(FAILED(hr) || rtStateObjectProperties == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not query interface for rtStateObject!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
+}
+
+LPCWSTR DXR_PipelineStateObject::HitGroupName(size_t index_){
+	GADGET_BASIC_ASSERT(index_ < std::size(hitGroupNames));
+
+	if(index_ >= std::size(hitGroupNames)){
+		GADGET_LOG_WARNING(SID("RENDER"), "Invalid hit group index " + std::to_string(index_) + "!");
+		return L"";
+	}
+
+	return hitGroupNames[index_].c_str();
 }
 
 ID3D12RootSignature* DXR_PipelineStateObject::CreateRayGenSignature(){

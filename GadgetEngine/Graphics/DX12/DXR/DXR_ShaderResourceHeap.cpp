@@ -8,6 +8,8 @@ DXR_ShaderResourceHeap::DXR_ShaderResourceHeap(DXR_OutputResource* outputResourc
 	GADGET_BASIC_ASSERT(outputResource_ != nullptr);
 	GADGET_BASIC_ASSERT(topLevelAS_ != nullptr);
 
+	Initialize(DX12::GetInstance().MainDevice(), 64, false);
+
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 	outputResourceHandle = DX12::GetInstance().CreateUAV(outputResource_->Resource(), nullptr, &uavDesc);

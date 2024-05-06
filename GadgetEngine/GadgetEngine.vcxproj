@@ -232,6 +232,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInfo.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_OutputResource.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_PipelineStateObject.h" />
+    <ClInclude Include="Graphics\DX12\DXR\DXR_ShaderBindingTable.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_ShaderResourceHeap.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_TopLevelAS.h" />
     <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.h" />
@@ -373,6 +374,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\DX12\DXR\DXR_MeshInfo.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_OutputResource.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_PipelineStateObject.cpp" />
+    <ClCompile Include="Graphics\DX12\DXR\DXR_ShaderBindingTable.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_ShaderResourceHeap.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\DXR_TopLevelAS.cpp" />
     <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.cpp" />
