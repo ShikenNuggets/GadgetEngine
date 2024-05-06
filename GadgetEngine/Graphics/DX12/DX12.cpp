@@ -96,6 +96,10 @@ ErrorCode DX12::DeleteInstance(){
 	return ErrorCode::OK;
 }
 
+bool DX12::IsInstanceInitialized(){
+	return instance != nullptr && instance->IsInitialized();
+}
+
 ErrorCode DX12::EnableDebugLayer([[maybe_unused]] bool gpuValidation_){
 #ifdef GADGET_DEBUG
 	GADGET_BASIC_ASSERT(mainDevice == nullptr);

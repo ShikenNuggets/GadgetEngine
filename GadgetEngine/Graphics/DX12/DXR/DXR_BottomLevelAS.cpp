@@ -9,6 +9,7 @@ using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
 DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numVertices_, ID3D12_Resource* indexBuffer_, size_t numIndices_){
+	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
 	GADGET_BASIC_ASSERT(numVertices_ > 0);
 	GADGET_BASIC_ASSERT(numVertices_ <= std::numeric_limits<uint32_t>::max());

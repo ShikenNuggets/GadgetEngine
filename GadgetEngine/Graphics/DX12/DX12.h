@@ -40,6 +40,7 @@ namespace Gadget{
 
 		static DX12& GetInstance(const DX12_StartupOptions& options_ = DX12_StartupOptions());
 		[[nodiscard]] static ErrorCode DeleteInstance();
+		static bool IsInstanceInitialized();
 
 		[[nodiscard]] ErrorCode EnableDebugLayer(bool gpuValidation_ = false);
 		[[nodiscard]] ErrorCode CreateDevice(uint32_t dxgiFactoryFlags_ = 0, bool requireDXR_ = false);
