@@ -1,6 +1,7 @@
 #include "Win32_DXR_Renderer.h"
 
 #include "App.h"
+#include "Graphics/Vertex.h"
 #include "Graphics/Components/CameraComponent.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
@@ -232,21 +233,16 @@ TextureInfo* Win32_DXR_Renderer::GenerateAPITextureInfo([[maybe_unused]] const T
 
 FontInfo* Win32_DXR_Renderer::GenerateAPIFontInfo([[maybe_unused]] const FreetypeFont& font_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
-struct TestVertex{
-	Gadget::Vector3 position;
-	Gadget::Color color;
-};
-
 ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	//------------------------------------------------------------//
 	//------------------ Triangles -------------------------------//
 	//------------------------------------------------------------//
 	float aspect = 16.0f / 9.0f;
 
-	TestVertex triangleVertices[]{
-		{ Vector3(0.0f, 0.25f * aspect, 0.0f), Color::Red() },
-		{ Vector3(0.25f, -0.25f * aspect, 0.0f), Color::Green() },
-		{ Vector3(-0.25f, -0.25f * aspect, 0.0f), Color::Blue() }
+	Vertex triangleVertices[]{
+		{ Vector3(0.0f, 0.25f * aspect, 0.0f), Vector3::Zero(), Vector2::Zero() },
+		{ Vector3(0.25f, -0.25f * aspect, 0.0f), Vector3::Zero(), Vector2::Zero() },
+		{ Vector3(-0.25f, -0.25f * aspect, 0.0f), Vector3::Zero(), Vector2::Zero() }
 	};
 	std::vector<UINT> indices = { 0, 1, 2 };
 
@@ -268,13 +264,13 @@ ErrorCode Win32_DXR_Renderer::SetupTestAssets(){
 	//------------------------------------------------------------//
 	//------------------ Plane -----------------------------------//
 	//------------------------------------------------------------//
-	TestVertex planeVertices[] = {
-		{ Vector3(-1.5f, -0.8f,  1.5f), Color::White() }, // 0
-		{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
-		{ Vector3( 1.5f, -0.8f,  1.5f), Color::White() }, // 2
-		//{ Vector3( 1.5f, -0.8f,  1.5f), Color::White() }, // 2
-		//{ Vector3(-1.5f, -0.8f, -1.5f), Color::White() }, // 1
-		{ Vector3( 1.5f, -0.8f, -1.5f), Color::White() }  // 4
+	Vertex planeVertices[] = {
+		{ Vector3(-1.5f, -0.8f,  1.5f), Vector3::Zero(), Vector2::Zero() }, // 0
+		{ Vector3(-1.5f, -0.8f, -1.5f), Vector3::Zero(), Vector2::Zero() }, // 1
+		{ Vector3( 1.5f, -0.8f,  1.5f), Vector3::Zero(), Vector2::Zero() }, // 2
+		//{ Vector3( 1.5f, -0.8f,  1.5f), Vector3::Zero(), Vector2::Zero() }, // 2
+		//{ Vector3(-1.5f, -0.8f, -1.5f), Vector3::Zero(), Vector2::Zero() }, // 1
+		{ Vector3( 1.5f, -0.8f, -1.5f), Vector3::Zero(), Vector2::Zero() }  // 4
 	};
 	std::vector<UINT> planeIndices = { 0, 1, 2, 2, 1, 3 };
 

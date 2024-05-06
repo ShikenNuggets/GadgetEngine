@@ -1,14 +1,12 @@
 #include "DXR_BottomLevelAS.h"
 
+#include "Graphics/Vertex.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/BottomLevelASGenerator.h"
 
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
-
-constexpr size_t vertexSize = 28;
-//constexpr size_t vertexSize = sizeof(Vertex); //TODO - Switch over to this vertex size once everything's set up to use the normal and texcoords
 
 DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numVertices_, ID3D12_Resource* indexBuffer_, size_t numIndices_){
 	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
@@ -19,9 +17,9 @@ DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numV
 	nv_helpers_dx12::BottomLevelASGenerator blas;
 
 	if(indexBuffer_ != nullptr && numIndices_ > 0){
-		blas.AddVertexBuffer(vertexBuffer_, 0, static_cast<uint32_t>(numVertices_), vertexSize, indexBuffer_, 0, static_cast<uint32_t>(numIndices_), nullptr, 0, true);
+		blas.AddVertexBuffer(vertexBuffer_, 0, static_cast<uint32_t>(numVertices_), sizeof(Vertex), indexBuffer_, 0, static_cast<uint32_t>(numIndices_), nullptr, 0, true);
 	}else{
-		blas.AddVertexBuffer(vertexBuffer_, 0, static_cast<uint32_t>(numVertices_), vertexSize, nullptr, 0);
+		blas.AddVertexBuffer(vertexBuffer_, 0, static_cast<uint32_t>(numVertices_), sizeof(Vertex), nullptr, 0);
 	}
 
 	uint64_t scratchSizeInBytes = 0;

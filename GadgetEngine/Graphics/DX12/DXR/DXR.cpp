@@ -71,9 +71,9 @@ AccelerationStructureBuffers DXR::CreateBottomLevelAS(std::vector<std::pair<ComP
 
 	for(size_t i = 0; i < vVertexBuffers_.size(); i++){
 		if(i < vIndexBuffers_.size() && vIndexBuffers_[i].second > 0){
-			blas.AddVertexBuffer(vVertexBuffers_[i].first.Get(), 0, vVertexBuffers_[i].second, 28, vIndexBuffers_[i].first.Get(), 0, vIndexBuffers_[i].second, nullptr, 0, true);
+			blas.AddVertexBuffer(vVertexBuffers_[i].first.Get(), 0, vVertexBuffers_[i].second, sizeof(Vertex), vIndexBuffers_[i].first.Get(), 0, vIndexBuffers_[i].second, nullptr, 0, true);
 		}else{
-			blas.AddVertexBuffer(vVertexBuffers_[i].first.Get(), 0, vVertexBuffers_[i].second, 28, nullptr, 0);
+			blas.AddVertexBuffer(vVertexBuffers_[i].first.Get(), 0, vVertexBuffers_[i].second, sizeof(Vertex), nullptr, 0);
 		}
 	}
 
