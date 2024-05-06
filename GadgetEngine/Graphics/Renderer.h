@@ -13,6 +13,7 @@
 #include "Window.h"
 #include "Graphics/Text/FreetypeFont.h"
 #include "Math/MathObjects.h"
+#include "Graphics/Materials/MaterialInfo.h"
 
 namespace Gadget{
 	//Forward Declarations
@@ -101,6 +102,7 @@ namespace Gadget{
 		void ResetViewportRect(){ SetViewportRect(ViewportRect::Fullscreen); }
 
 		virtual Shader* GenerateAPIShader(StringID shaderResource_) = 0;
+		virtual MaterialInfo* GenerateAPIMaterialInfo(const std::vector<Color>& colors_) = 0;
 		virtual MeshInfo* GenerateAPIMeshInfo(const Mesh& mesh_) = 0;
 		virtual MeshInfo* GenerateAPIDynamicMeshInfo(size_t numVertices, size_t numIndices) = 0;
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) = 0;

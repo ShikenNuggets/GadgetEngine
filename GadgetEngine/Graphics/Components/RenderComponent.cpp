@@ -9,7 +9,7 @@ using namespace Gadget;
 
 ComponentCollection<RenderComponent> RenderComponent::componentCollection = ComponentCollection<RenderComponent>();
 
-RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, StringID textureName_, StringID shaderName_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(nullptr){
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, StringID textureName_, StringID shaderName_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(nullptr), engineMaterial(nullptr){
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(textureName_ != StringID::None);
@@ -25,7 +25,7 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, StringID
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, const Color& color_, StringID shaderName_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(nullptr){
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, const Color& color_, StringID shaderName_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(nullptr), engineMaterial(nullptr){
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(color_.IsValid());
@@ -41,7 +41,21 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, const Co
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, Material* material_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(material_){
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, Material* material_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(material_), engineMaterial(nullptr){
+	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
+	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
+	GADGET_BASIC_ASSERT(material_ != nullptr);
+
+	CreateMeshInfo();
+
+	componentCollection.Add(this);
+
+	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr);
+	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
+}
+
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* material_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(nullptr), engineMaterial(material_){
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(material_ != nullptr);
@@ -70,6 +84,7 @@ RenderComponent::RenderComponent(const ComponentProperties& props_) : Component(
 RenderComponent::~RenderComponent(){
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 
+	delete engineMaterial;
 	delete material;
 	delete meshInfo;
 
@@ -80,17 +95,23 @@ RenderComponent::~RenderComponent(){
 
 void RenderComponent::Bind(){
 	GADGET_BASIC_ASSERT(meshInfo != nullptr);
-	GADGET_BASIC_ASSERT(material != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr || engineMaterial != nullptr);
 
 	meshInfo->Bind();
-	material->Bind();
+
+	if(material != nullptr){
+		material->Bind();
+	}
 }
 
 void RenderComponent::Unbind(){
 	GADGET_BASIC_ASSERT(meshInfo != nullptr);
-	GADGET_BASIC_ASSERT(material != nullptr);
+	GADGET_BASIC_ASSERT(material != nullptr || engineMaterial != nullptr);
 
-	material->Unbind();
+	if(material != nullptr){
+		material->Unbind();
+	}
+
 	meshInfo->Unbind();
 }
 

@@ -10,6 +10,7 @@ namespace Gadget{
 		EngineMaterial(const Color& color_);
 		EngineMaterial(const Color& colorA_, const Color& colorB_, const Color& colorC_);
 		EngineMaterial(const std::vector<Color>& color_);
+		~EngineMaterial();
 
 	private:
 		std::vector<Color> colors;

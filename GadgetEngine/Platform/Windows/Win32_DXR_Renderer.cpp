@@ -8,6 +8,7 @@
 #include "Graphics/DX12/DX12_ShaderHandler.h"
 #include "Graphics/DX12/DX12_UploadHandler.h"
 #include "Graphics/DX12/DXR/DXR.h"
+#include "Graphics/DX12/DXR/DXR_MaterialInfo.h"
 #include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 #include "Platform/Windows/Win32_Window.h"
 
@@ -227,6 +228,10 @@ void Win32_DXR_Renderer::SetWindingOrder([[maybe_unused]] WindingOrder order_){}
 void Win32_DXR_Renderer::SetCullFace([[maybe_unused]] CullFace cullFace_){}
 
 Shader* Win32_DXR_Renderer::GenerateAPIShader([[maybe_unused]] StringID shaderResource_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+
+MaterialInfo* Win32_DXR_Renderer::GenerateAPIMaterialInfo(const std::vector<Color>& colors_){
+	return new DXR_MaterialInfo(colors_);
+}
 
 MeshInfo* Win32_DXR_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){ return new DXR_MeshInfo(mesh_); }
 

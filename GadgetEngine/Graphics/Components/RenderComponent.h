@@ -3,6 +3,7 @@
 
 #include "Game/Component.h"
 #include "Graphics/MeshInfo.h"
+#include "Graphics/Materials/EngineMaterial.h"
 #include "Graphics/Materials/Material.h"
 
 namespace Gadget{
@@ -11,6 +12,7 @@ namespace Gadget{
 		RenderComponent(GUID parentGUID_, StringID modelName_, StringID textureName_, StringID shaderName_);
 		RenderComponent(GUID parentGUID_, StringID modelName_, const Color& color_, StringID shaderName_);
 		RenderComponent(GUID parentGUID_, StringID modelName_, Material* material_);
+		RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* engineMaterial_);
 		RenderComponent(const ComponentProperties& props_);
 
 		virtual ~RenderComponent() override;
@@ -49,6 +51,7 @@ namespace Gadget{
 		StringID modelName;
 		MeshInfo* meshInfo;
 		Material* material;
+		EngineMaterial* engineMaterial;
 
 		void CreateMeshInfo();
 
