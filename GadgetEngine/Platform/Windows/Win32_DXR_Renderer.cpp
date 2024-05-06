@@ -76,6 +76,9 @@ Win32_DXR_Renderer::Win32_DXR_Renderer(int w_, int h_, int x_, int y_) : Rendere
 }
 
 Win32_DXR_Renderer::~Win32_DXR_Renderer(){
+	//Make sure no resources are currently being used by the GPU before proceeding
+	(void)dx12->GfxCommand()->Flush(); //Not a whole lot we can do for error handling in a destructor
+
 	for(auto& mesh : meshInfos){
 		delete mesh;
 		mesh = nullptr;
@@ -87,7 +90,6 @@ Win32_DXR_Renderer::~Win32_DXR_Renderer(){
 	planeVertexBuffer.Detach();
 	planeIndexBuffer.Detach();
 
-	(void)dx12->GfxCommand()->Flush(); //Not a whole lot we can do for error handling in a destructor
 	(void)DXR::DeleteInstance();
 
 	DX12_UploadHandler::DeleteInstance();
