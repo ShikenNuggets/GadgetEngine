@@ -5,10 +5,12 @@
 
 #include <dxgi1_6.h>
 #include <d3d12.h>
+#include <DirectXMath.h>
 
 #include "Debug.h"
 #include "Graphics/DX12/DX12_Defines.h"
 #include "Graphics/DX12/DX12_UploadContext.h"
+#include "Math/Matrix.h"
 
 namespace Gadget{
 	//Some of these are loosely based on Microsoft's d3dx12 helper library: https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/d3dx12.h
@@ -463,6 +465,18 @@ namespace Gadget{
 									 ID3D12Heap* heap_ = nullptr, uint64_t heapOffset_ = 0);
 
 		void UpdateBuffer(ID3D12_Resource* buffer_, const void* data_, uint64_t bufferSize_, UINT subResource_ = 0);
+
+		//----------------------------------------------------------------------------------------------------//
+		//----------------------- Math -----------------------------------------------------------------------//
+		//----------------------------------------------------------------------------------------------------//
+		inline DirectX::XMMATRIX ConvertMatrix4(const Matrix4& matrix_){
+			return DirectX::XMMATRIX(
+				matrix_[ 0], matrix_[ 1], matrix_[ 2], matrix_[ 3],
+				matrix_[ 4], matrix_[ 5], matrix_[ 6], matrix_[ 7],
+				matrix_[ 8], matrix_[ 9], matrix_[10], matrix_[11],
+				matrix_[12], matrix_[13], matrix_[14], matrix_[15]
+			);
+		}
 	}
 }
 

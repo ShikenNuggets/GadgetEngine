@@ -200,6 +200,9 @@
     <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInfo.h">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\DXR_TopLevelAS.h">
+      <Filter>Graphics\DX12\DXR</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.h">
       <Filter>Graphics\DX12\DXR\nv_helpers_dx12</Filter>
     </ClInclude>
@@ -585,6 +588,9 @@
       <Filter>Graphics\DX12\DXR</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DXR\DXR_MeshInfo.cpp">
+      <Filter>Graphics\DX12\DXR</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DX12\DXR\DXR_TopLevelAS.cpp">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\DX12\DXR\nv_helpers_dx12\BottomLevelASGenerator.cpp">
