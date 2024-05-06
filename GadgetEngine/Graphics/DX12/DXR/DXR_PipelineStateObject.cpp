@@ -7,10 +7,10 @@
 
 using namespace Gadget;
 
-const std::vector<std::wstring> hitGroupNames = {{
+const std::vector<std::wstring> hitGroupNames = {
 	L"HitGroup",
 	L"PlaneHitGroup"
-}};
+};
 
 DXR_PipelineStateObject::DXR_PipelineStateObject(){
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());

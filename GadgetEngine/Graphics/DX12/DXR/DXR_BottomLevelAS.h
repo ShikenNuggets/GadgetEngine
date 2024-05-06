@@ -12,10 +12,13 @@ namespace Gadget{
 		DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numVertices_, ID3D12_Resource* indexBuffer_, size_t numIndices_);
 		~DXR_BottomLevelAS() = default;
 
-		ID3D12_Resource* Buffer(){ return buffer.Get(); }
+		void ReleaseTempResources();
+
+		ID3D12_Resource* Buffer(){ return mainBuffer.Get(); }
 
 	private:
-		Microsoft::WRL::ComPtr<ID3D12_Resource> buffer;
+		Microsoft::WRL::ComPtr<ID3D12_Resource> mainBuffer;
+		Microsoft::WRL::ComPtr<ID3D12_Resource> scratchBuffer;
 	};
 }
 

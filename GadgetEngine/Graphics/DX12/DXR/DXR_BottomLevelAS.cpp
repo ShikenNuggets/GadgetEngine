@@ -8,7 +8,7 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numVertices_, ID3D12_Resource* indexBuffer_, size_t numIndices_){
+DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numVertices_, ID3D12_Resource* indexBuffer_, size_t numIndices_) : mainBuffer(nullptr), scratchBuffer(nullptr){
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 	GADGET_BASIC_ASSERT(vertexBuffer_ != nullptr);
 	GADGET_BASIC_ASSERT(numVertices_ > 0);
@@ -27,20 +27,23 @@ DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numV
 	uint64_t resultSizeInBytes = 0;
 	blas.ComputeASBufferSizes(DX12::GetInstance().MainDevice(), false, &scratchSizeInBytes, &resultSizeInBytes);
 
-	ComPtr<ID3D12_Resource> scratchBuffer;
 	scratchBuffer.Attach(DX12::GetInstance().CreateBuffer(nullptr, scratchSizeInBytes, false, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
-	buffer.Attach(DX12::GetInstance().CreateBuffer(nullptr, resultSizeInBytes, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
+	mainBuffer.Attach(DX12::GetInstance().CreateBuffer(nullptr, resultSizeInBytes, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
 	
 	GADGET_BASIC_ASSERT(scratchBuffer != nullptr);
-	GADGET_BASIC_ASSERT(buffer != nullptr);
+	GADGET_BASIC_ASSERT(mainBuffer != nullptr);
 
 	if(scratchBuffer != nullptr){
 		scratchBuffer->SetName(L"BLAS_ScratchBuffer");
 	}
 
-	if(buffer != nullptr){
-		buffer->SetName(L"BLAS_MainBuffer");
+	if(mainBuffer != nullptr){
+		mainBuffer->SetName(L"BLAS_MainBuffer");
 	}
 
-	blas.Generate(DX12::GetInstance().GfxCommand()->CommandList(), scratchBuffer.Get(), buffer.Get(), false, nullptr);
+	blas.Generate(DX12::GetInstance().GfxCommand()->CommandList(), scratchBuffer.Get(), mainBuffer.Get(), false, nullptr);
+}
+
+void DXR_BottomLevelAS::ReleaseTempResources(){
+	scratchBuffer.Reset();
 }

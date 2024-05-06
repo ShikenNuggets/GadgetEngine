@@ -11,8 +11,10 @@ namespace Gadget{
 	class DXR_MeshInfo : public MeshInfo{
 	public:
 		DXR_MeshInfo(const Mesh& mesh_);
-		DXR_MeshInfo(size_t indexCount_, ID3D12_Resource* vertexBuffer_, ID3D12_Resource* indexBuffer_);
 		virtual ~DXR_MeshInfo() override;
+
+		//TODO - For Testing Only
+		DXR_MeshInfo(size_t indexCount_, ID3D12_Resource* vertexBuffer_, ID3D12_Resource* indexBuffer_);
 
 		virtual void Bind() override{}
 		virtual void Unbind() override{}
@@ -20,6 +22,9 @@ namespace Gadget{
 		ID3D12_Resource* VertexBuffer(){ return vertexBuffer.Get(); }
 		ID3D12_Resource* IndexBuffer(){ return indexBuffer.Get(); }
 		ID3D12_Resource* BottomLevelAS(){ return bottomLevelAS->Buffer(); }
+
+		//TODO - For Testing Only
+		inline void SetBottomLevelAS(DXR_BottomLevelAS* blas_){ bottomLevelAS = blas_; }
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D12_Resource> vertexBuffer;

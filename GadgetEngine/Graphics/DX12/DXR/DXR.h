@@ -16,6 +16,7 @@
 #include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 #include "Graphics/DX12/DXR/DXR_PipelineStateObject.h"
 #include "Graphics/DX12/DXR/DXR_OutputResource.h"
+#include "Graphics/DX12/DXR/DXR_TopLevelAS.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/TopLevelASGenerator.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/ShaderBindingTableGenerator.h"
 #include "Math/Matrix.h"
@@ -58,15 +59,12 @@ namespace Gadget{
 		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
 
 		void UpdateTopLevelAS();
-		AccelerationStructureBuffers CreateBottomLevelAS(std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, uint32_t>> vVertexBuffers_, std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, uint32_t>> vIndexBuffers_);
 		void CreateAccelerationStructures(const std::vector<Microsoft::WRL::ComPtr<ID3D12_Resource>>& resources_);
 
 		void UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_);
 
 	private:
 		static std::unique_ptr<DXR> instance;
-
-		void CreateTopLevelAS(const std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectX::XMMATRIX>>& instances_, bool updateOnly_ = false);
 
 		void CreateShaderResourceHeap();
 		void CreateShaderBindingTable();
@@ -75,11 +73,8 @@ namespace Gadget{
 
 		DX12& dx12;
 
-		Microsoft::WRL::ComPtr<ID3D12Resource> bottomLevelAS;
-		Microsoft::WRL::ComPtr<ID3D12Resource> bottomLevelAS2;
-		nv_helpers_dx12::TopLevelASGenerator topLevelASGenerator;
-		AccelerationStructureBuffers topLevelASBuffers;
-		std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectX::XMMATRIX>> instances;
+		DXR_TopLevelAS* topLevelAS;
+		std::vector<DXR_MeshInstance> instances;
 
 		DXR_PipelineStateObject* pso;
 		DXR_OutputResource* outputResource;

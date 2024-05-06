@@ -14,7 +14,7 @@ using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DXR> DXR::instance = nullptr;
 
-DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), meshInfos(meshInfo_){
+DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), meshInfos(meshInfo_), cameraBufferHandle(), topLevelASHandle(), outputResourceHandle(){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0);
 	GADGET_BASIC_ASSERT(frameSize_.y > 0);
 	GADGET_BASIC_ASSERT(meshInfo_.size() > 0);
@@ -49,6 +49,9 @@ DXR::~DXR(){
 
 	delete pso;
 	pso = nullptr;
+
+	delete topLevelAS;
+	topLevelAS = nullptr;
 }
 
 DXR& DXR::GetInstance(){
@@ -78,80 +81,37 @@ ErrorCode DXR::DeleteInstance(){
 	return ErrorCode::OK;
 }
 
-AccelerationStructureBuffers DXR::CreateBottomLevelAS(std::vector<std::pair<ComPtr<ID3D12Resource>, uint32_t>> vVertexBuffers_, std::vector<std::pair<Microsoft::WRL::ComPtr<ID3D12Resource>, uint32_t>> vIndexBuffers_){
-	nv_helpers_dx12::BottomLevelASGenerator blas;
-
-	for(size_t i = 0; i < vVertexBuffers_.size(); i++){
-		if(i < vIndexBuffers_.size() && vIndexBuffers_[i].second > 0){
-			blas.AddVertexBuffer(vVertexBuffers_[i].first.Get(), 0, vVertexBuffers_[i].second, sizeof(Vertex), vIndexBuffers_[i].first.Get(), 0, vIndexBuffers_[i].second, nullptr, 0, true);
-		}else{
-			blas.AddVertexBuffer(vVertexBuffers_[i].first.Get(), 0, vVertexBuffers_[i].second, sizeof(Vertex), nullptr, 0);
-		}
-	}
-
-	uint64_t scratchSizeInBytes = 0;
-	uint64_t resultSizeInBytes = 0;
-	blas.ComputeASBufferSizes(dx12.MainDevice(), false, &scratchSizeInBytes, &resultSizeInBytes);
-
-	AccelerationStructureBuffers buffers;
-	buffers.pScratch.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSizeInBytes, false, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
-	buffers.pResult.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSizeInBytes, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
-
-	blas.Generate(dx12.GfxCommand()->CommandList(), buffers.pScratch.Get(), buffers.pResult.Get(), false, nullptr);
-	return buffers;
-}
-
-void DXR::CreateTopLevelAS(const std::vector<std::pair<ComPtr<ID3D12Resource>, DirectX::XMMATRIX>>& instances_, bool updateOnly_){
-	if(!updateOnly_){
-		for(size_t i = 0; i < instances_.size(); i++){
-			topLevelASGenerator.AddInstance(instances_[i].first.Get(), instances_[i].second, static_cast<UINT>(i), static_cast<UINT>(i));
-		}
-
-		uint64_t scratchSize = 0;
-		uint64_t resultSize = 0;
-		uint64_t instanceDescsSize = 0;
-		topLevelASGenerator.ComputeASBufferSizes(dx12.MainDevice(), true, &scratchSize, &resultSize, &instanceDescsSize);
-
-		topLevelASBuffers.pScratch.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, scratchSize, true, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
-		topLevelASBuffers.pResult.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
-		topLevelASBuffers.pInstanceDesc.Attach(DX12_Helpers::CreateBuffer(dx12.MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE));
-	}
-
-	topLevelASGenerator.Generate(dx12.GfxCommand()->CommandList(), topLevelASBuffers.pScratch.Get(), topLevelASBuffers.pResult.Get(), topLevelASBuffers.pInstanceDesc.Get(), updateOnly_, topLevelASBuffers.pResult.Get());
-}
-
 void DXR::UpdateTopLevelAS(){
-	CreateTopLevelAS({}, true);
+	topLevelAS->Update();
 }
 
 void DXR::CreateAccelerationStructures(const std::vector<ComPtr<ID3D12_Resource>>& resources_){
 	auto* cmdList = dx12.GfxCommand()->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
-	std::vector<AccelerationStructureBuffers> bottomLevelBuffers;
-	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[0]->VertexBuffer(), 3}}, {{ meshInfos[0]->IndexBuffer(), static_cast<uint32_t>(meshInfos[0]->GetNumIndices()) }}));
-	bottomLevelBuffers.push_back(CreateBottomLevelAS({{ meshInfos[1]->VertexBuffer(), 4}}, {{ meshInfos[1]->IndexBuffer(), static_cast<uint32_t>(meshInfos[1]->GetNumIndices()) }}));
+	DXR_BottomLevelAS* triangleBLAS = new DXR_BottomLevelAS(meshInfos[0]->VertexBuffer(), 3, meshInfos[0]->IndexBuffer(), meshInfos[0]->GetNumIndices());
+	DXR_BottomLevelAS* planeBLAS = new DXR_BottomLevelAS(meshInfos[1]->VertexBuffer(), 4, meshInfos[1]->IndexBuffer(), meshInfos[1]->GetNumIndices());
 
-	bottomLevelBuffers[0].SetName(L"Triangle BLAS");
-	bottomLevelBuffers[1].SetName(L"Plane BLAS");
+	meshInfos[0]->SetBottomLevelAS(triangleBLAS);
+	meshInfos[1]->SetBottomLevelAS(planeBLAS);
 
-	instances = {
-		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixIdentity()},
-		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(-0.6f, 0.0f, 0.0f) },
-		{ bottomLevelBuffers[0].pResult, DirectX::XMMatrixTranslation(0.6f, 0.0f, 0.0f) },
+	instances.clear();
+	instances.reserve(4);
+	instances.push_back(DXR_MeshInstance(triangleBLAS, DX12_Helpers::ConvertMatrix4(Matrix4::Identity())));
+	instances.push_back(DXR_MeshInstance(triangleBLAS, DX12_Helpers::ConvertMatrix4(Matrix4::Translate(Vector3(-0.6f, 0.0f, 0.0f)))));
+	instances.push_back(DXR_MeshInstance(triangleBLAS, DX12_Helpers::ConvertMatrix4(Matrix4::Translate(Vector3(0.6f, 0.0f, 0.0f)))));
+	instances.push_back(DXR_MeshInstance(planeBLAS, DX12_Helpers::ConvertMatrix4(Matrix4::Identity())));
+	instances.shrink_to_fit();
 
-		{ bottomLevelBuffers[1].pResult, DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f) },
-	};
-	CreateTopLevelAS(instances);
-	topLevelASBuffers.SetName(L"TLAS");
+	topLevelAS = new DXR_TopLevelAS(instances);
 
 	auto err = dx12.GfxCommand()->ExecuteCommandsImmediate();
 	if(err != ErrorCode::OK){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not execute commands for creating acceleration structures!", err, __FILE__, __LINE__);
 	}
 
-	bottomLevelAS = bottomLevelBuffers[0].pResult;
-	bottomLevelAS2 = bottomLevelBuffers[1].pResult;
+	triangleBLAS->ReleaseTempResources();
+	planeBLAS->ReleaseTempResources();
 }
 
 void DXR::CreateShaderResourceHeap(){
@@ -165,7 +125,7 @@ void DXR::CreateShaderResourceHeap(){
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_RAYTRACING_ACCELERATION_STRUCTURE;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.RaytracingAccelerationStructure.Location = topLevelASBuffers.pResult->GetGPUVirtualAddress();
+	srvDesc.RaytracingAccelerationStructure.Location = topLevelAS->Buffer()->GetGPUVirtualAddress();
 	topLevelASHandle = dx12.CreateSRV(nullptr, &srvDesc);
 
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};

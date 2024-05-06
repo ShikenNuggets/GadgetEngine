@@ -15,7 +15,7 @@ void DXR_TopLevelAS::Regenerate(const std::vector<DXR_MeshInstance>& meshInstanc
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 
 	for(size_t i = 0; i < meshInstances_.size(); i++){
-		topLevelASGenerator.AddInstance(meshInstances_[i].bottomLevelAS->Buffer(), DX12_Helpers::ConvertMatrix4(meshInstances_[i].transform), static_cast<UINT>(i), static_cast<UINT>(i));
+		topLevelASGenerator.AddInstance(meshInstances_[i].bottomLevelAS->Buffer(), meshInstances_[i].transform, static_cast<UINT>(i), static_cast<UINT>(i));
 	}
 
 	uint64_t scratchSize = 0;
@@ -43,7 +43,7 @@ void DXR_TopLevelAS::Regenerate(const std::vector<DXR_MeshInstance>& meshInstanc
 		instanceDescBuffer->SetName(L"TLAS_InstanceDescBuffer");
 	}
 
-	topLevelASGenerator.Generate(DX12::GetInstance().GfxCommand()->CommandList(), scratchBuffer.Get(), mainBuffer.Get(), instanceDescBuffer.Get(), false);
+	topLevelASGenerator.Generate(DX12::GetInstance().GfxCommand()->CommandList(), scratchBuffer.Get(), mainBuffer.Get(), instanceDescBuffer.Get(), false, mainBuffer.Get());
 }
 
 void DXR_TopLevelAS::Update(){

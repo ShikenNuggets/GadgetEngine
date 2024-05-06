@@ -13,10 +13,10 @@
 
 namespace Gadget{
 	struct DXR_MeshInstance{
-		DXR_MeshInstance(DXR_BottomLevelAS* blas_, const Matrix4& transform_) : bottomLevelAS(blas_), transform(transform_){}
+		DXR_MeshInstance(DXR_BottomLevelAS* blas_, const DirectX::XMMATRIX& transform_) : bottomLevelAS(blas_), transform(transform_){}
 
 		DXR_BottomLevelAS* bottomLevelAS;
-		Matrix4 transform;
+		DirectX::XMMATRIX transform;
 	};
 
 	class DXR_TopLevelAS{
