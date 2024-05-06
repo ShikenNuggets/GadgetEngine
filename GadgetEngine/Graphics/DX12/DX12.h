@@ -77,8 +77,8 @@ namespace Gadget{
 		DX12_DescriptorHeap& UAVHeap(){ return uavDescriptorHeap; }
 
 		DX12_DescriptorHandle CreateUAV(ID3D12_Resource* resource_, ID3D12_Resource* counterResource_, const D3D12_UNORDERED_ACCESS_VIEW_DESC* desc_, DX12_DescriptorHeap& heap_ = DX12::GetInstance().SRVHeap());
-		DX12_DescriptorHandle CreateSRV(ID3D12_Resource* resource_, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc_);
-		DX12_DescriptorHandle CreateCBV(const D3D12_CONSTANT_BUFFER_VIEW_DESC* desc_);
+		DX12_DescriptorHandle CreateSRV(ID3D12_Resource* resource_, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc_, DX12_DescriptorHeap& heap_ = DX12::GetInstance().SRVHeap());
+		DX12_DescriptorHandle CreateCBV(const D3D12_CONSTANT_BUFFER_VIEW_DESC* desc_, DX12_DescriptorHeap& heap_ = DX12::GetInstance().SRVHeap());
 
 		DX12_Helpers::DX12_ResourceBarriers& ResourceBarriers(){ return resourceBarriers; }
 

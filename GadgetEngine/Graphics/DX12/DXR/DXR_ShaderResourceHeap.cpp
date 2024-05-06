@@ -8,18 +8,18 @@ DXR_ShaderResourceHeap::DXR_ShaderResourceHeap(DXR_OutputResource* outputResourc
 	GADGET_BASIC_ASSERT(outputResource_ != nullptr);
 	GADGET_BASIC_ASSERT(topLevelAS_ != nullptr);
 
-	Initialize(DX12::GetInstance().MainDevice(), 64, false);
+	Initialize(DX12::GetInstance().MainDevice(), 4096, true);
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
-	outputResourceHandle = DX12::GetInstance().CreateUAV(outputResource_->Resource(), nullptr, &uavDesc);
+	outputResourceHandle = DX12::GetInstance().CreateUAV(outputResource_->Resource(), nullptr, &uavDesc, *this); //TODO - This is kinda weird and roundabout
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_RAYTRACING_ACCELERATION_STRUCTURE;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.RaytracingAccelerationStructure.Location = topLevelAS_->Buffer()->GetGPUVirtualAddress();
-	topLevelASHandle = DX12::GetInstance().CreateSRV(nullptr, &srvDesc);
+	topLevelASHandle = DX12::GetInstance().CreateSRV(nullptr, &srvDesc, *this);
 }
 
 DXR_ShaderResourceHeap::~DXR_ShaderResourceHeap(){
@@ -39,5 +39,5 @@ void DXR_ShaderResourceHeap::CreateCBV(ID3D12_Resource* buffer_, size_t size_){
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 	cbvDesc.BufferLocation = buffer_->GetGPUVirtualAddress();
 	cbvDesc.SizeInBytes = static_cast<UINT>(size_);
-	constantBufferViews.push_back(DX12::GetInstance().CreateCBV(&cbvDesc));
+	constantBufferViews.push_back(DX12::GetInstance().CreateCBV(&cbvDesc, *this));
 }

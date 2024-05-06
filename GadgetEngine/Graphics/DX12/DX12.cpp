@@ -469,20 +469,20 @@ DX12_DescriptorHandle DX12::CreateUAV(ID3D12_Resource* resource_, ID3D12_Resourc
 	return handle;
 }
 
-DX12_DescriptorHandle DX12::CreateSRV(ID3D12_Resource* resource_, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc_){
+DX12_DescriptorHandle DX12::CreateSRV(ID3D12_Resource* resource_, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc_, DX12_DescriptorHeap& heap_){
 	GADGET_BASIC_ASSERT(mainDevice != nullptr);
 	GADGET_BASIC_ASSERT(desc_ != nullptr);
 
-	DX12_DescriptorHandle handle = srvDescriptorHeap.Allocate();
+	DX12_DescriptorHandle handle = heap_.Allocate();
 	mainDevice->CreateShaderResourceView(resource_, desc_, handle.cpuHandle);
 	return handle;
 }
 
-DX12_DescriptorHandle DX12::CreateCBV(const D3D12_CONSTANT_BUFFER_VIEW_DESC* desc_){
+DX12_DescriptorHandle DX12::CreateCBV(const D3D12_CONSTANT_BUFFER_VIEW_DESC* desc_, DX12_DescriptorHeap& heap_){
 	GADGET_BASIC_ASSERT(mainDevice != nullptr);
 	GADGET_BASIC_ASSERT(desc_ != nullptr);
 
-	DX12_DescriptorHandle handle = srvDescriptorHeap.Allocate();
+	DX12_DescriptorHandle handle = heap_.Allocate();
 	mainDevice->CreateConstantBufferView(desc_, handle.cpuHandle);
 	return handle;
 }

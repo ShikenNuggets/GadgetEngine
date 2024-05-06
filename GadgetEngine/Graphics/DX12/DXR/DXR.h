@@ -14,11 +14,11 @@
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
 #include "Graphics/DX12/DXR/DXR_MeshInfo.h"
-#include "Graphics/DX12/DXR/DXR_PipelineStateObject.h"
 #include "Graphics/DX12/DXR/DXR_OutputResource.h"
+#include "Graphics/DX12/DXR/DXR_PipelineStateObject.h"
+#include "Graphics/DX12/DXR/DXR_ShaderBindingTable.h"
+#include "Graphics/DX12/DXR/DXR_ShaderResourceHeap.h"
 #include "Graphics/DX12/DXR/DXR_TopLevelAS.h"
-#include "Graphics/DX12/DXR/nv_helpers_dx12/TopLevelASGenerator.h"
-#include "Graphics/DX12/DXR/nv_helpers_dx12/ShaderBindingTableGenerator.h"
 #include "Math/Matrix.h"
 #include "Utils/Utils.h"
 
@@ -55,6 +55,7 @@ namespace Gadget{
 
 		ID3D12StateObject* RTStateObject(){ return pso->StateObject(); }
 		ID3D12Resource* OutputResource(){ return outputResource->Resource(); }
+		ID3D12DescriptorHeap* Heap(){ return heap->Heap(); }
 		nv_helpers_dx12::ShaderBindingTableGenerator& SBTHelper(){ return sbtHelper; }
 		ID3D12Resource* SBTStorage() const{ return sbtStorage.Get(); }
 
@@ -78,6 +79,9 @@ namespace Gadget{
 
 		DXR_PipelineStateObject* pso;
 		DXR_OutputResource* outputResource;
+
+		DXR_ShaderResourceHeap* heap;
+		DXR_ShaderBindingTable* shaderBindingTable;
 
 		nv_helpers_dx12::ShaderBindingTableGenerator sbtHelper;
 		Microsoft::WRL::ComPtr<ID3D12Resource> sbtStorage;
