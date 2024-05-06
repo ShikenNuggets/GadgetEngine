@@ -241,14 +241,8 @@ void DXR::CreateCameraBuffer(){
 	if(cameraBuffer == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not create buffer for camera properties!", ErrorCode::D3D12_Error, __FILE__, __LINE__);
 	}
+
 	cameraBuffer->SetName(L"Camera Buffer");
-
-	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-	cbvDesc.BufferLocation = cameraBuffer->GetGPUVirtualAddress();
-	cbvDesc.SizeInBytes = cameraBufferSize;
-
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = dx12.SRVHeap().CPUStart();
-	dx12.MainDevice()->CreateConstantBufferView(&cbvDesc, srvHandle);
 }
 
 void DXR::UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_){
