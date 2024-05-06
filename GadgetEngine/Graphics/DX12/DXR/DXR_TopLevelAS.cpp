@@ -25,6 +25,22 @@ void DXR_TopLevelAS::Regenerate(const std::vector<DXR_MeshInstance>& meshInstanc
 	mainBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, resultSize, false, D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS));
 	instanceDescBuffer.Attach(DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), nullptr, instanceDescsSize, true, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_FLAG_NONE));
 
+	GADGET_BASIC_ASSERT(scratchBuffer != nullptr);
+	GADGET_BASIC_ASSERT(mainBuffer != nullptr);
+	GADGET_BASIC_ASSERT(instanceDescBuffer != nullptr);
+
+	if(scratchBuffer != nullptr){
+		scratchBuffer->SetName(L"TLAS_ScratchBuffer");
+	}
+
+	if(mainBuffer != nullptr){
+		mainBuffer->SetName(L"TLAS_MainBuffer");
+	}
+
+	if(instanceDescBuffer != nullptr){
+		instanceDescBuffer->SetName(L"TLAS_InstanceDescBuffer");
+	}
+
 	topLevelASGenerator.Generate(DX12::GetInstance().GfxCommand()->CommandList(), scratchBuffer.Get(), mainBuffer.Get(), instanceDescBuffer.Get(), false);
 }
 
