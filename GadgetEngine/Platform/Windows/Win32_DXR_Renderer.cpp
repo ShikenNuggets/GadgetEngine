@@ -156,8 +156,6 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 			r->GetEngineMaterial()->CreateMaterialInfo();
 		}
 
-		r->GetMeshInstanceInfo()->Update(r->GetParent()->GetTransformMatrix());
-
 		mInstances.push_back(DXR_MeshInstance(
 			dynamic_cast<DXR_MeshInfo*>(r->GetMeshInfo()),
 			dynamic_cast<DXR_MaterialInfo*>(r->GetEngineMaterial()->GetMaterialInfo()),

@@ -105,6 +105,15 @@ RenderComponent::~RenderComponent(){
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == nullptr);
 }
 
+void RenderComponent::OnTransformModified(){
+	GADGET_BASIC_ASSERT(parent != nullptr);
+	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
+
+	if(meshInstanceInfo != nullptr && parent != nullptr){
+		meshInstanceInfo->Update(parent->GetTransformMatrix());
+	}
+}
+
 void RenderComponent::Bind(){
 	GADGET_BASIC_ASSERT(meshInfo != nullptr);
 	GADGET_BASIC_ASSERT(material != nullptr || engineMaterial != nullptr);

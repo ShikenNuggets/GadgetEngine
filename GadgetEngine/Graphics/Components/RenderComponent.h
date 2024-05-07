@@ -18,6 +18,8 @@ namespace Gadget{
 
 		virtual ~RenderComponent() override;
 
+		virtual void OnTransformModified() override;
+
 		static RenderComponent* Get(GUID objectGuid_){
 			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 			return componentCollection.Get(objectGuid_);
