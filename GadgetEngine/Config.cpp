@@ -15,8 +15,8 @@ Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
 	engineConfigPath = engineConfigFileName; //Storing the config file in the same directory makes debugging much easier
 #endif //GADGET_DEBUG
 
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowMoved, &OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, &OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowMoved, std::bind(&Config::OnWindowMovedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, std::bind(&Config::OnWindowResizedEvent, this, std::placeholders::_1));
 
 	LocManager* locMan = LocManager::GetInstance(); //Initialize Localization Manager
 	GADGET_BASIC_ASSERT(locMan != nullptr);
@@ -69,18 +69,27 @@ void Config::SetOption(StringID section_, StringID key_, StringID value_){
 	vars.SetValue(section_, key_, value_);
 }
 
-void Config::OnEvent(const Event& e_){
-	switch(e_.GetEventType()){
-		case EventType::WindowResize:
-			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayWidthKey, dynamic_cast<const WindowResizedEvent&>(e_).GetWidth());
-			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayHeightKey, dynamic_cast<const WindowResizedEvent&>(e_).GetHeight());
-			break;
-		case EventType::WindowMoved:
-			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, dynamic_cast<const WindowMovedEvent&>(e_).GetX());
-			App::GetConfig().SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowYKey, dynamic_cast<const WindowMovedEvent&>(e_).GetY());
-			break;
-		default:
-			break;
+void Config::OnWindowMovedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() < EventType::Count);
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const WindowMovedEvent* eventPtr = dynamic_cast<const WindowMovedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, eventPtr->GetX());
+		SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowYKey, eventPtr->GetY());
+	}
+}
+
+void Config::OnWindowResizedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == WindowResizedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const WindowResizedEvent* eventPtr = dynamic_cast<const WindowResizedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayWidthKey, eventPtr->GetWidth());
+		SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayHeightKey, eventPtr->GetHeight());
 	}
 }
 

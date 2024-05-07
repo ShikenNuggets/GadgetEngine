@@ -11,16 +11,16 @@
 using namespace Gadget;
 
 Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), persistentAxes(), definedButtons(), definedAxes(), currentMouseX(0), currentMouseY(0){
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowRestarted, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseScroll, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonReleased, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadAxis, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonPressed, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonReleased, OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowRestarted, std::bind(&Input::OnWindowRestartedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, std::bind(&Input::OnKeyPressedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased, std::bind(&Input::OnKeyReleasedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, std::bind(&Input::OnMouseMovedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseScroll, std::bind(&Input::OnMouseScrollEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, std::bind(&Input::OnMouseButtonPressedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonReleased, std::bind(&Input::OnMouseButtonReleasedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadAxis, std::bind(&Input::OnGamepadAxisEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonPressed, std::bind(&Input::OnGamepadButtonPressedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonReleased, std::bind(&Input::OnGamepadButtonReleasedEvent, this, std::placeholders::_1));
 
 	//These reserve values are somewhat arbitrary, adjust as you see fit
 	buttonEvents.reserve(256);
@@ -320,65 +320,120 @@ void Input::ProcessInputs(){
 	GADGET_BASIC_ASSERT(persistentAxes.empty());
 }
 
-void Input::OnEvent(const Event& e_){
-	GADGET_BASIC_ASSERT(e_.GetEventType() < EventType::Count);
+void Input::OnWindowRestartedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == WindowRestartedEvent::Type());
 	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
 
-	switch(e_.GetEventType()){
-		case EventType::WindowRestarted:
-			//Clear everything on a window restart
-			App::GetInput().axisEvents.clear();
-			App::GetInput().buttonEvents.clear();
-			App::GetInput().persistentAxisEvents.clear();
-			App::GetInput().buttonsDown.clear();
-			App::GetInput().buttonsHeld.clear();
-			App::GetInput().buttonsUp.clear();
-			App::GetInput().axes.clear();
-			App::GetInput().persistentAxes.clear();
-			break;
-		case EventType::KeyPressed:
-			GADGET_BASIC_ASSERT(dynamic_cast<const KeyPressedEvent*>(&e_) != nullptr);
-			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyPressedEvent&>(e_).GetKeyCode(), true));
-			break;
-		case EventType::KeyReleased:
-			GADGET_BASIC_ASSERT(dynamic_cast<const KeyReleasedEvent*>(&e_) != nullptr);
-			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const KeyReleasedEvent&>(e_).GetKeyCode(), false));
-			break;
-		case EventType::MouseMoved:
-			GADGET_BASIC_ASSERT(dynamic_cast<const MouseMovedEvent*>(&e_) != nullptr);
-			App::GetInput().currentMouseX = static_cast<int>(dynamic_cast<const MouseMovedEvent&>(e_).GetXAbsolute());
-			App::GetInput().currentMouseY = static_cast<int>(dynamic_cast<const MouseMovedEvent&>(e_).GetYAbsolute());
+	axisEvents.clear();
+	buttonEvents.clear();
+	persistentAxisEvents.clear();
+	buttonsDown.clear();
+	buttonsHeld.clear();
+	buttonsUp.clear();
+	axes.clear();
+	persistentAxes.clear();
+}
 
-			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, dynamic_cast<const MouseMovedEvent&>(e_).GetX()));
-			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, dynamic_cast<const MouseMovedEvent&>(e_).GetY()));
-			break;
-		case EventType::MouseScroll:
-			GADGET_BASIC_ASSERT(dynamic_cast<const MouseScrollEvent*>(&e_) != nullptr);
-			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Horizontal, dynamic_cast<const MouseScrollEvent&>(e_).GetXOffset()));
-			App::GetInput().axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Vertical, dynamic_cast<const MouseScrollEvent&>(e_).GetYOffset()));
-			break;
-		case EventType::MouseButtonPressed:
-			GADGET_BASIC_ASSERT(dynamic_cast<const MouseButtonPressedEvent*>(&e_) != nullptr);
-			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonPressedEvent&>(e_).GetButton(), true));
-			break;
-		case EventType::MouseButtonReleased:
-			GADGET_BASIC_ASSERT(dynamic_cast<const MouseButtonReleasedEvent*>(&e_) != nullptr);
-			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const MouseButtonReleasedEvent&>(e_).GetButton(), false));
-			break;
-		case EventType::GamepadAxis:
-			GADGET_BASIC_ASSERT(dynamic_cast<const GamepadAxisEvent*>(&e_) != nullptr);
-			App::GetInput().persistentAxisEvents.push_back(RawAxis(dynamic_cast<const GamepadAxisEvent&>(e_).GetAxisIndex(), dynamic_cast<const GamepadAxisEvent&>(e_).GetValue()));
-			break;
-		case EventType::GamepadButtonPressed:
-			GADGET_BASIC_ASSERT(dynamic_cast<const GamepadButtonPressedEvent*>(&e_) != nullptr);
-			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonPressedEvent&>(e_).GetButton(), true));
-			break;
-		case EventType::GamepadButtonReleased:
-			GADGET_BASIC_ASSERT(dynamic_cast<const GamepadButtonReleasedEvent*>(&e_) != nullptr);
-			App::GetInput().buttonEvents.push_back(RawButton(dynamic_cast<const GamepadButtonReleasedEvent&>(e_).GetButton(), false));
-			break;
-		default:
-			Debug::Log("Unhandled Event Type [" + e_.GetName().GetString() + "] in Input!", Debug::Error, __FILE__, __LINE__);
-			break;
+void Input::OnKeyPressedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == KeyPressedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const KeyPressedEvent* eventPtr = dynamic_cast<const KeyPressedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		buttonEvents.push_back(RawButton(eventPtr->GetKeyCode(), true));
+	}
+}
+
+void Input::OnKeyReleasedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == KeyReleasedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const KeyReleasedEvent* eventPtr = dynamic_cast<const KeyReleasedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		buttonEvents.push_back(RawButton(eventPtr->GetKeyCode(), false));
+	}
+}
+
+void Input::OnMouseMovedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == MouseMovedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const MouseMovedEvent* eventPtr = dynamic_cast<const MouseMovedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		currentMouseX = static_cast<int>(eventPtr->GetXAbsolute());
+		currentMouseY = static_cast<int>(eventPtr->GetYAbsolute());
+
+		axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, eventPtr->GetX()));
+		axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, eventPtr->GetY()));
+	}
+}
+
+void Input::OnMouseScrollEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == MouseScrollEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const MouseScrollEvent* eventPtr = dynamic_cast<const MouseScrollEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Horizontal, eventPtr->GetXOffset()));
+		axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Vertical, eventPtr->GetYOffset()));
+	}
+}
+
+void Input::OnMouseButtonPressedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == MouseButtonPressedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const MouseButtonPressedEvent* eventPtr = dynamic_cast<const MouseButtonPressedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		buttonEvents.push_back(RawButton(eventPtr->GetButton(), true));
+	}
+}
+
+void Input::OnMouseButtonReleasedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == MouseButtonReleasedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const MouseButtonReleasedEvent* eventPtr = dynamic_cast<const MouseButtonReleasedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		buttonEvents.push_back(RawButton(eventPtr->GetButton(), false));
+	}
+}
+
+void Input::OnGamepadAxisEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == GamepadAxisEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const GamepadAxisEvent* eventPtr = dynamic_cast<const GamepadAxisEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		persistentAxisEvents.push_back(RawAxis(eventPtr->GetAxisIndex(), eventPtr->GetValue()));
+	}
+}
+
+void Input::OnGamepadButtonPressedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == GamepadButtonPressedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const GamepadButtonPressedEvent* eventPtr = dynamic_cast<const GamepadButtonPressedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		buttonEvents.push_back(RawButton(eventPtr->GetButton(), true));
+	}
+}
+
+void Input::OnGamepadButtonReleasedEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == GamepadButtonReleasedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const GamepadButtonReleasedEvent* eventPtr = dynamic_cast<const GamepadButtonReleasedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		buttonEvents.push_back(RawButton(eventPtr->GetButton(), false));
 	}
 }

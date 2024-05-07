@@ -49,7 +49,16 @@ namespace Gadget{
 
 		void ProcessInputs();
 
-		static void OnEvent(const Event& e_);
+		void OnWindowRestartedEvent(const Event& e_);
+		void OnKeyPressedEvent(const Event& e_);
+		void OnKeyReleasedEvent(const Event& e_);
+		void OnMouseMovedEvent(const Event& e_);
+		void OnMouseScrollEvent(const Event& e_);
+		void OnMouseButtonPressedEvent(const Event& e_);
+		void OnMouseButtonReleasedEvent(const Event& e_);
+		void OnGamepadAxisEvent(const Event& e_);
+		void OnGamepadButtonPressedEvent(const Event& e_);
+		void OnGamepadButtonReleasedEvent(const Event& e_);
 
 	private:
 		std::vector<RawButton> buttonEvents;

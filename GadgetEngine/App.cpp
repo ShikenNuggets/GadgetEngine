@@ -25,10 +25,10 @@ std::unique_ptr<App> App::instance = nullptr;
 App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), physics(nullptr), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
 	GADGET_ASSERT(instance == nullptr, "Created multiple App instances!");
 	
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, OnEvent);
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, OnEvent);
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, std::bind(&App::OnWindowCloseEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, std::bind(&App::OnWindowResizeEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, std::bind(&App::OnMouseMoved, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, std::bind(&App::OnMouseButtonPressed, this, std::placeholders::_1));
 }
 
 App::~App(){
@@ -201,25 +201,46 @@ void App::Run(GameInterface& gameInterface_){
 	Profiler::OutputAllAverageResults();
 }
 
-void App::OnEvent(const Event& e_){
-	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
+void App::OnWindowCloseEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == WindowCloseEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
 
-	if(e_.GetEventType() == EventType::WindowClose){
-		GetInstance().isRunning = false;
-	}else if(e_.GetEventType() == EventType::WindowResize){
-		auto& ev = dynamic_cast<const WindowResizedEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
-		GetInstance().renderer->OnResize(ev.GetWidth(), ev.GetHeight());
-	}else if(e_.GetEventType() == EventType::MouseMoved){
-		auto& ev = dynamic_cast<const MouseMovedEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
+	isRunning = false;
+}
 
-		if(GetInstance().GetSceneManager().CurrentScene() != nullptr && GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
-			GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseMoved(static_cast<int>(ev.GetX()), static_cast<int>(ev.GetY()));
+void App::OnWindowResizeEvent(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == WindowResizedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const WindowResizedEvent* eventPtr = dynamic_cast<const WindowResizedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		renderer->OnResize(eventPtr->GetWidth(), eventPtr->GetHeight());
+	}
+}
+
+void App::OnMouseMoved(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == MouseMovedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const MouseMovedEvent* eventPtr = dynamic_cast<const MouseMovedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		if(GetSceneManager().CurrentScene() != nullptr && GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
+			GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseMoved(static_cast<int>(eventPtr->GetX()), static_cast<int>(eventPtr->GetY()));
 		}
-	}else if(e_.GetEventType() == EventType::MouseButtonPressed){
-		auto& ec = dynamic_cast<const MouseButtonEvent&>(e_); //TODO - dynamic cast is not particularly safe or efficient
+	}
+}
 
-		if(GetInstance().GetSceneManager().CurrentScene() != nullptr && GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
-			GetInstance().GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseClick(ec.GetButton());
+void App::OnMouseButtonPressed(const Event& e_){
+	GADGET_BASIC_ASSERT(e_.GetEventType() == MouseButtonPressedEvent::Type());
+	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
+
+	const MouseButtonPressedEvent* eventPtr = dynamic_cast<const MouseButtonPressedEvent*>(&e_);
+	GADGET_BASIC_ASSERT(eventPtr != nullptr);
+	if(eventPtr != nullptr){
+		if(GetSceneManager().CurrentScene() != nullptr && GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
+			GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseClick(eventPtr->GetButton());
 		}
 	}
 }

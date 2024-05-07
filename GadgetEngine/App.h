@@ -36,7 +36,10 @@ namespace Gadget{
 		//Only use this data for THIS frame or NEXT frame
 		void* AllocateTwoFrameMemory(size_t bytes_);
 
-		static void OnEvent(const Event& e_);
+		void OnWindowCloseEvent(const Event& e_);
+		void OnWindowResizeEvent(const Event& e_);
+		void OnMouseMoved(const Event& e_);
+		void OnMouseButtonPressed(const Event& e_);
 
 		static std::string GetGameName(){ return GetInstance().gameName; }
 		static Renderer::API GetCurrentRenderAPI();

@@ -34,7 +34,8 @@ namespace Gadget{
 		void ResetSectionToDefault(StringID section_);
 		void ResetAllOptionsToDefault(); //This will reset ALL EngineVars values in ALL subcategories
 
-		static void OnEvent(const Event& e_);
+		void OnWindowMovedEvent(const Event& e_);
+		void OnWindowResizedEvent(const Event& e_);
 
 	private:
 		static constexpr const char* engineConfigFileName = "UserEngine.ini";
