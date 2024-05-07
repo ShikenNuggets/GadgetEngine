@@ -154,7 +154,7 @@ void App::Run(GameInterface& gameInterface_){
 	time->Start();
 	while(isRunning){
 		//Main game loop
-		Profiler::Start(SID("MainLoop"));
+		Profiler::Start(SID("Main Loop"));
 
 		//Clear single frame and two frame allocators
 		//This must be the first thing that happens every frame
@@ -173,13 +173,19 @@ void App::Run(GameInterface& gameInterface_){
 
 		sceneManager->Update(time->DeltaTime());
 
+		Profiler::Start(SID("Physics Update"));
 		physics->Update(sceneManager->CurrentScene(), time->DeltaTime());
+		Profiler::End(SID("Physics Update"));
 
+		Profiler::Start(SID("Game Logic Update"));
 		gameLogicManager->Update(sceneManager->CurrentScene(), time->DeltaTime());
+		Profiler::End(SID("Game Logic Update"));
 
+		Profiler::Start(SID("Render"));
 		renderer->Render(sceneManager->CurrentScene());
+		Profiler::End(SID("Render"));
 
-		Profiler::End(SID("MainLoop"));
+		Profiler::End(SID("Main Loop"));
 
 	#ifdef GADGET_DEBUG
 		if(input->GetButtonDown(Gadget::ButtonID::Keyboard_F11)){
