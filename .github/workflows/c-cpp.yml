@@ -12,14 +12,21 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Checkout
     - uses: actions/checkout@v3
       with:
           submodules: recursive
           
-    - name: setup-msbuild
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
       with:
         msbuild-architecture: x64
           
-    - name: Build Solution
-      run: MSBuild.exe -restore GadgetEngine.sln
+    - name: Build Solution (Debug)
+      run: MSBuild.exe -restore GadgetEngine.sln /property:Configuration=Debug
+
+    - name: Build Solution (Develop)
+      run: MSBuild.exe -restore GadgetEngine.sln /property:Configuration=Develop
+
+    - name: Build Solution (Release)
+      run: MSBuild.exe -restore GadgetEngine.sln /property:Configuration=Release
