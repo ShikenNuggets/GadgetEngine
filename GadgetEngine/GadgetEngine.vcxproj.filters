@@ -203,6 +203,9 @@
     <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInfo.h">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInstanceInfo.h">
+      <Filter>Graphics\DX12\DXR</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\DX12\DXR\DXR_OutputResource.h">
       <Filter>Graphics\DX12\DXR</Filter>
     </ClInclude>
@@ -306,6 +309,9 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\MeshInfo.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\MeshInstanceInfo.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.h">

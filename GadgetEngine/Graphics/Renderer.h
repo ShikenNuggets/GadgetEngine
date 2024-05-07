@@ -108,6 +108,7 @@ namespace Gadget{
 		virtual MeshInfo* GenerateAPIDynamicMeshInfo(size_t numVertices, size_t numIndices) = 0;
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) = 0;
 		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) = 0;
+		virtual MeshInstanceInfo* GenerateAPIMeshInstanceInfo(const Matrix4& transform_){ return new MeshInstanceInfo(transform_); }
 
 	protected:
 		const API renderAPI;

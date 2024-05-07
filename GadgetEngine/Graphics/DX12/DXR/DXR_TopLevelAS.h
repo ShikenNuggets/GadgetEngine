@@ -19,7 +19,7 @@ namespace Gadget{
 
 		DXR_MeshInfo* meshInfo;
 		DXR_MaterialInfo* materialInfo;
-		DirectX::XMMATRIX transform;
+		const DirectX::XMMATRIX& transform;
 	};
 
 	class DXR_TopLevelAS{

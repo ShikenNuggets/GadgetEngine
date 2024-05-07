@@ -85,12 +85,10 @@ void DXR::CreateTopLevelAS(const std::vector<DXR_MeshInstance>& meshInstances_){
 	auto* cmdList = dx12.GfxCommand()->CommandList();
 	GADGET_BASIC_ASSERT(cmdList != nullptr);
 
-	instances = meshInstances_;
-
 	if(topLevelAS == nullptr){
-		topLevelAS = new DXR_TopLevelAS(instances);
+		topLevelAS = new DXR_TopLevelAS(meshInstances_);
 	}else{
-		topLevelAS->Regenerate(instances);
+		topLevelAS->Regenerate(meshInstances_);
 	}
 
 	auto err = dx12.GfxCommand()->ExecuteCommandsImmediate();
@@ -99,7 +97,7 @@ void DXR::CreateTopLevelAS(const std::vector<DXR_MeshInstance>& meshInstances_){
 	}
 
 	CreateShaderResourceHeap();
-	CreateShaderBindingTable();
+	CreateShaderBindingTable(meshInstances_);
 }
 
 void DXR::CreateShaderResourceHeap(){
@@ -117,7 +115,7 @@ void DXR::CreateShaderResourceHeap(){
 	heap->CreateCBV(cameraBuffer.Get(), cameraBufferSize);
 }
 
-void DXR::CreateShaderBindingTable(){
+void DXR::CreateShaderBindingTable(const std::vector<DXR_MeshInstance>& meshInstances_){
 	GADGET_BASIC_ASSERT(pso != nullptr);
 
 	if(shaderBindingTable != nullptr){
@@ -126,7 +124,7 @@ void DXR::CreateShaderBindingTable(){
 	}
 
 	std::vector<HitGroupInfo> hitGroupInfos;
-	for(const auto& i : instances){
+	for(const auto& i : meshInstances_){
 		GADGET_BASIC_ASSERT(i.meshInfo != nullptr);
 		GADGET_BASIC_ASSERT(i.materialInfo != nullptr);
 		hitGroupInfos.push_back(HitGroupInfo(i.materialInfo->HitGroupIndex(), i.meshInfo->VertexBuffer(), i.meshInfo->IndexBuffer(), i.materialInfo->ConstBuffer()));

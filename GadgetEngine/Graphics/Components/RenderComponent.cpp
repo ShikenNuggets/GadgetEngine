@@ -16,11 +16,13 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, StringID
 	GADGET_BASIC_ASSERT(shaderName_ != StringID::None);
 	
 	CreateMeshInfo();
+	CreateMeshInstanceInfo();
 	material = new DiffuseTextureMaterial(textureName_, shaderName_);
 
 	componentCollection.Add(this);
 
 	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
 	GADGET_BASIC_ASSERT(material != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
@@ -32,11 +34,13 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, const Co
 	GADGET_BASIC_ASSERT(shaderName_ != StringID::None);
 	
 	CreateMeshInfo();
+	CreateMeshInstanceInfo();
 	material = new ColorMaterial(color_, shaderName_);
 
 	componentCollection.Add(this);
 
 	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
 	GADGET_BASIC_ASSERT(material != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
@@ -47,10 +51,12 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, Material
 	GADGET_BASIC_ASSERT(material_ != nullptr);
 
 	CreateMeshInfo();
+	CreateMeshInstanceInfo();
 
 	componentCollection.Add(this);
 
 	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
 	GADGET_BASIC_ASSERT(material != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
@@ -63,10 +69,12 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, EngineMa
 	if(!setMeshInfoDeferred_){
 		CreateMeshInfo();
 	}
+	CreateMeshInstanceInfo();
 
 	componentCollection.Add(this);
 
 	GADGET_BASIC_ASSERT(setMeshInfoDeferred_ || meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
 	GADGET_BASIC_ASSERT(engineMaterial != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
@@ -79,6 +87,7 @@ RenderComponent::RenderComponent(const ComponentProperties& props_) : Component(
 	componentCollection.Add(this);
 
 	GADGET_BASIC_ASSERT(meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
 	GADGET_BASIC_ASSERT(material != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
@@ -88,6 +97,7 @@ RenderComponent::~RenderComponent(){
 
 	delete engineMaterial;
 	delete material;
+	delete meshInstanceInfo;
 	delete meshInfo;
 
 	componentCollection.Remove(this);
@@ -129,6 +139,10 @@ void RenderComponent::CreateMeshInfo(){
 	App::GetResourceManager().UnloadResource(modelName);
 }
 
+void RenderComponent::CreateMeshInstanceInfo(){
+	meshInstanceInfo = App::GetRenderer().GenerateAPIMeshInstanceInfo(parent->GetTransformMatrix());
+}
+
 ComponentProperties RenderComponent::Serialize() const{
 	ComponentProperties props = Component::Serialize();
 	props.variables.Add(SID("ModelName"), modelName);
@@ -147,6 +161,7 @@ void RenderComponent::Deserialize(const ComponentProperties& props_){
 	GADGET_BASIC_ASSERT(shaderName != StringID::None);
 
 	CreateMeshInfo();
+	CreateMeshInstanceInfo();
 
 	if(materialType == DiffuseTextureMaterial::type){
 		material = new DiffuseTextureMaterial(props_.variables);

@@ -231,6 +231,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\DX12\DXR\DXR_BottomLevelAS.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_MaterialInfo.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInfo.h" />
+    <ClInclude Include="Graphics\DX12\DXR\DXR_MeshInstanceInfo.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_OutputResource.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_PipelineStateObject.h" />
     <ClInclude Include="Graphics\DX12\DXR\DXR_ShaderBindingTable.h" />
@@ -266,6 +267,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\Materials\MaterialInfo.h" />
     <ClInclude Include="Graphics\Mesh.h" />
     <ClInclude Include="Graphics\MeshInfo.h" />
+    <ClInclude Include="Graphics\MeshInstanceInfo.h" />
     <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_DepthFrameBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\FrameBuffers\GL_FrameBuffer.h" />

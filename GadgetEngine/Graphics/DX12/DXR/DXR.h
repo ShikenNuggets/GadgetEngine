@@ -48,14 +48,13 @@ namespace Gadget{
 		static std::unique_ptr<DXR> instance;
 
 		void CreateShaderResourceHeap();
-		void CreateShaderBindingTable();
+		void CreateShaderBindingTable(const std::vector<DXR_MeshInstance>& meshInstances_);
 
 		void CreateCameraBuffer();
 
 		DX12& dx12;
 
 		DXR_TopLevelAS* topLevelAS;
-		std::vector<DXR_MeshInstance> instances;
 
 		DXR_PipelineStateObject* pso;
 		DXR_OutputResource* outputResource;

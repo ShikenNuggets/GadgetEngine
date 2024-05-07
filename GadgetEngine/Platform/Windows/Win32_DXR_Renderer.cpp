@@ -11,6 +11,7 @@
 #include "Graphics/DX12/DXR/DXR.h"
 #include "Graphics/DX12/DXR/DXR_MaterialInfo.h"
 #include "Graphics/DX12/DXR/DXR_MeshInfo.h"
+#include "Graphics/DX12/DXR/DXR_MeshInstanceInfo.h"
 #include "Platform/Windows/Win32_Window.h"
 
 using namespace Gadget;
@@ -155,14 +156,20 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 			r->GetEngineMaterial()->CreateMaterialInfo();
 		}
 
-		mInstances.push_back(DXR_MeshInstance(dynamic_cast<DXR_MeshInfo*>(r->GetMeshInfo()), dynamic_cast<DXR_MaterialInfo*>(r->GetEngineMaterial()->GetMaterialInfo()), DX12_Helpers::ConvertMatrix4(r->GetParent()->GetTransformMatrix())));
+		r->GetMeshInstanceInfo()->Update(r->GetParent()->GetTransformMatrix());
+
+		mInstances.push_back(DXR_MeshInstance(
+			dynamic_cast<DXR_MeshInfo*>(r->GetMeshInfo()),
+			dynamic_cast<DXR_MaterialInfo*>(r->GetEngineMaterial()->GetMaterialInfo()),
+			dynamic_cast<DXR_MeshInstanceInfo*>(r->GetMeshInstanceInfo())->DX12MatrixRef()
+		));
 	}
 
-	//if(needsToRegenerate){
+	if(needsToRegenerate){
 		dxr->CreateTopLevelAS(mInstances);
-	//}else{
-	//	dxr->UpdateTopLevelAS();
-	//}
+	}else{
+		dxr->UpdateTopLevelAS();
+	}
 
 	std::vector<ID3D12DescriptorHeap*> heaps = { dxr->Heap() };
 	cmdList->SetDescriptorHeaps(static_cast<UINT>(heaps.size()), heaps.data());
@@ -238,3 +245,7 @@ MeshInfo* Win32_DXR_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t
 TextureInfo* Win32_DXR_Renderer::GenerateAPITextureInfo([[maybe_unused]] const Texture& texture_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
 FontInfo* Win32_DXR_Renderer::GenerateAPIFontInfo([[maybe_unused]] const FreetypeFont& font_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+
+MeshInstanceInfo* Win32_DXR_Renderer::GenerateAPIMeshInstanceInfo(const Matrix4& transform_){
+	return new DXR_MeshInstanceInfo(transform_);
+}

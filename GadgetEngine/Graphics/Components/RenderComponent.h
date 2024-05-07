@@ -3,6 +3,7 @@
 
 #include "Game/Component.h"
 #include "Graphics/MeshInfo.h"
+#include "Graphics/MeshInstanceInfo.h"
 #include "Graphics/Materials/EngineMaterial.h"
 #include "Graphics/Materials/Material.h"
 
@@ -31,6 +32,7 @@ namespace Gadget{
 		void Unbind();
 
 		inline constexpr MeshInfo* GetMeshInfo() const{ return meshInfo; }
+		inline constexpr MeshInstanceInfo* GetMeshInstanceInfo() const{ return meshInstanceInfo; }
 
 		inline constexpr size_t GetMeshNumIndices() const{
 			GADGET_BASIC_ASSERT(meshInfo != nullptr);
@@ -57,6 +59,9 @@ namespace Gadget{
 		MeshInfo* meshInfo;
 		Material* material;
 		EngineMaterial* engineMaterial;
+		MeshInstanceInfo* meshInstanceInfo;
+
+		void CreateMeshInstanceInfo();
 
 		static ComponentCollection<RenderComponent> componentCollection;
 	};
