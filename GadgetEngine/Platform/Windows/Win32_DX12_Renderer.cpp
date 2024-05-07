@@ -209,7 +209,7 @@ Shader* Win32_DX12_Renderer::GenerateAPIShader([[maybe_unused]] StringID shaderR
 	//return App::GetResourceManager().LoadResource<GL_Shader>(shaderResource_); //TODO - This feels bad...
 }
 
-MaterialInfo* Win32_DX12_Renderer::GenerateAPIMaterialInfo(const std::vector<Color>& colors_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
+MaterialInfo* Win32_DX12_Renderer::GenerateAPIMaterialInfo([[maybe_unused]] const std::vector<Color>& colors_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
 MeshInfo* Win32_DX12_Renderer::GenerateAPIMeshInfo([[maybe_unused]] const Mesh& mesh_){
 	return new DX12_MeshInfo(mesh_);

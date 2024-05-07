@@ -31,7 +31,8 @@ Mesh* AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene){
 	GADGET_BASIC_ASSERT(node != nullptr);
 	GADGET_BASIC_ASSERT(scene != nullptr);
 
-	for(unsigned int i = 0; i < node->mNumMeshes; i++){
+	size_t i = 0;
+	//for(size_t int i = 0; i < node->mNumMeshes; i++){
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
 		std::vector<Vertex> verts;
@@ -63,11 +64,12 @@ Mesh* AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene){
 		}
 
 		return new Mesh(verts, indices);
-	}
+	//}
 
-	for(unsigned int i = 0; i < node->mNumChildren; i++){
-		return ProcessNode(node->mChildren[i], scene);
-	}
+	//TODO - Multi-mesh loading
+	//for(unsigned int i = 0; i < node->mNumChildren; i++){
+	//	return ProcessNode(node->mChildren[i], scene);
+	//}
 
-	return nullptr;
+	//return nullptr;
 }

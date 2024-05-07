@@ -2,6 +2,7 @@
 
 #include "App.h"
 #include "Window.h"
+#include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Input/GamepadEvent.h"
 #include "Input/KeyEvent.h"
