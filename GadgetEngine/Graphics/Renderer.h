@@ -3,17 +3,18 @@
 
 #include <memory>
 
-#include "Color.h"
-#include "FontInfo.h"
-#include "MeshInfo.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "TextureInfo.h"
-#include "ViewportRect.h"
 #include "Window.h"
+#include "Graphics/Color.h"
+#include "Graphics/FontInfo.h"
+#include "Graphics/MeshInfo.h"
+#include "Graphics/MeshInstanceInfo.h"
+#include "Graphics/Shader.h"
+#include "Graphics/Texture.h"
+#include "Graphics/TextureInfo.h"
+#include "Graphics/ViewportRect.h"
+#include "Graphics/Materials/MaterialInfo.h"
 #include "Graphics/Text/FreetypeFont.h"
 #include "Math/MathObjects.h"
-#include "Graphics/Materials/MaterialInfo.h"
 
 namespace Gadget{
 	//Forward Declarations
