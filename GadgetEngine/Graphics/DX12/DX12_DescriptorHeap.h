@@ -35,7 +35,7 @@ namespace Gadget{
 	class DX12_DescriptorHeap{
 	public:
 		explicit DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_);
-		virtual ~DX12_DescriptorHeap() = default;
+		virtual ~DX12_DescriptorHeap();
 		DISABLE_COPY_AND_MOVE(DX12_DescriptorHeap)
 
 		ErrorCode Initialize(ID3D12_Device* const device_, uint32_t capacity_, bool isShaderVisible_);

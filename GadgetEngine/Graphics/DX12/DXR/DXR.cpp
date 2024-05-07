@@ -108,6 +108,7 @@ void DXR::CreateShaderResourceHeap(){
 	GADGET_BASIC_ASSERT(cameraBuffer != nullptr);
 
 	if(heap != nullptr){
+		heap->Release();
 		delete heap;
 		heap = nullptr;
 	}
@@ -118,6 +119,11 @@ void DXR::CreateShaderResourceHeap(){
 
 void DXR::CreateShaderBindingTable(){
 	GADGET_BASIC_ASSERT(pso != nullptr);
+
+	if(shaderBindingTable != nullptr){
+		delete shaderBindingTable;
+		shaderBindingTable = nullptr;
+	}
 
 	std::vector<HitGroupInfo> hitGroupInfos;
 	for(const auto& i : instances){
