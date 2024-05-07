@@ -10,7 +10,7 @@ namespace Gadget{
 	public:
 		static const StringID type;
 
-		PointLightComponent(GameObject* parent_) : Component(typeName, parent_), lightSource(){
+		PointLightComponent(GameObject* parent_) : Component(type, parent_), lightSource(){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
 			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
 
@@ -19,7 +19,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 		}
 
-		PointLightComponent(GUID parentGUID_) : Component(typeName, parentGUID_), lightSource(){
+		PointLightComponent(GUID parentGUID_) : Component(type, parentGUID_), lightSource(){
 			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 
 			componentCollection.Add(this);
