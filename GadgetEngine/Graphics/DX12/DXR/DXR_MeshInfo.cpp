@@ -15,9 +15,15 @@ DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), 
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 	GADGET_BASIC_ASSERT(mesh_.vertices.size() > 0);
 	GADGET_BASIC_ASSERT(mesh_.indices.size() > 0);
+	GADGET_BASIC_ASSERT(mesh_.vertices.size() < mesh_.indices.size()); //There should always be more indices than vertices
+	GADGET_BASIC_ASSERT(mesh_.indices.size() <= std::numeric_limits<uint32_t>::max()); //If you need more indices, adjust the index buffer creation
 
 	//Vertex Buffer
 	vertexBuffer.Attach(DX12::GetInstance().CreateBuffer(mesh_.vertices.data(), mesh_.vertices.size() * sizeof(Vertex), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	GADGET_BASIC_ASSERT(vertexBuffer != nullptr);
+	if(vertexBuffer != nullptr){
+		vertexBuffer->SetName(L"Vertex Buffer");
+	}
 
 	//Index Buffer
 	std::vector<uint32_t> dxrIndices;
@@ -28,6 +34,10 @@ DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), 
 	}
 
 	indexBuffer.Attach(DX12::GetInstance().CreateBuffer(dxrIndices.data(), dxrIndices.size() * sizeof(uint32_t), true, D3D12_RESOURCE_STATE_GENERIC_READ));
+	GADGET_BASIC_ASSERT(indexBuffer != nullptr);
+	if(indexBuffer != nullptr){
+		indexBuffer->SetName(L"Index Buffer");
+	}
 
 	//Bottom Level Acceleration Structure
 	bottomLevelAS = new DXR_BottomLevelAS(vertexBuffer.Get(), mesh_.vertices.size(), indexBuffer.Get(), dxrIndices.size());

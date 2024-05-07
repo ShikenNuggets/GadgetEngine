@@ -55,17 +55,19 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, Material
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* material_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(nullptr), engineMaterial(material_){
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* material_, bool setMeshInfoDeferred_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfo(nullptr), material(nullptr), engineMaterial(material_){
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(material_ != nullptr);
 
-	CreateMeshInfo();
+	if(!setMeshInfoDeferred_){
+		CreateMeshInfo();
+	}
 
 	componentCollection.Add(this);
 
-	GADGET_BASIC_ASSERT(meshInfo != nullptr);
-	GADGET_BASIC_ASSERT(material != nullptr);
+	GADGET_BASIC_ASSERT(setMeshInfoDeferred_ || meshInfo != nullptr);
+	GADGET_BASIC_ASSERT(engineMaterial != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 

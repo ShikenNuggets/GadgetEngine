@@ -31,7 +31,7 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 void PlaneClosestHit(inout HitInfo payload, Attributes attrib)
 {
     //float3 barycentrics = float3(1.0f - attrib.barycentric.x - attrib.barycentric.y, attrib.barycentric.x, attrib.barycentric.y);
-    float3 hitColor = float3(0.75f, 0.75f, 0.3f);
+    float3 hitColor = A;
     
     payload.colorAndDistance = float4(hitColor, RayTCurrent());
 }

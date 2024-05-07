@@ -12,10 +12,14 @@ DXR_TopLevelAS::DXR_TopLevelAS(const std::vector<DXR_MeshInstance>& meshInstance
 }
 
 void DXR_TopLevelAS::Regenerate(const std::vector<DXR_MeshInstance>& meshInstances_){
+	scratchBuffer.Reset();
+	mainBuffer.Reset();
+	instanceDescBuffer.Reset();
+
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 
 	for(size_t i = 0; i < meshInstances_.size(); i++){
-		topLevelASGenerator.AddInstance(meshInstances_[i].bottomLevelAS->Buffer(), meshInstances_[i].transform, static_cast<UINT>(i), static_cast<UINT>(i));
+		topLevelASGenerator.AddInstance(meshInstances_[i].meshInfo->BottomLevelAS(), meshInstances_[i].transform, static_cast<UINT>(i), static_cast<UINT>(i));
 	}
 
 	uint64_t scratchSize = 0;

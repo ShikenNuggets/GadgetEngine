@@ -88,12 +88,12 @@ void DX12_Helpers::DX12_ResourceBarriers::ApplyAllBarriers(ID3D12_GraphicsComman
 
 ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, const void* data_, uint64_t bufferSize_, bool isCpuAccessible_, D3D12_RESOURCE_STATES state_, D3D12_RESOURCE_FLAGS flags_, ID3D12Heap* heap_, uint64_t heapOffset_){
 	GADGET_BASIC_ASSERT(device_ != nullptr);
-	GADGET_BASIC_ASSERT(bufferSize_ > 0);
+	//GADGET_BASIC_ASSERT(bufferSize_ > 0);
 
 	D3D12_RESOURCE_DESC desc{};
 	desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 	desc.Alignment = 0;
-	desc.Width = bufferSize_;
+	desc.Width = Math::Clamp(static_cast<size_t>(1), std::numeric_limits<UINT64>::max(), bufferSize_);
 	desc.Height = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels = 1;

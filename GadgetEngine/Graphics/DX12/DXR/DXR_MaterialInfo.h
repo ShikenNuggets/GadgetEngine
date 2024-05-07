@@ -16,7 +16,11 @@ namespace Gadget{
 		DXR_MaterialInfo(const std::vector<Color>& colors_);
 		virtual ~DXR_MaterialInfo() override = default;
 
+		ID3D12_Resource* ConstBuffer(){ return constBuffer.Get(); }
+		size_t HitGroupIndex(){ return hitGroupIndex; }
+
 	protected:
+		size_t hitGroupIndex;
 		Microsoft::WRL::ComPtr<ID3D12_Resource> constBuffer;
 	};
 }

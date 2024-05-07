@@ -10,7 +10,7 @@ namespace Gadget{
 	class DXR_BottomLevelAS{
 	public:
 		DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numVertices_, ID3D12_Resource* indexBuffer_, size_t numIndices_);
-		~DXR_BottomLevelAS() = default;
+		~DXR_BottomLevelAS();
 
 		void ReleaseTempResources();
 

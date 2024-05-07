@@ -7,10 +7,15 @@
 namespace Gadget{
 	class EngineMaterial{
 	public:
-		EngineMaterial(const Color& color_);
-		EngineMaterial(const Color& colorA_, const Color& colorB_, const Color& colorC_);
-		EngineMaterial(const std::vector<Color>& color_);
+		EngineMaterial(const Color& color_, bool materialInfoDeferred_ = true);
+		EngineMaterial(const Color& colorA_, const Color& colorB_, const Color& colorC_, bool materialInfoDeferred_ = true);
+		EngineMaterial(const std::vector<Color>& color_, bool materialInfoDeferred_);
 		~EngineMaterial();
+
+		void CreateMaterialInfo();
+
+		const std::vector<Color>& GetColors() const{ return colors; }
+		MaterialInfo* GetMaterialInfo(){ return materialInfo; }
 
 	private:
 		std::vector<Color> colors;

@@ -4,6 +4,7 @@
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/BottomLevelASGenerator.h"
+#include "Utils/StringID.h"
 
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
@@ -42,6 +43,10 @@ DXR_BottomLevelAS::DXR_BottomLevelAS(ID3D12_Resource* vertexBuffer_, size_t numV
 	}
 
 	blas.Generate(DX12::GetInstance().GfxCommand()->CommandList(), scratchBuffer.Get(), mainBuffer.Get(), false, nullptr);
+}
+
+DXR_BottomLevelAS::~DXR_BottomLevelAS(){
+	DX12::GetInstance().DeferredRelease(mainBuffer.Detach());
 }
 
 void DXR_BottomLevelAS::ReleaseTempResources(){

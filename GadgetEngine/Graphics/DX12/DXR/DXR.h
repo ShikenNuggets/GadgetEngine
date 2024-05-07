@@ -23,26 +23,6 @@
 #include "Utils/Utils.h"
 
 namespace Gadget{
-	struct AccelerationStructureBuffers{
-		Microsoft::WRL::ComPtr<ID3D12Resource> pScratch;
-		Microsoft::WRL::ComPtr<ID3D12Resource> pResult;
-		Microsoft::WRL::ComPtr<ID3D12Resource> pInstanceDesc;
-
-		void SetName(const std::wstring& namePrefix_){
-			if(pScratch != nullptr){
-				pScratch->SetName((namePrefix_ + L"_Scratch").c_str());
-			}
-
-			if(pResult != nullptr){
-				pResult->SetName((namePrefix_ + L"_Result").c_str());
-			}
-
-			if(pInstanceDesc != nullptr){
-				pInstanceDesc->SetName((namePrefix_ + L"_InstanceDesc").c_str());
-			}
-		}
-	};
-
 	class DXR{
 	public:
 		DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_);
@@ -60,7 +40,7 @@ namespace Gadget{
 		ID3D12Resource* SBTStorage() const{ return shaderBindingTable->Storage(); }
 
 		void UpdateTopLevelAS();
-		void CreateAccelerationStructures(const std::vector<Microsoft::WRL::ComPtr<ID3D12_Resource>>& resources_);
+		void CreateTopLevelAS(const std::vector<DXR_MeshInstance>& meshInstances_);
 
 		void UpdateCameraBuffer(const Matrix4& view_, const Matrix4& perspective_);
 

@@ -12,7 +12,7 @@ namespace Gadget{
 		RenderComponent(GUID parentGUID_, StringID modelName_, StringID textureName_, StringID shaderName_);
 		RenderComponent(GUID parentGUID_, StringID modelName_, const Color& color_, StringID shaderName_);
 		RenderComponent(GUID parentGUID_, StringID modelName_, Material* material_);
-		RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* engineMaterial_);
+		RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* engineMaterial_, bool setMeshInfoDeferred_ = true);
 		RenderComponent(const ComponentProperties& props_);
 
 		virtual ~RenderComponent() override;
@@ -30,12 +30,15 @@ namespace Gadget{
 		void Bind();
 		void Unbind();
 
+		inline constexpr MeshInfo* GetMeshInfo() const{ return meshInfo; }
+
 		inline constexpr size_t GetMeshNumIndices() const{
 			GADGET_BASIC_ASSERT(meshInfo != nullptr);
 			return meshInfo->GetNumIndices();
 		}
 
 		Material* GetMaterial(){ return material; }
+		EngineMaterial* GetEngineMaterial(){ return engineMaterial; }
 
 		Shader* GetShader(){
 			GADGET_BASIC_ASSERT(material != nullptr);
@@ -43,6 +46,8 @@ namespace Gadget{
 		}
 
 		virtual ComponentProperties Serialize() const override;
+
+		void CreateMeshInfo();
 
 	protected:
 		virtual void Deserialize(const ComponentProperties& props_) override;
@@ -52,8 +57,6 @@ namespace Gadget{
 		MeshInfo* meshInfo;
 		Material* material;
 		EngineMaterial* engineMaterial;
-
-		void CreateMeshInfo();
 
 		static ComponentCollection<RenderComponent> componentCollection;
 	};
