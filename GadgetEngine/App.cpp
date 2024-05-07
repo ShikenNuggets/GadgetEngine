@@ -192,7 +192,7 @@ void App::Run(GameInterface& gameInterface_){
 		time->Delay();
 	}
 
-	Debug::Log("Average Frame Duration: " + std::to_string(Profiler::GetAverage(SID("MainLoop")) * 1000.0) + "ms", Debug::Info, __FILE__, __LINE__);
+	Profiler::OutputAllAverageResults();
 }
 
 void App::OnEvent(const Event& e_){

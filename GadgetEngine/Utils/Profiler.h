@@ -15,8 +15,8 @@ namespace Gadget{
 		void StartProfiling();
 		double EndProfiling();
 
-		double Total();
-		double Average();
+		double Total() const;
+		double Average() const;
 		
 	private:
 		constexpr inline std::chrono::milliseconds CurrentTime() const{
@@ -36,6 +36,8 @@ namespace Gadget{
 
 		static double TotalTime(StringID name_);
 		static double GetAverage(StringID name_);
+
+		static void OutputAllAverageResults();
 
 	private:
 		static std::map<StringID, Timer> profiles;

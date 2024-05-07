@@ -32,7 +32,7 @@ double Timer::EndProfiling(){
 	return durationSeconds;
 }
 
-double Timer::Total(){
+double Timer::Total() const{
 	double total = 0.0;
 	for(const auto& t : times){
 		total += t;
@@ -41,7 +41,7 @@ double Timer::Total(){
 	return total;
 }
 
-double Timer::Average(){
+double Timer::Average() const{
 	if(times.size() == 0){
 		return 0.0;
 	}
@@ -86,4 +86,10 @@ double Profiler::GetAverage(StringID name_){
 	}
 
 	return 0.0;
+}
+
+void Profiler::OutputAllAverageResults(){
+	for(auto& profile : profiles){
+		Debug::Log("Average " + profile.first.GetString() + " Duration: " + std::to_string(profile.second.Average() * 1000.0) + "ms", Debug::Info);
+	}
 }
