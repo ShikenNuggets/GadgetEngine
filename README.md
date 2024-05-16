@@ -1,9 +1,8 @@
 # GadgetEngine
 
-Yet another 3D game engine. But it's *my* 3D game engine :)  
-This is mostly just a project for fun, but I want to see exactly how far I can take this thing.
+Yet another 3D game engine. But it's *my* 3D game engine :)
 
-At the moment I'm only trying to get it to work for Windows (x64) but I'm abstracting platform specific code where I can to make it easier (in theory) to port to other platforms in the future.
+At the moment I'm only trying to get it to work for Windows, but I'm abstracting platform specific code where I can to make it easier (in theory) to port to other platforms in the future.
 
 More details can be found [on my portfolio website](https://gamesbycarter.wordpress.com/2022/06/22/gadget-engine-c/).
 
