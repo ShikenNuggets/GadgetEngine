@@ -190,6 +190,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="ConfigParser.h" />
     <ClInclude Include="Core\FileSystem.h" />
     <ClInclude Include="Core\Time.h" />
+    <ClInclude Include="Data\List.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="EngineVars.h" />
     <ClInclude Include="Events\AppEvent.h" />
