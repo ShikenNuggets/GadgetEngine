@@ -102,6 +102,9 @@
     <ClInclude Include="Data\List.h">
       <Filter>Data</Filter>
     </ClInclude>
+    <ClInclude Include="Data\String.h">
+      <Filter>Data</Filter>
+    </ClInclude>
     <ClInclude Include="Debug.h" />
     <ClInclude Include="EngineVars.h" />
     <ClInclude Include="Events\AppEvent.h">
