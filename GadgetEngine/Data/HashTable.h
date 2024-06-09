@@ -26,6 +26,12 @@ namespace Gadget{
 				data.Add(List<KeyValuePair>());
 			}
 
+		#ifdef GADGET_DEBUG
+			if(!data[index].IsEmpty()){
+				GADGET_LOG(SID("DataStructure"), "Performance: HashTable collision occured. Increasing your hash table size could improve performance");
+			}
+		#endif //GADGET_DEBUG
+
 			data[index].Add(KeyValuePair(key_, value_));
 		}
 
