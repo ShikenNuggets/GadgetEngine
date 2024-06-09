@@ -69,6 +69,16 @@ namespace Gadget{
 			QuickSort(0, size - 1);
 		}
 
+		constexpr bool Contains(const T& value_) const{
+			for(int i = 0; i < size; i++){
+				if(data[i] == value_){
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		constexpr const T& operator[](size_t i_) const{
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];

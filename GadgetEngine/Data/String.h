@@ -44,6 +44,35 @@ namespace Gadget{
 			}
 		}
 
+		bool Contains(char c){
+			return data.Contains(c);
+		}
+
+		//TODO - Naive brute force implementation. Consider other options: https://en.wikipedia.org/wiki/String-searching_algorithm#Single-pattern_algorithms
+		bool Contains(const String& str_){
+			if(data.Size() < str_.Length()){
+				return false;
+			}
+
+			for(size_t i = 0; i < data.Size(); i++){
+				bool isEqual = true;
+
+				size_t j = i;
+				for(size_t k = 0; k < str_.Length(); j++ && k++){
+					if(data[j] != str_[k]){
+						isEqual = false;
+						break;
+					}
+				}
+
+				if(isEqual){
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		void QuickSort(){
 			if(!data.IsEmpty()){
 				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
