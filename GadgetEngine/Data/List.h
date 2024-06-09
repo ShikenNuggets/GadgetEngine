@@ -68,9 +68,9 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(size > 0);
 			GADGET_BASIC_ASSERT(tail != nullptr);
 
-			Node* secondLast = SecondLast();
-			delete tail;
-			tail = secondLast;
+			tail = SecondLast();
+			delete tail->next;
+			tail->next = nullptr;
 
 			size--;
 		}
