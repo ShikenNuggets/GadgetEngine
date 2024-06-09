@@ -11,6 +11,13 @@ namespace Gadget{
 			data = new T[capacity];
 		}
 
+		Array(const Array<T>& array_) : data(nullptr), size(0), capacity(array_.Capacity()){
+			data = new T[capacity];
+			for(int i = 0; i < array_.Size(); i++){
+				Add(array_[i]);
+			}
+		}
+
 		Array(size_t initialCapacity_) : data(nullptr), size(0), capacity(initialCapacity_){
 			data = new T[capacity];
 		}
