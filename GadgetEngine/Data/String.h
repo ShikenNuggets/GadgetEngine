@@ -73,21 +73,24 @@ namespace Gadget{
 		}
 		
 		void Trim(){
-			while(!IsEmpty()){
-				if(IsWhitespace(data[0])){
-					RemoveAt(0);
-				}else{
+			size_t whitespaceAtStart;
+			for(whitespaceAtStart = 0; whitespaceAtStart < Length(); whitespaceAtStart++){
+				if(!IsWhitespace(data[whitespaceAtStart])){
 					break;
 				}
 			}
 
-			while(!IsEmpty()){
-				if(IsWhitespace(data[Length() - 1])){
-					RemoveAt(Length() - 1);
-				}else{
+			data.RemoveAt(0, whitespaceAtStart);
+
+			size_t indexToEndWhitespace;
+			for(indexToEndWhitespace = data.Size() - 2; indexToEndWhitespace >= 0; indexToEndWhitespace--){
+				if(!IsWhitespace(data[indexToEndWhitespace])){
 					break;
 				}
 			}
+
+			data.RemoveAt(indexToEndWhitespace + 1, data.Size());
+			data.Add('\0');
 		}
 
 		void FindAndReplace(char find_, const String& replace_){

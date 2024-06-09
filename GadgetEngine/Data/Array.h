@@ -89,9 +89,11 @@ namespace Gadget{
 			InsertAt(index_, range_.data, range_.Size());
 		}
 
-		void Pop(){
-			if(!IsEmpty()){
-				size--;
+		void Pop(size_t elementsToPop = 1){
+			if(size - elementsToPop < 0){
+				size = 0;
+			}else{
+				size -= elementsToPop;
 			}
 		}
 
@@ -106,6 +108,23 @@ namespace Gadget{
 			}
 
 			size--;
+		}
+
+		void RemoveAt(size_t startIndex_, size_t rangeSize_){
+			if(startIndex_ >= size || rangeSize_ == 0){
+				return;
+			}
+
+			if(startIndex_ + rangeSize_ > size){
+				Pop(size - startIndex_);
+				return;
+			}
+
+			for(size_t i = startIndex_; i < startIndex_ + rangeSize_ && i < size; i++){
+				data[i] = data[i + rangeSize_];
+			}
+
+			size -= rangeSize_;
 		}
 
 		void Remove(const T& value_){
