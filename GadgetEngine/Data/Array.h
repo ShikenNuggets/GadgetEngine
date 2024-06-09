@@ -21,14 +21,7 @@ namespace Gadget{
 
 		void Add(const T& value_){
 			if(size >= capacity){
-				capacity = capacity * 2;
-				T* newData = new T[capacity];
-				for(size_t i = 0; i < size; i++){
-					newData[i] = data[i];
-				}
-
-				delete[] data;
-				data = newData;
+				Reserve(capacity * 2);
 			}
 
 			GADGET_BASIC_ASSERT(size < capacity);
@@ -41,6 +34,24 @@ namespace Gadget{
 			if(!IsEmpty()){
 				size--;
 			}
+		}
+
+		void Reserve(size_t newCapacity_){
+			if(newCapacity_ <= capacity){
+				return;
+			}
+
+			capacity = newCapacity_;
+			Recreate();
+		}
+
+		void ShrinkToFit(){
+			if(capacity == size){
+				return;
+			}
+
+			capacity = size;
+			Recreate();
 		}
 
 		constexpr const T& operator[](size_t i_) const{
@@ -61,6 +72,16 @@ namespace Gadget{
 		T* data;
 		size_t size;
 		size_t capacity;
+
+		void Recreate(){
+			T* newData = new T[capacity];
+			for(size_t i = 0; i < size; i++){
+				newData[i] = data[i];
+			}
+
+			delete[] data;
+			data = newData;
+		}
 	};
 }
 
