@@ -38,7 +38,9 @@ namespace Gadget{
 		}
 
 		void Pop(){
-			size--;
+			if(!IsEmpty()){
+				size--;
+			}
 		}
 
 		constexpr const T& operator[](size_t i_) const{
@@ -52,6 +54,7 @@ namespace Gadget{
 		}
 
 		constexpr size_t Size() const{ return size; }
+		constexpr size_t IsEmpty() const{ return size == 0; }
 		constexpr size_t Capacity() const{ return capacity; }
 
 	private:
