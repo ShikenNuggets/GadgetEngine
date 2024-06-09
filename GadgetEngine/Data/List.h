@@ -116,6 +116,37 @@ namespace Gadget{
 			size--;
 		}
 
+		//Removes the specified node from the list
+		//If successful, the Node* passed in will not be valid afterwards
+		constexpr inline void Remove(const Node* node_){
+			GADGET_BASIC_ASSERT(node_ != nullptr);
+
+			if(IsEmpty()){
+				GADGET_LOG_WARNING(SID("DataStructures"), "Tried to remove a node from an empty list");
+				return;
+			}
+
+			if(node_ == head){
+				PopFront();
+				return;
+			}else if(node_ == tail){
+				Pop();
+				return;
+			}
+
+			Node* prev = head;
+			Node* cur = head->next;
+			while(cur != nullptr){
+				if(cur == node_){
+					prev->next = cur->next;
+					delete cur;
+					return;
+				}
+			}
+
+			GADGET_LOG_WARNING(SID("DataStructures"), "Tried to remove a node from a list, but could not find the node - There's either a bug in your code, a bug in the List code, or List nodes were manually altered by other code (do not do that)");
+		}
+
 		constexpr inline size_t Size() const{ return size; }
 		constexpr inline bool IsEmpty() const{ return size == 0; }
 		constexpr inline Node* Front(){ return head; }

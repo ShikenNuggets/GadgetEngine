@@ -41,7 +41,7 @@ namespace Gadget{
 			size--;
 		}
 
-		constexpr T operator[](size_t i_) const{
+		constexpr const T& operator[](size_t i_) const{
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];
 		}
@@ -50,6 +50,9 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];
 		}
+
+		constexpr size_t Size() const{ return size; }
+		constexpr size_t Capacity() const{ return capacity; }
 
 	private:
 		T* data;

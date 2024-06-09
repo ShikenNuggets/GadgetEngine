@@ -96,6 +96,9 @@
     <ClInclude Include="Data\Array.h">
       <Filter>Data</Filter>
     </ClInclude>
+    <ClInclude Include="Data\HashTable.h">
+      <Filter>Data</Filter>
+    </ClInclude>
     <ClInclude Include="Data\List.h">
       <Filter>Data</Filter>
     </ClInclude>
