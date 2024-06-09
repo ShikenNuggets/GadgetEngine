@@ -58,8 +58,10 @@ namespace Gadget{
 				bool isEqual = true;
 
 				size_t j = i;
-				for(size_t k = 0; k < str_.Length(); j++ && k++){
+				for(size_t k = 0; k < str_.Length() - 1; j++, k++){ //Length() - 1 because of the null terminator
 					if(data[j] != str_[k]){
+						GADGET_ASSERT(str_[k] != '\0', "String comparison failing due to null terminator!");
+
 						isEqual = false;
 						break;
 					}
