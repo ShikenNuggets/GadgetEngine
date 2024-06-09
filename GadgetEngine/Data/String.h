@@ -44,6 +44,18 @@ namespace Gadget{
 			}
 		}
 
+		void RemoveAt(size_t index_){
+			data.RemoveAt(index_);
+		}
+
+		void Remove(char value_){
+			data.Remove(value_);
+		}
+
+		void RemoveAll(char value_){
+			data.RemoveAll(value_);
+		}
+
 		bool Contains(char c){
 			return data.Contains(c);
 		}

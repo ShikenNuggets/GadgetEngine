@@ -43,6 +43,36 @@ namespace Gadget{
 			}
 		}
 
+		void RemoveAt(size_t index_){
+			GADGET_BASIC_ASSERT(index_ < size);
+			if(index_ >= size){
+				return;
+			}
+
+			for(size_t i = index_; i < size - 1; i++){
+				data[i] = data[i + 1];
+			}
+
+			size--;
+		}
+
+		void Remove(const T& value_){
+			for(size_t i = 0; i < size; i++){
+				if(data[i] == value_){
+					RemoveAt(i);
+					return;
+				}
+			}
+		}
+
+		void RemoveAll(const T& value_){
+			for(size_t i = 0; i < size; i++){
+				if(data[i] == value_){
+					RemoveAt(i);
+				}
+			}
+		}
+
 		void Reserve(size_t newCapacity_){
 			if(newCapacity_ <= capacity){
 				return;
