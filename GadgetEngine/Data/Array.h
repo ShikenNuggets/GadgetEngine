@@ -54,6 +54,14 @@ namespace Gadget{
 			Recreate();
 		}
 
+		void QuickSort(){
+			if(size < 2){
+				return;
+			}
+
+			QuickSort(0, size - 1);
+		}
+
 		constexpr const T& operator[](size_t i_) const{
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];
@@ -74,6 +82,7 @@ namespace Gadget{
 		size_t capacity;
 
 		void Recreate(){
+			GADGET_BASIC_ASSERT(size <= capacity);
 			T* newData = new T[capacity];
 			for(size_t i = 0; i < size; i++){
 				newData[i] = data[i];
@@ -81,6 +90,42 @@ namespace Gadget{
 
 			delete[] data;
 			data = newData;
+		}
+
+		void QuickSort(size_t low_, size_t high_){
+			if(high_ - low_ < 2){
+				return;
+			}
+
+			size_t pivot = QuickSortPartition(low_, high_);
+			QuickSort(low_, pivot);
+			QuickSort(pivot + 1, high_);
+		}
+
+		//Hoare Partition Scheme
+		size_t QuickSortPartition(size_t low_, size_t high_){
+			const T& pivot = data[low_];
+
+			size_t leftIndex = low_ = 1;
+			size_t rightIndex = high_;
+
+			while(true){
+				do{
+					leftIndex++;
+				} while(data[leftIndex] < pivot);
+
+				do{
+					rightIndex--;
+				} while(data[rightIndex] > pivot);
+
+				if(leftIndex >= rightIndex){
+					return rightIndex;
+				}
+
+				const T tmp = data[leftIndex];
+				data[leftIndex] = data[rightIndex];
+				data[rightIndex] = tmp;
+			}
 		}
 	};
 }

@@ -44,6 +44,18 @@ namespace Gadget{
 			}
 		}
 
+		void QuickSort(){
+			if(!data.IsEmpty()){
+				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
+			}
+
+			data.Pop(); //We typically don't want to sort the null terminator
+
+			data.QuickSort();
+
+			data.Add('\0');
+		}
+
 		const char* Value() const{
 			if(data.IsEmpty()){
 				return "";
