@@ -8,17 +8,17 @@ namespace Gadget{
 	class String{
 	public:
 		String(const char* str_ = "") : data(Math::Clamp<size_t>(16, std::numeric_limits<size_t>::max(), std::strlen(str_))){
+			data.Add('\0');
 			Append(str_);
 		}
 
 		String(const Array<char>& strArray_) : data(strArray_.Size()){
+			data.Add('\0');
 			Append(strArray_);
 		}
 
 		void Append(const char* str_){
-			if(!data.IsEmpty()){
-				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
-			}
+			GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
 
 			data.Pop(); //Pop the null terminator
 
@@ -34,9 +34,7 @@ namespace Gadget{
 		}
 
 		void Append(const Array<char>& strArray_){
-			if(!data.IsEmpty()){
-				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
-			}
+			GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
 
 			data.Pop();
 
@@ -78,6 +76,17 @@ namespace Gadget{
 			data.RemoveAll(value_);
 		}
 
+		void FindAndReplace(char find_, const String& replace_){
+			for(size_t i = 0; i < data.Size(); i++){
+				if(data[i] == find_){
+					RemoveAt(i);
+					for(size_t j = 0; j < replace_.Length(); j++){
+						InsertAt(i + j, replace_[j]);
+					}
+				}
+			}
+		}
+
 		bool Contains(char c){
 			return data.Contains(c);
 		}
@@ -92,7 +101,7 @@ namespace Gadget{
 				bool isEqual = true;
 
 				size_t j = i;
-				for(size_t k = 0; k < str_.Length() - 1; j++, k++){ //Length() - 1 because of the null terminator
+				for(size_t k = 0; k < str_.Length(); j++, k++){
 					if(data[j] != str_[k]){
 						GADGET_ASSERT(str_[k] != '\0', "String comparison failing due to null terminator!");
 
@@ -169,9 +178,19 @@ namespace Gadget{
 			return data[i_];
 		}
 
-		constexpr size_t Length() const{ return data.Size(); }
+		constexpr size_t Length() const{ return data.Size() - 1; }
 
-		bool IsEmpty() const{ return data.Size() == 0 || data[0] == '\0'; }
+		bool IsEmpty() const{
+			GADGET_BASIC_ASSERT(data.Size() > 0);
+			if(data.Size() == 1){
+				GADGET_BASIC_ASSERT(data[0] == '\0');
+			}else if(data.Size() > 1){
+				GADGET_BASIC_ASSERT(data[0] != '\0');
+				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
+			}
+
+			return data.Size() == 1 || data[0] == '\0';
+		}
 
 	private:
 		Array<char> data;
