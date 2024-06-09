@@ -74,6 +74,16 @@ namespace Gadget{
 			return true;
 		}
 
+		constexpr const char& operator[](size_t i_) const{
+			GADGET_BASIC_ASSERT(i_ < data.Size());
+			return data[i_];
+		}
+
+		char& operator[](size_t i_){
+			GADGET_BASIC_ASSERT(i_ < data.Size());
+			return data[i_];
+		}
+
 		constexpr size_t Length() const{ return data.Size(); }
 
 	private:
