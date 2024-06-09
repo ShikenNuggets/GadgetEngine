@@ -27,6 +27,10 @@ namespace Gadget{
 		}
 
 		void Add(const T& value_){
+			if(capacity == 0){
+				Reserve(16);
+			}
+
 			if(size >= capacity){
 				Reserve(capacity * 2);
 			}
@@ -109,7 +113,7 @@ namespace Gadget{
 			return false;
 		}
 
-		Array SubRange(size_t startIndex_, size_t endIndex_){
+		Array SubRange(size_t startIndex_, size_t endIndex_) const{
 			if(endIndex_ > size){
 				endIndex_ = size;
 			}

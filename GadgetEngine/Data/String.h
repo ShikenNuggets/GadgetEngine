@@ -105,7 +105,7 @@ namespace Gadget{
 			return false;
 		}
 
-		String SubString(size_t startIndex_, size_t endIndex_){
+		String SubString(size_t startIndex_, size_t endIndex_) const{
 			return String(data.SubRange(startIndex_, endIndex_));
 		}
 
@@ -162,6 +162,8 @@ namespace Gadget{
 		}
 
 		constexpr size_t Length() const{ return data.Size(); }
+
+		bool IsEmpty() const{ return data.Size() == 0 || data[0] == '\0'; }
 
 	private:
 		Array<char> data;
