@@ -41,6 +41,19 @@ namespace Gadget{
 			size++;
 		}
 
+		void InsertAt(size_t index_, const T& value_){
+			if(index_ >= size){
+				Add(value_);
+			}
+
+			Add(T()); //This gets us the size and capacity increase without too much trouble
+			for(size_t i = size - 1; i > index_; i--){
+				data[i] = data[i - 1];
+			}
+
+			data[index_] = value_;
+		}
+
 		void Pop(){
 			if(!IsEmpty()){
 				size--;
@@ -135,6 +148,20 @@ namespace Gadget{
 		T& operator[](size_t i_){
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];
+		}
+
+		bool operator==(const Array<T>& array_) const{
+			if(size != array_.size){
+				return false;
+			}
+
+			for(size_t i = 0; i < size; i++){
+				if(data[i] != array_[i]){
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		constexpr size_t Size() const{ return size; }

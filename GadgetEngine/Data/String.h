@@ -62,6 +62,10 @@ namespace Gadget{
 			}
 		}
 
+		void InsertAt(size_t index_, char c){
+			data.InsertAt(index_, c);
+		}
+
 		void RemoveAt(size_t index_){
 			data.RemoveAt(index_);
 		}
@@ -149,6 +153,10 @@ namespace Gadget{
 			}
 
 			return true;
+		}
+
+		bool operator==(const String& str_) const{
+			return data == str_.data;
 		}
 
 		constexpr const char& operator[](size_t i_) const{
