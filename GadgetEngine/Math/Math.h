@@ -133,6 +133,16 @@ namespace Gadget{
 			return true;
 		}
 
+		static inline constexpr uint64_t NextPrime(uint64_t start){
+			for(uint64_t i = start + 1; i <= std::numeric_limits<uint64_t>::max(); i++){
+				if(IsPrime(i)){
+					return i;
+				}
+			}
+
+			return 0;
+		}
+
 		static inline constexpr bool IsInteger(double num_){ return Math::Near(static_cast<double>(static_cast<int64_t>(num_)), num_); }
 
 		static inline float Floor(float num_){
