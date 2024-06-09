@@ -122,7 +122,9 @@ namespace Gadget{
 				return false;
 			}
 
-			for(uint64_t i = 2; i <= num_ / 2; i++){
+			float sqrtNum = Sqrt(static_cast<float>(num_));
+
+			for(uint64_t i = 2; i <= sqrtNum; i++){
 				if(num_ % i == 0){
 					return false;
 				}
