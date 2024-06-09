@@ -76,6 +76,28 @@ namespace Gadget{
 			data.RemoveAll(value_);
 		}
 
+		static bool IsWhitespace(char c){
+			return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
+		}
+		
+		void Trim(){
+			while(!IsEmpty()){
+				if(IsWhitespace(data[0])){
+					RemoveAt(0);
+				}else{
+					break;
+				}
+			}
+
+			while(!IsEmpty()){
+				if(IsWhitespace(data[Length() - 1])){
+					RemoveAt(Length() - 1);
+				}else{
+					break;
+				}
+			}
+		}
+
 		void FindAndReplace(char find_, const String& replace_){
 			for(size_t i = 0; i < data.Size(); i++){
 				if(data[i] == find_){
