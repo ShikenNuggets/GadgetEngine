@@ -41,6 +41,18 @@ namespace Gadget{
 			size++;
 		}
 
+		void Add(const T* range_, size_t rangeSize_){
+			Reserve(size + rangeSize_);
+
+			for(int i = 0; i < rangeSize_; i++){
+				Add(range_[i]);
+			}
+		}
+
+		void Add(const Array<T>& range_){
+			Add(range_.data, range_.Size());
+		}
+
 		void InsertAt(size_t index_, const T& value_){
 			if(index_ >= size){
 				Add(value_);
@@ -52,6 +64,29 @@ namespace Gadget{
 			}
 
 			data[index_] = value_;
+		}
+
+		void InsertAt(size_t index_, const T* range_, size_t rangeSize_){
+			if(index_ >= size){
+				Add(range_, rangeSize_);
+			}
+
+			Reserve(size + rangeSize_);
+			for(size_t i = 0; i < rangeSize_; i++){
+				Add(T());
+			}
+
+			for(size_t i = size - 1; i > index_; i--){
+				data[i] = data[i - rangeSize_];
+			}
+
+			for(size_t i = 0; i < rangeSize_; i++){
+				data[i + index_] = range_[i];
+			}
+		}
+
+		void InsertAt(size_t index_, const Array<T>& range_){
+			InsertAt(index_, range_.data, range_.Size());
 		}
 
 		void Pop(){

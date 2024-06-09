@@ -21,11 +21,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
 
 			data.Pop(); //Pop the null terminator
-
-			for(size_t i = 0; i < std::strlen(str_); i++){
-				data.Add(str_[i]);
-			}
-
+			data.Add(str_, std::strlen(str_));
 			data.Add('\0');
 		}
 
@@ -37,11 +33,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
 
 			data.Pop();
-
-			for(int i = 0; i < strArray_.Size(); i++){
-				data.Add(strArray_[i]);
-			}
-
+			data.Add(strArray_);
 			data.Add('\0');
 		}
 
@@ -102,6 +94,7 @@ namespace Gadget{
 			for(size_t i = 0; i < data.Size(); i++){
 				if(data[i] == find_){
 					RemoveAt(i);
+
 					for(size_t j = 0; j < replace_.Length(); j++){
 						InsertAt(i + j, replace_[j]);
 					}
