@@ -25,6 +25,25 @@ namespace Gadget{
 			data.Add('\0');
 		}
 
+		void Append(const String& str_){
+			Append(str_.Value());
+		}
+
+		void Append(const Array<String>& strs_){
+			//This technically has higher time complexity than just doing one loop,
+			//but doing only one memory allocation is worth it if we're appending lots of strings/large strings
+			size_t newLength = Length();
+			for(size_t i = 0; i < strs_.Size(); i++){
+				newLength += strs_[i].Length();
+			}
+
+			data.Reserve(newLength);
+
+			for(size_t i = 0; i < strs_.Size(); i++){
+				Append(strs_[i].Value());
+			}
+		}
+
 		const char* Value() const{
 			if(data.IsEmpty()){
 				return "";
@@ -54,6 +73,8 @@ namespace Gadget{
 
 			return true;
 		}
+
+		constexpr size_t Length() const{ return data.Size(); }
 
 	private:
 		Array<char> data;
