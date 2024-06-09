@@ -109,6 +109,20 @@ namespace Gadget{
 			return false;
 		}
 
+		Array SubRange(size_t startIndex_, size_t endIndex_){
+			if(endIndex_ > size){
+				endIndex_ = size;
+			}
+
+			size_t subRangeSize = endIndex_ - startIndex_;
+			Array arr = Array(subRangeSize);
+			for(size_t i = startIndex_; i < endIndex_; i++){
+				arr.Add(data[i]);
+			}
+
+			return arr;
+		}
+
 		constexpr const T& operator[](size_t i_) const{
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];

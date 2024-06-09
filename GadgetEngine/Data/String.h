@@ -11,6 +11,10 @@ namespace Gadget{
 			Append(str_);
 		}
 
+		String(const Array<char>& strArray_) : data(strArray_.Size()){
+			Append(strArray_);
+		}
+
 		void Append(const char* str_){
 			if(!data.IsEmpty()){
 				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
@@ -27,6 +31,20 @@ namespace Gadget{
 
 		void Append(const String& str_){
 			Append(str_.Value());
+		}
+
+		void Append(const Array<char>& strArray_){
+			if(!data.IsEmpty()){
+				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
+			}
+
+			data.Pop();
+
+			for(int i = 0; i < strArray_.Size(); i++){
+				data.Add(strArray_[i]);
+			}
+
+			data.Add('\0');
 		}
 
 		void Append(const Array<String>& strs_){
@@ -85,6 +103,10 @@ namespace Gadget{
 			}
 
 			return false;
+		}
+
+		String SubString(size_t startIndex_, size_t endIndex_){
+			return String(data.SubRange(startIndex_, endIndex_));
 		}
 
 		void QuickSort(){
