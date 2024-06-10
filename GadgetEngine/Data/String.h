@@ -105,6 +105,18 @@ namespace Gadget{
 			}
 		}
 
+		void ToLower(){
+			for(size_t i = 0; i < Length(); i++){
+				data[i] = static_cast<char>(std::tolower(data[i]));
+			}
+		}
+
+		void ToUpper(){
+			for(size_t i = 0; i < Length(); i++){
+				data[i] = static_cast<char>(std::toupper(data[i]));
+			}
+		}
+
 		bool Contains(char c){
 			return data.Contains(c);
 		}
