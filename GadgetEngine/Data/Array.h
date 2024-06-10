@@ -168,6 +168,8 @@ namespace Gadget{
 			}
 
 			QuickSort(0, size - 1);
+
+			GADGET_BASIC_ASSERT(IsSorted());
 		}
 
 		constexpr bool Contains(const T& value_) const{
@@ -218,6 +220,18 @@ namespace Gadget{
 			return true;
 		}
 
+		bool IsSorted(){
+			for(size_t i = 0; i < size; i++){
+				for(size_t j = i; j < size; j++){
+					if(data[i] > data[j]){
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
 		constexpr size_t Size() const{ return size; }
 		constexpr size_t IsEmpty() const{ return size == 0; }
 		constexpr size_t Capacity() const{ return capacity; }
@@ -239,21 +253,19 @@ namespace Gadget{
 		}
 
 		void QuickSort(size_t low_, size_t high_){
-			if(high_ - low_ < 2){
-				return;
+			if(low_ >= 0 && high_ >= 0 && low_ < high_){
+				size_t pivot = QuickSortPartition(low_, high_);
+				QuickSort(low_, pivot);
+				QuickSort(pivot + 1, high_);
 			}
-
-			size_t pivot = QuickSortPartition(low_, high_);
-			QuickSort(low_, pivot);
-			QuickSort(pivot + 1, high_);
 		}
 
 		//Hoare Partition Scheme
 		size_t QuickSortPartition(size_t low_, size_t high_){
-			const T& pivot = data[low_];
+			const T pivot = data[low_];
 
-			size_t leftIndex = low_ = 1;
-			size_t rightIndex = high_;
+			size_t leftIndex = low_ - 1;
+			size_t rightIndex = high_ + 1;
 
 			while(true){
 				do{
