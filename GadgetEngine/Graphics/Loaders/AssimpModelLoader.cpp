@@ -27,12 +27,14 @@ Mesh* AssimpModelLoader::LoadMesh(const std::string& filePath_){
 	return ProcessNode(scene->mRootNode, scene);
 }
 
+//The compiler claims that there is unreachable code in this function. The compiler is wrong
+#pragma warning(disable : 4702)
+
 Mesh* AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene){
 	GADGET_BASIC_ASSERT(node != nullptr);
 	GADGET_BASIC_ASSERT(scene != nullptr);
 
-	size_t i = 0;
-	//for(size_t int i = 0; i < node->mNumMeshes; i++){
+	for(size_t i = 0; i < node->mNumMeshes; i++){
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
 		std::vector<Vertex> verts;
@@ -48,7 +50,7 @@ Mesh* AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene){
 					Vector3::Forward(),
 					Vector2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y)
 				));
-			} else{
+			}else{
 				verts.push_back(Vertex(
 					Vector3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z),
 					Vector3(mesh->mNormals[j].x, mesh->mNormals[j].y, mesh->mNormals[j].z),
@@ -63,13 +65,14 @@ Mesh* AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene){
 			}
 		}
 
-		return new Mesh(verts, indices);
-	//}
+		return new Mesh(verts, indices); //TODO - This return means we can only have a single mesh. Some models have multiple meshes
+	}
 
-	//TODO - Multi-mesh loading
-	//for(unsigned int i = 0; i < node->mNumChildren; i++){
-	//	return ProcessNode(node->mChildren[i], scene);
-	//}
+	for(unsigned int i = 0; i < node->mNumChildren; i++){
+		return ProcessNode(node->mChildren[i], scene);
+	}
 
-	//return nullptr;
+	return nullptr;
 }
+
+#pragma warning(default : 4702)
