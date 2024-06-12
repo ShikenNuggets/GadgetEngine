@@ -8,10 +8,12 @@ namespace Gadget{
 	class Array{
 	public:
 		Array() : data(nullptr), size(0), capacity(16){
+			GADGET_BASIC_ASSERT(capacity > 0);
 			data = new T[capacity];
 		}
 
 		Array(const Array<T>& array_) : data(nullptr), size(0), capacity(array_.Capacity()){
+			GADGET_BASIC_ASSERT(capacity > 0);
 			data = new T[capacity];
 			for(int i = 0; i < array_.Size(); i++){
 				Add(array_[i]);
@@ -19,6 +21,7 @@ namespace Gadget{
 		}
 
 		Array(size_t initialCapacity_) : data(nullptr), size(0), capacity(initialCapacity_){
+			GADGET_BASIC_ASSERT(capacity > 0);
 			data = new T[capacity];
 		}
 
@@ -27,6 +30,7 @@ namespace Gadget{
 		}
 
 		void Add(const T& value_){
+			GADGET_BASIC_ASSERT(capacity != 0);
 			if(capacity == 0){
 				Reserve(16);
 			}
@@ -44,18 +48,20 @@ namespace Gadget{
 		void Add(const T* range_, size_t rangeSize_){
 			Reserve(size + rangeSize_);
 
-			for(int i = 0; i < rangeSize_; i++){
+			for(size_t i = 0; i < rangeSize_; i++){
 				Add(range_[i]);
 			}
 		}
 
 		void Add(const Array<T>& range_){
+			GADGET_BASIC_ASSERT(range_.Capacity() > 0);
 			Add(range_.data, range_.Size());
 		}
 
 		void InsertAt(size_t index_, const T& value_){
 			if(index_ >= size){
 				Add(value_);
+				return;
 			}
 
 			Add(T()); //This gets us the size and capacity increase without too much trouble
@@ -69,6 +75,7 @@ namespace Gadget{
 		void InsertAt(size_t index_, const T* range_, size_t rangeSize_){
 			if(index_ >= size){
 				Add(range_, rangeSize_);
+				return;
 			}
 
 			Reserve(size + rangeSize_);
@@ -86,15 +93,19 @@ namespace Gadget{
 		}
 
 		void InsertAt(size_t index_, const Array<T>& range_){
+			GADGET_BASIC_ASSERT(range_.Capacity() > 0);
 			InsertAt(index_, range_.data, range_.Size());
 		}
 
 		void Pop(size_t elementsToPop = 1){
+			GADGET_BASIC_ASSERT(elementsToPop > 0); //You're probably doing something weird if you try to pop 0 elements
 			if(size - elementsToPop < 0){
 				size = 0;
 			}else{
 				size -= elementsToPop;
 			}
+
+			GADGET_BASIC_ASSERT(size < capacity);
 		}
 
 		void RemoveAt(size_t index_){
@@ -124,6 +135,7 @@ namespace Gadget{
 				data[i] = data[i + rangeSize_];
 			}
 
+			GADGET_BASIC_ASSERT(rangeSize_ < size);
 			size -= rangeSize_;
 		}
 
@@ -150,16 +162,18 @@ namespace Gadget{
 			}
 
 			capacity = newCapacity_;
-			Recreate();
+			Reallocate();
 		}
 
 		void ShrinkToFit(){
+			GADGET_BASIC_ASSERT(capacity >= size);
+
 			if(capacity == size){
 				return;
 			}
 
 			capacity = size;
-			Recreate();
+			Reallocate();
 		}
 
 		void QuickSort(){
@@ -207,6 +221,7 @@ namespace Gadget{
 		}
 
 		bool operator==(const Array<T>& array_) const{
+			GADGET_BASIC_ASSERT(array_.Capacity() > 0);
 			if(size != array_.size){
 				return false;
 			}
@@ -221,11 +236,9 @@ namespace Gadget{
 		}
 
 		bool IsSorted(){
-			for(size_t i = 0; i < size; i++){
-				for(size_t j = i; j < size; j++){
-					if(data[i] > data[j]){
-						return false;
-					}
+			for(size_t i = 0; i < size - 1; i++){
+				if(data[i] > data[i + 1]){
+					return false;
 				}
 			}
 
@@ -241,7 +254,7 @@ namespace Gadget{
 		size_t size;
 		size_t capacity;
 
-		void Recreate(){
+		void Reallocate(){
 			GADGET_BASIC_ASSERT(size <= capacity);
 			T* newData = new T[capacity];
 			for(size_t i = 0; i < size; i++){
