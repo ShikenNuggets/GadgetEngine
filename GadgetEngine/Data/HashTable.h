@@ -15,7 +15,7 @@ namespace Gadget{
 			K key;
 			V value;
 
-			KeyValuePair(const K& key_, const V& value_) : key(key_), value(value_){}
+			constexpr KeyValuePair(const K& key_, const V& value_) : key(key_), value(value_){}
 		};
 
 		HashTable(size_t capacity = 1024) : data(Math::NextPrime(capacity)){}

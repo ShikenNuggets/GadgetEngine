@@ -97,7 +97,7 @@ namespace Gadget{
 			InsertAt(index_, range_.data, range_.Size());
 		}
 
-		void Pop(size_t elementsToPop = 1){
+		constexpr void Pop(size_t elementsToPop = 1){
 			GADGET_BASIC_ASSERT(elementsToPop > 0); //You're probably doing something weird if you try to pop 0 elements
 			if(size - elementsToPop < 0){
 				size = 0;
@@ -108,7 +108,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(size < capacity);
 		}
 
-		void RemoveAt(size_t index_){
+		constexpr void RemoveAt(size_t index_){
 			GADGET_BASIC_ASSERT(index_ < size);
 			if(index_ >= size){
 				return;
@@ -121,7 +121,7 @@ namespace Gadget{
 			size--;
 		}
 
-		void RemoveAt(size_t startIndex_, size_t rangeSize_){
+		constexpr void RemoveAt(size_t startIndex_, size_t rangeSize_){
 			if(startIndex_ >= size || rangeSize_ == 0){
 				return;
 			}
@@ -139,7 +139,7 @@ namespace Gadget{
 			size -= rangeSize_;
 		}
 
-		void Remove(const T& value_){
+		constexpr void Remove(const T& value_){
 			for(size_t i = 0; i < size; i++){
 				if(data[i] == value_){
 					RemoveAt(i);
@@ -148,7 +148,7 @@ namespace Gadget{
 			}
 		}
 
-		void RemoveAll(const T& value_){
+		constexpr void RemoveAll(const T& value_){
 			for(size_t i = 0; i < size; i++){
 				if(data[i] == value_){
 					RemoveAt(i);
@@ -176,7 +176,7 @@ namespace Gadget{
 			Reallocate();
 		}
 
-		void QuickSort(){
+		constexpr void QuickSort(){
 			if(size < 2){
 				return;
 			}
@@ -221,12 +221,12 @@ namespace Gadget{
 			return data[i_];
 		}
 
-		T& operator[](size_t i_){
+		constexpr T& operator[](size_t i_){
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];
 		}
 
-		bool operator==(const Array<T>& array_) const{
+		constexpr bool operator==(const Array<T>& array_) const{
 			GADGET_BASIC_ASSERT(array_.Capacity() > 0);
 			if(size != array_.size){
 				return false;
@@ -241,7 +241,7 @@ namespace Gadget{
 			return true;
 		}
 
-		bool IsSorted(){
+		constexpr bool IsSorted(){
 			for(size_t i = 0; i < size - 1; i++){
 				if(data[i] > data[i + 1]){
 					return false;
@@ -271,7 +271,7 @@ namespace Gadget{
 			data = newData;
 		}
 
-		void QuickSort(size_t low_, size_t high_){
+		constexpr void QuickSort(size_t low_, size_t high_){
 			if(low_ >= 0 && high_ >= 0 && low_ < high_){
 				size_t pivot = QuickSortPartition(low_, high_);
 				QuickSort(low_, pivot);
@@ -280,7 +280,7 @@ namespace Gadget{
 		}
 
 		//Hoare Partition Scheme
-		size_t QuickSortPartition(size_t low_, size_t high_){
+		constexpr size_t QuickSortPartition(size_t low_, size_t high_){
 			const T pivot = data[low_];
 
 			size_t leftIndex = low_ - 1;

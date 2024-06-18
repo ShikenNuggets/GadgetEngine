@@ -16,7 +16,7 @@ namespace Gadget{
 
 		class Iterator{
 		public:
-			Iterator(const Node* node_) : currentNode(node_){}
+			constexpr Iterator(const Node* node_) : currentNode(node_){}
 
 			constexpr inline const Node* operator*(){ return currentNode; }
 
@@ -42,7 +42,7 @@ namespace Gadget{
 			}
 		}
 
-		constexpr inline void Add(const T& value_){
+		inline void Add(const T& value_){
 			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
 
 			Node* newNode = new Node(value_);
@@ -58,7 +58,7 @@ namespace Gadget{
 			size++;
 		}
 
-		constexpr inline void AddFront(const T& value_){
+		inline void AddFront(const T& value_){
 			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
 
 			Node* newNode = new Node(value_);
@@ -167,10 +167,10 @@ namespace Gadget{
 			return prev;
 		}
 
-		Iterator begin(){ return Iterator(head); }
-		const Iterator begin() const{ return Iterator(head); }
-		Iterator end(){ return Iterator(nullptr); }
-		const Iterator end() const{ return Iterator(nullptr); }
+		constexpr Iterator begin(){ return Iterator(head); }
+		constexpr const Iterator begin() const{ return Iterator(head); }
+		constexpr Iterator end(){ return Iterator(nullptr); }
+		constexpr const Iterator end() const{ return Iterator(nullptr); }
 
 	private:
 		size_t size;

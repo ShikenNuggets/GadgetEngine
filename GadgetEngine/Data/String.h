@@ -74,7 +74,7 @@ namespace Gadget{
 			data.InsertAt(index_, c);
 		}
 
-		void RemoveAt(size_t index_){
+		constexpr void RemoveAt(size_t index_){
 			if(index_ >= Length()){
 				return;
 			}
@@ -82,12 +82,12 @@ namespace Gadget{
 			data.RemoveAt(index_);
 		}
 
-		void Remove(char value_){
+		constexpr void Remove(char value_){
 			GADGET_BASIC_ASSERT(value_ != '\0'); //Do not remove the null terminator
 			data.Remove(value_);
 		}
 
-		void RemoveAll(char value_){
+		constexpr void RemoveAll(char value_){
 			GADGET_BASIC_ASSERT(value_ != '\0'); //Do not remove the null terminator
 			data.RemoveAll(value_);
 		}
@@ -131,13 +131,13 @@ namespace Gadget{
 			}
 		}
 
-		void ToLower(){
+		constexpr void ToLower(){
 			for(size_t i = 0; i < Length(); i++){
 				data[i] = static_cast<char>(std::tolower(data[i]));
 			}
 		}
 
-		void ToUpper(){
+		constexpr void ToUpper(){
 			for(size_t i = 0; i < Length(); i++){
 				data[i] = static_cast<char>(std::toupper(data[i]));
 			}
@@ -186,7 +186,7 @@ namespace Gadget{
 			data.Add('\0');
 		}
 
-		const char* Value() const{
+		constexpr const char* Value() const{
 			if(Length() == 0){
 				return "";
 			}
@@ -208,7 +208,7 @@ namespace Gadget{
 			return true;
 		}
 
-		bool operator==(const String& str_) const{
+		constexpr bool operator==(const String& str_) const{
 			return data == str_.data;
 		}
 
@@ -217,14 +217,14 @@ namespace Gadget{
 			return data[i_];
 		}
 
-		char& operator[](size_t i_){
+		constexpr char& operator[](size_t i_){
 			GADGET_BASIC_ASSERT(i_ < data.Size());
 			return data[i_];
 		}
 
 		constexpr size_t Length() const{ return data.Size() - 1; }
 
-		bool IsEmpty() const{
+		constexpr bool IsEmpty() const{
 			GADGET_BASIC_ASSERT(data.Size() > 0);
 			if(data.Size() == 1){
 				GADGET_BASIC_ASSERT(data[0] == '\0');
