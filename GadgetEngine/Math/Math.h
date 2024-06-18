@@ -46,9 +46,23 @@ namespace Gadget{
 			return a_ / b_;
 		}
 
+		template <class T>
+		static inline constexpr T Abs(T value_){
+			if(value_ < 0){
+				return value_ * -1;
+			}
+
+			return value_;
+		}
+
 		static inline float Abs(float value_){
 			GADGET_BASIC_ASSERT(IsValidNumber(value_));
-			return abs(value_);
+			return Abs<float>(value_);
+		}
+
+		static inline double Abs(double value_){
+			GADGET_BASIC_ASSERT(IsValidNumber(value_));
+			return Abs<double>(value_);
 		}
 
 		static inline constexpr float Dot2D(float aa_, float ab_, float ba_, float bb_){ return (aa_ * ba_) + (ab_ * bb_); }
