@@ -106,15 +106,19 @@ namespace Gadget{
 
 			data.RemoveAt(0, whitespaceAtStart);
 
-			size_t indexToEndWhitespace;
-			for(indexToEndWhitespace = data.Size() - 2; indexToEndWhitespace >= 0; indexToEndWhitespace--){
-				if(!IsWhitespace(data[indexToEndWhitespace])){
-					break;
-				}
-			}
+			GADGET_BASIC_ASSERT(data.Size() >= 1);
 
-			data.RemoveAt(indexToEndWhitespace + 1, data.Size());
-			data.Add('\0');
+			if(Length() != 0){
+				size_t indexToEndWhitespace;
+				for(indexToEndWhitespace = data.Size() - 2; indexToEndWhitespace >= 0; indexToEndWhitespace--){
+					if(!IsWhitespace(data[indexToEndWhitespace])){
+						break;
+					}
+				}
+
+				data.RemoveAt(indexToEndWhitespace + 1, data.Size());
+				data.Add('\0');
+			}
 		}
 
 		void FindAndReplace(char find_, const String& replace_){
