@@ -191,6 +191,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Core\FileSystem.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Data\Array.h" />
+    <ClInclude Include="Data\Bitset.h" />
     <ClInclude Include="Data\HashTable.h" />
     <ClInclude Include="Data\List.h" />
     <ClInclude Include="Data\String.h" />
