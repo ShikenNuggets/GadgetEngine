@@ -18,19 +18,32 @@ namespace Gadget{
 		}
 
 		void Append(const char* str_){
-			GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+
+			data.Reserve(data.Size() + 1);
 
 			data.Pop(); //Pop the null terminator
 			data.Add(str_, std::strlen(str_));
 			data.Add('\0');
 		}
 
+		void Append(char c){
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+
+			data.Reserve(data.Size() + 1);
+
+			data.Pop();
+			data.Add(c);
+			data.Add('\0');
+		}
+
 		void Append(const String& str_){
+			GADGET_BASIC_ASSERT(str_.HasNullTerminator());
 			Append(str_.Value());
 		}
 
 		void Append(const Array<char>& strArray_){
-			GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
+			GADGET_BASIC_ASSERT(HasNullTerminator());
 
 			data.Pop();
 			data.Add(strArray_);
@@ -53,22 +66,33 @@ namespace Gadget{
 		}
 
 		void InsertAt(size_t index_, char c){
+			if(index_ >= Length()){
+				Append(c);
+				return;
+			}
+
 			data.InsertAt(index_, c);
 		}
 
 		void RemoveAt(size_t index_){
+			if(index_ >= Length()){
+				return;
+			}
+
 			data.RemoveAt(index_);
 		}
 
 		void Remove(char value_){
+			GADGET_BASIC_ASSERT(value_ != '\0'); //Do not remove the null terminator
 			data.Remove(value_);
 		}
 
 		void RemoveAll(char value_){
+			GADGET_BASIC_ASSERT(value_ != '\0'); //Do not remove the null terminator
 			data.RemoveAll(value_);
 		}
 
-		static bool IsWhitespace(char c){
+		static constexpr inline bool IsWhitespace(char c){
 			return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
 		}
 		
@@ -94,7 +118,9 @@ namespace Gadget{
 		}
 
 		void FindAndReplace(char find_, const String& replace_){
-			for(size_t i = 0; i < data.Size(); i++){
+			GADGET_BASIC_ASSERT(find_ != '\0'); //Do not try to replace the null terminator
+
+			for(size_t i = 0; i < Length(); i++){
 				if(data[i] == find_){
 					RemoveAt(i);
 
@@ -117,12 +143,12 @@ namespace Gadget{
 			}
 		}
 
-		bool Contains(char c){
+		constexpr inline bool Contains(char c) const{
 			return data.Contains(c);
 		}
 
 		//TODO - Naive brute force implementation. Consider other options: https://en.wikipedia.org/wiki/String-searching_algorithm#Single-pattern_algorithms
-		bool Contains(const String& str_){
+		bool Contains(const String& str_) const{
 			if(data.Size() < str_.Length()){
 				return false;
 			}
@@ -153,27 +179,15 @@ namespace Gadget{
 		}
 
 		void QuickSort(){
-			if(!data.IsEmpty()){
-				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
-			}
+			GADGET_BASIC_ASSERT(HasNullTerminator());
 
 			data.Pop(); //We typically don't want to sort the null terminator
-
 			data.QuickSort();
-
 			data.Add('\0');
 		}
 
 		const char* Value() const{
-			if(data.IsEmpty()){
-				return "";
-			}
-
-			return &data[0];
-		}
-
-		const char* Value(){
-			if(data.IsEmpty()){
+			if(Length() == 0){
 				return "";
 			}
 
@@ -181,11 +195,11 @@ namespace Gadget{
 		}
 
 		bool operator==(const char* str_) const{
-			if(data.Size() != std::strlen(str_)){
+			if(Length() != std::strlen(str_)){
 				return false;
 			}
 
-			for(size_t i = 0; i < data.Size(); i++){
+			for(size_t i = 0; i < Length(); i++){
 				if(data[i] == str_[i]){
 					return false;
 				}
@@ -224,6 +238,10 @@ namespace Gadget{
 
 	private:
 		Array<char> data;
+
+		constexpr inline bool HasNullTerminator() const{
+			return !data.IsEmpty() && data[Length()] == '\0';
+		}
 	};
 }
 

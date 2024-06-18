@@ -197,12 +197,18 @@ namespace Gadget{
 		}
 
 		Array SubRange(size_t startIndex_, size_t endIndex_) const{
+			Array arr;
+
+			if(startIndex_ >= size){
+				return arr;
+			}
+
 			if(endIndex_ > size){
 				endIndex_ = size;
 			}
 
 			size_t subRangeSize = endIndex_ - startIndex_;
-			Array arr = Array(subRangeSize);
+			arr = Array(subRangeSize);
 			for(size_t i = startIndex_; i < endIndex_; i++){
 				arr.Add(data[i]);
 			}
