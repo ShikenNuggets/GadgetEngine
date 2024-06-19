@@ -17,6 +17,10 @@ namespace Gadget{
 			Append(strArray_);
 		}
 
+		explicit String(size_t capacity_) : data(capacity_ + 1){
+			data.Add('\0');
+		}
+
 		void Append(const char* str_){
 			GADGET_BASIC_ASSERT(HasNullTerminator());
 
