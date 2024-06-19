@@ -98,6 +98,14 @@ namespace Gadget{
 			data.RemoveAll(value_);
 		}
 
+		void Reserve(size_t capacity){
+			data.Reserve(capacity + 1); //Make sure there's room for the null terminator!
+		}
+
+		void ShrinkToFit(){
+			data.ShrinkToFit();
+		}
+
 		static constexpr inline bool IsWhitespace(char c){
 			return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
 		}
