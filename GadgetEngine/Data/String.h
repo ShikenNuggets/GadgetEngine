@@ -114,8 +114,9 @@ namespace Gadget{
 
 			GADGET_BASIC_ASSERT(data.Size() >= 1);
 
-			if(Length() != 0){
-				size_t indexToEndWhitespace;
+			if(Length() > 0){
+				GADGET_BASIC_ASSERT(data.Size() < static_cast<uint64_t>(std::numeric_limits<int64_t>::max())); //I doubt this will ever be an issue, but just in case
+				int64_t indexToEndWhitespace;
 				for(indexToEndWhitespace = data.Size() - 2; indexToEndWhitespace >= 0; indexToEndWhitespace--){
 					if(!IsWhitespace(data[indexToEndWhitespace])){
 						break;
