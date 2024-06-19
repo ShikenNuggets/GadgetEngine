@@ -210,7 +210,7 @@ namespace Gadget{
 			}
 
 			for(size_t i = 0; i < Length(); i++){
-				if(data[i] == str_[i]){
+				if(data[i] != str_[i]){
 					return false;
 				}
 			}
