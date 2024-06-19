@@ -50,6 +50,12 @@ namespace Gadget{
 			data.Add('\0');
 		}
 
+		void Append(int32_t number){
+			char buffer[10]{};
+			itoa(number, buffer, 10);
+			Append(buffer);
+		}
+
 		void Append(const Array<String>& strs_){
 			//This technically has higher time complexity than just doing one loop,
 			//but doing only one memory allocation is worth it if we're appending lots of strings/large strings
