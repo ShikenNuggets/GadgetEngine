@@ -239,6 +239,18 @@ namespace Gadget{
 			return true;
 		}
 
+		constexpr Array<T>& operator=(const Array<T>& other_){
+			GADGET_BASIC_ASSERT(other_.Capacity() > 0);
+
+			capacity = other_.Capacity();
+			data = new T[capacity];
+			for(int i = 0; i < other_.Size(); i++){
+				Add(other_[i]);
+			}
+
+			return *this;
+		}
+
 		constexpr bool IsSorted(){
 			for(size_t i = 0; i < size - 1; i++){
 				if(data[i] > data[i + 1]){
