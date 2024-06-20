@@ -242,6 +242,11 @@ namespace Gadget{
 		constexpr Array<T>& operator=(const Array<T>& other_){
 			GADGET_BASIC_ASSERT(other_.Capacity() > 0);
 
+			if(data != nullptr){
+				delete[] data;
+				size = 0;
+			}
+
 			capacity = other_.Capacity();
 			data = new T[capacity];
 			for(int i = 0; i < other_.Size(); i++){
