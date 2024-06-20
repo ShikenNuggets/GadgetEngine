@@ -195,6 +195,9 @@ echo D|xcopy "$(SolutionDir)Build\Resources\" "$(TargetDir)Resources\" /y /E /d<
     <ClInclude Include="Demos\01-Pong\PongScene.h" />
     <ClInclude Include="Demos\01-Pong\PongSceneHandler.h" />
     <ClInclude Include="Demos\01-Pong\PongState.h" />
+    <ClInclude Include="Demos\02-StarHawx\GameplayTestScene.h" />
+    <ClInclude Include="Demos\02-StarHawx\PlayerController.h" />
+    <ClInclude Include="Demos\02-StarHawx\StarHawxGame.h" />
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
     <ClInclude Include="ObjectRotator.h" />

@@ -10,6 +10,9 @@
     <Filter Include="Demos\01-Pong">
       <UniqueIdentifier>{2EE4DCF3-9AA4-582A-63DF-A1A7CF5E9D06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Demos\02-StarHawx">
+      <UniqueIdentifier>{CDAF3FCF-39C6-3D65-823D-C986EE920EED}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
@@ -48,6 +51,15 @@
     </ClInclude>
     <ClInclude Include="Demos\01-Pong\PongState.h">
       <Filter>Demos\01-Pong</Filter>
+    </ClInclude>
+    <ClInclude Include="Demos\02-StarHawx\GameplayTestScene.h">
+      <Filter>Demos\02-StarHawx</Filter>
+    </ClInclude>
+    <ClInclude Include="Demos\02-StarHawx\PlayerController.h">
+      <Filter>Demos\02-StarHawx</Filter>
+    </ClInclude>
+    <ClInclude Include="Demos\02-StarHawx\StarHawxGame.h">
+      <Filter>Demos\02-StarHawx</Filter>
     </ClInclude>
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
