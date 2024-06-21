@@ -20,13 +20,13 @@ namespace StarHawx{
 		}
 
 		void DefineInputs(){
-			auto axis = Gadget::Axis(SID("UpDownMove"));
+			auto axis = Gadget::Axis(UpDownMoveAxis);
 			axis.AddAxisID(Gadget::AxisID::Gamepad_LeftStick_Vertical);
 			axis.AddAxisID(Gadget::AxisID::Gamepad_DPad_Vertical);
 			axis.AddButtonAxis(Gadget::ButtonAxis(Gadget::ButtonID::Keyboard_S, Gadget::ButtonID::Keyboard_W));
 			Gadget::App::GetInput().DefineAxis(axis);
 
-			axis = Gadget::Axis(SID("LeftRightMove"));
+			axis = Gadget::Axis(LeftRightMoveAxis);
 			axis.AddAxisID(Gadget::AxisID::Gamepad_LeftStick_Horizontal);
 			axis.AddAxisID(Gadget::AxisID::Gamepad_DPad_Horizontal);
 			axis.AddButtonAxis(Gadget::ButtonAxis(Gadget::ButtonID::Keyboard_A, Gadget::ButtonID::Keyboard_D));

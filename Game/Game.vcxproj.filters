@@ -64,6 +64,7 @@
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
     <ClInclude Include="ObjectRotator.h" />
+    <ClInclude Include="StarHawxDefines.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demos\01-Pong\PongSceneHandler.cpp">
