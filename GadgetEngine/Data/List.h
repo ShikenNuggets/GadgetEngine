@@ -148,6 +148,7 @@ namespace Gadget{
 		}
 
 		constexpr inline void Reverse(){
+			tail = head;
 			Node* current = head;
 			Node* prev = nullptr;
 			Node* next = nullptr;
