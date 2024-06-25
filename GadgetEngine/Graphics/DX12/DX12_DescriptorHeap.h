@@ -48,7 +48,7 @@ namespace Gadget{
 		constexpr D3D12_DESCRIPTOR_HEAP_TYPE Type() const{ return type; }
 		constexpr D3D12_CPU_DESCRIPTOR_HANDLE CPUStart() const{ return cpuStart; }
 		constexpr D3D12_GPU_DESCRIPTOR_HANDLE GPUStart() const{ return gpuStart; }
-		constexpr ID3D12DescriptorHeap* const Heap() const{ return heap; }
+		constexpr ID3D12DescriptorHeap* Heap() const{ return heap; }
 		constexpr uint32_t Capacity() const{ return capacity; }
 		constexpr uint32_t Size() const{ return size; }
 		constexpr uint32_t DescriptorSize() const{ return descriptorSize; }

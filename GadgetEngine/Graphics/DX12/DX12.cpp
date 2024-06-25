@@ -350,7 +350,7 @@ ErrorCode DX12::BreakOnWarningsAndErrors([[maybe_unused]] bool breakOnWarnings_,
 
 bool DX12::IsInitialized() const{ return mainDevice != nullptr && gfxCommand != nullptr; }
 
-ID3D12_Device* const DX12::MainDevice() const{ return mainDevice.Get(); }
+ID3D12_Device* DX12::MainDevice() const{ return mainDevice.Get(); }
 
 uint32_t DX12::CurrentFrameIndex() const{
 	if(!IsInitialized()){

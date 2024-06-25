@@ -15,9 +15,9 @@ namespace Gadget{
 
 		void EndUpload();
 
-		ID3D12_GraphicsCommandList* const CommandList() const;
-		ID3D12Resource* const UploadBuffer() const;
-		void* const CPUAddress() const;
+		ID3D12_GraphicsCommandList* CommandList() const;
+		ID3D12Resource* UploadBuffer() const;
+		void* CPUAddress() const;
 
 	private:
 		struct DX12_UploadFrame* uploadFrame;

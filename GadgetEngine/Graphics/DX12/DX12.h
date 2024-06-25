@@ -53,8 +53,8 @@ namespace Gadget{
 		[[nodiscard]] ErrorCode Shutdown();
 
 		bool IsInitialized() const;
-		ID3D12_Device* const MainDevice() const;
-		DX12_Command* const GfxCommand() const{ return gfxCommand; }
+		ID3D12_Device* MainDevice() const;
+		DX12_Command* GfxCommand() const{ return gfxCommand; }
 		uint32_t CurrentFrameIndex() const;
 
 		[[nodiscard]] ErrorCode FlushAndSetFrameIndex(uint32_t frameIndex_); //Calling this in the main render loop is not recommended, it should only be used on startup

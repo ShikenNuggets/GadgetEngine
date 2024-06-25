@@ -29,7 +29,7 @@ namespace Gadget{
 		virtual void Bind([[maybe_unused]] int textureIndex_ = 0) override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
 		virtual void Unbind() override{ GADGET_ASSERT_NOT_IMPLEMENTED; }
 
-		constexpr ID3D12Resource* const GetResource() const{ return resource; }
+		constexpr ID3D12Resource* GetResource() const{ return resource; }
 		constexpr DX12_DescriptorHandle SRV() const{ return srvHandle; }
 
 	protected:

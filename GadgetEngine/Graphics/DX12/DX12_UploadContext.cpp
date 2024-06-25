@@ -37,7 +37,7 @@ void DX12_UploadContext::EndUpload(){
 	uploadFrame = nullptr;
 }
 
-ID3D12_GraphicsCommandList* const DX12_UploadContext::CommandList() const{
+ID3D12_GraphicsCommandList* DX12_UploadContext::CommandList() const{
 	GADGET_BASIC_ASSERT(uploadFrame != nullptr);
 	if(uploadFrame == nullptr){
 		return nullptr;
@@ -46,7 +46,7 @@ ID3D12_GraphicsCommandList* const DX12_UploadContext::CommandList() const{
 	return uploadFrame->cmdList.Get();
 }
 
-ID3D12Resource* const DX12_UploadContext::UploadBuffer() const{
+ID3D12Resource* DX12_UploadContext::UploadBuffer() const{
 	GADGET_BASIC_ASSERT(uploadFrame != nullptr);
 	if(uploadFrame == nullptr){
 		return nullptr;
@@ -55,7 +55,7 @@ ID3D12Resource* const DX12_UploadContext::UploadBuffer() const{
 	return uploadFrame->uploadBuffer.Get();
 }
 
-void* const DX12_UploadContext::CPUAddress() const{
+void* DX12_UploadContext::CPUAddress() const{
 	GADGET_BASIC_ASSERT(uploadFrame != nullptr);
 	if(uploadFrame == nullptr){
 		return nullptr;

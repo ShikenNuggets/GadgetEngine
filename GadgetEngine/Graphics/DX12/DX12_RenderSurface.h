@@ -21,7 +21,7 @@ namespace Gadget{
 		virtual ~DX12_RenderSurface() override;
 
 		UINT CurrentBackBufferIndex() const{ return swapChain->GetCurrentBackBufferIndex(); }
-		ID3D12Resource* const CurrentBackBuffer() const{ return renderTargetData[CurrentBackBufferIndex()].resource.Get(); }
+		ID3D12Resource* CurrentBackBuffer() const{ return renderTargetData[CurrentBackBufferIndex()].resource.Get(); }
 		constexpr D3D12_CPU_DESCRIPTOR_HANDLE CurrentRenderTargetView() const{ return renderTargetData[swapChain->GetCurrentBackBufferIndex()].renderTargetView.cpuHandle; }
 		constexpr const D3D12_VIEWPORT& Viewport() const{ return viewPort; }
 		constexpr const D3D12_RECT& ScissorRect() const{ return scissorRect; }
