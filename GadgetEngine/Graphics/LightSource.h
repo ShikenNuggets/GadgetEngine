@@ -37,7 +37,7 @@ namespace Gadget{
 
 	class PointLight : public LightSource{
 	public:
-		PointLight(const Color& color_ = Color::White()) : LightSource(color_), constant(1.0f), linear(0.09f), quadratic(0.032f){}
+		constexpr PointLight(const Color& color_ = Color::White()) : LightSource(color_), constant(1.0f), linear(0.09f), quadratic(0.032f){}
 
 		constexpr float GetConstant() const{ return constant; }
 		constexpr float GetLinear() const{ return linear; }
@@ -51,7 +51,7 @@ namespace Gadget{
 
 	class SpotLight : public LightSource{
 	public:
-		SpotLight(const Vector3& direction_, Degree cutOff_ = Degree(12.5f), Degree outerCutOff_ = Degree(15.0f), const Color& color_ = Color::White()) : LightSource(color_), direction(direction_), cutOff(cutOff_), outerCutOff(outerCutOff_), constant(1.0f), linear(0.09f), quadratic(0.032f){}
+		constexpr SpotLight(const Vector3& direction_, Degree cutOff_ = Degree(12.5f), Degree outerCutOff_ = Degree(15.0f), const Color& color_ = Color::White()) : LightSource(color_), direction(direction_), cutOff(cutOff_), outerCutOff(outerCutOff_), constant(1.0f), linear(0.09f), quadratic(0.032f){}
 
 		constexpr Vector3 GetDirection() const{ return direction; }
 		constexpr Degree GetCutOff() const{ return cutOff; }
@@ -86,7 +86,7 @@ namespace Gadget{
 
 	class DirectionalLight : public LightSource{
 	public:
-		DirectionalLight(const Vector3& direction_, const Color& color_ = Color::White()) : LightSource(color_), direction(direction_){}
+		constexpr DirectionalLight(const Vector3& direction_, const Color& color_ = Color::White()) : LightSource(color_), direction(direction_){}
 
 		constexpr Vector3 GetDirection() const{ return direction; }
 

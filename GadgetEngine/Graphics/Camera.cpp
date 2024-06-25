@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection projection_, const Rect& viewRect_) : view(), projection(), fov(45.0f), aspect(1.0f), nearPlane(0.1f), farPlane(1000.0f), orthoHeight(12.0f), currentProjection(projection_), viewRect(viewRect_){
+Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection projection_, const Rect& viewRect_) : view(), projection(), fov(45.0f), aspect(1.0f), nearPlane(0.1f), farPlane(1000.0f), orthoHeight(12.0f), viewRect(viewRect_), currentProjection(projection_){
 	GADGET_BASIC_ASSERT(position_.IsValid());
 	GADGET_BASIC_ASSERT(rotation_.IsValid());
 	GADGET_BASIC_ASSERT(projection_ < Projection::Projection_MAX);

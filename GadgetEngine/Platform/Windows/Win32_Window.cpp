@@ -105,6 +105,8 @@ void Win32_Window::HandleEvents(){
 				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(SDL2_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
 				break;
 			case SDL_MOUSEMOTION:
+				GADGET_BASIC_ASSERT(GetWidth() > 0);
+				GADGET_BASIC_ASSERT(GetHeight() > 0);
 				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(static_cast<float>(e.motion.xrel) / GetWidth(), static_cast<float>(e.motion.yrel) / GetHeight(), static_cast<float>(e.motion.x), static_cast<float>(e.motion.y)));
 				break;
 			case SDL_MOUSEBUTTONDOWN:

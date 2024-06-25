@@ -85,7 +85,7 @@ std::string ConfigParser::SerializeSection(StringID section_, const std::map<Str
 				}
 				break;
 			default:
-				GADGET_ASSERT(false, "Unhandled Var type!");
+				GADGET_ASSERT_NOT_IMPLEMENTED;
 				break;
 		}
 	}
