@@ -42,7 +42,7 @@ namespace Gadget{
 	public:
 		GameObject(StringID name_ = SID("GameObject"));
 		GameObject(const GameObjectProperties& properties_);
-		~GameObject();
+		virtual ~GameObject();
 
 		void Update(float deltaTime_);
 
