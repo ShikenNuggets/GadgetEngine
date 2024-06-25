@@ -220,7 +220,7 @@ void Win32_Window::HandleHatMotionEvent(const SDL_Event& e_){
 //TODO - I'm honestly not really sure that this is correct, the documentation is a little vague on all this. Validate this
 void Win32_Window::RemoveJoystick(Sint32 instanceID_){
 	int index = -1;
-	for(int i = 0; i < joysticks.size(); i++){
+	for(size_t i = 0; i < joysticks.size(); i++){
 		if(joysticks[i] == nullptr){
 			continue;
 		}
