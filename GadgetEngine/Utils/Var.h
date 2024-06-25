@@ -25,6 +25,26 @@ namespace Gadget{
 		constexpr Var(uint64_t value_) : type(Type::Number), numVal(static_cast<double>(value_)){}
 		constexpr Var(double value_) : type(Type::Number), numVal(value_){}
 
+		constexpr Var(const Var& other_) : type(other_.type), boolVal(false){
+			switch(type){
+				case Type::Null:
+					boolVal = false;
+					break;
+				case Type::String:
+					strValue = other_.strValue;
+					break;
+				case Type::Bool:
+					boolVal = other_.boolVal;
+					break;
+				case Type::Number:
+					numVal = other_.numVal;
+					break;
+				default:
+					GADGET_ASSERT_NOT_IMPLEMENTED;
+					break;
+			}
+		}
+
 		constexpr void operator=(const Var& var_){
 			type = var_.type;
 			switch(type){
