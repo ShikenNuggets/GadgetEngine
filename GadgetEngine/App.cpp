@@ -22,7 +22,7 @@ using namespace Gadget;
 
 std::unique_ptr<App> App::instance = nullptr;
 
-App::App() : isRunning(true), gameName("GadgetEngine"), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), physics(nullptr), renderer(nullptr), sceneManager(nullptr), gameLogicManager(nullptr), singleFrameAllocator(1024), twoFrameAllocator(1024){
+App::App() : gameName("GadgetEngine"), isRunning(true), singleFrameAllocator(1024), twoFrameAllocator(1024), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), renderer(nullptr), physics(nullptr), sceneManager(nullptr), gameLogicManager(nullptr){
 	GADGET_ASSERT(instance == nullptr, "Created multiple App instances!");
 	
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, std::bind(&App::OnWindowCloseEvent, this, std::placeholders::_1));

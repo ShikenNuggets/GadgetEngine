@@ -11,7 +11,7 @@ using Microsoft::WRL::ComPtr;
 
 std::unique_ptr<DXR> DXR::instance = nullptr;
 
-DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), meshInfos(meshInfo_), topLevelAS(nullptr), pso(nullptr), outputResource(nullptr), heap(nullptr), shaderBindingTable(nullptr){
+DXR::DXR(ScreenCoordinate frameSize_, const std::vector<DXR_MeshInfo*>& meshInfo_) : dx12(DX12::GetInstance()), topLevelAS(nullptr), pso(nullptr), outputResource(nullptr), heap(nullptr), shaderBindingTable(nullptr), meshInfos(meshInfo_){
 	GADGET_BASIC_ASSERT(frameSize_.x > 0);
 	GADGET_BASIC_ASSERT(frameSize_.y > 0);
 

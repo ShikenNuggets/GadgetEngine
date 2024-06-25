@@ -11,7 +11,7 @@
 
 using namespace Gadget;
 
-Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsUp(), buttonsHeld(), axes(), persistentAxes(), definedButtons(), definedAxes(), currentMouseX(0), currentMouseY(0){
+Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsHeld(), buttonsUp(), axes(), persistentAxes(), currentMouseX(0), currentMouseY(0), definedButtons(), definedAxes(){
 	EventHandler::GetInstance()->SetEventCallback(EventType::WindowRestarted, std::bind(&Input::OnWindowRestartedEvent, this, std::placeholders::_1));
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, std::bind(&Input::OnKeyPressedEvent, this, std::placeholders::_1));
 	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased, std::bind(&Input::OnKeyReleasedEvent, this, std::placeholders::_1));

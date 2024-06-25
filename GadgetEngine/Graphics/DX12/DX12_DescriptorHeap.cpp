@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-DX12_DescriptorHeap::DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_) : type(type_), heap(nullptr), cpuStart(), gpuStart(), freeHandles(), deferredFreeIndices(), capacity(0), size(0), descriptorSize(0){}
+DX12_DescriptorHeap::DX12_DescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type_) : heap(nullptr), type(type_), cpuStart(), gpuStart(), freeHandles(), deferredFreeIndices(), capacity(0), size(0), descriptorSize(0){}
 
 DX12_DescriptorHeap::~DX12_DescriptorHeap(){
 	if(heap != nullptr){

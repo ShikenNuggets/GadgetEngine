@@ -22,7 +22,7 @@ namespace Gadget{
 
 	class GuiElement{
 	public:
-		GuiElement(StringID name_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : name(name_), position(pos_), size(size_), anchor(anchor_), isActive(isActive_){
+		GuiElement(StringID name_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : name(name_), isActive(isActive_), position(pos_), size(size_), anchor(anchor_){
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
 			GADGET_BASIC_ASSERT(pos_.IsValid());
 			GADGET_BASIC_ASSERT(size_.IsValid());

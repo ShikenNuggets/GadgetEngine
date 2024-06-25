@@ -207,8 +207,8 @@ namespace Gadget{
 		std::set<AxisID> axisIDs;
 		std::vector<ButtonAxis> buttonAxisIDs;
 
-		bool invert;
 		float deadzone;
+		bool invert;
 	};
 }
 
