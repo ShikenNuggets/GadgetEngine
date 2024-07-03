@@ -51,7 +51,7 @@ namespace Gadget{
 				head = newNode;
 				tail = head;
 			}else{
-				tail->next = new Node(value_);
+				tail->next = newNode;
 				tail = tail->next;
 			}
 
