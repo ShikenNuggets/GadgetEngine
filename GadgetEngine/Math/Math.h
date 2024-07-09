@@ -12,6 +12,7 @@ namespace Gadget{
 		static constexpr float Pi = 3.141592653589793238f;
 		static constexpr float NearZero = std::numeric_limits<float>::denorm_min();
 		static constexpr float Infinity = std::numeric_limits<float>::infinity();
+		static constexpr uint64_t LargestPrime = 18'446'744'073'709'551'557; //Largest prime number that can be represented by a 64 bit integer
 
 		static inline bool IsValidNumber(float value_){
 			return !std::isnan(value_) && !std::isinf(value_);
@@ -131,8 +132,10 @@ namespace Gadget{
 			return Radian(static_cast<float>(atan2(a_, b_))).ToDegrees();
 		}
 
-		static inline constexpr bool IsPrime(uint64_t num_){
-			if(num_ == 0 || num_ == 1){
+		static inline bool IsPrime(uint64_t num_){
+			GADGET_ASSERT(num_ <= LargestPrime, "Checking IsPrime on an extremely large non-prime");
+
+			if(num_ == 0 || num_ == 1 || num_ > LargestPrime){
 				return false;
 			}
 
@@ -147,13 +150,19 @@ namespace Gadget{
 			return true;
 		}
 
-		static inline constexpr uint64_t NextPrime(uint64_t start){
+		static inline uint64_t NextPrime(uint64_t start){
+			GADGET_ASSERT(start <= LargestPrime, "Trying to get NextPrime, but [" + std::to_string(start) + "] is already larger than the largest available prime!");
+			if(start >= LargestPrime){
+				return 0;
+			}
+
 			for(uint64_t i = start + 1; i <= std::numeric_limits<uint64_t>::max(); i++){
 				if(IsPrime(i)){
 					return i;
 				}
 			}
 
+			GADGET_ASSERT(false, "Something went wrong trying to get the next prime number from [" + std::to_string(start) + "]!");
 			return 0;
 		}
 
