@@ -73,7 +73,7 @@ namespace Gadget{
 		static void PopupErrorMessage(const std::string& title_, const std::string& message_);
 
 		//ONLY USE THIS FOR *COMPLETELY UNRECOVERABLE* ERROR CASES - THIS *WILL* CRASH THE GAME
-		static void ThrowFatalError(StringID channel_, const std::string& message_, ErrorCode err_, const std::string& file_, int line_);
+		[[noreturn]] static void ThrowFatalError(StringID channel_, const std::string& message_, ErrorCode err_, const std::string& file_, int line_);
 
 	private:
 		static constexpr const char* logFileName = "log.txt";

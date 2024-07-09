@@ -92,9 +92,6 @@ namespace Gadget{
 
 			//There's no safe way to handle this request, so just error out
 			Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
-
-			//This is redundant, but it appeases the compiler since we can't reasonably return anything
-			throw std::runtime_error("");
 		}
 
 	private:
