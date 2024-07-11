@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 //Hide warnings from external code that we can't/won't modify - WNF
 #pragma warning(disable : 26495)	//Uninitialized member variable
@@ -21,11 +22,10 @@ namespace Gadget{
 		static const StringID None;
 
 		explicit constexpr StringID(uint64_t id_) : id(id_){}
-		constexpr StringID(const StringID& a_) : id(a_.id){}
-		void operator =(const StringID& a_){ id = a_.id; }
+		constexpr StringID(const StringID& a_) = default;
 
 		std::string GetString() const;
-		uint64_t GetID() const{ return id; }
+		constexpr uint64_t GetID() const{ return id; }
 
 		constexpr inline bool operator ==(StringID a_) const{ return id == a_.id; }
 		constexpr inline bool operator !=(StringID a_) const{ return id != a_.id; }
