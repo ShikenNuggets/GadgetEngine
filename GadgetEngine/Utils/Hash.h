@@ -1,6 +1,9 @@
 #ifndef GADGET_HASH_H
 #define GADGET_HASH_H
 
+#include <cstddef>
+#include <cstdint>
+
 namespace Gadget{
 	namespace Hash{
 		inline constexpr uint64_t GetBlock2(const char* str_, size_t len_){
