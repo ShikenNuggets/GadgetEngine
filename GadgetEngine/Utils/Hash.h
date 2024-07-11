@@ -3,10 +3,10 @@
 
 namespace Gadget{
 	namespace Hash{
-		inline constexpr uint64_t GetBlock2(const char* string_, size_t len_){
+		inline constexpr uint64_t GetBlock2(const char* str_, size_t len_){
 			uint64_t as_int = 0;
 			for(size_t i = 0; i < 8 && i < len_; i++){
-				as_int = as_int * 256 + string_[i];
+				as_int = as_int * 256 + str_[i];
 			}
 
 			return as_int;
@@ -25,11 +25,8 @@ namespace Gadget{
 
 			uint64_t h = seed_ ^ (len_ * m);
 
-			const char* data = data_;
-			const char* end = data_ + (len_);
-
-			while(data < end){
-				uint64_t k = GetBlock2(data, len_);
+			for(size_t i = 0; i < len_; i += sizeof(uint64_t)){
+				uint64_t k = GetBlock2(&data_[i], len_ - i);
 
 				k *= m;
 				k ^= k >> r;
@@ -37,8 +34,6 @@ namespace Gadget{
 
 				h ^= k;
 				h *= m;
-
-				data += sizeof(uint64_t);
 			}
 
 			switch(len_ & 7){
