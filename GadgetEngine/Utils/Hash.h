@@ -3,23 +3,13 @@
 
 namespace Gadget{
 	namespace Hash{
-		//Function prototypes
-		inline constexpr uint32_t CRC32(const char* data_, size_t len_);
-		inline constexpr uint64_t MurmurHash64A(const char* data_, size_t len_, uint64_t seed_);
-		inline constexpr uint32_t crc32_for_byte(uint32_t r);
-		inline constexpr uint64_t GetBlock(const uint64_t* p_);
-		constexpr uint64_t GetBlock2(std::string_view string_, size_t len_);
-
-		//Shamelessly copied from SDL2 (SDL_crc32.c)
-		//Pasted here so it can be constexpr
-		inline constexpr uint32_t CRC32(const char* data_, size_t len_){
-			uint32_t crc = 0;
-
-			for(size_t i = 0; i < len_; i++){
-				crc = crc32_for_byte(crc ^ (data_)[i]) ^ crc >> 8;
+		inline constexpr uint64_t GetBlock2(const char* string_, size_t len_){
+			uint64_t as_int = 0;
+			for(size_t i = 0; i < 8 && i < len_; i++){
+				as_int = as_int * 256 + string_[i];
 			}
 
-			return crc;
+			return as_int;
 		}
 
 		//MurmurHash64A - algorith created by Austin Appleby
@@ -67,38 +57,6 @@ namespace Gadget{
 			h ^= h >> r;
 
 			return h;
-		}
-
-		//Shamelessly copied from SDL2 (SDL_crc32.c)
-		//Pasted here so it can be constexpr
-		inline constexpr uint32_t crc32_for_byte(uint32_t r){
-			for(int i = 0; i < 8; i++){
-				r = (r & 1 ? 0 : (uint32_t)0xEDB88320L) ^ r >> 1;
-			}
-
-			return r ^ (uint32_t)0xFF000000L;
-		}
-
-		inline constexpr uint64_t GetBlock2(std::string_view string_, size_t len_){
-			uint64_t as_int = 0;
-			for(size_t i = 0; i < 8 && i < len_; i++){
-				as_int = as_int * 256 + string_[i];
-			}
-
-			return as_int;
-		}
-
-		inline constexpr uint64_t GetBlock(const uint64_t* p_){
-			//TODO - There's an optimization we can do here if we know the machine is little Endian
-			const uint8_t* c = (const uint8_t*)p_;
-			return (uint64_t)c[0] |
-				(uint64_t)c[1] << 8 |
-				(uint64_t)c[2] << 16 |
-				(uint64_t)c[3] << 24 |
-				(uint64_t)c[4] << 32 |
-				(uint64_t)c[5] << 40 |
-				(uint64_t)c[6] << 48 |
-				(uint64_t)c[7] << 56;
 		}
 	};
 }
