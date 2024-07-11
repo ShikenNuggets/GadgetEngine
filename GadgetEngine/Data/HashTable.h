@@ -22,6 +22,7 @@ namespace Gadget{
 
 		void Add(const K& key_, const V& value_){
 			size_t index = KeyToIndex(key_);
+			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			while(index >= data.Size()){
 				data.Add(List<KeyValuePair>());
 			}
@@ -37,6 +38,7 @@ namespace Gadget{
 
 		bool Contains(const K& key_) const{
 			size_t index = KeyToIndex(key_);
+			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				return false;
 			}
@@ -55,6 +57,7 @@ namespace Gadget{
 		void RemoveAt(const K& key_){
 			GADGET_BASIC_ASSERT(Contains(key_));
 			size_t index = KeyToIndex(key_);
+			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				GADGET_LOG_WARNING(SID("DataStructure"), "Tried to remove value at unknown key!");
 				return;
@@ -78,6 +81,7 @@ namespace Gadget{
 		constexpr const V& operator[](const K& key_) const{
 			GADGET_BASIC_ASSERT(Contains(key_));
 			size_t index = KeyToIndex(key_);
+			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				//There's no safe way to handle this request, so just error out
 				Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
