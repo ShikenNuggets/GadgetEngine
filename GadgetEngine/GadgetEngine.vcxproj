@@ -311,6 +311,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Math\Vector.h" />
     <ClInclude Include="Memory\AlignedAllocator.h" />
     <ClInclude Include="Memory\DoubleStackAllocator.h" />
+    <ClInclude Include="Memory\GlobalAllocator.h" />
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Physics\BoxCollider2D.h" />
@@ -427,6 +428,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Math\Matrix4x3.cpp" />
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Memory\DoubleStackAllocator.cpp" />
+    <ClCompile Include="Memory\GlobalAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
     <ClCompile Include="Physics\Collider.cpp" />
     <ClCompile Include="Physics\CollisionSystem.cpp" />

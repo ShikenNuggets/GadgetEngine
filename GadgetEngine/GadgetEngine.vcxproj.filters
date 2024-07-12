@@ -444,6 +444,9 @@
     <ClInclude Include="Memory\DoubleStackAllocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Memory\GlobalAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
     <ClInclude Include="Memory\PoolAllocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
@@ -766,6 +769,9 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Memory\DoubleStackAllocator.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\GlobalAllocator.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
     <ClCompile Include="Memory\StackAllocator.cpp">

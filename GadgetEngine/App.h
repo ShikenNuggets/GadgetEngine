@@ -10,6 +10,7 @@
 #include "Game/GameLogicManager.h"
 #include "Graphics/Renderer.h"
 #include "Input/Input.h"
+#include "Memory/GlobalAllocator.h"
 #include "Memory/StackAllocator.h"
 #include "Physics/PhysManager.h"
 #include "Resource/ResourceManager.h"
