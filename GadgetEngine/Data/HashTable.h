@@ -8,6 +8,8 @@
 #include "Utils/Hash.h"
 
 namespace Gadget{
+	class StringID;
+
 	template <class K, class V>
 	class HashTable{
 	public:
@@ -102,7 +104,11 @@ namespace Gadget{
 		Array<List<KeyValuePair>> data;
 
 		size_t KeyToIndex(const K& key_) const{
-			return Hash::MurmurHash64A(reinterpret_cast<const char*>(&key_), sizeof(key_)) % data.Capacity();
+			if constexpr(std::is_same_v<K, StringID>){
+				return key_.GetID() % data.Capacity();
+			}else{
+				return Hash::MurmurHash64A(reinterpret_cast<const char*>(&key_), sizeof(key_)) % data.Capacity();
+			}
 		}
 	};
 }
