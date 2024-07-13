@@ -14,7 +14,7 @@ void Timer::StartProfiling(){
 		return;
 	}
 
-	startTime = CurrentTime();
+	startTime = Timing::CurrentTime();
 }
 
 double Timer::EndProfiling(){
@@ -23,8 +23,7 @@ double Timer::EndProfiling(){
 		return 0.0;
 	}
 
-	auto duration = CurrentTime() - startTime;
-	double durationSeconds = static_cast<double>(duration.count()) / 1000.0f;
+	double durationSeconds = Timing::TimeSince(startTime);
 	times.push_back(durationSeconds);
 
 	startTime = std::chrono::milliseconds(0);

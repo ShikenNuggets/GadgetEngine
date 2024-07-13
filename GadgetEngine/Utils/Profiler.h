@@ -8,6 +8,17 @@
 #include "Utils/Utils.h"
 
 namespace Gadget{
+	namespace Timing{
+		constexpr inline std::chrono::milliseconds CurrentTime(){
+			return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch());
+		}
+
+		constexpr inline double TimeSince(std::chrono::milliseconds previousTime_){
+			auto duration = CurrentTime() - previousTime_;
+			return static_cast<double>(duration.count()) / 1000.0f;
+		}
+	}
+
 	class Timer{
 	public:
 		Timer();
@@ -19,10 +30,6 @@ namespace Gadget{
 		double Average() const;
 		
 	private:
-		constexpr inline std::chrono::milliseconds CurrentTime() const{
-			return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch());
-		}
-
 		std::chrono::milliseconds startTime;
 		std::vector<double> times;
 	};
