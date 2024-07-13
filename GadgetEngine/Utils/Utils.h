@@ -59,7 +59,7 @@ namespace Gadget{
 
 		template <class T, class Y>
 		inline constexpr bool ContainsKey(const std::map<T, Y>& container_, const T& key_){
-			return container_.find(key_) != container_.end();
+			return !container_.empty() && container_.find(key_) != container_.end();
 		}
 
 		template <class T, class Y>
