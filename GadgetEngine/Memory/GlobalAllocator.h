@@ -5,6 +5,7 @@
 
 namespace Gadget{
 	class GlobalAllocator{
+	#ifdef GADGET_DEBUG
 	public:
 		//DO NOT call these directly
 		static void AddToAllocCount(){ numAllocs++; }
@@ -23,6 +24,7 @@ namespace Gadget{
 
 		static std::atomic<double> allocTime;
 		static std::atomic<double> freeTime;
+	#endif //GADGET_DEBUG
 	};
 }
 
