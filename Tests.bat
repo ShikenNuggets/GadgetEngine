@@ -1,2 +1,2 @@
-START /WAIT /B Build\Tests\Release\Tests.exe
+START /WAIT /B %~dp0\Build\Tests\Release\Tests.exe
 PAUSE
