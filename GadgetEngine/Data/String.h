@@ -268,4 +268,9 @@ namespace Gadget{
 	};
 }
 
+inline std::ostream& operator<<(std::ostream& os_, const Gadget::String& str_){
+	os_ << str_.Value();
+	return os_;
+}
+
 #endif //!GADGET_STRING_H
