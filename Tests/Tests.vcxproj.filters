@@ -6,6 +6,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Catch2\catch_amalgamated.hpp">
+      <Filter>Catch2</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Catch2\catch_amalgamated.cpp">
       <Filter>Catch2</Filter>
     </ClCompile>

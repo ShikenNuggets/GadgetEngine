@@ -167,6 +167,9 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Catch2\catch_amalgamated.hpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Catch2\catch_amalgamated.cpp" />
     <ClCompile Include="StringTests.cpp" />
   </ItemGroup>
