@@ -131,7 +131,7 @@ namespace Gadget{
 				return;
 			}
 
-			for(size_t i = startIndex_; i < startIndex_ + rangeSize_ && i < size; i++){
+			for(size_t i = startIndex_; i < size - rangeSize_; i++){
 				data[i] = data[i + rangeSize_];
 			}
 
