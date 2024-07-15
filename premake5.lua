@@ -358,3 +358,24 @@ project "DataBuilder"
 		{
 			"dxcompiler.lib"
 		}
+
+-- //-----------------------------------------------------------//
+-- //---------------------- Tests ------------------------------//
+-- //-----------------------------------------------------------//
+
+project "Tests"
+		CppProjectDefaults()
+		GadgetExternalIncludes()
+		GadgetExternalLibDirs()
+		GadgetExternalLibs{ linkLibs="true" }
+		DependsOnGadgetEngine()
+
+		kind "ConsoleApp"
+		debugdir ("%{cfg.targetdir}")
+
+		filter "system:windows"
+		postbuildcommands
+		{
+			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+		}
