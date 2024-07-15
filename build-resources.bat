@@ -1,7 +1,7 @@
 xcopy /s "GadgetEngine\Graphics\OpenGL\Shaders" "Build\Resources\" /Y
 xcopy /s "GadgetEngine\Graphics\DX12\Shaders" "Build\Resources\" /Y
 
-START /WAIT /B DataBuilder.lnk -f
+START /WAIT /B Build\DataBuilder\Release\DataBuilder.exe -f
 
 @echo off
 if %errorlevel%==-1 ( echo Data Build was not successful && PAUSE && EXIT /B 2)
