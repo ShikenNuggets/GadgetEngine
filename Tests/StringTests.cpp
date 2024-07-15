@@ -179,6 +179,13 @@ TEST_CASE("String::Contains", "[string_contains]"){
 	REQUIRE(!str1a.Contains("Y"));
 	REQUIRE(!str1a.Contains("Z"));
 	REQUIRE(!str1a.Contains(-1));
+	REQUIRE(str1a.Contains("Hell"));
+	REQUIRE(str1a.Contains("Hello"));
+	REQUIRE(!str1a.Contains("Hell0"));
+	REQUIRE(!str1a.Contains("Helloo"));
+
+	REQUIRE(str2a.Contains("aaa"));
+	REQUIRE(!str2a.Contains("aba"));
 
 	REQUIRE(!IsPermutation(str1a, str1b));
 	REQUIRE(!IsPermutation2(str1a, str1b));
