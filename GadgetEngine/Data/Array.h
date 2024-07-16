@@ -284,7 +284,7 @@ namespace Gadget{
 			T* newData = nullptr;
 			if(capacity > 0){
 				newData = new T[capacity];
-				for(size_t i = 0; i < size; i++){
+				for(size_t i = 0; i < size && i < capacity; i++){
 					newData[i] = data[i];
 				}
 			}
