@@ -12,17 +12,16 @@ namespace Gadget{
 			data = new T[capacity];
 		}
 
-		Array(const Array<T>& array_) : data(nullptr), size(0), capacity(array_.Capacity()){
-			GADGET_BASIC_ASSERT(capacity > 0);
-			data = new T[capacity];
+		Array(const Array<T>& array_) : data(nullptr), size(0), capacity(0){
+			Reserve(array_.Capacity());
 			for(int i = 0; i < array_.Size(); i++){
 				Add(array_[i]);
 			}
 		}
 
-		Array(size_t initialCapacity_) : data(nullptr), size(0), capacity(initialCapacity_){
-			GADGET_BASIC_ASSERT(capacity > 0);
-			data = new T[capacity];
+		Array(size_t initialCapacity_) : data(nullptr), size(0), capacity(0){
+			GADGET_BASIC_ASSERT(initialCapacity_ > 0);
+			Reserve(initialCapacity_);
 		}
 
 		~Array(){
@@ -281,9 +280,13 @@ namespace Gadget{
 
 		void Reallocate(){
 			GADGET_BASIC_ASSERT(size <= capacity);
-			T* newData = new T[capacity];
-			for(size_t i = 0; i < size; i++){
-				newData[i] = data[i];
+
+			T* newData = nullptr;
+			if(capacity > 0){
+				newData = new T[capacity];
+				for(size_t i = 0; i < size; i++){
+					newData[i] = data[i];
+				}
 			}
 
 			delete[] data;
