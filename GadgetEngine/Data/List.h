@@ -16,9 +16,10 @@ namespace Gadget{
 
 		class Iterator{
 		public:
-			constexpr Iterator(const Node* node_) : currentNode(node_){}
+			constexpr Iterator(Node* node_) : currentNode(node_){}
 
-			constexpr inline const Node* operator*(){ return currentNode; }
+			constexpr inline const Node* operator*() const{ return currentNode; }
+			constexpr inline Node* operator*(){ return currentNode; }
 
 			constexpr inline void operator++(){
 				if(currentNode != nullptr){
@@ -26,12 +27,12 @@ namespace Gadget{
 				}
 			}
 
-			constexpr inline bool operator!=(const Iterator& it_){
+			constexpr inline bool operator!=(const Iterator& it_) const{
 				return currentNode != it_.currentNode;
 			}
 
 		private:
-			const Node* currentNode;
+			Node* currentNode;
 		};
 
 		constexpr List() : size(0), head(nullptr), tail(nullptr){}
