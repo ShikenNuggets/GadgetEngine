@@ -100,6 +100,27 @@ namespace Gadget{
 			Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 		}
 
+		V& operator[](const K& key_){
+			size_t index = KeyToIndex(key_);
+			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
+
+			if(!Contains(key_)){
+				Add(key_, V());
+			}
+
+			GADGET_BASIC_ASSERT(Contains(key_));
+
+			for(auto* node : data[index]){
+				GADGET_BASIC_ASSERT(node != nullptr);
+				if(node->value.key == key_){
+					return node->value.value;
+				}
+			}
+
+			//This shouldn't be possible - there's no safe way to handle this, so just error out
+			Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+		}
+
 	private:
 		Array<List<KeyValuePair>> data;
 
