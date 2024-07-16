@@ -156,6 +156,10 @@ namespace Gadget{
 			}
 		}
 
+		constexpr void Clear(){
+			size = 0;
+		}
+
 		void Reserve(size_t newCapacity_){
 			if(newCapacity_ <= capacity){
 				return;

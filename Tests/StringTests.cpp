@@ -3,7 +3,6 @@
 #include <Data/String.h>
 
 #include "Catch2/catch_amalgamated.hpp"
-#include <iostream>
 
 using namespace Gadget;
 
@@ -88,7 +87,7 @@ static inline bool IsOneEditAway(const String& str1, const String& str2){
 	return true;
 }
 
-TEST_CASE("Strings Array Accessor" "[string_array_access]"){
+TEST_CASE("String Array Accessor" "[string_array_access]"){
 	const String str1 = "Hello World";
 	const String str2 = String("Helo Wrd");
 

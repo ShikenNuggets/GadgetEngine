@@ -170,6 +170,7 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
     <ClInclude Include="Catch2\catch_amalgamated.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArrayTests.cpp" />
     <ClCompile Include="Catch2\catch_amalgamated.cpp" />
     <ClCompile Include="StringTests.cpp" />
   </ItemGroup>

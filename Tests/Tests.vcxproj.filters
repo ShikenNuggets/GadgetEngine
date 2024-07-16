@@ -11,6 +11,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArrayTests.cpp" />
     <ClCompile Include="Catch2\catch_amalgamated.cpp">
       <Filter>Catch2</Filter>
     </ClCompile>
