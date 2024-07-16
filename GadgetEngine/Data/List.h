@@ -148,6 +148,12 @@ namespace Gadget{
 			GADGET_LOG_WARNING(SID("DataStructures"), "Tried to remove a node from a list, but could not find the node - There's either a bug in your code, a bug in the List code, or List nodes were manually altered by other code (do not do that)");
 		}
 
+		constexpr inline void Clear(){
+			while(!IsEmpty()){
+				Pop();
+			}
+		}
+
 		constexpr inline void Reverse(){
 			tail = head;
 			Node* current = head;
