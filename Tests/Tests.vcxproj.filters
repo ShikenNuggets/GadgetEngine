@@ -9,6 +9,7 @@
     <ClInclude Include="Catch2\catch_amalgamated.hpp">
       <Filter>Catch2</Filter>
     </ClInclude>
+    <ClInclude Include="ListTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayTests.cpp" />
