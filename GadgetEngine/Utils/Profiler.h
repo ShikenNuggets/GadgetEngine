@@ -9,11 +9,11 @@
 
 namespace Gadget{
 	namespace Timing{
-		constexpr inline std::chrono::milliseconds CurrentTime(){
+		inline std::chrono::milliseconds CurrentTime(){
 			return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch());
 		}
 
-		constexpr inline double TimeSince(std::chrono::milliseconds previousTime_){
+		inline double TimeSince(std::chrono::milliseconds previousTime_){
 			auto duration = CurrentTime() - previousTime_;
 			return static_cast<double>(duration.count()) / 1000.0f;
 		}

@@ -32,11 +32,11 @@ namespace BulletHelper{
 		return btQuaternion(quat_.x, quat_.y, quat_.z, quat_.w);
 	}
 
-	constexpr inline Gadget::Transform ConvertTransform(const btTransform& transform_, const Gadget::Vector3& scale_){
+	inline Gadget::Transform ConvertTransform(const btTransform& transform_, const Gadget::Vector3& scale_){
 		return Gadget::Transform(ConvertVector3(transform_.getOrigin()), ConvertQuaternion(transform_.getRotation()), scale_);
 	}
 
-	constexpr inline Gadget::Transform ConvertTransform(const btTransform& transform_, float scale_ = 1.0f){
+	inline Gadget::Transform ConvertTransform(const btTransform& transform_, float scale_ = 1.0f){
 		return ConvertTransform(transform_, Gadget::Vector3::Fill(scale_));
 	}
 
