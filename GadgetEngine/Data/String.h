@@ -75,6 +75,28 @@ namespace Gadget{
 			}
 		}
 
+		String operator+(const String& str_) const{
+			String finalStr = *this;
+			finalStr.Append(str_);
+			return finalStr;
+		}
+
+		String operator+(char c_) const{
+			String finalStr = *this;
+			finalStr.Append(c_);
+			return finalStr;
+		}
+
+		String operator+(int32_t number_) const{
+			String finalStr = *this;
+			finalStr.Append(number_);
+			return finalStr;
+		}
+
+		void operator+=(const String& str_){ *this = *this + str_; }
+		void operator+=(char c_){ *this = *this + c_; }
+		void operator+=(int32_t number_){ *this = *this + number_; }
+
 		void InsertAt(size_t index_, char c){
 			if(index_ >= Length()){
 				Append(c);
