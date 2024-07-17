@@ -21,7 +21,7 @@ Collider::Collider(StringID typeName_, GUID parentGUID_, ColliderShape shape_, b
 }
 
 Collider::Collider(const ComponentProperties& props_, ColliderShape shape_) : Component(props_), shape(shape_), bulletRb(nullptr){
-	Deserialize(props_);
+	Collider::Deserialize(props_);
 }
 
 Collider::~Collider(){

@@ -14,4 +14,4 @@ namespace Gadget{
 	};
 }
 
-#endif GADGET_VERTEX_H
+#endif //!GADGET_VERTEX_H

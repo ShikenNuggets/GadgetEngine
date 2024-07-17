@@ -69,7 +69,7 @@ namespace Gadget{
 		inline friend constexpr bool operator >=(float a_, const Degree& d_)	{ return d_ >= a_; }
 		inline friend constexpr bool operator <=(float a_, const Degree& d_)	{ return d_ <= a_; }
 
-		inline bool IsValid() const;
+		bool IsValid() const;
 
 	private:
 		float angle;
@@ -137,7 +137,7 @@ namespace Gadget{
 		inline friend constexpr bool operator >=(float a_, const Radian& d_)	{ return d_ >= a_; }
 		inline friend constexpr bool operator <=(float a_, const Radian& d_)	{ return d_ <= a_; }
 
-		inline bool IsValid() const;
+		bool IsValid() const;
 
 	private:
 		float angle;

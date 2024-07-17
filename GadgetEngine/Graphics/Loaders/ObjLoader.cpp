@@ -58,6 +58,8 @@ Mesh* ObjLoader::LoadMesh(const std::string& filePath_){
 		return nullptr;
 	}
 
+	GADGET_ASSERT(tempPos.size() <= std::numeric_limits<int>::max(), "Model has " + std::to_string(tempPos.size()) + " vertices, possible loss of data!");
+
 	std::vector<VertIndex> uniqueVerts;
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;

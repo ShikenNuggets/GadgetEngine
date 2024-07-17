@@ -7,7 +7,7 @@ using namespace Gadget;
 
 GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), textureID(0){
 	GADGET_ASSERT(App::GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
-	GADGET_ASSERT(&texture_ == nullptr || texture_.GetWidth() > 0 && texture_.GetHeight() > 0 && !texture_.GetPixels().empty(), "Invalid texture data being passed to OpenGL!");
+	GADGET_ASSERT(texture_.GetWidth() > 0 && texture_.GetHeight() > 0 && !texture_.GetPixels().empty(), "Invalid texture data being passed to OpenGL!");
 
 	glCreateTextures(GL_TEXTURE_2D, 1, &textureID);
 	

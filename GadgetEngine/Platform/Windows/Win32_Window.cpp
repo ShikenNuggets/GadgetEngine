@@ -221,8 +221,10 @@ void Win32_Window::HandleHatMotionEvent(const SDL_Event& e_){
 
 //TODO - I'm honestly not really sure that this is correct, the documentation is a little vague on all this. Validate this
 void Win32_Window::RemoveJoystick(Sint32 instanceID_){
+	GADGET_ASSERT(joysticks.size() <= 256, "More than 256 joysticks are connected, something has likely gone wrong"); //Everything *should* work fine for up to int max, but I cannot imagine a scenario where we need that many
+
 	int index = -1;
-	for(size_t i = 0; i < joysticks.size(); i++){
+	for(int i = 0; i < joysticks.size(); i++){
 		if(joysticks[i] == nullptr){
 			continue;
 		}

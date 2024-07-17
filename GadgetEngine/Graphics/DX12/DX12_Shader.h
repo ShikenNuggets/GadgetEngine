@@ -1,5 +1,5 @@
 #ifndef GADGET_DX12_SHADER_H
-#define GADGET_DX12_SHADER_h
+#define GADGET_DX12_SHADER_H
 
 #include "Graphics/Shader.h"
 #include "Graphics/DX12/LowLevel/DX12_PSO.h"

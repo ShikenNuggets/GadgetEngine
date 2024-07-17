@@ -19,7 +19,7 @@ namespace Gadget{
 		}
 
 		BoxCollider2D(const ComponentProperties& props_) : Collider(props_, ColliderShape::Box2D){
-			Deserialize(props_);
+			BoxCollider2D::Deserialize(props_);
 		}
 
 		float GetWidth() const{ return width; }
@@ -49,7 +49,7 @@ namespace Gadget{
 		}
 
 	protected:
-		virtual void Deserialize(const ComponentProperties& props_){
+		virtual void Deserialize(const ComponentProperties& props_) override{
 			width = props_.variables.GetValue(SID("Width"), 1.0f).ToNumber<float>();
 			height = props_.variables.GetValue(SID("Height"), 1.0f).ToNumber<float>();
 

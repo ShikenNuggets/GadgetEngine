@@ -19,12 +19,12 @@ namespace Gadget{
 			color = color_;
 		}
 
-		float SetAmbientIntensity(float value_){
+		void SetAmbientIntensity(float value_){
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
 			ambientIntensity = value_;
 		}
 		
-		float SetDiffuseIntensity(float value_){
+		void SetDiffuseIntensity(float value_){
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
 			diffuseIntensity = value_;
 		}

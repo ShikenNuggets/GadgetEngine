@@ -40,7 +40,7 @@ FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_){
 	for(unsigned char c = 0; c < 128; c++) {  
 		//Load character glyph 
 		err = FT_Load_Char(fontFace, c, FT_LOAD_RENDER);
-		GADGET_ASSERT(err == FT_Err_Ok, "Could not load glyph for character " + static_cast<char>(c) + std::string("! FreeType Error Code" + std::to_string(err)));
+		GADGET_ASSERT(err == FT_Err_Ok, std::string("Could not load glyph for character ") + static_cast<char>(c) + std::string("! FreeType Error Code" + std::to_string(err)));
 
 		FreetypeFontCharacter character = FreetypeFontCharacter(
 			fontFace->glyph->bitmap.width,

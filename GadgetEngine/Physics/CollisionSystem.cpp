@@ -130,8 +130,8 @@ Vector3 CollisionSystem::CalculateContactPoint(const BoxCollider2D& cl1_, const 
 	bool bottomLeft = c2Rect.Intersects(c1Left, c1Bottom);
 	bool bottomRight = c2Rect.Intersects(c1Right, c1Bottom);
 
-	if(topLeft && topRight && bottomLeft && bottomRight
-		|| !topLeft && !topRight && !bottomLeft && !bottomRight){
+	if((topLeft && topRight && bottomLeft && bottomRight)
+		|| (!topLeft && !topRight && !bottomLeft && !bottomRight)){
 		return cl1_.GetParent()->GetPosition();
 	}
 

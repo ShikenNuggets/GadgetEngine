@@ -24,6 +24,8 @@ namespace Gadget{
 		explicit constexpr StringID(uint64_t id_) : id(id_){}
 		constexpr StringID(const StringID& a_) = default;
 
+		constexpr StringID& operator=(const StringID& a_) = default;
+
 		std::string GetString() const;
 		constexpr uint64_t GetID() const{ return id; }
 

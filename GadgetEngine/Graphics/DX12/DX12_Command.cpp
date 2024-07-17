@@ -67,7 +67,7 @@ DX12_Command::DX12_Command(ID3D12_Device* const device_, D3D12_COMMAND_LIST_TYPE
 	cmdQueue->SetName((typeNamePrefix + L"Queue").c_str());
 
 	//Create Command Frames
-	for(int i = 0; i < DX12::FrameBufferCount; i++){
+	for(uint32_t i = 0; i < DX12::FrameBufferCount; i++){
 		DX12_CommandFrame& frame = cmdFrames[i];
 		result = device_->CreateCommandAllocator(type_, IID_PPV_ARGS(frame.cmdAllocator.ReleaseAndGetAddressOf()));
 		if(FAILED(result) || frame.cmdAllocator == nullptr){
@@ -183,7 +183,7 @@ ErrorCode DX12_Command::EndFrame(DX12_RenderSurface* renderSurface_){
 }
 
 ErrorCode DX12_Command::Flush(){
-	for(int i = 0; i < DX12::FrameBufferCount; i++){
+	for(uint32_t i = 0; i < DX12::FrameBufferCount; i++){
 		auto err = cmdFrames[i].Wait(fenceEvent, fence.Get());
 		if(err != ErrorCode::OK){
 			Debug::Log("An error occurred while flushing command frames", Debug::Error, __FILE__, __LINE__);
@@ -258,7 +258,7 @@ void DX12_Command::Release(){
 	cmdQueue.Reset();
 	cmdList.Reset();
 
-	for(int i = 0; i < DX12::FrameBufferCount; i++){
+	for(uint32_t i = 0; i < DX12::FrameBufferCount; i++){
 		cmdFrames[i].Release();
 	}
 }

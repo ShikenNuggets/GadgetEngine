@@ -12,7 +12,7 @@ namespace Gadget{
 		static constexpr float Pi = 3.141592653589793238f;
 		static constexpr float NearZero = std::numeric_limits<float>::denorm_min();
 		static constexpr float Infinity = std::numeric_limits<float>::infinity();
-		static constexpr uint64_t LargestPrime = 18'446'744'073'709'551'557; //Largest prime number that can be represented by a 64 bit integer
+		static constexpr uint64_t LargestPrime = 18'446'744'073'709'551'557ULL; //Largest prime number that can be represented by a 64 bit integer
 
 		static inline bool IsValidNumber(float value_){
 			return !std::isnan(value_) && !std::isinf(value_);

@@ -167,7 +167,7 @@ void FontLoader::LoadGlyfTable(const std::vector<uint8_t>& data_, size_t tableOf
 			//TODO - Composite glyph
 		}else{
 			GlyphData gd;
-			for(size_t j = 0; j < numberOfContours; j++){
+			for(int16_t j = 0; j < numberOfContours; j++){
 				gd.endPtsOfContours.push_back(bs.Sequence2Bytes());
 			}
 
