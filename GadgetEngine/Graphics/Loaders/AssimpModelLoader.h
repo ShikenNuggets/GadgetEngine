@@ -2,6 +2,7 @@
 #define GADGET_ASSIMP_MODEL_LOADER_H
 
 #include <string>
+#include <vector>
 
 //--------------------------------------------------------------------
 //Undefine some "standard" macros that tend to cause problems
@@ -18,6 +19,7 @@
 
 namespace Gadget{
 	//Forward Declaration
+	struct Submesh;
 	class Mesh;
 
 	class AssimpModelLoader{
@@ -25,7 +27,7 @@ namespace Gadget{
 		static Mesh* LoadMesh(const std::string& filePath_);
 
 	private:
-		static Mesh* ProcessNode(const aiNode* node, const aiScene* scene);
+		static void ProcessNode(const aiNode* node, const aiScene* scene, std::vector<Submesh>& submeshes_);
 	};
 }
 

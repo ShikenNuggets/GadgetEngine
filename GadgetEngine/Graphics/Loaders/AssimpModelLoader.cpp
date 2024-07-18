@@ -17,6 +17,8 @@ Mesh* AssimpModelLoader::LoadMesh(const std::string& filePath_){
 	GADGET_BASIC_ASSERT(!filePath_.empty());
 	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
 
+	std::vector<Submesh> submeshes;
+
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath_, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
@@ -24,15 +26,15 @@ Mesh* AssimpModelLoader::LoadMesh(const std::string& filePath_){
 		return nullptr;
 	}
 
-	return ProcessNode(scene->mRootNode, scene);
+	ProcessNode(scene->mRootNode, scene, submeshes);
+	return new Mesh(submeshes);
 }
 
-//The compiler claims that there is unreachable code in this function. The compiler is wrong
-#pragma warning(disable : 4702)
-
-Mesh* AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene){
+void AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, std::vector<Submesh>& submeshes_){
 	GADGET_BASIC_ASSERT(node != nullptr);
 	GADGET_BASIC_ASSERT(scene != nullptr);
+
+	submeshes_.reserve(submeshes_.size() + node->mNumMeshes);
 
 	for(size_t i = 0; i < node->mNumMeshes; i++){
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -65,14 +67,10 @@ Mesh* AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene){
 			}
 		}
 
-		return new Mesh(verts, indices); //TODO - This return means we can only have a single mesh. Some models have multiple meshes
+		submeshes_.push_back(Submesh(verts, indices));
 	}
 
 	for(unsigned int i = 0; i < node->mNumChildren; i++){
-		return ProcessNode(node->mChildren[i], scene);
+		ProcessNode(node->mChildren[i], scene, submeshes_);
 	}
-
-	return nullptr;
 }
-
-#pragma warning(default : 4702)
