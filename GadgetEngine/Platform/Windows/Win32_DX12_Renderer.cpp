@@ -211,8 +211,13 @@ Shader* Win32_DX12_Renderer::GenerateAPIShader([[maybe_unused]] StringID shaderR
 
 MaterialInfo* Win32_DX12_Renderer::GenerateAPIMaterialInfo([[maybe_unused]] const std::vector<Color>& colors_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
-MeshInfo* Win32_DX12_Renderer::GenerateAPIMeshInfo([[maybe_unused]] const Mesh& mesh_){
-	return new DX12_MeshInfo(mesh_);
+std::vector<MeshInfo*> Win32_DX12_Renderer::GenerateAPIMeshInfos([[maybe_unused]] const Mesh& mesh_){
+	std::vector<MeshInfo*> meshInfos;
+	for(const auto& sm : mesh_.submeshes){
+		meshInfos.push_back(new DX12_MeshInfo(sm));
+	}
+
+	return meshInfos;
 }
 
 MeshInfo* Win32_DX12_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t numVertices_, [[maybe_unused]] size_t numIndices_){

@@ -6,7 +6,7 @@
 
 using namespace Gadget;
 
-DX12_MeshInfo::DX12_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()){
+DX12_MeshInfo::DX12_MeshInfo(const Submesh& mesh_) : MeshInfo(mesh_.indices.size()){
 	std::vector<Vector3> positions;
 	positions.reserve(mesh_.vertices.size());
 	for(const auto& p : mesh_.vertices){

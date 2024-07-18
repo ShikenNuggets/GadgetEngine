@@ -10,7 +10,7 @@
 namespace Gadget{
 	class DXR_MeshInfo : public MeshInfo{
 	public:
-		DXR_MeshInfo(const Mesh& mesh_);
+		DXR_MeshInfo(const Submesh& mesh_);
 		virtual ~DXR_MeshInfo() override;
 
 		//TODO - For Testing Only

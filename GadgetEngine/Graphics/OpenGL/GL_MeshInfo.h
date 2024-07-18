@@ -8,7 +8,7 @@
 namespace Gadget{
 	class GL_MeshInfo : public MeshInfo{
 	public:
-		GL_MeshInfo(const Mesh& mesh_);
+		GL_MeshInfo(const Submesh& mesh_);
 		virtual ~GL_MeshInfo() override;
 
 		virtual void Bind() override;

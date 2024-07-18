@@ -146,7 +146,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	std::vector<DXR_MeshInstance> mInstances;
 	bool needsToRegenerate = false;
 	for(const auto& r : renderComps){
-		if(r->GetMeshInfo() == nullptr){
+		if(r->GetMeshInfo(0) == nullptr){ //TODO - Handle submeshes
 			needsToRegenerate = true;
 			r->CreateMeshInfo();
 		}
@@ -157,7 +157,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 		}
 
 		mInstances.push_back(DXR_MeshInstance(
-			dynamic_cast<DXR_MeshInfo*>(r->GetMeshInfo()),
+			dynamic_cast<DXR_MeshInfo*>(r->GetMeshInfo(0)), //TODO - Handle submeshes
 			dynamic_cast<DXR_MaterialInfo*>(r->GetEngineMaterial()->GetMaterialInfo()),
 			dynamic_cast<DXR_MeshInstanceInfo*>(r->GetMeshInstanceInfo())->DX12MatrixRef()
 		));
@@ -236,7 +236,14 @@ MaterialInfo* Win32_DXR_Renderer::GenerateAPIMaterialInfo(const std::vector<Colo
 	return new DXR_MaterialInfo(colors_);
 }
 
-MeshInfo* Win32_DXR_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){ return new DXR_MeshInfo(mesh_); }
+std::vector<MeshInfo*> Win32_DXR_Renderer::GenerateAPIMeshInfos(const Mesh& mesh_){
+	std::vector<MeshInfo*> meshInfos;
+	for(const auto& sm : mesh_.submeshes){
+		meshInfos.push_back(new DXR_MeshInfo(sm));
+	}
+
+	return meshInfos;
+}
 
 MeshInfo* Win32_DXR_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t numVertices_, [[maybe_unused]] size_t numIndices_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 

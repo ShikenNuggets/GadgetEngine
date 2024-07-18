@@ -11,7 +11,7 @@
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;
 
-DXR_MeshInfo::DXR_MeshInfo(const Mesh& mesh_) : MeshInfo(mesh_.indices.size()), vertexBuffer(nullptr), indexBuffer(nullptr), bottomLevelAS(nullptr){
+DXR_MeshInfo::DXR_MeshInfo(const Submesh& mesh_) : MeshInfo(mesh_.indices.size()), vertexBuffer(nullptr), indexBuffer(nullptr), bottomLevelAS(nullptr){
 	GADGET_BASIC_ASSERT(DX12::IsInstanceInitialized());
 	GADGET_BASIC_ASSERT(mesh_.vertices.size() > 0);
 	GADGET_BASIC_ASSERT(mesh_.indices.size() > 0);

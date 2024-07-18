@@ -10,14 +10,21 @@
 #include "Resource/Resource.h"
 
 namespace Gadget{
-	class Mesh : public Resource{
-	public:
-		Mesh(const std::vector<Vertex>& verts_, const std::vector<uint32_t>& indices_) : vertices(verts_), indices(indices_){}
-
-		static constexpr const char* typeName = "Mesh";
+	struct Submesh{
+		Submesh(const std::vector<Vertex>& verts_, const std::vector<uint32_t>& indices_) : vertices(verts_), indices(indices_){}
 
 		const std::vector<Vertex> vertices;
 		const std::vector<uint32_t> indices;
+	};
+
+	class Mesh : public Resource{
+	public:
+		Mesh(const std::vector<Submesh>& submeshes_) : submeshes(submeshes_){}
+		Mesh(const std::vector<Vertex>& verts_, const std::vector<uint32_t>& indices_) : submeshes(1, Submesh(verts_, indices_)){}
+
+		static constexpr const char* typeName = "Mesh";
+
+		const std::vector<Submesh> submeshes;
 	};
 
 	class MeshResourceContainer : public ResourceContainer{

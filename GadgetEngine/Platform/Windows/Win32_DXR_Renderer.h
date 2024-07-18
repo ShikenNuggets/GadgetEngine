@@ -28,7 +28,7 @@ namespace Gadget{
 
 		virtual Shader* GenerateAPIShader(StringID shaderResource_) override;
 		virtual MaterialInfo* GenerateAPIMaterialInfo(const std::vector<Color>& colors_) override;
-		virtual MeshInfo* GenerateAPIMeshInfo(const Mesh& mesh_) override;
+		virtual std::vector<MeshInfo*> GenerateAPIMeshInfos(const Mesh& mesh_) override;
 		virtual MeshInfo* GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_) override;
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) override;
 		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) override;

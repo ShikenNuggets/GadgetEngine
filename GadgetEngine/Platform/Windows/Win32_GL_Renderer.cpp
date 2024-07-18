@@ -129,34 +129,36 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		//------------------------------------------------------------------------------------------------------------------------
 		//Render all meshes in the scene
 		for(const auto& mesh : meshes){
-			mesh->Bind();
-			mesh->GetShader()->BindMatrix4(SID("projectionMatrix"), proj);
-			mesh->GetShader()->BindMatrix4(SID("viewMatrix"), view);
+			for(size_t i = 0; i < mesh->GetNumSubmeshes(); i++){
+				mesh->Bind(i);
+				mesh->GetShader()->BindMatrix4(SID("projectionMatrix"), proj);
+				mesh->GetShader()->BindMatrix4(SID("viewMatrix"), view);
 
-			Matrix4 modelMatrix = mesh->GetParent()->GetTransformMatrix();
-			mesh->GetShader()->BindMatrix4(SID("modelMatrix"), modelMatrix);
+				Matrix4 modelMatrix = mesh->GetParent()->GetTransformMatrix();
+				mesh->GetShader()->BindMatrix4(SID("modelMatrix"), modelMatrix);
 
-			if(mesh->GetMaterial()->HasLighting()){
-				mesh->GetShader()->BindMatrix3(SID("normalMatrix"), (modelMatrix.Inverse()).Transpose().ToMatrix3());
+				if(mesh->GetMaterial()->HasLighting()){
+					mesh->GetShader()->BindMatrix3(SID("normalMatrix"), (modelMatrix.Inverse()).Transpose().ToMatrix3());
 
-				mesh->GetShader()->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
+					mesh->GetShader()->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
 
-				mesh->GetShader()->BindInt(SID("numPointLights"), static_cast<int>(lights.size()));
-				mesh->GetShader()->BindInt(SID("numSpotLights"), 0);
-				mesh->GetShader()->BindInt(SID("numDirLights"), 0);
+					mesh->GetShader()->BindInt(SID("numPointLights"), static_cast<int>(lights.size()));
+					mesh->GetShader()->BindInt(SID("numSpotLights"), 0);
+					mesh->GetShader()->BindInt(SID("numDirLights"), 0);
 
-				for(const auto& light : lights){
-					mesh->GetShader()->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
-					mesh->GetShader()->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
-					mesh->GetShader()->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
-					mesh->GetShader()->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
-					mesh->GetShader()->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+					for(const auto& light : lights){
+						mesh->GetShader()->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
+						mesh->GetShader()->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
+						mesh->GetShader()->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
+						mesh->GetShader()->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
+						mesh->GetShader()->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+					}
 				}
+
+				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->GetMeshNumIndices(i)), GL_UNSIGNED_INT, nullptr);
+
+				mesh->Unbind(i);
 			}
-
-			glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->GetMeshNumIndices()), GL_UNSIGNED_INT, nullptr);
-
-			mesh->Unbind();
 		}
 
 		//------------------------------------------------------------------------------------------------------------------------
@@ -390,8 +392,13 @@ Shader* Win32_GL_Renderer::GenerateAPIShader(StringID shaderResource_){
 
 MaterialInfo* Win32_GL_Renderer::GenerateAPIMaterialInfo([[maybe_unused]] const std::vector<Color>& colors_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
-MeshInfo* Win32_GL_Renderer::GenerateAPIMeshInfo(const Mesh& mesh_){
-	return new GL_MeshInfo(mesh_);
+std::vector<MeshInfo*> Win32_GL_Renderer::GenerateAPIMeshInfos(const Mesh& mesh_){
+	std::vector<MeshInfo*> meshInfos;
+	for(const auto& sm : mesh_.submeshes){
+		meshInfos.push_back(new GL_MeshInfo(sm));
+	}
+
+	return meshInfos;
 }
 
 MeshInfo* Win32_GL_Renderer::GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_){

@@ -9,7 +9,7 @@
 namespace Gadget{
 	class DX12_MeshInfo : public MeshInfo{
 	public:
-		DX12_MeshInfo(const Mesh& mesh_);
+		DX12_MeshInfo(const Submesh& mesh_);
 		virtual ~DX12_MeshInfo() override;
 
 		virtual void Bind() override;
