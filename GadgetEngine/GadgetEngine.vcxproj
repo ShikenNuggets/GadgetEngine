@@ -269,6 +269,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClInclude Include="Graphics\Materials\DiffuseTextureMaterial.h" />
     <ClInclude Include="Graphics\Materials\EngineMaterial.h" />
     <ClInclude Include="Graphics\Materials\Material.h" />
+    <ClInclude Include="Graphics\Materials\MaterialCache.h" />
     <ClInclude Include="Graphics\Materials\MaterialInfo.h" />
     <ClInclude Include="Graphics\Mesh.h" />
     <ClInclude Include="Graphics\MeshInfo.h" />
@@ -405,6 +406,7 @@ echo D|xcopy "$(SolutionDir)SDK\freetype\libs\$(Configuration)\*.*" "$(SolutionD
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp" />
     <ClCompile Include="Graphics\Materials\EngineMaterial.cpp" />
     <ClCompile Include="Graphics\Materials\Material.cpp" />
+    <ClCompile Include="Graphics\Materials\MaterialCache.cpp" />
     <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.cpp" />
     <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DepthFrameBuffer.cpp" />
     <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_FrameBuffer.cpp" />

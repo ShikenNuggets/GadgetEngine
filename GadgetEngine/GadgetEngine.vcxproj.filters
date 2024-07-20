@@ -320,6 +320,9 @@
     <ClInclude Include="Graphics\Materials\Material.h">
       <Filter>Graphics\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Materials\MaterialCache.h">
+      <Filter>Graphics\Materials</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Materials\MaterialInfo.h">
       <Filter>Graphics\Materials</Filter>
     </ClInclude>
@@ -702,6 +705,9 @@
       <Filter>Graphics\Materials</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Materials\Material.cpp">
+      <Filter>Graphics\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Materials\MaterialCache.cpp">
       <Filter>Graphics\Materials</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\FrameBuffers\GL_DefaultFrameBuffer.cpp">
