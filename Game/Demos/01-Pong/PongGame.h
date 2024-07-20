@@ -46,8 +46,8 @@ namespace Pong{
 		}
 
 		void DefineMaterials(){
-			Gadget::App::GetMaterialCache().AddMaterial(SID("WhiteColor"), new Gadget::ColorMaterial(Gadget::Color::White(), SID("ColorShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("DarkGrayColor"), new Gadget::ColorMaterial(Gadget::Color::DarkGray(), SID("ColorShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("WhiteColorMaterial"), new Gadget::ColorMaterial(Gadget::Color::White(), SID("ColorShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("DarkGrayColorMaterial"), new Gadget::ColorMaterial(Gadget::Color::DarkGray(), SID("ColorShader")));
 		}
 	};
 }
