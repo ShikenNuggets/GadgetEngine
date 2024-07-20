@@ -106,13 +106,13 @@ TEST_CASE("HashTable ForEach", "[hash_table_for_each]"){
 	REQUIRE(values[SID("Test11")] == 11);
 
 	size_t count = 0;
-	for(const auto& v : values){
+	for([[maybe_unused]] const auto& _ : values){
 		count++;
 	}
 	REQUIRE(count > 0);
 	
 	count = 0;
-	for(auto& v : values){
+	for([[maybe_unused]] auto& _ : values){
 		count++;
 	}
 	REQUIRE(count > 0);
