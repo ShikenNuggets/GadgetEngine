@@ -80,6 +80,7 @@ void App::Initialize(const std::string& name_){
 
 	GUID::SetInitialGUID(); //Temp, in the future we'll pull the number of unique entities from the project files or whatever, and then set that here
 
+	materialCache = std::make_unique<MaterialCache>(); //Init before the renderer in case the renderer would like to cache some materials
 	InitRenderer();
 
 	physics = std::make_unique<PhysManager>();
@@ -96,6 +97,7 @@ void App::Destroy(){
 	sceneManager.reset();
 	physics.reset();
 	renderer.reset();
+	materialCache.reset();
 	input.reset();
 	time.reset();
 	config.reset();

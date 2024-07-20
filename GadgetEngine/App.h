@@ -9,6 +9,7 @@
 #include "Game/BasicSceneManager.h"
 #include "Game/GameLogicManager.h"
 #include "Graphics/Renderer.h"
+#include "Graphics/Materials/MaterialCache.h"
 #include "Input/Input.h"
 #include "Memory/GlobalAllocator.h"
 #include "Memory/StackAllocator.h"
@@ -52,6 +53,7 @@ namespace Gadget{
 		static Config& GetConfig(){ return *GetInstance().config; }
 		static Time& GetTime(){ return *GetInstance().time; }
 		static Input& GetInput(){ return *GetInstance().input; }
+		static MaterialCache& GetMaterialCache(){ return *GetInstance().materialCache; }
 		static Renderer& GetRenderer(){ return *GetInstance().renderer; }
 		static PhysManager& GetPhysics(){ return *GetInstance().physics; }
 		static BasicSceneManager& GetSceneManager(){ return *GetInstance().sceneManager; }
@@ -69,6 +71,7 @@ namespace Gadget{
 		std::unique_ptr<Config> config;
 		std::unique_ptr<Time> time;
 		std::unique_ptr<Input> input;
+		std::unique_ptr<MaterialCache> materialCache;
 		std::unique_ptr<Renderer> renderer;
 		std::unique_ptr<PhysManager> physics;
 		std::unique_ptr<BasicSceneManager> sceneManager;
