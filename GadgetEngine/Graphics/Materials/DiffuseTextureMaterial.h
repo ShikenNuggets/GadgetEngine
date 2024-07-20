@@ -31,7 +31,7 @@ namespace Gadget{
 			Deserialize(varList_);
 		}
 
-		~DiffuseTextureMaterial(){
+		virtual ~DiffuseTextureMaterial() override{
 			delete textureInfo;
 		}
 
