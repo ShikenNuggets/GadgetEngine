@@ -82,7 +82,7 @@
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\SDL_image\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -95,8 +95,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\Build\GadgetEngine\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\SDL_image\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\Build\GadgetEngine\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
@@ -110,7 +110,7 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;GADGET_DEVELOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\SDL_image\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
@@ -128,8 +128,8 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\Build\GadgetEngine\Develop;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\SDL_image\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\Build\GadgetEngine\Develop;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
@@ -142,7 +142,7 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\SDL_image\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -158,8 +158,8 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\Build\GadgetEngine\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\Build\SDL_image\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\Build\GadgetEngine\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
