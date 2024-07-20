@@ -105,6 +105,9 @@
     <ClInclude Include="Data\List.h">
       <Filter>Data</Filter>
     </ClInclude>
+    <ClInclude Include="Data\Pair.h">
+      <Filter>Data</Filter>
+    </ClInclude>
     <ClInclude Include="Data\String.h">
       <Filter>Data</Filter>
     </ClInclude>

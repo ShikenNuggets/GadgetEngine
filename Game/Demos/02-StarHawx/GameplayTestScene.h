@@ -19,7 +19,7 @@ namespace StarHawx{
 
 			Gadget::GameObject* player = new Gadget::GameObject();
 			player->SetPosition(0.0f, 0.0f, 0.0f);
-			player->AddComponent(new Gadget::RenderComponent(player->GetGUID(), SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
+			player->AddComponent(new Gadget::RenderComponent(player->GetGUID(), SID("ArwingModel"), SID("BrickMaterial")));
 			//cube->AddComponent(new Gadget::RenderComponent(cube->GetGUID(), SID("CubeModel"), redMaterial));
 			player->AddComponent(new Gadget::Rigidbody(player, 100.0f, false));
 			player->AddComponent(new Gadget::CubeCollider(player));
@@ -29,7 +29,7 @@ namespace StarHawx{
 			Gadget::GameObject* floor = new Gadget::GameObject();
 			floor->SetPosition(Gadget::Vector3(0.0f, -2.5f, 0.0f));
 			floor->SetScale(Gadget::Vector3(25.0f, 0.01f, 25.0f));
-			floor->AddComponent(new Gadget::RenderComponent(floor->GetGUID(), SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
+			floor->AddComponent(new Gadget::RenderComponent(floor->GetGUID(), SID("CubeModel"), SID("BrickMaterial")));
 			//floor->AddComponent(new Gadget::RenderComponent(floor->GetGUID(), SID("CubeModel"), blueMaterial));
 			floor->AddComponent(new Gadget::CubeCollider(floor));
 			CreateObject(floor);

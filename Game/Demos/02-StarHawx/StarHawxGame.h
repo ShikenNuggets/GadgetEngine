@@ -16,6 +16,7 @@ namespace StarHawx{
 		virtual void LoadGame() final override{
 			Gadget::App::GetRenderer().SetClearColor(Gadget::Color::Black());
 			DefineInputs();
+			DefineMaterials();
 			Gadget::App::GetSceneManager().AddScene(new GameplayTestScene());
 		}
 
@@ -41,6 +42,10 @@ namespace StarHawx{
 			button.AddButtonID(Gadget::ButtonID::Gamepad_Shoulder_Right2);
 			button.AddButtonID(Gadget::ButtonID::Gamepad_Face_Down);
 			button.AddButtonID(Gadget::ButtonID::Keyboard_Space);
+		}
+
+		void DefineMaterials(){
+			Gadget::App::GetMaterialCache().AddMaterial(SID("BrickMaterial"), new Gadget::DiffuseTextureMaterial(SID("CubeTexture"), SID("DefaultShader")));
 		}
 	};
 }

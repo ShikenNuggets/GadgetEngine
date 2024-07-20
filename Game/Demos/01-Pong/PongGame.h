@@ -17,6 +17,7 @@ namespace Pong{
 		virtual void LoadGame() override{
 			Gadget::App::GetRenderer().SetClearColor(Gadget::Color::Black());
 			DefineInputs();
+			DefineMaterials();
 			Gadget::App::GetSceneManager().AddScene(new PongMenuScene());
 			Gadget::App::GetSceneManager().AddScene(new PongScene());
 		}
@@ -42,6 +43,11 @@ namespace Pong{
 			quitButton.AddButtonID(Gadget::ButtonID::Keyboard_Escape);
 			quitButton.AddButtonID(Gadget::ButtonID::Gamepad_Start);
 			Gadget::App::GetInput().DefineButton(quitButton);
+		}
+
+		void DefineMaterials(){
+			Gadget::App::GetMaterialCache().AddMaterial(SID("WhiteColor"), new Gadget::ColorMaterial(Gadget::Color::White(), SID("ColorShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("DarkGrayColor"), new Gadget::ColorMaterial(Gadget::Color::DarkGray(), SID("ColorShader")));
 		}
 	};
 }

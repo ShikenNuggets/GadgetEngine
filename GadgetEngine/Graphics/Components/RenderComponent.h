@@ -1,6 +1,7 @@
 #ifndef GADGET_RENDER_COMPONENT_H
 #define GADGET_RENDER_COMPONENT_H
 
+#include "Data/Pair.h"
 #include "Game/Component.h"
 #include "Graphics/MeshInfo.h"
 #include "Graphics/MeshInstanceInfo.h"
@@ -10,9 +11,8 @@
 namespace Gadget{
 	class RenderComponent : public Component{
 	public:
-		RenderComponent(GUID parentGUID_, StringID modelName_, StringID textureName_, StringID shaderName_);
-		RenderComponent(GUID parentGUID_, StringID modelName_, const Color& color_, StringID shaderName_);
-		RenderComponent(GUID parentGUID_, StringID modelName_, Material* material_);
+		RenderComponent(GUID parentGUID_, StringID modelName_, StringID cachedMaterial_);
+		RenderComponent(GUID parentGUID_, StringID modelName_, std::vector<StringID> cachedMaterials_);
 		RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* engineMaterial_, bool setMeshInfoDeferred_ = true);
 		RenderComponent(const ComponentProperties& props_);
 
@@ -42,8 +42,8 @@ namespace Gadget{
 				return nullptr;
 			}
 
-			GADGET_BASIC_ASSERT(meshInfos[index_] != nullptr);
-			return meshInfos[index_];
+			GADGET_BASIC_ASSERT(meshInfos[index_].first != nullptr);
+			return meshInfos[index_].first;
 		}
 
 		inline constexpr MeshInstanceInfo* GetMeshInstanceInfo() const{ return meshInstanceInfo; }
@@ -55,16 +55,32 @@ namespace Gadget{
 				return 0;
 			}
 
-			GADGET_BASIC_ASSERT(meshInfos[index_] != nullptr);
-			return meshInfos[index_]->GetNumIndices();
+			GADGET_BASIC_ASSERT(meshInfos[index_].first != nullptr);
+			return meshInfos[index_].first->GetNumIndices();
 		}
 
-		Material* GetMaterial(){ return material; }
+		Material* GetMaterial(size_t index_){
+			GADGET_BASIC_ASSERT(index_ < meshInfos.size());
+			if(index_ >= meshInfos.size()){
+				GADGET_LOG_WARNING(SID("RENDER"), "Trying to access invalid material at index " + std::to_string(index_));
+				return nullptr;
+			}
+
+			GADGET_BASIC_ASSERT(GetCachedMaterial(index_) != nullptr);
+			return GetCachedMaterial(index_);
+		}
+
 		EngineMaterial* GetEngineMaterial(){ return engineMaterial; }
 
-		Shader* GetShader(){
-			GADGET_BASIC_ASSERT(material != nullptr);
-			return material->GetShader();
+		Shader* GetShader(size_t index_){
+			GADGET_BASIC_ASSERT(index_ < meshInfos.size());
+			if(index_ >= meshInfos.size()){
+				GADGET_LOG_WARNING(SID("RENDER"), "Trying to access invalid material at index " + std::to_string(index_));
+				return nullptr;
+			}
+			
+			GADGET_BASIC_ASSERT(GetCachedMaterial(index_) != nullptr);
+			return GetCachedMaterial(index_)->GetShader();
 		}
 
 		virtual ComponentProperties Serialize() const override;
@@ -74,10 +90,12 @@ namespace Gadget{
 	protected:
 		virtual void Deserialize(const ComponentProperties& props_) override;
 
+		Material* GetCachedMaterial(size_t meshIndex_) const;
+		Material* GetCachedMaterial(StringID material_) const;
+
 	private:
 		StringID modelName;
-		std::vector<MeshInfo*> meshInfos;
-		Material* material;
+		std::vector<Pair<MeshInfo*, StringID>> meshInfos;
 		EngineMaterial* engineMaterial;
 		MeshInstanceInfo* meshInstanceInfo;
 

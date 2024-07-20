@@ -9,59 +9,54 @@ using namespace Gadget;
 
 ComponentCollection<RenderComponent> RenderComponent::componentCollection = ComponentCollection<RenderComponent>();
 
-RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, StringID textureName_, StringID shaderName_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfos(), material(nullptr), engineMaterial(nullptr){
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, StringID cachedMaterial_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfos(), engineMaterial(nullptr), meshInstanceInfo(nullptr){
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
-	GADGET_BASIC_ASSERT(textureName_ != StringID::None);
-	GADGET_BASIC_ASSERT(shaderName_ != StringID::None);
-	
+	GADGET_BASIC_ASSERT(cachedMaterial_ != StringID::None);
+	GADGET_BASIC_ASSERT(GetCachedMaterial(cachedMaterial_) != nullptr);
+
 	CreateMeshInfo();
 	CreateMeshInstanceInfo();
-	material = new DiffuseTextureMaterial(textureName_, shaderName_);
+
+	for(auto& m : meshInfos){
+		m.second = cachedMaterial_;
+	}
 
 	componentCollection.Add(this);
 
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
-	GADGET_BASIC_ASSERT(material != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, const Color& color_, StringID shaderName_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfos(), material(nullptr), engineMaterial(nullptr){
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, std::vector<StringID> cachedMaterials_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfos(), engineMaterial(nullptr), meshInstanceInfo(nullptr){
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
-	GADGET_BASIC_ASSERT(color_.IsValid());
-	GADGET_BASIC_ASSERT(shaderName_ != StringID::None);
-	
+	GADGET_BASIC_ASSERT(!cachedMaterials_.empty());
+	for(const auto& cm : cachedMaterials_){
+		GADGET_BASIC_ASSERT(GetCachedMaterial(cm) != nullptr);
+	}
+
 	CreateMeshInfo();
 	CreateMeshInstanceInfo();
-	material = new ColorMaterial(color_, shaderName_);
+
+	for(size_t i = 0; i < meshInfos.size(); i++){
+		size_t indexToUse = i;
+		if(indexToUse >= cachedMaterials_.size()){
+			indexToUse = 0;
+		}
+		
+		meshInfos[i].second = cachedMaterials_[0];
+	}
 
 	componentCollection.Add(this);
 
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
-	GADGET_BASIC_ASSERT(material != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, Material* material_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfos(), material(material_), engineMaterial(nullptr){
-	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
-	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
-	GADGET_BASIC_ASSERT(material_ != nullptr);
-
-	CreateMeshInfo();
-	CreateMeshInstanceInfo();
-
-	componentCollection.Add(this);
-
-	GADGET_BASIC_ASSERT(!meshInfos.empty());
-	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
-	GADGET_BASIC_ASSERT(material != nullptr);
-	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
-}
-
-RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* material_, bool setMeshInfoDeferred_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfos(), material(nullptr), engineMaterial(material_){
+RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, EngineMaterial* material_, bool setMeshInfoDeferred_) : Component(SID("RenderComponent"), parentGUID_), modelName(modelName_), meshInfos(), engineMaterial(material_), meshInstanceInfo(nullptr){
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(material_ != nullptr);
@@ -79,7 +74,7 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, EngineMa
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(const ComponentProperties& props_) : Component(props_), modelName(StringID::None), meshInfos(), material(nullptr){
+RenderComponent::RenderComponent(const ComponentProperties& props_) : Component(props_), modelName(StringID::None), meshInfos(){
 	GADGET_BASIC_ASSERT(props_.parentGuid != GUID::Invalid);
 
 	Deserialize(props_);
@@ -88,7 +83,6 @@ RenderComponent::RenderComponent(const ComponentProperties& props_) : Component(
 
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 	GADGET_BASIC_ASSERT(meshInstanceInfo != nullptr);
-	GADGET_BASIC_ASSERT(material != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
@@ -96,11 +90,11 @@ RenderComponent::~RenderComponent(){
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 
 	delete engineMaterial;
-	delete material;
+
 	delete meshInstanceInfo;
 
 	for(const auto& m : meshInfos){
-		delete m;
+		delete m.first;
 	}
 
 	componentCollection.Remove(this);
@@ -119,24 +113,16 @@ void RenderComponent::OnTransformModified(){
 
 void RenderComponent::Bind(size_t index_){
 	GADGET_BASIC_ASSERT(index_ < meshInfos.size());
-	GADGET_BASIC_ASSERT(material != nullptr || engineMaterial != nullptr);
 
-	meshInfos[index_]->Bind();
-
-	if(material != nullptr){
-		material->Bind();
-	}
+	meshInfos[index_].first->Bind();
+	GetCachedMaterial(index_)->Bind();
 }
 
 void RenderComponent::Unbind(size_t index_){
 	GADGET_BASIC_ASSERT(index_ < meshInfos.size());
-	GADGET_BASIC_ASSERT(material != nullptr || engineMaterial != nullptr);
 
-	if(material != nullptr){
-		material->Unbind();
-	}
-
-	meshInfos[index_]->Unbind();
+	GetCachedMaterial(index_)->Unbind();
+	meshInfos[index_].first->Unbind();
 }
 
 void RenderComponent::CreateMeshInfo(){
@@ -145,7 +131,11 @@ void RenderComponent::CreateMeshInfo(){
 	Mesh* mesh = App::GetResourceManager().LoadResource<Mesh>(modelName);
 	GADGET_BASIC_ASSERT(mesh != nullptr);
 
-	meshInfos = App::GetRenderer().GenerateAPIMeshInfos(*mesh);
+	std::vector<MeshInfo*> mi = App::GetRenderer().GenerateAPIMeshInfos(*mesh);
+	GADGET_BASIC_ASSERT(!mi.empty());
+	for(const auto& m : mi){
+		meshInfos.push_back(Pair(m, StringID::None));
+	}
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 
 	App::GetResourceManager().UnloadResource(modelName);
@@ -158,7 +148,7 @@ void RenderComponent::CreateMeshInstanceInfo(){
 ComponentProperties RenderComponent::Serialize() const{
 	ComponentProperties props = Component::Serialize();
 	props.variables.Add(SID("ModelName"), modelName);
-	material->Serialize(props.variables);
+	GetCachedMaterial(0)->Serialize(props.variables); //TODO - Serialize multiple materials
 
 	return props;
 }
@@ -175,11 +165,29 @@ void RenderComponent::Deserialize(const ComponentProperties& props_){
 	CreateMeshInfo();
 	CreateMeshInstanceInfo();
 
+	//TODO - This is all very dumb
 	if(materialType == DiffuseTextureMaterial::type){
-		material = new DiffuseTextureMaterial(props_.variables);
+		StringID materialName = StringID::ProcessString("__" + std::to_string(GetGUID().Id()) + "_DiffuseTextureMaterial");
+		App::GetMaterialCache().AddMaterial(materialName, new DiffuseTextureMaterial(props_.variables));
+		for(auto& m : meshInfos){
+			m.second = materialName;
+		}
 	}else if(materialType == ColorMaterial::type){
-		material = new ColorMaterial(props_.variables);
+		StringID materialName = StringID::ProcessString("__" + std::to_string(GetGUID().Id()) + "_ColorMaterial");
+		App::GetMaterialCache().AddMaterial(materialName, new ColorMaterial(props_.variables));
+		for(auto& m : meshInfos){
+			m.second = materialName;
+		}
 	}else{
 		GADGET_ASSERT_NOT_IMPLEMENTED;
 	}
+}
+
+Material* RenderComponent::GetCachedMaterial(size_t meshIndex_) const{
+	return GetCachedMaterial(meshInfos[meshIndex_].second);
+}
+
+Material* RenderComponent::GetCachedMaterial(StringID materialName_) const{
+	GADGET_BASIC_ASSERT(App::GetMaterialCache().GetMaterial(materialName_) != nullptr);
+	return App::GetMaterialCache().GetMaterial(materialName_);
 }
