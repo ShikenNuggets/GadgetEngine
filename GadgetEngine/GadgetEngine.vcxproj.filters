@@ -308,6 +308,9 @@
     <ClInclude Include="Graphics\Loaders\FreetypeFontLoader.h">
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Loaders\ImageLoader.h">
+      <Filter>Graphics\Loaders</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Loaders\ObjLoader.h">
       <Filter>Graphics\Loaders</Filter>
     </ClInclude>
@@ -699,6 +702,9 @@
       <Filter>Graphics\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\FreetypeFontLoader.cpp">
+      <Filter>Graphics\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Loaders\ImageLoader.cpp">
       <Filter>Graphics\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Loaders\ObjLoader.cpp">

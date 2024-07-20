@@ -6,6 +6,7 @@
 #include "Core/FileSystem.h"
 #include "Debug.h"
 #include "Loaders/BmpLoader.h"
+#include "Loaders/ImageLoader.h"
 #include "Resource/Resource.h"
 
 namespace Gadget{
@@ -41,7 +42,11 @@ namespace Gadget{
 		std::string GetPath() const{ return path; }
 
 		virtual Resource* LoadResource() override{
-			return BmpLoader::LoadImage(path);
+			if(Utils::Contains(path, ".bmp")){
+				return BmpLoader::LoadImage(path);
+			}
+
+			return ImageLoader::LoadImage(path);
 		}
 
 		virtual const std::type_info& GetResourceTypeInfo() override{

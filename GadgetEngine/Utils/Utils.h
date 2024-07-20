@@ -88,6 +88,10 @@ namespace Gadget{
 		//---------- Strings ---------------------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
 		//TODO - Pretty much all of these functions assume ASCII. Make sure they work for UTF-8 too!
+		inline constexpr bool Contains(const std::string& str_, const std::string& val_){
+			return str_.find(val_) != std::string::npos;
+		}
+
 		inline constexpr bool ContainsChar(const std::string& str_, char char_){
 			return str_.find(char_) != std::string::npos;
 		}
