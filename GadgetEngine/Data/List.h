@@ -172,8 +172,8 @@ namespace Gadget{
 
 		constexpr inline size_t Size() const{ return size; }
 		constexpr inline bool IsEmpty() const{ return size == 0; }
-		constexpr inline Node* Front(){ return head; }
-		constexpr inline Node* Back(){ return tail; }
+		constexpr inline Node* Front() const{ return head; }
+		constexpr inline Node* Back() const{ return tail; }
 
 		constexpr inline Node* SecondLast() const{
 			if(IsEmpty()){

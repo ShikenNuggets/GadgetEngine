@@ -20,6 +20,38 @@ namespace Gadget{
 			constexpr KeyValuePair(const K& key_, const V& value_) : key(key_), value(value_){}
 		};
 
+		class Iterator{
+		public:
+			constexpr Iterator(const Array<List<KeyValuePair>>& data_, size_t index_, List<KeyValuePair>::Node* node_) : data(data_), currentIndex(index_), currentNode(node_){}
+
+			constexpr inline const V& operator*() const{ return currentNode->value.value; }
+			constexpr inline V& operator*(){ return currentNode->value.value; }
+
+			constexpr inline void operator++(){
+				if(currentNode != nullptr){
+					currentNode = currentNode->next;
+				}
+
+				while(currentNode == nullptr){
+					currentIndex++;
+					if(currentIndex >= data.Size()){
+						break;
+					}
+
+					currentNode = data[currentIndex].Front();
+				}
+			}
+
+			constexpr inline bool operator!=(const Iterator& it_) const{
+				return currentNode != it_.currentNode;
+			}
+
+		private:
+			const Array<List<KeyValuePair>>& data;
+			size_t currentIndex;
+			List<KeyValuePair>::Node* currentNode;
+		};
+
 		HashTable(size_t capacity = 1024) : data(Math::NextPrime(capacity)){}
 
 		void Add(const K& key_, const V& value_){
@@ -120,6 +152,25 @@ namespace Gadget{
 			//This shouldn't be possible - there's no safe way to handle this, so just error out
 			Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 		}
+
+		constexpr inline Iterator begin(){
+			if(data.IsEmpty()){
+				return Iterator(data, 0, nullptr);
+			}
+
+			return Iterator(data, 0, data[0].Front());
+		}
+
+		constexpr inline const Iterator begin() const{
+			if(data.IsEmpty()){
+				return Iterator(data, 0, nullptr);
+			}
+
+			return Iterator(data, 0, data[0].Front());
+		}
+
+		constexpr inline Iterator end(){ return Iterator(data, data.Size(), nullptr); }
+		constexpr inline const Iterator end() const{ return Iterator(data, data.Size(), nullptr); }
 
 	private:
 		Array<List<KeyValuePair>> data;

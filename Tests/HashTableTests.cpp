@@ -60,3 +60,60 @@ TEST_CASE("HashTable TwoSum", "[hash_table_two_sum]"){
 	REQUIRE(result3[0] == 0);
 	REQUIRE(result3[1] == 1);
 }
+
+//------------------------------------------------------------//
+//-------------------- For Each Loop -------------------------//
+//------------------------------------------------------------//
+TEST_CASE("HashTable ForEach", "[hash_table_for_each]"){
+	HashTable<StringID, int> values;
+	values.Add(SID("Test0"), 0);
+	values.Add(SID("Test1"), 1);
+	values.Add(SID("Test2"), 2);
+	values.Add(SID("Test3"), 3);
+	values.Add(SID("Test4"), 4);
+	values.Add(SID("Test5"), 5);
+	values.Add(SID("Test6"), 6);
+	values.Add(SID("Test7"), 7);
+	values.Add(SID("Test8"), 8);
+	values.Add(SID("Test9"), 9);
+	values.Add(SID("Test10"), 10);
+	values.Add(SID("Test11"), 11);
+
+	REQUIRE(values.Contains(SID("Test0")));
+	REQUIRE(values.Contains(SID("Test1")));
+	REQUIRE(values.Contains(SID("Test2")));
+	REQUIRE(values.Contains(SID("Test3")));
+	REQUIRE(values.Contains(SID("Test4")));
+	REQUIRE(values.Contains(SID("Test5")));
+	REQUIRE(values.Contains(SID("Test6")));
+	REQUIRE(values.Contains(SID("Test7")));
+	REQUIRE(values.Contains(SID("Test8")));
+	REQUIRE(values.Contains(SID("Test9")));
+	REQUIRE(values.Contains(SID("Test10")));
+	REQUIRE(values.Contains(SID("Test11")));
+
+	REQUIRE(values[SID("Test0")] == 0);
+	REQUIRE(values[SID("Test1")] == 1);
+	REQUIRE(values[SID("Test2")] == 2);
+	REQUIRE(values[SID("Test3")] == 3);
+	REQUIRE(values[SID("Test4")] == 4);
+	REQUIRE(values[SID("Test5")] == 5);
+	REQUIRE(values[SID("Test6")] == 6);
+	REQUIRE(values[SID("Test7")] == 7);
+	REQUIRE(values[SID("Test8")] == 8);
+	REQUIRE(values[SID("Test9")] == 9);
+	REQUIRE(values[SID("Test10")] == 10);
+	REQUIRE(values[SID("Test11")] == 11);
+
+	size_t count = 0;
+	for(const auto& v : values){
+		REQUIRE(v == count);
+		count++;
+	}
+	
+	count = 0;
+	for(auto& v : values){
+		REQUIRE(v == count);
+		count++;
+	}
+}
