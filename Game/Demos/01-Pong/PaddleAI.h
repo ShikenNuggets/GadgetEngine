@@ -65,8 +65,6 @@ namespace Pong{
 
 				return CalculateNextBounce(Gadget::Vector3(ballPosXAfterBounce, ballPosYAfterBounce, startPos_.z), ballScale_, Gadget::Vector3(velocity_.x, -velocity_.y, velocity_.z), topWallPos_, bottomWallPos_, leftPaddlePos_, rightPaddlePos_, ++recursionCount_);
 			}
-
-			return startPos_;
 		}
 
 		float AdvancedCalculateTargetPosition(){
