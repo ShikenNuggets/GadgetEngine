@@ -233,7 +233,9 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClInclude Include="..\SDL\src\SDL_internal.h" />
     <ClInclude Include="..\SDL\src\SDL_list.h" />
     <ClInclude Include="..\SDL\src\SDL_log_c.h" />
+    <ClInclude Include="..\SDL\src\SDL_utils_c.h" />
     <ClInclude Include="..\SDL\src\audio\SDL_audio_c.h" />
+    <ClInclude Include="..\SDL\src\audio\SDL_audio_channel_converters.h" />
     <ClInclude Include="..\SDL\src\audio\SDL_audio_resampler_filter.h" />
     <ClInclude Include="..\SDL\src\audio\SDL_audiodev_c.h" />
     <ClInclude Include="..\SDL\src\audio\SDL_sysaudio.h" />
@@ -245,6 +247,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClInclude Include="..\SDL\src\audio\winmm\SDL_winmm.h" />
     <ClInclude Include="..\SDL\src\core\windows\SDL_directx.h" />
     <ClInclude Include="..\SDL\src\core\windows\SDL_hid.h" />
+    <ClInclude Include="..\SDL\src\core\windows\SDL_immdevice.h" />
     <ClInclude Include="..\SDL\src\core\windows\SDL_windows.h" />
     <ClInclude Include="..\SDL\src\core\windows\SDL_xinput.h" />
     <ClInclude Include="..\SDL\src\dynapi\SDL_dynapi.h" />
@@ -256,8 +259,9 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClInclude Include="..\SDL\src\events\SDL_events_c.h" />
     <ClInclude Include="..\SDL\src\events\SDL_gesture_c.h" />
     <ClInclude Include="..\SDL\src\events\SDL_keyboard_c.h" />
+    <ClInclude Include="..\SDL\src\events\SDL_keysym_to_scancode_c.h" />
     <ClInclude Include="..\SDL\src\events\SDL_mouse_c.h" />
-    <ClInclude Include="..\SDL\src\events\SDL_sysevents.h" />
+    <ClInclude Include="..\SDL\src\events\SDL_scancode_tables_c.h" />
     <ClInclude Include="..\SDL\src\events\SDL_touch_c.h" />
     <ClInclude Include="..\SDL\src\events\SDL_windowevents_c.h" />
     <ClInclude Include="..\SDL\src\events\blank_cursor.h" />
@@ -272,8 +276,10 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClInclude Include="..\SDL\src\hidapi\hidapi\hidapi.h" />
     <ClInclude Include="..\SDL\src\joystick\SDL_gamecontrollerdb.h" />
     <ClInclude Include="..\SDL\src\joystick\SDL_joystick_c.h" />
+    <ClInclude Include="..\SDL\src\joystick\SDL_steam_virtual_gamepad.h" />
     <ClInclude Include="..\SDL\src\joystick\SDL_sysjoystick.h" />
     <ClInclude Include="..\SDL\src\joystick\controller_type.h" />
+    <ClInclude Include="..\SDL\src\joystick\hidapi\SDL_hidapi_nintendo.h" />
     <ClInclude Include="..\SDL\src\joystick\hidapi\SDL_hidapi_rumble.h" />
     <ClInclude Include="..\SDL\src\joystick\hidapi\SDL_hidapijoystick_c.h" />
     <ClInclude Include="..\SDL\src\joystick\usb_ids.h" />
@@ -292,6 +298,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClInclude Include="..\SDL\src\render\SDL_yuv_sw_c.h" />
     <ClInclude Include="..\SDL\src\render\direct3d\SDL_shaders_d3d.h" />
     <ClInclude Include="..\SDL\src\render\direct3d11\SDL_shaders_d3d11.h" />
+    <ClInclude Include="..\SDL\src\render\direct3d12\SDL_render_d3d12_xbox.h" />
     <ClInclude Include="..\SDL\src\render\direct3d12\SDL_shaders_d3d12.h" />
     <ClInclude Include="..\SDL\src\render\opengl\SDL_glfuncs.h" />
     <ClInclude Include="..\SDL\src\render\opengl\SDL_shaders_gl.h" />
@@ -337,7 +344,6 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vk_platform.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vk_sdk_platform.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan.h" />
-    <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan.hpp" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_android.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_beta.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_core.h" />
@@ -347,6 +353,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_ios.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_macos.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_metal.h" />
+    <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_screen.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_vi.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_wayland.h" />
     <ClInclude Include="..\SDL\src\video\khronos\vulkan\vulkan_win32.h" />
@@ -365,14 +372,18 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowsopengl.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowsopengles.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowsshape.h" />
-    <ClInclude Include="..\SDL\src\video\windows\SDL_windowstaskdialog.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowsvideo.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowsvulkan.h" />
     <ClInclude Include="..\SDL\src\video\windows\SDL_windowswindow.h" />
     <ClInclude Include="..\SDL\src\video\windows\wmmsg.h" />
     <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb.h" />
+    <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_common.h" />
+    <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_internal.h" />
+    <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_lsx.h" />
     <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_lsx_func.h" />
+    <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_sse.h" />
     <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_sse_func.h" />
+    <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_std.h" />
     <ClInclude Include="..\SDL\src\video\yuv2rgb\yuv_rgb_std_func.h" />
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +395,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClCompile Include="..\SDL\src\SDL_hints.c" />
     <ClCompile Include="..\SDL\src\SDL_list.c" />
     <ClCompile Include="..\SDL\src\SDL_log.c" />
+    <ClCompile Include="..\SDL\src\SDL_utils.c" />
     <ClCompile Include="..\SDL\src\atomic\SDL_atomic.c" />
     <ClCompile Include="..\SDL\src\atomic\SDL_spinlock.c" />
     <ClCompile Include="..\SDL\src\audio\SDL_audio.c" />
@@ -399,6 +411,7 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClCompile Include="..\SDL\src\audio\wasapi\SDL_wasapi_win32.c" />
     <ClCompile Include="..\SDL\src\audio\winmm\SDL_winmm.c" />
     <ClCompile Include="..\SDL\src\core\windows\SDL_hid.c" />
+    <ClCompile Include="..\SDL\src\core\windows\SDL_immdevice.c" />
     <ClCompile Include="..\SDL\src\core\windows\SDL_windows.c" />
     <ClCompile Include="..\SDL\src\core\windows\SDL_xinput.c" />
     <ClCompile Include="..\SDL\src\cpuinfo\SDL_cpuinfo.c" />
@@ -409,8 +422,10 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClCompile Include="..\SDL\src\events\SDL_events.c" />
     <ClCompile Include="..\SDL\src\events\SDL_gesture.c" />
     <ClCompile Include="..\SDL\src\events\SDL_keyboard.c" />
+    <ClCompile Include="..\SDL\src\events\SDL_keysym_to_scancode.c" />
     <ClCompile Include="..\SDL\src\events\SDL_mouse.c" />
     <ClCompile Include="..\SDL\src\events\SDL_quit.c" />
+    <ClCompile Include="..\SDL\src\events\SDL_scancode_tables.c" />
     <ClCompile Include="..\SDL\src\events\SDL_touch.c" />
     <ClCompile Include="..\SDL\src\events\SDL_windowevents.c" />
     <ClCompile Include="..\SDL\src\file\SDL_rwops.c" />
@@ -423,15 +438,21 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClCompile Include="..\SDL\src\hidapi\SDL_hidapi.c" />
     <ClCompile Include="..\SDL\src\joystick\SDL_gamecontroller.c" />
     <ClCompile Include="..\SDL\src\joystick\SDL_joystick.c" />
+    <ClCompile Include="..\SDL\src\joystick\SDL_steam_virtual_gamepad.c" />
     <ClCompile Include="..\SDL\src\joystick\controller_type.c" />
+    <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_combined.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_gamecube.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_luna.c" />
+    <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_ps3.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_ps4.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_ps5.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_rumble.c" />
+    <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_shield.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_stadia.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_steam.c" />
+    <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_steamdeck.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_switch.c" />
+    <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_wii.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_xbox360.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_xbox360w.c" />
     <ClCompile Include="..\SDL\src\joystick\hidapi\SDL_hidapi_xboxone.c" />
@@ -477,7 +498,10 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClCompile Include="..\SDL\src\render\direct3d11\SDL_render_d3d11.c" />
     <ClCompile Include="..\SDL\src\render\direct3d11\SDL_shaders_d3d11.c" />
     <ClCompile Include="..\SDL\src\render\direct3d12\SDL_render_d3d12.c" />
+    <ClCompile Include="..\SDL\src\render\direct3d12\SDL_render_d3d12_xbox.cpp" />
     <ClCompile Include="..\SDL\src\render\direct3d12\SDL_shaders_d3d12.c" />
+    <ClCompile Include="..\SDL\src\render\direct3d12\SDL_shaders_d3d12_xboxone.cpp" />
+    <ClCompile Include="..\SDL\src\render\direct3d12\SDL_shaders_d3d12_xboxseries.cpp" />
     <ClCompile Include="..\SDL\src\render\opengl\SDL_render_gl.c" />
     <ClCompile Include="..\SDL\src\render\opengl\SDL_shaders_gl.c" />
     <ClCompile Include="..\SDL\src\render\opengles2\SDL_render_gles2.c" />
@@ -492,12 +516,12 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClCompile Include="..\SDL\src\render\software\SDL_triangle.c" />
     <ClCompile Include="..\SDL\src\sensor\SDL_sensor.c" />
     <ClCompile Include="..\SDL\src\sensor\windows\SDL_windowssensor.c" />
+    <ClCompile Include="..\SDL\src\stdlib\SDL_crc16.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_crc32.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_getenv.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_iconv.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_malloc.c" />
-    <ClCompile Include="..\SDL\src\stdlib\SDL_memcpy.c" />
-    <ClCompile Include="..\SDL\src\stdlib\SDL_memset.c" />
+    <ClCompile Include="..\SDL\src\stdlib\SDL_mslibc.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_qsort.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_stdlib.c" />
     <ClCompile Include="..\SDL\src\stdlib\SDL_string.c" />
@@ -548,7 +572,9 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowsvideo.c" />
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowsvulkan.c" />
     <ClCompile Include="..\SDL\src\video\windows\SDL_windowswindow.c" />
-    <ClCompile Include="..\SDL\src\video\yuv2rgb\yuv_rgb.c" />
+    <ClCompile Include="..\SDL\src\video\yuv2rgb\yuv_rgb_lsx.c" />
+    <ClCompile Include="..\SDL\src\video\yuv2rgb\yuv_rgb_sse.c" />
+    <ClCompile Include="..\SDL\src\video\yuv2rgb\yuv_rgb_std.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
