@@ -27,7 +27,7 @@ namespace Gadget{
 			constexpr inline const V& operator*() const{ return currentNode->value.value; }
 			constexpr inline V& operator*(){ return currentNode->value.value; }
 
-			constexpr inline void operator++(){
+			inline Iterator& operator++(){
 				if(currentNode != nullptr){
 					currentNode = currentNode->next;
 				}
@@ -35,16 +35,21 @@ namespace Gadget{
 				while(currentNode == nullptr){
 					currentIndex++;
 					if(currentIndex >= data.Size()){
+						currentIndex = data.Size();
 						break;
 					}
 
 					currentNode = data[currentIndex].Front();
 				}
+
+				return *this;
 			}
 
 			constexpr inline bool operator!=(const Iterator& it_) const{
-				return currentNode != it_.currentNode;
+				return currentNode != it_.currentNode || currentIndex != it_.currentIndex;
 			}
+
+			constexpr bool IsValid() const{ return currentNode != nullptr && currentIndex < data.Size(); }
 
 		private:
 			const Array<List<KeyValuePair>>& data;
@@ -158,7 +163,12 @@ namespace Gadget{
 				return Iterator(data, 0, nullptr);
 			}
 
-			return Iterator(data, 0, data[0].Front());
+			auto it = Iterator(data, 0, data[0].Front());
+			if(!it.IsValid()){
+				++it;
+			}
+
+			return it;
 		}
 
 		constexpr inline const Iterator begin() const{
@@ -166,7 +176,12 @@ namespace Gadget{
 				return Iterator(data, 0, nullptr);
 			}
 
-			return Iterator(data, 0, data[0].Front());
+			auto it = Iterator(data, 0, data[0].Front());
+			if(!it.IsValid()){
+				++it;
+			}
+
+			return it;
 		}
 
 		constexpr inline Iterator end(){ return Iterator(data, data.Size(), nullptr); }

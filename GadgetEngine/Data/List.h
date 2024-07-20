@@ -21,10 +21,12 @@ namespace Gadget{
 			constexpr inline const Node* operator*() const{ return currentNode; }
 			constexpr inline Node* operator*(){ return currentNode; }
 
-			constexpr inline void operator++(){
+			constexpr inline Iterator& operator++(){
 				if(currentNode != nullptr){
 					currentNode = currentNode->next;
 				}
+
+				return *this;
 			}
 
 			constexpr inline bool operator!=(const Iterator& it_) const{
