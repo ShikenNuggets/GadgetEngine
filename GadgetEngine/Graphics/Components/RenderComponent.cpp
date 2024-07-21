@@ -46,7 +46,7 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, std::vec
 			indexToUse = 0;
 		}
 		
-		meshInfos[i].second = cachedMaterials_[0];
+		meshInfos[i].second = cachedMaterials_[indexToUse];
 	}
 
 	componentCollection.Add(this);
