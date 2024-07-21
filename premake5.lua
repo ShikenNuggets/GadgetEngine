@@ -81,7 +81,6 @@ function GadgetExternalIncludes()
 		"SDK/Assimp/include",
 		"SDK/Glad/include",
 		"SDK/SDL/include",
-		"SDK/SDL_image/include",
 		"SDK/freetype/include",
 		"SDK/bullet3/src",
 	}
@@ -92,10 +91,10 @@ function GadgetExternalLibDirs()
 		{
 			"Build/SDL2/%{cfg.buildcfg}/",
 			"Build/SDL2main/%{cfg.buildcfg}/",
-			"Build/SDL_image/%{cfg.buildcfg}/",
 			"Build/Glad/%{cfg.buildcfg}/",
 			"SDK/Assimp/lib/x64/",
 			"SDK/freetype/libs/%{cfg.buildcfg}/",
+			"SDK/lib/",
 			"Build/BulletCollision/%{cfg.buildcfg}/",
 			"Build/BulletDynamics/%{cfg.buildcfg}/",
 			"Build/BulletLinearMath/%{cfg.buildcfg}/",
@@ -108,7 +107,6 @@ function GadgetExternalLibs(options)
 		"Glad",
 		"SDL2",
 		"SDL2main",
-		"SDL_image",
 		"BulletCollision",
 		"BulletDynamics",
 		"BulletLinearMath",
@@ -122,7 +120,7 @@ function GadgetExternalLibs(options)
 			"Glad.lib",
 			"SDL2.lib",
 			"SDL2main.lib",
-			"SDL_image.lib",
+			"SDL2_image.lib",
 			"freetype.lib",
 			"BulletCollision.lib",
 			"BulletDynamics.lib",
@@ -207,12 +205,6 @@ externalproject "SDL2main"
 	{
 		"SDL2",
 	}
-
-externalproject "SDL_image"
-	location "SDK/_prj"
-	filename "SDL_image"
-	kind "StaticLib"
-	language "C++"
 	
 externalproject "BulletCollision"
 	location "SDK/_prj"
@@ -255,7 +247,8 @@ project "GadgetEngine"
 			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
 			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\bin\\x64\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
 			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\lib\\x64\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d"
+			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 		}
 		
 	filter "configurations:Release"

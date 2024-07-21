@@ -4,6 +4,3 @@
 [submodule "SDK/bullet3"]
 	path = SDK/bullet3
 	url = https://github.com/bulletphysics/bullet3.git
-[submodule "SDK/SDL_image"]
-	path = SDK/SDL_image
-	url = https://github.com/libsdl-org/SDL_image
