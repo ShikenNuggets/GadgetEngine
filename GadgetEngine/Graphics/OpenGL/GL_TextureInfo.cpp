@@ -17,14 +17,14 @@ GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), texture
 	glTextureParameteri(textureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	GLenum internalFormat = GL_RGBA8;
-	GLenum dataFormat = GL_BGRA;
+	GLenum dataFormat = GL_RGBA;
 	if(texture_.GetBitDepth() == 32){
 		internalFormat = GL_RGBA8;
-		dataFormat = GL_BGRA;
+		dataFormat = GL_RGBA;
 	}else if(texture_.GetBitDepth() == 24){
 		Debug::Log(SID("RENDER"), "Using RGB image format, RGBA is preferred for optimal performance", Debug::Warning, __FILE__, __LINE__);
 		internalFormat = GL_RGB8;
-		dataFormat = GL_BGR;
+		dataFormat = GL_RGB;
 	}else{
 		Debug::Log("Invalid bit depth!", Debug::Error, __FILE__, __LINE__);
 	}
