@@ -42,10 +42,6 @@ namespace Gadget{
 		std::string GetPath() const{ return path; }
 
 		virtual Resource* LoadResource() override{
-			if(Utils::Contains(path, ".bmp")){
-				return BmpLoader::LoadImage(path);
-			}
-
 			return ImageLoader::LoadImage(path);
 		}
 

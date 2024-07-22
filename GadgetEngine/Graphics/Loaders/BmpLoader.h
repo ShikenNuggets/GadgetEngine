@@ -52,7 +52,7 @@ namespace Gadget{
 
 	class BmpLoader{
 	public:
-		static Texture* LoadImage(const std::string& filePath_);
+		[[deprecated]] static Texture* LoadImage(const std::string& filePath_);
 
 	private:
 		static BmpFileHeader CreateFileHeader(const std::vector<uint8_t>& data_, ByteSequencer& byteSequencer_);
