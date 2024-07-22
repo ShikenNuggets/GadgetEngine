@@ -41,7 +41,7 @@ Windows is the only officially supported platforms at this time. Windows 10 (May
        * Games and Graphics - Graphics debugger and GPU profiler for DirectX
        * SDKs, libraries, and frameworks - Windows Universal C Runtime
 
-3. Run _premake.bat_. This isn't strictly necessary since the Visual Studio solution and project files are included in the repository, but it's good practice to ensure that everything is working and up to date.
+3. Run _premake.bat_. There is a Visual Studio solution and project files included in the repository, but due to the way premake works they rely on a lot of absolute paths.
 4. Open _GadgetEngine.sln_ in Visual Studio 2022. Set your startup project (Game for testing the runtime, Workbench for the editor), and build the solution, but **do not run the Game project yet**. Performing a batch build of all projects and configurations is recommended at this point. At minimum, ensure that DataBuilder is built in the Release configuration, as this is required for the next step.
 5. Run _build-resources.bat_. This will build shaders and copy them and other game assets to all the relevant directories.
 6. You should now be able to run game.
