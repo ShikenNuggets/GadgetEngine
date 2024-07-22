@@ -189,15 +189,17 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(IsSorted());
 		}
 
-		constexpr bool Contains(const T& value_) const{
-			for(int i = 0; i < size; i++){
+		constexpr int64_t Find(const T& value_) const{
+			for(size_t i = 0; i < size; i++){
 				if(data[i] == value_){
-					return true;
+					return i;
 				}
 			}
 
-			return false;
+			return -1;
 		}
+
+		constexpr bool Contains(const T& value_) const{ return Find(value_) != -1; }
 
 		Array SubRange(size_t startIndex_, size_t endIndex_) const{
 			if(startIndex_ >= size){

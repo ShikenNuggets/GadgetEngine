@@ -188,9 +188,9 @@ namespace Gadget{
 			}
 		}
 
-		constexpr inline bool Contains(char c) const{
-			return data.Contains(c);
-		}
+		constexpr inline int64_t Find(char c_) const{ return data.Find(c_); }
+
+		constexpr inline bool Contains(char c) const{ return data.Contains(c); }
 
 		//TODO - Naive brute force implementation. Consider other options: https://en.wikipedia.org/wiki/String-searching_algorithm#Single-pattern_algorithms
 		bool Contains(const String& str_) const{
