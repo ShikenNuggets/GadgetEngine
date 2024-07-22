@@ -320,3 +320,37 @@ TEST_CASE("String::Append", "[string_append]"){
 	REQUIRE(CompressString("aabbccddee") == "aabbccddee");
 	REQUIRE(CompressString("abcde") == "abcde");
 }
+
+//------------------------------------------------------------//
+//-------------- String Rotation (CTCI 1.9) ------------------//
+//------------------------------------------------------------//
+//O(n)
+static inline bool IsRotation(const String& s1, const String& s2){
+	if(s1.Length() != s2.Length()){
+		return false;
+	}
+
+	const int64_t start = s2.Find(s1[0]);
+	if(start < 0){
+		return false;
+	}
+
+	String unrotated;
+	for(size_t i = start; i < s2.Length(); i++){
+		unrotated.Append(s2[i]);
+	}
+
+	for(size_t i = 0; i < start; i++){
+		unrotated.Append(s2[i]);
+	}
+
+	return unrotated == s1;
+}
+
+TEST_CASE("String Rotation", "[string_rotation]"){
+	String s1 = "waterbottle";
+	String s2 = "erbottlewat";
+
+	REQUIRE(s1.Length() == s2.Length());
+	REQUIRE(IsRotation(s1, s2));
+}
