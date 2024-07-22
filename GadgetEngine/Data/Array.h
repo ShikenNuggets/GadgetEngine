@@ -7,6 +7,21 @@ namespace Gadget{
 	template <class T>
 	class Array{
 	public:
+		class Iterator{
+		public:
+			constexpr Iterator(Array<T>& data_, int64_t index_) : data(data_), index(index_){}
+
+			constexpr inline const T& operator*() const{ return data[index]; }
+			constexpr inline T& operator*(){ return data[index]; }
+
+			constexpr inline Iterator& operator++(){ index++; return *this; }
+			constexpr inline bool operator!=(const Iterator& it_) const{ return index != it_.index; }
+
+		private:
+			Array<T>& data;
+			int64_t index;
+		};
+
 		Array() : data(nullptr), size(0), capacity(16){
 			GADGET_BASIC_ASSERT(capacity > 0);
 			data = new T[capacity];
@@ -274,6 +289,11 @@ namespace Gadget{
 		constexpr size_t Size() const{ return size; }
 		constexpr size_t IsEmpty() const{ return size == 0; }
 		constexpr size_t Capacity() const{ return capacity; }
+
+		constexpr Iterator begin(){ return Iterator(*this, 0); }
+		constexpr const Iterator begin() const{ return Iterator(*this, 0); }
+		constexpr Iterator end(){ return Iterator(*this, size); }
+		constexpr const Iterator end() const{ return Iterator(*this, size); }
 
 	private:
 		T* data;
