@@ -340,7 +340,7 @@ static inline bool IsRotation(const String& s1, const String& s2){
 		unrotated.Append(s2[i]);
 	}
 
-	for(size_t i = 0; i < start; i++){
+	for(int64_t i = 0; i < start; i++){
 		unrotated.Append(s2[i]);
 	}
 

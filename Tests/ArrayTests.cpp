@@ -1,5 +1,6 @@
 #include <Gadget.h>
 #include <Data/Array.h>
+#include <Data/String.h>
 
 #include "Catch2/catch_amalgamated.hpp"
 
@@ -212,4 +213,74 @@ TEST_CASE("Array Zero Matrix", "[array_zero_matrix]"){
 	REQUIRE(matrix[2][1] == 1);
 	REQUIRE(matrix[2][2] == 0);
 	REQUIRE(matrix[2][3] == 1);
+}
+
+//------------------------------------------------------------//
+//----------- Sort the People (Leetcode 2418) ----------------//
+//------------------------------------------------------------//
+struct Person{
+	Person(){}
+	Person(const String& name_, int height_) : name(name_), height(height_){}
+
+	String name;
+	int height;
+
+	constexpr bool operator<(const Person& other_){ return height < other_.height; }
+	constexpr bool operator>(const Person& other_){ return height > other_.height; }
+};
+
+//O(n log n)
+static inline Array<String> SortPeopleByHeight(const Array<String>& names_, const Array<int> heights_){
+	GADGET_BASIC_ASSERT(names_.Size() == heights_.Size());
+	Array<Person> people = Array<Person>(names_.Size());
+	for(size_t i = 0; i < names_.Size(); i++){
+		people.Add(Person(names_[i], heights_[i]));
+	}
+
+	people.QuickSort();
+
+	Array<String> finalNames;
+	for(const Person& p : people){
+		finalNames.Add(p.name);
+	}
+
+	return finalNames;
+}
+
+TEST_CASE("Array Sort the People", "[array_sort_the_people]"){
+	Array<String> names1 = Array<String>(3);
+	names1.Add("Mary");
+	names1.Add("John");
+	names1.Add("Emma");
+
+	Array<int> heights1 = Array<int>(3);
+	heights1.Add(180);
+	heights1.Add(165);
+	heights1.Add(170);
+
+	REQUIRE(names1.Size() == heights1.Size());
+	Array<String> sorted1 = SortPeopleByHeight(names1, heights1);
+	REQUIRE(sorted1.Size() == names1.Size());
+	REQUIRE(sorted1[0] == "John");
+	REQUIRE(sorted1[1] == "Emma");
+	REQUIRE(sorted1[2] == "Mary");
+
+	//-----------------------------------------//
+
+	Array<String> names2 = Array<String>(3);
+	names2.Add("Alice");
+	names2.Add("Bob");
+	names2.Add("Bob");
+
+	Array<int> heights2 = Array<int>(3);
+	heights2.Add(155);
+	heights2.Add(185);
+	heights2.Add(150);
+
+	REQUIRE(names2.Size() == heights2.Size());
+	Array<String> sorted2 = SortPeopleByHeight(names2, heights2);
+	REQUIRE(sorted2.Size() == names2.Size());
+	REQUIRE(sorted2[0] == "Bob");
+	REQUIRE(sorted2[1] == "Alice");
+	REQUIRE(sorted2[2] == "Bob");
 }
