@@ -162,6 +162,7 @@ namespace Gadget{
 					GADGET_BASIC_ASSERT(prev->next == cur);
 					prev->next = cur->next;
 					delete cur;
+					size--;
 					return;
 				}
 
