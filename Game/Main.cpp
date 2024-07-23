@@ -11,6 +11,7 @@
 #endif //GADGET_DEBUG
 
 #include <Gadget.h>
+#include <Memory/GlobalAllocator.h>
 
 #include "ExampleGame.h"
 #include "Demos/01-Pong/PongGame.h"
@@ -42,6 +43,10 @@ int main(int argc, char* argv[]){
 	Gadget::App::DeleteInstance();
 
 #ifdef GADGET_DEBUG
+	std::cout << Gadget::GlobalAllocator::GetNumAllocs() << " - " << Gadget::GlobalAllocator::GetNumFrees() << std::endl;
+	std::cout << "Total time spent allocating memory: " << Gadget::GlobalAllocator::GetAllocTime() << " seconds" << std::endl;
+	std::cout << "Total time spent freeing memory: " << Gadget::GlobalAllocator::GetFreeTime() << " seconds" << std::endl;
+
 	std::cout << "The program is now complete." << std::endl;
 #endif //_DEBUG
 
