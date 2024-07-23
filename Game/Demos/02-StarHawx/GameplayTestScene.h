@@ -83,15 +83,16 @@ namespace StarHawx{
 			materialNames.push_back(SID("ArwingMaterial8"));
 
 			Gadget::GameObject* player = new Gadget::GameObject();
-			player->SetPosition(0.0f, 0.0f, 0.0f);
+			player->SetPosition(0.0f, 0.0f, -7.5f);
+			player->SetRotation(0.0f, 180.0f, 0.0f);
 			player->AddComponent(new Gadget::RenderComponent(player->GetGUID(), SID("ArwingModel"), materialNames));
-			player->AddComponent(new Gadget::Rigidbody(player, 100.0f, false));
+			player->AddComponent(new Gadget::Rigidbody(player, 100.0f, false, Gadget::FreezeRotationType::FreezeAll));
 			player->AddComponent(new Gadget::CubeCollider(player));
 			player->AddComponent(new PlayerController(player));
 			CreateObject(player);
 
 			Gadget::GameObject* floor = new Gadget::GameObject();
-			floor->SetPosition(Gadget::Vector3(0.0f, -2.5f, 0.0f));
+			floor->SetPosition(Gadget::Vector3(0.0f, -10.0f, 0.0f));
 			floor->SetScale(Gadget::Vector3(25.0f, 0.01f, 25.0f));
 			floor->AddComponent(new Gadget::RenderComponent(floor->GetGUID(), SID("CubeModel"), SID("BrickMaterial")));
 			floor->AddComponent(new Gadget::CubeCollider(floor));
