@@ -33,6 +33,10 @@ namespace Gadget{
 		inline constexpr void operator *=(float f_){ *this = *this * f_; }
 		inline constexpr void operator /=(float f_){ *this = *this / f_; }
 
+		inline friend constexpr Euler operator *(float s_, const Euler& e_){ return e_ * s_; }
+
+		static inline constexpr Euler Lerp(const Euler& a_, const Euler& b_, float t_){ return a_ + t_ * (b_ - a_); }
+
 		Matrix3 ToMatrix3() const;
 		Matrix4 ToMatrix4() const;
 		Quaternion ToQuaternion() const;
