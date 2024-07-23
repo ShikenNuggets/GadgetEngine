@@ -27,12 +27,21 @@
             "resource_type": "Mesh"
         }
     ],
+	[
+        {
+            "string": "ArwingModel"
+        },
+        {
+            "path": "Resources/Arwing/Arwing.obj",
+            "resource_type": "Mesh"
+        }
+    ],
     [
         {
             "string": "SkyboxBackTexture"
         },
         {
-            "path": "Resources/skybox/back.bmp",
+            "path": "Resources/skybox/back.png",
             "resource_type": "Texture"
         }
     ],
@@ -41,7 +50,7 @@
             "string": "SkyboxRightTexture"
         },
         {
-            "path": "Resources/skybox/right.bmp",
+            "path": "Resources/skybox/right.png",
             "resource_type": "Texture"
         }
     ],
@@ -90,7 +99,7 @@
             "string": "SkyboxTopTexture"
         },
         {
-            "path": "Resources/skybox/top.bmp",
+            "path": "Resources/skybox/top.png",
             "resource_type": "Texture"
         }
     ],
@@ -108,7 +117,7 @@
             "string": "CubeTexture"
         },
         {
-            "path": "Resources/wall.bmp",
+            "path": "Resources/wall.png",
             "resource_type": "Texture"
         }
     ],
@@ -126,7 +135,7 @@
             "string": "SkyboxLeftTexture"
         },
         {
-            "path": "Resources/skybox/left.bmp",
+            "path": "Resources/skybox/left.png",
             "resource_type": "Texture"
         }
     ],
@@ -155,7 +164,7 @@
             "string": "SkyboxBottomTexture"
         },
         {
-            "path": "Resources/skybox/bottom.bmp",
+            "path": "Resources/skybox/bottom.png",
             "resource_type": "Texture"
         }
     ],
@@ -164,8 +173,143 @@
             "string": "SkyboxFrontTexture"
         },
         {
-            "path": "Resources/skybox/front.bmp",
+            "path": "Resources/skybox/front.png",
             "resource_type": "Texture"
         }
-    ]
+    ],
+	[
+		{
+			"string": "ArwingTexture1"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material1.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture2"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material2.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture3"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material3.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture4"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material4.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture5"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material5.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture6"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material6.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture7"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material7.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture8"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material8.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture9"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material9.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture10"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material10.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture11"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material11.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture12"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material12.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture13"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/M_7CF8406C_c.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture14"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material14.png",
+			"resource_type": "Texture"
+		}
+	],
+	[
+		{
+			"string": "ArwingTexture15"
+		},
+		{
+			"path": "Resources/Arwing/Arwing/Material15.png",
+			"resource_type": "Texture"
+		}
+	]
 ]

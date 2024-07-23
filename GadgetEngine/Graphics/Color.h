@@ -20,6 +20,7 @@ namespace Gadget{
 		static inline constexpr Color Yellow ()	{ return Color(1.0f, 1.0f, 0.0f, 1.0f); }
 		static inline constexpr Color Orange()	{ return Color(1.0f, 0.5f, 0.0f, 1.0f); }
 		static inline constexpr Color Purple()	{ return Color(0.4f, 0.0f, 0.8f, 1.0f); }
+		static inline constexpr Color Pink()	{ return Color(1.0f, 0.0f, 1.0f, 1.0f); }
 		static inline constexpr Color Black()	{ return Color(0.0f, 0.0f, 0.0f, 1.0f); }
 		static inline constexpr Color White()	{ return Color(1.0f, 1.0f, 1.0f, 1.0f); }
 		static inline constexpr Color Brown()	{ return Color(0.4f, 0.2f, 0.0f, 1.0f); }

@@ -1,0 +1,94 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Material15
+Ka 0.000000 0.000000 0.000000
+Kd 0.125490 0.125490 0.125490
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material15.png
+
+newmtl Material9
+Ka 0.000000 0.000000 0.000000
+Kd 0.894118 0.870588 0.752941
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material9.png
+
+newmtl Material8
+Ka 0.000000 0.000000 0.000000
+Kd 0.843137 0.839216 0.709804
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material8.png
+
+newmtl Material3
+Ka 0.000000 0.000000 0.000000
+Kd 0.847059 0.827451 0.698039
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material3.png
+
+newmtl Material12
+Ka 0.000000 0.000000 0.000000
+Kd 0.294118 0.368627 0.568627
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material12.png
+
+newmtl Material6
+Ka 0.000000 0.000000 0.000000
+Kd 0.270588 0.274510 0.231373
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material6.png
+
+newmtl M_7CF8406C_c
+Ka 0.000000 0.000000 0.000000
+Kd 0.345098 0.384314 0.345098
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/M_7CF8406C_c.png
+
+newmtl Material2
+Ka 0.000000 0.000000 0.000000
+Kd 0.894118 0.890196 0.741176
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material2.png
+
+newmtl Material7
+Ka 0.000000 0.000000 0.000000
+Kd 0.117647 0.113725 0.058824
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material7.png
+
+newmtl Material4
+Ka 0.000000 0.000000 0.000000
+Kd 0.282353 0.282353 0.278431
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material4.png
+
+newmtl Material1
+Ka 0.000000 0.000000 0.000000
+Kd 0.917647 0.886275 0.807843
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material1.png
+
+newmtl Material5
+Ka 0.000000 0.000000 0.000000
+Kd 0.909804 0.827451 0.772549
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material5.png
+
+newmtl Material10
+Ka 0.000000 0.000000 0.000000
+Kd 0.070588 0.066667 0.050980
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material10.png
+
+newmtl Material11
+Ka 0.000000 0.000000 0.000000
+Kd 0.141176 0.239216 0.486275
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material11.png
+
+newmtl Material14
+Ka 0.000000 0.000000 0.000000
+Kd 0.352941 0.345098 0.352941
+Ks 0.330000 0.330000 0.330000
+map_Kd Arwing/Material14.png
+
