@@ -354,3 +354,61 @@ TEST_CASE("String Rotation", "[string_rotation]"){
 	REQUIRE(s1.Length() == s2.Length());
 	REQUIRE(IsRotation(s1, s2));
 }
+
+//------------------------------------------------------------//
+//Longest Substring Without Repeating Characters (Leetcode 3) //
+//------------------------------------------------------------//
+
+static inline int LengthOfLongestSubstring(const String& s){
+	if(s.Length() <= 1){
+		return s.Length();
+	}
+
+	String initialString = s;
+
+	size_t longestSubStr = 0;
+	int64_t firstRepeatIndex = -1;
+
+	for(size_t i = 0; i < initialString.Length(); i++){
+		bool endOfString = true;
+
+		String substr = initialString.SubString(i, i + 1);
+
+		for(size_t j = i + 1; j < initialString.Length(); j++){
+			if(substr.Find(initialString[j]) < 0){
+				substr += initialString[j];
+			}else{
+				if(substr.Length() > longestSubStr){
+					longestSubStr = substr.Length();
+				}
+
+				auto nextIndex = initialString.Find(initialString[j], i);
+				if(nextIndex >= 0){
+					i = nextIndex;
+					endOfString = false;
+					break;
+				}
+			}
+		}
+
+		if(endOfString){
+			auto remainingSubStr = initialString.SubString(i, initialString.Length()).Length();
+			if(remainingSubStr > longestSubStr){
+				longestSubStr = remainingSubStr;
+				break;
+			}
+		}
+	}
+
+	return longestSubStr;
+}
+
+TEST_CASE("String Longest Substring", "[string_longest_substring]"){
+	String s1 = "abcabcbb";
+	String s2 = "bbbbb";
+	String s3 = "pwwkew";
+
+	REQUIRE(LengthOfLongestSubstring(s1) == 3);
+	REQUIRE(LengthOfLongestSubstring(s2) == 1);
+	REQUIRE(LengthOfLongestSubstring(s3) == 3);
+}
