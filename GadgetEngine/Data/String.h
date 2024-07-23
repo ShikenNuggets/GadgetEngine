@@ -220,6 +220,7 @@ namespace Gadget{
 		}
 
 		String SubString(size_t startIndex_, size_t endIndex_) const{
+			GADGET_BASIC_ASSERT(startIndex_ != endIndex_);
 			return String(data.SubRange(startIndex_, endIndex_));
 		}
 

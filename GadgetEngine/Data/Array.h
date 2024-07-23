@@ -217,6 +217,7 @@ namespace Gadget{
 		constexpr bool Contains(const T& value_) const{ return Find(value_) != -1; }
 
 		Array SubRange(size_t startIndex_, size_t endIndex_) const{
+			GADGET_BASIC_ASSERT(startIndex_ != endIndex_);
 			if(startIndex_ >= size){
 				return Array();
 			}
