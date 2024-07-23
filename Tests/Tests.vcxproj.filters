@@ -9,7 +9,6 @@
     <ClInclude Include="Catch2\catch_amalgamated.hpp">
       <Filter>Catch2</Filter>
     </ClInclude>
-    <ClInclude Include="ListTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayTests.cpp" />
@@ -17,6 +16,7 @@
       <Filter>Catch2</Filter>
     </ClCompile>
     <ClCompile Include="HashTableTests.cpp" />
+    <ClCompile Include="ListTests.cpp" />
     <ClCompile Include="StringTests.cpp" />
   </ItemGroup>
 </Project>
