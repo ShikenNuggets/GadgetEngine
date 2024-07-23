@@ -141,10 +141,14 @@ namespace Gadget{
 			Node* cur = head->next;
 			while(cur != nullptr){
 				if(cur == node_){
+					GADGET_BASIC_ASSERT(prev->next == cur);
 					prev->next = cur->next;
 					delete cur;
 					return;
 				}
+
+				prev = cur;
+				cur = cur->next;
 			}
 
 			GADGET_LOG_WARNING(SID("DataStructures"), "Tried to remove a node from a list, but could not find the node - There's either a bug in your code, a bug in the List code, or List nodes were manually altered by other code (do not do that)");
