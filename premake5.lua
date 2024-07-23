@@ -363,23 +363,35 @@ project "DataBuilder"
 			"dxcompiler.lib"
 		}
 
+	filter "configurations:Debug or Develop"
+		IgnoreDefaultLibrariesForDebug()
+		
+	filter "configurations:Release"
+		IgnoreDefaultLibrariesForRelease()
+
 -- //-----------------------------------------------------------//
 -- //---------------------- Tests ------------------------------//
 -- //-----------------------------------------------------------//
 
 project "Tests"
-		CppProjectDefaults()
-		GadgetExternalIncludes()
-		GadgetExternalLibDirs()
-		GadgetExternalLibs{ linkLibs="true" }
-		DependsOnGadgetEngine()
+	CppProjectDefaults()
+	GadgetExternalIncludes()
+	GadgetExternalLibDirs()
+	GadgetExternalLibs{ linkLibs="true" }
+	DependsOnGadgetEngine()
 
-		kind "ConsoleApp"
-		debugdir ("%{cfg.targetdir}")
+	kind "ConsoleApp"
+	debugdir ("%{cfg.targetdir}")
 
-		filter "system:windows"
+	filter "system:windows"
 		postbuildcommands
 		{
 			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
 			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
 		}
+
+	filter "configurations:Debug or Develop"
+		IgnoreDefaultLibrariesForDebug()
+		
+	filter "configurations:Release"
+		IgnoreDefaultLibrariesForRelease()

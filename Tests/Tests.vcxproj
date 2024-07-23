@@ -97,6 +97,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\SDK\lib;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\Build\GadgetEngine\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
@@ -130,6 +131,7 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\SDK\lib;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\Build\GadgetEngine\Develop;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
@@ -160,6 +162,7 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\SDK\lib;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\Build\GadgetEngine\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
