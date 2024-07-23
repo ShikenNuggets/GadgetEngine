@@ -4,6 +4,8 @@
 
 #include "Catch2/catch_amalgamated.hpp"
 
+#include "ListTests.h"
+
 using namespace Gadget;
 
 //------------------------------------------------------------//
