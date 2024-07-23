@@ -215,6 +215,42 @@ namespace Gadget{
 			return prev;
 		}
 
+		constexpr bool IsValid() const{
+			if(Size() == 0 || head == nullptr || tail == nullptr){
+				return Size() == 0 && head == nullptr && tail == nullptr; //If any of these are true, they must all be true
+			}
+
+			if(Size() == 1 || head == tail){
+				return Size() == 1 && head == tail; //If either of these is true, they must both be true
+			}
+
+			if(Size() > 1 && head->next == nullptr){
+				return false; //head->next must have a value if the list has more than one node
+			}
+
+			if(tail->next != nullptr){
+				return false; //tail->next must always be null
+			}
+
+			Node* current = head;
+			size_t count = 0;
+			while(current != nullptr){
+				count++;
+				if(count > Size()){
+					return false; //Count got too big, there's either invalid nodes or the list became circular
+				}
+
+				if(current->next == nullptr){
+					return current == tail && count == Size();
+				}
+
+				current = current->next;
+			}
+
+			GADGET_ASSERT_UNREACHABLE;
+			return false;
+		}
+
 		constexpr Iterator begin(){ return Iterator(head); }
 		constexpr const Iterator begin() const{ return Iterator(head); }
 		constexpr Iterator end(){ return Iterator(nullptr); }
