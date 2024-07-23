@@ -33,6 +33,7 @@
 
 #define GADGET_BASIC_ASSERT(expr) GADGET_ASSERT(expr, "Condition Failed: " #expr)
 #define GADGET_ASSERT_NOT_IMPLEMENTED GADGET_ASSERT(false, "Case not implemented - Ask a dev!")
+#define GADGET_ASSERT_UNREACHABLE GADGET_ASSERT(false, "Executing code that was expected to be unreachable-  Ask a dev!");
 
 #if defined GADGET_DEBUG
 	#define GADGET_DEBUG_INT(var) int var
