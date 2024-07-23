@@ -39,6 +39,24 @@ namespace Gadget{
 
 		constexpr List() : size(0), head(nullptr), tail(nullptr){}
 
+		constexpr List(const List<T>& other_) : size(0), head(nullptr), tail(nullptr){
+			for(const auto& n : other_){
+				Add(n->value);
+			}
+		}
+
+		constexpr List<T>& operator=(const List<T>& other_){
+			while(!IsEmpty()){
+				Pop();
+			}
+
+			for(const auto& n : other_){
+				Add(n->value);
+			}
+
+			return *this;
+		}
+
 		constexpr ~List(){
 			while(!IsEmpty()){
 				Pop();
