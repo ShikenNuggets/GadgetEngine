@@ -204,8 +204,8 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(IsSorted());
 		}
 
-		constexpr int64_t Find(const T& value_) const{
-			for(size_t i = 0; i < size; i++){
+		constexpr int64_t Find(const T& value_, size_t startPos_ = 0) const{
+			for(size_t i = startPos_; i < size; i++){
 				if(data[i] == value_){
 					return i;
 				}

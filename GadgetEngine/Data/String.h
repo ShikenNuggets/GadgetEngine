@@ -188,7 +188,7 @@ namespace Gadget{
 			}
 		}
 
-		constexpr inline int64_t Find(char c_) const{ return data.Find(c_); }
+		constexpr inline int64_t Find(char c_, size_t startPos_ = 0) const{ return data.Find(c_, startPos_); }
 
 		constexpr inline bool Contains(char c) const{ return data.Contains(c); }
 
