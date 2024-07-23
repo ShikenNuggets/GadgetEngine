@@ -19,14 +19,14 @@ GL_CubemapInfo::GL_CubemapInfo(const Cubemap& cubemap_) : textureID(0), vao(0), 
 	GADGET_BASIC_ASSERT(cubemap_.IsValid());
 
 	GLenum internalFormat = GL_RGBA8;
-	GLenum dataFormat = GL_BGRA;
+	GLenum dataFormat = GL_RGBA;
 	if(cubemap_.GetBitDepth() == 32){
 		internalFormat = GL_RGBA8;
-		dataFormat = GL_BGRA;
+		dataFormat = GL_RGBA;
 	}else if(cubemap_.GetBitDepth() == 24){
 		Debug::Log(SID("RENDER"), "Using RGB image format, RGBA is preferred for optimal performance", Debug::Warning, __FILE__, __LINE__);
 		internalFormat = GL_RGB8;
-		dataFormat = GL_BGR;
+		dataFormat = GL_RGB;
 	}else{
 		Debug::Log("Invalid bit depth!", Debug::Error, __FILE__, __LINE__);
 	}

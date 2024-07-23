@@ -8,6 +8,6 @@ uniform mat4 viewMatrix;
 out vec3 outTexCoord;
 
 void main(){
-	outTexCoord = normalize(vec3(vertPos.x, -vertPos.y, -vertPos.z));
+	outTexCoord = normalize(vertPos);
 	gl_Position = ((projectionMatrix * viewMatrix) * vec4(vertPos, 1.0f)).xyww;
 }
