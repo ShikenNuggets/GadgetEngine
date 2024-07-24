@@ -146,6 +146,8 @@ namespace Gadget{
 
 				return guidMap.at(objectGuid_);
 			}
+
+			size_t Count() const{ return guidMap.size(); }
 	};
 }
 
