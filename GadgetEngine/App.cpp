@@ -83,6 +83,7 @@ void App::Initialize(const std::string& name_){
 	materialCache = std::make_unique<MaterialCache>(); //Init before the renderer in case the renderer would like to cache some materials
 	InitRenderer();
 
+	audio = std::make_unique<Audio>();
 	physics = std::make_unique<PhysManager>();
 	sceneManager = std::make_unique<BasicSceneManager>();
 	gameLogicManager = std::make_unique<GameLogicManager>();
@@ -96,6 +97,7 @@ void App::Destroy(){
 	gameLogicManager.reset();
 	sceneManager.reset();
 	physics.reset();
+	audio.reset();
 	renderer.reset();
 	materialCache.reset();
 	input.reset();
@@ -186,6 +188,10 @@ void App::Run(GameInterface& gameInterface_){
 		Profiler::Start(SID("Render"));
 		renderer->Render(sceneManager->CurrentScene());
 		Profiler::End(SID("Render"));
+
+		Profiler::Start(SID("Audio"));
+		audio->Update();
+		Profiler::End(SID("Audio"));
 
 		Profiler::End(SID("Main Loop"));
 

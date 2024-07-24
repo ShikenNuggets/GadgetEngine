@@ -13,7 +13,7 @@ namespace Gadget{
 
 	private:
 		FMOD::Studio::System* studioSystem;
-		FMOD::System* lowLevelSystem;
+		FMOD::System* coreSystem;
 	};
 }
 

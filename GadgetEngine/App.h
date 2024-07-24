@@ -5,6 +5,7 @@
 
 #include "Config.h"
 #include "GameInterface.h"
+#include "Audio/Audio.h"
 #include "Core/Time.h"
 #include "Game/BasicSceneManager.h"
 #include "Game/GameLogicManager.h"
@@ -55,6 +56,7 @@ namespace Gadget{
 		static Input& GetInput(){ return *GetInstance().input; }
 		static MaterialCache& GetMaterialCache(){ return *GetInstance().materialCache; }
 		static Renderer& GetRenderer(){ return *GetInstance().renderer; }
+		static Audio& GetAudio(){ return *GetInstance().audio; }
 		static PhysManager& GetPhysics(){ return *GetInstance().physics; }
 		static BasicSceneManager& GetSceneManager(){ return *GetInstance().sceneManager; }
 		static GameLogicManager& GetGameLogicManager(){ return *GetInstance().gameLogicManager; }
@@ -73,6 +75,7 @@ namespace Gadget{
 		std::unique_ptr<Input> input;
 		std::unique_ptr<MaterialCache> materialCache;
 		std::unique_ptr<Renderer> renderer;
+		std::unique_ptr<Audio> audio;
 		std::unique_ptr<PhysManager> physics;
 		std::unique_ptr<BasicSceneManager> sceneManager;
 		std::unique_ptr<GameLogicManager> gameLogicManager;
