@@ -197,6 +197,7 @@ echo D|xcopy "$(SolutionDir)SDK\FMOD\studio\lib\$(Configuration)\*.dll" "$(Solut
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Concurrency\SpinLock.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigParser.h" />
@@ -361,6 +362,7 @@ echo D|xcopy "$(SolutionDir)SDK\FMOD\studio\lib\$(Configuration)\*.dll" "$(Solut
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Concurrency\SpinLock.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigParser.cpp" />
