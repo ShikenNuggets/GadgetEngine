@@ -101,9 +101,9 @@ function GadgetExternalLibDirs()
 		"Build/BulletCollision/%{cfg.buildcfg}/",
 		"Build/BulletDynamics/%{cfg.buildcfg}/",
 		"Build/BulletLinearMath/%{cfg.buildcfg}/",
-		"SDK/FMOD/core/lib/%{cfg.buildcfg}/",
+		"SDK/FMOD/core/lib/",
 		"SDK/FMOD/fsbank/lib/",
-		"SDK/FMOD/studio/lib/%{cfg.buildcfg}/",
+		"SDK/FMOD/studio/lib/",
 	}
 end
 
@@ -131,6 +131,7 @@ function GadgetExternalLibs(options)
 			"BulletCollision.lib",
 			"BulletDynamics.lib",
 			"BulletLinearMath.lib",
+			"fsbank_vc.lib",
 		}
 
 		filter "system:windows"
@@ -138,8 +139,19 @@ function GadgetExternalLibs(options)
 			{
 				"dxgi.lib",
 				"d3d12.lib",
+			}
+
+		filter "configurations:Debug or Develop"
+			links
+			{
+				"fmodL_vc.lib",
+				"fmodstudioL_vc.lib",
+			}
+
+		filter "configurations:Release"
+			links
+			{
 				"fmod_vc.lib",
-				"fsbank_vc.lib",
 				"fmodstudio_vc.lib",
 			}
 	end
@@ -258,9 +270,9 @@ project "GadgetEngine"
 			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\lib\\x64\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
 			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 			"echo D|xcopy \"$(SolutionDir)SDK\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\core\\lib\\$(Configuration)\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\core\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\fsbank\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\studio\\lib\\$(Configuration)\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\studio\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 		}
 		
 	filter "configurations:Release"
