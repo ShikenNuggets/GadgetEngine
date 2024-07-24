@@ -29,6 +29,12 @@ namespace Gadget{
 		OpenGL_Error,
 		OpenGL_ShaderCompileFailed,
 
+		//FMOD Errors
+		FMOD_Error,
+		FMOD_Init_Error,
+		FMOD_Version_Error,
+		FMOD_Shutdown_Error,
+
 		ErrorCode_MAX
 	};
 
@@ -55,6 +61,11 @@ namespace Gadget{
 
 		"OpenGL_Error",
 		"OpenGL_ShaderCompileFailed",
+
+		"FMOD_Error",
+		"FMOD_Init_Error",
+		"FMOD_Version_Error",
+		"FMOD_Shutdown_Error",
 
 		//ErrorCode_MAX
 	};
