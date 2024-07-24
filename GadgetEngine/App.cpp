@@ -190,7 +190,7 @@ void App::Run(GameInterface& gameInterface_){
 		Profiler::End(SID("Render"));
 
 		Profiler::Start(SID("Audio"));
-		audio->Update();
+		audio->Update(sceneManager->CurrentScene());
 		Profiler::End(SID("Audio"));
 
 		Profiler::End(SID("Main Loop"));

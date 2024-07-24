@@ -106,6 +106,7 @@ namespace StarHawx{
 			Gadget::GameObject* camera = new Gadget::GameObject();
 			camera->SetPosition(0.0f, 0.0f, 8.0f);
 			camera->AddComponent(new Gadget::CameraComponent(camera));
+			camera->AddComponent(new Gadget::AudioListener(camera));
 			CreateObject(camera);
 		}
 	};

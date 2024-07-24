@@ -3,13 +3,15 @@
 
 #include <fmod_studio.hpp>
 
+#include "Game/Scene.h"
+
 namespace Gadget{
 	class Audio{
 	public:
 		Audio();
 		~Audio();
 
-		void Update();
+		void Update(Scene* scene_);
 
 		FMOD::Studio::System* GetStudioSystem(){ return studioSystem; }
 		FMOD::System* GetCoreSystem(){ return coreSystem; }

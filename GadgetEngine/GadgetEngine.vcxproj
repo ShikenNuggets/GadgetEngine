@@ -199,7 +199,9 @@ echo D|xcopy "$(SolutionDir)SDK\FMOD\studio\lib\*.dll" "$(SolutionDir)SDK\_Gadge
     <ClInclude Include="App.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Audio\AudioClip.h" />
+    <ClInclude Include="Audio\AudioListener.h" />
     <ClInclude Include="Audio\FMODAudioClipLoader.h" />
+    <ClInclude Include="Audio\FMODHelper.h" />
     <ClInclude Include="Concurrency\SpinLock.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigParser.h" />
@@ -365,6 +367,7 @@ echo D|xcopy "$(SolutionDir)SDK\FMOD\studio\lib\*.dll" "$(SolutionDir)SDK\_Gadge
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Audio\AudioListener.cpp" />
     <ClCompile Include="Audio\FMODAudioClipLoader.cpp" />
     <ClCompile Include="Concurrency\SpinLock.cpp" />
     <ClCompile Include="Config.cpp" />

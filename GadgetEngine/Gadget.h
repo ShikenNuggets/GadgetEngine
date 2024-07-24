@@ -9,6 +9,8 @@
 #include "GadgetEnums.h"
 #include "Random.h"
 
+#include "Audio/AudioListener.h"
+
 #include "Core/Time.h"
 
 #include "Game/Component.h"
