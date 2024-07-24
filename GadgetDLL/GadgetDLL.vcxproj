@@ -82,7 +82,7 @@
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;GADGETDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\SDK\FMOD\core\inc;..\SDK\FMOD\fsbank\inc;..\SDK\FMOD\studio\inc;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -96,8 +96,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\SDK\lib;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\Build\GadgetEngine\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;fmod_vc.lib;fsbank_vc.lib;fmodstudio_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\SDK\lib;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\SDK\FMOD\core\lib\Debug;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib\Debug;..\Build\GadgetEngine\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\Build\GadgetDLL\Debug\Gadget.lib</ImportLibrary>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -112,7 +112,7 @@
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;GADGET_DEVELOP;GADGETDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\SDK\FMOD\core\inc;..\SDK\FMOD\fsbank\inc;..\SDK\FMOD\studio\inc;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
@@ -131,8 +131,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\SDK\lib;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\Build\GadgetEngine\Develop;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;fmod_vc.lib;fsbank_vc.lib;fmodstudio_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\SDK\lib;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\SDK\FMOD\core\lib\Develop;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib\Develop;..\Build\GadgetEngine\Develop;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\Build\GadgetDLL\Develop\Gadget.lib</ImportLibrary>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -146,7 +146,7 @@
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_RELEASE;GADGETDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\SDK\FMOD\core\inc;..\SDK\FMOD\fsbank\inc;..\SDK\FMOD\studio\inc;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -163,8 +163,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\SDK\lib;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\Build\GadgetEngine\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;dxgi.lib;d3d12.lib;fmod_vc.lib;fsbank_vc.lib;fmodstudio_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\SDK\lib;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\SDK\FMOD\core\lib\Release;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib\Release;..\Build\GadgetEngine\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\Build\GadgetDLL\Release\Gadget.lib</ImportLibrary>
       <IgnoreSpecificDefaultLibraries>libcmtd.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>

@@ -83,22 +83,28 @@ function GadgetExternalIncludes()
 		"SDK/SDL/include",
 		"SDK/freetype/include",
 		"SDK/bullet3/src",
+		"SDK/FMOD/core/inc",
+		"SDK/FMOD/fsbank/inc",
+		"SDK/FMOD/studio/inc",
 	}
 end
 
 function GadgetExternalLibDirs()
 	libdirs
-		{
-			"Build/SDL2/%{cfg.buildcfg}/",
-			"Build/SDL2main/%{cfg.buildcfg}/",
-			"Build/Glad/%{cfg.buildcfg}/",
-			"SDK/Assimp/lib/x64/",
-			"SDK/freetype/libs/%{cfg.buildcfg}/",
-			"SDK/lib/",
-			"Build/BulletCollision/%{cfg.buildcfg}/",
-			"Build/BulletDynamics/%{cfg.buildcfg}/",
-			"Build/BulletLinearMath/%{cfg.buildcfg}/",
-		}
+	{
+		"Build/SDL2/%{cfg.buildcfg}/",
+		"Build/SDL2main/%{cfg.buildcfg}/",
+		"Build/Glad/%{cfg.buildcfg}/",
+		"SDK/Assimp/lib/x64/",
+		"SDK/freetype/libs/%{cfg.buildcfg}/",
+		"SDK/lib/",
+		"Build/BulletCollision/%{cfg.buildcfg}/",
+		"Build/BulletDynamics/%{cfg.buildcfg}/",
+		"Build/BulletLinearMath/%{cfg.buildcfg}/",
+		"SDK/FMOD/core/lib/%{cfg.buildcfg}/",
+		"SDK/FMOD/fsbank/lib/",
+		"SDK/FMOD/studio/lib/%{cfg.buildcfg}/",
+	}
 end
 
 function GadgetExternalLibs(options)
@@ -132,6 +138,9 @@ function GadgetExternalLibs(options)
 			{
 				"dxgi.lib",
 				"d3d12.lib",
+				"fmod_vc.lib",
+				"fsbank_vc.lib",
+				"fmodstudio_vc.lib",
 			}
 	end
 
@@ -249,6 +258,9 @@ project "GadgetEngine"
 			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\lib\\x64\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
 			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 			"echo D|xcopy \"$(SolutionDir)SDK\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\core\\lib\\$(Configuration)\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\fsbank\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\studio\\lib\\$(Configuration)\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 		}
 		
 	filter "configurations:Release"
