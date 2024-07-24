@@ -11,6 +11,9 @@ namespace Gadget{
 
 		void Update();
 
+		FMOD::Studio::System* GetStudioSystem(){ return studioSystem; }
+		FMOD::System* GetCoreSystem(){ return coreSystem; }
+
 	private:
 		FMOD::Studio::System* studioSystem;
 		FMOD::System* coreSystem;

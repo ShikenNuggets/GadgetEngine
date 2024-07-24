@@ -88,6 +88,12 @@
     <ClInclude Include="Audio\Audio.h">
       <Filter>Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Audio\AudioClip.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\FMODAudioClipLoader.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
     <ClInclude Include="Concurrency\SpinLock.h">
       <Filter>Concurrency</Filter>
     </ClInclude>
@@ -551,6 +557,9 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Audio\Audio.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\FMODAudioClipLoader.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
     <ClCompile Include="Concurrency\SpinLock.cpp">
