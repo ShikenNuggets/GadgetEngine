@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "GadgetEnums.h"
 #include "Audio/AudioListener.h"
+#include "Audio/AudioSource.h"
 
 using namespace Gadget;
 
@@ -52,6 +53,11 @@ void Audio::Update(Scene* scene_){
 	const auto als = scene_->GetAllComponentsInScene<AudioListener>(); //TODO - This is slow
 	for(const auto& al : als){
 		al->Update();
+	}
+
+	const auto asList = scene_->GetAllComponentsInScene<AudioSource>();
+	for(const auto& as : asList){
+		as->Update();
 	}
 
 	studioSystem->update();
