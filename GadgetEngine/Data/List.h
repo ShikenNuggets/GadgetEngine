@@ -200,6 +200,50 @@ namespace Gadget{
 		constexpr inline Node* Front() const{ return head; }
 		constexpr inline Node* Back() const{ return tail; }
 
+		constexpr inline Node* GetNode(size_t index_) const{
+			GADGET_BASIC_ASSERT(index_ < size);
+			if(index_ >= size){
+				return nullptr;
+			}
+
+			Node* current = nullptr;
+			for(size_t i = 0; i < index_; i++){
+				if(current == nullptr){
+					current = head;
+				}else{
+					current = current->next;
+				}
+			}
+
+			GADGET_BASIC_ASSERT(current != nullptr);
+			return current;
+		}
+
+		constexpr inline Node* GetNthLastNode(size_t index_) const{
+			GADGET_BASIC_ASSERT(index_ <= size);
+			GADGET_BASIC_ASSERT(index_ > 0);
+			if(index_ > size || index_ == 0){
+				return nullptr;
+			}
+
+			if(index_ == 1){
+				GADGET_BASIC_ASSERT(tail != nullptr);
+				return tail;
+			}
+
+			Node* current = nullptr;
+			for(size_t i = 0; i < size + 1 - index_; i++){
+				if(current == nullptr){
+					current = head;
+				}else{
+					current = current->next;
+				}
+			}
+
+			GADGET_BASIC_ASSERT(current != nullptr);
+			return current;
+		}
+
 		constexpr inline Node* SecondLast() const{
 			if(IsEmpty()){
 				return nullptr;
@@ -212,6 +256,8 @@ namespace Gadget{
 				cur = cur->next;
 			}
 
+			GADGET_BASIC_ASSERT(prev != nullptr);
+			GADGET_BASIC_ASSERT(GetNthLastNode(2) == prev);
 			return prev;
 		}
 

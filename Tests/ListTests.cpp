@@ -268,3 +268,88 @@ TEST_CASE("List Remove Dupes", "[list_remove_dupes]"){
 
 	REQUIRE(count == 2);
 }
+
+//------------------------------------------------------------//
+//-------------- Kth to Last Node (CTCI 2.2) -----------------//
+//------------------------------------------------------------//
+
+static inline List<int>::Node* GetNthLastNode_UnknownSize(List<int>::Node* const head, size_t nthLast){
+	GADGET_BASIC_ASSERT(head != nullptr);
+
+	List<int>::Node* current = head;
+	List<int>::Node* skipNode = head;
+
+	size_t currentIndex = 0;
+	size_t size = 0;
+	while(skipNode != nullptr){
+		GADGET_BASIC_ASSERT(current != nullptr);
+		current = current->next;
+		currentIndex++;
+
+		if(skipNode->next == nullptr){
+			size++;
+			break;
+		}
+
+		skipNode = skipNode->next->next;
+		size += 2;
+	}
+
+	GADGET_BASIC_ASSERT(nthLast <= size);
+	size_t targetIndex = size - nthLast;
+	if(currentIndex > targetIndex){
+		//We went too far. Start over
+		current = head;
+		currentIndex = 0;
+	}
+
+	for(size_t i = currentIndex; i < targetIndex; i++){
+		GADGET_BASIC_ASSERT(current != nullptr);
+		if(current == nullptr){
+			break;
+		}
+		
+		current = current->next;
+	}
+
+	return current;
+}
+
+TEST_CASE("List Kth to Last Node", "[list_k_to_last]"){
+	List<int> list;
+	list.Add(4);
+	list.Add(5);
+	list.Add(6);
+	list.Add(7);
+	list.Add(8);
+
+	REQUIRE(list.GetNthLastNode(1) != nullptr);
+	REQUIRE(list.GetNthLastNode(1)->value == 8);
+	REQUIRE(list.GetNthLastNode(1) == list.Back());
+	REQUIRE(list.GetNthLastNode(1)->next == nullptr);
+	REQUIRE(list.GetNthLastNode(1) == GetNthLastNode_UnknownSize(list.Front(), 1));
+
+	REQUIRE(list.GetNthLastNode(2) != nullptr);
+	REQUIRE(list.GetNthLastNode(2)->value == 7);
+	REQUIRE(list.GetNthLastNode(2)->next == list.Back());
+	REQUIRE(list.GetNthLastNode(2)->next->next == nullptr);
+	REQUIRE(list.GetNthLastNode(2) == GetNthLastNode_UnknownSize(list.Front(), 2));
+
+	REQUIRE(list.GetNthLastNode(3) != nullptr);
+	REQUIRE(list.GetNthLastNode(3)->value == 6);
+	REQUIRE(list.GetNthLastNode(3)->next->next == list.Back());
+	REQUIRE(list.GetNthLastNode(3)->next->next->next == nullptr);
+	REQUIRE(list.GetNthLastNode(3) == GetNthLastNode_UnknownSize(list.Front(), 3));
+
+	REQUIRE(list.GetNthLastNode(4) != nullptr);
+	REQUIRE(list.GetNthLastNode(4)->value == 5);
+	REQUIRE(list.GetNthLastNode(4)->next->next->next == list.Back());
+	REQUIRE(list.GetNthLastNode(4)->next->next->next->next == nullptr);
+	REQUIRE(list.GetNthLastNode(4) == GetNthLastNode_UnknownSize(list.Front(), 4));
+
+	REQUIRE(list.GetNthLastNode(5) != nullptr);
+	REQUIRE(list.GetNthLastNode(5)->value == 4);
+	REQUIRE(list.GetNthLastNode(5)->next->next->next->next == list.Back());
+	REQUIRE(list.GetNthLastNode(5)->next->next->next->next->next == nullptr);
+	REQUIRE(list.GetNthLastNode(5) == GetNthLastNode_UnknownSize(list.Front(), 5));
+}
