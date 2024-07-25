@@ -359,15 +359,13 @@ TEST_CASE("String Rotation", "[string_rotation]"){
 //Longest Substring Without Repeating Characters (Leetcode 3) //
 //------------------------------------------------------------//
 
-static inline int LengthOfLongestSubstring(const String& s){
+static inline size_t LengthOfLongestSubstring(const String& s){
 	if(s.Length() <= 1){
 		return s.Length();
 	}
 
 	String initialString = s;
-
 	size_t longestSubStr = 0;
-	int64_t firstRepeatIndex = -1;
 
 	for(size_t i = 0; i < initialString.Length(); i++){
 		bool endOfString = true;
