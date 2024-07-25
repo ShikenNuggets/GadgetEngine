@@ -69,11 +69,32 @@ namespace Gadget{
 			}
 		};
 
+		struct Audio : ConfigSection{
+			static const StringID sectionName;
+
+			static const StringID masterVolumeKey;
+			static const StringID musicVolumeKey;
+			static const StringID dialogueVolumeKey;
+			static const StringID sfxVolumeKey;
+			static const StringID ambientVolumeKey;
+
+			Audio() : ConfigSection(sectionName){
+				vars.emplace(masterVolumeKey, 1.0);
+				vars.emplace(musicVolumeKey, 1.0);
+				vars.emplace(dialogueVolumeKey, 1.0);
+				vars.emplace(sfxVolumeKey, 1.0);
+				vars.emplace(ambientVolumeKey, 1.0);
+
+				GADGET_BASIC_ASSERT(vars.size() == static_cast<size_t>(VolumeChannel::VolumeChannel_MAX));
+			}
+		};
+
 		std::vector<ConfigSection*> sections{
 			new Core(),
 			new Display(),
 			new Physics(),
-			new Render()
+			new Render(),
+			new Audio(),
 		};
 
 		constexpr Var GetValue(StringID key_) const{

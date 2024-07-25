@@ -42,6 +42,11 @@ AudioSource::~AudioSource(){
 
 void AudioSource::Update(){
 	Set3DAttributes();
+
+	FMOD_RESULT result = channel->setVolume(App::GetAudio().GetVolume(volumeChannel));
+	if(result != FMOD_OK){
+		GADGET_LOG_ERROR(SID("AUDIO"), "Could not set channel audio! FMOD Error: " + std::string(FMOD_ErrorString(result)));
+	}
 }
 
 ErrorCode AudioSource::Play(bool loop_){
@@ -61,6 +66,12 @@ ErrorCode AudioSource::Play(bool loop_){
 	ErrorCode err = Set3DAttributes();
 	if(err != ErrorCode::OK){
 		return err;
+	}
+
+	result = channel->setVolume(App::GetAudio().GetVolume(volumeChannel));
+	if(result != FMOD_OK){
+		GADGET_LOG_ERROR(SID("AUDIO"), "Could not set channel audio! FMOD Error: " + std::string(FMOD_ErrorString(result)));
+		return ErrorCode::FMOD_Error;
 	}
 
 	FMOD_MODE mode = loop_ ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF;

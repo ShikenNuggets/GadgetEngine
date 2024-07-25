@@ -20,3 +20,10 @@ const StringID EngineVars::Physics::physicsUpdatesKey = SID("PhysicsUpdatesPerSe
 
 const StringID EngineVars::Render::sectionName = SID("Engine.Render");
 const StringID EngineVars::Render::gpuValidationKey = SID("EnableGPUValidation");
+
+const StringID EngineVars::Audio::sectionName = SID("Engine.Audio");
+const StringID EngineVars::Audio::masterVolumeKey = SID("MasterVolume");
+const StringID EngineVars::Audio::musicVolumeKey = SID("MusicVolume");
+const StringID EngineVars::Audio::dialogueVolumeKey = SID("DialogueVolume");
+const StringID EngineVars::Audio::sfxVolumeKey = SID("SFXVolume");
+const StringID EngineVars::Audio::ambientVolumeKey = SID("AmbientVolume");

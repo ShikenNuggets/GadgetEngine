@@ -2,6 +2,7 @@
 
 #include <fmod_errors.h>
 
+#include "App.h"
 #include "Debug.h"
 #include "GadgetEnums.h"
 #include "Audio/AudioListener.h"
@@ -55,4 +56,54 @@ void Audio::Update(Scene* scene_){
 
 	studioSystem->update();
 	coreSystem->update();
+}
+
+float Audio::GetVolume(VolumeChannel channel_){
+	double masterVolume = App::GetConfig().GetOptionFloat(EngineVars::Audio::masterVolumeKey);
+	double channelVolume = 1.0;
+
+	switch(channel_){
+		case VolumeChannel::Master:
+			break;
+		case VolumeChannel::Music:
+			channelVolume = App::GetConfig().GetOptionFloat(EngineVars::Audio::musicVolumeKey);
+			break;
+		case VolumeChannel::Dialogue:
+			channelVolume = App::GetConfig().GetOptionFloat(EngineVars::Audio::dialogueVolumeKey);
+			break;
+		case VolumeChannel::SFX:
+			channelVolume = App::GetConfig().GetOptionFloat(EngineVars::Audio::sfxVolumeKey);
+			break;
+		case VolumeChannel::Ambience:
+			channelVolume = App::GetConfig().GetOptionFloat(EngineVars::Audio::ambientVolumeKey);
+			break;
+		default:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			break;
+	}
+
+	return static_cast<float>(masterVolume * channelVolume);
+}
+
+void Audio::SetVolume(float volume_, VolumeChannel channel_){
+	switch(channel_){
+		case VolumeChannel::Master:
+			App::GetConfig().SetOption(EngineVars::Audio::sectionName, EngineVars::Audio::masterVolumeKey, Math::Clamp(0.0f, 1.0f, volume_));
+			break;
+		case VolumeChannel::Music:
+			App::GetConfig().SetOption(EngineVars::Audio::sectionName, EngineVars::Audio::musicVolumeKey, Math::Clamp(0.0f, 1.0f, volume_));
+			break;
+		case VolumeChannel::Dialogue:
+			App::GetConfig().SetOption(EngineVars::Audio::sectionName, EngineVars::Audio::dialogueVolumeKey, Math::Clamp(0.0f, 1.0f, volume_));
+			break;
+		case VolumeChannel::SFX:
+			App::GetConfig().SetOption(EngineVars::Audio::sectionName, EngineVars::Audio::sfxVolumeKey, Math::Clamp(0.0f, 1.0f, volume_));
+			break;
+		case VolumeChannel::Ambience:
+			App::GetConfig().SetOption(EngineVars::Audio::sectionName, EngineVars::Audio::ambientVolumeKey, Math::Clamp(0.0f, 1.0f, volume_));
+			break;
+		default:
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			break;
+	}
 }
