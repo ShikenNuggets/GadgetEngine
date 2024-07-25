@@ -16,7 +16,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(sound3D != nullptr);
 		}
 
-		static constexpr const char* typeName = "Audio";
+		static constexpr const char* typeName = "AudioClip";
 
 		FMOD::Sound* GetSound2D(){ return sound2D; }
 		FMOD::Sound* GetSound3D(){ return sound3D; }
