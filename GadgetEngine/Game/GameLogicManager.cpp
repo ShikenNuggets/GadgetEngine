@@ -24,5 +24,7 @@ void GameLogicManager::Update(const Scene* scene_, float deltaTime_){
 		while(lc->HasCollisionsToHandle()){
 			lc->OnCollision(lc->PopCollisionToHandle());
 		}
+
+		GADGET_BASIC_ASSERT(lc->HasStarted());
 	}
 }
