@@ -94,6 +94,9 @@
     <ClInclude Include="Audio\AudioListener.h">
       <Filter>Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Audio\AudioSource.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
     <ClInclude Include="Audio\FMODAudioClipLoader.h">
       <Filter>Audio</Filter>
     </ClInclude>
@@ -566,6 +569,9 @@
       <Filter>Audio</Filter>
     </ClCompile>
     <ClCompile Include="Audio\AudioListener.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioSource.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
     <ClCompile Include="Audio\FMODAudioClipLoader.cpp">

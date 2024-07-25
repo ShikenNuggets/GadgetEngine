@@ -18,6 +18,9 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "Audio";
 
+		FMOD::Sound* GetSound2D(){ return sound2D; }
+		FMOD::Sound* GetSound3D(){ return sound3D; }
+
 	private:
 		FMOD::Sound* sound2D;
 		FMOD::Sound* sound3D;
