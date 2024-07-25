@@ -31,7 +31,7 @@ Audio::Audio() : studioSystem(nullptr), coreSystem(nullptr){
 		Debug::ThrowFatalError(SID("AUDIO"), "FMOD header version does not match FMOD lib version!", ErrorCode::FMOD_Version_Error, __FILE__, __LINE__);
 	}
 
-	result = studioSystem->initialize(4095, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0);
+	result = studioSystem->initialize(4095, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_3D_RIGHTHANDED, 0);
 	if(result != FMOD_OK){
 		Debug::ThrowFatalError(SID("AUDIO"), "FMOD Studio System could not be initialized! FMOD Error: " + std::string(FMOD_ErrorString(result)), ErrorCode::FMOD_Init_Error, __FILE__, __LINE__);
 	}
