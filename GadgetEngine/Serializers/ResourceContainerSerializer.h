@@ -10,6 +10,7 @@
 #pragma warning(default : 26800)
 #pragma warning(default : 26819)
 
+#include "Audio/AudioClip.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Text/Font.h"
@@ -47,6 +48,8 @@ namespace Gadget{
 			value_ = new TextureResourceContainer(j_.at("path"));
 		}else if(typeID == StringID::ProcessString(BinaryBlobResource::typeName)){
 			value_ = new BinaryBlobResourceContainer(j_.at("path"));
+		}else if(typeID == StringID::ProcessString(AudioClip::typeName)){
+			value_ = new AudioClipResourceContainer(j_.at("path"));
 		}else{
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 		}
