@@ -33,6 +33,11 @@ AudioSource::AudioSource(const ComponentProperties& props_) : Component(props_),
 
 AudioSource::~AudioSource(){
 	componentCollection.Remove(this);
+
+	if(audioClip != nullptr){
+		App::GetResourceManager().UnloadResource(clipName);
+		audioClip = nullptr;
+	}
 }
 
 void AudioSource::Update(){
