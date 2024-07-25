@@ -9,21 +9,21 @@ using namespace Gadget;
 
 ComponentCollection<AudioSource> AudioSource::componentCollection;
 
-AudioSource::AudioSource(GameObject* parent_, StringID clipName_, SoundType type_) : Component(SID("AudioSource"), parent_), soundType(type_), clipName(clipName_), audioClip(nullptr), channel(nullptr){
+AudioSource::AudioSource(GameObject* parent_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_) : Component(SID("AudioSource"), parent_), soundType(type_), volumeChannel(volumeChannel_), clipName(clipName_), audioClip(nullptr), channel(nullptr){
 	componentCollection.Add(this);
 
 	audioClip = App::GetResourceManager().LoadResource<AudioClip>(clipName);
 	GADGET_BASIC_ASSERT(audioClip != nullptr);
 }
 
-AudioSource::AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_) : Component(SID("AudioSource"), parentGUID_), soundType(type_), clipName(clipName_), audioClip(nullptr), channel(nullptr){
+AudioSource::AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_) : Component(SID("AudioSource"), parentGUID_), soundType(type_), volumeChannel(volumeChannel_), clipName(clipName_), audioClip(nullptr), channel(nullptr){
 	componentCollection.Add(this);
 
 	audioClip = App::GetResourceManager().LoadResource<AudioClip>(clipName);
 	GADGET_BASIC_ASSERT(audioClip != nullptr);
 }
 
-AudioSource::AudioSource(const ComponentProperties& props_) : Component(props_), soundType(SoundType::_2D), clipName(StringID::None), audioClip(nullptr), channel(nullptr){
+AudioSource::AudioSource(const ComponentProperties& props_) : Component(props_), soundType(SoundType::_2D), volumeChannel(VolumeChannel::Master), clipName(StringID::None), audioClip(nullptr), channel(nullptr){
 	componentCollection.Add(this);
 	Deserialize(props_);
 
@@ -97,6 +97,7 @@ ComponentProperties AudioSource::Serialize() const{
 	ComponentProperties props = Component::Serialize();
 
 	props.variables.Add(SID("SoundType"), static_cast<uint8_t>(soundType));
+	props.variables.Add(SID("VolumeChannel"), static_cast<uint8_t>(volumeChannel));
 	props.variables.Add(SID("ClipName"), clipName);
 
 	return props;
@@ -104,10 +105,14 @@ ComponentProperties AudioSource::Serialize() const{
 
 void AudioSource::Deserialize(const ComponentProperties& props_){
 	soundType = static_cast<SoundType>(props_.variables.GetValue(SID("SoundType"), 0).ToNumber<uint8_t>());
+	volumeChannel = static_cast<VolumeChannel>(props_.variables.GetValue(SID("VolumeChannel"), 0).ToNumber<uint8_t>());
 	clipName = props_.variables.GetValue(SID("ClipName"), SID("")).Name();
 
 	GADGET_BASIC_ASSERT(static_cast<int>(soundType) >= 0);
 	GADGET_BASIC_ASSERT(soundType < SoundType::SoundType_MAX);
+
+	GADGET_BASIC_ASSERT(static_cast<int>(volumeChannel) >= 0);
+	GADGET_BASIC_ASSERT(volumeChannel < VolumeChannel::VolumeChannel_MAX);
 }
 
 ErrorCode AudioSource::Set3DAttributes(){

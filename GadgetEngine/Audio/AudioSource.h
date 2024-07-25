@@ -3,21 +3,22 @@
 
 #include <fmod.hpp>
 
+#include "GadgetEnums.h"
 #include "Audio/AudioClip.h"
 #include "Game/Component.h"
 
 namespace Gadget{
+	enum class SoundType : uint8_t{
+		_2D,
+		_3D,
+
+		SoundType_MAX
+	};
+
 	class AudioSource : public Component{
 	public:
-		enum class SoundType : uint8_t{
-			_2D,
-			_3D,
-
-			SoundType_MAX
-		};
-
-		AudioSource(GameObject* parent_, StringID clipName_, SoundType type_);
-		AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_);
+		AudioSource(GameObject* parent_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_);
+		AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_);
 		AudioSource(const ComponentProperties& props_);
 
 		virtual ~AudioSource() override;
@@ -46,6 +47,7 @@ namespace Gadget{
 		static ComponentCollection<AudioSource> componentCollection;
 
 		SoundType soundType;
+		VolumeChannel volumeChannel;
 		StringID clipName;
 		AudioClip* audioClip;
 		FMOD::Channel* channel;

@@ -81,6 +81,16 @@ namespace Gadget{
 
 		return ErrorCodeStr[static_cast<size_t>(err_)];
 	}
+
+	enum class VolumeChannel : uint8_t{
+		Master = 0,
+		Music,
+		Dialogue,
+		SFX,
+		Ambience,
+
+		VolumeChannel_MAX
+	};
 }
 
 #endif //!GADGET_ENUMS_H
