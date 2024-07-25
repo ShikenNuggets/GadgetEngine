@@ -311,5 +311,14 @@
 			"path": "Resources/Arwing/Arwing/Material15.png",
 			"resource_type": "Texture"
 		}
+	],
+	[
+		{
+			"string": "CorneriaMusic"
+		},
+		{
+			"path": "Resources/Music/Corneria.mp3",
+			"resource_type": "AudioClip"
+		}
 	]
 ]

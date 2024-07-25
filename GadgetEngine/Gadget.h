@@ -10,6 +10,7 @@
 #include "Random.h"
 
 #include "Audio/AudioListener.h"
+#include "Audio/AudioSource.h"
 
 #include "Core/Time.h"
 

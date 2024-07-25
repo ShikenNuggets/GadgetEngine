@@ -28,6 +28,13 @@ namespace StarHawx{
 			GADGET_BASIC_ASSERT(parent != nullptr);
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();
 			GADGET_BASIC_ASSERT(rigidbody != nullptr);
+
+			Gadget::AudioSource* source = parent->GetComponent<Gadget::AudioSource>();
+			if(source != nullptr){
+				source->Play(true);
+			}
+
+			GameLogicComponent::OnStart();
 		}
 
 		virtual void OnUpdate(float deltaTime_) final override{
