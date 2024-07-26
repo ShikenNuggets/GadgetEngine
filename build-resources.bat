@@ -1,5 +1,5 @@
-xcopy /s "GadgetEngine\Graphics\OpenGL\Shaders" "Resources\" /Y
-xcopy /s "GadgetEngine\Graphics\DX12\Shaders" "Resources\" /Y
+xcopy /s "GadgetEngine\Graphics\OpenGL\Shaders" "Resources\Shaders\OpenGL\" /Y
+xcopy /s "GadgetEngine\Graphics\DX12\Shaders" "Resources\Shaders\DX12\" /Y
 
 START /WAIT /B %~dp0\Build\DataBuilder\Release\DataBuilder.exe -f
 

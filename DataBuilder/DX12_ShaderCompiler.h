@@ -26,7 +26,7 @@ namespace DB{
 		Gadget::ShaderType::Type type;
 	};
 
-	constexpr const char* shaderSourcePath = "Build/Resources/";
+	constexpr const char* shaderSourcePath = "Resources/Shaders/DX12/";
 
 	//This is just used for AreCompiledEngineShadersUpToDate check
 	//The include handler figures out the actual inclusion logic on its own

@@ -4,7 +4,7 @@
             "string": "EngineShaders_DX12"
         },
         {
-            "path": "Resources/EngineShaders.bin",
+            "path": "Resources/Shaders/DX12/EngineShaders.bin",
             "resource_type": "BinaryBlob"
         }
     ],
@@ -13,8 +13,8 @@
             "string": "ScreenGrayscaleShader"
         },
         {
-            "path1": "Resources/screenVert.glsl",
-            "path2": "Resources/screenGrayscaleFrag.glsl",
+            "path1": "Resources/Shaders/OpenGL/screenVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/screenGrayscaleFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
@@ -59,8 +59,8 @@
             "string": "DefaultShader"
         },
         {
-            "path1": "Resources/defaultVert.glsl",
-            "path2": "Resources/defaultFrag.glsl",
+            "path1": "Resources/Shaders/OpenGL/defaultVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/defaultFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
@@ -69,8 +69,8 @@
             "string": "UnlitShader"
         },
         {
-            "path1": "Resources/defaultVert.glsl",
-            "path2": "Resources/unlitTextureFrag.glsl",
+            "path1": "Resources/Shaders/OpenGL/defaultVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/unlitTextureFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
@@ -79,8 +79,8 @@
             "string": "Text2DShader"
         },
         {
-            "path1": "Resources/text2DVert.glsl",
-            "path2": "Resources/text2DFrag.glsl",
+            "path1": "Resources/Shaders/OpenGL/text2DVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/text2DFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
@@ -89,8 +89,8 @@
             "string": "ColorShader"
         },
         {
-            "path1": "Resources/defaultVert.glsl",
-            "path2": "Resources/colorFrag.glsl",
+            "path1": "Resources/Shaders/OpenGL/defaultVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/colorFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
@@ -99,8 +99,8 @@
             "string": "SkyboxShader"
         },
         {
-            "path1": "Resources/skyboxVert.glsl",
-            "path2": "Resources/skyboxFrag.glsl",
+            "path1": "Resources/Shaders/OpenGL/skyboxVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/skyboxFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
@@ -154,8 +154,8 @@
             "string": "ScreenInvertShader"
         },
         {
-            "path1": "Resources/screenVert.glsl",
-            "path2": "Resources/screenInversionEffectFrag.glsl",
+            "path1": "Resources/Shaders/OpenGL/screenVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/screenInversionEffectFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
@@ -164,8 +164,8 @@
             "string": "ScreenShader"
         },
         {
-            "path1": "Resources/screenVert.glsl",
-            "path2": "Resources/screenFrag.glsl",
+            "path1": "Resources/Shaders/OpenGL/screenVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/screenFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
