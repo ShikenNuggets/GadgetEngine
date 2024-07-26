@@ -55,7 +55,13 @@
     <ClInclude Include="Demos\02-StarHawx\GameplayTestScene.h">
       <Filter>Demos\02-StarHawx</Filter>
     </ClInclude>
+    <ClInclude Include="Demos\02-StarHawx\PlayerCamera.h">
+      <Filter>Demos\02-StarHawx</Filter>
+    </ClInclude>
     <ClInclude Include="Demos\02-StarHawx\PlayerController.h">
+      <Filter>Demos\02-StarHawx</Filter>
+    </ClInclude>
+    <ClInclude Include="Demos\02-StarHawx\PlayerObject.h">
       <Filter>Demos\02-StarHawx</Filter>
     </ClInclude>
     <ClInclude Include="Demos\02-StarHawx\StarHawxGame.h">
