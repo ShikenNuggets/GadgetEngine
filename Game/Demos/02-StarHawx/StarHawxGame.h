@@ -49,21 +49,21 @@ namespace StarHawx{
 
 			Gadget::App::GetMaterialCache().AddMaterial(SID("BrickMaterial"), new Gadget::DiffuseTextureMaterial(SID("CubeTexture"), SID("DefaultShader")));
 
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial1"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture1"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial2"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture2"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial3"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture3"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial4"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture4"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial5"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture5"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial6"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture6"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial7"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture7"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial8"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture8"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial9"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture9"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial10"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture10"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial11"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture11"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial12"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture12"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial13"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture13"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial14"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture14"), SID("DefaultShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial15"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture15"), SID("DefaultShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial1"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture1"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial2"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture2"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial3"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture3"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial4"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture4"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial5"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture5"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial6"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture6"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial7"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture7"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial8"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture8"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial9"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture9"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial10"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture10"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial11"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture11"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial12"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture12"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial13"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture13"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial14"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture14"), SID("UnlitShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial15"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture15"), SID("UnlitShader")));
 		}
 	};
 }

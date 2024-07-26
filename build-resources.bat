@@ -1,5 +1,5 @@
-xcopy /s "GadgetEngine\Graphics\OpenGL\Shaders" "Build\Resources\" /Y
-xcopy /s "GadgetEngine\Graphics\DX12\Shaders" "Build\Resources\" /Y
+xcopy /s "GadgetEngine\Graphics\OpenGL\Shaders" "Resources\" /Y
+xcopy /s "GadgetEngine\Graphics\DX12\Shaders" "Resources\" /Y
 
 START /WAIT /B %~dp0\Build\DataBuilder\Release\DataBuilder.exe -f
 
@@ -7,8 +7,8 @@ START /WAIT /B %~dp0\Build\DataBuilder\Release\DataBuilder.exe -f
 if %errorlevel%==-1 ( echo Data Build was not successful && PAUSE && EXIT /B 2)
 @echo on
 
-xcopy /s "Build\Resources\" "Build\Game\Debug\Resources" /Y /d
-xcopy /s "Build\Resources\" "Build\Game\Develop\Resources" /Y /d
-xcopy /s "Build\Resources\" "Build\Game\Release\Resources" /Y /d
+xcopy /s "Resources\" "Build\Game\Debug\Resources" /Y /d
+xcopy /s "Resources\" "Build\Game\Develop\Resources" /Y /d
+xcopy /s "Resources\" "Build\Game\Release\Resources" /Y /d
 
 PAUSE
