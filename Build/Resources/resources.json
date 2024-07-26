@@ -66,6 +66,16 @@
     ],
     [
         {
+            "string": "UnlitShader"
+        },
+        {
+            "path1": "Resources/defaultVert.glsl",
+            "path2": "Resources/unlitTextureFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
             "string": "Text2DShader"
         },
         {
