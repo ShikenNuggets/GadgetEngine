@@ -98,50 +98,74 @@ void GL_Shader::Unbind(){
 
 void GL_Shader::BindInt(StringID uniformName_, int value_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
-	AddUniform(uniformName_);
-	glUniform1iv(uniforms[uniformName_], 1, &value_);
+
+	if(HasUniform(uniformName_)){
+		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
+		glUniform1iv(uniforms[uniformName_], 1, &value_);
+	}
 }
 
 void GL_Shader::BindFloat(StringID uniformName_, float value_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
-	AddUniform(uniformName_);
-	glUniform1fv(uniforms[uniformName_], 1, &value_);
+
+	if(HasUniform(uniformName_)){
+		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
+		glUniform1fv(uniforms[uniformName_], 1, &value_);
+	}
 }
 
 void GL_Shader::BindVector2(StringID uniformName_, const Vector2& vec_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
-	AddUniform(uniformName_);
-	glUniform2fv(uniforms[uniformName_], 1, vec_);
+
+	if(HasUniform(uniformName_)){
+		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
+		glUniform2fv(uniforms[uniformName_], 1, vec_);
+	}
 }
 
 void GL_Shader::BindVector3(StringID uniformName_, const Vector3& vec_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
-	AddUniform(uniformName_);
-	glUniform3fv(uniforms[uniformName_], 1, vec_);
+
+	if(HasUniform(uniformName_)){
+		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
+		glUniform3fv(uniforms[uniformName_], 1, vec_);
+	}
 }
 
 void GL_Shader::BindVector4(StringID uniformName_, const Vector4& vec_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
-	AddUniform(uniformName_);
-	glUniform4fv(uniforms[uniformName_], 1, vec_);
+
+	if(HasUniform(uniformName_)){
+		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
+		glUniform4fv(uniforms[uniformName_], 1, vec_);
+	}
 }
 
 void GL_Shader::BindMatrix3(StringID uniformName_, const Matrix3& mat3_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
-	AddUniform(uniformName_);
-	glUniformMatrix3fv(uniforms[uniformName_], 1, GL_FALSE, mat3_);
+
+	if(HasUniform(uniformName_)){
+		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
+		glUniformMatrix3fv(uniforms[uniformName_], 1, GL_FALSE, mat3_);
+	}
 }
 
 void GL_Shader::BindMatrix4(StringID uniformName_, const Matrix4& mat4_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
-	AddUniform(uniformName_);
-	glUniformMatrix4fv(uniforms[uniformName_], 1, GL_FALSE, mat4_);
+
+	if(HasUniform(uniformName_)){
+		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
+		glUniformMatrix4fv(uniforms[uniformName_], 1, GL_FALSE, mat4_);
+	}
 }
 
 void GL_Shader::BindColor(StringID uniformName_, const Color& color_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
-	AddUniform(uniformName_);
-	glUniform4fv(uniforms[uniformName_], 1, color_);
+
+	if(HasUniform(uniformName_)){
+		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
+		glUniform4fv(uniforms[uniformName_], 1, color_);
+	}
 }
 
 std::string GL_Shader::GetShaderLog(GLuint shader_){

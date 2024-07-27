@@ -34,13 +34,14 @@ namespace Gadget{
 
 	private:
 		GLuint shader;
-		std::map<StringID, GLuint> uniforms;
+		std::map<StringID, GLint> uniforms;
 
-		inline void AddUniform(StringID uniformName_){
+		inline bool HasUniform(StringID uniformName_){
 			if(uniforms.find(uniformName_) == uniforms.end()){
-				GADGET_ASSERT(glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str()) != -1, "Tried to get invalid OpenGL uniform [" + uniformName_.GetString() + "]!");
 				uniforms.insert(std::make_pair(uniformName_, glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str())));
 			}
+
+			return uniforms[uniformName_] != -1;
 		}
 
 		std::string GetShaderLog(GLuint shader_);
