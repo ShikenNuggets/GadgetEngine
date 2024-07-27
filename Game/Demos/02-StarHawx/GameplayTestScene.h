@@ -5,6 +5,7 @@
 #include <Graphics/Components/CameraComponent.h>
 #include <Graphics/Components/SkyboxComponent.h>
 
+#include "PlayerCamera.h"
 #include "PlayerController.h"
 
 namespace StarHawx{
@@ -93,7 +94,7 @@ namespace StarHawx{
 			CreateObject(player);
 
 			Gadget::GameObject* floor = new Gadget::GameObject();
-			floor->SetPosition(Gadget::Vector3(0.0f, -10.0f, 0.0f));
+			floor->SetPosition(Gadget::Vector3(0.0f, -5.0f, 0.0f));
 			floor->SetScale(Gadget::Vector3(25.0f, 0.01f, 25.0f));
 			floor->AddComponent(new Gadget::RenderComponent(floor->GetGUID(), SID("CubeModel"), SID("BrickMaterial")));
 			floor->AddComponent(new Gadget::CubeCollider(floor));
@@ -108,6 +109,7 @@ namespace StarHawx{
 			camera->SetPosition(0.0f, 0.0f, 8.0f);
 			camera->AddComponent(new Gadget::CameraComponent(camera));
 			camera->AddComponent(new Gadget::AudioListener(camera));
+			camera->AddComponent(new PlayerCamera(camera));
 			CreateObject(camera);
 		}
 	};

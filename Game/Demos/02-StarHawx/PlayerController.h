@@ -8,21 +8,7 @@
 namespace StarHawx{
 	class PlayerController : public Gadget::GameLogicComponent{
 	public:
-		enum class TiltDir : uint8_t{
-			None,
-			Up,
-			UpRight,
-			Right,
-			DownRight,
-			Down,
-			DownLeft,
-			Left,
-			UpLeft,
-
-			TiltDir_MAX
-		};
-
-		PlayerController(Gadget::GameObject* parent_) : GameLogicComponent(SID("PlayerController"), parent_), rigidbody(nullptr), flightSpeed(10.0f), tiltDir(TiltDir::None), tiltAngle(30.0f), tiltLerpSpeed(0.5f), tiltLerpTimer(0.0f), isLerping(false){}
+		PlayerController(Gadget::GameObject* parent_) : GameLogicComponent(SID("PlayerController"), parent_), rigidbody(nullptr), flightSpeed(15.0f), tiltDir(TiltDir::None), tiltAngle(35.0f), tiltLerpSpeed(0.5f), tiltLerpTimer(0.0f), isLerping(false){}
 
 		virtual void OnStart() final override{
 			GADGET_BASIC_ASSERT(parent != nullptr);

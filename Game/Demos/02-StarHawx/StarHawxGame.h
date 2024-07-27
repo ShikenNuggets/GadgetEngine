@@ -47,7 +47,7 @@ namespace StarHawx{
 		void DefineMaterials(){
 			Gadget::App::GetMaterialCache().AddMaterial(SID("Invalid"), new Gadget::ColorMaterial(Gadget::Color::Pink(), SID("ColorShader")));
 
-			Gadget::App::GetMaterialCache().AddMaterial(SID("BrickMaterial"), new Gadget::DiffuseTextureMaterial(SID("CubeTexture"), SID("DefaultShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("BrickMaterial"), new Gadget::DiffuseTextureMaterial(SID("CubeTexture"), SID("UnlitShader")));
 
 			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial1"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture1"), SID("UnlitShader")));
 			Gadget::App::GetMaterialCache().AddMaterial(SID("ArwingMaterial2"), new Gadget::DiffuseTextureMaterial(SID("ArwingTexture2"), SID("UnlitShader")));

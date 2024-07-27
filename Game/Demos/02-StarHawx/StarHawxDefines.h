@@ -8,6 +8,20 @@ namespace StarHawx{
 	static const Gadget::StringID LeftRightMoveAxis = SID("LeftRightMove");
 	static const Gadget::StringID MenuButton = SID("Menu");
 	static const Gadget::StringID ShootButton = SID("Shoot");
+
+	enum class TiltDir : uint8_t{
+		None,
+		Up,
+		UpRight,
+		Right,
+		DownRight,
+		Down,
+		DownLeft,
+		Left,
+		UpLeft,
+
+		TiltDir_MAX
+	};
 }
 
 #endif //!STAR_HAWX_DEFINES_H
