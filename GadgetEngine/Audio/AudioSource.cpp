@@ -52,12 +52,14 @@ AudioSource::AudioSource(const ComponentProperties& props_) : Component(props_),
 }
 
 AudioSource::~AudioSource(){
-	componentCollection.Remove(this);
+	Stop();
 
 	if(audioClip != nullptr){
 		App::GetResourceManager().UnloadResource(clipName);
 		audioClip = nullptr;
 	}
+
+	componentCollection.Remove(this);
 }
 
 void AudioSource::Update(){
