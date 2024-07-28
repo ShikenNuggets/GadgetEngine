@@ -15,11 +15,6 @@ namespace StarHawx{
 			rigidbody = parent->GetComponent<Gadget::Rigidbody>();
 			GADGET_BASIC_ASSERT(rigidbody != nullptr);
 
-			Gadget::AudioSource* source = parent->GetComponent<Gadget::AudioSource>();
-			if(source != nullptr){
-				source->Play(true);
-			}
-
 			GameLogicComponent::OnStart();
 		}
 

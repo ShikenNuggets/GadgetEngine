@@ -15,10 +15,18 @@ namespace Gadget{
 		SoundType_MAX
 	};
 
+	enum class SoundPlayMode : uint8_t{
+		None = 0,
+		PlayOnce,
+		PlayLooping,
+
+		SoundPlayMode_MAX
+	};
+
 	class AudioSource : public Component{
 	public:
-		AudioSource(GameObject* parent_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_);
-		AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_);
+		AudioSource(GameObject* parent_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_, SoundPlayMode startMode_ = SoundPlayMode::None);
+		AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_, SoundPlayMode startMode_ = SoundPlayMode::None);
 		AudioSource(const ComponentProperties& props_);
 
 		virtual ~AudioSource() override;
@@ -35,7 +43,7 @@ namespace Gadget{
 
 		void Update();
 
-		ErrorCode Play(bool loop_ = false);
+		ErrorCode Play(SoundPlayMode mode_ = SoundPlayMode::PlayOnce);
 		ErrorCode Stop();
 
 		virtual ComponentProperties Serialize() const override;

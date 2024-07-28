@@ -9,18 +9,38 @@ using namespace Gadget;
 
 ComponentCollection<AudioSource> AudioSource::componentCollection;
 
-AudioSource::AudioSource(GameObject* parent_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_) : Component(SID("AudioSource"), parent_), soundType(type_), volumeChannel(volumeChannel_), clipName(clipName_), audioClip(nullptr), channel(nullptr){
+AudioSource::AudioSource(GameObject* parent_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_, SoundPlayMode startMode_) : Component(SID("AudioSource"), parent_), soundType(type_), volumeChannel(volumeChannel_), clipName(clipName_), audioClip(nullptr), channel(nullptr){
+	GADGET_BASIC_ASSERT(parent_ != nullptr);
+	GADGET_BASIC_ASSERT(clipName_ != StringID::None);
+	GADGET_BASIC_ASSERT(type_ < SoundType::SoundType_MAX);
+	GADGET_BASIC_ASSERT(volumeChannel_ < VolumeChannel::VolumeChannel_MAX);
+	GADGET_BASIC_ASSERT(startMode_ < SoundPlayMode::SoundPlayMode_MAX);
+	
 	componentCollection.Add(this);
 
 	audioClip = App::GetResourceManager().LoadResource<AudioClip>(clipName);
 	GADGET_BASIC_ASSERT(audioClip != nullptr);
+
+	if(startMode_ != SoundPlayMode::None){
+		Play(startMode_);
+	}
 }
 
-AudioSource::AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_) : Component(SID("AudioSource"), parentGUID_), soundType(type_), volumeChannel(volumeChannel_), clipName(clipName_), audioClip(nullptr), channel(nullptr){
+AudioSource::AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_, VolumeChannel volumeChannel_, SoundPlayMode startMode_) : Component(SID("AudioSource"), parentGUID_), soundType(type_), volumeChannel(volumeChannel_), clipName(clipName_), audioClip(nullptr), channel(nullptr){
+	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
+	GADGET_BASIC_ASSERT(clipName_ != StringID::None);
+	GADGET_BASIC_ASSERT(type_ < SoundType::SoundType_MAX);
+	GADGET_BASIC_ASSERT(volumeChannel_ < VolumeChannel::VolumeChannel_MAX);
+	GADGET_BASIC_ASSERT(startMode_ < SoundPlayMode::SoundPlayMode_MAX);
+	
 	componentCollection.Add(this);
 
 	audioClip = App::GetResourceManager().LoadResource<AudioClip>(clipName);
 	GADGET_BASIC_ASSERT(audioClip != nullptr);
+
+	if(startMode_ != SoundPlayMode::None){
+		Play(startMode_);
+	}
 }
 
 AudioSource::AudioSource(const ComponentProperties& props_) : Component(props_), soundType(SoundType::_2D), volumeChannel(VolumeChannel::Master), clipName(StringID::None), audioClip(nullptr), channel(nullptr){
@@ -49,8 +69,13 @@ void AudioSource::Update(){
 	}
 }
 
-ErrorCode AudioSource::Play(bool loop_){
+ErrorCode AudioSource::Play(SoundPlayMode mode_){
+	GADGET_BASIC_ASSERT(mode_ > SoundPlayMode::None && mode_ < SoundPlayMode::SoundPlayMode_MAX);
+
 	Stop();
+	if(mode_ == SoundPlayMode::None || mode_ == SoundPlayMode::SoundPlayMode_MAX){
+		return ErrorCode::Invalid_Args;
+	}
 
 	FMOD::System* coreSystem = App::GetAudio().GetCoreSystem();
 	GADGET_BASIC_ASSERT(coreSystem != nullptr);
@@ -74,7 +99,7 @@ ErrorCode AudioSource::Play(bool loop_){
 		return ErrorCode::FMOD_Error;
 	}
 
-	FMOD_MODE mode = loop_ ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF;
+	FMOD_MODE mode = (mode_ == SoundPlayMode::PlayOnce) ? FMOD_LOOP_OFF : FMOD_LOOP_NORMAL;
 	result = channel->setMode(mode);
 	if(result != FMOD_OK){
 		GADGET_LOG_ERROR(SID("AUDIO"), "Could not set channel mode! FMOD Error: " + std::string(FMOD_ErrorString(result)));

@@ -89,7 +89,7 @@ namespace StarHawx{
 			player->AddComponent(new Gadget::RenderComponent(player->GetGUID(), SID("ArwingModel"), materialNames));
 			player->AddComponent(new Gadget::Rigidbody(player, 100.0f, false, Gadget::FreezeRotationType::FreezeAll));
 			player->AddComponent(new Gadget::CubeCollider(player));
-			player->AddComponent(new Gadget::AudioSource(player, SID("CorneriaMusic"), Gadget::SoundType::_2D, Gadget::VolumeChannel::Music));
+			player->AddComponent(new Gadget::AudioSource(player, SID("CorneriaMusic"), Gadget::SoundType::_2D, Gadget::VolumeChannel::Music, Gadget::SoundPlayMode::PlayLooping));
 			player->AddComponent(new PlayerController(player));
 			CreateObject(player);
 
