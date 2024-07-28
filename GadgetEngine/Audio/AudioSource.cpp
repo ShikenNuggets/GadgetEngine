@@ -61,6 +61,10 @@ AudioSource::~AudioSource(){
 }
 
 void AudioSource::Update(){
+	if(channel == nullptr){
+		return;
+	}
+
 	Set3DAttributes();
 
 	FMOD_RESULT result = channel->setVolume(App::GetAudio().GetVolume(volumeChannel));
