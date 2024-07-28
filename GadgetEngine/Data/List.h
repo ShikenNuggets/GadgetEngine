@@ -202,17 +202,18 @@ namespace Gadget{
 
 		constexpr inline Node* GetNode(size_t index_) const{
 			GADGET_BASIC_ASSERT(index_ < size);
-			if(index_ >= size){
+
+			if(index_ == 0){
+				return head;
+			}else if(index_ == size - 1){
+				return tail;
+			}else if(index_ >= size){
 				return nullptr;
 			}
 
-			Node* current = nullptr;
-			for(size_t i = 0; i < index_; i++){
-				if(current == nullptr){
-					current = head;
-				}else{
-					current = current->next;
-				}
+			Node* current = head;
+			for(size_t i = 1; i <= index_; i++){
+				current = current->next;
 			}
 
 			GADGET_BASIC_ASSERT(current != nullptr);
