@@ -1,34 +1,54 @@
 #include "App.h"
 
-#include <iostream>
+#include <cstddef>
+#include <memory>
+#include <string>
 
 #include "Config.h"
 #include "Debug.h"
+#include "EngineVars.h"
+#include "GadgetEnums.h"
+#include "GameInterface.h"
 #include "Random.h"
+#include "Audio/Audio.h"
 #include "Core/Time.h"
+#include "Game/BasicSceneManager.h"
 #include "Game/ComponentFactory.h"
-#include "Events/AppEvent.h"
-#include "Events/EventHandler.h"
+#include "Game/GameLogicManager.h"
+#include "Graphics/Renderer.h"
 #include "Graphics/GUI/CanvasSceneComponent.h"
+#include "Graphics/Materials/MaterialCache.h"
+#include "Events/AppEvent.h"
+#include "Events/Event.h"
+#include "Events/EventHandler.h"
 #include "Input/Input.h"
+#include "Input/InputEnums.h"
 #include "Input/MouseEvent.h"
+#include "Physics/PhysManager.h"
 #include "Platform/Windows/Win32_GL_Renderer.h"
-#include "Platform/Windows/Win32_DX12_Renderer.h"
-#include "Platform/Windows/Win32_DXR_Renderer.h"
+//#include "Platform/Windows/Win32_DX12_Renderer.h"
+//#include "Platform/Windows/Win32_DXR_Renderer.h"
 #include "Resource/ResourceManager.h"
+#include "Utils/GUID.h"
 #include "Utils/Profiler.h"
+#include "Utils/StringID.h"
 
 using namespace Gadget;
 
 std::unique_ptr<App> App::instance = nullptr;
 
-App::App() : gameName("GadgetEngine"), isRunning(true), singleFrameAllocator(1024), twoFrameAllocator(1024), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), renderer(nullptr), physics(nullptr), sceneManager(nullptr), gameLogicManager(nullptr){
+static constexpr size_t gDefaultAllocatorSize = 1024;
+static constexpr int gMinWindowSize = 100;
+static constexpr int gDefaultWindowWidth = 1280;
+static constexpr int gDefaultWindowHeight = 720;
+
+App::App() : gameName("GadgetEngine"), isRunning(true), singleFrameAllocator(gDefaultAllocatorSize), twoFrameAllocator(gDefaultAllocatorSize), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), renderer(nullptr), physics(nullptr), sceneManager(nullptr), gameLogicManager(nullptr){
 	GADGET_ASSERT(instance == nullptr, "Created multiple App instances!");
 	
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, std::bind(&App::OnWindowCloseEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, std::bind(&App::OnWindowResizeEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, std::bind(&App::OnMouseMoved, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, std::bind(&App::OnMouseButtonPressed, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, [&](const Event& e){ OnWindowCloseEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, [&](const Event& e){ OnWindowResizeEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, [&](const Event& e){ OnMouseMoved(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, [&](const Event& e){ OnMouseButtonPressed(e); });
 }
 
 App::~App(){
@@ -117,13 +137,13 @@ void App::InitRenderer(){
 
 	int width = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayWidthKey));
 	int height = static_cast<int>(config->GetOptionFloat(EngineVars::Display::displayHeightKey));
-	int x = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowXKey));
-	int y = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowYKey));
+	const int x = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowXKey));
+	const int y = static_cast<int>(config->GetOptionFloat(EngineVars::Display::lastWindowYKey));
 
 	//Use a default value if option is invalid
-	if(width <= 100 || height <= 100){
-		width = 1280;
-		height = 720;
+	if(width < gMinWindowSize || height < gMinWindowSize){
+		width = gDefaultWindowWidth;
+		height = gDefaultWindowHeight;
 	}
 
 #ifdef GADGET_PLATFORM_WIN32
@@ -312,14 +332,14 @@ float App::GetFixedDeltaTime(){
 float App::GetCurrentFramerateCap(){
 	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
 
-	float targetFPS = static_cast<float>(GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
-	bool vsync = GetConfig().GetOptionBool(EngineVars::Display::vsyncKey);
+	const float targetFPS = static_cast<float>(GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
+	const bool vsyncEnabled = GetConfig().GetOptionBool(EngineVars::Display::vsyncKey);
 
-	if(targetFPS == 0.0f && vsync == false){
+	if(targetFPS == 0.0f && !vsyncEnabled){
 		return 0.0f;
 	}
 
-	float vsyncFPS = GetRenderer().GetRefreshRate();
+	const float vsyncFPS = GetRenderer().GetRefreshRate();
 	if(vsyncFPS != 0.0f && (targetFPS == 0.0f || vsyncFPS < targetFPS)){
 		return vsyncFPS;
 	}
