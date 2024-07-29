@@ -27,11 +27,11 @@ ErrorCode ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& va
 			continue;
 		}
 
-		std::string keyStr = line.substr(0, line.find('='));
-		std::string valStr = line.substr(line.find('=') + 1, line.length());
+		const std::string keyStr = line.substr(0, line.find('='));
+		const std::string valStr = line.substr(line.find('=') + 1, line.length());
 
-		StringID keyID = StringID::ProcessString(keyStr);
-		Var value = Var::StringToVar(valStr);
+		const StringID keyID = StringID::ProcessString(keyStr);
+		const Var value = Var::StringToVar(valStr);
 
 		vars_.SetValue(currentSection, keyID, value);
 	}

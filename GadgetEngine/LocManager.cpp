@@ -6,11 +6,11 @@ using namespace Gadget;
 
 LocManager* LocManager::instance = nullptr;
 
-LocManager::LocManager() : currentLanguage(0), languages(){
-	languages.reserve(8); //This feels like a good number
-}
+constexpr size_t gStartLanguages = 8;
 
-LocManager::~LocManager(){}
+LocManager::LocManager() : currentLanguage(0), languages(){
+	languages.reserve(gStartLanguages); //This feels like a good number
+}
 
 LocManager* LocManager::GetInstance(){
 	if(instance == nullptr){

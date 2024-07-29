@@ -14,7 +14,7 @@ Component::Component(StringID typeName_, GUID parentGUID_) : typeName(typeName_)
 }
 
 Component::Component(const ComponentProperties& props_) : typeName(props_.typeName), guid(GUID::Invalid), isActivated(false){
-	Deserialize(props_);
+	Component::Deserialize(props_);
 }
 
 StringID Component::GetParentName() const{

@@ -18,7 +18,7 @@ namespace Gadget{
 		//MurmurHash64A - algorith created by Austin Appleby
 		//Algorithm code is in the public domain: https://github.com/explosion/murmurhash/blob/master/murmurhash/MurmurHash2.cpp
 		//More info here: https://en.wikipedia.org/wiki/MurmurHash
-		inline constexpr uint64_t MurmurHash64A(const char* data_, size_t len_, uint64_t seed_ = 0){
+		inline constexpr uint64_t MurmurHash64A(const char* data_, size_t len_, uint64_t seed_ = 0) noexcept{
 			//Some assumptions made by the code here
 			//We can read a 4-byte value from any address without crashing (no idea how to check this, TODO? Need to modify the algorithm if aligned reads are required)
 			//Will not produce the same results on machines with different endianness (do we care? TODO? Endian-neutral version is significantly slower)

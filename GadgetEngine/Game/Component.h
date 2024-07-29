@@ -87,7 +87,7 @@ namespace Gadget{
 			std::map<GUID, std::vector<T*>> guidMap;
 
 		public:
-			ComponentCollection(){}
+			ComponentCollection() noexcept = default;
 
 			void Add(T* element_){
 				GADGET_BASIC_ASSERT(element_ != nullptr);

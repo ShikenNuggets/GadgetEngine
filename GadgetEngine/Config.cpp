@@ -11,12 +11,8 @@
 using namespace Gadget;
 
 Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
-#ifdef GADGET_DEBUG
-	engineConfigPath = engineConfigFileName; //Storing the config file in the same directory makes debugging much easier
-#endif //GADGET_DEBUG
-
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowMoved, std::bind(&Config::OnWindowMovedEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, std::bind(&Config::OnWindowResizedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowMoved, [&](const Event& e){ OnWindowMovedEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, [&](const Event& e){ OnWindowResizedEvent(e); });
 
 	LocManager* locMan = LocManager::GetInstance(); //Initialize Localization Manager
 	GADGET_BASIC_ASSERT(locMan != nullptr);
@@ -133,5 +129,9 @@ void Config::ResetAllOptionsToDefault(){
 }
 
 std::string Config::CreateEngineConfigPath(){
+#ifdef GADGET_DEBUG
+	return engineConfigFileName; //Storing the config file in the same directory makes debugging much easier
+#else
 	return FileSystem::ConstructFilePath(FileSystem::GetPersistentDataDir(), App::GetGameName(), engineConfigFileName);
+#endif //GADGET_DEBUG
 }

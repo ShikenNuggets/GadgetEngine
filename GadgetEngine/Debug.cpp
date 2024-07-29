@@ -26,7 +26,7 @@ std::queue<std::string> Debug::queuedLogsForFileWrite;
 void Debug::Init(){
 	GADGET_BASIC_ASSERT(!isInitialized);
 	if(isInitialized){
-		std::cout << "Tried to initialize debug subsystem twice!" << std::endl;
+		std::cout << "Tried to initialize debug subsystem twice!\n";
 		return;
 	}
 
@@ -38,10 +38,10 @@ void Debug::Init(){
 	logFilePath = FileSystem::GetPersistentDataDir() + FileSystem::PathSeparator + App::GetGameName() + FileSystem::PathSeparator + logFileName;
 #endif //GADGET_DEBUG
 
-	std::string message = "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + " GMT\n";
+	const std::string message = "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + " GMT\n";
 	auto err = FileSystem::WriteToFile(logFilePath, message, writeType);
 	if(err != ErrorCode::OK){
-		std::cout << "ERROR: Could not write initial log message to " << FileSystem::GetFileNameFromPath(logFilePath) << "! We'll try again later..." << std::endl;
+		std::cout << "ERROR: Could not write initial log message to " << FileSystem::GetFileNameFromPath(logFilePath) << "! We'll try again later...\n";
 		queuedLogsForFileWrite.push(message);
 	}
 
@@ -59,9 +59,7 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 
 	std::string finalMessage;
 	switch(type_){
-		case LogType::Verbose:
-			finalMessage = "LOG: ";
-			break;
+		case LogType::Verbose: [[fallthrough]];
 		case LogType::Info:
 			finalMessage = "LOG: ";
 			break;
@@ -106,7 +104,7 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	}
 #endif //GADGET_PLATFORM_WIN32
 
-	std::cout << finalMessage << std::endl;
+	std::cout << finalMessage << "\n";
 
 #ifdef GADGET_PLATFORM_WIN32
 	Win32_Utils::SetConsoleColorWhite();
@@ -154,7 +152,7 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 
 	#ifdef GADGET_PLATFORM_WIN32
 	//Extra spacing at the end to prevent text from getting cut off
-	int status = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title_.c_str(), (message_ + "         \n         ").c_str(), nullptr);
+	const int status = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title_.c_str(), (message_ + "         \n         ").c_str(), nullptr);
 	if(status != 0){
 		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, Gadget::FileSystem::GetFileNameFromPath(__FILE__), __LINE__);
 	}
@@ -173,8 +171,8 @@ void Debug::ThrowFatalError(StringID channel_, const std::string& message_, Erro
 	GADGET_BASIC_ASSERT(!message_.empty());
 	GADGET_BASIC_ASSERT(err_ > ErrorCode::OK && err_ < ErrorCode::ErrorCode_MAX);
 
-	std::string messageWithErr = message_ + std::string("\nError Code: ") + GetErrorCodeString(err_);
-	std::string finalMessage = messageWithErr + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_);
+	const std::string messageWithErr = message_ + std::string("\nError Code: ") + GetErrorCodeString(err_);
+	const std::string finalMessage = messageWithErr + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_);
 
 	Debug::Log(channel_, messageWithErr, FatalError, file_, line_);
 	PopupErrorMessage("Fatal Error! [" + channel_.GetString() + "]", finalMessage);

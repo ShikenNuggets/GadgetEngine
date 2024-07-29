@@ -21,10 +21,10 @@ namespace Gadget{
 	public:
 		static const StringID None;
 
-		explicit constexpr StringID(uint64_t id_) : id(id_){}
-		constexpr StringID(const StringID& a_) = default;
+		explicit constexpr StringID(uint64_t id_) noexcept : id(id_){}
+		constexpr StringID(const StringID& a_) noexcept = default;
 
-		constexpr StringID& operator=(const StringID& a_) = default;
+		constexpr StringID& operator=(const StringID& a_) noexcept = default;
 
 		std::string GetString() const;
 		constexpr uint64_t GetID() const{ return id; }
@@ -37,7 +37,7 @@ namespace Gadget{
 		constexpr inline bool operator <=(StringID a_) const{ return id <= a_.id; }
 
 		//DON'T USE THIS DIRECTLY, USE THE SID() MACRO
-		static StringID InternString(StringID sid_, const char* str_);
+		static StringID InternString(StringID sid_, const char* str_) noexcept;
 		static std::string GetStringFromID(StringID id_);
 		static std::string GetStringFromID(uint64_t id_);
 
@@ -76,7 +76,7 @@ namespace Gadget{
 }
 
 //Compile time user-defined literal - DON'T USE THIS DIRECTLY UNLESS YOU KNOW WHAT YOU'RE DOING, USE THE SID() MACRO
-consteval inline Gadget::StringID operator "" _sid(const char* str_, size_t len_){ return Gadget::StringID(Gadget::Hash::MurmurHash64A(str_, len_)); }
+consteval inline Gadget::StringID operator "" _sid(const char* str_, size_t len_) noexcept{ return Gadget::StringID(Gadget::Hash::MurmurHash64A(str_, len_)); }
 
 //Use this to create a hashed string ID and add it to the string database
 #define SID(str) Gadget::StringID::InternString(str ""_sid, str)
