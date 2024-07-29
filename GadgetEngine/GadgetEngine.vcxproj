@@ -60,18 +60,21 @@
     <IntDir>..\Build\Intermediate\GadgetEngine\Debug\</IntDir>
     <TargetName>GadgetEngine</TargetName>
     <TargetExt>.lib</TargetExt>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
     <OutDir>..\Build\GadgetEngine\Develop\</OutDir>
     <IntDir>..\Build\Intermediate\GadgetEngine\Develop\</IntDir>
     <TargetName>GadgetEngine</TargetName>
     <TargetExt>.lib</TargetExt>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\Build\GadgetEngine\Release\</OutDir>
     <IntDir>..\Build\Intermediate\GadgetEngine\Release\</IntDir>
     <TargetName>GadgetEngine</TargetName>
     <TargetExt>.lib</TargetExt>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
