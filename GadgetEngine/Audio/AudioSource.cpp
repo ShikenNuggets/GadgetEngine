@@ -45,8 +45,9 @@ AudioSource::AudioSource(GUID parentGUID_, StringID clipName_, SoundType type_, 
 
 AudioSource::AudioSource(const ComponentProperties& props_) : Component(props_), soundType(SoundType::_2D), volumeChannel(VolumeChannel::Master), clipName(StringID::None), audioClip(nullptr), channel(nullptr){
 	componentCollection.Add(this);
-	Deserialize(props_);
+	AudioSource::Deserialize(props_);
 
+	GADGET_BASIC_ASSERT(clipName != StringID::None);
 	audioClip = App::GetResourceManager().LoadResource<AudioClip>(clipName);
 	GADGET_BASIC_ASSERT(audioClip != nullptr);
 }
@@ -69,7 +70,7 @@ void AudioSource::Update(){
 
 	Set3DAttributes();
 
-	FMOD_RESULT result = channel->setVolume(App::GetAudio().GetVolume(volumeChannel));
+	const FMOD_RESULT result = channel->setVolume(App::GetAudio().GetVolume(volumeChannel));
 	if(result != FMOD_OK){
 		GADGET_LOG_ERROR(SID("AUDIO"), "Could not set channel audio! FMOD Error: " + std::string(FMOD_ErrorString(result)));
 	}
@@ -88,13 +89,13 @@ ErrorCode AudioSource::Play(SoundPlayMode mode_){
 
 	FMOD::Sound* soundToPlay = (soundType == SoundType::_2D) ? audioClip->GetSound2D() : audioClip->GetSound3D();
 	
-	FMOD_RESULT result = coreSystem->playSound(soundToPlay, 0, true, &channel); //Sound starts paused so we can fix up positional info before it starts playing
+	FMOD_RESULT result = coreSystem->playSound(soundToPlay, nullptr, true, &channel); //Sound starts paused so we can fix up positional info before it starts playing
 	if(result != FMOD_OK || channel == nullptr){
 		GADGET_LOG_ERROR(SID("AUDIO"), "Sound could not be played! FMOD Error: " + std::string(FMOD_ErrorString(result)));
 		return ErrorCode::FMOD_Error;
 	}
 
-	ErrorCode err = Set3DAttributes();
+	const ErrorCode err = Set3DAttributes();
 	if(err != ErrorCode::OK){
 		return err;
 	}
@@ -105,7 +106,7 @@ ErrorCode AudioSource::Play(SoundPlayMode mode_){
 		return ErrorCode::FMOD_Error;
 	}
 
-	FMOD_MODE mode = (mode_ == SoundPlayMode::PlayOnce) ? FMOD_LOOP_OFF : FMOD_LOOP_NORMAL;
+	const FMOD_MODE mode = (mode_ == SoundPlayMode::PlayOnce) ? FMOD_LOOP_OFF : FMOD_LOOP_NORMAL;
 	result = channel->setMode(mode);
 	if(result != FMOD_OK){
 		GADGET_LOG_ERROR(SID("AUDIO"), "Could not set channel mode! FMOD Error: " + std::string(FMOD_ErrorString(result)));
@@ -123,7 +124,7 @@ ErrorCode AudioSource::Play(SoundPlayMode mode_){
 
 ErrorCode AudioSource::Stop(){
 	if(channel != nullptr){
-		FMOD_RESULT result = channel->stop();
+		const FMOD_RESULT result = channel->stop();
 		if(result != FMOD_OK){
 			GADGET_LOG_ERROR(SID("AUDIO"), "Could not stop channel! FMOD Error: " + std::string(FMOD_ErrorString(result)));
 			return ErrorCode::FMOD_Error;
@@ -171,7 +172,7 @@ ErrorCode AudioSource::Set3DAttributes(){
 	const FMOD_VECTOR pos = FMODHelper::ConvertVector3(parent->GetPosition());
 	const FMOD_VECTOR vel = FMODHelper::ConvertVector3(velocity);
 
-	FMOD_RESULT result = channel->set3DAttributes(&pos, &vel);
+	const FMOD_RESULT result = channel->set3DAttributes(&pos, &vel);
 	if(result != FMOD_OK){
 		GADGET_LOG_ERROR(SID("AUDIO"), "Could not set 3D channel attributes! FMOD Error: " + std::string(FMOD_ErrorString(result)));
 		return ErrorCode::FMOD_Error;

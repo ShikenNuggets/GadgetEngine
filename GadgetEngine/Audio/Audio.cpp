@@ -10,6 +10,8 @@
 
 using namespace Gadget;
 
+constexpr int gMaxChannels = 4095;
+
 Audio::Audio() : studioSystem(nullptr), coreSystem(nullptr){
 	FMOD_RESULT result = FMOD::Studio::System::create(&studioSystem);
 	if(result != FMOD_OK || studioSystem == nullptr){
@@ -31,7 +33,7 @@ Audio::Audio() : studioSystem(nullptr), coreSystem(nullptr){
 		Debug::ThrowFatalError(SID("AUDIO"), "FMOD header version does not match FMOD lib version!", ErrorCode::FMOD_Version_Error, __FILE__, __LINE__);
 	}
 
-	result = studioSystem->initialize(4095, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_3D_RIGHTHANDED, 0);
+	result = studioSystem->initialize(gMaxChannels, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_3D_RIGHTHANDED, nullptr);
 	if(result != FMOD_OK){
 		Debug::ThrowFatalError(SID("AUDIO"), "FMOD Studio System could not be initialized! FMOD Error: " + std::string(FMOD_ErrorString(result)), ErrorCode::FMOD_Init_Error, __FILE__, __LINE__);
 	}
@@ -39,7 +41,7 @@ Audio::Audio() : studioSystem(nullptr), coreSystem(nullptr){
 
 Audio::~Audio(){
 	if(studioSystem != nullptr){
-		FMOD_RESULT result = studioSystem->release();
+		const FMOD_RESULT result = studioSystem->release();
 		if(result != FMOD_OK){
 			Debug::Log(SID("AUDIO"), "FMOD Studio System could not be released! FMOD Error: " + std::string(FMOD_ErrorString(result)), Debug::Error, __FILE__, __LINE__);
 		}
@@ -65,7 +67,7 @@ void Audio::Update(Scene* scene_){
 }
 
 float Audio::GetVolume(VolumeChannel channel_){
-	double masterVolume = App::GetConfig().GetOptionFloat(EngineVars::Audio::masterVolumeKey);
+	const double masterVolume = App::GetConfig().GetOptionFloat(EngineVars::Audio::masterVolumeKey);
 	double channelVolume = 1.0;
 
 	switch(channel_){

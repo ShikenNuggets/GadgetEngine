@@ -47,10 +47,10 @@ void AudioListener::Update(){
 		velocity = rb->GetVelocity();
 	}
 
-	FMOD_VECTOR pos = FMODHelper::ConvertVector3(parent->GetPosition());
-	FMOD_VECTOR vel = FMODHelper::ConvertVector3(velocity);
-	FMOD_VECTOR forw = FMODHelper::ConvertVector3(parent->GetTransform().Forward());
-	FMOD_VECTOR up = FMODHelper::ConvertVector3(parent->GetTransform().Up());
+	const FMOD_VECTOR pos = FMODHelper::ConvertVector3(parent->GetPosition());
+	const FMOD_VECTOR vel = FMODHelper::ConvertVector3(velocity);
+	const FMOD_VECTOR forw = FMODHelper::ConvertVector3(parent->GetTransform().Forward());
+	const FMOD_VECTOR up = FMODHelper::ConvertVector3(parent->GetTransform().Up());
 
 	coreSystem->set3DListenerAttributes(0, &pos, &vel, &forw, &up); //TODO - Support multiple listeners correctly
 }
