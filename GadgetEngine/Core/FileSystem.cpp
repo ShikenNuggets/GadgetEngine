@@ -54,9 +54,12 @@ std::string FileSystem::ReadFileToString(const std::string& filePath_){
 	GADGET_BASIC_ASSERT(!filePath_.empty());
 
 	std::string result;
-	std::vector<std::string> fileContents = ReadFile(filePath_);
-	result.reserve(fileContents.size() * 16);
-	for(std::string s : fileContents){
+	const std::vector<std::string> fileContents = ReadFile(filePath_);
+
+	constexpr size_t averageCharsPerLine = 16; //Assumption - feel free to tweak this to see if it improves performance
+	result.reserve(fileContents.size() * averageCharsPerLine);
+
+	for(const std::string& s : fileContents){
 		result += s + "\n";
 	}
 
@@ -115,7 +118,7 @@ ErrorCode FileSystem::WriteToFile(const std::string& filePath_, const std::strin
 
 	switch(type_){
 		case FileSystem::WriteType::Append:
-			filestream.open(filePath_, std::ios::out | std::ios_base::app);
+			filestream.open(filePath_, std::fstream::out | std::fstream::app);
 			break;
 		case FileSystem::WriteType::Clear:
 			filestream.open(filePath_, std::ios::out | std::ios_base::trunc);
@@ -178,8 +181,9 @@ ErrorCode FileSystem::WriteToBinaryFile(const std::string& filePath_, const std:
 		Debug::LogToConsoleOnly(SID("FILESYSTEM"), "Could not open " + filePath_ + " for writing!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::FileIO;
 	}
-	
-	outfile.write(reinterpret_cast<const char*>(&data_[0]), data_.size());
+
+	const std::ostreambuf_iterator<char> osbi(outfile);
+	std::copy(data_.begin(), data_.end(), osbi);
 	outfile.close();
 	
 	if(!outfile){
@@ -210,7 +214,7 @@ ErrorCode FileSystem::CreateFile(const std::string& file_){
 	GADGET_BASIC_ASSERT(!file_.empty());
 	//TODO - Check if file name is valid
 
-	std::string dir = RemoveFileNameFromPath(file_);
+	const std::string dir = RemoveFileNameFromPath(file_);
 	if(Utils::ContainsChar(dir, PathSeparator) && !DirExists(dir)){
 		auto err = CreateDir(dir);
 		if(err != ErrorCode::OK){

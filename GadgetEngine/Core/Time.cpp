@@ -8,6 +8,9 @@
 
 using namespace Gadget;
 
+static constexpr int gMsInSecond = 1000;
+static constexpr float gMinRealDeltaTime = 0.1f;
+
 Time::Time() : timeScale(1.0f), startTime(0), previousTicks(0), currentTicks(0){}
 
 void Time::Start(){
@@ -38,12 +41,12 @@ void Time::Delay(){
 std::chrono::milliseconds Time::GetSleepTime() const{
 	//If the framerate is 0, this is treated as an unlimited framerate
 	//This also prevents a division by 0 later
-	int targetFPS = static_cast<int>(App::GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
-	if(targetFPS == 0){
+	const int targetFPS = static_cast<int>(App::GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
+	if(targetFPS <= 0){
 		return std::chrono::milliseconds(0);
 	}
 
-	auto msPerFrame = std::chrono::milliseconds(1000 / targetFPS);
+	const auto msPerFrame = std::chrono::milliseconds(gMsInSecond / targetFPS);
 
 	if(msPerFrame.count() == 0){
 		return std::chrono::milliseconds(0);
@@ -70,7 +73,7 @@ float Time::RealDeltaTime() const{
 	//If it's too low it'll affect normal framerates, and if it's too high it won't be effective enough
 
 	//We also don't want the delta time to be negative for various reasons
-	return Math::Clamp(0.0f, 0.1f, PureDeltaTime());
+	return Math::Clamp(0.0f, gMinRealDeltaTime, PureDeltaTime());
 }
 
 float Time::PureDeltaTime() const{
