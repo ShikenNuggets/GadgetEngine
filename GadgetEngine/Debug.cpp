@@ -156,7 +156,7 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 	//Extra spacing at the end to prevent text from getting cut off
 	int status = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title_.c_str(), (message_ + "         \n         ").c_str(), nullptr);
 	if(status != 0){
-		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, __FILENAME__, __LINE__);
+		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, Gadget::FileSystem::GetFileNameFromPath(__FILE__), __LINE__);
 	}
 	#else
 	static_assert(false, "Unhandled platform in Debug::PopupErrorMessage!");

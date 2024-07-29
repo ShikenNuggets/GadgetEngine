@@ -198,15 +198,6 @@ ErrorCode FileSystem::WriteJSONToBinaryFile(const std::string& filePath_, const 
 	return WriteToBinaryFile(filePath_, nlohmann::json::to_bson(json_), type_);
 }
 
-std::string FileSystem::GetFileNameFromPath(const std::string& path_){
-	size_t i = path_.rfind(PathSeparator, path_.length());
-	if(i != std::string::npos){
-		return(path_.substr(i + 1, path_.length() - i));
-	}
-
-	return "";
-}
-
 std::string FileSystem::GetPersistentDataDir(){
 	#ifdef GADGET_PLATFORM_WIN32
 		return Win32_Utils::GetUserDocumentsPath();

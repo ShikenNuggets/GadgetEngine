@@ -6,6 +6,7 @@
 #include <string>
 
 #include "GadgetEnums.h"
+#include "Core/FileSystem.h"
 #include "Utils/StringID.h"
 #include "Utils/Utils.h"
 
@@ -14,21 +15,14 @@
 	#error "Essential macros are being redefined"
 #endif
 
-#ifdef GADGET_PLATFORM_WIN32
-	#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
-#else
-	#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#endif
-
-
 #if defined GADGET_DEBUG && defined GADGET_PLATFORM_WIN32
-	#define GADGET_ASSERT(expr, msg) { if(!(expr)){ Gadget::Debug::PopupErrorMessage(std::string("Assert Failed! ") + __FILENAME__ + " : " + std::to_string(__LINE__), msg); __debugbreak(); } }
+	#define GADGET_ASSERT(expr, msg) { if(!(expr)){ Gadget::Debug::PopupErrorMessage(std::string("Assert Failed! ") + Gadget::FileSystem::GetFileNameFromPath(__FILE__) + std::string(" : ") + std::to_string(__LINE__), msg); __debugbreak(); } }
 #endif //GADGET_DEBUG && GADGET_PLATFORM_WIN32
 
 #if defined GADGET_RELEASE || !defined GADGET_PLATFORM_WIN32
 	//We still want the poup messages but not the debug break
 	//In an actual final production build you'll probably want to remove these entirely
-	#define GADGET_ASSERT(expr, msg) { if(!(expr)){ Gadget::Debug::PopupErrorMessage(std::string("Assert Failed! ") + __FILENAME__ + " : " + std::to_string(__LINE__), msg); } }
+	#define GADGET_ASSERT(expr, msg) { if(!(expr)){ Gadget::Debug::PopupErrorMessage(std::string("Assert Failed! ") + Gadget::FileSystem::GetFileNameFromPath(__FILE__) + std::string(" : ") + std::to_string(__LINE__), msg); } }
 #endif //GADGET_RELEASE || !GADGET_PLATFORM_WIN32
 
 #define GADGET_BASIC_ASSERT(expr) GADGET_ASSERT(expr, "Condition Failed: " #expr)

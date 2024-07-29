@@ -50,7 +50,14 @@ namespace Gadget{
 		[[nodiscard]] static ErrorCode WriteJSONToPlainTextFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
 		[[nodiscard]] static ErrorCode WriteJSONToBinaryFile(const std::string& filePath_, const nlohmann::json& json_, WriteType type_ = WriteType::Overwrite);
 
-		static std::string GetFileNameFromPath(const std::string& path_);
+		static constexpr std::string GetFileNameFromPath(const std::string& path_){
+			size_t i = path_.rfind(PathSeparator, path_.length());
+			if(i != std::string::npos){
+				return(path_.substr(i + 1, path_.length() - i));
+			}
+
+			return "";
+		}
 
 		static std::string GetPersistentDataDir();
 
