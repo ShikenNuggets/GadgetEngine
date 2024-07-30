@@ -15,9 +15,9 @@ Transform::Transform(const Vector3& pos_, const Euler& euler_, const Vector3& sc
 }
 
 Matrix4 Transform::GetTransformMatrix() const{
-	Matrix4 positionMatrix = Matrix4::Translate(position);
-	Matrix4 rotationMatrix = rotation.ToMatrix4();
-	Matrix4 scaleMatrix = Matrix4::Scale(scale);
+	const Matrix4 positionMatrix = Matrix4::Translate(position);
+	const Matrix4 rotationMatrix = rotation.ToMatrix4();
+	const Matrix4 scaleMatrix = Matrix4::Scale(scale);
 
 	return (positionMatrix * (rotationMatrix * scaleMatrix));
 }

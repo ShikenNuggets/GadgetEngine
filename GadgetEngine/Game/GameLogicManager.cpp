@@ -4,8 +4,6 @@
 
 using namespace Gadget;
 
-GameLogicManager::GameLogicManager(){}
-
 //Overly simplistic but it's fine for just a basic integration
 void GameLogicManager::Update(const Scene* scene_, float deltaTime_){
 	GADGET_BASIC_ASSERT(scene_ != nullptr);

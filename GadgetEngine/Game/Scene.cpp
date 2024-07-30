@@ -5,7 +5,7 @@ using namespace Gadget;
 
 Scene::Scene(StringID name_) : guid(GUID::Generate()), name(name_), gameObjects(){
 	GADGET_BASIC_ASSERT(name_ != StringID::None);
-	SetToDefaultState();
+	Scene::SetToDefaultState();
 }
 
 Scene::~Scene(){

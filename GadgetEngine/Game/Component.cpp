@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-Component::Component(StringID typeName_, GUID parentGUID_) : typeName(typeName_), guid(GUID::Generate()), isActivated(false){
+Component::Component(StringID typeName_, GUID parentGUID_) : typeName(typeName_), guid(GUID::Generate()), parent(nullptr), isActivated(false){
 	GADGET_BASIC_ASSERT(typeName_ != StringID::None);
 	GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 	GADGET_BASIC_ASSERT(guid != GUID::Invalid);
@@ -13,8 +13,9 @@ Component::Component(StringID typeName_, GUID parentGUID_) : typeName(typeName_)
 	GADGET_BASIC_ASSERT(parent != nullptr);
 }
 
-Component::Component(const ComponentProperties& props_) : typeName(props_.typeName), guid(GUID::Invalid), isActivated(false){
+Component::Component(const ComponentProperties& props_) : typeName(props_.typeName), guid(GUID::Invalid), parent(nullptr), isActivated(false){
 	Component::Deserialize(props_);
+	GADGET_BASIC_ASSERT(parent != nullptr);
 }
 
 StringID Component::GetParentName() const{

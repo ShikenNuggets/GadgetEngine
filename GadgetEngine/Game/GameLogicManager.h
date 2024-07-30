@@ -6,7 +6,7 @@
 namespace Gadget{
 	class GameLogicManager{
 	public:
-		GameLogicManager();
+		GameLogicManager() = default;
 
 		void Update(const Scene* scene_, float deltaTime_);
 	};
