@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "Events/Event.h"
@@ -10,21 +11,21 @@
 namespace Gadget{
 	class EventHandler{
 	public:
+		EventHandler();
+		~EventHandler();
+
 		static EventHandler* GetInstance();
 
 		#ifdef GADGET_DEBUG
 		static void DeleteInstance(); //Only use this for testing proper shutdown, don't use this in production
 		#endif //GADGET_DEBUG
 
-		void SetEventCallback(EventType type_, std::function<void(const Event&)> callback_);
+		void SetEventCallback(EventType type_, const std::function<void(const Event&)>& callback_);
 
 		void HandleEvent(const Event& e_);
 
 	private:
-		static EventHandler* instance;
-
-		EventHandler();
-		~EventHandler();
+		static std::unique_ptr<EventHandler> instance;
 
 		std::map<EventType, std::vector<std::function<void(const Event&)>>> eventCallbacks;
 	};

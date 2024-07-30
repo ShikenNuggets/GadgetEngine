@@ -4,11 +4,11 @@
 
 using namespace Gadget;
 
-EventHandler* EventHandler::instance = nullptr;
+std::unique_ptr<EventHandler> EventHandler::instance = nullptr;
 
 EventHandler::EventHandler() : eventCallbacks(){
-	for(size_t i = 0; i < (size_t)EventType::Count; i++){
-		eventCallbacks.emplace((EventType)i, std::vector<std::function<void(const Event&)>>());
+	for(EventType i = EventType::None; i < EventType::Count; i = static_cast<EventType>(static_cast<size_t>(i) + 1)){
+		eventCallbacks.emplace(i, std::vector<std::function<void(const Event&)>>());
 	}
 }
 
@@ -18,22 +18,21 @@ EventHandler::~EventHandler(){
 
 EventHandler* EventHandler::GetInstance(){
 	if(instance == nullptr){
-		instance = new EventHandler();
+		instance = std::make_unique<EventHandler>();
 	}
 
-	return instance;
+	return instance.get();
 }
 
 #ifdef GADGET_DEBUG
 void EventHandler::DeleteInstance(){
 	if(instance != nullptr){
-		delete instance;
-		instance = nullptr;
+		instance.reset();
 	}
 }
 #endif //GADGET_DEBUG
 
-void EventHandler::SetEventCallback(EventType type_, std::function<void(const Event&)> callback_){
+void EventHandler::SetEventCallback(EventType type_, const std::function<void(const Event&)>& callback_){
 	GADGET_BASIC_ASSERT(type_ != EventType::None);
 	GADGET_BASIC_ASSERT(type_ < EventType::Count);
 	GADGET_ASSERT(eventCallbacks.find(type_) != eventCallbacks.end(), "Tried to set event callback of invalid type!");
