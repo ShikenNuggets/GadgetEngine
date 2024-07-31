@@ -5,6 +5,9 @@
 
 using namespace Gadget;
 
+static constexpr int gBitDepthRGB = 24;
+static constexpr int gBitDepthRGBA = 32;
+
 GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), textureID(0){
 	GADGET_ASSERT(App::GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 	GADGET_ASSERT(texture_.GetWidth() > 0 && texture_.GetHeight() > 0 && !texture_.GetPixels().empty(), "Invalid texture data being passed to OpenGL!");
@@ -18,10 +21,10 @@ GL_TextureInfo::GL_TextureInfo(const Texture& texture_) : TextureInfo(), texture
 
 	GLenum internalFormat = GL_RGBA8;
 	GLenum dataFormat = GL_RGBA;
-	if(texture_.GetBitDepth() == 32){
+	if(texture_.GetBitDepth() == gBitDepthRGBA){
 		internalFormat = GL_RGBA8;
 		dataFormat = GL_RGBA;
-	}else if(texture_.GetBitDepth() == 24){
+	}else if(texture_.GetBitDepth() == gBitDepthRGB){
 		Debug::Log(SID("RENDER"), "Using RGB image format, RGBA is preferred for optimal performance", Debug::Warning, __FILE__, __LINE__);
 		internalFormat = GL_RGB8;
 		dataFormat = GL_RGB;

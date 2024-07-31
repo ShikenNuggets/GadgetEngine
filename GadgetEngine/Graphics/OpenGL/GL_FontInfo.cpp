@@ -8,7 +8,7 @@ GL_FontInfo::GL_FontInfo(const FreetypeFont& font_) : FontInfo(){
 
 	const auto& characters = font_.GetCharacters();
 	for(const auto& c : characters){
-		GLuint texture;
+		GLuint texture = 0;
 		glActiveTexture(GL_TEXTURE1);
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);

@@ -12,8 +12,8 @@ GL_MeshInfo::GL_MeshInfo(const Submesh& mesh_) : MeshInfo(mesh_.indices.size()),
 	glCreateBuffers(1, &vbo);
 	glCreateBuffers(1, &ebo);
 
-	glNamedBufferData(vbo, mesh_.vertices.size() * sizeof(Vertex), &mesh_.vertices[0], GL_STATIC_DRAW);
-	glNamedBufferData(ebo, mesh_.indices.size() * sizeof(uint32_t), &mesh_.indices[0], GL_STATIC_DRAW);
+	glNamedBufferData(vbo, static_cast<GLsizeiptr>(mesh_.vertices.size() * sizeof(Vertex)), &mesh_.vertices[0], GL_STATIC_DRAW);
+	glNamedBufferData(ebo, static_cast<GLsizeiptr>(mesh_.indices.size() * sizeof(uint32_t)), &mesh_.indices[0], GL_STATIC_DRAW);
 
 	//Position
 	glEnableVertexArrayAttrib(vao, 0);
