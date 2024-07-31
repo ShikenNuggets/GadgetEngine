@@ -11,28 +11,30 @@
 
 using namespace Gadget;
 
+//These reserve values are somewhat arbitrary, adjust as you see fit
+static constexpr size_t gNumEventsToReserve = 256;
+static constexpr size_t gNumButtonsToReserve = 32;
+static constexpr size_t gNumAxesToReserve = 16;
+
 Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsHeld(), buttonsUp(), axes(), persistentAxes(), currentMouseX(0), currentMouseY(0), definedButtons(), definedAxes(){
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowRestarted, std::bind(&Input::OnWindowRestartedEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed, std::bind(&Input::OnKeyPressedEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased, std::bind(&Input::OnKeyReleasedEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, std::bind(&Input::OnMouseMovedEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseScroll, std::bind(&Input::OnMouseScrollEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, std::bind(&Input::OnMouseButtonPressedEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonReleased, std::bind(&Input::OnMouseButtonReleasedEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadAxis, std::bind(&Input::OnGamepadAxisEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonPressed, std::bind(&Input::OnGamepadButtonPressedEvent, this, std::placeholders::_1));
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonReleased, std::bind(&Input::OnGamepadButtonReleasedEvent, this, std::placeholders::_1));
+	EventHandler::GetInstance()->SetEventCallback(EventType::WindowRestarted,		[&](const Event& e){ OnWindowRestartedEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed,			[&](const Event& e){ OnKeyPressedEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased,			[&](const Event& e){ OnKeyReleasedEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved,			[&](const Event& e){ OnMouseMovedEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseScroll,			[&](const Event& e){ OnMouseScrollEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed,	[&](const Event& e){ OnMouseButtonPressedEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonReleased,	[&](const Event& e){ OnMouseButtonReleasedEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadAxis,			[&](const Event& e){ OnGamepadAxisEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonPressed,	[&](const Event& e){ OnGamepadButtonPressedEvent(e); });
+	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonReleased,	[&](const Event& e){ OnGamepadButtonReleasedEvent(e); });
+	
+	buttonEvents.reserve(gNumEventsToReserve);
+	axisEvents.reserve(gNumEventsToReserve);
+	persistentAxisEvents.reserve(gNumEventsToReserve);
 
-	//These reserve values are somewhat arbitrary, adjust as you see fit
-	buttonEvents.reserve(256);
-	axisEvents.reserve(256);
-	persistentAxisEvents.reserve(256);
-
-	definedButtons.reserve(32);
-	definedAxes.reserve(16);
+	definedButtons.reserve(gNumButtonsToReserve);
+	definedAxes.reserve(gNumAxesToReserve);
 }
-
-Input::~Input(){}
 
 bool Input::GetButtonDown(ButtonID id_) const{
 	GADGET_BASIC_ASSERT(id_ < ButtonID::ButtonID_MAX);
@@ -171,7 +173,7 @@ float Input::GetCurrentMouseXInGUICoordinates() const{
 	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock() != nullptr);
 	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock()->GetWidth() > 0);
 
-	float value = static_cast<float>(currentMouseX) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetWidth());
+	const float value = static_cast<float>(currentMouseX) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetWidth());
 	return Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range
 }
 
@@ -179,7 +181,7 @@ float Input::GetCurrentMouseYInGUICoordinates() const{
 	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock() != nullptr);
 	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock()->GetHeight() > 0);
 
-	float value = static_cast<float>(currentMouseY) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetHeight());
+	const float value = static_cast<float>(currentMouseY) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetHeight());
 	return -Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range, then invert
 }
 
@@ -342,7 +344,7 @@ void Input::OnKeyPressedEvent(const Event& e_){
 	const KeyPressedEvent* eventPtr = dynamic_cast<const KeyPressedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
-		buttonEvents.push_back(RawButton(eventPtr->GetKeyCode(), true));
+		buttonEvents.emplace_back(eventPtr->GetKeyCode(), true);
 	}
 }
 
@@ -353,7 +355,7 @@ void Input::OnKeyReleasedEvent(const Event& e_){
 	const KeyReleasedEvent* eventPtr = dynamic_cast<const KeyReleasedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
-		buttonEvents.push_back(RawButton(eventPtr->GetKeyCode(), false));
+		buttonEvents.emplace_back(eventPtr->GetKeyCode(), false);
 	}
 }
 
@@ -367,8 +369,8 @@ void Input::OnMouseMovedEvent(const Event& e_){
 		currentMouseX = static_cast<int>(eventPtr->GetXAbsolute());
 		currentMouseY = static_cast<int>(eventPtr->GetYAbsolute());
 
-		axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Horizontal, eventPtr->GetX()));
-		axisEvents.push_back(RawAxis(AxisID::Mouse_Move_Vertical, eventPtr->GetY()));
+		axisEvents.emplace_back(AxisID::Mouse_Move_Horizontal, eventPtr->GetX());
+		axisEvents.emplace_back(AxisID::Mouse_Move_Vertical, eventPtr->GetY());
 	}
 }
 
@@ -379,8 +381,8 @@ void Input::OnMouseScrollEvent(const Event& e_){
 	const MouseScrollEvent* eventPtr = dynamic_cast<const MouseScrollEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
-		axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Horizontal, eventPtr->GetXOffset()));
-		axisEvents.push_back(RawAxis(AxisID::Mouse_Scroll_Vertical, eventPtr->GetYOffset()));
+		axisEvents.emplace_back(AxisID::Mouse_Scroll_Horizontal, eventPtr->GetXOffset());
+		axisEvents.emplace_back(AxisID::Mouse_Scroll_Vertical, eventPtr->GetYOffset());
 	}
 }
 
@@ -391,7 +393,7 @@ void Input::OnMouseButtonPressedEvent(const Event& e_){
 	const MouseButtonPressedEvent* eventPtr = dynamic_cast<const MouseButtonPressedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
-		buttonEvents.push_back(RawButton(eventPtr->GetButton(), true));
+		buttonEvents.emplace_back(eventPtr->GetButton(), true);
 	}
 }
 
@@ -402,7 +404,7 @@ void Input::OnMouseButtonReleasedEvent(const Event& e_){
 	const MouseButtonReleasedEvent* eventPtr = dynamic_cast<const MouseButtonReleasedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
-		buttonEvents.push_back(RawButton(eventPtr->GetButton(), false));
+		buttonEvents.emplace_back(eventPtr->GetButton(), false);
 	}
 }
 
@@ -413,7 +415,7 @@ void Input::OnGamepadAxisEvent(const Event& e_){
 	const GamepadAxisEvent* eventPtr = dynamic_cast<const GamepadAxisEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
-		persistentAxisEvents.push_back(RawAxis(eventPtr->GetAxisIndex(), eventPtr->GetValue()));
+		persistentAxisEvents.emplace_back(eventPtr->GetAxisIndex(), eventPtr->GetValue());
 	}
 }
 
@@ -424,7 +426,7 @@ void Input::OnGamepadButtonPressedEvent(const Event& e_){
 	const GamepadButtonPressedEvent* eventPtr = dynamic_cast<const GamepadButtonPressedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
-		buttonEvents.push_back(RawButton(eventPtr->GetButton(), true));
+		buttonEvents.emplace_back(eventPtr->GetButton(), true);
 	}
 }
 
@@ -435,6 +437,6 @@ void Input::OnGamepadButtonReleasedEvent(const Event& e_){
 	const GamepadButtonReleasedEvent* eventPtr = dynamic_cast<const GamepadButtonReleasedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
-		buttonEvents.push_back(RawButton(eventPtr->GetButton(), false));
+		buttonEvents.emplace_back(eventPtr->GetButton(), false);
 	}
 }

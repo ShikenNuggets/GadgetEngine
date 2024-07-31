@@ -45,7 +45,7 @@ namespace Gadget{
 
 	class ButtonSequenceGesture : public InputGesture{
 	public:
-		ButtonSequenceGesture(StringID gestureName_, std::vector<StringID> sequence_, float maxAllowedTime_ = 1.0f);
+		ButtonSequenceGesture(StringID gestureName_, const std::vector<StringID>& sequence_, float maxAllowedTime_ = 1.0f);
 		virtual ~ButtonSequenceGesture(){}
 
 		virtual bool IsGestureValid() const override;
@@ -69,7 +69,7 @@ namespace Gadget{
 			DownRight
 		};
 
-		CircularRotationGesture(StringID gestureName_, StringID horizontalAxisName_, StringID verticalAxisName_, std::vector<Rotations> rotations_, float maxAllowedTime_ = 1.0f);
+		CircularRotationGesture(StringID gestureName_, StringID horizontalAxisName_, StringID verticalAxisName_, const std::vector<Rotations>& rotations_, float maxAllowedTime_ = 1.0f);
 		virtual ~CircularRotationGesture(){}
 
 		virtual bool IsGestureValid() const override;
