@@ -35,9 +35,9 @@ bool Cubemap::IsValid() const{
 		return false;
 	}
 
-	int expectedWidth = textures[0]->GetWidth();
-	int expectedHeight = textures[0]->GetHeight();
-	int expectedBitDepth = textures[0]->GetBitDepth();
+	const int expectedWidth = textures[0]->GetWidth();
+	const int expectedHeight = textures[0]->GetHeight();
+	const int expectedBitDepth = textures[0]->GetBitDepth();
 
 	for(size_t i = 0; i < numTextures; i++){
 		if(textures[i] == nullptr){

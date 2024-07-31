@@ -6,7 +6,7 @@ using namespace Gadget;
 
 Texture* ImageLoader::LoadImage(const std::string& filePath_){
 	static constexpr int flags = IMG_INIT_JPG | IMG_INIT_PNG;
-	int init = IMG_Init(flags);
+	const int init = IMG_Init(flags);
 	if((init & flags) != flags){
 		GADGET_ASSERT(false, std::string("SDL_Image init failed. SDL Error: ") + SDL_GetError());
 		return nullptr;

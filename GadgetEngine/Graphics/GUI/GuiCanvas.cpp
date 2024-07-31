@@ -50,7 +50,7 @@ void GuiCanvas::OnMouseMoved([[maybe_unused]] int xPos, [[maybe_unused]] int yPo
 void GuiCanvas::OnMouseClick(ButtonID mouseButton_){
 	GADGET_BASIC_ASSERT(mouseButton_ != ButtonID::ButtonID_MAX);
 
-	Vector2 clickPoint = Vector2(App::GetInput().GetCurrentMouseXInGUICoordinates(), App::GetInput().GetCurrentMouseYInGUICoordinates());
+	const Vector2 clickPoint = Vector2(App::GetInput().GetCurrentMouseXInGUICoordinates(), App::GetInput().GetCurrentMouseYInGUICoordinates());
 
 	switch(mouseButton_){
 		case Gadget::ButtonID::Mouse_LeftMouseButton:

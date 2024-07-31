@@ -28,7 +28,7 @@ namespace Gadget{
 		}
 
 		DiffuseTextureMaterial(const NamedVarList& varList_) : Material(varList_), textureResourceName(StringID::None){
-			Deserialize(varList_);
+			DiffuseTextureMaterial::Deserialize(varList_);
 		}
 
 		virtual ~DiffuseTextureMaterial() override{
@@ -63,6 +63,7 @@ namespace Gadget{
 
 	protected:
 		virtual void Deserialize(const NamedVarList& varList_) override{
+			GADGET_BASIC_ASSERT(DiffuseTextureMaterial::Type() == varList_.GetValue(SID("MaterialType"), StringID::None).ToStr());
 			textureResourceName = varList_.GetValue(SID("TextureName"), StringID::None).ToStr();
 			GADGET_BASIC_ASSERT(textureResourceName != StringID::None);
 		}

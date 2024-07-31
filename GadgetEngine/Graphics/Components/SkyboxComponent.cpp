@@ -4,6 +4,8 @@
 
 using namespace Gadget;
 
+static constexpr size_t gNumSides = 6;
+
 SkyboxComponent::SkyboxComponent(Scene* parent_, StringID skyboxName_, StringID shader_) : SceneComponent(parent_), shaderName(shader_), shader(nullptr), cubemapInfo(nullptr){
 	GADGET_BASIC_ASSERT(parent_ != nullptr);
 	GADGET_BASIC_ASSERT(skyboxName_ != StringID::None);
@@ -11,7 +13,7 @@ SkyboxComponent::SkyboxComponent(Scene* parent_, StringID skyboxName_, StringID 
 	
 	shader = App::GetRenderer().GenerateAPIShader(shaderName);
 
-	std::array<StringID, 6> textures = {
+	std::array<StringID, gNumSides> textures = {
 		StringID::ProcessString(skyboxName_.GetString() + "RightTexture"),
 		StringID::ProcessString(skyboxName_.GetString() + "LeftTexture"),
 		StringID::ProcessString(skyboxName_.GetString() + "TopTexture"),

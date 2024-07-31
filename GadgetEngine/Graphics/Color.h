@@ -5,7 +5,7 @@
 
 namespace Gadget{
 	struct Color{
-		constexpr Color(float r_, float g_, float b_, float a_ = 1.0f) : r(r_), g(g_), b(b_), a(a_){
+		constexpr Color(float r_, float g_, float b_, float a_ = 1.0f) noexcept : r(r_), g(g_), b(b_), a(a_){
 			r = Math::Clamp(0.0f, 1.0f, r_);
 			g = Math::Clamp(0.0f, 1.0f, g_);
 			b = Math::Clamp(0.0f, 1.0f, b_);

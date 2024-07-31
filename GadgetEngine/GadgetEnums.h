@@ -35,6 +35,9 @@ namespace Gadget{
 		FMOD_Version_Error,
 		FMOD_Shutdown_Error,
 
+		//FreeType Errors
+		FreeType_Errror,
+
 		ErrorCode_MAX
 	};
 
@@ -66,6 +69,8 @@ namespace Gadget{
 		"FMOD_Init_Error",
 		"FMOD_Version_Error",
 		"FMOD_Shutdown_Error",
+
+		"FreeType_Error",
 
 		//ErrorCode_MAX
 	};

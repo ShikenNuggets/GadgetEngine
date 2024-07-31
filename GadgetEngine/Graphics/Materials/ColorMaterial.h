@@ -19,7 +19,7 @@ namespace Gadget{
 		}
 
 		ColorMaterial(const NamedVarList& varList_) : Material(varList_), color(Color::Black()){
-			Deserialize(varList_);
+			ColorMaterial::Deserialize(varList_);
 		}
 
 		virtual void Bind() override{
@@ -55,6 +55,7 @@ namespace Gadget{
 
 	protected:
 		virtual void Deserialize(const NamedVarList& varList_) override{
+			GADGET_BASIC_ASSERT(ColorMaterial::Type() == varList_.GetValue(SID("MaterialType"), StringID::None).ToStr());
 			color.r = varList_.GetValue(SID("Color_R"), Color::White().r).ToNumber<float>();
 			color.g = varList_.GetValue(SID("Color_G"), Color::White().g).ToNumber<float>();
 			color.b = varList_.GetValue(SID("Color_B"), Color::White().b).ToNumber<float>();

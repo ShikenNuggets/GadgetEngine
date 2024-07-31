@@ -47,7 +47,7 @@ CameraComponent::CameraComponent(GUID parentGUID_, Camera::Projection projection
 CameraComponent::CameraComponent(const ComponentProperties& props_) : Component(props_){
 	GADGET_BASIC_ASSERT(props_.typeName == CameraComponent::type);
 
-	Deserialize(props_);
+	CameraComponent::Deserialize(props_);
 
 	lastPosition = parent->GetPosition();
 	lastRotation = parent->GetRotation();
@@ -106,7 +106,7 @@ Matrix4 CameraComponent::GetUpdatedProjectionMatrix(){
 
 ComponentProperties CameraComponent::Serialize() const{
 	ComponentProperties props = Component::Serialize();
-	props.variables.Add(SID("Projection"), (int)camera.GetCurrentProjection());
+	props.variables.Add(SID("Projection"), static_cast<int>(camera.GetCurrentProjection()));
 	props.variables.Add(SID("ViewRect_X"), camera.GetViewportRect().x);
 	props.variables.Add(SID("ViewRect_Y"), camera.GetViewportRect().y);
 	props.variables.Add(SID("ViewRect_W"), camera.GetViewportRect().w);
@@ -116,10 +116,10 @@ ComponentProperties CameraComponent::Serialize() const{
 }
 
 void CameraComponent::Deserialize(const ComponentProperties& props_){
-	Camera::Projection proj = (Camera::Projection)props_.variables.GetValue(SID("Projection"), (int)Camera::Projection::Perspective).ToNumber<int>();
+	Camera::Projection proj = static_cast<Camera::Projection>(props_.variables.GetValue(SID("Projection"), static_cast<int>(Camera::Projection::Perspective)).ToNumber<int>());
 	GADGET_BASIC_ASSERT((int)proj > 0);
 	GADGET_BASIC_ASSERT(proj < Camera::Projection::Projection_MAX);
-	if((int)proj < 0 || proj >= Camera::Projection::Projection_MAX){
+	if(proj >= Camera::Projection::Projection_MAX){
 		proj = Camera::Projection::Perspective; //Default to perspective if something went wrong
 	}
 

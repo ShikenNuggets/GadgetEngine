@@ -24,7 +24,7 @@ namespace Gadget{
 	//Use the macros defined below so they aren't included in Release builds
 	class RaceConditionDetector{
 	public:
-		RaceConditionDetector();
+		RaceConditionDetector() noexcept;
 		DISABLE_COPY_AND_MOVE(RaceConditionDetector);
 
 		void Acquire();

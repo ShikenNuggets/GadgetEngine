@@ -6,14 +6,21 @@
 
 using namespace Gadget;
 
-FreetypeFontLoader::FreetypeFontLoader(){
-	FT_Error err = FT_Init_FreeType(&ftLib);
-	GADGET_ASSERT(err == FT_Err_Ok, "Could not initialize FreeType! FreeType Error Code: " + std::to_string(err));
+static constexpr FT_UInt gFontPixelSize = 128;
+static constexpr FT_UInt gNumCharacters = 128; //TODO - Unicode?
+
+FreetypeFontLoader::FreetypeFontLoader() : ftLib(nullptr){
+	const FT_Error err = FT_Init_FreeType(&ftLib);
+	if(err != FT_Err_Ok){
+		Debug::ThrowFatalError(SID("RENDER"), "Could not initialize FreeType! FreeType Error Code: " + std::to_string(err), ErrorCode::FreeType_Errror, __FILE__, __LINE__);
+	}
 }
 
 FreetypeFontLoader::~FreetypeFontLoader(){
-	FT_Error err = FT_Done_FreeType(ftLib);
-	GADGET_ASSERT(err == FT_Err_Ok, "Could not cleanup FreeType! FreeType Error Code: " + std::to_string(err));
+	const FT_Error err = FT_Done_FreeType(ftLib);
+	if(err != FT_Err_Ok){
+		GADGET_LOG_ERROR(SID("RENDER"), "Could not cleanup FreeType! FreeType Error Code: " + std::to_string(err));
+	}
 }
 
 FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_){
@@ -30,19 +37,19 @@ FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_){
 	GADGET_ASSERT(err == FT_Err_Ok && fontFace != nullptr, "Could not load font face! FreeType Error Code: " + std::to_string(err));
 
 	//Set size to load glyphs as
-	err = FT_Set_Pixel_Sizes(fontFace, 0, 128);
+	err = FT_Set_Pixel_Sizes(fontFace, 0, gFontPixelSize);
 	GADGET_ASSERT(err == FT_Err_Ok, "Could not set FreeType pixel sizes! FreeType Error Code: " + std::to_string(err));
 
 	FreetypeFont* font = new FreetypeFont();
 
 	//Load the first 128 ASCII characters
 	//TODO - Unicode?
-	for(unsigned char c = 0; c < 128; c++) {  
+	for(unsigned char c = 0; c < gNumCharacters; c++) {
 		//Load character glyph 
 		err = FT_Load_Char(fontFace, c, FT_LOAD_RENDER);
 		GADGET_ASSERT(err == FT_Err_Ok, std::string("Could not load glyph for character ") + static_cast<char>(c) + std::string("! FreeType Error Code" + std::to_string(err)));
 
-		FreetypeFontCharacter character = FreetypeFontCharacter(
+		const FreetypeFontCharacter character = FreetypeFontCharacter(
 			fontFace->glyph->bitmap.width,
 			fontFace->glyph->bitmap.rows,
 			fontFace->glyph->bitmap.pitch,

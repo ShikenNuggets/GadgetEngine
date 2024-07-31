@@ -71,7 +71,7 @@ namespace Gadget{
 		static inline constexpr float Dot4D(float aa_, float ab_, float ac_, float ad_, float ba_, float bb_, float bc_, float bd_){ return (aa_ * ba_) + (ab_ * bb_) + (ac_ * bc_) + (ad_ * bd_); }
 
 		template <class T>
-		static inline constexpr T Clamp(T min_, T max_, T value_){
+		static inline constexpr T Clamp(T min_, T max_, T value_) noexcept{
 			if(value_ < min_){
 				return min_;
 			}else if(value_ > max_){

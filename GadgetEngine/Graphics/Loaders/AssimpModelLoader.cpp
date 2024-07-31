@@ -43,21 +43,21 @@ void AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, st
 		std::vector<unsigned int> indices;
 
 		verts.reserve(mesh->mNumVertices);
-		indices.reserve(mesh->mNumFaces * 3);
+		indices.reserve(static_cast<size_t>(mesh->mNumFaces) * 3);
 
 		for(unsigned int j = 0; j < mesh->mNumVertices; j++){
 			if(mesh->mNormals == nullptr){
-				verts.push_back(Vertex(
+				verts.emplace_back(
 					Vector3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z),
 					Vector3::Forward(),
 					Vector2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y)
-				));
+				);
 			}else{
-				verts.push_back(Vertex(
+				verts.emplace_back(
 					Vector3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z),
 					Vector3(mesh->mNormals[j].x, mesh->mNormals[j].y, mesh->mNormals[j].z),
 					Vector2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y)
-				));
+				);
 			}
 		}
 
@@ -67,7 +67,7 @@ void AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, st
 			}
 		}
 
-		submeshes_.push_back(Submesh(verts, indices));
+		submeshes_.emplace_back(verts, indices);
 	}
 
 	for(unsigned int i = 0; i < node->mNumChildren; i++){

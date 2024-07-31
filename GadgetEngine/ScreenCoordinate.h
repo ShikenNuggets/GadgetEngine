@@ -6,7 +6,7 @@ namespace Gadget{
 		int x;
 		int y;
 
-		explicit constexpr ScreenCoordinate(int x_, int y_) : x(x_), y(y_){}
+		explicit constexpr ScreenCoordinate(int x_, int y_) noexcept : x(x_), y(y_){}
 
 		inline constexpr bool operator ==(const ScreenCoordinate& sc_) const{ return x == sc_.x && y == sc_.y; }
 		inline constexpr bool operator !=(const ScreenCoordinate& sc_) const{ return x != sc_.x && y != sc_.y; }

@@ -74,10 +74,10 @@ RenderComponent::RenderComponent(GUID parentGUID_, StringID modelName_, EngineMa
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-RenderComponent::RenderComponent(const ComponentProperties& props_) : Component(props_), modelName(StringID::None), meshInfos(){
+RenderComponent::RenderComponent(const ComponentProperties& props_) : Component(props_), modelName(StringID::None), meshInfos(), engineMaterial(nullptr), meshInstanceInfo(nullptr){
 	GADGET_BASIC_ASSERT(props_.parentGuid != GUID::Invalid);
 
-	Deserialize(props_);
+	RenderComponent::Deserialize(props_);
 
 	componentCollection.Add(this);
 
@@ -131,10 +131,10 @@ void RenderComponent::CreateMeshInfo(){
 	Mesh* mesh = App::GetResourceManager().LoadResource<Mesh>(modelName);
 	GADGET_BASIC_ASSERT(mesh != nullptr);
 
-	std::vector<MeshInfo*> mi = App::GetRenderer().GenerateAPIMeshInfos(*mesh);
+	const std::vector<MeshInfo*> mi = App::GetRenderer().GenerateAPIMeshInfos(*mesh);
 	GADGET_BASIC_ASSERT(!mi.empty());
 	for(const auto& m : mi){
-		meshInfos.push_back(Pair(m, StringID::None));
+		meshInfos.emplace_back(m, StringID::None);
 	}
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 
@@ -155,8 +155,8 @@ ComponentProperties RenderComponent::Serialize() const{
 
 void RenderComponent::Deserialize(const ComponentProperties& props_){
 	modelName = props_.variables.GetValue(SID("ModelName"), StringID::None).ToStr();
-	StringID materialType = props_.variables.GetValue(SID("MaterialType"), StringID::None).ToStr();
-	StringID shaderName = props_.variables.GetValue(SID("ShaderName"), StringID::None).ToStr();
+	const StringID materialType = props_.variables.GetValue(SID("MaterialType"), StringID::None).ToStr();
+	const StringID shaderName = props_.variables.GetValue(SID("ShaderName"), StringID::None).ToStr();
 
 	GADGET_BASIC_ASSERT(modelName != StringID::None);
 	GADGET_BASIC_ASSERT(materialType != StringID::None);
@@ -167,13 +167,13 @@ void RenderComponent::Deserialize(const ComponentProperties& props_){
 
 	//TODO - This is all very dumb
 	if(materialType == DiffuseTextureMaterial::type){
-		StringID materialName = StringID::ProcessString("__" + std::to_string(GetGUID().Id()) + "_DiffuseTextureMaterial");
+		const StringID materialName = StringID::ProcessString("__" + std::to_string(GetGUID().Id()) + "_DiffuseTextureMaterial");
 		App::GetMaterialCache().AddMaterial(materialName, new DiffuseTextureMaterial(props_.variables));
 		for(auto& m : meshInfos){
 			m.second = materialName;
 		}
 	}else if(materialType == ColorMaterial::type){
-		StringID materialName = StringID::ProcessString("__" + std::to_string(GetGUID().Id()) + "_ColorMaterial");
+		const StringID materialName = StringID::ProcessString("__" + std::to_string(GetGUID().Id()) + "_ColorMaterial");
 		App::GetMaterialCache().AddMaterial(materialName, new ColorMaterial(props_.variables));
 		for(auto& m : meshInfos){
 			m.second = materialName;

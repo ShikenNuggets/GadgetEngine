@@ -17,8 +17,8 @@ Material::Material(StringID shaderResource_) : shaderResourceName(shaderResource
 	GADGET_ASSERT(shader != nullptr, "Could not load shader [" + shaderResourceName.GetString() + "]!");
 }
 
-Material::Material(const NamedVarList& varList_) : shaderResourceName(StringID::None){
-	Deserialize(varList_);
+Material::Material(const NamedVarList& varList_) : shaderResourceName(StringID::None), shader(nullptr){
+	Material::Deserialize(varList_);
 }
 
 Material::~Material(){
@@ -32,6 +32,5 @@ void Material::Serialize(NamedVarList& varList_) const{
 }
 
 void Material::Deserialize(const NamedVarList& varList_){
-	GADGET_BASIC_ASSERT(Type() == varList_.GetValue(SID("MaterialType"), StringID::None).ToStr());
 	shaderResourceName = varList_.GetValue(SID("ShaderName"), StringID::None).ToStr();
 }

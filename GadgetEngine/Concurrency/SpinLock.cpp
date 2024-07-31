@@ -20,7 +20,7 @@ void SpinLock::Release(){
 	atomicFlag.clear(std::memory_order_release);
 }
 
-RaceConditionDetector::RaceConditionDetector() : flag(false){}
+RaceConditionDetector::RaceConditionDetector() noexcept : flag(false){}
 
 void RaceConditionDetector::Acquire(){
 	GADGET_ASSERT(!flag, "Race condition detected (lock was re-acquired by another thread)!"); //No one should already have the lock
