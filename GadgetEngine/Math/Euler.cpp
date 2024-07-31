@@ -25,26 +25,26 @@ Matrix4 Euler::ToMatrix4() const{
 Quaternion Euler::ToQuaternion() const{
 	GADGET_BASIC_ASSERT(IsValid());
 
-	float bank = x.ToRadians();
-	float heading = y.ToRadians();
-	float attitude = z.ToRadians();
+	const float bank = x.ToRadians();
+	const float heading = y.ToRadians();
+	const float attitude = z.ToRadians();
 
-	float c1 = Math::CosR(heading / 2.0f);
-	float c2 = Math::CosR(attitude / 2.0f);
-	float c3 = Math::CosR(bank / 2.0f);
+	const float c1 = Math::CosR(heading / 2.0f);
+	const float c2 = Math::CosR(attitude / 2.0f);
+	const float c3 = Math::CosR(bank / 2.0f);
 
-	float s1 = Math::SinR(heading / 2.0f);
-	float s2 = Math::SinR(attitude / 2.0f);
-	float s3 = Math::SinR(bank / 2.0f);
+	const float s1 = Math::SinR(heading / 2.0f);
+	const float s2 = Math::SinR(attitude / 2.0f);
+	const float s3 = Math::SinR(bank / 2.0f);
 
-	float newW = c1 * c2 * c3 - s1 * s2 * s3;
-	float newX = s1 * s2 * c3 + c1 * c2 * s3;
-	float newY = s1 * c2 * c3 + c1 * s2 * s3;
-	float newZ = c1 * s2 * c3 - s1 * c2 * s3;
+	const float newW = c1 * c2 * c3 - s1 * s2 * s3;
+	const float newX = s1 * s2 * c3 + c1 * c2 * s3;
+	const float newY = s1 * c2 * c3 + c1 * s2 * s3;
+	const float newZ = c1 * s2 * c3 - s1 * c2 * s3;
 
 	return Quaternion(newW, newX, newY, newZ).Normalized();
 }
 
 std::string Euler::ToString() const{
-	return std::string(std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z));
+	return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
 }

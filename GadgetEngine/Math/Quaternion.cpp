@@ -46,7 +46,7 @@ Angle Quaternion::GetRotationAngle(const Quaternion& q_){
 Vector3 Quaternion::GetRotationAxis(const Quaternion& q_){
 	GADGET_BASIC_ASSERT(q_.IsValid());
 
-	Vector3 v = Vector3(q_.x, q_.y, q_.z);
+	const Vector3 v = Vector3(q_.x, q_.y, q_.z);
 	return v / Math::SinR((GetRotationAngle(q_) / 2.0f).ToRadians());
 }
 
@@ -54,9 +54,9 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 	GADGET_BASIC_ASSERT(source_.IsValid());
 	GADGET_BASIC_ASSERT(destination_.IsValid());
 
-	Vector3 forwardVector = (destination_ - source_).Normalized();
+	const Vector3 forwardVector = (destination_ - source_).Normalized();
 
-	float dot = Vector3::Dot(Vector3::Forward(), forwardVector);
+	const float dot = Vector3::Dot(Vector3::Forward(), forwardVector);
 
 	if(Math::Abs(dot - (-1.0f)) < Math::NearZero){
 		return Quaternion(Math::Pi, Vector3::Up());
@@ -66,8 +66,8 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 		return Quaternion::Identity();
 	}
 
-	Angle rotAngle = Math::Acos(dot);
-	Vector3 rotAxis = Vector3::Cross(Vector3::Forward(), forwardVector).Normalized();
+	const Angle rotAngle = Math::Acos(dot);
+	const Vector3 rotAxis = Vector3::Cross(Vector3::Forward(), forwardVector).Normalized();
 	return Quaternion::Rotate(rotAngle.Get(), rotAxis);
 }
 
@@ -146,12 +146,12 @@ Euler Quaternion::ToEuler() const{
 	float attitude = 0.0f;
 	float bank = 0.0f;
 
-	float sqw = w * w;
-	float sqx = x * x;
-	float sqy = y * y;
-	float sqz = z * z;
-	float unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-	float test = (x * y) + (z * w);
+	const float sqw = w * w;
+	const float sqx = x * x;
+	const float sqy = y * y;
+	const float sqz = z * z;
+	const float unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+	const float test = (x * y) + (z * w);
 
 	if(test > 0.499f * unit){ // singularity at north pole
 		heading = 2.0f * atan2(x, w);
@@ -172,5 +172,5 @@ Euler Quaternion::ToEuler() const{
 }
 
 std::string Quaternion::ToString() const{
-	return std::string(std::to_string(w) + ", (" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")");
+	return std::to_string(w) + ", (" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
 }

@@ -133,7 +133,7 @@ float Matrix2::Determinant() const{
 
 Matrix2 Matrix2::Inverse() const{
 	GADGET_BASIC_ASSERT(IsValid());
-	float invdet = Math::SafeDivide(1.0f, Determinant());
+	const float invdet = Math::SafeDivide(1.0f, Determinant());
 
 	return Matrix2(	m[3] * invdet, -m[1] * invdet,
 					-m[2] * invdet, m[0] * invdet);

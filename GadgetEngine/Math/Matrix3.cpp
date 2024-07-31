@@ -162,7 +162,7 @@ float Matrix3::Determinant() const{
 Matrix3 Matrix3::Inverse() const{
 	GADGET_BASIC_ASSERT(IsValid());
 
-	float invdet = Math::SafeDivide(1.0f, Determinant());
+	const float invdet = Math::SafeDivide(1.0f, Determinant());
 
 	return Matrix3(
 		(m[4] * m[8] - m[7] * m[5]) * invdet,
@@ -199,9 +199,7 @@ Euler Matrix3::ToEuler() const{
 	Angle attitude = Math::Asin(m[1]);
 	Angle bank = Angle(0.0f);
 
-	if(m[1] >= 0.99f){
-		heading = Math::Atan2(m[6], m[8]);
-	}else if(m[1] <= -0.99f){
+	if(m[1] >= 0.99f || m[1] <= -0.99f){
 		heading = Math::Atan2(m[6], m[8]);
 	}else{
 		heading = Math::Atan2(-m[2], m[0]);
