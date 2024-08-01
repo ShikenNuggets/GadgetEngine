@@ -47,4 +47,5 @@ mono_crash.*
 
 # Special Directories
 SDK/_Gadget/
+!Resources/**/*.obj
 Resources/Shaders/
