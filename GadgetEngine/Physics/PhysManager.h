@@ -1,6 +1,8 @@
 #ifndef GADGET_PHYS_MANAGER_H
 #define GADGET_PHYS_MANAGER_H
 
+#include <vector>
+
 #include "Physics/BulletHelper.h"
 #include "Physics/Collider.h"
 #include "Physics/Rigidbody.h"
@@ -34,6 +36,9 @@ namespace Gadget{
 		btSequentialImpulseConstraintSolver* solver;
 
 		std::vector<btCollisionShape*> cachedCollisionShapes;
+
+		std::vector<Rigidbody*> rigidbodiesBuffer;
+		std::vector<Collider*> collidersBuffer;
 
 		void HandleCollisionResponse(Collider* collider_, Collider* other_);
 		btCollisionShape* CreateCollisionShape(const Collider* col_);

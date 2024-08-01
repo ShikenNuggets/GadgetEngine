@@ -52,18 +52,22 @@ Audio::~Audio(){
 }
 
 void Audio::Update(Scene* scene_){
-	const auto als = scene_->GetAllComponentsInScene<AudioListener>(); //TODO - This is slow
-	for(const auto& al : als){
+	scene_->GetAllComponentsInScene<AudioListener>(audioListenersBuffer); //TODO - This is slow
+	for(const auto& al : audioListenersBuffer){
 		al->Update();
 	}
 
-	const auto asList = scene_->GetAllComponentsInScene<AudioSource>();
-	for(const auto& as : asList){
+	scene_->GetAllComponentsInScene<AudioSource>(audioSourcesBuffer); //TODO - This is slow
+	for(const auto& as : audioSourcesBuffer){
 		as->Update();
 	}
 
 	studioSystem->update();
 	coreSystem->update();
+
+	//So we don't accidentally reuse these pointers later
+	audioListenersBuffer.clear();
+	audioSourcesBuffer.clear();
 }
 
 float Audio::GetVolume(VolumeChannel channel_){

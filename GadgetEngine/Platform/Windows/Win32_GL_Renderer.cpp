@@ -106,29 +106,27 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 	//TODO - This is very inefficient, find a better way to do this
 	//TODO - However we actually decide to do this it should be part of the generic renderer instead of being here
-	auto cams = scene_->GetAllComponentsInScene<CameraComponent>();
-	auto meshes = scene_->GetAllComponentsInScene<RenderComponent>();
-	auto lights = scene_->GetAllComponentsInScene<PointLightComponent>();
+	scene_->GetAllComponentsInScene<CameraComponent>(camerasBuffer);
+	scene_->GetAllComponentsInScene<RenderComponent>(rendersBuffer);
+	scene_->GetAllComponentsInScene<PointLightComponent>(pointLightsBuffer);
 	auto skybox = scene_->GetSceneComponent<SkyboxComponent>();
 	auto canvas = scene_->GetSceneComponent<CanvasSceneComponent>();
 
-	std::vector<GuiTextElement*> guiTexts;
-	std::vector<GuiTextureElement*> guiTextures;
 	if(canvas != nullptr){
-		guiTexts = canvas->GetCanvas().GetElements<GuiTextElement>();
-		guiTextures = canvas->GetCanvas().GetElements<GuiTextureElement>();
+		canvas->GetCanvas().GetElements<GuiTextElement>(guiTextsBuffer);
+		canvas->GetCanvas().GetElements<GuiTextureElement>(guiTexturesBuffer);
 	}
 
-	GADGET_ASSERT(lights.size() < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(lights.size()) + "!");
+	GADGET_ASSERT(pointLightsBuffer.size() < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(pointLightsBuffer.size()) + "!");
 
-	for(const auto& cam : cams){
+	for(const auto& cam : camerasBuffer){
 		SetViewportRect(cam->GetCamera().GetViewportRect());
 		const Matrix4 view = cam->GetUpdatedViewMatrix();
 		const Matrix4 proj = cam->GetUpdatedProjectionMatrix();
 
 		//------------------------------------------------------------------------------------------------------------------------
 		//Render all meshes in the scene
-		for(const auto& mesh : meshes){
+		for(const auto& mesh : rendersBuffer){
 			for(size_t i = 0; i < mesh->GetNumSubmeshes(); i++){
 				mesh->Bind(i);
 				mesh->GetShader(i)->BindMatrix4(SID("projectionMatrix"), proj);
@@ -142,11 +140,11 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 					mesh->GetShader(i)->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
 
-					mesh->GetShader(i)->BindInt(SID("numPointLights"), static_cast<int>(lights.size()));
+					mesh->GetShader(i)->BindInt(SID("numPointLights"), static_cast<int>(pointLightsBuffer.size()));
 					mesh->GetShader(i)->BindInt(SID("numSpotLights"), 0);
 					mesh->GetShader(i)->BindInt(SID("numDirLights"), 0);
 
-					for(const auto& light : lights){
+					for(const auto& light : pointLightsBuffer){
 						mesh->GetShader(i)->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
 						mesh->GetShader(i)->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
 						mesh->GetShader(i)->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
@@ -180,7 +178,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		uiProjection[0] = 1.0f / GetAspectRatio();
 
 		//TEXT
-		for(const auto& text : guiTexts){
+		for(const auto& text : guiTextsBuffer){
 			if(text->GetText().empty()){
 				continue;
 			}
@@ -246,7 +244,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		}
 
 		//TEXTURES
-		for(const auto& texture : guiTextures){
+		for(const auto& texture : guiTexturesBuffer){
 			Shader* shader = texture->GetShader();
 			shader->Bind();
 			shader->BindMatrix4(SID("projectionMatrix"), uiProjection);
@@ -301,6 +299,13 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 	//Do this only at the end
 	window.get()->SwapBuffers();
+
+	//So we don't accidentally reuse these pointers later
+	camerasBuffer.clear();
+	rendersBuffer.clear();
+	pointLightsBuffer.clear();
+	guiTextsBuffer.clear();
+	guiTexturesBuffer.clear();
 }
 
 void Win32_GL_Renderer::ClearScreen(){

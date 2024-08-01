@@ -8,10 +8,9 @@ using namespace Gadget;
 void GameLogicManager::Update(const Scene* scene_, float deltaTime_){
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
-
-	//TODO - This is very inefficient, find a better way to do this
-	auto lcs = scene_->GetAllComponentsInScene<GameLogicComponent>();
-	for(auto& lc : lcs){
+	
+	scene_->GetAllComponentsInScene<GameLogicComponent>(gameLogicsBuffer); //TODO - This is very inefficient, find a better way to do this
+	for(auto& lc : gameLogicsBuffer){
 		GADGET_BASIC_ASSERT(lc != nullptr);
 		if(!lc->HasStarted()){
 			lc->OnStart();
@@ -25,4 +24,7 @@ void GameLogicManager::Update(const Scene* scene_, float deltaTime_){
 
 		GADGET_BASIC_ASSERT(lc->HasStarted());
 	}
+
+	//So we don't accidentally reuse these pointers later
+	gameLogicsBuffer.clear();
 }

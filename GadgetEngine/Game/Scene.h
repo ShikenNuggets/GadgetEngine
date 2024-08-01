@@ -57,6 +57,7 @@ namespace Gadget{
 		template <class T> void GetAllComponentsInScene(std::vector<T*>& inBuffer_) const{
 			GADGET_ASSERT(inBuffer_.empty(), "Non-empty std::vector passed to GetAllComponentsInScene, existing data will be lost!");
 			inBuffer_.clear();
+			inBuffer_.reserve(gameObjects.size());
 
 			for(const auto& go : gameObjects){
 				//TODO - This assumes only one of each kind of component on an object

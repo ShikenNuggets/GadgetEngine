@@ -9,6 +9,11 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
+#include "Graphics/Components/CameraComponent.h"
+#include "Graphics/Components/LightComponent.h"
+#include "Graphics/Components/RenderComponent.h"
+#include "Graphics/GUI/GuiTextElement.h"
+#include "Graphics/GUI/GuiTextureElement.h"
 #include "Graphics/OpenGL/GL_ScreenQuad.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 #include "Graphics/OpenGL/FrameBuffers/GL_DefaultFrameBuffer.h"
@@ -48,6 +53,14 @@ namespace Gadget{
 		GL_DefaultFrameBuffer* mainFBO;
 		GL_Shader* screenShader;
 		GL_ScreenQuad* screenQuad;
+
+	private:
+		std::vector<CameraComponent*> camerasBuffer;
+		std::vector<RenderComponent*> rendersBuffer;
+		std::vector<PointLightComponent*> pointLightsBuffer;
+
+		std::vector<GuiTextElement*> guiTextsBuffer;
+		std::vector<GuiTextureElement*> guiTexturesBuffer;
 	};
 }
 

@@ -40,13 +40,13 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 
 	bulletDynamicsWorld->stepSimulation(deltaTime_, 0); //TODO - We should eventually do proper interpolation w/ fixed time step
 
-	const auto rbs = scene_->GetAllComponentsInScene<Rigidbody>(); //TODO - This is slow
-	for(const auto& rb : rbs){
+	scene_->GetAllComponentsInScene<Rigidbody>(rigidbodiesBuffer); //TODO - This is slow
+	for(const auto& rb : rigidbodiesBuffer){
 		rb->Update(deltaTime_);
 	}
 
-	const auto cls = App::GetSceneManager().CurrentScene()->GetAllComponentsInScene<Collider>(); //TODO - This is slow
-	for(const auto* cl : cls){
+	scene_->GetAllComponentsInScene<Collider>(collidersBuffer); //TODO - This is slow
+	for(const auto* cl : collidersBuffer){
 		GADGET_BASIC_ASSERT(cl != nullptr);
 		if(cl == nullptr || cl->bulletRb == nullptr){
 			continue;
@@ -55,6 +55,10 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 		BulletCollisionResultCallback callback;
 		bulletDynamicsWorld->contactTest(cl->bulletRb, callback);
 	}
+
+	//So we don't accidentally reuse these pointers later
+	rigidbodiesBuffer.clear();
+	collidersBuffer.clear();
 }
 
 btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody* rb_){
