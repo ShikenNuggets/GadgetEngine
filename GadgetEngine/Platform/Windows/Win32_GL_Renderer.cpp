@@ -35,7 +35,7 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 		Debug::ThrowFatalError(SID("RENDER"), "OpenGL context could not be created! SDL Error: " + std::string(SDL_GetError()), ErrorCode::OpenGL_Error, __FILE__, __LINE__);
 	}
 
-	int swapInterval = App::GetConfig().GetOptionBool(EngineVars::Display::vsyncKey) ? -1 : 0;
+	const int swapInterval = App::GetConfig().GetOptionBool(EngineVars::Display::vsyncKey) ? -1 : 0;
 	int status = SDL_GL_SetSwapInterval(swapInterval);
 	if(status != 0 && swapInterval < 0){
 		//Adaptive sync isn't supported, try again with regular vsync
@@ -46,15 +46,15 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 		Debug::Log("Swap interval could not be set! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
 	}
 
-	if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)){
+	if(!gladLoadGLLoader(static_cast<GLADloadproc>(SDL_GL_GetProcAddress))){
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), ErrorCode::OpenGL_Error,  __FILE__, __LINE__);
 	}
 
-	SetWindingOrder(currentWindingOrder);
-	SetCullFace(currentCullFace);
+	Win32_GL_Renderer::SetWindingOrder(currentWindingOrder);
+	Win32_GL_Renderer::SetCullFace(currentCullFace);
 
-	SetViewportRect(ViewportRect::Fullscreen);
-	SetClearColor(Color::DarkGray());
+	Win32_GL_Renderer::SetViewportRect(ViewportRect::Fullscreen);
+	Win32_GL_Renderer::SetClearColor(Color::DarkGray());
 
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
@@ -62,13 +62,13 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 	glDepthFunc(GL_LESS);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	ClearScreen();
+	Win32_GL_Renderer::ClearScreen();
 	window->SwapBuffers();
 
 	#ifdef GADGET_DEBUG
 	if(glDebugMessageCallback){
 		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback((GLDEBUGPROC)Win32_GL_Renderer::GLDebugCallback, nullptr);
+		glDebugMessageCallback(static_cast<GLDEBUGPROC>(Win32_GL_Renderer::GLDebugCallback), nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
 	}else{
 		Debug::Log(SID("RENDER"), "Could not set up OpenGL debug callback, OpenGL issues will not be logged!", Debug::Warning, __FILE__, __LINE__);
@@ -123,8 +123,8 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 	for(const auto& cam : cams){
 		SetViewportRect(cam->GetCamera().GetViewportRect());
-		Matrix4 view = cam->GetUpdatedViewMatrix();
-		Matrix4 proj = cam->GetUpdatedProjectionMatrix();
+		const Matrix4 view = cam->GetUpdatedViewMatrix();
+		const Matrix4 proj = cam->GetUpdatedProjectionMatrix();
 
 		//------------------------------------------------------------------------------------------------------------------------
 		//Render all meshes in the scene
@@ -134,7 +134,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				mesh->GetShader(i)->BindMatrix4(SID("projectionMatrix"), proj);
 				mesh->GetShader(i)->BindMatrix4(SID("viewMatrix"), view);
 
-				Matrix4 modelMatrix = mesh->GetParent()->GetTransformMatrix();
+				const Matrix4 modelMatrix = mesh->GetParent()->GetTransformMatrix();
 				mesh->GetShader(i)->BindMatrix4(SID("modelMatrix"), modelMatrix);
 
 				if(mesh->GetMaterial(i)->HasLighting()){
@@ -190,30 +190,30 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 			text->GetTextMesh().GetMeshInfo()->Bind();
 
-			size_t totalWidthInPixels = text->GetTextMesh().GetTotalWidthInPixels();
-			size_t totalHeightInPixels = text->GetTextMesh().GetTotalHeightInPixels();
+			const size_t totalWidthInPixels = text->GetTextMesh().GetTotalWidthInPixels();
+			const size_t totalHeightInPixels = text->GetTextMesh().GetTotalHeightInPixels();
 
 			GADGET_BASIC_ASSERT(totalWidthInPixels > 0);
-			float screenWidthPerPixel = text->GetSize().x / totalWidthInPixels;
-			float screenHeightPerPixel = screenWidthPerPixel;
-			float heightToUse = screenWidthPerPixel * totalHeightInPixels;
+			const float screenWidthPerPixel = text->GetSize().x / static_cast<float>(totalWidthInPixels);
+			const float screenHeightPerPixel = screenWidthPerPixel;
+			const float heightToUse = screenWidthPerPixel * static_cast<float>(totalHeightInPixels);
 
 			float x = text->GetPosition().x - (text->GetSize().x / 2.0f);
-			float y = text->GetPosition().y - (heightToUse / 2.0f);
+			const float y = text->GetPosition().y - (heightToUse / 2.0f);
 
 			GL_FontInfo* fontInfo = dynamic_cast<GL_FontInfo*>(text->GetTextMesh().GetFont()->GetFontInfo());
 			GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(text->GetTextMesh().GetMeshInfo());
 
-			for(char c : text->GetText()){
-				FreetypeFontCharacter ch = text->GetTextMesh().GetFont()->GetCharacters().at(c);
+			for(const char c : text->GetText()){
+				const FreetypeFontCharacter ch = text->GetTextMesh().GetFont()->GetCharacters().at(c);
 
-				GLfloat xpos = x + ch.left * screenWidthPerPixel;
-				GLfloat ypos = y - (ch.rows - ch.top) * screenHeightPerPixel;
+				GLfloat xpos = x + static_cast<float>(ch.left) * screenWidthPerPixel;
+				GLfloat ypos = y - static_cast<float>(ch.rows - ch.top) * screenHeightPerPixel;
 
-				GLfloat w = ch.width * screenWidthPerPixel;
-				GLfloat h = ch.rows * screenHeightPerPixel;
+				const GLfloat w = static_cast<float>(ch.width) * screenWidthPerPixel;
+				const GLfloat h = static_cast<float>(ch.rows) * screenHeightPerPixel;
 				// Update VBO for each character
-				GLfloat vertices[6][4] = {
+				const GLfloat vertices[6][4] = {
 					{ xpos,     ypos + h,   0.0, 0.0 },
 					{ xpos,     ypos,		0.0, 1.0 },
 					{ xpos + w, ypos,       1.0, 1.0 },
@@ -224,7 +224,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				};
 
 				//Don't bind the texture if it's a space, for some reason doing so causes OpenGL warnings
-				if(c != 32){
+				if(c != ' '){
 					//Render glyph texture over quad
 					glActiveTexture(GL_TEXTURE0);
 					glBindTexture(GL_TEXTURE_2D, fontInfo->GetTextureForChar(c));
@@ -232,13 +232,13 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 				//Update content of VBO memory
 				glBindBuffer(GL_ARRAY_BUFFER, meshInfo->GetVBO());
-				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), &vertices[0]);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				//Render quad
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 				//Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-				x += (ch.advanceX >> 6) * screenWidthPerPixel; //Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels)) 
+				x += static_cast<float>(ch.advanceX >> 6) * screenWidthPerPixel; //Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels)) 
 			}
 
 			text->GetTextMesh().GetMeshInfo()->Unbind();
@@ -254,12 +254,12 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 			GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(texture->GetMeshInfo());
 			meshInfo->Bind();
 
-			float x = texture->GetPosition().x;
-			float y = texture->GetPosition().y;
-			float w = texture->GetSize().x;
-			float h = texture->GetSize().y;
+			const float x = texture->GetPosition().x;
+			const float y = texture->GetPosition().y;
+			const float w = texture->GetSize().x;
+			const float h = texture->GetSize().y;
 
-			GLfloat vertices[6][4] = {
+			const GLfloat vertices[6][4] = {
 				{ x - w, y + h, 0.0f, 0.0f },
 				{ x - w, y - h, 0.0f, 1.0f },
 				{ x + w, y - h, 1.0f, 1.0f },
@@ -276,7 +276,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 			//Update content of VBO memory
 			glBindBuffer(GL_ARRAY_BUFFER, meshInfo->GetVBO());
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), &vertices[0]);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			//Render quad
@@ -353,7 +353,7 @@ void Win32_GL_Renderer::SetWindingOrder(WindingOrder order_){
 			glFrontFace(GL_CCW);
 			break;
 		default:
-			Debug::Log(SID("[RENDER]"), "Unsupported winding order [" + std::to_string((int)currentWindingOrder) + "]!", Debug::Error, __FILE__, __LINE__);
+			Debug::Log(SID("[RENDER]"), "Unsupported winding order [" + std::to_string(static_cast<int>(currentWindingOrder)) + "]!", Debug::Error, __FILE__, __LINE__);
 			break;
 	}
 }
@@ -380,7 +380,7 @@ void Win32_GL_Renderer::SetCullFace(CullFace cullFace_){
 			glCullFace(GL_FRONT_AND_BACK);
 			break;
 		default:
-			Debug::Log(SID("[RENDER]"), "Unsupported cull face [" + std::to_string((int)currentCullFace) + "]!", Debug::Error, __FILE__, __LINE__);
+			Debug::Log(SID("[RENDER]"), "Unsupported cull face [" + std::to_string(static_cast<int>(currentCullFace)) + "]!", Debug::Error, __FILE__, __LINE__);
 			break;
 	}
 }
@@ -394,6 +394,7 @@ MaterialInfo* Win32_GL_Renderer::GenerateAPIMaterialInfo([[maybe_unused]] const 
 
 std::vector<MeshInfo*> Win32_GL_Renderer::GenerateAPIMeshInfos(const Mesh& mesh_){
 	std::vector<MeshInfo*> meshInfos;
+	meshInfos.reserve(mesh_.submeshes.size());
 	for(const auto& sm : mesh_.submeshes){
 		meshInfos.push_back(new GL_MeshInfo(sm));
 	}
@@ -438,8 +439,7 @@ void __stdcall Win32_GL_Renderer::GLDebugCallback(GLenum source_, GLenum type_, 
 		case GL_DEBUG_SOURCE_APPLICATION:
 			finalMessage += ("Application ");
 			break;
-		case GL_DEBUG_SOURCE_OTHER:
-			break;
+		case GL_DEBUG_SOURCE_OTHER: [[fallthrough]];
 		default:
 			break;
 	}
@@ -469,8 +469,7 @@ void __stdcall Win32_GL_Renderer::GLDebugCallback(GLenum source_, GLenum type_, 
 		case GL_DEBUG_TYPE_POP_GROUP:
 			finalMessage += ("Pop Group ");
 			break;
-		case GL_DEBUG_TYPE_OTHER:
-			//Intentional Fallthrough
+		case GL_DEBUG_TYPE_OTHER: [[fallthrough]];
 		default:
 			finalMessage += ("Other ");
 			break;
@@ -483,12 +482,11 @@ void __stdcall Win32_GL_Renderer::GLDebugCallback(GLenum source_, GLenum type_, 
 			Debug::Log(SID("OPENGL"), finalMessage, Debug::Error);
 			break;
 		case GL_DEBUG_SEVERITY_MEDIUM:
-			Debug::Log(SID("OPENGL"), finalMessage, Debug::Warning);
-			break;
 		case GL_DEBUG_SEVERITY_LOW:
 			Debug::Log(SID("OPENGL"), finalMessage, Debug::Warning);
 			break;
-		case GL_DEBUG_SEVERITY_NOTIFICATION:
+		case GL_DEBUG_SEVERITY_NOTIFICATION: [[fallthrough]];
+		default:
 			Debug::Log(SID("OPENGL"), finalMessage, Debug::Verbose);
 			break;
 	}

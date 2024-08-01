@@ -14,6 +14,9 @@
 
 using namespace Gadget;
 
+static constexpr int gGLMajorVersion = 4;
+static constexpr int gGLMinorVersion = 6;
+
 Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderAPI_) : Window(w_, h_, x_, y_), sdlWindow(nullptr), joysticks(), refreshRate(0.0f){
 	GADGET_BASIC_ASSERT(w_ > 0);
 	GADGET_BASIC_ASSERT(h_ > 0);
@@ -30,11 +33,11 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderA
 			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 
-		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) != 0){
+		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, gGLMajorVersion) != 0){
 			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 
-		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6) != 0){
+		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, gGLMinorVersion) != 0){
 			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 	}
@@ -76,7 +79,7 @@ uint64_t Win32_Window::GetWindowHandle() const{
 	SDL_SysWMinfo wmInfo{};
 	SDL_VERSION(&wmInfo.version);
 	SDL_GetWindowWMInfo(sdlWindow, &wmInfo);
-	return (uint64_t)wmInfo.info.win.window;
+	return reinterpret_cast<uint64_t>(wmInfo.info.win.window);
 }
 
 SDL_Window* Win32_Window::GetSDLWindow() const{ return sdlWindow; }
@@ -107,7 +110,7 @@ void Win32_Window::HandleEvents(){
 			case SDL_MOUSEMOTION:
 				GADGET_BASIC_ASSERT(GetWidth() > 0);
 				GADGET_BASIC_ASSERT(GetHeight() > 0);
-				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(static_cast<float>(e.motion.xrel) / GetWidth(), static_cast<float>(e.motion.yrel) / GetHeight(), static_cast<float>(e.motion.x), static_cast<float>(e.motion.y)));
+				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(static_cast<float>(e.motion.xrel) / static_cast<float>(GetWidth()), static_cast<float>(e.motion.yrel) / static_cast<float>(GetHeight()), static_cast<float>(e.motion.x), static_cast<float>(e.motion.y)));
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				EventHandler::GetInstance()->HandleEvent(MouseButtonPressedEvent(SDL2_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));

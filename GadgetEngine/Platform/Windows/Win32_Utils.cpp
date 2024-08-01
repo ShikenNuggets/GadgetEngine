@@ -6,16 +6,16 @@
 
 using namespace Gadget;
 
-const HANDLE gConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+HANDLE gConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 std::string Win32_Utils::GetUserDocumentsPath(){
-	WCHAR* path;
+	WCHAR* path = nullptr;
 	auto result = SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &path);
-	if(!SUCCEEDED(result)){
+	if(!SUCCEEDED(result) || path == nullptr){
 		return "";
 	}
 	
-	std::wstring ws(path);
+	const std::wstring ws(path);
 
 	std::string resultStr;
 	for(const auto& wchar : ws){
