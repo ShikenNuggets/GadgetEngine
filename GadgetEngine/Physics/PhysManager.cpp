@@ -7,7 +7,7 @@
 
 using namespace Gadget;
 
-PhysManager::PhysManager() : bulletDynamicsWorld(nullptr){
+PhysManager::PhysManager() : bulletDynamicsWorld(nullptr), collisionConfig(nullptr), dispatcher(nullptr), broadphase(nullptr), solver(nullptr){
 	collisionConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfig);
 	broadphase = new btDbvtBroadphase(); //TODO - Other broadphase classes may have better performance characteristics
@@ -46,14 +46,14 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 	}
 
 	const auto cls = App::GetSceneManager().CurrentScene()->GetAllComponentsInScene<Collider>(); //TODO - This is slow
-	for(size_t i = 0; i < cls.size(); i++){
-		GADGET_BASIC_ASSERT(cls[i] != nullptr);
-		if(cls[i] == nullptr || cls[i]->bulletRb == nullptr){
+	for(const auto* cl : cls){
+		GADGET_BASIC_ASSERT(cl != nullptr);
+		if(cl == nullptr || cl->bulletRb == nullptr){
 			continue;
 		}
 
 		BulletCollisionResultCallback callback;
-		bulletDynamicsWorld->contactTest(cls[i]->bulletRb, callback);
+		bulletDynamicsWorld->contactTest(cl->bulletRb, callback);
 	}
 }
 
@@ -66,20 +66,20 @@ btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody*
 
 	btCollisionShape* shape = CreateCollisionShape(col_);
 	if(shape == nullptr){
-		Debug::Log("An error occured while creating the collision shape of type [" + std::to_string((int)col_->GetShape()) + "]!", Debug::Error, __FILE__, __LINE__);
+		Debug::Log("An error occured while creating the collision shape of type [" + std::to_string(static_cast<int>(col_->GetShape())) + "]!", Debug::Error, __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	cachedCollisionShapes.push_back(shape); //TODO - Actually check the cached shapes before making a new one
 
-	btTransform startTransform = btTransform(BulletHelper::ConvertQuaternion(col_->GetParent()->GetTransform().rotation), BulletHelper::ConvertVector3(col_->GetParent()->GetTransform().position));
+	const btTransform startTransform = btTransform(BulletHelper::ConvertQuaternion(col_->GetParent()->GetTransform().rotation), BulletHelper::ConvertVector3(col_->GetParent()->GetTransform().position));
 	btVector3 localInertia = btVector3(0.0f, 0.0f, 0.0f);
 	btDefaultMotionState* motionState = new btDefaultMotionState(startTransform);
 
 	btRigidBody* body = nullptr;
 	if(rb_ == nullptr){
 		//Static object
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, motionState, shape, localInertia);
+		const btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, motionState, shape, localInertia);
 		body = new btRigidBody(rbInfo);
 
 		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
@@ -87,7 +87,7 @@ btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody*
 		//Dynamic object
 		shape->calculateLocalInertia(rb_->GetMass(), localInertia);
 
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(rb_->GetMass(), motionState, shape, localInertia);
+		const btRigidBody::btRigidBodyConstructionInfo rbInfo(rb_->GetMass(), motionState, shape, localInertia);
 		body = new btRigidBody(rbInfo);
 
 		switch(rb_->GetFreezeRotation()){
@@ -218,8 +218,8 @@ btScalar BulletCollisionResultCallback::addSingleResult([[maybe_unused]] btManif
 		return 0;
 	}
 
-	Collider* col0 = (Collider*)obj0->getUserPointer();
-	Collider* col1 = (Collider*)obj1->getUserPointer();
+	Collider* col0 = static_cast<Collider*>(obj0->getUserPointer());
+	Collider* col1 = static_cast<Collider*>(obj1->getUserPointer());
 	
 	App::GetPhysics().HandleCollisionResponse(col0, col1);
 	App::GetPhysics().HandleCollisionResponse(col1, col0);

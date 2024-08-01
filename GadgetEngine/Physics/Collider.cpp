@@ -20,7 +20,7 @@ Collider::Collider(StringID typeName_, GUID parentGUID_, ColliderShape shape_, b
 	componentCollection.Add(this);
 }
 
-Collider::Collider(const ComponentProperties& props_, ColliderShape shape_) : Component(props_), shape(shape_), bulletRb(nullptr){
+Collider::Collider(const ComponentProperties& props_, ColliderShape shape_) : Component(props_), shape(shape_), isTrigger(false), bulletRb(nullptr){
 	Collider::Deserialize(props_);
 }
 
@@ -48,7 +48,7 @@ void Collider::OnTransformModified(){
 		return;
 	}
 
-	btTransform newTransform = BulletHelper::ConvertTransform(parent->GetTransform());
+	const btTransform newTransform = BulletHelper::ConvertTransform(parent->GetTransform());
 	if(bulletRb->getWorldTransform() == newTransform){
 		return;
 	}
@@ -78,7 +78,7 @@ void Collider::Reset(){
 ComponentProperties Collider::Serialize() const{
 	ComponentProperties props = Component::Serialize();
 
-	props.variables.Add(SID("ColliderShape"), (int)shape);
+	props.variables.Add(SID("ColliderShape"), static_cast<int>(shape));
 	props.variables.Add(SID("IsTrigger"), isTrigger);
 
 	return props;
