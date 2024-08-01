@@ -48,6 +48,7 @@ namespace Gadget{
 
 		static inline std::vector<std::string> ToStringList(const std::vector<StringID>& stringIds_){
 			std::vector<std::string> strings;
+			strings.reserve(stringIds_.size());
 			for(const auto& sid : stringIds_){
 				strings.push_back(sid.GetString());
 			}
@@ -57,6 +58,7 @@ namespace Gadget{
 
 		static inline std::vector<StringID> ToStringIDList(const std::vector<std::string>& strings_){
 			std::vector<StringID> stringIds;
+			stringIds.reserve(strings_.size());
 			for(const auto& sid : strings_){
 				stringIds.push_back(ProcessString(sid));
 			}

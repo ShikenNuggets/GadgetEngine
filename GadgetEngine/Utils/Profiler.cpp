@@ -23,7 +23,7 @@ double Timer::EndProfiling(){
 		return 0.0;
 	}
 
-	double durationSeconds = Timing::TimeSince(startTime);
+	const double durationSeconds = Timing::TimeSince(startTime);
 	times.push_back(durationSeconds);
 
 	startTime = std::chrono::milliseconds(0);
