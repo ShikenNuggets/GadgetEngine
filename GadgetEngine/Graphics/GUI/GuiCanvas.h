@@ -67,6 +67,25 @@ namespace Gadget{
 			return ems;
 		}
 
+		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
+		template <class T> void GetElements(std::vector<T*>& inBuffer_){
+			GADGET_ASSERT(inBuffer_.empty(), "Non-empty std::vector passed to GetElements, existing data will be lost!");
+			inBuffer_.clear();
+			inBuffer_.reserve(elements.size());
+
+			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
+			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
+			for(GuiElement* e : elements){
+				GADGET_BASIC_ASSERT(e != nullptr);
+				T* element = dynamic_cast<T*>(e);
+				if(element != nullptr){
+					inBuffer_.push_back(element);
+				}
+
+				e->GetSubElements<T>(inBuffer_);
+			}
+		}
+
 	private:
 		StringID name;
 		bool isActive;

@@ -42,7 +42,6 @@ namespace Gadget{
 		Vector2 GetPosition() const{ return position; }
 		Vector2 GetSize() const{ return size; }
 		GuiAnchor GetAnchor() const{ return anchor; }
-		const std::vector<GuiElement*>& GetSubElements() const{ return subElements; }
 
 		void AddSubElement(GuiElement* element_){
 			GADGET_BASIC_ASSERT(element_ != nullptr);
@@ -102,6 +101,16 @@ namespace Gadget{
 			}
 
 			return ems;
+		}
+
+		template <class T> void GetSubElements(std::vector<T*>& inBuffer_) const{
+			inBuffer_.reserve(inBuffer_.size() + subElements.size());
+			for(const auto& e : subElements){
+				T* element = dynamic_cast<T*>(e);
+				if(element != nullptr){
+					inBuffer_.push_back(element);
+				}
+			}
 		}
 
 		virtual void OnClick(ButtonID button_, const Vector2& clickPoint_){
