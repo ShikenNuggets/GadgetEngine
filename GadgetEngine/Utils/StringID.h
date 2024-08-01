@@ -21,6 +21,7 @@ namespace Gadget{
 	public:
 		static const StringID None;
 
+		constexpr StringID() noexcept : id(0){}
 		explicit constexpr StringID(uint64_t id_) noexcept : id(id_){}
 		constexpr StringID(const StringID& a_) noexcept = default;
 

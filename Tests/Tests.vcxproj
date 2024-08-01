@@ -178,6 +178,7 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
     <ClCompile Include="HashTableTests.cpp" />
     <ClCompile Include="ListTests.cpp" />
     <ClCompile Include="StaticArrayTests.cpp" />
+    <ClCompile Include="StaticHashTableTests.cpp" />
     <ClCompile Include="StringTests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

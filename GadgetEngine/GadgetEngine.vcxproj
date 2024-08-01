@@ -216,6 +216,8 @@ echo D|xcopy "$(SolutionDir)SDK\FMOD\studio\lib\*.dll" "$(SolutionDir)SDK\_Gadge
     <ClInclude Include="Data\HashTable.h" />
     <ClInclude Include="Data\List.h" />
     <ClInclude Include="Data\Pair.h" />
+    <ClInclude Include="Data\StaticArray.h" />
+    <ClInclude Include="Data\StaticHashTable.h" />
     <ClInclude Include="Data\String.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="EngineVars.h" />
