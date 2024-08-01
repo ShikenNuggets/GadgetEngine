@@ -19,6 +19,7 @@ Checks: '-*
 , -hicpp-uppercase-literal-suffix
 , -hicpp-use-auto
 , -misc-include-cleaner
+, -misc-non-private-member-variables-in-classes
 , -misc-no-recursion
 , -modernize-return-braced-init-list
 , -modernize-use-auto
