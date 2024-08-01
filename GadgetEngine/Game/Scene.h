@@ -53,6 +53,20 @@ namespace Gadget{
 			return comps;
 		}
 
+		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache results when possible
+		template <class T> void GetAllComponentsInScene(std::vector<T*>& inBuffer_) const{
+			GADGET_ASSERT(inBuffer_.empty(), "Non-empty std::vector passed to GetAllComponentsInScene, existing data will be lost!");
+			inBuffer_.clear();
+
+			for(const auto& go : gameObjects){
+				//TODO - This assumes only one of each kind of component on an object
+				T* t = go->GetComponent<T>();
+				if(t != nullptr){
+					inBuffer_.push_back(t);
+				}
+			}
+		}
+
 		template <class T> T* GetSceneComponent() const{
 			static_assert(std::is_base_of<SceneComponent, T>::value, "T must inherit from SceneComponent");
 			T* comp = nullptr;
