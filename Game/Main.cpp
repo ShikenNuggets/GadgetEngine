@@ -6,8 +6,8 @@
 
 #ifdef GADGET_DEBUG
 #define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
 #include <crtdbg.h>
+#include <cstdlib>
 #endif //GADGET_DEBUG
 
 #include <Gadget.h>
@@ -25,11 +25,11 @@ int main(int argc, char* argv[]){
 #endif // GADGET_DEBUG
 
 	if(argc > 0){
-		std::cout << "Launching with arguments: " << std::endl;
+		std::cout << "Launching with arguments:\n";
 	}
 
 	for(int i = 0; i < argc; i++){
-		std::cout << argv[i] << std::endl;
+		std::cout << argv[i] << "\n";
 	}
 
 	//ExampleGame game = ExampleGame();
@@ -38,18 +38,18 @@ int main(int argc, char* argv[]){
 
 	try{
 		Gadget::App::GetInstance().Run(game);
-	}catch(std::runtime_error e){
+	}catch([[maybe_unused]] const std::runtime_error& e){
 		_ASSERT(false);
 	}
 
 	Gadget::App::DeleteInstance();
 
 #ifdef GADGET_DEBUG
-	std::cout << Gadget::GlobalAllocator::GetNumAllocs() << " - " << Gadget::GlobalAllocator::GetNumFrees() << std::endl;
-	std::cout << "Total time spent allocating memory: " << Gadget::GlobalAllocator::GetAllocTime() << " seconds" << std::endl;
-	std::cout << "Total time spent freeing memory: " << Gadget::GlobalAllocator::GetFreeTime() << " seconds" << std::endl;
+	std::cout << Gadget::GlobalAllocator::GetNumAllocs() << " - " << Gadget::GlobalAllocator::GetNumFrees() << "\n";
+	std::cout << "Total time spent allocating memory: " << Gadget::GlobalAllocator::GetAllocTime() << " seconds\n";
+	std::cout << "Total time spent freeing memory: " << Gadget::GlobalAllocator::GetFreeTime() << " seconds\n";
 
-	std::cout << "The program is now complete." << std::endl;
+	std::cout << "The program is now complete.\n";
 #endif //_DEBUG
 
 	return 0;

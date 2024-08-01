@@ -12,11 +12,11 @@ namespace Example{
 	public:
 		CameraController(Gadget::GameObject* parent_) : GameLogicComponent(SID("CameraController"), parent_), input(Gadget::App::GetInput()){}
 		
-		CameraController(const Gadget::ComponentProperties& props_) : GameLogicComponent(props_), input(Gadget::App::GetInput()){
-			Deserialize(props_);
+		explicit CameraController(const Gadget::ComponentProperties& props_) : GameLogicComponent(props_), input(Gadget::App::GetInput()){
+			CameraController::Deserialize(props_);
 		}
 		
-		virtual ~CameraController() override{}
+		virtual ~CameraController() override = default;
 
 		virtual void OnUpdate(float deltaTime_) override{
 			constexpr float moveSpeed = 2.5f;

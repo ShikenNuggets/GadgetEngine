@@ -24,7 +24,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 		}
 
-		GameLogicComponent(const ComponentProperties& props_) : Component(props_), hasStarted(false), collisionsToHandle(){ Deserialize(props_); }
+		GameLogicComponent(const ComponentProperties& props_) : Component(props_), hasStarted(false), collisionsToHandle(){ GameLogicComponent::Deserialize(props_); }
 
 		virtual ~GameLogicComponent() override{
 			OnDestroy();
