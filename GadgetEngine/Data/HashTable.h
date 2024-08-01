@@ -117,6 +117,10 @@ namespace Gadget{
 			}
 		}
 
+		void Clear(){
+			data.Clear();
+		}
+
 		constexpr const V& operator[](const K& key_) const{
 			GADGET_BASIC_ASSERT(Contains(key_));
 			size_t index = KeyToIndex(key_);
@@ -157,6 +161,8 @@ namespace Gadget{
 			//This shouldn't be possible - there's no safe way to handle this, so just error out
 			Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 		}
+
+		constexpr inline bool IsEmpty(){ return data.IsEmpty(); }
 
 		constexpr inline Iterator begin(){
 			if(data.IsEmpty()){
