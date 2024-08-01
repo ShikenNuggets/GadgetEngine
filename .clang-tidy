@@ -1,1 +1,26 @@
-Checks: '-*, bugprone-*, cert-*, clang-analyzer-*, concurrency-*, cppcoreguidelines-*, google-*, hicpp-*, misc-*, modernize-*, performance-*, portability-*, -google-build-using-namespace, -modernize-use-auto, -modernize-use-trailing-return-type, -cppcoreguidelines-avoid-non-const-global-variables, -google-readability-namespace-comments, -google-readability-todo, -hicpp-uppercase-literal-suffix, -hicpp-use-auto, -misc-include-cleaner, -modernize-return-braced-init-list, -hicpp-signed-bitwise, -misc-no-recursion'
+Checks: '-*
+, bugprone-*
+, cert-*
+, clang-analyzer-*
+, concurrency-*
+, cppcoreguidelines-*
+, google-*
+, hicpp-*
+, misc-*
+, modernize-*
+, performance-*
+, portability-*
+
+, -cppcoreguidelines-avoid-non-const-global-variables
+, -google-build-using-namespace
+, -google-readability-namespace-comments
+, -google-readability-todo
+, -hicpp-signed-bitwise
+, -hicpp-uppercase-literal-suffix
+, -hicpp-use-auto
+, -misc-include-cleaner
+, -misc-no-recursion
+, -modernize-return-braced-init-list
+, -modernize-use-auto
+, -modernize-use-trailing-return-type
+'
