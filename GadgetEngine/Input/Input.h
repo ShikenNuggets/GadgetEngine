@@ -5,6 +5,7 @@
 #include <set>
 #include <vector>
 
+#include "Data/StaticHashTable.h"
 #include "Events/Event.h"
 #include "Input/InputType.h"
 #include "Utils/Utils.h"
@@ -68,8 +69,8 @@ namespace Gadget{
 		std::set<ButtonID> buttonsDown;
 		std::set<ButtonID> buttonsHeld;
 		std::set<ButtonID> buttonsUp;
-		std::map<AxisID, float> axes;
-		std::map<AxisID, float> persistentAxes; //Special axes that are based on a persistent state rather than just motion (e.g. an analog stick)
+		StaticHashTable<AxisID, float, static_cast<int64_t>(AxisID::AxisID_MAX)> axes;
+		StaticHashTable<AxisID, float, static_cast<int64_t>(AxisID::AxisID_MAX)> persistentAxes; //Special axes that are based on a persistent state rather than just motion (e.g. an analog stick)
 
 		int currentMouseX;
 		int currentMouseY;

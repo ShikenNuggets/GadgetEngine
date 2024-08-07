@@ -119,14 +119,12 @@ bool Input::GetButtonHeld(StringID buttonName_) const{
 float Input::GetAxis(AxisID id_) const{
 	GADGET_BASIC_ASSERT(id_ < AxisID::AxisID_MAX);
 
-	auto it = axes.find(id_);
-	if(it != axes.end()){
-		return axes.at(id_);
+	if(axes.Contains(id_)){
+		return axes[id_];
 	}
 
-	it = persistentAxes.find(id_);
-	if(it != persistentAxes.end()){
-		return persistentAxes.at(id_);
+	if(persistentAxes.Contains(id_)){
+		return persistentAxes[id_];
 	}
 
 	return 0.0f;
@@ -287,7 +285,7 @@ void Input::DefineMultiButton(const MultiButton& multiButton_){
 void Input::ProcessInputs(){
 	buttonsDown.clear();
 	buttonsUp.clear();
-	axes.clear();
+	axes.Clear();
 
 	for(const auto& b : buttonEvents){
 		if(b.IsPressed()){
@@ -301,26 +299,26 @@ void Input::ProcessInputs(){
 	buttonEvents.clear();
 
 	for(const auto& a : axisEvents){
-		if(axes.find(a.GetAxisID()) != axes.end()){
+		if(axes.Contains(a.GetAxisID())){
 			axes[a.GetAxisID()] += a.Value(); //Update our existing axis value, in case there are multiple events for the same axis (common with mouse motion)
 		}else{
-			axes.insert(std::make_pair(a.GetAxisID(), a.Value()));
+			axes.Add(a.GetAxisID(), a.Value());
 		}
 	}
 	axisEvents.clear();
 
 	for(const auto& a : persistentAxisEvents){
-		if(persistentAxes.find(a.GetAxisID()) != persistentAxes.end()){
+		if(persistentAxes.Contains(a.GetAxisID())){
 			persistentAxes[a.GetAxisID()] = a.Value(); //Persistent axis has a single set value
 		}else{
-			persistentAxes.insert(std::make_pair(a.GetAxisID(), a.Value()));
+			persistentAxes.Add(a.GetAxisID(), a.Value());
 		}
 	}
-	persistentAxes.clear();
+	persistentAxes.Clear();
 
 	GADGET_BASIC_ASSERT(buttonEvents.empty());
 	GADGET_BASIC_ASSERT(axisEvents.empty());
-	GADGET_BASIC_ASSERT(persistentAxes.empty());
+	GADGET_BASIC_ASSERT(persistentAxes.IsEmpty());
 }
 
 void Input::OnWindowRestartedEvent(const Event& e_){
@@ -333,8 +331,8 @@ void Input::OnWindowRestartedEvent(const Event& e_){
 	buttonsDown.clear();
 	buttonsHeld.clear();
 	buttonsUp.clear();
-	axes.clear();
-	persistentAxes.clear();
+	axes.Clear();
+	persistentAxes.Clear();
 }
 
 void Input::OnKeyPressedEvent(const Event& e_){
