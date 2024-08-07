@@ -157,6 +157,9 @@ namespace Gadget{
 		size_t KeyToIndex(const K& key_) const{
 			if constexpr(std::is_same_v<K, StringID>){
 				return key_.GetID() % Size;
+			}else if constexpr(std::is_enum<K>()){
+				GADGET_BASIC_ASSERT(Size > static_cast<size_t>(key_));
+				return static_cast<size_t>(key_);
 			}else{
 				return Hash::MurmurHash64A(reinterpret_cast<const char*>(&key_), sizeof(key_)) % Size;
 			}
