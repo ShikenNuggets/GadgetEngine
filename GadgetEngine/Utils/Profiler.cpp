@@ -24,6 +24,10 @@ double Timer::EndProfiling(){
 	}
 
 	const double durationSeconds = Timing::TimeSince(startTime);
+	if(times.size() == times.capacity()){
+		times.reserve(times.capacity() * 2); //TODO - This will eventually result in crazy stupid memory usage. Cap this somehow
+	}
+
 	times.push_back(durationSeconds);
 
 	startTime = std::chrono::milliseconds(0);
