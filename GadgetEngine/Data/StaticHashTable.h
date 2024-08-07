@@ -59,7 +59,7 @@ namespace Gadget{
 			}
 		}
 
-		bool Contains(const K& key_){
+		bool Contains(const K& key_) const{
 			size_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
@@ -119,9 +119,22 @@ namespace Gadget{
 			return data[index].value;
 		}
 
-		constexpr inline bool IsEmpty(){ return elementsInUse == 0; }
+		constexpr inline bool IsEmpty() const{ return elementsInUse == 0; }
 
 		constexpr inline Iterator begin(){
+			if(IsEmpty()){
+				return Iterator(data, 0);
+			}
+
+			auto it = Iterator(data, 0);
+			if(!it.IsValid()){
+				++it;
+			}
+
+			return it;
+		}
+
+		constexpr inline const Iterator begin() const{
 			if(IsEmpty()){
 				return Iterator(data, 0);
 			}
