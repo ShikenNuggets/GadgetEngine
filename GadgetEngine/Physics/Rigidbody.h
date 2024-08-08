@@ -75,6 +75,11 @@ namespace Gadget{
 
 		btRigidBody* bulletRb;
 
+		bool hasCachedForce;
+		bool hasCachedVelocity;
+		std::vector<Vector3> cachedForces;
+		Vector3 cachedVelocity;
+
 		static ComponentCollection<Rigidbody> componentCollection;
 	};
 }

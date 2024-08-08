@@ -6,7 +6,7 @@ using namespace Gadget;
 
 ComponentCollection<Rigidbody> Rigidbody::componentCollection;
 
-Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), bulletRb(nullptr){
+Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	GADGET_BASIC_ASSERT(parent != nullptr);
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
@@ -17,7 +17,7 @@ Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeR
 	componentCollection.Add(this);
 }
 
-Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), bulletRb(nullptr){
+Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	GADGET_BASIC_ASSERT(parent != nullptr);
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
@@ -28,7 +28,7 @@ Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRota
 	componentCollection.Add(this);
 }
 
-Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), mass(1.0f), useGravity(true), freezeRotation(FreezeRotationType::None), bulletRb(nullptr){
+Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), mass(1.0f), useGravity(true), freezeRotation(FreezeRotationType::None), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	Rigidbody::Deserialize(props_);
 }
 
@@ -50,6 +50,19 @@ void Rigidbody::Update([[maybe_unused]] float deltaTime_){
 		return; //If we're not currently part of the physics sim, do nothing
 	}
 
+	if(hasCachedForce){
+		for(const auto& f : cachedForces){
+			AddForce(f);
+		}
+		cachedForces.clear();
+		hasCachedForce = false;
+	}
+
+	if(hasCachedVelocity){
+		SetVelocity(cachedVelocity);
+		hasCachedVelocity = false;
+	}
+
 	btTransform bulletTransform;
 	bulletRb->getMotionState()->getWorldTransform(bulletTransform);
 
@@ -64,7 +77,9 @@ void Rigidbody::AddForce(const Vector3& force_){
 	GADGET_BASIC_ASSERT(bulletRb != nullptr);
 
 	if(bulletRb == nullptr){
-		//TODO - Apply force on next update
+		//Apply force on next update
+		cachedForces.push_back(force_);
+		hasCachedForce = true;
 		return;
 	}
 
@@ -96,7 +111,9 @@ void Rigidbody::SetVelocity(const Vector3& vel_){
 	GADGET_BASIC_ASSERT(vel_.IsValid());
 
 	if(bulletRb == nullptr){
-		//TODO - Set velocity on next update
+		//Set velocity on next update
+		cachedVelocity = vel_;
+		hasCachedVelocity = true;
 		return;
 	}
 
