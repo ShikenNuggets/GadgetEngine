@@ -204,6 +204,8 @@ echo D|xcopy "$(SolutionDir)Resources\" "$(TargetDir)Resources\" /y /E /d</Comma
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
     <ClInclude Include="ObjectRotator.h" />
+    <ClInclude Include="ProjectileController.h" />
+    <ClInclude Include="ProjectileObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demos\01-Pong\PongSceneHandler.cpp" />
