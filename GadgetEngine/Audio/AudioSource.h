@@ -61,6 +61,7 @@ namespace Gadget{
 		AudioClip* audioClip;
 		FMOD::Channel* channel;
 
+		bool IsChannelValid() const;
 		ErrorCode Set3DAttributes();
 	};
 }

@@ -64,7 +64,8 @@ AudioSource::~AudioSource(){
 }
 
 void AudioSource::Update(){
-	if(channel == nullptr){
+	if(!IsChannelValid()){
+		channel = nullptr;
 		return;
 	}
 
@@ -123,21 +124,20 @@ ErrorCode AudioSource::Play(SoundPlayMode mode_){
 }
 
 ErrorCode AudioSource::Stop(){
-	if(channel != nullptr){
+	if(IsChannelValid()){
 		const FMOD_RESULT result = channel->stop();
 		if(result != FMOD_OK){
 			GADGET_LOG_ERROR(SID("AUDIO"), "Could not stop channel! FMOD Error: " + std::string(FMOD_ErrorString(result)));
 			return ErrorCode::FMOD_Error;
 		}
-
-		channel = nullptr;
 	}
 
+	channel = nullptr;
 	return ErrorCode::OK;
 }
 
 ErrorCode AudioSource::Pause(bool isPaused_){
-	if(channel != nullptr){
+	if(IsChannelValid()){
 		const FMOD_RESULT result = channel->setPaused(isPaused_);
 		if(result != FMOD_OK){
 			GADGET_LOG_ERROR(SID("AUDIO"), "Could not pause channel! FMOD Error: " + std::string(FMOD_ErrorString(result)));
@@ -170,8 +170,19 @@ void AudioSource::Deserialize(const ComponentProperties& props_){
 	GADGET_BASIC_ASSERT(volumeChannel < VolumeChannel::VolumeChannel_MAX);
 }
 
+bool AudioSource::IsChannelValid() const{
+	if(channel == nullptr){
+		return false;
+	}
+
+	bool isPlaying = false;
+	const FMOD_RESULT result = channel->isPlaying(&isPlaying);
+	GADGET_BASIC_ASSERT(result == FMOD_OK || result == FMOD_ERR_INVALID_HANDLE);
+	return result == FMOD_OK;
+}
+
 ErrorCode AudioSource::Set3DAttributes(){
-	if(channel == nullptr || soundType == SoundType::_2D){
+	if(!IsChannelValid() || soundType == SoundType::_2D){
 		return ErrorCode::OK;
 	}
 
