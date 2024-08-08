@@ -17,6 +17,7 @@ namespace StarHawx{
 			AddComponent(new Gadget::RenderComponent(GetGUID(), SID("CubeModel"), SID("RedMaterial")));
 			AddComponent(new Gadget::Rigidbody(this, 0.01f, false, Gadget::FreezeRotationType::None));
 			AddComponent(new Gadget::CubeCollider(this));
+			AddComponent(new Gadget::AudioSource(this, SID("LazerSFX"), Gadget::SoundType::_2D, Gadget::VolumeChannel::SFX, Gadget::SoundPlayMode::PlayOnce));
 			AddComponent(new ProjectileController(this));
 		}
 	};

@@ -330,5 +330,14 @@
 			"path": "Resources/Music/Corneria.mp3",
 			"resource_type": "AudioClip"
 		}
+	],
+	[
+		{
+			"string": "LazerSFX"
+		},
+		{
+			"path": "Resources/SFX/Lazer1.wav",
+			"resource_type": "AudioClip"
+		}
 	]
 ]
