@@ -1,6 +1,7 @@
 #ifndef GADGET_ENGINE_VARS_H
 #define GADGET_ENGINE_VARS_H
 
+#include "LocManager.h"
 #include "Utils/StringID.h"
 #include "Utils/Utils.h"
 #include "Utils/Var.h"
@@ -21,7 +22,7 @@ namespace Gadget{
 			static const StringID languageKey;
 
 			Core() : ConfigSection(sectionName){
-				vars.emplace(languageKey, SID("ENG")); //TODO - Don't hardcode the default language key here
+				vars.emplace(languageKey, LocManager::DefaultLanguageKey);
 			}
 		};
 

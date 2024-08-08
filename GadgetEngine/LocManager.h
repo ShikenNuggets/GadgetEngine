@@ -19,6 +19,8 @@ namespace Gadget{
 		void AddLanguage(StringID language_);
 		void SetCurrentLanguage(StringID language_);
 
+		static const StringID DefaultLanguageKey;
+
 	private:
 		static LocManager* instance;
 

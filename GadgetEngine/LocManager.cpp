@@ -4,6 +4,7 @@
 
 using namespace Gadget;
 
+const StringID LocManager::DefaultLanguageKey = SID("ENG");
 LocManager* LocManager::instance = nullptr;
 
 constexpr size_t gStartLanguages = 8;
