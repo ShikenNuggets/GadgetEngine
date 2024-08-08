@@ -3,6 +3,7 @@
 
 #include <Game/GameLogicComponent.h>
 
+#include "ProjectileObject.h"
 #include "StarHawxDefines.h"
 
 namespace StarHawx{
@@ -64,6 +65,10 @@ namespace StarHawx{
 				}
 			}
 
+			if(Gadget::App::GetInput().GetButtonDown(StarHawx::ShootButton)){
+				SpawnProjectile();
+			}
+
 			GameLogicComponent::OnUpdate(deltaTime_);
 		}
 
@@ -119,6 +124,16 @@ namespace StarHawx{
 					targetTilt = Gadget::Euler(0.0f, startTilt.y, 0.0f);
 					break;
 			}
+		}
+
+		void SpawnProjectile(){
+			Gadget::Scene* currentScene = Gadget::App::GetSceneManager().CurrentScene();
+			GADGET_BASIC_ASSERT(currentScene != nullptr);
+			if(currentScene == nullptr){
+				return;
+			}
+
+			currentScene->CreateObject(new ProjectileObject(parent->GetPosition() + Gadget::Vector3(0.0f, 0.0f, -5.0f), parent->GetRotation()));
 		}
 	};
 }

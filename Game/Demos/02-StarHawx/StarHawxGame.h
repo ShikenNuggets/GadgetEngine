@@ -33,15 +33,16 @@ namespace StarHawx{
 			axis.AddButtonAxis(Gadget::ButtonAxis(Gadget::ButtonID::Keyboard_A, Gadget::ButtonID::Keyboard_D));
 			Gadget::App::GetInput().DefineAxis(axis);
 
-			auto button = Gadget::Button(SID("MenuButton"));
+			auto button = Gadget::Button(MenuButton);
 			button.AddButtonID(Gadget::ButtonID::Gamepad_Start);
 			button.AddButtonID(Gadget::ButtonID::Keyboard_Escape);
 			Gadget::App::GetInput().DefineButton(button);
 
-			button = Gadget::Button(SID("ShootButton"));
+			button = Gadget::Button(ShootButton);
 			button.AddButtonID(Gadget::ButtonID::Gamepad_Shoulder_Right2);
 			button.AddButtonID(Gadget::ButtonID::Gamepad_Face_Down);
 			button.AddButtonID(Gadget::ButtonID::Keyboard_Space);
+			Gadget::App::GetInput().DefineButton(button);
 		}
 
 		void DefineMaterials(){

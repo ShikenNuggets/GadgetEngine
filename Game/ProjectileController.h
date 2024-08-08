@@ -6,17 +6,32 @@
 namespace StarHawx{
 	class ProjectileController : public Gadget::GameLogicComponent{
 	public:
-		ProjectileController(Gadget::GameObject* parent_) : GameLogicComponent(SID("PlayerController"), parent_){
+		ProjectileController(Gadget::GameObject* parent_) : GameLogicComponent(SID("PlayerController"), parent_), waitOneFrame(false), hasFired(false){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
-			Gadget::Rigidbody* rb = parent_->GetComponent<Gadget::Rigidbody>();
-			GADGET_BASIC_ASSERT(rb != nullptr);
-			if(rb){
-				rb->AddForce(parent->GetTransform().Forward() * shotForce);
+		}
+
+		virtual void OnUpdate(float deltaTime_) override{
+			if(!waitOneFrame){
+				waitOneFrame = true;
+				return;
+			}
+
+			if(!hasFired){
+				Gadget::Rigidbody* rb = parent->GetComponent<Gadget::Rigidbody>();
+				GADGET_BASIC_ASSERT(rb != nullptr);
+				if(rb){
+					rb->SetVelocity(-parent->GetTransform().Forward() * shotForce);
+					//rb->AddForce(-parent->GetTransform().Forward() * shotForce);
+				}
+
+				hasFired = true;
 			}
 		}
 
 	private:
-		static constexpr float shotForce = 50.0f;
+		static constexpr float shotForce = 250.0f;
+		bool waitOneFrame;
+		bool hasFired;
 	};
 }
 

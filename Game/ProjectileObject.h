@@ -8,9 +8,12 @@
 namespace StarHawx{
 	class ProjectileObject : public Gadget::GameObject{
 	public:
-		ProjectileObject(){
+		ProjectileObject(const Gadget::Vector3 position_, const Gadget::Quaternion rotation_) : GameObject(SID("Projectile")){
+			SetPosition(position_);
+			SetRotation(rotation_);
+			SetScale(0.25f, 0.25f, 2.5f);
 			SetLifeTime(10.0f);
-			SetScale(0.5f, 0.5f, 2.5f);
+
 			AddComponent(new Gadget::RenderComponent(GetGUID(), SID("CubeModel"), SID("RedMaterial")));
 			AddComponent(new Gadget::Rigidbody(this, 0.01f, false, Gadget::FreezeRotationType::None));
 			AddComponent(new Gadget::CubeCollider(this));
