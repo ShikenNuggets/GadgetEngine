@@ -136,6 +136,18 @@ ErrorCode AudioSource::Stop(){
 	return ErrorCode::OK;
 }
 
+ErrorCode AudioSource::Pause(bool isPaused_){
+	if(channel != nullptr){
+		const FMOD_RESULT result = channel->setPaused(isPaused_);
+		if(result != FMOD_OK){
+			GADGET_LOG_ERROR(SID("AUDIO"), "Could not pause channel! FMOD Error: " + std::string(FMOD_ErrorString(result)));
+			return ErrorCode::FMOD_Error;
+		}
+	}
+
+	return ErrorCode::OK;
+}
+
 ComponentProperties AudioSource::Serialize() const{
 	ComponentProperties props = Component::Serialize();
 

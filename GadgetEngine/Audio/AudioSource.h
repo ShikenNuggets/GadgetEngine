@@ -45,6 +45,7 @@ namespace Gadget{
 
 		ErrorCode Play(SoundPlayMode mode_ = SoundPlayMode::PlayOnce);
 		ErrorCode Stop();
+		ErrorCode Pause(bool isPaused_);
 
 		virtual ComponentProperties Serialize() const override;
 
