@@ -64,6 +64,12 @@
     <ClInclude Include="Demos\02-StarHawx\PlayerObject.h">
       <Filter>Demos\02-StarHawx</Filter>
     </ClInclude>
+    <ClInclude Include="Demos\02-StarHawx\ProjectileController.h">
+      <Filter>Demos\02-StarHawx</Filter>
+    </ClInclude>
+    <ClInclude Include="Demos\02-StarHawx\ProjectileObject.h">
+      <Filter>Demos\02-StarHawx</Filter>
+    </ClInclude>
     <ClInclude Include="Demos\02-StarHawx\StarHawxDefines.h">
       <Filter>Demos\02-StarHawx</Filter>
     </ClInclude>
@@ -73,8 +79,6 @@
     <ClInclude Include="ExampleGame.h" />
     <ClInclude Include="ExampleScene.h" />
     <ClInclude Include="ObjectRotator.h" />
-    <ClInclude Include="ProjectileController.h" />
-    <ClInclude Include="ProjectileObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demos\01-Pong\PongSceneHandler.cpp">
