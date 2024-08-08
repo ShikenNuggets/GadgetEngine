@@ -11,7 +11,7 @@ namespace StarHawx{
 		ProjectileObject(const Gadget::Vector3 position_, const Gadget::Quaternion rotation_) : GameObject(SID("Projectile")){
 			SetPosition(position_);
 			SetRotation(rotation_);
-			SetScale(0.25f, 0.25f, 2.5f);
+			SetScale(0.35f, 0.35f, 2.5f);
 			SetLifeTime(10.0f);
 
 			AddComponent(new Gadget::RenderComponent(GetGUID(), SID("CubeModel"), SID("RedMaterial")));
