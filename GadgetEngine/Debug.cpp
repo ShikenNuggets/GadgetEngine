@@ -21,7 +21,9 @@ std::string Debug::logFilePath = logFileName;
 bool Debug::isInitialized = false;
 Debug::LogType Debug::logLevel = Debug::Verbose;
 std::set<StringID> Debug::logChannelFilter = std::set<StringID>();
+
 std::queue<std::string> Debug::queuedLogsForFileWrite;
+std::mutex Debug::logQueueMutex;
 
 void Debug::Init(){
 	GADGET_BASIC_ASSERT(!isInitialized);
@@ -42,7 +44,11 @@ void Debug::Init(){
 	auto err = FileSystem::WriteToFile(logFilePath, message, writeType);
 	if(err != ErrorCode::OK){
 		std::cout << "ERROR: Could not write initial log message to " << FileSystem::GetFileNameFromPath(logFilePath) << "! We'll try again later...\n";
-		queuedLogsForFileWrite.push(message);
+
+		{
+			std::lock_guard lock{ logQueueMutex };
+			queuedLogsForFileWrite.push(message);
+		}
 	}
 
 	isInitialized = true;
@@ -182,11 +188,16 @@ void Debug::ThrowFatalError(StringID channel_, const std::string& message_, Erro
 void Debug::QueueLogForFileWrite(const std::string& message_){
 	GADGET_BASIC_ASSERT(!message_.empty());
 
-	queuedLogsForFileWrite.push(message_);
+	{
+		std::lock_guard lock{ logQueueMutex };
+		queuedLogsForFileWrite.push(message_);
+	}
+
 	WriteQueuedLogs();
 }
 
 void Debug::WriteQueuedLogs(){
+	std::lock_guard lock{ logQueueMutex };
 	while(isInitialized && !queuedLogsForFileWrite.empty()){
 		auto err = FileSystem::WriteToFile(logFilePath, queuedLogsForFileWrite.front());
 		if(err != ErrorCode::OK){

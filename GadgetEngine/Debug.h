@@ -1,6 +1,7 @@
 #ifndef GADGET_DEBUG_H
 #define GADGET_DEBUG_H
 
+#include <mutex>
 #include <queue>
 #include <set>
 #include <string>
@@ -76,7 +77,9 @@ namespace Gadget{
 		static bool isInitialized;
 		static LogType logLevel;
 		static std::set<StringID> logChannelFilter;
-		static std::queue<std::string> queuedLogsForFileWrite; //TODO - Make this thread-safe
+
+		static std::queue<std::string> queuedLogsForFileWrite;
+		static std::mutex logQueueMutex;
 
 		static void QueueLogForFileWrite(const std::string& message_);
 		static void WriteQueuedLogs();
