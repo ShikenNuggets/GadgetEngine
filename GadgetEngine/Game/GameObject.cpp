@@ -22,7 +22,7 @@ Matrix4 Transform::GetTransformMatrix() const{
 	return (positionMatrix * (rotationMatrix * scaleMatrix));
 }
 
-GameObject::GameObject(StringID name_) : guid(GUID::Generate()), name(name_), transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), components(){
+GameObject::GameObject(StringID name_) : guid(GUID::Generate()), name(name_), transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), components(), lifeTime(-1.0f), lifeTimeTimer(0.0f){
 	GADGET_BASIC_ASSERT(name_ != StringID::None);
 	GADGET_BASIC_ASSERT(guid != GUID::Invalid);
 
@@ -31,7 +31,7 @@ GameObject::GameObject(StringID name_) : guid(GUID::Generate()), name(name_), tr
 	GADGET_BASIC_ASSERT(GameObjectCollection::Get(guid) == this);
 }
 
-GameObject::GameObject(const GameObjectProperties& properties_) : guid(properties_.guid.ToNumber<uint64_t>()), name(properties_.name.ToStr()), tags(), transform(properties_.transform), components(){
+GameObject::GameObject(const GameObjectProperties& properties_) : guid(properties_.guid.ToNumber<uint64_t>()), name(properties_.name.ToStr()), tags(), transform(properties_.transform), components(), lifeTime(-1.0f), lifeTimeTimer(0.0f){
 	GADGET_BASIC_ASSERT(properties_.name.Value() != StringID::None);
 	GADGET_BASIC_ASSERT(properties_.transform.position.IsValid());
 	GADGET_BASIC_ASSERT(properties_.transform.rotation.IsValid());
@@ -63,6 +63,10 @@ void GameObject::Update([[maybe_unused]] float deltaTime_){
 		if(!component->IsActivated()){
 			component->OnActivated();
 		}
+	}
+
+	if(lifeTime > 0.0f){
+		lifeTimeTimer += deltaTime_;
 	}
 }
 
@@ -96,6 +100,12 @@ void GameObject::AddTag(StringID tag_){
 	GADGET_BASIC_ASSERT(tag_ != StringID::None);
 	GADGET_ASSERT(!HasTag(tag_), "Tried adding tag [" + tag_.GetString() + "] to a GameObject that already has that tag!");
 	tags.push_back(tag_);
+}
+
+void GameObject::SetLifeTime(float lifeTime_){
+	GADGET_BASIC_ASSERT(lifeTime_ > 0);
+	lifeTime = lifeTime_;
+	lifeTimeTimer = 0.0f;
 }
 
 GameObject* GameObject::FindWithTag(StringID tag_){

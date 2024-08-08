@@ -37,12 +37,21 @@ void Scene::Update(float deltaTime_){
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
 
 	for(const auto& sc : sceneComponents){
+		GADGET_BASIC_ASSERT(sc != nullptr);
 		sc->OnUpdate(deltaTime_);
 	}
 
 	for(auto& go : gameObjects){
+		GADGET_BASIC_ASSERT(go != nullptr);
 		go->Update(deltaTime_);
+		
+		if(go->HasLifeTimeEnded()){
+			delete go;
+			go = nullptr;
+		}
 	}
+
+	gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), nullptr), gameObjects.end());
 }
 
 GameObject* Scene::FindWithTag(StringID tag_){

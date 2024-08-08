@@ -120,6 +120,9 @@ namespace Gadget{
 		void SetName(StringID newName_){ name = newName_; }
 		void AddTag(StringID tag_);
 
+		void SetLifeTime(float lifeTime);
+		inline bool HasLifeTimeEnded() const{ return lifeTime > 0.0f && lifeTimeTimer > lifeTime; }
+
 		void SetPosition(const Vector3& pos_){ transform.position = pos_; OnTransformModified(); }
 		void SetPosition(float x_, float y_, float z_){ transform.position = Vector3(x_, y_, z_); OnTransformModified(); }
 
@@ -147,6 +150,8 @@ namespace Gadget{
 		std::vector<StringID> tags;
 		Transform transform;
 		std::vector<Component*> components;
+		float lifeTime;
+		float lifeTimeTimer;
 
 		virtual void OnTransformModified();
 	};
