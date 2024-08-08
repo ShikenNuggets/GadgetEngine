@@ -128,6 +128,7 @@ namespace Gadget{
 		void SetRotation(float x_, float y_, float z_){ transform.rotation = Euler(x_, y_, z_).ToQuaternion(); OnTransformModified(); }
 
 		void SetScale(float scale_){ transform.scale = Vector3::Fill(scale_); OnTransformModified(); }
+		void SetScale(float x_, float y_, float z_){ transform.scale = Vector3(x_, y_, z_); OnTransformModified(); }
 		void SetScale(const Vector3& scale_){ transform.scale = scale_; OnTransformModified(); }
 
 		void Translate(const Vector3& translation_){ transform.position += translation_; OnTransformModified(); }
