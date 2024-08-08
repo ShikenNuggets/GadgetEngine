@@ -216,8 +216,9 @@ void App::Run(GameInterface& gameInterface_){
 		Profiler::End(SID("Main Loop"));
 
 	#ifdef GADGET_DEBUG
-		if(input->GetButtonDown(Gadget::ButtonID::Keyboard_F11)){
-			ResetRenderer(); //TODO - Temp code, being able to hot reload the renderer is just useful for testing
+		//Hot reload the renderer when F11 is pressed - useful for testing
+		if(input->GetButtonDown(ButtonID::Keyboard_F11)){
+			ResetRenderer();
 			EventHandler::GetInstance()->HandleEvent(WindowRestartedEvent());
 		}
 	#endif // GADGET_DEBUG
