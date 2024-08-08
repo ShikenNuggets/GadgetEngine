@@ -177,7 +177,11 @@ bool AudioSource::IsChannelValid() const{
 
 	bool isPlaying = false;
 	const FMOD_RESULT result = channel->isPlaying(&isPlaying);
-	GADGET_BASIC_ASSERT(result == FMOD_OK || result == FMOD_ERR_INVALID_HANDLE);
+	GADGET_BASIC_ASSERT(result == FMOD_OK || result == FMOD_ERR_INVALID_HANDLE || result == FMOD_ERR_CHANNEL_STOLEN);
+	if(result == FMOD_ERR_CHANNEL_STOLEN){
+		GADGET_LOG_WARNING(SID("AUDIO"), "FMOD is reporting a stolen channel"); //TODO - Investigate this
+	}
+
 	return result == FMOD_OK;
 }
 

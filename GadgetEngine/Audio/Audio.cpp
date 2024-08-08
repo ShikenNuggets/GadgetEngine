@@ -33,10 +33,17 @@ Audio::Audio() : studioSystem(nullptr), coreSystem(nullptr){
 		Debug::ThrowFatalError(SID("AUDIO"), "FMOD header version does not match FMOD lib version!", ErrorCode::FMOD_Version_Error, __FILE__, __LINE__);
 	}
 
+	result = coreSystem->setSoftwareChannels(256);
+	if(result != FMOD_OK){
+		GADGET_LOG_WARNING(SID("AUDIO"), "Could not set the desired number of software channels! FMOD Error: " + std::string(FMOD_ErrorString(result)));
+	}
+
 	result = studioSystem->initialize(gMaxChannels, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_3D_RIGHTHANDED, nullptr);
 	if(result != FMOD_OK){
 		Debug::ThrowFatalError(SID("AUDIO"), "FMOD Studio System could not be initialized! FMOD Error: " + std::string(FMOD_ErrorString(result)), ErrorCode::FMOD_Init_Error, __FILE__, __LINE__);
 	}
+
+	GADGET_BASIC_ASSERT(studioSystem->isValid());
 }
 
 Audio::~Audio(){
