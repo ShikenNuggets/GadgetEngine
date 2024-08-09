@@ -20,7 +20,7 @@ namespace Gadget{
 		#endif
 
 		Input();
-		~Input() = default;
+		~Input();
 		DISABLE_COPY_AND_MOVE(Input);
 
 		bool GetButtonDown(ButtonID id_) const;

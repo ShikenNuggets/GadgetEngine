@@ -45,10 +45,10 @@ static constexpr int gDefaultWindowHeight = 720;
 App::App() : gameName("GadgetEngine"), isRunning(true), singleFrameAllocator(gDefaultAllocatorSize), twoFrameAllocator(gDefaultAllocatorSize), resourceMgr(nullptr), config(nullptr), time(nullptr), input(nullptr), renderer(nullptr), physics(nullptr), sceneManager(nullptr), gameLogicManager(nullptr){
 	GADGET_ASSERT(instance == nullptr, "Created multiple App instances!");
 	
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowClose, [&](const Event& e){ OnWindowCloseEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, [&](const Event& e){ OnWindowResizeEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved, [&](const Event& e){ OnMouseMoved(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed, [&](const Event& e){ OnMouseButtonPressed(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::WindowClose, this, [&](const Event& e){ OnWindowCloseEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::WindowResize, this, [&](const Event& e){ OnWindowResizeEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::MouseMoved, this, [&](const Event& e){ OnMouseMoved(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::MouseButtonPressed, this, [&](const Event& e){ OnMouseButtonPressed(e); });
 }
 
 App::~App(){

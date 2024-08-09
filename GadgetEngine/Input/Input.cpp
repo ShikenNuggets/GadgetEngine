@@ -17,16 +17,16 @@ static constexpr size_t gNumButtonsToReserve = 32;
 static constexpr size_t gNumAxesToReserve = 16;
 
 Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDown(), buttonsHeld(), buttonsUp(), axes(), persistentAxes(), currentMouseX(0), currentMouseY(0), definedButtons(), definedAxes(){
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowRestarted,		[&](const Event& e){ OnWindowRestartedEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::KeyPressed,			[&](const Event& e){ OnKeyPressedEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::KeyReleased,			[&](const Event& e){ OnKeyReleasedEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseMoved,			[&](const Event& e){ OnMouseMovedEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseScroll,			[&](const Event& e){ OnMouseScrollEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonPressed,	[&](const Event& e){ OnMouseButtonPressedEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::MouseButtonReleased,	[&](const Event& e){ OnMouseButtonReleasedEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadAxis,			[&](const Event& e){ OnGamepadAxisEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonPressed,	[&](const Event& e){ OnGamepadButtonPressedEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::GamepadButtonReleased,	[&](const Event& e){ OnGamepadButtonReleasedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::WindowRestarted,		this,	[&](const Event& e){ OnWindowRestartedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::KeyPressed,			this,	[&](const Event& e){ OnKeyPressedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::KeyReleased,			this,	[&](const Event& e){ OnKeyReleasedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::MouseMoved,			this,	[&](const Event& e){ OnMouseMovedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::MouseScroll,			this,	[&](const Event& e){ OnMouseScrollEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::MouseButtonPressed,	this,	[&](const Event& e){ OnMouseButtonPressedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::MouseButtonReleased,	this,	[&](const Event& e){ OnMouseButtonReleasedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::GamepadAxis,			this,	[&](const Event& e){ OnGamepadAxisEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::GamepadButtonPressed,	this,	[&](const Event& e){ OnGamepadButtonPressedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::GamepadButtonReleased,	this,	[&](const Event& e){ OnGamepadButtonReleasedEvent(e); });
 	
 	buttonEvents.reserve(gNumEventsToReserve);
 	axisEvents.reserve(gNumEventsToReserve);
@@ -34,6 +34,10 @@ Input::Input() : buttonEvents(), axisEvents(), persistentAxisEvents(), buttonsDo
 
 	definedButtons.reserve(gNumButtonsToReserve);
 	definedAxes.reserve(gNumAxesToReserve);
+}
+
+Input::~Input(){
+	EventHandler::GetInstance()->UnregisterCallbacks(this);
 }
 
 bool Input::GetButtonDown(ButtonID id_) const{

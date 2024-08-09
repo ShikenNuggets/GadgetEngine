@@ -11,8 +11,8 @@
 using namespace Gadget;
 
 Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowMoved, [&](const Event& e){ OnWindowMovedEvent(e); });
-	EventHandler::GetInstance()->SetEventCallback(EventType::WindowResize, [&](const Event& e){ OnWindowResizedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::WindowMoved, this, [&](const Event& e){ OnWindowMovedEvent(e); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::WindowResize, this, [&](const Event& e){ OnWindowResizedEvent(e); });
 
 	LocManager* locMan = LocManager::GetInstance(); //Initialize Localization Manager
 	GADGET_BASIC_ASSERT(locMan != nullptr);
@@ -25,6 +25,8 @@ Config::Config() : engineConfigPath(CreateEngineConfigPath()), vars(){
 }
 
 Config::~Config(){
+	EventHandler::GetInstance()->UnregisterCallbacks(this);
+
 	SaveConfigs();
 
 #ifdef GADGET_DEBUG
