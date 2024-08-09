@@ -62,6 +62,7 @@ void GameObject::Update([[maybe_unused]] float deltaTime_){
 		//TODO - There is probably a better approach to this than checking every component every frame...
 		if(!component->IsActivated()){
 			component->OnActivated();
+			GADGET_BASIC_ASSERT(component->IsActivated());
 		}
 	}
 
