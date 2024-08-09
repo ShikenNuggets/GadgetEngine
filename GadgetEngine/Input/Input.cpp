@@ -134,6 +134,16 @@ bool Input::GetAnyButtonDown(ButtonID ignore_) const{
 	return false;
 }
 
+bool Input::GetAnyButtonDown(StringID ignoreButtonName_) const{
+	for(const auto& b : definedButtons){
+		if(ignoreButtonName_ != b.GetName() && GetButtonDown(b.GetName())){
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool Input::GetAnyButtonUp() const{
 	return !buttonsUp.empty();
 }
@@ -148,6 +158,16 @@ bool Input::GetAnyButtonUp(ButtonID ignore_) const{
 	return false;
 }
 
+bool Input::GetAnyButtonUp(StringID ignoreButtonName_) const{
+	for(const auto& b : definedButtons){
+		if(ignoreButtonName_ != b.GetName() && GetButtonUp(b.GetName())){
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool Input::GetAnyButtonHeld() const{
 	return !buttonsHeld.empty();
 }
@@ -155,6 +175,16 @@ bool Input::GetAnyButtonHeld() const{
 bool Input::GetAnyButtonHeld(ButtonID ignore_) const{
 	for(const auto& b : buttonsHeld){
 		if(b != ignore_){
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Input::GetAnyButtonHeld(StringID ignoreButtonName_) const{
+	for(const auto& b : definedButtons){
+		if(ignoreButtonName_ != b.GetName() && GetButtonHeld(b.GetName())){
 			return true;
 		}
 	}
