@@ -120,6 +120,48 @@ bool Input::GetButtonHeld(StringID buttonName_) const{
 	return false;
 }
 
+bool Input::GetAnyButtonDown() const{
+	return !buttonsDown.empty();
+}
+
+bool Input::GetAnyButtonDown(ButtonID ignore_) const{
+	for(const auto& b : buttonsDown){
+		if(b != ignore_){
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Input::GetAnyButtonUp() const{
+	return !buttonsUp.empty();
+}
+
+bool Input::GetAnyButtonUp(ButtonID ignore_) const{
+	for(const auto& b : buttonsUp){
+		if(b != ignore_){
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Input::GetAnyButtonHeld() const{
+	return !buttonsHeld.empty();
+}
+
+bool Input::GetAnyButtonHeld(ButtonID ignore_) const{
+	for(const auto& b : buttonsHeld){
+		if(b != ignore_){
+			return true;
+		}
+	}
+
+	return false;
+}
+
 float Input::GetAxis(AxisID id_) const{
 	GADGET_BASIC_ASSERT(id_ < AxisID::AxisID_MAX);
 

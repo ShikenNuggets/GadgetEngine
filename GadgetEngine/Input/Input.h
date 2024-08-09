@@ -32,6 +32,13 @@ namespace Gadget{
 		bool GetButtonUp(ButtonID id_) const;
 		bool GetButtonUp(StringID buttonName_) const;
 
+		bool GetAnyButtonDown() const;
+		bool GetAnyButtonDown(ButtonID ignore_) const;
+		bool GetAnyButtonUp() const;
+		bool GetAnyButtonUp(ButtonID ignore_) const;
+		bool GetAnyButtonHeld() const;
+		bool GetAnyButtonHeld(ButtonID ignore_) const;
+
 		float GetAxis(AxisID id_) const;
 		float GetAxis(StringID axisName_) const;
 
