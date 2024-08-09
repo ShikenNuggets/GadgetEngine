@@ -52,7 +52,7 @@ namespace Gadget{
 			renderSurface = surface_;
 		}
 
-		virtual void HandleEvents() = 0; //TODO - Not sure if this should be here... we'll leave it here for now
+		virtual void HandleEvents() = 0;
 		virtual void SwapBuffers() = 0;
 
 		virtual float GetRefreshRate() = 0;
