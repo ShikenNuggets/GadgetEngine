@@ -16,6 +16,7 @@ namespace Gadget{
 		};
 
 		Camera(const Vector3& position_ = Vector3::Zero(), const Quaternion& rotation_ = Quaternion::Identity(), Projection projection_ = Projection::Perspective, const Rect& viewRect_ = ViewportRect::Fullscreen);
+		~Camera();
 
 		void CalculateViewMatrix(const Vector3& position_, const Quaternion& rotation_);
 		void CalculateProjectionMatrix();
@@ -36,6 +37,8 @@ namespace Gadget{
 		void SetNearPlane(float near_);
 		void SetFarPlane(float far_);
 		void SetOrthoHeight(float height_);
+
+		void OnResize();
 
 	private:
 		Matrix4 view;

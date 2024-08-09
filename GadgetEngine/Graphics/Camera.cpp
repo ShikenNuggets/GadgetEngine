@@ -1,6 +1,7 @@
 #include "Camera.h"
 
 #include "App.h"
+#include "Events/EventHandler.h"
 
 using namespace Gadget;
 
@@ -19,6 +20,12 @@ Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection
 
 	CalculateViewMatrix(position_, rotation_);
 	CalculateProjectionMatrix();
+
+	EventHandler::GetInstance()->RegisterCallback(EventType::WindowResize, this, [&](const Event& e){ OnResize(); });
+}
+
+Camera::~Camera(){
+	EventHandler::GetInstance()->UnregisterCallbacks(this);
 }
 
 void Camera::CalculateViewMatrix(const Vector3& position_, const Quaternion& rotation_){
@@ -120,4 +127,9 @@ void Camera::SetFarPlane(float far_){
 void Camera::SetOrthoHeight(float height_){
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
 	orthoHeight = height_;
+}
+
+void Camera::OnResize(){
+	aspect = App::GetAspectRatio();
+	CalculateProjectionMatrix();
 }

@@ -70,7 +70,7 @@ namespace Gadget{
 			}
 		}
 
-		virtual void OnResize(int newWidth_, int newHeight_) = 0; //TODO - Update all camera projection matrices
+		virtual void OnResize(int newWidth_, int newHeight_) = 0;
 
 		virtual void SetWindingOrder(WindingOrder order_){
 			GADGET_BASIC_ASSERT(order_ < WindingOrder::WindingOrder_MAX);
