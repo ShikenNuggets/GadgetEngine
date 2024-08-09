@@ -76,7 +76,6 @@ bool ButtonSequenceGesture::IsGestureComplete() const{
 	return currentButtonIndex >= buttonNames.size();
 }
 
-//TODO - Pressing the wrong button should reset the gesture
 void ButtonSequenceGesture::Update(){
 	GADGET_ASSERT(!buttonNames.empty(), "ButtonSequenceGesture with no button names set exists!");
 
@@ -96,6 +95,8 @@ void ButtonSequenceGesture::Update(){
 		}else{
 			Reset();
 		}
+	}else if(App::GetInput().GetAnyButtonDown(buttonNames[currentButtonIndex])){
+		Reset();
 	}
 }
 
