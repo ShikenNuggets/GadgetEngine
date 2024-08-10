@@ -6,7 +6,7 @@ using namespace Gadget;
 //---------- Timer -----------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------//
 
-Timer::Timer() : startTime(0), times(){}
+Timer::Timer() : startTime(0), total(0.0), numIterations(0){};
 
 void Timer::StartProfiling(){
 	if(startTime.count() != 0){
@@ -24,32 +24,20 @@ double Timer::EndProfiling(){
 	}
 
 	const double durationSeconds = Timing::TimeSince(startTime);
-	if(times.size() == times.capacity()){
-		times.reserve(times.capacity() * 2); //TODO - This will eventually result in crazy stupid memory usage. Cap this somehow
-	}
-
-	times.push_back(durationSeconds);
+	total += durationSeconds;
+	numIterations++;
 
 	startTime = std::chrono::milliseconds(0);
 
 	return durationSeconds;
 }
 
-double Timer::Total() const{
-	double total = 0.0;
-	for(const auto& t : times){
-		total += t;
-	}
-
-	return total;
-}
-
 double Timer::Average() const{
-	if(times.size() == 0){
+	if(numIterations == 0){
 		return 0.0;
 	}
 
-	return Total() / static_cast<double>(times.size());
+	return Total() / static_cast<double>(numIterations);
 }
 
 //----------------------------------------------------------------------------------------------------//

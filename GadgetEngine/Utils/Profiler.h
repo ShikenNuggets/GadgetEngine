@@ -26,12 +26,13 @@ namespace Gadget{
 		void StartProfiling();
 		double EndProfiling();
 
-		double Total() const;
+		inline constexpr double Total() const{ return total; }
 		double Average() const;
 		
 	private:
 		std::chrono::milliseconds startTime;
-		std::vector<double> times;
+		double total;
+		uint64_t numIterations;
 	};
 
 	class Profiler{
