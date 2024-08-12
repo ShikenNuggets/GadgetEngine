@@ -63,11 +63,11 @@ namespace Gadget{
 			}
 		}
 
-		inline void Add(const T& value_){
-			Add(value_, tail);
+		inline Node* Add(const T& value_){
+			return Add(value_, tail);
 		}
 
-		inline void Add(const T& value_, Node* nodePos_){
+		inline Node* Add(const T& value_, Node* nodePos_){
 			GADGET_BASIC_ASSERT(IsEmpty() || nodePos_ != nullptr);
 			GADGET_BASIC_ASSERT(nodePos_ == nullptr || ContainsNode(nodePos_));
 			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
@@ -90,9 +90,10 @@ namespace Gadget{
 
 			GADGET_BASIC_ASSERT(tail->next == nullptr);
 			size++;
+			return newNode;
 		}
 
-		inline void AddFront(const T& value_){
+		inline Node* AddFront(const T& value_){
 			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
 
 			Node* newNode = new Node(value_);
@@ -106,6 +107,8 @@ namespace Gadget{
 			}
 
 			size++;
+
+			return newNode;
 		}
 
 		constexpr inline void Pop(){
