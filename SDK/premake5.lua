@@ -53,8 +53,8 @@ project "Glad"
 
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)SDK\\$(ProjectName)\\include\\*.h*\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
-			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
+			"echo D|xcopy \"$(ProjectDir)..\\$(ProjectName)\\include\\*.h*\" \"$(ProjectDir)..\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(ProjectDir)..\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
 		}
 		
 	filter "configurations:Debug"
@@ -206,8 +206,8 @@ project "SDL2"
 
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)SDK\\SDL\\include\\*.h*\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
-			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
+			"echo D|xcopy \"$(ProjectDir)..\\SDL\\include\\*.h*\" \"$(ProjectDir)..\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(ProjectDir)..\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
 		}
 		
 	filter "configurations:Debug"
@@ -255,7 +255,7 @@ project "SDL2main"
 
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(ProjectDir)..\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
 		}
 		
 	filter "configurations:Debug"

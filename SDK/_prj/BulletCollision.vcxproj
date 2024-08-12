@@ -54,13 +54,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\Build\$(ProjectName)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\Build\Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\..\Build\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\..\Build\Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">BulletCollision</TargetName>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\Build\$(ProjectName)\$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">$(SolutionDir)\Build\$(ProjectName)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\Build\Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">$(SolutionDir)\Build\Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\..\Build\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">$(ProjectDir)..\..\Build\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\..\Build\Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">$(ProjectDir)..\..\Build\Intermediate\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BulletCollision</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">BulletCollision</TargetName>
   </PropertyGroup>
@@ -100,8 +100,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\bullet3\" /s /y /E /d
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\bullet3\src\*.h" "$(ProjectDir)..\_Gadget\include\bullet3\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(ProjectDir)..\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -136,8 +136,8 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\bullet3\" /s /y /E /d
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\bullet3\src\*.h" "$(ProjectDir)..\_Gadget\include\bullet3\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(ProjectDir)..\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -173,8 +173,8 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\bullet3\src\*.h" "$(SolutionDir)SDK\_Gadget\include\bullet3\" /s /y /E /d
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\bullet3\src\*.h" "$(ProjectDir)..\_Gadget\include\bullet3\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(ProjectDir)..\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

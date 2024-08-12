@@ -89,8 +89,8 @@
       <ImportLibrary>..\..\Build\SDL2\Debug\SDL2.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\SDL\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\SDL\include\*.h*" "$(ProjectDir)..\_Gadget\include\$(ProjectName)\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(ProjectDir)..\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -114,8 +114,8 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <ImportLibrary>..\..\Build\SDL2\Develop\SDL2.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\SDL\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\SDL\include\*.h*" "$(ProjectDir)..\_Gadget\include\$(ProjectName)\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(ProjectDir)..\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,8 +141,8 @@ echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\"
       <ImportLibrary>..\..\Build\SDL2\Release\SDL2.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\SDL\include\*.h*" "$(SolutionDir)SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d
-echo D|xcopy "$(TargetDir)*.*" "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\SDL\include\*.h*" "$(ProjectDir)..\_Gadget\include\$(ProjectName)\" /s /y /E /d
+echo D|xcopy "$(TargetDir)*.*" "$(ProjectDir)..\_Gadget\lib\$(Configuration)\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
