@@ -72,7 +72,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo D|xcopy &quot;$(SolutionDir)Build\GadgetDLL\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E /d&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)Build\SDL2\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E /d&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\Assimp\bin\x64\*.dll&quot; &quot;$(TargetDir)&quot; /y /E /d&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\_Gadget\include\*.*&quot; &quot;$(TargetDir)_Gadget\include\&quot; /s /y /E /d&#xD;&#xA;echo D|xcopy &quot;$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.*&quot; &quot;$(TargetDir)_Gadget\lib\$(Configuration)\&quot; /s /y /E /d" />
+    <Exec Command="echo D|xcopy &quot;$(ProjectDir)..\Build\GadgetDLL\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E /d&#xD;&#xA;echo D|xcopy &quot;$(ProjectDir)..\Build\SDL2\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot; /y /E /d&#xD;&#xA;echo D|xcopy &quot;$(ProjectDir)..\SDK\Assimp\bin\x64\*.dll&quot; &quot;$(TargetDir)&quot; /y /E /d&#xD;&#xA;echo D|xcopy &quot;$(ProjectDir)..\SDK\_Gadget\include\*.*&quot; &quot;$(TargetDir)_Gadget\include\&quot; /s /y /E /d&#xD;&#xA;echo D|xcopy &quot;$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.*&quot; &quot;$(TargetDir)_Gadget\lib\$(Configuration)\&quot; /s /y /E /d" />
   </Target>
 
 </Project>
