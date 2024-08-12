@@ -100,9 +100,9 @@
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -135,9 +135,9 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -167,9 +167,9 @@ echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir
       <IgnoreSpecificDefaultLibraries>libcmtd.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(SolutionDir)SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(SolutionDir)SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
+      <Command>echo D|xcopy "$(ProjectDir)..\SDK\dxc\bin\x64\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

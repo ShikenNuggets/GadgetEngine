@@ -8,8 +8,8 @@ function CppProjectDefaults()
 	cppdialect "C++20"
 	warnings "Extra"
 	
-	targetdir (gRootPath .. "Build/%{prj.name}/%{cfg.buildcfg}/") 
-	objdir (gRootPath .. "Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
+	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
+	objdir ("Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
 
 	files
 	{

@@ -81,18 +81,18 @@ project "GadgetEngine"
 	filter "system:windows"
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(ProjectDir)*.h*\" \"$(SolutionDir)SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\include\\*.h*\" \"$(SolutionDir)SDK\\_Gadget\\include\\common\\\" /s /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\include\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\include\\Assimp\\\" /s /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\include\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\include\\freetype\\\" /s /y /E /d",
-			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\bin\\x64\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\Assimp\\lib\\x64\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\core\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\fsbank\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\FMOD\\studio\\lib\\*.dll\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)*.h*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\include\\*.h*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\common\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\include\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\Assimp\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\freetype\\include\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\freetype\\\" /s /y /E /d",
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\bin\\x64\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\lib\\x64\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 		}
 		
 	filter "configurations:Release"
@@ -124,7 +124,7 @@ project "GadgetDLL"
 
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(TargetDir)*.*\" \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d"
 		}
 
 	filter "configurations:Debug or Develop"
@@ -150,9 +150,9 @@ project "Game"
 	filter "system:windows"
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)Resources\\\" \"$(TargetDir)Resources\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\Resources\\\" \"$(TargetDir)Resources\\\" /y /E /d",
 		}
 		
 	filter "configurations:Debug or Develop"
@@ -192,9 +192,9 @@ project "DataBuilder"
 	filter "system:windows"
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)SDK\\dxc\\bin\\x64\\*.dll\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\dxc\\bin\\x64\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
 		}
 
 		libdirs
@@ -230,8 +230,8 @@ project "Tests"
 	filter "system:windows"
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(SolutionDir)SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
 		}
 
 	filter "configurations:Debug or Develop"
