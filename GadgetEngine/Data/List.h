@@ -111,6 +111,24 @@ namespace Gadget{
 			return newNode;
 		}
 
+		//Absorbs all nodes from the other list
+		//The other list will be empty after this operation
+		inline void Merge(List<T>& other_){
+			tail->next = other_->head;
+			tail = other_->tail;
+			size += other_.size;
+
+			//Empty the other list so there's no ambiguity on ownership
+			other_.head = nullptr;
+			other_.tail = nullptr;
+			other_.size = 0;
+
+			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_BASIC_ASSERT(other_.IsEmpty());
+			GADGET_BASIC_ASSERT(other_.IsValid());
+		}
+
+
 		constexpr inline void Pop(){
 			if(IsEmpty()){
 				return;
