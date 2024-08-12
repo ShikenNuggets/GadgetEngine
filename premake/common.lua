@@ -75,7 +75,7 @@ end
 function GadgetExternalIncludes()
 	includedirs
 	{
-		gRootPath .. "%{prj.name}/",
+		"%{prj.name}/",
 		gRootPath .. "SDK/include",
 		gRootPath .. "SDK/Assimp/include",
 		gRootPath .. "SDK/Glad/include",
@@ -159,8 +159,8 @@ function GadgetExternalLibs(options)
 end
 
 function DependsOnGadgetEngine()
-	includedirs { "GadgetEngine/" }
-	libdirs { "Build/GadgetEngine/%{cfg.buildcfg}/" }
+	includedirs { gRootPath .. "GadgetEngine/" }
+	libdirs { gRootPath .. "Build/GadgetEngine/%{cfg.buildcfg}/" }
 	links { "GadgetEngine.lib" }
 	dependson { "GadgetEngine" }
 	forceincludes { "Gadget.h" }
