@@ -353,3 +353,83 @@ TEST_CASE("List Kth to Last Node", "[list_k_to_last]"){
 	REQUIRE(list.GetNthLastNode(5)->next->next->next->next->next == nullptr);
 	REQUIRE(list.GetNthLastNode(5) == GetNthLastNode_UnknownSize(list.Front(), 5));
 }
+
+//------------------------------------------------------------//
+//----------------- Partition (CTCI 2.4) ---------------------//
+//------------------------------------------------------------//
+
+void PartitionListAtValue(List<int>& list, int pValue){
+	GADGET_BASIC_ASSERT(!list.IsEmpty());
+	if(list.IsEmpty()){
+		return;
+	}
+
+	List<int> pList;
+	List<int>::Node* lowPartition = nullptr;
+	List<int>::Node* highPartition = nullptr;
+
+	pList.Add(list.Front()->value);
+	if(list.Front()->value < pValue){
+		lowPartition = pList.Front();
+	}else{
+		highPartition = pList.Front();
+	}
+
+	bool firstIter = true;
+	for(const auto* n : list){
+		if(firstIter){
+			firstIter = false;
+			continue;
+		}
+
+		if(lowPartition == nullptr && n->value < pValue){
+			pList.AddFront(n->value);
+			lowPartition = pList.Front();
+			continue;
+		}else if(highPartition == nullptr && n->value >= pValue){
+			pList.Add(n->value);
+			highPartition = pList.Back();
+			continue;
+		}
+
+		if(n->value < pValue){
+			pList.Add(n->value, lowPartition);
+		}else{
+			List<int>::Node* newNode = pList.Add(n->value, highPartition);
+			if(n->value == pValue){
+				highPartition = newNode; //This technically isn't necessary to meet the requirements of this function, but keeping the pValues together is ideal
+			}
+		}
+	}
+
+	list = pList;
+}
+
+TEST_CASE("List Partition", "[list_partition]"){
+	List<int> inputList;
+	inputList.Add(3);
+	inputList.Add(5);
+	inputList.Add(8);
+	inputList.Add(5);
+	inputList.Add(10);
+	inputList.Add(2);
+	inputList.Add(1);
+
+	PartitionListAtValue(inputList, 5);
+
+	REQUIRE(inputList.Front() != nullptr);
+	REQUIRE(inputList.Front()->next != nullptr);
+	REQUIRE(inputList.Front()->next->next != nullptr);
+	REQUIRE(inputList.Front()->next->next->next != nullptr);
+	REQUIRE(inputList.Front()->next->next->next->next != nullptr);
+	REQUIRE(inputList.Front()->next->next->next->next->next != nullptr);
+	REQUIRE(inputList.Front()->next->next->next->next->next->next != nullptr);
+
+	REQUIRE(inputList.Front()->value == 3);
+	REQUIRE(inputList.Front()->next->value == 1);
+	REQUIRE(inputList.Front()->next->next->value == 2);
+	REQUIRE(inputList.Front()->next->next->next->value == 5);
+	REQUIRE(inputList.Front()->next->next->next->next->value == 5);
+	REQUIRE(inputList.Front()->next->next->next->next->next->value == 10);
+	REQUIRE(inputList.Front()->next->next->next->next->next->next->value == 8);
+}
