@@ -64,6 +64,12 @@ namespace Gadget{
 		}
 
 		inline void Add(const T& value_){
+			Add(value_, tail);
+		}
+
+		inline void Add(const T& value_, Node* nodePos_){
+			GADGET_BASIC_ASSERT(IsEmpty() || nodePos_ != nullptr);
+			GADGET_BASIC_ASSERT(nodePos_ == nullptr || ContainsNode(nodePos_));
 			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
 
 			Node* newNode = new Node(value_);
@@ -72,10 +78,17 @@ namespace Gadget{
 				head = newNode;
 				tail = head;
 			}else{
-				tail->next = newNode;
-				tail = tail->next;
+				if(nodePos_->next != nullptr){
+					newNode->next = nodePos_->next;
+				}
+
+				nodePos_->next = newNode;
+				if(nodePos_ == tail){
+					tail = newNode;
+				}
 			}
 
+			GADGET_BASIC_ASSERT(tail->next == nullptr);
 			size++;
 		}
 
@@ -307,6 +320,18 @@ namespace Gadget{
 		size_t size;
 		Node* head;
 		Node* tail;
+
+		constexpr bool ContainsNode(Node* node_) const{
+			GADGET_BASIC_ASSERT(node_ != nullptr);
+
+			for(const auto* n : *this){
+				if(n == node_){
+					return true;
+				}
+			}
+
+			return false;
+		}
 	};
 }
 
