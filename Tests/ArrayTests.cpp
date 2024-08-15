@@ -219,7 +219,7 @@ TEST_CASE("Array Zero Matrix", "[array_zero_matrix]"){
 //----------- Sort the People (Leetcode 2418) ----------------//
 //------------------------------------------------------------//
 struct Person{
-	Person(){}
+	Person() : name(""), height(0){}
 	Person(const String& name_, int height_) : name(name_), height(height_){}
 
 	String name;
@@ -283,4 +283,80 @@ TEST_CASE("Array Sort the People", "[array_sort_the_people]"){
 	REQUIRE(sorted2[0] == "Bob");
 	REQUIRE(sorted2[1] == "Alice");
 	REQUIRE(sorted2[2] == "Bob");
+}
+
+//------------------------------------------------------------//
+//------------ Lemonade Change (Leetcode 860) ----------------//
+//------------------------------------------------------------//
+
+static inline bool LemonadeChange(const Array<int>& bills){
+	int bill5 = 0;
+	int bill10 = 0;
+
+	for(const auto& b : bills){
+		if(b == 5){
+			bill5++;
+			continue;
+		}
+
+		if(b == 10){
+			bill10++;
+			bill5--;
+		}else if(b == 20){
+			if(bill10 > 0){
+				bill10--;
+				bill5--;
+			}else{
+				bill5 -= 3;
+			}
+		}
+
+		if(bill5 < 0 || bill10 < 0){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+TEST_CASE("Array Lemonade Change", "[array_lemonade_change]"){
+	Array<int> case1;
+	case1.Add(5);
+	case1.Add(5);
+	case1.Add(5);
+	case1.Add(10);
+	case1.Add(20);
+
+	Array<int> case2;
+	case2.Add(5);
+	case2.Add(5);
+	case2.Add(10);
+	case2.Add(10);
+	case2.Add(20);
+
+	Array<int> case3;
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(10);
+	case3.Add(20);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(10);
+	case3.Add(5);
+	case3.Add(5);
+	case3.Add(20);
+	case3.Add(5);
+	case3.Add(20);
+	case3.Add(5);
+
+	REQUIRE(LemonadeChange(case1) == true);
+	REQUIRE(LemonadeChange(case2) == false);
+	REQUIRE(LemonadeChange(case3) == true);
 }

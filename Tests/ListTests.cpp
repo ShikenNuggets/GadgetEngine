@@ -433,3 +433,159 @@ TEST_CASE("List Partition", "[list_partition]"){
 	REQUIRE(inputList.Front()->next->next->next->next->next->value == 10);
 	REQUIRE(inputList.Front()->next->next->next->next->next->next->value == 8);
 }
+
+//------------------------------------------------------------//
+//----------------- Sum Lists (CTCI 2.5) ---------------------//
+//------------------------------------------------------------//
+
+static inline int SumNodes(List<int>::Node* aCur, List<int>::Node* bCur, List<int>& result){
+	int sum = 0;
+	if(aCur == nullptr && bCur == nullptr){
+		return 0;
+	}else if(aCur && !bCur){
+		sum += SumNodes(aCur->next, nullptr, result);
+		sum += aCur->value;
+	}else if(bCur && !aCur){
+		sum += SumNodes(nullptr, bCur->next, result);
+		sum += bCur->value;
+	}else{
+		sum += SumNodes(aCur->next, bCur->next, result);
+		sum += aCur->value + bCur->value;
+	}
+
+	int remainder = 0;
+	while(sum >= 10){
+		remainder++;
+		sum -= 10;
+	}
+
+	result.AddFront(sum);
+	return remainder;
+}
+
+static inline List<int> SumLists(const List<int>& a, const List<int>& b){
+	List<int> resultTest;
+	SumNodes(a.Front(), b.Front(), resultTest);
+	return resultTest;
+}
+
+static inline List<int> SumListsReverse(const List<int>& a, const List<int>& b){
+	List<int>::Node* aCurrent = a.Front();
+	List<int>::Node* bCurrent = b.Front();
+
+	List<int> result;
+	int remainder = 0;
+	while(aCurrent != nullptr || bCurrent != nullptr){
+		int sum = remainder;
+		remainder = 0;
+
+		if(aCurrent != nullptr){
+			sum += aCurrent->value;
+			aCurrent = aCurrent->next;
+		}
+
+		if(bCurrent != nullptr){
+			sum += bCurrent->value;
+			bCurrent = bCurrent->next;
+		}
+
+		while(sum > 10){
+			remainder++;
+			sum -= 10;
+		}
+
+		result.Add(sum);
+	}
+
+	if(remainder > 0){
+		result.Add(remainder);
+	}
+
+	return result;
+}
+
+TEST_CASE("List Sum", "[list_sum]"){
+	List<int> listA;
+	listA.Add(7);
+	listA.Add(1);
+	listA.Add(6);
+
+	List<int> listB;
+	listB.Add(5);
+	listB.Add(9);
+	listB.Add(2);
+
+	REQUIRE(listA.Size() == 3);
+	REQUIRE(listA.GetNode(0) != nullptr);
+	REQUIRE(listA.GetNode(1) != nullptr);
+	REQUIRE(listA.GetNode(2) != nullptr);
+	REQUIRE(listA.GetNode(0)->value == 7);
+	REQUIRE(listA.GetNode(1)->value == 1);
+	REQUIRE(listA.GetNode(2)->value == 6);
+
+	REQUIRE(listB.Size() == 3);
+	REQUIRE(listB.GetNode(0) != nullptr);
+	REQUIRE(listB.GetNode(1) != nullptr);
+	REQUIRE(listB.GetNode(2) != nullptr);
+	REQUIRE(listB.GetNode(0)->value == 5);
+	REQUIRE(listB.GetNode(1)->value == 9);
+	REQUIRE(listB.GetNode(2)->value == 2);
+
+	List<int> result = SumListsReverse(listA, listB);
+	REQUIRE(result.IsValid());
+	REQUIRE(!result.IsEmpty());
+	REQUIRE(result.Size() == 3);
+	REQUIRE(result.Front() != nullptr);
+	REQUIRE(result.Front()->next != nullptr);
+	REQUIRE(result.Front()->next->next != nullptr);
+	REQUIRE(result.Front()->next->next->next == nullptr);
+	REQUIRE(result.GetNode(0) != nullptr);
+	REQUIRE(result.GetNode(1) != nullptr);
+	REQUIRE(result.GetNode(2) != nullptr);
+	REQUIRE(result.GetNode(0)->value == 2);
+	REQUIRE(result.GetNode(1)->value == 1);
+	REQUIRE(result.GetNode(2)->value == 9);
+
+	//-----------------------------------------------------//
+
+	List<int> listA2;
+	listA2.Add(6);
+	listA2.Add(1);
+	listA2.Add(7);
+
+	List<int> listB2;
+	listB2.Add(2);
+	listB2.Add(9);
+	listB2.Add(5);
+
+	REQUIRE(listA2.Size() == 3);
+	REQUIRE(listA2.GetNode(0) != nullptr);
+	REQUIRE(listA2.GetNode(1) != nullptr);
+	REQUIRE(listA2.GetNode(2) != nullptr);
+	REQUIRE(listA2.GetNode(0)->value == 6);
+	REQUIRE(listA2.GetNode(1)->value == 1);
+	REQUIRE(listA2.GetNode(2)->value == 7);
+
+	REQUIRE(listB2.Size() == 3);
+	REQUIRE(listB2.GetNode(0) != nullptr);
+	REQUIRE(listB2.GetNode(1) != nullptr);
+	REQUIRE(listB2.GetNode(2) != nullptr);
+	REQUIRE(listB2.GetNode(0)->value == 2);
+	REQUIRE(listB2.GetNode(1)->value == 9);
+	REQUIRE(listB2.GetNode(2)->value == 5);
+
+	List<int> result2 = SumLists(listA2, listB2);
+	REQUIRE(result2.IsValid());
+	REQUIRE(!result2.IsEmpty());
+	REQUIRE(result2.Size() == 3);
+	REQUIRE(result2.Front() != nullptr);
+	REQUIRE(result2.Front()->next != nullptr);
+	REQUIRE(result2.Front()->next->next != nullptr);
+	REQUIRE(result2.Front()->next->next->next == nullptr);
+	REQUIRE(result2.GetNode(0) != nullptr);
+	REQUIRE(result2.GetNode(1) != nullptr);
+	REQUIRE(result2.GetNode(2) != nullptr);
+	REQUIRE(result2.GetNode(0)->value == 9);
+	REQUIRE(result2.GetNode(1)->value == 1);
+	REQUIRE(result2.GetNode(2)->value == 2);
+}
