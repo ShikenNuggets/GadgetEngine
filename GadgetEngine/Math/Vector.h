@@ -33,6 +33,7 @@ namespace Gadget{
 		inline constexpr void operator *=(float s_){ *this = *this * s_; }
 		inline constexpr void operator /=(float s_){ *this = *this / s_; }
 
+		inline constexpr float Average() const{ return (x + y) / 2.0f; }
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y); }
 		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
 		inline Vector2 Normalized() const{ return *this / Magnitude(); }
@@ -78,6 +79,7 @@ namespace Gadget{
 		inline constexpr void operator *=(float s_){ *this = *this * s_; }
 		inline constexpr void operator /=(float s_){ *this = *this / s_; }
 
+		inline constexpr float Average() const{ return (x + y + z) / 3.0f; }
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y) + (z * z); }
 		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
 		inline Vector3 Normalized() const{ return *this / Magnitude(); }
@@ -144,6 +146,7 @@ namespace Gadget{
 		inline constexpr void operator *=(float s_){ *this = *this * s_; }
 		inline constexpr void operator /=(float s_){ *this = *this / s_; }
 
+		inline constexpr float Average() const{ return (x + y + z + w) / 2.0f; }
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y) + (z * z) + (w * w); }
 		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
 		inline Vector4 Normalized() const{ return *this / Magnitude(); }
