@@ -198,6 +198,8 @@ namespace Gadget{
 			return (((value_ - oldMin_) * newRange) / oldRange) + newMin_;
 		}
 
+		static inline constexpr float Lerp(float from_, float to_, float phase_){ return std::lerp(from_, to_, phase_); }
+
 		//Delete unwanted compiler-generated constructors, destructors, and assignment operators
 		Math() = delete;
 		Math(const Math&) = delete;
