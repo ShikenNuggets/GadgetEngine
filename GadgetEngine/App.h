@@ -30,6 +30,7 @@ namespace Gadget{
 		static void DeleteInstance();
 
 		void Run(GameInterface& gameInterface_);
+		static void CloseGame();
 
 		//Allocate memory that will free itself at the end of the frame
 		//Do not cache this pointer beyond the frame boundary!!!

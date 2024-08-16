@@ -94,7 +94,7 @@ void Win32_Window::HandleEvents(){
 	while(SDL_PollEvent(&e) != 0){
 		switch(e.type){
 			case SDL_QUIT:
-				EventHandler::GetInstance()->HandleEvent(WindowCloseEvent());
+				App::CloseGame();
 				return;
 			case SDL_WINDOWEVENT:
 				HandleWindowEvent(e);

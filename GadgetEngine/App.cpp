@@ -230,6 +230,10 @@ void App::Run(GameInterface& gameInterface_){
 	Profiler::OutputAllAverageResults();
 }
 
+void App::CloseGame(){
+	EventHandler::GetInstance()->HandleEvent(WindowCloseEvent());
+}
+
 void App::OnWindowCloseEvent(const Event& e_){
 	GADGET_BASIC_ASSERT(e_.GetEventType() == WindowCloseEvent::Type());
 	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
