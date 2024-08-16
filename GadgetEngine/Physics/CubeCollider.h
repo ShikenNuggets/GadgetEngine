@@ -31,9 +31,9 @@ namespace Gadget{
 		virtual Vector3 GetColliderSize() const override{
 			GADGET_BASIC_ASSERT(size.IsValid());
 			return Vector3(
-				(parent->GetScale().x * size.x) / 2.0f,
-				(parent->GetScale().y * size.y) / 2.0f,
-				(parent->GetScale().z * size.z) / 2.0f
+				(parent->GetScale().x * size.x),
+				(parent->GetScale().y * size.y),
+				(parent->GetScale().z * size.z)
 			);
 		}
 

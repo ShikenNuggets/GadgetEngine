@@ -25,9 +25,9 @@ namespace Gadget{
 		virtual Vector3 GetColliderSize() const override{
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(radius));
 			return Vector3(
-				(parent->GetScale().x * radius) / 2.0f,
-				(parent->GetScale().y * radius) / 2.0f,
-				(parent->GetScale().z * radius) / 2.0f
+				(parent->GetScale().x * radius),
+				(parent->GetScale().y * radius),
+				(parent->GetScale().z * radius)
 			);
 		}
 
