@@ -510,6 +510,9 @@
     <ClInclude Include="Physics\Rigidbody.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\SphereCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
     <ClInclude Include="Platform\Windows\SDL2_Utils.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>

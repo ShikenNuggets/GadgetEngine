@@ -53,12 +53,12 @@ Vector3 CollisionSystem::CalculateContactPoint(const Collider* col1_, const Coll
 			GADGET_BASIC_ASSERT(dynamic_cast<const BoxCollider2D*>(col2_) != nullptr);
 			return CalculateContactPoint(*dynamic_cast<const BoxCollider2D*>(col1_), *dynamic_cast<const BoxCollider2D*>(col2_));
 		case ColliderShape::Cube:
-			break;
+			break; //TODO
 		case ColliderShape::Circle2D:
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
 		case ColliderShape::Sphere:
-			GADGET_ASSERT_NOT_IMPLEMENTED;
+			//GADGET_ASSERT_NOT_IMPLEMENTED; //TODO
 			break;
 		default:
 			break;
@@ -84,12 +84,12 @@ float CollisionSystem::CalculateOverlapAmount(const Vector3& dir_, const Collide
 			GADGET_BASIC_ASSERT(dynamic_cast<const BoxCollider2D*>(col2_) != nullptr);
 			return CalculateOverlapAmount(dir_, *dynamic_cast<const BoxCollider2D*>(col1_), *dynamic_cast<const BoxCollider2D*>(col2_));
 		case ColliderShape::Cube:
-			break;
+			break; //TODO
 		case ColliderShape::Circle2D:
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
 		case ColliderShape::Sphere:
-			GADGET_ASSERT_NOT_IMPLEMENTED;
+			//GADGET_ASSERT_NOT_IMPLEMENTED; //TODO
 			break;
 		default:
 			break;

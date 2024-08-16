@@ -347,6 +347,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Physics\CubeCollider.h" />
     <ClInclude Include="Physics\PhysManager.h" />
     <ClInclude Include="Physics\Rigidbody.h" />
+    <ClInclude Include="Physics\SphereCollider.h" />
     <ClInclude Include="Platform\Windows\SDL2_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_DX12_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_DXR_Renderer.h" />
