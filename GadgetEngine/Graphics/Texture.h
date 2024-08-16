@@ -16,6 +16,8 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(width_ > 0);
 			GADGET_BASIC_ASSERT(height_ > 0);
 			GADGET_BASIC_ASSERT(!pixelData_.empty());
+			GADGET_ASSERT(bitDepth >= 24, "Bit depth of less than 24 is not supported, tried to load with bit depth of " + std::to_string(bitDepth));
+			GADGET_ASSERT(bitDepth >= 32, "Bit depth of greater than 32 is not supported, tried to load with bit depth of " + std::to_string(bitDepth));
 		}
 
 		static constexpr const char* typeName = "Texture";
