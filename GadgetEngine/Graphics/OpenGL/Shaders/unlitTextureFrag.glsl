@@ -9,5 +9,5 @@ in vec3 outFragPos;
 uniform sampler2D aTexture;
 
 void main(){
-	color = vec4(vec3(texture(aTexture, outTexCoord)), 1.0);
+	color = texture(aTexture, outTexCoord);
 }

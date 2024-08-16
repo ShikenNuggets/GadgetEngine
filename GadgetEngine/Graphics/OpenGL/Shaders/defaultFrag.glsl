@@ -62,7 +62,8 @@ void main(){
 		result += GetDirLightShading(dirLights[i], viewDir);
 	}
 
-	color = vec4(result, 1.0);
+	float alpha = texture(aTexture, outTexCoord).w; //TODO - Is calling texture slow? We do it like 3 times per light source when we could probably just do it once
+	color = vec4(result, alpha);
 }
 
 vec3 GetPointLightShading(PointLight light, vec3 viewDir){
