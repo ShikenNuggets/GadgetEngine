@@ -25,6 +25,8 @@ namespace Gadget{
 		btRigidBody* AddToSimulation(const Collider* col_, const Rigidbody* rb_);
 		void RemoveFromSimulation(btRigidBody* brb_);
 
+		void ForceUpdateAABB(btRigidBody* brb_);
+
 	private:
 		static PhysManager* instance;
 

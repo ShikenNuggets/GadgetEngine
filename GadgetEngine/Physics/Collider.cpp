@@ -58,6 +58,8 @@ void Collider::OnTransformModified(){
 	//If we modify the transform directly, we need to make sure those changes are reflected within the physics engine
 	bulletRb->setWorldTransform(BulletHelper::ConvertTransform(parent->GetTransform()));
 	bulletRb->getMotionState()->setWorldTransform(BulletHelper::ConvertTransform(parent->GetTransform()));
+	bulletRb->getCollisionShape()->setLocalScaling(BulletHelper::ConvertVector3(GetColliderSize()));
+	App::GetPhysics().ForceUpdateAABB(bulletRb);
 }
 
 void Collider::Reset(){

@@ -164,6 +164,13 @@ void PhysManager::RemoveFromSimulation(btRigidBody* brb_){
 	delete brb_;
 }
 
+void PhysManager::ForceUpdateAABB(btRigidBody* brb_){
+	GADGET_BASIC_ASSERT(bulletDynamicsWorld != nullptr);
+	GADGET_BASIC_ASSERT(brb_ != nullptr);
+
+	bulletDynamicsWorld->updateSingleAabb(brb_);
+}
+
 void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_){
 	GADGET_BASIC_ASSERT(collider_ != nullptr);
 	GADGET_BASIC_ASSERT(collider_->GetParent() != nullptr);
