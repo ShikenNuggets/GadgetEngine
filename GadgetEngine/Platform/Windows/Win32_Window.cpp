@@ -214,10 +214,11 @@ void Win32_Window::HandleHatMotionEvent(const SDL_Event& e_){
 		button = ButtonID::Gamepad_DPad_Left;
 	}
 
-	GADGET_BASIC_ASSERT(button != ButtonID::None);
-
-	EventHandler::GetInstance()->HandleEvent(GamepadButtonPressedEvent(e_.jhat.which, button));
-	EventHandler::GetInstance()->HandleEvent(GamepadButtonReleasedEvent(e_.jhat.which, button));
+	if(button != ButtonID::None){
+		EventHandler::GetInstance()->HandleEvent(GamepadButtonPressedEvent(e_.jhat.which, button));
+		EventHandler::GetInstance()->HandleEvent(GamepadButtonReleasedEvent(e_.jhat.which, button)); //TODO - This isn't quite right
+	}
+	
 	EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e_.jhat.which, AxisID::Gamepad_DPad_Horizontal, xAxis));
 	EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e_.jhat.which, AxisID::Gamepad_DPad_Vertical, yAxis));
 }
