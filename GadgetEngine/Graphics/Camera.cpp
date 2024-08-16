@@ -21,7 +21,7 @@ Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection
 	CalculateViewMatrix(position_, rotation_);
 	CalculateProjectionMatrix();
 
-	EventHandler::GetInstance()->RegisterCallback(EventType::WindowResize, this, [&](const Event& e){ OnResize(); });
+	EventHandler::GetInstance()->RegisterCallback(EventType::WindowResize, this, [&]([[maybe_unused]] const Event& e){ OnResize(); });
 }
 
 Camera::~Camera(){
