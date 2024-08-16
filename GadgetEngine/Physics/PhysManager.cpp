@@ -190,7 +190,7 @@ btCollisionShape* PhysManager::CreateCollisionShape(const Collider* col_){
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
 		case ColliderShape::Sphere:
-			return new btSphereShape(col_->GetColliderSize().Magnitude());
+			return new btSphereShape(col_->GetColliderSize().Average());
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
 		default:
