@@ -390,11 +390,11 @@ void Input::ProcessInputs(){
 			persistentAxes.Add(a.GetAxisID(), a.Value());
 		}
 	}
-	persistentAxes.Clear();
+	persistentAxisEvents.clear();
 
 	GADGET_BASIC_ASSERT(buttonEvents.empty());
 	GADGET_BASIC_ASSERT(axisEvents.empty());
-	GADGET_BASIC_ASSERT(persistentAxes.IsEmpty());
+	GADGET_BASIC_ASSERT(persistentAxisEvents.empty());
 }
 
 void Input::OnWindowRestartedEvent(const Event& e_){
