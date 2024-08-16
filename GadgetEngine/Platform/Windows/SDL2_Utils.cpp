@@ -552,6 +552,14 @@ ButtonID SDL2_Utils::ConvertSDLJoystickButtonToButtonID(Uint8 button_){
 			return ButtonID::Gamepad_AnalogClick_Right;
 		case 10:
 			return ButtonID::Gamepad_Home;
+		case 11:
+			return ButtonID::Gamepad_DPad_Up;
+		case 12:
+			return ButtonID::Gamepad_DPad_Down;
+		case 13:
+			return ButtonID::Gamepad_DPad_Left;
+		case 14:
+			return ButtonID::Gamepad_DPad_Right;
 		default:
 			Debug::Log("Unsupported gamepad button index: " + std::to_string(button_), Debug::Error, __FILE__, __LINE__);
 			break;
