@@ -53,6 +53,7 @@ namespace Gadget{
 		void SetVelocity(const Vector3& velocity_);
 		void SetVelocity(float x_, float y_, float z_);
 		void FreezeRotation(FreezeRotationType type_);
+		void SetMaxVelocity(const Vector3& maxVelocity_);
 
 		void ClearForces();
 
@@ -72,6 +73,7 @@ namespace Gadget{
 		float mass; //Mass in kg
 		bool useGravity;
 		FreezeRotationType freezeRotation;
+		Vector3 maxVelocity;
 
 		btRigidBody* bulletRb;
 

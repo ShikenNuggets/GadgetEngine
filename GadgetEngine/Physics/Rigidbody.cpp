@@ -6,7 +6,7 @@ using namespace Gadget;
 
 ComponentCollection<Rigidbody> Rigidbody::componentCollection;
 
-Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	GADGET_BASIC_ASSERT(parent != nullptr);
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
@@ -17,7 +17,7 @@ Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeR
 	componentCollection.Add(this);
 }
 
-Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	GADGET_BASIC_ASSERT(parent != nullptr);
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
@@ -28,7 +28,7 @@ Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRota
 	componentCollection.Add(this);
 }
 
-Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), mass(1.0f), useGravity(true), freezeRotation(FreezeRotationType::None), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), mass(1.0f), useGravity(true), freezeRotation(FreezeRotationType::None), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	Rigidbody::Deserialize(props_);
 }
 
@@ -88,7 +88,16 @@ void Rigidbody::AddForce(const Vector3& force_){
 
 void Rigidbody::AddVelocity(const Vector3& vel_){
 	GADGET_BASIC_ASSERT(vel_.IsValid());
-	bulletRb->setLinearVelocity(bulletRb->getLinearVelocity() + BulletHelper::ConvertVector3(vel_));
+	if(Math::IsNearZero(vel_.x) && Math::IsNearZero(vel_.y) && Math::IsNearZero(vel_.z)){
+		return;
+	}
+
+	Vector3 newVelocity = BulletHelper::ConvertVector3(bulletRb->getLinearVelocity()) + vel_;
+	newVelocity.x = Math::Clamp(-maxVelocity.x, maxVelocity.x, newVelocity.x);
+	newVelocity.y = Math::Clamp(-maxVelocity.y, maxVelocity.y, newVelocity.y);
+	newVelocity.z = Math::Clamp(-maxVelocity.z, maxVelocity.z, newVelocity.z);
+
+	bulletRb->setLinearVelocity(BulletHelper::ConvertVector3(newVelocity));
 }
 
 void Rigidbody::AddVelocity(float x_, float y_, float z_){
@@ -167,6 +176,10 @@ void Rigidbody::FreezeRotation(FreezeRotationType type_){
 				break;
 		}
 	}
+}
+
+void Rigidbody::SetMaxVelocity(const Vector3& maxVelocity_){
+	maxVelocity = maxVelocity_;
 }
 
 void Rigidbody::ClearForces(){
