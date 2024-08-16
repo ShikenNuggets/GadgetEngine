@@ -6,7 +6,7 @@ using namespace Gadget;
 
 ComponentCollection<Rigidbody> Rigidbody::componentCollection;
 
-Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	GADGET_BASIC_ASSERT(parent != nullptr);
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
@@ -17,7 +17,7 @@ Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeR
 	componentCollection.Add(this);
 }
 
-Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	GADGET_BASIC_ASSERT(parent != nullptr);
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
 	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
@@ -28,7 +28,7 @@ Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRota
 	componentCollection.Add(this);
 }
 
-Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), mass(1.0f), useGravity(true), freezeRotation(FreezeRotationType::None), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), mass(1.0f), useGravity(true), freezeRotation(FreezeRotationType::None), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	Rigidbody::Deserialize(props_);
 }
 
@@ -61,6 +61,14 @@ void Rigidbody::Update([[maybe_unused]] float deltaTime_){
 	if(hasCachedVelocity){
 		SetVelocity(cachedVelocity);
 		hasCachedVelocity = false;
+	}
+
+	if(brakingSpeed > 0.0f){
+		Vector3 currentVelocity = BulletHelper::ConvertVector3(bulletRb->getLinearVelocity());
+		currentVelocity.x = ApplyBrakes(currentVelocity.x, deltaTime_);
+		//currentVelocity.y = ApplyBrakes(currentVelocity.y, deltaTime_); //TODO - Hardcoding this to not overwrite gravity
+		currentVelocity.z = ApplyBrakes(currentVelocity.z, deltaTime_);
+		SetVelocity(currentVelocity);
 	}
 
 	btTransform bulletTransform;
@@ -182,6 +190,12 @@ void Rigidbody::SetMaxVelocity(const Vector3& maxVelocity_){
 	maxVelocity = maxVelocity_;
 }
 
+void Rigidbody::SetBrakingSpeed(float brakingSpeed_){
+	GADGET_ASSERT(brakingSpeed_ >= 0.0f, "Negative number entered for brake speed - Will be treated as 0");
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(brakingSpeed_));
+	brakingSpeed = brakingSpeed_;
+}
+
 void Rigidbody::ClearForces(){
 	if(bulletRb == nullptr){
 		return;
@@ -204,6 +218,18 @@ void Rigidbody::Reset(){
 
 	if(collider != nullptr){
 		collider->Reset();
+	}
+}
+
+float Rigidbody::ApplyBrakes(float curVelocity_, float deltaTime_){
+	if(Math::Abs(curVelocity_) < (brakingSpeed * deltaTime_)){
+		return 0.0f;
+	}
+	
+	if(curVelocity_ < 0.0f){
+		return curVelocity_ + brakingSpeed * deltaTime_;
+	}else{
+		return curVelocity_ - brakingSpeed * deltaTime_;
 	}
 }
 

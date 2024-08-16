@@ -54,6 +54,7 @@ namespace Gadget{
 		void SetVelocity(float x_, float y_, float z_);
 		void FreezeRotation(FreezeRotationType type_);
 		void SetMaxVelocity(const Vector3& maxVelocity_);
+		void SetBrakingSpeed(float brakingSpeed_); //Braking speed <= 0 means no brakes
 
 		void ClearForces();
 
@@ -74,6 +75,7 @@ namespace Gadget{
 		bool useGravity;
 		FreezeRotationType freezeRotation;
 		Vector3 maxVelocity;
+		float brakingSpeed;
 
 		btRigidBody* bulletRb;
 
@@ -81,6 +83,8 @@ namespace Gadget{
 		bool hasCachedVelocity;
 		std::vector<Vector3> cachedForces;
 		Vector3 cachedVelocity;
+
+		float ApplyBrakes(float curVelocity_, float deltaTime_);
 
 		static ComponentCollection<Rigidbody> componentCollection;
 	};
