@@ -20,6 +20,8 @@ namespace Gadget{
 
 		void Update(Scene* scene_, float deltaTime_);
 
+		void SetWorldGravity(float gravity_ = -9.81f);
+
 		btRigidBody* AddToSimulation(const Collider* col_, const Rigidbody* rb_);
 		void RemoveFromSimulation(btRigidBody* brb_);
 

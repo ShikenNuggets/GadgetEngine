@@ -14,7 +14,7 @@ PhysManager::PhysManager() : bulletDynamicsWorld(nullptr), collisionConfig(nullp
 	solver = new btSequentialImpulseConstraintSolver();
 
 	bulletDynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
-	bulletDynamicsWorld->setGravity(btVector3(0.0f, static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::gravityConstantKey)), 0.0f));
+	SetWorldGravity(App::GetConfig().GetOptionFloat(EngineVars::Physics::gravityConstantKey));
 
 	GADGET_BASIC_ASSERT(bulletDynamicsWorld != nullptr);
 }
@@ -59,6 +59,19 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 	//So we don't accidentally reuse these pointers later
 	rigidbodiesBuffer.clear();
 	collidersBuffer.clear();
+}
+
+//TODO - This is kinda weird. Maybe gravity *shouldn't* be in a config file? Game interfaces need to be able to set new config defaults? Idk
+void PhysManager::SetWorldGravity(float gravity_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(gravity_));
+	GADGET_BASIC_ASSERT(bulletDynamicsWorld != nullptr);
+	if(bulletDynamicsWorld == nullptr){
+		GADGET_LOG_WARNING(SID("PHYSICS"), "Tried to set world gravity before PhysManager was fully initialized!");
+		return;
+	}
+
+	bulletDynamicsWorld->setGravity(btVector3(0.0f, gravity_, 0.0f));
+	App::GetConfig().SetOption(EngineVars::Physics::sectionName, EngineVars::Physics::gravityConstantKey, gravity_);
 }
 
 btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody* rb_){
