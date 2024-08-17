@@ -202,12 +202,14 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 		//TEXT
 		for(const auto& text : guiTextsBuffer){
+			GADGET_BASIC_ASSERT(text != nullptr);
 			if(text->GetText().empty()){
 				continue;
 			}
 
 			text->GetTextMesh().GetShader()->Bind();
 			text->GetTextMesh().GetShader()->BindMatrix4(SID("projectionMatrix"), uiProjection);
+			text->GetTextMesh().GetShader()->BindColor(SID("textColor"), text->GetColor());
 
 			text->GetTextMesh().GetMeshInfo()->Bind();
 

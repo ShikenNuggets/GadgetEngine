@@ -13,7 +13,7 @@ namespace Gadget{
 			Type_MAX
 		};
 
-		TimerDisplayElement(StringID name_, StringID font_, Type type_, float targetTime_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : GuiTextElement(name_, "", font_, pos_, size_, anchor_, isActive_), type(type_), targetTime(targetTime_), timer(0.0f), isPaused(false){
+		TimerDisplayElement(StringID name_, StringID font_, Type type_, float targetTime_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : GuiTextElement(name_, "", font_, pos_, size_, anchor_, Color::White(), isActive_), type(type_), targetTime(targetTime_), timer(0.0f), isPaused(false){
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
 			GADGET_BASIC_ASSERT(font_ != StringID::None);
 			GADGET_BASIC_ASSERT(type_ < Type::Type_MAX);

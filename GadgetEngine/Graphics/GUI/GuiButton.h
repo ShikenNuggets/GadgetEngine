@@ -18,7 +18,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(size_.IsValid());
 			GADGET_BASIC_ASSERT(anchor_ != GuiAnchor::GuiAnchor_MAX);
 			
-			text = new GuiTextElement(SID("GuiButton_text"), text_, font_, pos_, size_, anchor_, isActive_);
+			text = new GuiTextElement(SID("GuiButton_text"), text_, font_, pos_, size_, anchor_, Color::White(), isActive_);
 			texture = new GuiTextureElement(SID("GuiButton_texture"), texture_, pos_, size_, anchor_, isActive_);
 
 			AddSubElement(text);
