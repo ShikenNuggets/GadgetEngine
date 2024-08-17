@@ -48,6 +48,7 @@ namespace Gadget{
 		}
 
 		const DirectionalLight& GetLightSource() const{ return lightSource; }
+		DirectionalLight& GetLightSource(){ return lightSource; }
 
 		virtual ComponentProperties Serialize() const override{ return Component::Serialize(); } //TODO
 

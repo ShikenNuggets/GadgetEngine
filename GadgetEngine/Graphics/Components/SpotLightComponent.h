@@ -48,6 +48,7 @@ namespace Gadget{
 		}
 
 		const SpotLight& GetLightSource() const{ return lightSource; }
+		SpotLight& GetLightSource(){ return lightSource; }
 
 		virtual ComponentProperties Serialize() const override{ return Component::Serialize(); } //TODO
 
