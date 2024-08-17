@@ -10,8 +10,10 @@
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Components/CameraComponent.h"
+#include "Graphics/Components/DirectionalLightComponent.h"
 #include "Graphics/Components/LightComponent.h"
 #include "Graphics/Components/RenderComponent.h"
+#include "Graphics/Components/SpotLightComponent.h"
 #include "Graphics/GUI/GuiTextElement.h"
 #include "Graphics/GUI/GuiTextureElement.h"
 #include "Graphics/OpenGL/GL_ScreenQuad.h"
@@ -58,6 +60,8 @@ namespace Gadget{
 		std::vector<CameraComponent*> camerasBuffer;
 		std::vector<RenderComponent*> rendersBuffer;
 		std::vector<PointLightComponent*> pointLightsBuffer;
+		std::vector<DirectionalLightComponent*> dirLightsBuffer;
+		std::vector<SpotLightComponent*> spotLightsBuffer;
 
 		std::vector<GuiTextElement*> guiTextsBuffer;
 		std::vector<GuiTextureElement*> guiTexturesBuffer;

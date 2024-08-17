@@ -109,6 +109,8 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 	scene_->GetAllComponentsInScene<CameraComponent>(camerasBuffer);
 	scene_->GetAllComponentsInScene<RenderComponent>(rendersBuffer);
 	scene_->GetAllComponentsInScene<PointLightComponent>(pointLightsBuffer);
+	scene_->GetAllComponentsInScene<DirectionalLightComponent>(dirLightsBuffer);
+	scene_->GetAllComponentsInScene<SpotLightComponent>(spotLightsBuffer);
 	auto skybox = scene_->GetSceneComponent<SkyboxComponent>();
 	auto canvas = scene_->GetSceneComponent<CanvasSceneComponent>();
 
@@ -117,7 +119,8 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		canvas->GetCanvas().GetElements<GuiTextureElement>(guiTexturesBuffer);
 	}
 
-	GADGET_ASSERT(pointLightsBuffer.size() < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(pointLightsBuffer.size()) + "!");
+	const size_t numLights = pointLightsBuffer.size() + dirLightsBuffer.size() + spotLightsBuffer.size();
+	GADGET_ASSERT(numLights < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(numLights) + "!");
 
 	for(const auto& cam : camerasBuffer){
 		SetViewportRect(cam->GetCamera().GetViewportRect());
@@ -141,15 +144,35 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					mesh->GetShader(i)->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
 
 					mesh->GetShader(i)->BindInt(SID("numPointLights"), static_cast<int>(pointLightsBuffer.size()));
-					mesh->GetShader(i)->BindInt(SID("numSpotLights"), 0);
-					mesh->GetShader(i)->BindInt(SID("numDirLights"), 0);
+					mesh->GetShader(i)->BindInt(SID("numSpotLights"), static_cast<int>(spotLightsBuffer.size()));
+					mesh->GetShader(i)->BindInt(SID("numDirLights"), static_cast<int>(dirLightsBuffer.size()));
 
-					for(const auto& light : pointLightsBuffer){
+					//TODO - Handle indexing for multiple light sources of one type
+					for(const auto* light : pointLightsBuffer){
+						GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
 						mesh->GetShader(i)->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
 						mesh->GetShader(i)->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
 						mesh->GetShader(i)->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
 						mesh->GetShader(i)->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
 						mesh->GetShader(i)->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+					}
+
+					for(const auto* light : spotLightsBuffer){
+						GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
+						mesh->GetShader(i)->BindVector3(SID("spotLights[0].position"), light->GetParent()->GetPosition());
+						mesh->GetShader(i)->BindVector3(SID("spotLights[0].direction"), light->GetLightSource().GetDirection());
+						mesh->GetShader(i)->BindFloat(SID("spotLights[0].cutOff"), light->GetLightSource().GetCutOff());
+						mesh->GetShader(i)->BindFloat(SID("spotLights[0].outerCutOff"), light->GetLightSource().GetOuterCutOff());
+						mesh->GetShader(i)->BindColor(SID("spotLights[0].lightColor"), light->GetLightSource().GetColor());
+						mesh->GetShader(i)->BindFloat(SID("spotLights[0].constant"), light->GetLightSource().GetConstant());
+						mesh->GetShader(i)->BindFloat(SID("spotLights[0].linear"), light->GetLightSource().GetLinear());
+						mesh->GetShader(i)->BindFloat(SID("spotLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+					}
+
+					for(const auto* light : dirLightsBuffer){
+						GADGET_BASIC_ASSERT(light != nullptr);
+						mesh->GetShader(i)->BindVector3(SID("dirLights[0].direction"), light->GetLightSource().GetDirection());
+						mesh->GetShader(i)->BindColor(SID("dirLights[0].lightColor"), light->GetLightSource().GetColor());
 					}
 				}
 
@@ -304,6 +327,8 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 	camerasBuffer.clear();
 	rendersBuffer.clear();
 	pointLightsBuffer.clear();
+	spotLightsBuffer.clear();
+	dirLightsBuffer.clear();
 	guiTextsBuffer.clear();
 	guiTexturesBuffer.clear();
 }
