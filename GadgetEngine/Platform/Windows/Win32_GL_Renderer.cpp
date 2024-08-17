@@ -128,6 +128,18 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		const Matrix4 proj = cam->GetUpdatedProjectionMatrix();
 
 		//------------------------------------------------------------------------------------------------------------------------
+		//Render the skybox
+		if(skybox != nullptr){
+			glDepthFunc(GL_LEQUAL);
+			skybox->Bind(proj, view.ToMatrix3().ToMatrix4());
+
+			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+
+			skybox->Unbind();
+			glDepthFunc(GL_LESS);
+		}
+
+		//------------------------------------------------------------------------------------------------------------------------
 		//Render all meshes in the scene
 		for(const auto& mesh : rendersBuffer){
 			for(size_t i = 0; i < mesh->GetNumSubmeshes(); i++){
@@ -180,18 +192,6 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 				mesh->Unbind(i);
 			}
-		}
-
-		//------------------------------------------------------------------------------------------------------------------------
-		//Render the skybox
-		if(skybox != nullptr){
-			glDepthFunc(GL_LEQUAL);
-			skybox->Bind(proj, view.ToMatrix3().ToMatrix4());
-		
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
-
-			skybox->Unbind();
-			glDepthFunc(GL_LESS);
 		}
 
 		//------------------------------------------------------------------------------------------------------------------------
