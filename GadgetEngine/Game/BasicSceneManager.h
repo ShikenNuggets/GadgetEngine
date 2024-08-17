@@ -21,6 +21,7 @@ namespace Gadget{
 		//Request for a new scene to be loaded when it's safe to do so
 		void RequestSceneLoad(size_t index_);
 		void RequestSceneLoad(StringID name_);
+		void RequestReloadCurrentScene();
 
 		Scene* CurrentScene();
 		inline constexpr size_t GetNumScenes(){ return scenes.size(); }

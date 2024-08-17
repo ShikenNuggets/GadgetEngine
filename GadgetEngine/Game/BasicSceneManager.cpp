@@ -88,6 +88,11 @@ void BasicSceneManager::RequestSceneLoad(StringID name_){
 	Debug::Log("Requested load of invalid Scene \"" + name_.GetString() + "\"!", Debug::Error, __FILE__, __LINE__);
 }
 
+void BasicSceneManager::RequestReloadCurrentScene(){
+	GADGET_BASIC_ASSERT(CurrentScene() != nullptr);
+	RequestSceneLoad(sceneIndex);
+}
+
 Scene* BasicSceneManager::CurrentScene(){
 	GADGET_BASIC_ASSERT(sceneIndex < scenes.size());
 	GADGET_BASIC_ASSERT(scenes[sceneIndex] != nullptr);
