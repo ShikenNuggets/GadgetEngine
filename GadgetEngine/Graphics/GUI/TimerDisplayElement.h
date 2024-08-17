@@ -51,12 +51,12 @@ namespace Gadget{
 				}
 			}
 
-			SetText(Utils::FloatSecondsToTimeString(timer));
+			SetText(Utils::FloatSecondsToTimeString(std::trunc(timer)));
 		}
 
-		float GetTimer(){ return timer; }
+		float GetTimer() const{ return timer; }
 
-		bool IsDone(){
+		bool IsDone() const{
 			if(type == Type::TimerToZero){
 				return timer <= 0.0f;
 			}else{
