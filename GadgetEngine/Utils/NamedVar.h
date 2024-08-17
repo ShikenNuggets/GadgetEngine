@@ -36,7 +36,7 @@ namespace Gadget{
 
 	class NamedVarList{
 	public:
-		constexpr NamedVarList(StringID name_, const std::vector<NamedVar>& values_ = std::vector<NamedVar>()) : name(name_), values(values_){}
+		explicit constexpr NamedVarList(StringID name_, const std::vector<NamedVar>& values_ = std::vector<NamedVar>()) : name(name_), values(values_){}
 
 		constexpr StringID Name() const{ return name; }
 		constexpr const std::vector<NamedVar>& Value() const{ return values; }
