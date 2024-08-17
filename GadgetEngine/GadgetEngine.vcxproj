@@ -238,6 +238,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Graphics\Color.h" />
     <ClInclude Include="Graphics\Components\CameraComponent.h" />
+    <ClInclude Include="Graphics\Components\DirectionalLightComponent.h" />
     <ClInclude Include="Graphics\Components\LightComponent.h" />
     <ClInclude Include="Graphics\Components\RenderComponent.h" />
     <ClInclude Include="Graphics\Components\SkyboxComponent.h" />
@@ -395,6 +396,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClCompile Include="Game\Scene.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Graphics\Components\CameraComponent.cpp" />
+    <ClCompile Include="Graphics\Components\DirectionalLightComponent.cpp" />
     <ClCompile Include="Graphics\Components\LightComponent.cpp" />
     <ClCompile Include="Graphics\Components\RenderComponent.cpp" />
     <ClCompile Include="Graphics\Components\SkyboxComponent.cpp" />
