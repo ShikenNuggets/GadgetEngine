@@ -285,6 +285,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Graphics\GUI\GuiManager.h" />
     <ClInclude Include="Graphics\GUI\GuiTextElement.h" />
     <ClInclude Include="Graphics\GUI\GuiTextureElement.h" />
+    <ClInclude Include="Graphics\GUI\TimerDisplayElement.h" />
     <ClInclude Include="Graphics\LightSource.h" />
     <ClInclude Include="Graphics\Loaders\AssimpModelLoader.h" />
     <ClInclude Include="Graphics\Loaders\BmpLoader.h" />

@@ -326,6 +326,9 @@
     <ClInclude Include="Graphics\GUI\GuiTextureElement.h">
       <Filter>Graphics\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\GUI\TimerDisplayElement.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\LightSource.h">
       <Filter>Graphics</Filter>
     </ClInclude>
