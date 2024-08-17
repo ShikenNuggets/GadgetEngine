@@ -194,6 +194,9 @@
     <ClInclude Include="Graphics\Components\SkyboxComponent.h">
       <Filter>Graphics\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Components\SpotLightComponent.h">
+      <Filter>Graphics\Components</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Cubemap.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -636,6 +639,9 @@
       <Filter>Graphics\Components</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Components\SkyboxComponent.cpp">
+      <Filter>Graphics\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Components\SpotLightComponent.cpp">
       <Filter>Graphics\Components</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Cubemap.cpp">

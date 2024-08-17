@@ -241,6 +241,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Graphics\Components\LightComponent.h" />
     <ClInclude Include="Graphics\Components\RenderComponent.h" />
     <ClInclude Include="Graphics\Components\SkyboxComponent.h" />
+    <ClInclude Include="Graphics\Components\SpotLightComponent.h" />
     <ClInclude Include="Graphics\Cubemap.h" />
     <ClInclude Include="Graphics\DX12\DX12.h" />
     <ClInclude Include="Graphics\DX12\DX12_Command.h" />
@@ -397,6 +398,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClCompile Include="Graphics\Components\LightComponent.cpp" />
     <ClCompile Include="Graphics\Components\RenderComponent.cpp" />
     <ClCompile Include="Graphics\Components\SkyboxComponent.cpp" />
+    <ClCompile Include="Graphics\Components\SpotLightComponent.cpp" />
     <ClCompile Include="Graphics\Cubemap.cpp" />
     <ClCompile Include="Graphics\DX12\DX12.cpp" />
     <ClCompile Include="Graphics\DX12\DX12_Command.cpp" />
