@@ -81,6 +81,7 @@ void BasicSceneManager::RequestSceneLoad(StringID name_){
 	for(size_t i = 0; i < scenes.size(); i++){
 		if(scenes[i]->name == name_){
 			RequestSceneLoad(i);
+			return;
 		}
 	}
 
