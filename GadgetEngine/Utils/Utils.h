@@ -144,6 +144,47 @@ namespace Gadget{
 		inline constexpr std::wstring ToWString(const std::string& s_){ return { s_.begin(), s_.end() }; }
 		inline constexpr std::wstring ToWString(const char* s_){ return ToWString(std::string(s_)); }
 
+		inline std::string FloatSecondsToTimeString(float timeInSeconds_){
+			size_t hours = 0;
+			size_t minutes = 0;
+
+			size_t seconds = std::round(timeInSeconds_);
+			while(seconds >= 60 * 60){
+				seconds -= 60 * 60;
+				hours++;
+			}
+
+			while(seconds >= 60){
+				seconds -= 60;
+				minutes++;
+			}
+
+			_ASSERT(minutes < 60);
+			_ASSERT(seconds < 60);
+			std::string result;
+			if(hours > 0){
+				result += std::to_string(hours) + ":";
+			}
+
+			if(hours > 0 && minutes == 0){
+				result += "00:";
+			}else if(minutes >= 10){
+				result += std::to_string(minutes) + ":";
+			}else if(minutes > 0 && minutes < 10){
+				result += "0" + std::to_string(minutes) + ":";
+			}
+
+			if((hours > 0 || minutes > 0) && seconds == 0){
+				result += "00";
+			}else if(seconds >= 10){
+				result += std::to_string(seconds);
+			}else{
+				result += "0" + std::to_string(seconds);
+			}
+
+			return result;
+		}
+
 		//----------------------------------------------------------------------------------------------------//
 		//---------- Binary ----------------------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
