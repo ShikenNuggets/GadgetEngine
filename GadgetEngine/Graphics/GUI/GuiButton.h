@@ -40,7 +40,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
 			GADGET_BASIC_ASSERT(clickPoint_.IsValid());
 
-			if(button_ == ButtonID::Mouse_LeftMouseButton){
+			if(button_ == ButtonID::Mouse_LeftMouseButton && onClickFunc){
 				onClickFunc(button_, clickPoint_);
 			}
 		}
