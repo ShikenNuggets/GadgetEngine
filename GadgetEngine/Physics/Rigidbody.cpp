@@ -124,6 +124,19 @@ Vector3 Rigidbody::GetVelocity() const{
 	return BulletHelper::ConvertVector3(bulletRb->getLinearVelocity());
 }
 
+void Rigidbody::SetMass(float mass_){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
+	GADGET_ASSERT(mass_ > 0.0f, "Mass <= 0 is not supported!");
+	GADGET_ASSERT(!Math::IsNearZero(mass_), "Mass of 0 is not supported!");
+	mass = mass_;
+
+	if(bulletRb != nullptr && bulletRb->getCollisionShape() != nullptr){
+		btVector3 inertia;
+		bulletRb->getCollisionShape()->calculateLocalInertia(mass, inertia);
+		bulletRb->setMassProps(mass, inertia);
+	}
+}
+
 void Rigidbody::SetVelocity(const Vector3& vel_){
 	GADGET_BASIC_ASSERT(vel_.IsValid());
 

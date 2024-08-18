@@ -49,7 +49,7 @@ namespace Gadget{
 		bool UseGravity() const{ return useGravity; }
 		FreezeRotationType GetFreezeRotation() const{ return freezeRotation; }
 
-		void SetMass(float mass_){ mass = mass_; }
+		void SetMass(float mass_);
 		void SetVelocity(const Vector3& velocity_);
 		void SetVelocity(float x_, float y_, float z_);
 		void FreezeRotation(FreezeRotationType type_);
