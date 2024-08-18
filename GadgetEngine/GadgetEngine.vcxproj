@@ -348,6 +348,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Physics\Collider.h" />
     <ClInclude Include="Physics\CollisionSystem.h" />
     <ClInclude Include="Physics\CubeCollider.h" />
+    <ClInclude Include="Physics\MeshCollider.h" />
     <ClInclude Include="Physics\PhysManager.h" />
     <ClInclude Include="Physics\Rigidbody.h" />
     <ClInclude Include="Physics\SphereCollider.h" />
@@ -470,6 +471,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClCompile Include="Memory\StackAllocator.cpp" />
     <ClCompile Include="Physics\Collider.cpp" />
     <ClCompile Include="Physics\CollisionSystem.cpp" />
+    <ClCompile Include="Physics\MeshCollider.cpp" />
     <ClCompile Include="Physics\PhysManager.cpp" />
     <ClCompile Include="Physics\Rigidbody.cpp" />
     <ClCompile Include="Platform\Windows\SDL2_Utils.cpp" />

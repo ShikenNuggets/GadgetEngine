@@ -513,6 +513,9 @@
     <ClInclude Include="Physics\CubeCollider.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\MeshCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
     <ClInclude Include="Physics\PhysManager.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -853,6 +856,9 @@
       <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Physics\CollisionSystem.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\MeshCollider.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Physics\PhysManager.cpp">
