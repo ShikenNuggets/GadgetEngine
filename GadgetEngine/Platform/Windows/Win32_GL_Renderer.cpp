@@ -203,7 +203,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		//TEXT
 		for(const auto& text : guiTextsBuffer){
 			GADGET_BASIC_ASSERT(text != nullptr);
-			if(text->GetText().empty()){
+			if(text == nullptr || !text->IsActive() || text->GetText().empty()){
 				continue;
 			}
 
@@ -270,6 +270,10 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 		//TEXTURES
 		for(const auto& texture : guiTexturesBuffer){
+			if(texture == nullptr || !texture->IsActive()){
+				continue;
+			}
+
 			Shader* shader = texture->GetShader();
 			shader->Bind();
 			shader->BindMatrix4(SID("projectionMatrix"), uiProjection);
