@@ -148,7 +148,7 @@ namespace Gadget{
 			size_t hours = 0;
 			size_t minutes = 0;
 
-			size_t seconds = std::round(timeInSeconds_);
+			size_t seconds = static_cast<size_t>(std::round(timeInSeconds_));
 			while(seconds >= 60 * 60){
 				seconds -= 60 * 60;
 				hours++;
