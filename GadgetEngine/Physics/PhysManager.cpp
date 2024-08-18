@@ -81,9 +81,9 @@ btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody*
 	GADGET_BASIC_ASSERT(col_->GetShape() < ColliderShape::ColliderShape_MAX);
 	GADGET_ASSERT(rb_ == nullptr || !Math::IsNearZero(rb_->GetMass()), "Rigidbody with mass of 0 is not supported!");
 
-	btCollisionShape* shape = CreateCollisionShape(col_);
+	btCollisionShape* shape = col_->CreateCollisionShape();
 	if(shape == nullptr){
-		Debug::Log("An error occured while creating the collision shape of type [" + std::to_string(static_cast<int>(col_->GetShape())) + "]!", Debug::Error, __FILE__, __LINE__);
+		Debug::Log("An error occured while creating the collision shape for type [" + std::to_string(static_cast<int>(col_->GetShape())) + "]!", Debug::Error, __FILE__, __LINE__);
 		return nullptr;
 	}
 
@@ -194,31 +194,6 @@ void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_)
 	for(const auto& lg : lgs){
 		lg->AddCollisionToHandle(collision);
 	}
-}
-
-btCollisionShape* PhysManager::CreateCollisionShape(const Collider* col_){
-	GADGET_BASIC_ASSERT(col_ != nullptr);
-	GADGET_BASIC_ASSERT(col_->GetShape() != ColliderShape::None);
-	GADGET_BASIC_ASSERT(col_->GetShape() != ColliderShape::ColliderShape_MAX);
-	GADGET_BASIC_ASSERT(col_->GetColliderSize().IsValid());
-
-	switch(col_->GetShape()){
-		case ColliderShape::Box2D:
-		case ColliderShape::Cube:
-			return new btBoxShape(BulletHelper::ConvertVector3(col_->GetColliderSize()));
-		case ColliderShape::Circle2D:
-			GADGET_ASSERT_NOT_IMPLEMENTED;
-			break;
-		case ColliderShape::Sphere:
-			return new btSphereShape(col_->GetColliderSize().Average());
-			GADGET_ASSERT_NOT_IMPLEMENTED;
-			break;
-		default:
-			GADGET_ASSERT_NOT_IMPLEMENTED;
-			break;
-	}
-
-	return nullptr;
 }
 
 //Return value of this function is not used by Bullet, in case you're wondering

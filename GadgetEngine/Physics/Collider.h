@@ -14,6 +14,9 @@ namespace Gadget{
 		Cube,
 		Sphere,
 
+		ConcaveMesh,
+		ConvexMesh,
+
 		ColliderShape_MAX //Do not put anything below this!
 	};
 
@@ -39,6 +42,8 @@ namespace Gadget{
 
 		//Remove the collider from the physics sim and re-add it
 		void Reset();
+
+		virtual btCollisionShape* CreateCollisionShape() const = 0;
 
 		ColliderShape GetShape() const{ return shape; }
 		bool IsTrigger() const{ return isTrigger; }

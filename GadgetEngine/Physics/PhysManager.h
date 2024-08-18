@@ -45,7 +45,6 @@ namespace Gadget{
 		std::vector<Collider*> collidersBuffer;
 
 		void HandleCollisionResponse(Collider* collider_, Collider* other_);
-		btCollisionShape* CreateCollisionShape(const Collider* col_);
 	};
 }
 

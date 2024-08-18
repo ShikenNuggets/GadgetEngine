@@ -28,6 +28,10 @@ namespace Gadget{
 		float GetY() const{ return size.y; }
 		float GetZ() const{ return size.z; }
 
+		virtual btCollisionShape* CreateCollisionShape() const override{
+			return new btBoxShape(BulletHelper::ConvertVector3(GetColliderSize()));
+		}
+
 		virtual Vector3 GetColliderSize() const override{
 			GADGET_BASIC_ASSERT(size.IsValid());
 			return Vector3(

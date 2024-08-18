@@ -22,6 +22,10 @@ namespace Gadget{
 
 		float GetRadius() const{ return radius; }
 
+		virtual btCollisionShape* CreateCollisionShape() const override{
+			return new btBoxShape(BulletHelper::ConvertVector3(GetColliderSize()));
+		}
+
 		virtual Vector3 GetColliderSize() const override{
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(radius));
 			return Vector3(

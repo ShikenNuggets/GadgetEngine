@@ -24,6 +24,10 @@ namespace Gadget{
 
 		float GetWidth() const{ return width; }
 		float GetHeight() const{ return height; }
+
+		virtual btCollisionShape* CreateCollisionShape() const override{
+			return new btBoxShape(BulletHelper::ConvertVector3(GetColliderSize()));
+		}
 		
 		virtual Vector3 GetColliderSize() const override{
 			GADGET_BASIC_ASSERT(parent != nullptr);
