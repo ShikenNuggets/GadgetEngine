@@ -23,7 +23,7 @@ namespace Gadget{
 		float GetRadius() const{ return radius; }
 
 		virtual btCollisionShape* CreateCollisionShape() const override{
-			return new btBoxShape(BulletHelper::ConvertVector3(GetColliderSize()));
+			return new btSphereShape(GetColliderSize().Average());
 		}
 
 		virtual Vector3 GetColliderSize() const override{
