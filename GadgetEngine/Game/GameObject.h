@@ -188,6 +188,8 @@ namespace Gadget{
 
 				return guidMap.at(objectGuid_);
 			}
+
+			static inline size_t Size(){ return guidMap.size(); }
 	};
 }
 
