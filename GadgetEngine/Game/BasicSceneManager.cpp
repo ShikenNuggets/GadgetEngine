@@ -37,6 +37,7 @@ void BasicSceneManager::AddScene(Scene* scene_){
 
 void BasicSceneManager::LoadScene(size_t index_){
 	CurrentScene()->SetToDefaultState();
+	GADGET_ASSERT(CurrentScene()->gameObjects.size() == GameObjectCollection::Size(), "Not all GameObjects were deleted from the scene!");
 
 	GADGET_BASIC_ASSERT(index_ < scenes.size());
 	GADGET_BASIC_ASSERT(scenes.size() > 0);
@@ -47,16 +48,14 @@ void BasicSceneManager::LoadScene(size_t index_){
 	}
 
 	CurrentScene()->SetToDefaultState();
+	GADGET_ASSERT(CurrentScene()->gameObjects.size() == GameObjectCollection::Size(), "Not all created GameObjects were correctly added to the scene!");
 }
 
 void BasicSceneManager::LoadScene(StringID name_){
 	GADGET_BASIC_ASSERT(name_ != StringID::None);
-
-	CurrentScene()->SetToDefaultState();
 	for(size_t i = 0; i < scenes.size(); i++){
 		if(scenes[i]->name == name_){
-			sceneIndex = i;
-			CurrentScene()->SetToDefaultState();
+			LoadScene(i);
 			return;
 		}
 	}
