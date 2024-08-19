@@ -52,6 +52,10 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 			continue;
 		}
 
+		if(cl->bulletRb->getMass() == 0.0f){
+			continue; //Only need to call contactTest on dynamic objects
+		}
+
 		BulletCollisionResultCallback callback;
 		bulletDynamicsWorld->contactTest(cl->bulletRb, callback);
 	}
