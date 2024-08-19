@@ -36,7 +36,7 @@ void BasicSceneManager::AddScene(Scene* scene_){
 }
 
 void BasicSceneManager::LoadScene(size_t index_){
-	CurrentScene()->SetToDefaultState();
+	CurrentScene()->OnShutdown();
 	GADGET_ASSERT(CurrentScene()->gameObjects.size() == GameObjectCollection::Size(), "Not all GameObjects were deleted from the scene!");
 
 	GADGET_BASIC_ASSERT(index_ < scenes.size());

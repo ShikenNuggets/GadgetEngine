@@ -93,6 +93,10 @@ namespace Gadget{
 		std::vector<SceneComponent*> sceneComponents;
 
 		virtual void SetToDefaultState(){
+			OnShutdown();
+		}
+
+		virtual void OnShutdown(){
 			DestroyAllGameObjects();
 			DestroyAllSceneComponents();
 		}
