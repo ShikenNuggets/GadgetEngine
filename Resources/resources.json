@@ -146,7 +146,7 @@
             "string": "ButtonTexture"
         },
         {
-            "path": "Resources/button.bmp",
+            "path": "Resources/button.png",
             "resource_type": "Texture"
         }
     ],
