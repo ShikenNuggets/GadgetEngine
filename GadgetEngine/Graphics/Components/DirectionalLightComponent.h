@@ -10,24 +10,28 @@ namespace Gadget{
 	public:
 		static const StringID type;
 
-		DirectionalLightComponent(GameObject* parent_, const Vector3& direction_) : Component(type, parent_), lightSource(direction_){
+		DirectionalLightComponent(GameObject* parent_) : Component(type, parent_), lightSource(Vector3::Forward()){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
 			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+
+			lightSource.SetDirection(parent->GetTransform().Forward());
 
 			componentCollection.Add(this);
 
 			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 		}
 
-		DirectionalLightComponent(GUID parentGUID_, const Vector3& direction_) : Component(type, parentGUID_), lightSource(direction_){
+		DirectionalLightComponent(GUID parentGUID_) : Component(type, parentGUID_), lightSource(Vector3::Forward()){
 			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
 
 			componentCollection.Add(this);
 
+			lightSource.SetDirection(parent->GetTransform().Forward());
+
 			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 		}
 
-		DirectionalLightComponent(const ComponentProperties& props_) : Component(props_), lightSource(Vector3::Forward()){ GADGET_BASIC_ASSERT(props_.typeName == DirectionalLightComponent::type); }
+		DirectionalLightComponent(const ComponentProperties& props_) : Component(props_), lightSource(Vector3::Forward()){GADGET_BASIC_ASSERT(props_.typeName == DirectionalLightComponent::type); }
 
 		virtual ~DirectionalLightComponent() override{
 			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
@@ -49,6 +53,11 @@ namespace Gadget{
 
 		const DirectionalLight& GetLightSource() const{ return lightSource; }
 		DirectionalLight& GetLightSource(){ return lightSource; }
+
+		virtual void OnTransformModified() override{
+			GADGET_BASIC_ASSERT(parent != nullptr);
+			lightSource.SetDirection(parent->GetTransform().Forward());
+		}
 
 		virtual ComponentProperties Serialize() const override{ return Component::Serialize(); } //TODO
 

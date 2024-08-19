@@ -10,17 +10,21 @@ namespace Gadget{
 	public:
 		static const StringID type;
 
-		SpotLightComponent(GameObject* parent_, const Vector3& direction_) : Component(type, parent_), lightSource(direction_){
+		SpotLightComponent(GameObject* parent_) : Component(type, parent_), lightSource(Vector3::Forward()){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
 			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
+
+			lightSource.SetDirection(parent->GetTransform().Forward());
 
 			componentCollection.Add(this);
 
 			GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 		}
 
-		SpotLightComponent(GUID parentGUID_, const Vector3& direction_) : Component(type, parentGUID_), lightSource(direction_){
+		SpotLightComponent(GUID parentGUID_) : Component(type, parentGUID_), lightSource(Vector3::Forward()){
 			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
+
+			lightSource.SetDirection(parent->GetTransform().Forward());
 
 			componentCollection.Add(this);
 
@@ -49,6 +53,11 @@ namespace Gadget{
 
 		const SpotLight& GetLightSource() const{ return lightSource; }
 		SpotLight& GetLightSource(){ return lightSource; }
+
+		virtual void OnTransformModified() override{
+			GADGET_BASIC_ASSERT(parent != nullptr);
+			lightSource.SetDirection(parent->GetTransform().Forward());
+		}
 
 		virtual ComponentProperties Serialize() const override{ return Component::Serialize(); } //TODO
 
