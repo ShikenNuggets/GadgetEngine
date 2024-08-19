@@ -86,6 +86,16 @@
     ],
     [
         {
+            "string": "Texture2DShader"
+        },
+        {
+            "path1": "Resources/Shaders/OpenGL/text2DVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/texture2DFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
             "string": "ColorShader"
         },
         {

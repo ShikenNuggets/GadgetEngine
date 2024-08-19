@@ -277,6 +277,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 			Shader* shader = texture->GetShader();
 			shader->Bind();
 			shader->BindMatrix4(SID("projectionMatrix"), uiProjection);
+			shader->BindColor(SID("tintColor"), Color::White()); //TODO - Allow image tint color
 
 			GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(texture->GetMeshInfo());
 			meshInfo->Bind();

@@ -8,7 +8,7 @@
 namespace Gadget{
 	class GuiTextureElement : public GuiElement{
 	public:
-		GuiTextureElement(StringID name_, StringID textureResource_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : GuiElement(name_, pos_, size_, anchor_, isActive_), textureName(textureResource_), shaderName(SID("Text2DShader")){
+		GuiTextureElement(StringID name_, StringID textureResource_, const Vector2& pos_, const Vector2& size_, GuiAnchor anchor_, bool isActive_ = true) : GuiElement(name_, pos_, size_, anchor_, isActive_), textureName(textureResource_), shaderName(SID("Texture2DShader")){
 			GADGET_BASIC_ASSERT(name != StringID::None);
 			GADGET_BASIC_ASSERT(textureResource_ != StringID::None);
 			GADGET_BASIC_ASSERT(pos_.IsValid());
