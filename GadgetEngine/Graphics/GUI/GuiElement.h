@@ -49,7 +49,15 @@ namespace Gadget{
 		}
 
 		void SetName(StringID name_){ name = name_; }
-		void SetIsActive(bool isActive_){ isActive = isActive_; }
+
+		void SetIsActive(bool isActive_){
+			isActive = isActive_;
+			for(auto* se : subElements){
+				GADGET_BASIC_ASSERT(se != nullptr);
+				se->SetIsActive(isActive_);
+			}
+		}
+
 		void SetPosition(const Vector2& pos_){ position = pos_; }
 		void SetSize(const Vector2& size_){ size = size_; }
 		void SetAnchor(GuiAnchor anchor_){ anchor = anchor_; }
