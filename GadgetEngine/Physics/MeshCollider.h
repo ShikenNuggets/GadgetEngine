@@ -23,14 +23,7 @@ namespace Gadget{
 
 		virtual btCollisionShape* CreateCollisionShape() const override;
 
-		virtual Vector3 GetColliderSize() const override{
-			GADGET_BASIC_ASSERT(size.IsValid());
-			return Vector3(
-				(parent->GetScale().x * size.x) / 2.0f,
-				(parent->GetScale().y * size.y) / 2.0f,
-				(parent->GetScale().z * size.z) / 2.0f
-			);
-		}
+		virtual Vector3 GetColliderSize() const override{ return parent->GetScale(); }
 
 		void SetModel(StringID newModel_);
 
@@ -41,7 +34,6 @@ namespace Gadget{
 
 	private:
 		StringID modelName;
-		Vector3 size;
 
 		Array<btTriangleMesh*> triMeshes;
 
