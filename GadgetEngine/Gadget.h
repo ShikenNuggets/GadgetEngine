@@ -20,8 +20,11 @@
 #include "Game/Scene.h"
 
 #include "Graphics/Components/CameraComponent.h"
+#include "Graphics/Components/DirectionalLightComponent.h"
 #include "Graphics/Components/LightComponent.h"
 #include "Graphics/Components/RenderComponent.h"
+#include "Graphics/Components/SkyboxComponent.h"
+#include "Graphics/Components/SpotLightComponent.h"
 #include "Graphics/GUI/CanvasSceneComponent.h"
 #include "Graphics/GUI/GuiButton.h"
 #include "Graphics/GUI/GuiCanvas.h"
@@ -42,7 +45,9 @@
 
 #include "Physics/BoxCollider2D.h"
 #include "Physics/CubeCollider.h"
+#include "Physics/MeshCollider.h"
 #include "Physics/Rigidbody.h"
+#include "Physics/SphereCollider.h"
 
 #include "Resource/ResourceManager.h"
 
