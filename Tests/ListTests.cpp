@@ -589,3 +589,84 @@ TEST_CASE("List Sum", "[list_sum]"){
 	REQUIRE(result2.GetNode(1)->value == 1);
 	REQUIRE(result2.GetNode(2)->value == 2);
 }
+
+//------------------------------------------------------------//
+//----------------- Palindrome (CTCI 2.6) --------------------//
+//------------------------------------------------------------//
+
+bool IsPalindrome(List<int>::Node* head, size_t debugListSize_){
+	GADGET_BASIC_ASSERT(head != nullptr);
+
+	List<int>::Node* cur = head;
+	List<int>::Node* skip = head->next;
+
+	if(skip == nullptr){
+		return true; //Size is 1
+	}
+
+	std::stack<int> firstHalf;
+
+	size_t size = 1;
+	while(skip != nullptr){
+		firstHalf.push(cur->value);
+		cur = cur->next;
+
+		skip = skip->next;
+		size++;
+
+		if(skip != nullptr){
+			skip = skip->next;
+			size++;
+		}
+	}
+
+	GADGET_BASIC_ASSERT(size == debugListSize_);
+	GADGET_BASIC_ASSERT(cur != nullptr);
+	if(size % 2 != 0){ //isOdd
+		cur = cur->next; //Ignore middle
+	}
+
+	while(cur != nullptr && !firstHalf.empty()){
+		if(cur->value != firstHalf.top()){
+			return false;
+		}
+
+		firstHalf.pop();
+		cur = cur->next;
+	}
+
+	return true;
+}
+
+TEST_CASE("List Palindrome", "[list_palindrome]"){
+	List<int> list1;
+	list1.Add(5);
+	list1.Add(4);
+	list1.Add(3);
+	list1.Add(2);
+	list1.Add(1);
+	REQUIRE(IsPalindrome(list1.Front(), list1.Size()) == false);
+
+	List<int> list2;
+	list2.Add(5);
+	list2.Add(4);
+	list2.Add(3);
+	list2.Add(2);
+	list2.Add(1);
+	list2.Add(2);
+	list2.Add(3);
+	list2.Add(4);
+	list2.Add(5);
+	REQUIRE(IsPalindrome(list2.Front(), list2.Size()) == true);
+
+	List<int> list3;
+	list3.Add(5);
+	list3.Add(4);
+	list3.Add(4);
+	list3.Add(5);
+	REQUIRE(IsPalindrome(list3.Front(), list3.Size()) == true);
+
+	List<int> list4;
+	list4.Add(5);
+	REQUIRE(IsPalindrome(list4.Front(), list4.Size()) == true);
+}
