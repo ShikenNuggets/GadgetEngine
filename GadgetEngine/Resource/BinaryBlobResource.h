@@ -22,10 +22,7 @@ namespace Gadget{
 
 	class BinaryBlobResourceContainer : public ResourceContainer{
 	public:
-		BinaryBlobResourceContainer(const std::string& path_) : ResourceContainer(BinaryBlobResource::typeName, path_){
-			GADGET_BASIC_ASSERT(!path_.empty());
-			GADGET_BASIC_ASSERT(FileSystem::FileExists(path_));
-		}
+		BinaryBlobResourceContainer(const std::string& path_) : ResourceContainer(BinaryBlobResource::typeName, path_){}
 
 		virtual Resource* LoadResource() override{
 			return new BinaryBlobResource(FileSystem::ReadBinaryFile(path));

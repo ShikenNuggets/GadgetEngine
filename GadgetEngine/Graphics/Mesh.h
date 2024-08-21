@@ -29,10 +29,7 @@ namespace Gadget{
 
 	class MeshResourceContainer : public ResourceContainer{
 	public:
-		MeshResourceContainer(const std::string& path_) : ResourceContainer(Mesh::typeName, path_){
-			GADGET_BASIC_ASSERT(!path_.empty());
-			GADGET_BASIC_ASSERT(FileSystem::FileExists(path_));
-		}
+		MeshResourceContainer(const std::string& path_) : ResourceContainer(Mesh::typeName, path_){}
 
 		virtual Resource* LoadResource() override{
 			return AssimpModelLoader::LoadMesh(path);

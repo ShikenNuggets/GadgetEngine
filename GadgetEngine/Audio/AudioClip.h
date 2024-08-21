@@ -28,10 +28,7 @@ namespace Gadget{
 
 	class AudioClipResourceContainer : public ResourceContainer{
 	public:
-		AudioClipResourceContainer(const std::string& path_) : ResourceContainer(AudioClip::typeName, path_){
-			GADGET_BASIC_ASSERT(!path_.empty());
-			GADGET_BASIC_ASSERT(FileSystem::FileExists(path_));
-		}
+		AudioClipResourceContainer(const std::string& path_) : ResourceContainer(AudioClip::typeName, path_){}
 
 		std::string GetPath() const{ return path; }
 

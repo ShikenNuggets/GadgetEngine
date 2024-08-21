@@ -34,10 +34,7 @@ namespace Gadget{
 
 	class AnimMeshResourceContainer : public ResourceContainer{
 	public:
-		AnimMeshResourceContainer(const std::string& path_) : ResourceContainer(AnimMesh::typeName, path_){
-			GADGET_BASIC_ASSERT(!path_.empty());
-			GADGET_BASIC_ASSERT(FileSystem::FileExists(path_));
-		}
+		AnimMeshResourceContainer(const std::string& path_) : ResourceContainer(AnimMesh::typeName, path_){}
 
 		virtual Resource* LoadResource() override{
 			return AssimpModelLoader::LoadAnimMesh(path);

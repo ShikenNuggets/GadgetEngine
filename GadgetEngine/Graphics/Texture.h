@@ -36,10 +36,7 @@ namespace Gadget{
 
 	class TextureResourceContainer : public ResourceContainer{
 	public:
-		TextureResourceContainer(const std::string& path_) : ResourceContainer(Texture::typeName, path_){
-			GADGET_BASIC_ASSERT(!path_.empty());
-			GADGET_BASIC_ASSERT(FileSystem::FileExists(path_));
-		}
+		TextureResourceContainer(const std::string& path_) : ResourceContainer(Texture::typeName, path_){}
 
 		std::string GetPath() const{ return path; }
 

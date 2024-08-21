@@ -49,7 +49,10 @@ namespace Gadget{
 
 	class GL_ShaderResourceContainer : public ResourceContainer{
 	public:
-		GL_ShaderResourceContainer(const std::string& vertPath_, const std::string fragPath_) : ResourceContainer(GL_Shader::typeName, vertPath_), fragPath(fragPath_){}
+		GL_ShaderResourceContainer(const std::string& vertPath_, const std::string fragPath_) : ResourceContainer(GL_Shader::typeName, vertPath_), fragPath(fragPath_){
+			GADGET_ASSERT_FILE_EXISTS(vertPath_);
+			GADGET_ASSERT_FILE_EXISTS(fragPath_);
+		}
 
 		std::string FragPath() const{ return fragPath; }
 
