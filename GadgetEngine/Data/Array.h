@@ -312,6 +312,7 @@ namespace Gadget{
 			T* newData = nullptr;
 			if(capacity > 0){
 				newData = static_cast<T*>(std::malloc(capacity * sizeof(T)));
+				GADGET_BASIC_ASSERT(newData != nullptr);
 				std::memcpy(newData, data, size * sizeof(T));
 			}
 
