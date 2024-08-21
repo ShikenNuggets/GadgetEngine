@@ -17,17 +17,28 @@
 #pragma warning(default : 4244)
 #pragma warning(default : 26451)	//Possible arithmetic overflow
 
+#include "Data/Array.h"
+#include "Math/Matrix.h"
+
 namespace Gadget{
 	//Forward Declaration
 	struct Submesh;
 	class Mesh;
+	struct AnimSubmesh;
+	class AnimMesh;
+	struct Joint;
 
 	class AssimpModelLoader{
 	public:
 		static Mesh* LoadMesh(const std::string& filePath_);
+		static AnimMesh* LoadAnimMesh(const std::string& filePath_);
 
 	private:
 		static void ProcessNode(const aiNode* node, const aiScene* scene, std::vector<Submesh>& submeshes_);
+		static void ProcessAnimNode(const aiNode* node_, const aiScene* scene_, Array<AnimSubmesh>& inSubMeshes_, Array<Joint>& inJoints_);
+
+		static int32_t GetJointIndex(Array<Joint>& joints, StringID name_);
+		static Matrix4 ConvertMatrix4(const aiMatrix4x4& m_);
 	};
 }
 
