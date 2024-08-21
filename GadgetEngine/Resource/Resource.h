@@ -6,7 +6,7 @@
 namespace Gadget{
 	class Resource{
 	public:
-		virtual ~Resource(){}
+		virtual ~Resource() = default;
 	};
 
 	class ResourceContainer{
