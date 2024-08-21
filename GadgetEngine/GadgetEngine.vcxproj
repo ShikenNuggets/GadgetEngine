@@ -199,6 +199,8 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation\AnimMesh.h" />
+    <ClInclude Include="Animation\AnimVertex.h" />
     <ClInclude Include="Animation\Skeleton.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Audio\Audio.h" />

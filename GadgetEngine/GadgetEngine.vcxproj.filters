@@ -87,6 +87,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation\AnimMesh.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimVertex.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Animation\Skeleton.h">
       <Filter>Animation</Filter>
     </ClInclude>
