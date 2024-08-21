@@ -12,7 +12,7 @@ using namespace Gadget;
 //O(N^2) for NxN matrix
 template <typename T, int Size>
 void RotateMatrixRight90(StaticArray<StaticArray<T, Size>, Size>& inMatrix_){
-	if(Size <= 1){
+	if constexpr(Size <= 1){
 		return;
 	}
 
