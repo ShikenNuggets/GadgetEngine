@@ -2,6 +2,7 @@
 #define GADGET_ARRAY_H
 
 #include "Debug.h"
+#include "Math/Math.h"
 
 namespace Gadget{
 	template <class T>
@@ -36,25 +37,23 @@ namespace Gadget{
 			int64_t index;
 		};
 
-		Array() : data(nullptr), size(0), capacity(16){
-			GADGET_BASIC_ASSERT(capacity > 0);
-			data = new T[capacity];
+		Array() : data(nullptr), size(0), capacity(0){
+			Reserve(16);
 		}
 
 		Array(const Array<T>& array_) : data(nullptr), size(0), capacity(0){
 			Reserve(array_.Capacity());
-			for(int i = 0; i < array_.Size(); i++){
+			for(size_t i = 0; i < array_.Size(); i++){
 				Add(array_[i]);
 			}
 		}
 
-		Array(size_t initialCapacity_) : data(nullptr), size(0), capacity(0){
-			GADGET_BASIC_ASSERT(initialCapacity_ > 0);
+		explicit Array(size_t initialCapacity_) : data(nullptr), size(0), capacity(0){
 			Reserve(initialCapacity_);
 		}
 
 		~Array(){
-			delete[] data;
+			std::free(data);
 		}
 
 		void Add(const T& value_){
@@ -69,7 +68,7 @@ namespace Gadget{
 
 			GADGET_BASIC_ASSERT(size < capacity);
 
-			data[size] = value_;
+			new (&data[size]) T(value_);
 			size++;
 		}
 
@@ -82,7 +81,7 @@ namespace Gadget{
 		}
 
 		void Add(const Array<T>& range_){
-			GADGET_BASIC_ASSERT(range_.Capacity() > 0);
+			GADGET_ASSERT(range_.Capacity() > 0, "Adding an Array of 0 to another array... did you mean to do that?");
 			Add(range_.data, range_.Size());
 		}
 
@@ -92,12 +91,10 @@ namespace Gadget{
 				return;
 			}
 
-			Add(T()); //This gets us the size and capacity increase without too much trouble
-			for(size_t i = size - 1; i > index_; i--){
-				data[i] = data[i - 1];
-			}
+			Reserve(size + 1);
+			ShiftElements(index_, 1);
 
-			data[index_] = value_;
+			new (&data[index_]) T(value_);
 		}
 
 		void InsertAt(size_t index_, const T* range_, size_t rangeSize_){
@@ -107,30 +104,23 @@ namespace Gadget{
 			}
 
 			Reserve(size + rangeSize_);
-			for(size_t i = 0; i < rangeSize_; i++){
-				Add(T());
-			}
-
-			for(size_t i = size - 1; i > index_; i--){
-				data[i] = data[i - rangeSize_];
-			}
+			ShiftElements(index_, rangeSize_);
 
 			for(size_t i = 0; i < rangeSize_; i++){
-				data[i + index_] = range_[i];
+				new (&data[i + index_]) T(range_[i]);
 			}
 		}
 
 		void InsertAt(size_t index_, const Array<T>& range_){
-			GADGET_BASIC_ASSERT(range_.Capacity() > 0);
+			GADGET_ASSERT(range_.Capacity() > 0, "Adding an Array of 0 to another array... did you mean to do that?");
 			InsertAt(index_, range_.data, range_.Size());
 		}
 
 		constexpr void Pop(size_t elementsToPop = 1){
 			GADGET_BASIC_ASSERT(elementsToPop > 0); //You're probably doing something weird if you try to pop 0 elements
-			if(size - elementsToPop < 0){
-				size = 0;
-			}else{
-				size -= elementsToPop;
+			for(size_t i = 0; i < elementsToPop; i++){
+				data[i].~T();
+				size--;
 			}
 
 			GADGET_BASIC_ASSERT(size < capacity);
@@ -142,11 +132,8 @@ namespace Gadget{
 				return;
 			}
 
-			for(size_t i = index_; i < size - 1; i++){
-				data[i] = data[i + 1];
-			}
-
-			size--;
+			data[index_].~T();
+			ShiftElements(index_ + 1, -1);
 		}
 
 		constexpr void RemoveAt(size_t startIndex_, size_t rangeSize_){
@@ -159,12 +146,12 @@ namespace Gadget{
 				return;
 			}
 
-			for(size_t i = startIndex_; i < size - rangeSize_; i++){
-				data[i] = data[i + rangeSize_];
+			GADGET_BASIC_ASSERT(rangeSize_ < size);
+			for(size_t i = startIndex_; i < startIndex_ + rangeSize_; i++){
+				data[i].~T();
 			}
 
-			GADGET_BASIC_ASSERT(rangeSize_ < size);
-			size -= rangeSize_;
+			ShiftElements(startIndex_, -static_cast<int64_t>(rangeSize_));
 		}
 
 		constexpr void Remove(const T& value_){
@@ -185,7 +172,7 @@ namespace Gadget{
 		}
 
 		constexpr void Clear(){
-			size = 0;
+			Pop(size);
 		}
 
 		void Reserve(size_t newCapacity_){
@@ -219,7 +206,7 @@ namespace Gadget{
 		}
 
 		constexpr int64_t Find(const T& value_, size_t startPos_ = 0) const{
-			for(size_t i = startPos_; i < size; i++){
+			for(int64_t i = startPos_; static_cast<size_t>(i) < size; i++){
 				if(data[i] == value_){
 					return i;
 				}
@@ -275,15 +262,19 @@ namespace Gadget{
 		}
 
 		constexpr Array<T>& operator=(const Array<T>& other_){
+			if(&other_ == this){
+				return *this;
+			}
+
 			GADGET_BASIC_ASSERT(other_.Capacity() > 0);
 
 			if(data != nullptr){
-				delete[] data;
+				std::free(data);
 				size = 0;
 			}
 
 			capacity = other_.Capacity();
-			data = new T[capacity];
+			data = static_cast<T*>(std::malloc(capacity * sizeof(T)));
 			for(int i = 0; i < other_.Size(); i++){
 				Add(other_[i]);
 			}
@@ -320,14 +311,41 @@ namespace Gadget{
 
 			T* newData = nullptr;
 			if(capacity > 0){
-				newData = new T[capacity];
-				for(size_t i = 0; i < size && i < capacity; i++){
-					newData[i] = data[i];
-				}
+				newData = static_cast<T*>(std::malloc(capacity * sizeof(T)));
+				std::memcpy(newData, data, size * sizeof(T));
 			}
 
-			delete[] data;
+			std::free(data);
 			data = newData;
+		}
+
+		void ShiftElements(size_t startIndex_, int64_t amountToShift_){
+			if(amountToShift_ == 0){
+				return;
+			}
+
+			if(size + amountToShift_ > capacity){
+				Reserve(size + amountToShift_);
+			}
+
+			int64_t srcIndex = startIndex_;
+			int64_t destIndex = startIndex_ + amountToShift_;
+			while(destIndex < 0){
+				//To avoid memmoving outside the buffer - ignore the first N elements if amount to shift is -N
+				srcIndex++;
+				destIndex++;
+			}
+
+			const int64_t numElementsToShift = size - srcIndex;
+			const int64_t numBytesToShift = Math::Abs(numElementsToShift * sizeof(T));
+			const int64_t shiftEndPos = srcIndex + numElementsToShift + amountToShift_;
+
+			GADGET_BASIC_ASSERT(numElementsToShift <= static_cast<int64_t>(size));
+			GADGET_BASIC_ASSERT(startIndex_ < size);
+			GADGET_BASIC_ASSERT(shiftEndPos <= static_cast<int64_t>(capacity));
+
+			std::memmove(&data[destIndex], &data[srcIndex], numBytesToShift);
+			size += amountToShift_;
 		}
 
 		constexpr void QuickSort(size_t low_, size_t high_){
