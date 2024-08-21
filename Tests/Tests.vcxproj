@@ -174,7 +174,11 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayTests.cpp" />
-    <ClCompile Include="Catch2\catch_amalgamated.cpp" />
+    <ClCompile Include="Catch2\catch_amalgamated.cpp">
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">TurnOffAllWarnings</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
     <ClCompile Include="HashTableTests.cpp" />
     <ClCompile Include="ListTests.cpp" />
     <ClCompile Include="StaticArrayTests.cpp" />
