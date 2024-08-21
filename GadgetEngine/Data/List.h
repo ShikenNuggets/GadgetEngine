@@ -301,8 +301,8 @@ namespace Gadget{
 				return Size() == 0 && head == nullptr && tail == nullptr; //If any of these are true, they must all be true
 			}
 
-			if(Size() == 1 || head == tail){
-				return Size() == 1 && head == tail; //If either of these is true, they must both be true
+			if(Size() == 1 || head == tail || head->next == nullptr){
+				return Size() == 1 && head == tail && head->next == nullptr; //If any of these is true, they must all be true
 			}
 
 			if(Size() > 1 && head->next == nullptr){
