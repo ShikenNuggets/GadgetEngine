@@ -4,6 +4,9 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{859E00A2-F108-B518-3A47-66BEA6F0926D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation\Loaders">
+      <UniqueIdentifier>{7EEBC538-EA01-C4CE-3379-4FF09FCE9456}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Audio">
       <UniqueIdentifier>{9718D90C-032D-01BE-CCAE-A41D3882FDEE}</UniqueIdentifier>
     </Filter>
@@ -87,11 +90,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation\AnimClip.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Animation\AnimMesh.h">
       <Filter>Animation</Filter>
     </ClInclude>
     <ClInclude Include="Animation\AnimVertex.h">
       <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\Loaders\AssimpAnimLoader.h">
+      <Filter>Animation\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="Animation\Skeleton.h">
       <Filter>Animation</Filter>
@@ -600,6 +609,9 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation\Loaders\AssimpAnimLoader.cpp">
+      <Filter>Animation\Loaders</Filter>
+    </ClCompile>
     <ClCompile Include="Animation\Skeleton.cpp">
       <Filter>Animation</Filter>
     </ClCompile>

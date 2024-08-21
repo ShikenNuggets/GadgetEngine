@@ -199,8 +199,10 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation\AnimClip.h" />
     <ClInclude Include="Animation\AnimMesh.h" />
     <ClInclude Include="Animation\AnimVertex.h" />
+    <ClInclude Include="Animation\Loaders\AssimpAnimLoader.h" />
     <ClInclude Include="Animation\Skeleton.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Audio\Audio.h" />
@@ -380,6 +382,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation\Loaders\AssimpAnimLoader.cpp" />
     <ClCompile Include="Animation\Skeleton.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
