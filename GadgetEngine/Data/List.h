@@ -46,6 +46,10 @@ namespace Gadget{
 		}
 
 		constexpr List<T>& operator=(const List<T>& other_){
+			if(&other_ == this){
+				return *this; //Self-assignment
+			}
+
 			while(!IsEmpty()){
 				Pop();
 			}
@@ -72,17 +76,18 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(nodePos_ == nullptr || ContainsNode(nodePos_));
 			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
 
-			if(nodePos_ == nullptr){
-				GADGET_LOG_ERROR(SID("DATA"), "Tried to add at invalid node position!");
-				return nullptr;
-			}
-
 			Node* newNode = new Node(value_);
 
 			if(IsEmpty()){
 				head = newNode;
 				tail = head;
 			}else{
+				if(nodePos_ == nullptr){
+					GADGET_LOG_ERROR(SID("DATA"), "Tried to add at invalid node position!");
+					delete newNode;
+					return nullptr;
+				}
+
 				if(nodePos_->next != nullptr){
 					newNode->next = nodePos_->next;
 				}
@@ -133,7 +138,6 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(other_.IsEmpty());
 			GADGET_BASIC_ASSERT(other_.IsValid());
 		}
-
 
 		constexpr inline void Pop(){
 			if(IsEmpty()){
