@@ -1,8 +1,8 @@
 #include <Gadget.h>
 #include <Data/Array.h>
-#include <Data/HashTable.h>
+#include <Data/StaticHashTable.h>
 
-#include "Catch2/catch_amalgamated.hpp"
+#include "_Catch2/catch_amalgamated.hpp"
 
 using namespace Gadget;
 
@@ -11,7 +11,7 @@ using namespace Gadget;
 //------------------------------------------------------------//
 
 static inline Array<size_t> TwoSum(Array<size_t>& nums_, size_t target_){
-	HashTable<size_t, size_t> table;
+	StaticHashTable<size_t, size_t> table;
 
 	for(size_t i = 0; i < nums_.Size(); i++){
 		size_t complement = target_ - nums_[i];
@@ -28,7 +28,7 @@ static inline Array<size_t> TwoSum(Array<size_t>& nums_, size_t target_){
 	return Array<size_t>();
 }
 
-TEST_CASE("HashTable TwoSum", "[hash_table_two_sum]"){
+TEST_CASE("StaticHashTable TwoSum", "[hash_table_two_sum]"){
 	Array<size_t> nums;
 	nums.Reserve(4);
 	nums.Add(2);
@@ -64,8 +64,8 @@ TEST_CASE("HashTable TwoSum", "[hash_table_two_sum]"){
 //------------------------------------------------------------//
 //-------------------- For Each Loop -------------------------//
 //------------------------------------------------------------//
-TEST_CASE("HashTable ForEach", "[hash_table_for_each]"){
-	HashTable<StringID, int> values;
+TEST_CASE("StaticHashTable ForEach", "[hash_table_for_each]"){
+	StaticHashTable<StringID, int> values;
 	values.Add(SID("Test0"), 0);
 	values.Add(SID("Test1"), 1);
 	values.Add(SID("Test2"), 2);
@@ -110,7 +110,7 @@ TEST_CASE("HashTable ForEach", "[hash_table_for_each]"){
 		count++;
 	}
 	REQUIRE(count > 0);
-	
+
 	count = 0;
 	for([[maybe_unused]] auto& _ : values){
 		count++;

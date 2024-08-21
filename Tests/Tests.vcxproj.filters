@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Catch2">
-      <UniqueIdentifier>{7A3E45AB-66E0-6F81-4F9B-83D53BDCF6D1}</UniqueIdentifier>
+    <Filter Include="DataTests">
+      <UniqueIdentifier>{D289ED31-3EF4-A1A8-8732-534EF3DB7FFD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Catch2">
+      <UniqueIdentifier>{B9620238-2542-81D3-2E5A-0CAA9AB8E734}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Catch2\catch_amalgamated.hpp">
-      <Filter>Catch2</Filter>
+    <ClInclude Include="_Catch2\catch_amalgamated.hpp">
+      <Filter>_Catch2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayTests.cpp" />
-    <ClCompile Include="Catch2\catch_amalgamated.cpp">
-      <Filter>Catch2</Filter>
+    <ClCompile Include="DataTests\ArrayTests.cpp">
+      <Filter>DataTests</Filter>
     </ClCompile>
-    <ClCompile Include="HashTableTests.cpp" />
-    <ClCompile Include="ListTests.cpp" />
-    <ClCompile Include="StaticArrayTests.cpp" />
-    <ClCompile Include="StaticHashTableTests.cpp" />
-    <ClCompile Include="StringTests.cpp" />
+    <ClCompile Include="DataTests\HashTableTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTests\ListTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTests\StaticArrayTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTests\StaticHashTableTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTests\StringTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
+    <ClCompile Include="_Catch2\catch_amalgamated.cpp">
+      <Filter>_Catch2</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

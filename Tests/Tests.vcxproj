@@ -170,20 +170,20 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Catch2\catch_amalgamated.hpp" />
+    <ClInclude Include="_Catch2\catch_amalgamated.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayTests.cpp" />
-    <ClCompile Include="Catch2\catch_amalgamated.cpp">
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">TurnOffAllWarnings</WarningLevel>
+    <ClCompile Include="DataTests\ArrayTests.cpp" />
+    <ClCompile Include="DataTests\HashTableTests.cpp" />
+    <ClCompile Include="DataTests\ListTests.cpp" />
+    <ClCompile Include="DataTests\StaticArrayTests.cpp" />
+    <ClCompile Include="DataTests\StaticHashTableTests.cpp" />
+    <ClCompile Include="DataTests\StringTests.cpp" />
+    <ClCompile Include="_Catch2\catch_amalgamated.cpp">
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</WarningLevel>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">TurnOffAllWarnings</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">TurnOffAllWarnings</WarningLevel>
     </ClCompile>
-    <ClCompile Include="HashTableTests.cpp" />
-    <ClCompile Include="ListTests.cpp" />
-    <ClCompile Include="StaticArrayTests.cpp" />
-    <ClCompile Include="StaticHashTableTests.cpp" />
-    <ClCompile Include="StringTests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

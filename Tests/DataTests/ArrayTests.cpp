@@ -2,7 +2,7 @@
 #include <Data/Array.h>
 #include <Data/String.h>
 
-#include "Catch2/catch_amalgamated.hpp"
+#include "_Catch2/catch_amalgamated.hpp"
 
 using namespace Gadget;
 
