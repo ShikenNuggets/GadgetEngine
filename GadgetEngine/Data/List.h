@@ -72,6 +72,11 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(nodePos_ == nullptr || ContainsNode(nodePos_));
 			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
 
+			if(nodePos_ == nullptr){
+				GADGET_LOG_ERROR(SID("DATA"), "Tried to add at invalid node position!");
+				return nullptr;
+			}
+
 			Node* newNode = new Node(value_);
 
 			if(IsEmpty()){
@@ -88,8 +93,9 @@ namespace Gadget{
 				}
 			}
 
-			GADGET_BASIC_ASSERT(tail->next == nullptr);
 			size++;
+			GADGET_BASIC_ASSERT(tail->next == nullptr);
+			GADGET_BASIC_ASSERT(IsValid());
 			return newNode;
 		}
 
