@@ -117,7 +117,6 @@ namespace Gadget{
 		}
 
 		constexpr void Pop(size_t elementsToPop = 1){
-			GADGET_BASIC_ASSERT(elementsToPop > 0); //You're probably doing something weird if you try to pop 0 elements
 			for(size_t i = 0; i < elementsToPop; i++){
 				data[i].~T();
 				size--;
