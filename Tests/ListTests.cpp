@@ -670,3 +670,107 @@ TEST_CASE("List Palindrome", "[list_palindrome]"){
 	list4.Add(5);
 	REQUIRE(IsPalindrome(list4.Front(), list4.Size()) == true);
 }
+
+//------------------------------------------------------------//
+//---------------- Intersection (CTCI 2.7) -------------------//
+//------------------------------------------------------------//
+
+template <class T>
+static inline List<T>::Node* ListIntersects(const List<T>& a, const List<T>& b, size_t bListTrueSize_){
+	if(a.IsEmpty() || b.IsEmpty()){
+		return nullptr;
+	}
+
+	auto* aNode = a.Front();
+	auto* bNode = b.Front();
+
+	int64_t aSizeDiff = a.Size() - bListTrueSize_;
+	while(aSizeDiff > 0){
+		aNode = aNode->next;
+		aSizeDiff--;
+	}
+
+	int64_t bSizeDiff = bListTrueSize_ - a.Size();
+	while(bSizeDiff > 0){
+		bNode = bNode->next;
+		bSizeDiff--;
+	}
+
+	//If the lists intersect, the last node will be the same
+	while(aNode->next != nullptr && bNode->next != nullptr){
+		if(aNode == bNode){
+			return aNode;
+		}
+
+		if(aNode->next != nullptr){
+			aNode = aNode->next;
+		}
+
+		if(aNode == bNode){
+			return aNode;
+		}
+
+		if(bNode->next != nullptr){
+			bNode = bNode->next;
+		}
+	}
+
+	if(aNode == bNode){
+		return aNode;
+	}
+
+	return nullptr;
+}
+
+TEST_CASE("List Intersection", "[list_intersection]"){
+	//---------- Same Size ----------//
+	List<int> list1;
+	list1.Add(4);
+	List<int>::Node* mid1 = list1.Add(5);
+	list1.Add(6);
+	list1.Add(7);
+
+	List<int> list2;
+	list2.Add(5);
+	list2.Front()->next = mid1;
+
+	REQUIRE(ListIntersects(list1, list2, 4) == mid1);
+	REQUIRE(!list2.IsValid());
+
+	//---------- Different Sizes ----------//
+	List<float> list3;
+	list3.Add(2.5f);
+	list3.Add(3.5f);
+	list3.Add(4.5f);
+	list3.Add(5.5f);
+	list3.Add(6.5f);
+	List<float>::Node* mid2 = list3.Add(7.5f);
+	list3.Add(8.5f);
+
+	List<float> list4;
+	list4.Add(0.1f);
+	list4.Add(0.2f);
+	list4.GetNode(1)->next = mid2;
+
+	REQUIRE(ListIntersects(list3, list4, 4) == mid2);
+	REQUIRE(!list4.IsValid());
+
+	//---------- No Intersection ----------//
+	List<Array<int>> list5;
+	list5.Add(Array<int>());
+	list5.Add(Array<int>());
+	list5.Add(Array<int>());
+	list5.Add(Array<int>());
+	list5.Add(Array<int>());
+
+	List<Array<int>> list6;
+	list6.Add(Array<int>());
+	list6.Add(Array<int>());
+	list6.Add(Array<int>());
+	list6.Add(Array<int>());
+	list6.Add(Array<int>());
+
+	REQUIRE(ListIntersects(list5, list6, list6.Size()) == nullptr);
+	REQUIRE(list5.IsValid());
+	REQUIRE(list6.IsValid());
+}
