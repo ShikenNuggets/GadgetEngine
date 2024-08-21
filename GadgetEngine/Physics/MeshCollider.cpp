@@ -36,12 +36,13 @@ MeshCollider::MeshCollider(const ComponentProperties& props_) : Collider(props_,
 
 //TODO - The ownership semantics here are *really weird*
 btCollisionShape* MeshCollider::CreateCollisionShape() const{
-	btCompoundShape* shape = new btCompoundShape(true, triMeshes.Size());
+	GADGET_BASIC_ASSERT(triMeshes.Size() < std::numeric_limits<int>::max());
+	btCompoundShape* cShape = new btCompoundShape(true, static_cast<int>(triMeshes.Size()));
 	for(auto* mesh : triMeshes){
-		shape->addChildShape(btTransform(btQuaternion::getIdentity()), new btBvhTriangleMeshShape(mesh, false));
+		cShape->addChildShape(btTransform(btQuaternion::getIdentity()), new btBvhTriangleMeshShape(mesh, false));
 	}
 
-	return shape;
+	return cShape;
 }
 
 void MeshCollider::RecalculateCollider(){
@@ -78,6 +79,6 @@ ComponentProperties MeshCollider::Serialize() const{
 	return ComponentProperties(SID("MeshCollider"), GetGUID(), parent->GetGUID());
 }
 
-void MeshCollider::Deserialize(const ComponentProperties& props_){
+void MeshCollider::Deserialize([[maybe_unused]] const ComponentProperties& props_){
 	GADGET_ASSERT_NOT_IMPLEMENTED
 }

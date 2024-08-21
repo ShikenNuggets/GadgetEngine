@@ -14,7 +14,7 @@ PhysManager::PhysManager() : bulletDynamicsWorld(nullptr), collisionConfig(nullp
 	solver = new btSequentialImpulseConstraintSolver();
 
 	bulletDynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
-	SetWorldGravity(App::GetConfig().GetOptionFloat(EngineVars::Physics::gravityConstantKey));
+	SetWorldGravity(static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::gravityConstantKey)));
 
 	GADGET_BASIC_ASSERT(bulletDynamicsWorld != nullptr);
 }
