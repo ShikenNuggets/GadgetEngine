@@ -132,6 +132,9 @@
     <ClInclude Include="Data\Bitset.h">
       <Filter>Data</Filter>
     </ClInclude>
+    <ClInclude Include="Data\DList.h">
+      <Filter>Data</Filter>
+    </ClInclude>
     <ClInclude Include="Data\HashTable.h">
       <Filter>Data</Filter>
     </ClInclude>
