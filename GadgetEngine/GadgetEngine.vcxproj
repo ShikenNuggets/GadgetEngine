@@ -202,6 +202,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Animation\AnimClip.h" />
     <ClInclude Include="Animation\AnimMesh.h" />
     <ClInclude Include="Animation\AnimVertex.h" />
+    <ClInclude Include="Animation\Animator.h" />
     <ClInclude Include="Animation\Components\AnimRenderComponent.h" />
     <ClInclude Include="Animation\KeyFrame.h" />
     <ClInclude Include="Animation\Loaders\AssimpAnimLoader.h" />
@@ -384,6 +385,8 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation\AnimClip.cpp" />
+    <ClCompile Include="Animation\Animator.cpp" />
     <ClCompile Include="Animation\Components\AnimRenderComponent.cpp" />
     <ClCompile Include="Animation\Loaders\AssimpAnimLoader.cpp" />
     <ClCompile Include="Animation\Skeleton.cpp" />

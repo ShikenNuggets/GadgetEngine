@@ -102,6 +102,9 @@
     <ClInclude Include="Animation\AnimVertex.h">
       <Filter>Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Animation\Animator.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Animation\Components\AnimRenderComponent.h">
       <Filter>Animation\Components</Filter>
     </ClInclude>
@@ -618,6 +621,12 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation\AnimClip.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\Animator.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
     <ClCompile Include="Animation\Components\AnimRenderComponent.cpp">
       <Filter>Animation\Components</Filter>
     </ClCompile>
