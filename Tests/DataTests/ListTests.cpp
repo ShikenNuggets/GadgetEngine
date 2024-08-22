@@ -1,5 +1,6 @@
 #include <Gadget.h>
 #include <Data/Array.h>
+#include <Data/HashTable.h>
 #include <Data/List.h>
 
 #include "_Catch2/catch_amalgamated.hpp"
@@ -773,4 +774,47 @@ TEST_CASE("List Intersection", "[list_intersection]"){
 	REQUIRE(ListIntersects(list5, list6, list6.Size()) == nullptr);
 	REQUIRE(list5.IsValid());
 	REQUIRE(list6.IsValid());
+}
+
+//------------------------------------------------------------//
+//---------------- Loop Detection (CTCI 2.8) -----------------//
+//------------------------------------------------------------//
+
+static inline List<int>::Node* DetectLoop(List<int>::Node* head_){
+	HashTable<List<int>::Node*, bool> table;
+
+	List<int>::Node* node = head_;
+	while(node != nullptr){
+		if(table.Contains(node)){
+			return node;
+		}
+
+		table.Add(node, true);
+		node = node->next;
+	}
+
+	return nullptr;
+}
+
+TEST_CASE("List Loop Detection", "[list_loop_detection]"){
+	//Has Loop
+	List<int> list1;
+	list1.Add(1);
+	list1.Add(2);
+	List<int>::Node* mid1 = list1.Add(3);
+	list1.Add(4);
+	list1.Add(5);
+
+	list1.Back()->next = mid1;
+	REQUIRE(!list1.IsValid());
+	REQUIRE(DetectLoop(list1.Front()) == mid1);
+
+	//No Loop
+	List<int> list2;
+	list2.Add(6);
+	list2.Add(7);
+	list2.Add(8);
+	list2.Add(9);
+	REQUIRE(list2.IsValid());
+	REQUIRE(DetectLoop(list2.Front()) == nullptr);
 }
