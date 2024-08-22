@@ -19,7 +19,7 @@ namespace Gadget{
 	using QuatKey = KeyFrame<Quaternion>;
 
 	using VectorNode = DList<VectorKey>::Node;
-	using QuatNode = DList<Quaternion>::Node;
+	using QuatNode = DList<QuatKey>::Node;
 
 	template <class T1, class T2>
 	struct ClipSearchResult{
