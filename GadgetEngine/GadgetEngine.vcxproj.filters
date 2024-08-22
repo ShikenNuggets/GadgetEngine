@@ -105,6 +105,9 @@
     <ClInclude Include="Animation\Components\AnimRenderComponent.h">
       <Filter>Animation\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Animation\KeyFrame.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Animation\Loaders\AssimpAnimLoader.h">
       <Filter>Animation\Loaders</Filter>
     </ClInclude>

@@ -203,6 +203,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Animation\AnimMesh.h" />
     <ClInclude Include="Animation\AnimVertex.h" />
     <ClInclude Include="Animation\Components\AnimRenderComponent.h" />
+    <ClInclude Include="Animation\KeyFrame.h" />
     <ClInclude Include="Animation\Loaders\AssimpAnimLoader.h" />
     <ClInclude Include="Animation\Skeleton.h" />
     <ClInclude Include="App.h" />

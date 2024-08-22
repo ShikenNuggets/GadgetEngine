@@ -1,6 +1,7 @@
 #ifndef GADGET_ANIMATION_ANIM_CLIP_H
 #define GADGET_ANIMATION_ANIM_CLIP_H
 
+#include "Animation/KeyFrame.h"
 #include "Animation/Loaders/AssimpAnimLoader.h"
 #include "Data/DList.h"
 #include "Data/HashTable.h"
@@ -10,17 +11,6 @@
 #include "Resource/Resource.h"
 
 namespace Gadget{
-	template <class T>
-	struct KeyFrame{
-		float time;
-		T value;
-
-		constexpr KeyFrame(float time_, const T& value_) : time(Math::Clamp(0.0f, 1.0f, time_)), value(value_){}
-	};
-
-	using VectorKey = KeyFrame<Vector3>;
-	using QuatKey = KeyFrame<Quaternion>;
-
 	class AnimClip : public Resource{
 	public:
 		AnimClip(float length_, const HashTable<StringID, DList<VectorKey>>& posKeys_, const HashTable<StringID, DList<QuatKey>>& rotKeys_, const HashTable<StringID, DList<VectorKey>>& scaleKeys_) : length(length_), posKeys(posKeys_), rotKeys(rotKeys_), scaleKeys(scaleKeys_){}
