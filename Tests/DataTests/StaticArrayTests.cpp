@@ -237,3 +237,79 @@ TEST_CASE("StaticArray Sort the People", "[staticarray_sort_the_people]"){
 	REQUIRE(sorted2[1] == "Alice");
 	REQUIRE(sorted2[2] == "Bob");
 }
+
+//------------------------------------------------------------//
+//------------ Lemonade Change (Leetcode 860) ----------------//
+//------------------------------------------------------------//
+template <int Size>
+static inline bool LemonadeChange(const StaticArray<int, Size>& bills){
+	int bill5 = 0;
+	int bill10 = 0;
+
+	for(const auto& b : bills){
+		if(b == 5){
+			bill5++;
+			continue;
+		}
+
+		if(b == 10){
+			bill10++;
+			bill5--;
+		}else if(b == 20){
+			if(bill10 > 0){
+				bill10--;
+				bill5--;
+			} else{
+				bill5 -= 3;
+			}
+		}
+
+		if(bill5 < 0 || bill10 < 0){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+TEST_CASE("StaticArray Lemonade Change", "[staticarray_lemonade_change]"){
+	StaticArray<int, 5> case1;
+	case1[0] = 5;
+	case1[1] = 5;
+	case1[2] = 5;
+	case1[3] = 10;
+	case1[4] = 20;
+
+	StaticArray<int, 5> case2;
+	case2[0] = 5;
+	case2[1] = 5;
+	case2[2] = 10;
+	case2[3] = 10;
+	case2[4] = 20;
+
+	StaticArray<int, 20> case3;
+	case3[0] = 5;
+	case3[1] = 5;
+	case3[2] = 10;
+	case3[3] = 20;
+	case3[4] = 5;
+	case3[5] = 5;
+	case3[6] = 5;
+	case3[7] = 5;
+	case3[8] = 5;
+	case3[9] = 5;
+	case3[10] = 5;
+	case3[11] = 5;
+	case3[12] = 5;
+	case3[13] = 10;
+	case3[14] = 5;
+	case3[15] = 5;
+	case3[16] = 20;
+	case3[17] = 5;
+	case3[18] = 20;
+	case3[19] = 5;
+
+	REQUIRE(LemonadeChange(case1) == true);
+	REQUIRE(LemonadeChange(case2) == false);
+	REQUIRE(LemonadeChange(case3) == true);
+}
