@@ -1,5 +1,6 @@
 #include "Win32_GL_Renderer.h"
 
+#include <Windows.h> //Include before GLAD
 #include <glad/glad.h>
 
 #include "App.h"

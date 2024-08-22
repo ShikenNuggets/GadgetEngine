@@ -1,6 +1,7 @@
 #include "Win32_Window.h"
 
 #include <SDL_syswm.h>
+#include <Windows.h> //Include before GLAD
 #include <glad/glad.h>
 
 #include "App.h"
