@@ -4,6 +4,9 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{859E00A2-F108-B518-3A47-66BEA6F0926D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation\Components">
+      <UniqueIdentifier>{7A463E61-66D5-C72A-0FF4-DB25FB61D8D0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Animation\Loaders">
       <UniqueIdentifier>{7EEBC538-EA01-C4CE-3379-4FF09FCE9456}</UniqueIdentifier>
     </Filter>
@@ -98,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="Animation\AnimVertex.h">
       <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\Components\AnimRenderComponent.h">
+      <Filter>Animation\Components</Filter>
     </ClInclude>
     <ClInclude Include="Animation\Loaders\AssimpAnimLoader.h">
       <Filter>Animation\Loaders</Filter>
@@ -609,6 +615,9 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation\Components\AnimRenderComponent.cpp">
+      <Filter>Animation\Components</Filter>
+    </ClCompile>
     <ClCompile Include="Animation\Loaders\AssimpAnimLoader.cpp">
       <Filter>Animation\Loaders</Filter>
     </ClCompile>
