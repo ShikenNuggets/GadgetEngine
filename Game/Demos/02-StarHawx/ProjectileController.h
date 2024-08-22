@@ -10,7 +10,7 @@ namespace StarHawx{
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
 		}
 
-		virtual void OnUpdate(float deltaTime_) override{
+		virtual void OnUpdate([[maybe_unused]] float deltaTime_) override{
 			if(!hasFired){
 				Gadget::Rigidbody* rb = parent->GetComponent<Gadget::Rigidbody>();
 				GADGET_BASIC_ASSERT(rb != nullptr);
