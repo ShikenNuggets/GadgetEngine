@@ -185,6 +185,28 @@ namespace Gadget{
 			return result;
 		}
 
+		constexpr std::string Stringify(int64_t value_){
+			const char nums[] = "0123456789";
+			
+			int64_t value = value_;
+
+			std::string result;
+			do{
+				result = nums[value % 10] + result;
+				value /= 10;
+			}while(value != 0);
+			
+			if(value_ < 0){
+				result = "-" + result;
+			}
+
+			return result;
+		}
+
+		consteval std::string Stringify_CE(int64_t value_){
+			return Stringify(value_);
+		}
+
 		//----------------------------------------------------------------------------------------------------//
 		//---------- Binary ----------------------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
