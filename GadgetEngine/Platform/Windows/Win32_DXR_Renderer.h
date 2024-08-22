@@ -30,6 +30,7 @@ namespace Gadget{
 		virtual MaterialInfo* GenerateAPIMaterialInfo(const std::vector<Color>& colors_) override;
 		virtual std::vector<MeshInfo*> GenerateAPIMeshInfos(const Mesh& mesh_) override;
 		virtual MeshInfo* GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_) override;
+		virtual std::vector<MeshInfo*> GenerateAPIAnimMeshInfos(const AnimMesh& mesh_) override;
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) override;
 		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) override;
 		virtual MeshInstanceInfo* GenerateAPIMeshInstanceInfo(const Matrix4& transform_) override;

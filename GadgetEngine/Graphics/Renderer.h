@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Window.h"
+#include "Animation/AnimMesh.h"
 #include "Graphics/Color.h"
 #include "Graphics/FontInfo.h"
 #include "Graphics/MeshInfo.h"
@@ -106,6 +107,7 @@ namespace Gadget{
 		virtual MaterialInfo* GenerateAPIMaterialInfo(const std::vector<Color>& colors_) = 0;
 		virtual std::vector<MeshInfo*> GenerateAPIMeshInfos(const Mesh& mesh_) = 0;
 		virtual MeshInfo* GenerateAPIDynamicMeshInfo(size_t numVertices, size_t numIndices) = 0;
+		virtual std::vector<MeshInfo*> GenerateAPIAnimMeshInfos(const AnimMesh& animMesh_) = 0;
 		virtual TextureInfo* GenerateAPITextureInfo(const Texture& texture_) = 0;
 		virtual FontInfo* GenerateAPIFontInfo(const FreetypeFont& font_) = 0;
 		virtual MeshInstanceInfo* GenerateAPIMeshInstanceInfo(const Matrix4& transform_){ return new MeshInstanceInfo(transform_); }

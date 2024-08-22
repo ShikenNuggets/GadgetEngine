@@ -226,6 +226,11 @@ MeshInfo* Win32_DX12_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_
 	//return new GL_DynamicMeshInfo(numVertices_, numIndices_);
 }
 
+std::vector<MeshInfo*> Win32_DX12_Renderer::GenerateAPIAnimMeshInfos([[maybe_unused]] const AnimMesh& animMesh_){
+	GADGET_ASSERT_NOT_IMPLEMENTED;
+	return std::vector<MeshInfo*>();
+}
+
 TextureInfo* Win32_DX12_Renderer::GenerateAPITextureInfo([[maybe_unused]] const Texture& texture_){
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 	return nullptr;

@@ -247,6 +247,11 @@ std::vector<MeshInfo*> Win32_DXR_Renderer::GenerateAPIMeshInfos(const Mesh& mesh
 
 MeshInfo* Win32_DXR_Renderer::GenerateAPIDynamicMeshInfo([[maybe_unused]] size_t numVertices_, [[maybe_unused]] size_t numIndices_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
+std::vector<MeshInfo*> Win32_DXR_Renderer::GenerateAPIAnimMeshInfos([[maybe_unused]] const AnimMesh& animMesh_){
+	GADGET_ASSERT_NOT_IMPLEMENTED;
+	return std::vector<MeshInfo*>();
+}
+
 TextureInfo* Win32_DXR_Renderer::GenerateAPITextureInfo([[maybe_unused]] const Texture& texture_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }
 
 FontInfo* Win32_DXR_Renderer::GenerateAPIFontInfo([[maybe_unused]] const FreetypeFont& font_){ GADGET_ASSERT_NOT_IMPLEMENTED; return nullptr; }

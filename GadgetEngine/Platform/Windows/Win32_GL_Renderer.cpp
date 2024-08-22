@@ -1,6 +1,5 @@
 #include "Win32_GL_Renderer.h"
 
-#include <Windows.h> //Include before GLAD
 #include <glad/glad.h>
 
 #include "App.h"
@@ -442,6 +441,16 @@ std::vector<MeshInfo*> Win32_GL_Renderer::GenerateAPIMeshInfos(const Mesh& mesh_
 
 MeshInfo* Win32_GL_Renderer::GenerateAPIDynamicMeshInfo(size_t numVertices_, size_t numIndices_){
 	return new GL_DynamicMeshInfo(numVertices_, numIndices_);
+}
+
+std::vector<MeshInfo*> Win32_GL_Renderer::GenerateAPIAnimMeshInfos(const AnimMesh& animMesh_){
+	std::vector<MeshInfo*> meshInfos;
+	meshInfos.reserve(animMesh_.submeshes.Size());
+	for(const auto& sm : animMesh_.submeshes){
+		meshInfos.push_back(new GL_AnimMeshInfo(sm));
+	}
+
+	return meshInfos;
 }
 
 TextureInfo* Win32_GL_Renderer::GenerateAPITextureInfo(const Texture& texture_){
