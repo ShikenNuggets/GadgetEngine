@@ -164,6 +164,22 @@ namespace Gadget{
 
 		constexpr inline bool IsEmpty(){ return data.IsEmpty(); }
 
+		constexpr inline Array<K> Keys() const{
+			Array<K> keys;
+
+			for(const auto& i : data){
+				for(const auto& j : i){
+					if(j == nullptr){
+						continue;
+					}
+
+					keys.Add(j->value.key);
+				}
+			}
+
+			return keys;
+		}
+
 		constexpr inline Iterator begin(){
 			if(data.IsEmpty()){
 				return Iterator(data, 0, nullptr);
