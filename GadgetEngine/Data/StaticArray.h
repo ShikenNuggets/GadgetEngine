@@ -24,6 +24,20 @@ namespace Gadget{
 			int64_t index;
 		};
 
+		class ConstIterator{
+		public:
+			constexpr ConstIterator(const StaticArray<T, Size>& data_, int64_t index_) : data(data_), index(index_){}
+
+			constexpr inline const T& operator*() const{ return data[index]; }
+
+			constexpr inline ConstIterator& operator++(){ index++; return *this; }
+			constexpr inline bool operator!=(const ConstIterator& it_) const{ return index != it_.index; }
+
+		private:
+			const StaticArray<T, Size>& data;
+			int64_t index;
+		};
+
 		StaticArray() : data(){ static_assert(Size > 0); }
 
 		StaticArray(const StaticArray<T, Size>& array_) : data(){
@@ -115,9 +129,9 @@ namespace Gadget{
 		constexpr size_t GetSize() const{ return Size; }
 
 		constexpr Iterator begin(){ return Iterator(*this, 0); }
-		constexpr const Iterator begin() const{ return Iterator(*this, 0); }
+		constexpr const ConstIterator begin() const{ return ConstIterator(*this, 0); }
 		constexpr Iterator end(){ return Iterator(*this, Size); }
-		constexpr const Iterator end() const{ return Iterator(*this, Size); }
+		constexpr const ConstIterator end() const{ return ConstIterator(*this, Size); }
 
 	private:
 		T data[Size];
