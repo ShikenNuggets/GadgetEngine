@@ -49,7 +49,7 @@ namespace Gadget{
 		~StaticArray() = default;
 
 		constexpr void QuickSort(){
-			if(Size < 2){
+			if constexpr(Size < 2){
 				return;
 			}
 
