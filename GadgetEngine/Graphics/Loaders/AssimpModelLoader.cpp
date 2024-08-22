@@ -181,8 +181,7 @@ void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scen
 			for(unsigned int k = 0; k < bone->mNumWeights; k++){
 				const aiVertexWeight& weight = bone->mWeights[k];
 				GADGET_BASIC_ASSERT(verts.Size() > weight.mVertexId);
-				verts[weight.mVertexId].jointIDs.Add(static_cast<int32_t>(inJoints_.Size()) - 1);
-				verts[weight.mVertexId].jointWeights.Add(weight.mWeight);
+				verts[weight.mVertexId].AddWeight(static_cast<int32_t>(inJoints_.Size()) - 1, weight.mWeight);
 			}
 		}
 
