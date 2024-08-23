@@ -809,6 +809,58 @@ static inline DList<int>::Node* DetectLoop(DList<int>::Node* head_){
 	return nullptr;
 }
 
+static inline DList<int>::Node* DetectLoop_LowMemory(DList<int>::Node* head_, size_t debugListSize_){
+	size_t debugNumIterations = 0;
+
+	//If there's an intersection, these will eventually collide
+	DList<int>::Node* slowRunner = head_;
+	DList<int>::Node* fastRunner = head_;
+	while(fastRunner != nullptr && slowRunner != nullptr){
+		slowRunner = slowRunner->next;
+
+		fastRunner = fastRunner->next;
+		if(fastRunner == nullptr){
+			break;
+		}
+
+		fastRunner = fastRunner->next;
+
+		if(slowRunner == fastRunner){
+			break;
+		}
+
+		debugNumIterations++;
+		GADGET_BASIC_ASSERT(debugNumIterations <= debugListSize_);
+	}
+
+	if(fastRunner == nullptr || slowRunner == nullptr){
+		return nullptr;
+	}
+
+	GADGET_BASIC_ASSERT(slowRunner == fastRunner);
+
+	//Once they've collided, set the slow runner back to the head, iterate through at the same speed
+	//When they collide again, you have hit the start of the loop
+	debugNumIterations = 0;
+	slowRunner = head_;
+	while(fastRunner != nullptr && slowRunner != nullptr && slowRunner != fastRunner){
+		slowRunner = slowRunner->next;
+		fastRunner = fastRunner->next;
+
+		debugNumIterations++;
+		GADGET_BASIC_ASSERT(debugNumIterations <= debugListSize_);
+		if(debugNumIterations > debugListSize_){
+			return nullptr;
+		}
+	}
+
+	if(fastRunner == nullptr || slowRunner == nullptr){
+		return nullptr;
+	}
+
+	return fastRunner;
+}
+
 TEST_CASE("DList Loop Detection", "[dlist_loop_detection]"){
 	//Has Loop
 	DList<int> list1;
@@ -821,6 +873,7 @@ TEST_CASE("DList Loop Detection", "[dlist_loop_detection]"){
 	list1.Back()->next = mid1;
 	REQUIRE(!list1.IsValid());
 	REQUIRE(DetectLoop(list1.Front()) == mid1);
+	REQUIRE(DetectLoop_LowMemory(list1.Front(), list1.Size() + 1) == mid1);
 
 	//No Loop
 	DList<int> list2;
@@ -830,4 +883,5 @@ TEST_CASE("DList Loop Detection", "[dlist_loop_detection]"){
 	list2.Add(9);
 	REQUIRE(list2.IsValid());
 	REQUIRE(DetectLoop(list2.Front()) == nullptr);
+	REQUIRE(DetectLoop_LowMemory(list2.Front(), list2.Size() + 1) == nullptr);
 }
