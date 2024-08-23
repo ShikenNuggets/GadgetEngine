@@ -10,7 +10,7 @@ Animator::Animator(const AnimMesh& mesh_, const Array<StringID>& clipNames_) : a
 	GADGET_BASIC_ASSERT(mesh_.skeleton.IsValidSkeleton());
 	GADGET_BASIC_ASSERT(!clipNames_.IsEmpty());
 	
-	for(size_t i = 0; i < animMesh.skeleton.GetJointCount(); i++){
+	for(int32_t i = 0; i < animMesh.skeleton.GetJointCount(); i++){
 		skeletonInstance.Add(Matrix4::Identity());
 
 		currentPosNodes.Add(animMesh.skeleton.GetJoint(i).name, nullptr);

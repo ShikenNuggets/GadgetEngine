@@ -22,7 +22,7 @@ namespace Gadget{
 		void AddJoint(const Joint& joint_);
 		void AddJoint(StringID name_, int32_t parentID_, const Matrix4& inverseBindPose_);
 		
-		size_t GetJointCount() const{ return joints.Size(); }
+		int32_t GetJointCount() const{ return static_cast<int32_t>(joints.Size()); }
 		int32_t GetJointID(StringID name_) const;
 
 		const Joint& GetJoint(StringID name_) const;
