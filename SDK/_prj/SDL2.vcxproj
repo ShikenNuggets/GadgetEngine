@@ -59,6 +59,7 @@
     <IntDir>..\..\Build\Intermediate\SDL2\Debug\</IntDir>
     <TargetName>SDL2</TargetName>
     <TargetExt>.dll</TargetExt>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -66,6 +67,7 @@
     <IntDir>..\..\Build\Intermediate\SDL2\Develop\</IntDir>
     <TargetName>SDL2</TargetName>
     <TargetExt>.dll</TargetExt>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -73,6 +75,7 @@
     <IntDir>..\..\Build\Intermediate\SDL2\Release\</IntDir>
     <TargetName>SDL2</TargetName>
     <TargetExt>.dll</TargetExt>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
