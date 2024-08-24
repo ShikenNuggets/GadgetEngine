@@ -33,7 +33,7 @@ namespace Gadget{
 		const HashTable<StringID, DList<VectorKey>> scaleKeys;
 
 		template <class T>
-		typename const DList<T>::Node* Search(const DList<T>::Node* startNode_, float time_) const{
+		const DList<T>::Node* Search(const DList<T>::Node* startNode_, float time_) const{
 			const auto* curNode = startNode_;
 			GADGET_BASIC_ASSERT(curNode != nullptr);
 			if(curNode == nullptr){
