@@ -57,13 +57,10 @@ Vector3 CollisionSystem::CalculateContactPoint(const Collider* col1_, const Coll
 		case ColliderShape::Circle2D:
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
-		case ColliderShape::Sphere:
-			//GADGET_ASSERT_NOT_IMPLEMENTED; //TODO
-			break;
-		case ColliderShape::ConcaveMesh:
-			break; //TODO
-		case ColliderShape::ConvexMesh:
-			break; //TODO
+		//TODO
+		case ColliderShape::Sphere: [[fallthrough]];
+		case ColliderShape::ConcaveMesh: [[fallthrough]];
+		case ColliderShape::ConvexMesh: [[fallthrough]];
 		default:
 			break;
 	}
@@ -92,13 +89,10 @@ float CollisionSystem::CalculateOverlapAmount(const Vector3& dir_, const Collide
 		case ColliderShape::Circle2D:
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
-		case ColliderShape::Sphere:
-			//GADGET_ASSERT_NOT_IMPLEMENTED; //TODO
-			break;
-		case ColliderShape::ConcaveMesh:
-			break; //TODO
-		case ColliderShape::ConvexMesh:
-			break; //TODO
+		//TODO
+		case ColliderShape::Sphere: [[fallthrough]];
+		case ColliderShape::ConcaveMesh: [[fallthrough]];
+		case ColliderShape::ConvexMesh: [[fallthrough]];
 		default:
 			break;
 	}
