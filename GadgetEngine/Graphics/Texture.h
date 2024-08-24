@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "Core/FileSystem.h"
 #include "Debug.h"
 #include "Loaders/BmpLoader.h"
 #include "Loaders/ImageLoader.h"

@@ -10,7 +10,8 @@
 #pragma warning(default : 26495)
 #pragma warning(default : 4127)
 
-#include "Math/Math.h"
+#include "Math/Quaternion.h"
+#include "Math/Vector.h"
 #include "Game/GameObject.h"
 
 namespace BulletHelper{
