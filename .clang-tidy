@@ -1,2 +1,14 @@
 Checks: '-*
+, altera-struct-pack-align
+, bugprone-assert-side-effect
+, bugprone-assignment-in-if-condition
+, bugprone-bool-pointer-implicit-conversion
+, bugprone-branch-clone
+, bugprone-casting-through-void
+, bugprone-chained-comparison
+, bugprone-compare-pointer-to-member-virtual-function
 '
+
+CheckOptions:
+ - key: bugprone-assert-side-effect.AssertMacros
+   value: "assert,_ASSERT,GADGET_ASSERT"
