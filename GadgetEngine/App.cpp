@@ -175,6 +175,8 @@ void App::Run(GameInterface& gameInterface_){
 
 	sceneManager->LoadScene(0);
 
+	std::vector<AnimRenderComponent*> animRenderComps;
+
 	time->Start();
 	while(isRunning){
 		//Main game loop
@@ -204,6 +206,16 @@ void App::Run(GameInterface& gameInterface_){
 		Profiler::Start(SID("Game Logic Update"));
 		gameLogicManager->Update(sceneManager->CurrentScene(), time->DeltaTime());
 		Profiler::End(SID("Game Logic Update"));
+
+		//TODO - Do we need a dedicated subsystem for this?
+		Profiler::Start(SID("Animator Updates"));
+		animRenderComps.clear();
+		sceneManager->CurrentScene()->GetAllComponentsInScene(animRenderComps);
+		for(auto& ar : animRenderComps){
+			GADGET_BASIC_ASSERT(ar != nullptr);
+			ar->Update(time->DeltaTime());
+		}
+		Profiler::End(SID("Animator Updates"));
 
 		Profiler::Start(SID("Render"));
 		renderer->Render(sceneManager->CurrentScene());
