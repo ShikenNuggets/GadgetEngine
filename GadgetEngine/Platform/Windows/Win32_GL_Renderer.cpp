@@ -108,6 +108,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 	//TODO - However we actually decide to do this it should be part of the generic renderer instead of being here
 	scene_->GetAllComponentsInScene<CameraComponent>(camerasBuffer);
 	scene_->GetAllComponentsInScene<RenderComponent>(rendersBuffer);
+	scene_->GetAllComponentsInScene<AnimRenderComponent>(animRendersBuffer);
 	scene_->GetAllComponentsInScene<PointLightComponent>(pointLightsBuffer);
 	scene_->GetAllComponentsInScene<DirectionalLightComponent>(dirLightsBuffer);
 	scene_->GetAllComponentsInScene<SpotLightComponent>(spotLightsBuffer);
@@ -191,6 +192,61 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->GetMeshNumIndices(i)), GL_UNSIGNED_INT, nullptr);
 
 				mesh->Unbind(i);
+			}
+		}
+
+		//------------------------------------------------------------------------------------------------------------------------
+		//Animated meshes
+		for(const auto& aMesh : animRendersBuffer){
+			for(size_t i = 0; i < aMesh->GetNumSubmeshes(); i++){
+				aMesh->Bind(i);
+				aMesh->GetShader(i)->BindMatrix4(SID("projectionMatrix"), proj);
+				aMesh->GetShader(i)->BindMatrix4(SID("viewMatrix"), view);
+
+				const Matrix4 modelMatrix = aMesh->GetParent()->GetTransformMatrix();
+				aMesh->GetShader(i)->BindMatrix4(SID("modelMatrix"), modelMatrix);
+
+				if(aMesh->GetMaterial(i)->HasLighting()){
+					aMesh->GetShader(i)->BindMatrix3(SID("normalMatrix"), (modelMatrix.Inverse()).Transpose().ToMatrix3());
+
+					aMesh->GetShader(i)->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
+
+					aMesh->GetShader(i)->BindInt(SID("numPointLights"), static_cast<int>(pointLightsBuffer.size()));
+					aMesh->GetShader(i)->BindInt(SID("numSpotLights"), static_cast<int>(spotLightsBuffer.size()));
+					aMesh->GetShader(i)->BindInt(SID("numDirLights"), static_cast<int>(dirLightsBuffer.size()));
+
+					//TODO - Handle indexing for multiple light sources of one type
+					for(const auto* light : pointLightsBuffer){
+						GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
+						aMesh->GetShader(i)->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
+						aMesh->GetShader(i)->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
+						aMesh->GetShader(i)->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
+						aMesh->GetShader(i)->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
+						aMesh->GetShader(i)->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+					}
+
+					for(const auto* light : spotLightsBuffer){
+						GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
+						aMesh->GetShader(i)->BindVector3(SID("spotLights[0].position"), light->GetParent()->GetPosition());
+						aMesh->GetShader(i)->BindVector3(SID("spotLights[0].direction"), light->GetLightSource().GetDirection());
+						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].cutOff"), light->GetLightSource().GetCutOff());
+						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].outerCutOff"), light->GetLightSource().GetOuterCutOff());
+						aMesh->GetShader(i)->BindColor(SID("spotLights[0].lightColor"), light->GetLightSource().GetColor());
+						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].constant"), light->GetLightSource().GetConstant());
+						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].linear"), light->GetLightSource().GetLinear());
+						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+					}
+
+					for(const auto* light : dirLightsBuffer){
+						GADGET_BASIC_ASSERT(light != nullptr);
+						aMesh->GetShader(i)->BindVector3(SID("dirLights[0].direction"), light->GetLightSource().GetDirection());
+						aMesh->GetShader(i)->BindColor(SID("dirLights[0].lightColor"), light->GetLightSource().GetColor());
+					}
+				}
+
+				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(aMesh->GetMeshNumIndices(i)), GL_UNSIGNED_INT, nullptr);
+
+				aMesh->Unbind(i);
 			}
 		}
 
@@ -333,6 +389,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 	//So we don't accidentally reuse these pointers later
 	camerasBuffer.clear();
 	rendersBuffer.clear();
+	animRendersBuffer.clear();
 	pointLightsBuffer.clear();
 	spotLightsBuffer.clear();
 	dirLightsBuffer.clear();

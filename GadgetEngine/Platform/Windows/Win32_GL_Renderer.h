@@ -6,6 +6,7 @@
 #include <SDL.h>
 #pragma warning(default : 26819)
 
+#include "Animation/Components/AnimRenderComponent.h"
 #include "Graphics/Renderer.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
@@ -60,6 +61,7 @@ namespace Gadget{
 	private:
 		std::vector<CameraComponent*> camerasBuffer;
 		std::vector<RenderComponent*> rendersBuffer;
+		std::vector<AnimRenderComponent*> animRendersBuffer;
 		std::vector<PointLightComponent*> pointLightsBuffer;
 		std::vector<DirectionalLightComponent*> dirLightsBuffer;
 		std::vector<SpotLightComponent*> spotLightsBuffer;
