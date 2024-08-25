@@ -14,6 +14,8 @@ namespace Gadget{
 
 		void Update(float deltaTime_);
 
+		void AddClip(StringID clipName_);
+
 		const Skeleton& GetSkeleton() const{ return skeleton; }
 
 		Matrix4 GetJointTransform(int32_t jointIndex_) const;

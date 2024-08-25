@@ -5,9 +5,9 @@
 using namespace Gadget;
 
 Animator::Animator(StringID animMeshName_, const Skeleton& skeleton_, const Array<StringID>& clipNames_) : animMeshName(animMeshName_), skeleton(skeleton_), globalTime(0.0f), skeletonInstance(), clips(), currentClip(nullptr), currentPosNodes(), currentRotNodes(), currentScaleNodes(), globalTransformCache(){
+	GADGET_BASIC_ASSERT(animMeshName != StringID::None);
 	GADGET_BASIC_ASSERT(skeleton.GetGlobalInverse().IsValid());
 	GADGET_BASIC_ASSERT(skeleton.IsValidSkeleton());
-	GADGET_BASIC_ASSERT(!clipNames_.IsEmpty());
 
 	AnimMesh* animMeshPtr = App::GetResourceManager().LoadResource<AnimMesh>(animMeshName_); //Claim ownership of the mesh so we can keep the skeleton loaded
 	GADGET_BASIC_ASSERT(animMeshPtr != nullptr);
@@ -21,6 +21,7 @@ Animator::Animator(StringID animMeshName_, const Skeleton& skeleton_, const Arra
 	}
 
 	for(const auto& name : clipNames_){
+		GADGET_BASIC_ASSERT(name != StringID::None);
 		clips.Add(name, App::GetResourceManager().LoadResource<AnimClip>(name));
 		GADGET_BASIC_ASSERT(clips[name] != nullptr);
 	}
@@ -47,6 +48,12 @@ void Animator::Update(float deltaTime_){
 	}
 
 	UpdateSkeletonInstance(currentClip, globalTime);
+}
+
+void Animator::AddClip(StringID clipName_){
+	GADGET_BASIC_ASSERT(clipName_ != StringID::None);
+	clips.Add(clipName_, App::GetResourceManager().LoadResource<AnimClip>(clipName_));
+	GADGET_BASIC_ASSERT(clips[clipName_] != nullptr);
 }
 
 Matrix4 Animator::GetJointTransform(int32_t jointID_) const{
