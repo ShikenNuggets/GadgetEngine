@@ -9,7 +9,7 @@ using namespace Gadget;
 
 ComponentCollection<AnimRenderComponent> AnimRenderComponent::componentCollection = ComponentCollection<AnimRenderComponent>();
 
-AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, std::vector<StringID> cachedMaterials_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), meshInfos(){
+AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, std::vector<StringID> cachedMaterials_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), meshInfos(), animator(nullptr){
 	GADGET_BASIC_ASSERT(parent != nullptr && parent->GetGUID() != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	for(const auto& cm : cachedMaterials_){
@@ -18,6 +18,7 @@ AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName
 	}
 
 	CreateMeshInfo();
+	CreateAnimator();
 
 	for(size_t i = 0; i < meshInfos.size(); i++){
 		size_t indexToUse = i;
@@ -34,13 +35,14 @@ AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, StringID cachedMaterial_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), meshInfos(){
+AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, StringID cachedMaterial_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), meshInfos(), animator(nullptr){
 	GADGET_BASIC_ASSERT(parent != nullptr && parent->GetGUID() != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(cachedMaterial_ != StringID::None);
 	GADGET_BASIC_ASSERT(GetCachedMaterial(cachedMaterial_) != nullptr);
 
 	CreateMeshInfo();
+	CreateAnimator();
 
 	for(auto& m : meshInfos){
 		m.second = cachedMaterial_;
@@ -66,6 +68,8 @@ AnimRenderComponent::AnimRenderComponent(const ComponentProperties& props_) : Co
 AnimRenderComponent::~AnimRenderComponent(){
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 
+	delete animator;
+
 	for(const auto& m : meshInfos){
 		delete m.first;
 	}
@@ -73,6 +77,12 @@ AnimRenderComponent::~AnimRenderComponent(){
 	componentCollection.Remove(this);
 
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == nullptr);
+}
+
+void AnimRenderComponent::Update(float deltaTime_){
+	if(animator != nullptr){
+		animator->Update(deltaTime_);
+	}
 }
 
 void AnimRenderComponent::Bind(size_t index_){
@@ -89,6 +99,14 @@ void AnimRenderComponent::Unbind(size_t index_){
 	meshInfos[index_].first->Unbind();
 }
 
+void AnimRenderComponent::AddClip(StringID clipName_){
+	if(animator != nullptr){
+		animator->AddClip(clipName_);
+	}else{
+		GADGET_LOG_WARNING(SID("ANIM"), "Tried to add animation clip to an AnimRenderComponent with no Animator");
+	}
+}
+
 void AnimRenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(modelName != StringID::None);
 
@@ -103,6 +121,11 @@ void AnimRenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 
 	App::GetResourceManager().UnloadResource(modelName);
+}
+
+void AnimRenderComponent::CreateAnimator(){
+	AnimMesh* mesh = App::GetResourceManager().LoadResource<AnimMesh>(modelName);
+	animator = new Animator(modelName, mesh->skeleton, {});
 }
 
 ComponentProperties AnimRenderComponent::Serialize() const{
@@ -123,6 +146,7 @@ void AnimRenderComponent::Deserialize(const ComponentProperties& props_){
 	GADGET_BASIC_ASSERT(shaderName != StringID::None);
 
 	CreateMeshInfo();
+	CreateAnimator();
 
 	//TODO - This is all very dumb
 	if(materialType == DiffuseTextureMaterial::type){

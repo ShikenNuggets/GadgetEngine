@@ -1,6 +1,7 @@
 #ifndef GADGET_ANIM_RENDER_COMPONENT_H
 #define GADGET_ANIM_RENDER_COMPONENT_H
 
+#include "Animation/Animator.h"
 #include "Animation/AnimMesh.h"
 #include "Data/Pair.h"
 #include "Game/Component.h"
@@ -26,8 +27,11 @@ namespace Gadget{
 			return componentCollection.GetComponents(objectGuid_);
 		}
 
+		void Update(float deltaTime_);
 		void Bind(size_t index_);
 		void Unbind(size_t index_);
+
+		void AddClip(StringID clipName_);
 
 		inline constexpr size_t GetNumSubmeshes() const{ return meshInfos.size(); }
 
@@ -77,17 +81,19 @@ namespace Gadget{
 
 		virtual ComponentProperties Serialize() const override;
 
-		void CreateMeshInfo();
-
 	protected:
 		virtual void Deserialize(const ComponentProperties& props_) override;
 
 		Material* GetCachedMaterial(size_t meshIndex_) const;
 		Material* GetCachedMaterial(StringID material_) const;
 
+		void CreateMeshInfo();
+		void CreateAnimator();
+
 	private:
 		StringID modelName;
 		std::vector<Pair<MeshInfo*, StringID>> meshInfos;
+		Animator* animator;
 
 		static ComponentCollection<AnimRenderComponent> componentCollection;
 	};
