@@ -14,7 +14,15 @@ namespace Example{
 		ExampleGame() : GameInterface("Example Game"){}
 
 		virtual void LoadGame() final override{
+			DefineMaterials();
 			Gadget::App::GetSceneManager().AddScene(new ExampleScene());
+		}
+
+		void DefineMaterials(){
+			Gadget::App::GetMaterialCache().AddMaterial(SID("Invalid"), new Gadget::ColorMaterial(Gadget::Color::Pink(), SID("ColorShader")));
+
+			Gadget::App::GetMaterialCache().AddMaterial(SID("BlueMaterial"), new Gadget::ColorMaterial(Gadget::Color::Blue(), SID("ColorShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("BlackMaterial"), new Gadget::ColorMaterial(Gadget::Color::Black(), SID("ColorShader")));
 		}
 	};
 }

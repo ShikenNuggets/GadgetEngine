@@ -32,9 +32,9 @@ int main(int argc, char* argv[]){
 		std::cout << argv[i] << "\n";
 	}
 
-	//ExampleGame game = ExampleGame();
+	ExampleGame game = ExampleGame();
 	//Pong::PongGame game = Pong::PongGame();
-	StarHawx::StarHawxGame game = StarHawx::StarHawxGame();
+	//StarHawx::StarHawxGame game = StarHawx::StarHawxGame();
 
 	try{
 		Gadget::App::GetInstance().Run(game);
