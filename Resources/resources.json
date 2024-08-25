@@ -165,7 +165,7 @@
         },
         {
             "path1": "Resources/Shaders/OpenGL/screenVert.glsl",
-            "path2": "Resources/Shaders/OpenGL/screenInversionEffectFrag.glsl",
+            "path2": "Resources/Shaders/OpenGL/screenInversionFrag.glsl",
             "resource_type": "GL_Shader"
         }
     ],
