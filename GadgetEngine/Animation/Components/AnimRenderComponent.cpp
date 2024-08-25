@@ -7,6 +7,8 @@
 
 using namespace Gadget;
 
+ComponentCollection<AnimRenderComponent> AnimRenderComponent::componentCollection = ComponentCollection<AnimRenderComponent>();
+
 AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, std::vector<StringID> cachedMaterials_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), meshInfos(){
 	GADGET_BASIC_ASSERT(parent != nullptr && parent->GetGUID() != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
