@@ -13,6 +13,7 @@ uniform mat3 normalMatrix;
 
 out vec3 outNormal;
 out vec2 outTexCoord;
+out vec3 outFragPos;
 
 uniform mat4 bones[128];
 
@@ -24,6 +25,7 @@ void main(){
 
 	outNormal = normalize(normalMatrix * vertPos);
 	outTexCoord = texCoords;
+	outFragPos = vec3((modelMatrix * (boneTransform * vec4(vertPos, 1.0))));
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * (boneTransform * vec4(vertPos, 1.0));
 }

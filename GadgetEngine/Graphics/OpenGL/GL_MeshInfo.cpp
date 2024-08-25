@@ -18,17 +18,17 @@ GL_MeshInfo::GL_MeshInfo(const Submesh& mesh_) : MeshInfo(mesh_.indices.size()),
 	//Position
 	glEnableVertexArrayAttrib(vao, 0);
 	glVertexArrayAttribBinding(vao, 0, 0);
-	glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+	glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, position));
 
 	//Normal
 	glEnableVertexArrayAttrib(vao, 1);
 	glVertexArrayAttribBinding(vao, 1, 0);
-	glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3));
+	glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, normal));
 
 	//Texture Coordinates
 	glEnableVertexArrayAttrib(vao, 2);
 	glVertexArrayAttribBinding(vao, 2, 0);
-	glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, sizeof(Vector3) + sizeof(Vector3));
+	glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, offsetof(Vertex, texCoords));
 
 	glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(Vertex));
 	glVertexArrayElementBuffer(vao, ebo);
@@ -75,7 +75,7 @@ GL_AnimMeshInfo::GL_AnimMeshInfo(const AnimSubmesh& mesh_) : MeshInfo(mesh_.indi
 	//Position
 	glEnableVertexArrayAttrib(vao, 0);
 	glVertexArrayAttribBinding(vao, 0, 0);
-	glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+	glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, offsetof(AnimVertex, vertex.position));
 
 	//Normal
 	glEnableVertexArrayAttrib(vao, 1);
@@ -90,12 +90,12 @@ GL_AnimMeshInfo::GL_AnimMeshInfo(const AnimSubmesh& mesh_) : MeshInfo(mesh_.indi
 	//Joint IDs
 	glEnableVertexArrayAttrib(vao, 3);
 	glVertexArrayAttribBinding(vao, 3, 0);
-	glVertexArrayAttribFormat(vao, 3, AnimVertex::maxJointWeights, GL_FLOAT, GL_FALSE, offsetof(AnimVertex, jointIDs));
+	glVertexArrayAttribFormat(vao, 3, AnimVertex::maxJointWeights, GL_INT, GL_FALSE, offsetof(AnimVertex, jointIDs));
 
 	//Joint Weights
-	glEnableVertexArrayAttrib(vao, 3);
-	glVertexArrayAttribBinding(vao, 3, 0);
-	glVertexArrayAttribFormat(vao, 3, AnimVertex::maxJointWeights, GL_FLOAT, GL_FALSE, offsetof(AnimVertex, jointWeights));
+	glEnableVertexArrayAttrib(vao, 4);
+	glVertexArrayAttribBinding(vao, 4, 0);
+	glVertexArrayAttribFormat(vao, 4, AnimVertex::maxJointWeights, GL_FLOAT, GL_FALSE, offsetof(AnimVertex, jointWeights));
 
 	glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(AnimVertex));
 	glVertexArrayElementBuffer(vao, ebo);
