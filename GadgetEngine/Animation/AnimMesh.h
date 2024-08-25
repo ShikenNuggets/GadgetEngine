@@ -23,13 +23,12 @@ namespace Gadget{
 
 	class AnimMesh : public Resource{
 	public:
-		AnimMesh(const Array<AnimSubmesh>& submeshes_, const Skeleton& skeleton_, const Matrix4& globalInverse_) : submeshes(submeshes_), skeleton(skeleton_), globalInverse(globalInverse_){}
+		AnimMesh(const Array<AnimSubmesh>& submeshes_, const Skeleton& skeleton_) : submeshes(submeshes_), skeleton(skeleton_){}
 
 		static constexpr const char* typeName = "AnimMesh";
 
 		const Array<AnimSubmesh> submeshes;
 		const Skeleton skeleton;
-		const Matrix4 globalInverse;
 	};
 
 	class AnimMeshResourceContainer : public ResourceContainer{

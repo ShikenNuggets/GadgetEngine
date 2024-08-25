@@ -4,6 +4,8 @@
 
 using namespace Gadget;
 
+Skeleton::Skeleton(const Matrix4& globalInverse_) : joints(), globalInverse(globalInverse_){}
+
 void Skeleton::AddJoint(const Joint& joint_){
 	GADGET_BASIC_ASSERT(!HasJoint(joint_.name));
 	joints.Add(joint_);
@@ -62,6 +64,8 @@ const Joint& Skeleton::GetJoint(int32_t id_) const{
 
 	return joints[id_];
 }
+
+Matrix4 Skeleton::GetGlobalInverse() const{ return globalInverse; }
 
 bool Skeleton::HasJoint(StringID name_) const{
 	GADGET_BASIC_ASSERT(name_ != StringID::None);

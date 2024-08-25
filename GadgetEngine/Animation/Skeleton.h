@@ -19,7 +19,7 @@ namespace Gadget{
 
 	class Skeleton{
 	public:
-		Skeleton() = default;
+		Skeleton(const Matrix4& globalInverse_);
 
 		void AddJoint(const Joint& joint_);
 		void AddJoint(StringID name_, int32_t parentID_, const Matrix4& inverseBindPose_);
@@ -29,6 +29,7 @@ namespace Gadget{
 
 		const Joint& GetJoint(StringID name_) const;
 		const Joint& GetJoint(int32_t id_) const;
+		Matrix4 GetGlobalInverse() const;
 
 		bool HasJoint(StringID name_) const;
 
@@ -36,6 +37,7 @@ namespace Gadget{
 
 	private:
 		Array<Joint> joints;
+		Matrix4 globalInverse;
 	};
 }
 

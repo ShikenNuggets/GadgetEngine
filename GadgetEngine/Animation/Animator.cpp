@@ -5,7 +5,7 @@
 using namespace Gadget;
 
 Animator::Animator(const AnimMesh& mesh_, const Array<StringID>& clipNames_) : animMesh(mesh_), globalTime(0.0f), skeletonInstance(), clips(), currentClip(nullptr), currentPosNodes(), currentRotNodes(), currentScaleNodes(), globalTransformCache(){
-	GADGET_BASIC_ASSERT(mesh_.globalInverse.IsValid());
+	GADGET_BASIC_ASSERT(mesh_.skeleton.GetGlobalInverse().IsValid());
 	GADGET_BASIC_ASSERT(!mesh_.submeshes.IsEmpty());
 	GADGET_BASIC_ASSERT(mesh_.skeleton.IsValidSkeleton());
 	GADGET_BASIC_ASSERT(!clipNames_.IsEmpty());
@@ -83,6 +83,6 @@ void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 		}
 
 		globalTransformCache.Add(parentTransform * result.result);
-		skeletonInstance[i] = animMesh.globalInverse * globalTransformCache[i] * joint.inverseBindPose;
+		skeletonInstance[i] = animMesh.skeleton.GetGlobalInverse() * globalTransformCache[i] * joint.inverseBindPose;
 	}
 }

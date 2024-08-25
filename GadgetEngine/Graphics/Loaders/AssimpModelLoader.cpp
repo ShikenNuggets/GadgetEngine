@@ -114,14 +114,14 @@ AnimMesh* AssimpModelLoader::LoadAnimMesh(const std::string& filePath_){
 
 	ProcessAnimNode(scene->mRootNode, scene, subMeshes, joints);
 
-	Skeleton sk = Skeleton();
+	Skeleton sk = Skeleton(ConvertMatrix4(scene->mRootNode->mTransformation).Inverse());
 	for(const auto& j : joints){
 		sk.AddJoint(j);
 	}
 
 	GADGET_BASIC_ASSERT(sk.IsValidSkeleton());
 
-	return new AnimMesh(subMeshes, sk, ConvertMatrix4(scene->mRootNode->mTransformation).Inverse());
+	return new AnimMesh(subMeshes, sk);
 }
 
 void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scene_, Array<AnimSubmesh>& inSubMeshes_, Array<Joint>& inJoints_){
