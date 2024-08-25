@@ -27,7 +27,17 @@ namespace Gadget{
 			return value;
 		}
 
-		T Peek() const{
+		const T& Peek() const{
+			GADGET_BASIC_ASSERT(!data.IsEmpty());
+			if(data.IsEmpty()){
+				Debug::ThrowFatalError(SID("DATA"), "Called Peek on an empty stack!", ErrorCode::Invalid_State, __FILE__, __LINE__);
+			}
+
+			GADGET_BASIC_ASSERT(data.Front() != nullptr);
+			return data.Front()->value;
+		}
+
+		T& Peek(){
 			GADGET_BASIC_ASSERT(!data.IsEmpty());
 			if(data.IsEmpty()){
 				Debug::ThrowFatalError(SID("DATA"), "Called Peek on an empty stack!", ErrorCode::Invalid_State, __FILE__, __LINE__);
