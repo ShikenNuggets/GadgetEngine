@@ -26,6 +26,12 @@
     <ClCompile Include="DataTests\ListTests.cpp">
       <Filter>DataTests</Filter>
     </ClCompile>
+    <ClCompile Include="DataTests\QueueTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTests\StackTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
     <ClCompile Include="DataTests\StaticArrayTests.cpp">
       <Filter>DataTests</Filter>
     </ClCompile>
