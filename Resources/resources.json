@@ -106,6 +106,16 @@
     ],
     [
         {
+            "string": "AnimColorShader"
+        },
+        {
+            "path1": "Resources/Shaders/OpenGL/animVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/colorFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
             "string": "SkyboxShader"
         },
         {

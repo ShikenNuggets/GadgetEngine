@@ -21,8 +21,8 @@ namespace Example{
 		void DefineMaterials(){
 			Gadget::App::GetMaterialCache().AddMaterial(SID("Invalid"), new Gadget::ColorMaterial(Gadget::Color::Pink(), SID("ColorShader")));
 
-			Gadget::App::GetMaterialCache().AddMaterial(SID("BlueMaterial"), new Gadget::ColorMaterial(Gadget::Color::Blue(), SID("ColorShader")));
-			Gadget::App::GetMaterialCache().AddMaterial(SID("BlackMaterial"), new Gadget::ColorMaterial(Gadget::Color::Black(), SID("ColorShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("BlueMaterial"), new Gadget::ColorMaterial(Gadget::Color::Blue(), SID("AnimColorShader")));
+			Gadget::App::GetMaterialCache().AddMaterial(SID("BlackMaterial"), new Gadget::ColorMaterial(Gadget::Color::Black(), SID("AnimColorShader")));
 		}
 	};
 }
