@@ -410,3 +410,32 @@ TEST_CASE("String Longest Substring", "[string_longest_substring]"){
 	REQUIRE(LengthOfLongestSubstring(s2) == 1);
 	REQUIRE(LengthOfLongestSubstring(s3) == 3);
 }
+
+//------------------------------------------------------------//
+//------------ Score of a String (Leetcode 3110) -------------//
+//------------------------------------------------------------//
+
+static inline size_t GetStringScore(const String& str){
+	if(str.Length() < 2){
+		return 0;
+	}
+
+	size_t score = 0;
+
+	for(int64_t i = 0; i < str.Length() - 1; i++){
+		int64_t aVal = str[i];
+		int64_t bVal = str[i + 1];
+
+		score += static_cast<size_t>(Math::Abs(aVal - bVal));
+	}
+
+	return score;
+}
+
+TEST_CASE("String Get String Score", "[string_get_string_score]"){
+	REQUIRE(GetStringScore("hello") == 13);
+	REQUIRE(GetStringScore("zaz") == 50);
+	REQUIRE(GetStringScore("") == 0);
+	REQUIRE(GetStringScore("a") == 0);
+	REQUIRE(GetStringScore("aaaaaaaaaaaa") == 0);
+}
