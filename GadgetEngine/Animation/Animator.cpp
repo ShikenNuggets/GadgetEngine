@@ -20,6 +20,7 @@ Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : 
 	GADGET_BASIC_ASSERT(skeleton->GetGlobalInverse().IsValid());
 	GADGET_BASIC_ASSERT(skeleton->IsValidSkeleton());
 	
+	skeletonInstance.Reserve(skeleton->GetJointCount());
 	for(int32_t i = 0; i < skeleton->GetJointCount(); i++){
 		skeletonInstance.Add(Matrix4::Identity());
 
@@ -35,6 +36,7 @@ Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : 
 	}
 
 	globalTransformCache.Reserve(skeleton->GetJointCount());
+	SetDefaultSkeletonInstanceState();
 }
 
 Animator::~Animator(){
@@ -78,6 +80,10 @@ Matrix4 Animator::GetJointTransform(int32_t jointID_) const{
 void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 	GADGET_BASIC_ASSERT(clip_ != nullptr);
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(time_));
+	if(clip_ == nullptr || globalTransformCache.IsEmpty()){
+		SetDefaultSkeletonInstanceState();
+	}
+
 	if(clip_ == nullptr){
 		return;
 	}
@@ -101,7 +107,33 @@ void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 			parentTransform = globalTransformCache[parentID];
 		}
 
-		globalTransformCache.Add(parentTransform * result.result);
+		const Matrix4 transform = parentTransform * result.result;
+		globalTransformCache.Add(transform);
+		skeletonInstance[i] = skeleton->GetGlobalInverse() * transform * joint.inverseBindPose;
+	}
+}
+
+void Animator::SetDefaultSkeletonInstanceState(){
+	GADGET_BASIC_ASSERT(globalTransformCache.IsEmpty());
+	globalTransformCache.Clear();
+
+	for(int32_t i = 0; i < skeletonInstance.Size(); i++){
+		const Joint& joint = skeleton->GetJoint(i);
+		GADGET_BASIC_ASSERT(joint.name != StringID::None);
+		GADGET_BASIC_ASSERT(joint.parentID >= -1);
+		GADGET_BASIC_ASSERT(joint.inverseBindPose.IsValid());
+
+		currentPosNodes[joint.name] = nullptr;
+		currentRotNodes[joint.name] = nullptr;
+		currentScaleNodes[joint.name] = nullptr;
+
+		int32_t parentID = joint.parentID;
+		Matrix4 parentTransform = Matrix4::Identity();
+		if(joint.parentID >= 0){
+			parentTransform = globalTransformCache[parentID];
+		}
+
+		globalTransformCache.Add(parentTransform * Matrix4::Identity());
 		skeletonInstance[i] = skeleton->GetGlobalInverse() * globalTransformCache[i] * joint.inverseBindPose;
 	}
 }

@@ -41,6 +41,7 @@ namespace Gadget{
 		Array<Matrix4> globalTransformCache;
 
 		virtual void UpdateSkeletonInstance(AnimClip* clip_, float time_);
+		void SetDefaultSkeletonInstanceState();
 	};
 }
 
