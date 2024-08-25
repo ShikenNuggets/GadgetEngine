@@ -45,6 +45,7 @@ namespace Gadget{
 		}
 
 		std::string GetShaderLog(GLuint shader_);
+		std::string GetProgramLog(GLuint program_);
 	};
 
 	class GL_ShaderResourceContainer : public ResourceContainer{

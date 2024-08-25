@@ -47,14 +47,14 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 
 	glCompileShader(vertShader);
 	glGetShaderiv(vertShader, GL_COMPILE_STATUS, &status);
-	GADGET_BASIC_ASSERT(status != GL_FALSE);
+	GADGET_ASSERT(status != GL_FALSE, "Vertex shader compile failed! GL Error: " + GetShaderLog(vertShader));
 	if(status == GL_FALSE){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Vertex Shader! GL Error: " + GetShaderLog(vertShader), ErrorCode::OpenGL_ShaderCompileFailed, __FILE__, __LINE__);
 	}
 
 	glCompileShader(fragShader);
 	glGetShaderiv(fragShader, GL_COMPILE_STATUS, &status);
-	GADGET_BASIC_ASSERT(status != GL_FALSE);
+	GADGET_ASSERT(status != GL_FALSE, "Fragment shader compile failed! GL Error: " + GetShaderLog(fragShader));
 	if(status == GL_FALSE){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Fragment Shader! GL Error: " + GetShaderLog(fragShader), ErrorCode::OpenGL_ShaderCompileFailed, __FILE__, __LINE__);
 	}
@@ -65,9 +65,9 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 
 	glLinkProgram(shader);
 	glGetProgramiv(shader, GL_LINK_STATUS, &status);
-	GADGET_BASIC_ASSERT(status != GL_FALSE);
+	GADGET_ASSERT(status != GL_FALSE, "Shader linking failed! GL Error: " + GetProgramLog(shader));
 	if(status == GL_FALSE){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not link Shader! GL Error: " + GetShaderLog(shader), ErrorCode::OpenGL_Error, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not link Shader! GL Error: " + GetProgramLog(shader), ErrorCode::OpenGL_Error, __FILE__, __LINE__);
 	}
 
 	glDetachShader(shader, fragShader);
@@ -169,6 +169,20 @@ void GL_Shader::BindColor(StringID uniformName_, const Color& color_){
 }
 
 std::string GL_Shader::GetShaderLog(GLuint shader_){
+	std::string errorLog = "";
+
+	GLsizei errorLogSize = 0;
+	glGetShaderiv(shader_, GL_INFO_LOG_LENGTH, &errorLogSize);
+
+	if(errorLogSize > 0){
+		errorLog.resize(errorLogSize);
+		glGetShaderInfoLog(shader_, errorLogSize, &errorLogSize, &errorLog[0]);
+	}
+
+	return errorLog;
+}
+
+std::string GL_Shader::GetProgramLog(GLuint shader_){
 	std::string errorLog = "";
 
 	GLsizei errorLogSize = 0;
