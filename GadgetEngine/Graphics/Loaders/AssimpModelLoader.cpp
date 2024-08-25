@@ -101,6 +101,7 @@ void AssimpModelLoader::ProcessNode(const aiNode* node, const aiScene* scene, st
 
 AnimMesh* AssimpModelLoader::LoadAnimMesh(const std::string& filePath_){
 	Assimp::Importer importer;
+	importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 	const aiScene* scene = importer.ReadFile(filePath_, gLoadFlags);
 	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
 		GADGET_LOG_ERROR(SID("ASSET"), "AssImp could not load model! AssImp Error: " + std::string(importer.GetErrorString()));
@@ -168,6 +169,10 @@ void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scen
 			Joint joint;
 			joint.name = StringID::ProcessString(bone->mName.C_Str());
 			joint.inverseBindPose = ConvertMatrix4(bone->mOffsetMatrix);
+
+			if(inJoints_.Contains(joint)){
+				continue;
+			}
 
 			if(bone->mNode == nullptr || bone->mNode->mParent == nullptr){
 				joint.parentID = -1;
