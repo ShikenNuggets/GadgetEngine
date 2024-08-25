@@ -9,20 +9,23 @@
 namespace Gadget{
 	class Animator{
 	public:
-		Animator(StringID animMeshName_, const Skeleton& skeleton_, const Array<StringID>& clipNames_);
+		Animator(StringID animMeshName_, const Array<StringID>& clipNames_);
 		~Animator();
 
 		void Update(float deltaTime_);
 
 		void AddClip(StringID clipName_);
 
-		const Skeleton& GetSkeleton() const{ return skeleton; }
+		const Skeleton& GetSkeleton() const{
+			GADGET_BASIC_ASSERT(skeleton != nullptr);
+			return *skeleton;
+		}
 
 		Matrix4 GetJointTransform(int32_t jointIndex_) const;
 
 	private:
 		StringID animMeshName;
-		const Skeleton& skeleton;
+		const Skeleton* skeleton;
 		float globalTime;
 		Array<Matrix4> skeletonInstance;
 

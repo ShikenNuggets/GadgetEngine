@@ -124,8 +124,11 @@ void AnimRenderComponent::CreateMeshInfo(){
 }
 
 void AnimRenderComponent::CreateAnimator(){
-	AnimMesh* mesh = App::GetResourceManager().LoadResource<AnimMesh>(modelName);
-	animator = new Animator(modelName, mesh->skeleton, {});
+	GADGET_BASIC_ASSERT(modelName != StringID::None);
+	GADGET_BASIC_ASSERT(animator == nullptr); //This function shouldn't clobber an existing animator
+	if(animator == nullptr){
+		animator = new Animator(modelName, {});
+	}
 }
 
 ComponentProperties AnimRenderComponent::Serialize() const{

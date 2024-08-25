@@ -4,20 +4,28 @@
 
 using namespace Gadget;
 
-Animator::Animator(StringID animMeshName_, const Skeleton& skeleton_, const Array<StringID>& clipNames_) : animMeshName(animMeshName_), skeleton(skeleton_), globalTime(0.0f), skeletonInstance(), clips(), currentClip(nullptr), currentPosNodes(), currentRotNodes(), currentScaleNodes(), globalTransformCache(){
+Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : animMeshName(animMeshName_), skeleton(nullptr), globalTime(0.0f), skeletonInstance(), clips(), currentClip(nullptr), currentPosNodes(), currentRotNodes(), currentScaleNodes(), globalTransformCache(){
 	GADGET_BASIC_ASSERT(animMeshName != StringID::None);
-	GADGET_BASIC_ASSERT(skeleton.GetGlobalInverse().IsValid());
-	GADGET_BASIC_ASSERT(skeleton.IsValidSkeleton());
-
 	AnimMesh* animMeshPtr = App::GetResourceManager().LoadResource<AnimMesh>(animMeshName_); //Claim ownership of the mesh so we can keep the skeleton loaded
 	GADGET_BASIC_ASSERT(animMeshPtr != nullptr);
+	if(animMeshPtr != nullptr){
+		skeleton = &animMeshPtr->skeleton;
+	}
+
+	GADGET_BASIC_ASSERT(skeleton != nullptr);
+	if(skeleton == nullptr){
+		Debug::ThrowFatalError(SID("ANIM"), "Skeleton must not be nullptr!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+	}
+
+	GADGET_BASIC_ASSERT(skeleton->GetGlobalInverse().IsValid());
+	GADGET_BASIC_ASSERT(skeleton->IsValidSkeleton());
 	
-	for(int32_t i = 0; i < skeleton.GetJointCount(); i++){
+	for(int32_t i = 0; i < skeleton->GetJointCount(); i++){
 		skeletonInstance.Add(Matrix4::Identity());
 
-		currentPosNodes.Add(skeleton.GetJoint(i).name, nullptr);
-		currentRotNodes.Add(skeleton.GetJoint(i).name, nullptr);
-		currentScaleNodes.Add(skeleton.GetJoint(i).name, nullptr);
+		currentPosNodes.Add(skeleton->GetJoint(i).name, nullptr);
+		currentRotNodes.Add(skeleton->GetJoint(i).name, nullptr);
+		currentScaleNodes.Add(skeleton->GetJoint(i).name, nullptr);
 	}
 
 	for(const auto& name : clipNames_){
@@ -26,7 +34,7 @@ Animator::Animator(StringID animMeshName_, const Skeleton& skeleton_, const Arra
 		GADGET_BASIC_ASSERT(clips[name] != nullptr);
 	}
 
-	globalTransformCache.Reserve(skeleton.GetJointCount());
+	globalTransformCache.Reserve(skeleton->GetJointCount());
 }
 
 Animator::~Animator(){
@@ -77,7 +85,7 @@ void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 	globalTransformCache.Clear();
 
 	for(int32_t i = 0; i < skeletonInstance.Size(); i++){
-		const Joint& joint = skeleton.GetJoint(i);
+		const Joint& joint = skeleton->GetJoint(i);
 		GADGET_BASIC_ASSERT(joint.name != StringID::None);
 		GADGET_BASIC_ASSERT(joint.parentID >= -1);
 		GADGET_BASIC_ASSERT(joint.inverseBindPose.IsValid());
@@ -94,6 +102,6 @@ void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 		}
 
 		globalTransformCache.Add(parentTransform * result.result);
-		skeletonInstance[i] = skeleton.GetGlobalInverse() * globalTransformCache[i] * joint.inverseBindPose;
+		skeletonInstance[i] = skeleton->GetGlobalInverse() * globalTransformCache[i] * joint.inverseBindPose;
 	}
 }
