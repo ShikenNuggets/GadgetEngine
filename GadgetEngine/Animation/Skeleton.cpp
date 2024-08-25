@@ -1,6 +1,6 @@
 #include "Skeleton.h"
 
-#include "Data/HashTable.h"
+#include "Data/Pair.h"
 
 using namespace Gadget;
 
@@ -78,19 +78,40 @@ bool Skeleton::HasJoint(StringID name_) const{
 bool Skeleton::IsValidSkeleton() const{
 	GADGET_ASSERT(joints.Size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
 	
-	HashTable<int32_t, bool> foundIDs;
-	foundIDs.Add(-1, true);
+	bool foundRootNode = false;
+	Array<Pair<int32_t, bool>> confirmedJoints;
+	for(int32_t i = 0; i < joints.Size(); i++){
+		confirmedJoints.Add(Pair(i, false));
+	}
 
 	for(int32_t i = 0; i < joints.Size(); i++){
-		foundIDs.Add(i, true);
+		const Joint& currentJoint = joints[i];
 
-		if(joints[i].parentID == i){
+		if(currentJoint.parentID == i){
+			GADGET_LOG_WARNING(SID("ANIM"), "Skeleton joint [" + currentJoint.name.GetString() + "] is parented to itself");
 			return false;
 		}
 
-		if(!foundIDs.Contains(joints[i].parentID)){
-			return false;
+		if(currentJoint.parentID < -1){
+			GADGET_LOG_WARNING(SID("ANIM"), "Skeleton joint [" + currentJoint.name.GetString() + "] has an invalid parent ID");
+			return false; //-1 denotes no parent, anything lower probably means something went wrong
 		}
+
+		if(currentJoint.parentID == -1){
+			if(foundRootNode){
+				GADGET_LOG_WARNING(SID("ANIM"), "Skeleton joint [" + currentJoint.name.GetString() + "] identified as a root node, but skeleton already has a root node!");
+				return false; //Skeleton has multiple root nodes
+			}else{
+				foundRootNode = true;
+			}
+		}
+
+		if(currentJoint.parentID >= 0 && confirmedJoints[currentJoint.parentID].second == false){
+			GADGET_LOG_WARNING(SID("ANIM"), "Skeleton joint ]" + currentJoint.name.GetString() + "]'s parent was not found");
+			return false; //Parent was not found yet
+		}
+
+		confirmedJoints[i].second = true;
 	}
 
 	return true;
