@@ -10,6 +10,8 @@ namespace Gadget{
 	struct Joint{
 		explicit Joint() : name(StringID::None), parentID(-1), inverseBindPose(Matrix4::Identity()){}
 
+		bool operator==(const Joint& other_){ return other_.name == name; } //This is somewhat bad form, but being able to compare joints by name is very handy
+
 		StringID name;
 		int32_t parentID;
 		Matrix4 inverseBindPose;
