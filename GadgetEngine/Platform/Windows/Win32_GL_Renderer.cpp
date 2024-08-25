@@ -203,7 +203,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 			for(size_t i = 0; i < aMesh->GetNumSubmeshes(); i++){
 				aMesh->Bind(i);
 				
-				for(int32_t j = 0; j < skeletonInstance.Size(); i++){
+				for(int32_t j = 0; j < skeletonInstance.Size(); j++){
 					aMesh->GetShader(i)->BindMatrix4(StringID::ProcessString("bones[" + std::to_string(j) + "]"), skeletonInstance[j]);
 				}
 
