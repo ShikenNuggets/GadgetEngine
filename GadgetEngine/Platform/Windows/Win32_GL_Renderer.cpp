@@ -198,8 +198,15 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		//------------------------------------------------------------------------------------------------------------------------
 		//Animated meshes
 		for(const auto& aMesh : animRendersBuffer){
+			const Array<Matrix4>& skeletonInstance = aMesh->GetCurrentSkeletonInstance();
+
 			for(size_t i = 0; i < aMesh->GetNumSubmeshes(); i++){
 				aMesh->Bind(i);
+				
+				for(int32_t j = 0; j < skeletonInstance.Size(); i++){
+					aMesh->GetShader(i)->BindMatrix4(StringID::ProcessString("bones[" + std::to_string(j) + "]"), skeletonInstance[j]);
+				}
+
 				aMesh->GetShader(i)->BindMatrix4(SID("projectionMatrix"), proj);
 				aMesh->GetShader(i)->BindMatrix4(SID("viewMatrix"), view);
 

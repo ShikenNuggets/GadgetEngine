@@ -57,6 +57,11 @@ namespace Gadget{
 			return meshInfos[index_].first->GetNumIndices();
 		}
 
+		inline const Array<Matrix4>& GetCurrentSkeletonInstance() const{
+			GADGET_BASIC_ASSERT(animator != nullptr);
+			return animator->GetCurrentSkeletonInstance();
+		}
+
 		Material* GetMaterial(size_t index_){
 			GADGET_BASIC_ASSERT(index_ < meshInfos.size());
 			if(index_ >= meshInfos.size()){

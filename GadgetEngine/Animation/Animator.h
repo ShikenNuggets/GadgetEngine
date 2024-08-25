@@ -21,6 +21,8 @@ namespace Gadget{
 			return *skeleton;
 		}
 
+		inline const Array<Matrix4>& GetCurrentSkeletonInstance() const{ return globalTransformCache; }
+
 		Matrix4 GetJointTransform(int32_t jointIndex_) const;
 
 	private:
