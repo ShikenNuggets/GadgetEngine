@@ -170,17 +170,15 @@ void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scen
 			joint.name = StringID::ProcessString(bone->mName.C_Str());
 			joint.inverseBindPose = ConvertMatrix4(bone->mOffsetMatrix);
 
-			if(inJoints_.Contains(joint)){
-				continue;
-			}
+			if(!inJoints_.Contains(joint)){
+				if(bone->mNode == nullptr || bone->mNode->mParent == nullptr){
+					joint.parentID = -1;
+				}else{
+					joint.parentID = GetJointIndex(inJoints_, StringID::ProcessString(bone->mNode->mParent->mName.C_Str()));
+				}
 
-			if(bone->mNode == nullptr || bone->mNode->mParent == nullptr){
-				joint.parentID = -1;
-			}else{
-				joint.parentID = GetJointIndex(inJoints_, StringID::ProcessString(bone->mNode->mParent->mName.C_Str()));
+				inJoints_.Add(joint);
 			}
-
-			inJoints_.Add(joint);
 
 			//Per-vertex skinning data
 			for(unsigned int k = 0; k < bone->mNumWeights; k++){
