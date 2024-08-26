@@ -14,7 +14,7 @@ out vec2 outTexCoord;
 out vec3 outFragPos;
 
 void main(){
-	outNormal = normalize(normalMatrix * vertPos);
+	outNormal = normalize(normalMatrix * vertNorm);
 	outTexCoord = texCoords;
 	outFragPos = vec3(modelMatrix * vec4(vertPos, 1.0));
 
