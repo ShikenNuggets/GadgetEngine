@@ -12,7 +12,7 @@ namespace Gadget{
 		float time;
 		T value;
 
-		constexpr KeyFrame(float time_, const T& value_) : time(Math::Clamp(0.0f, 1.0f, time_)), value(value_){}
+		constexpr KeyFrame(float time_, const T& value_) : time(time_), value(value_){}
 	};
 
 	using VectorKey = KeyFrame<Vector3>;
