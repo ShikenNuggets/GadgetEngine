@@ -66,3 +66,62 @@ TEST_CASE("Stack Set of Stacks" "[stack_set_of_stacks]"){
 	set.Pop();					REQUIRE(set.Size() == 4);	REQUIRE(set.Peek() == 4);	REQUIRE(set.NumStacks() == 2);
 	set.Pop();					REQUIRE(set.Size() == 3);	REQUIRE(set.Peek() == 3);	REQUIRE(set.NumStacks() == 1);
 }
+
+//------------------------------------------------------------//
+//--------------- Queue of Stacks (CTCI 3.4) -----------------//
+//------------------------------------------------------------//
+
+template <typename T>
+class QueueOfStacks{
+public:
+	QueueOfStacks() : stackNew(), stackOld(){}
+	~QueueOfStacks() = default;
+
+	void Add(const T& value_){
+		stackNew.Push(value_);
+	}
+
+	T Remove(){
+		ShiftStacks();
+		return stackOld.Pop();
+	}
+
+	const T& Peek(){
+		ShiftStacks();
+		return stackOld.Peek();
+	}
+
+	size_t Size() const{ return stackNew.Size() + stackOld.Size(); }
+	bool IsEmpty() const{ return Size() == 0; }
+
+private:
+	Stack<T> stackNew;
+	Stack<T> stackOld;
+
+	void ShiftStacks(){
+		if(!stackOld.IsEmpty()){
+			return; //If we shift over while the old stack has elements, the order will get messed up
+		}
+
+		//Pushing all the new elements into the old stack reverses the order to allow for FIFO
+		while(!stackNew.IsEmpty()){
+			stackOld.Push(stackNew.Pop());
+		}
+	}
+};
+
+TEST_CASE("Stack QueueOfStacks", "[stack_queue_of_stacks]"){
+	QueueOfStacks<int> queue;	REQUIRE(queue.IsEmpty());
+
+	queue.Add(1);	REQUIRE(queue.Size() == 1);	REQUIRE(queue.Peek() == 1);
+	queue.Add(2);	REQUIRE(queue.Size() == 2);	REQUIRE(queue.Peek() == 1);
+	queue.Add(3);	REQUIRE(queue.Size() == 3);	REQUIRE(queue.Peek() == 1);
+	queue.Add(4);	REQUIRE(queue.Size() == 4);	REQUIRE(queue.Peek() == 1);
+	queue.Add(5);	REQUIRE(queue.Size() == 5);	REQUIRE(queue.Peek() == 1);
+
+	queue.Remove();	REQUIRE(queue.Size() == 4); REQUIRE(queue.Peek() == 2);
+	queue.Remove();	REQUIRE(queue.Size() == 3); REQUIRE(queue.Peek() == 3);
+	queue.Remove();	REQUIRE(queue.Size() == 2); REQUIRE(queue.Peek() == 4);
+	queue.Remove();	REQUIRE(queue.Size() == 1); REQUIRE(queue.Peek() == 5);
+	queue.Remove();	REQUIRE(queue.Size() == 0);
+}
