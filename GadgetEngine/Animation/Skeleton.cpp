@@ -7,12 +7,18 @@ using namespace Gadget;
 Skeleton::Skeleton(const Matrix4& globalInverse_) : joints(), globalInverse(globalInverse_){}
 
 void Skeleton::AddJoint(const Joint& joint_){
+	GADGET_BASIC_ASSERT(joint_.name != StringID::None);
+	GADGET_BASIC_ASSERT(joint_.parentID >= -1);
+	GADGET_BASIC_ASSERT(joint_.inverseBindPose.IsValid());
 	GADGET_BASIC_ASSERT(!HasJoint(joint_.name));
 	joints.Add(joint_);
 	GADGET_ASSERT(joints.Size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
 }
 
 void Skeleton::AddJoint(StringID name_, int32_t parentID_, const Matrix4& inverseBindPose_){
+	GADGET_BASIC_ASSERT(name_ != StringID::None);
+	GADGET_BASIC_ASSERT(parentID_ >= -1);
+	GADGET_BASIC_ASSERT(inverseBindPose_.IsValid());
 	GADGET_BASIC_ASSERT(!HasJoint(name_));
 
 	Joint j;

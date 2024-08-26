@@ -18,14 +18,16 @@ out vec3 outFragPos;
 uniform mat4 bones[128];
 
 void main(){
+	vec4 vVertex = vec4(vertPos, 1.0);
+
 	mat4 boneTransform = bones[boneIDs[0]] * boneWeights[0];
 	boneTransform += bones[boneIDs[1]] * boneWeights[1];
 	boneTransform += bones[boneIDs[2]] * boneWeights[2];
 	boneTransform += bones[boneIDs[3]] * boneWeights[3];
 
-	outNormal = normalize(normalMatrix * vertPos);
+	outNormal = normalize(normalMatrix * vertNorm);
 	outTexCoord = texCoords;
-	outFragPos = vec3((modelMatrix * (boneTransform * vec4(vertPos, 1.0))));
+	outFragPos = vec3(modelMatrix * (boneTransform * vVertex));
 
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * (boneTransform * vec4(vertPos, 1.0));
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * (boneTransform * vVertex);
 }
