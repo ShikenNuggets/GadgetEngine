@@ -90,7 +90,7 @@ GL_AnimMeshInfo::GL_AnimMeshInfo(const AnimSubmesh& mesh_) : MeshInfo(mesh_.indi
 	//Joint IDs
 	glEnableVertexArrayAttrib(vao, 3);
 	glVertexArrayAttribBinding(vao, 3, 0);
-	glVertexArrayAttribFormat(vao, 3, AnimVertex::maxJointWeights, GL_INT, GL_FALSE, offsetof(AnimVertex, jointIDs));
+	glVertexArrayAttribFormat(vao, 3, AnimVertex::maxJointWeights, GL_FLOAT, GL_FALSE, offsetof(AnimVertex, jointIDs)); //TODO - This should technically be GL_INT, but for some reason that doesn't behave correctly
 
 	//Joint Weights
 	glEnableVertexArrayAttrib(vao, 4);
