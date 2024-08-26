@@ -22,8 +22,12 @@ VectorResult AnimClip::GetTranslationAtTime(StringID name_, float time_, const V
 		return VectorResult(nullptr);
 	}
 
-	if(keys.Size() == 1 || Math::IsNearZero(time_) || time_ >= keys.Back()->value.time){
+	if(keys.Size() == 1 || Math::IsNearZero(time_)){
 		return VectorResult(keys.Front());
+	}
+
+	if(time_ >= keys.Back()->value.time){
+		return VectorResult(keys.Back());
 	}
 
 	const auto* node = posNode_;
@@ -44,8 +48,12 @@ QuatResult AnimClip::GetRotationAtTime(StringID name_, float time_, const QuatNo
 		return QuatResult(nullptr);
 	}
 
-	if(keys.Size() == 1 || Math::IsNearZero(time_) || time_ >= keys.Back()->value.time){
+	if(keys.Size() == 1 || Math::IsNearZero(time_)){
 		return QuatResult(keys.Front());
+	}
+
+	if(time_ >= keys.Back()->value.time){
+		return QuatResult(keys.Back());
 	}
 
 	const auto* node = rotNode_;
@@ -66,8 +74,12 @@ VectorResult AnimClip::GetScaleAtTime(StringID name_, float time_, const VectorN
 		return VectorResult(nullptr);
 	}
 
-	if(keys.Size() == 1 || Math::IsNearZero(time_) || time_ >= keys.Back()->value.time){
+	if(keys.Size() == 1 || Math::IsNearZero(time_)){
 		return VectorResult(keys.Front());
+	}
+
+	if(time_ >= keys.Back()->value.time){
+		return VectorResult(keys.Back());
 	}
 
 	const auto* node = scaleNode_;
