@@ -313,3 +313,61 @@ TEST_CASE("StaticArray Lemonade Change", "[staticarray_lemonade_change]"){
 	REQUIRE(LemonadeChange(case2) == false);
 	REQUIRE(LemonadeChange(case3) == true);
 }
+
+//------------------------------------------------------------//
+//--------- Semi-Ordered Permutation (Leetcode 2717) ---------//
+//------------------------------------------------------------//
+
+template<int _Capacity>
+static inline int64_t SemiOrderedPermutation(const StaticArray<int, _Capacity>& nums){
+	if constexpr(_Capacity <= 1){
+		return 0;
+	}
+
+	int64_t smallIdx = -1;
+	int64_t bigIdx = -1;
+	int bigNum = -1;
+
+	for(size_t i = 0; i < _Capacity; i++){
+		if(nums[i] == 1){
+			smallIdx = i;
+		}
+
+		if(nums[i] > bigNum){
+			bigIdx = i;
+			bigNum = nums[i];
+		}
+	}
+
+	int64_t numMoves = smallIdx + (_Capacity - 1 - bigIdx);
+	if(bigIdx < smallIdx){
+		//We get a swap for free
+		numMoves--;
+	}
+
+	return numMoves;
+}
+
+TEST_CASE("StaticArray Semi-Ordered Permutation", "[staticarray_semi_ordered_permuation]"){
+	StaticArray<int, 4> test1;
+	test1[0] = 2;
+	test1[1] = 1;
+	test1[2] = 4;
+	test1[3] = 3;
+	REQUIRE(SemiOrderedPermutation(test1) == 2);
+
+	StaticArray<int, 4> test2;
+	test2[0] = 2;
+	test2[1] = 4;
+	test2[2] = 1;
+	test2[3] = 3;
+	REQUIRE(SemiOrderedPermutation(test2) == 3);
+
+	StaticArray<int, 5> test3;
+	test3[0] = 1;
+	test3[1] = 3;
+	test3[2] = 4;
+	test3[3] = 2;
+	test3[4] = 5;
+	REQUIRE(SemiOrderedPermutation(test3) == 0);
+}

@@ -360,3 +360,63 @@ TEST_CASE("Array Lemonade Change", "[array_lemonade_change]"){
 	REQUIRE(LemonadeChange(case2) == false);
 	REQUIRE(LemonadeChange(case3) == true);
 }
+
+//------------------------------------------------------------//
+//--------- Semi-Ordered Permutation (Leetcode 2717) ---------//
+//------------------------------------------------------------//
+
+static inline int64_t SemiOrderedPermutation(const Array<int>& nums){
+	if(nums.Size() <= 1){
+		return 0;
+	}
+
+	int64_t smallIdx = -1;
+	int64_t bigIdx = -1;
+	int bigNum = -1;
+
+	for(size_t i = 0; i < nums.Size(); i++){
+		if(nums[i] == 1){
+			smallIdx = i;
+		}
+
+		if(nums[i] > bigNum){
+			bigIdx = i;
+			bigNum = nums[i];
+		}
+	}
+
+	int64_t numMoves = smallIdx + (nums.Size() - 1 - bigIdx);
+	if(bigIdx < smallIdx){
+		//We get a swap for free
+		numMoves--;
+	}
+
+	return numMoves;
+}
+
+TEST_CASE("Array Semi-Ordered Permutation", "[array_semi_ordered_permuation]"){
+	Array<int> test1;	 REQUIRE(test1.IsEmpty());
+	test1.Add(2);		 REQUIRE(test1.Size() == 1);	REQUIRE(test1[0] == 2);
+	test1.Add(1);		 REQUIRE(test1.Size() == 2);	REQUIRE(test1[1] == 1);
+	test1.Add(4);		 REQUIRE(test1.Size() == 3);	REQUIRE(test1[2] == 4);
+	test1.Add(3);		 REQUIRE(test1.Size() == 4);	REQUIRE(test1[3] == 3);
+	test1.ShrinkToFit(); REQUIRE(test1.Size() == test1.Capacity());
+	REQUIRE(SemiOrderedPermutation(test1) == 2);
+
+	Array<int> test2;	 REQUIRE(test2.IsEmpty());
+	test2.Add(2);		 REQUIRE(test2.Size() == 1);	REQUIRE(test2[0] == 2);
+	test2.Add(4);		 REQUIRE(test2.Size() == 2);	REQUIRE(test2[1] == 4);
+	test2.Add(1);		 REQUIRE(test2.Size() == 3);	REQUIRE(test2[2] == 1);
+	test2.Add(3);		 REQUIRE(test2.Size() == 4);	REQUIRE(test2[3] == 3);
+	test2.ShrinkToFit(); REQUIRE(test2.Size() == test2.Capacity());
+	REQUIRE(SemiOrderedPermutation(test2) == 3);
+
+	Array<int> test3;	 REQUIRE(test3.IsEmpty());
+	test3.Add(1);		 REQUIRE(test3.Size() == 1);	REQUIRE(test3[0] == 1);
+	test3.Add(3);		 REQUIRE(test3.Size() == 2);	REQUIRE(test3[1] == 3);
+	test3.Add(4);		 REQUIRE(test3.Size() == 3);	REQUIRE(test3[2] == 4);
+	test3.Add(2);		 REQUIRE(test3.Size() == 4);	REQUIRE(test3[3] == 2);
+	test3.Add(5);		 REQUIRE(test3.Size() == 5);	REQUIRE(test3[4] == 5);
+	test3.ShrinkToFit(); REQUIRE(test3.Size() == test3.Capacity());
+	REQUIRE(SemiOrderedPermutation(test3) == 0);
+}
