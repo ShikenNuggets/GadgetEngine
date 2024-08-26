@@ -10,6 +10,7 @@
 #pragma warning(default : 26800)
 #pragma warning(default : 26819)
 
+#include "Animation/AnimClip.h"
 #include "Animation/AnimMesh.h"
 #include "Audio/AudioClip.h"
 #include "Graphics/Mesh.h"
@@ -53,6 +54,8 @@ namespace Gadget{
 			value_ = new AudioClipResourceContainer(j_.at("path"));
 		}else if(typeID == StringID::ProcessString(AnimMesh::typeName)){
 			value_ = new AnimMeshResourceContainer(j_.at("path"));
+		}else if(typeID == StringID::ProcessString(AnimClip::typeName)){
+			value_ = new AnimClipResourceContainer(j_.at("path"));
 		}else{
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 		}
