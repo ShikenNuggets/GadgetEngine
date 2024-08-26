@@ -32,40 +32,6 @@ namespace Gadget{
 		const HashTable<StringID, DList<VectorKey>> posKeys;
 		const HashTable<StringID, DList<QuatKey>> rotKeys;
 		const HashTable<StringID, DList<VectorKey>> scaleKeys;
-
-		template <class T>
-		const DList<T>::Node* Search(const DList<T>::Node* startNode_, float time_) const{
-			const auto* curNode = startNode_;
-			GADGET_BASIC_ASSERT(curNode != nullptr);
-			if(curNode == nullptr){
-				return nullptr;
-			}
-
-			if(time_ == curNode->value.time){
-				return curNode;
-			}else if(time_ > curNode->value.time){
-				//Forward Search
-				while(curNode != nullptr){
-					if(curNode->value.time <= time_ && (curNode->next == nullptr || curNode->next->value.time >= time_)){
-						return curNode;
-					}
-
-					curNode = curNode->next;
-				}
-			}else if(time_ < curNode->value.time){
-				//Backward Search
-				while(curNode != nullptr){
-					if(curNode->value.time >= time_ && (curNode->prev == nullptr || curNode->prev->value.time <= time_)){
-						return curNode;
-					}
-
-					curNode = curNode->prev;
-				}
-			}
-
-			GADGET_ASSERT_UNREACHABLE;
-			return nullptr;
-		}
 	};
 
 	class AnimClipResourceContainer : public ResourceContainer{

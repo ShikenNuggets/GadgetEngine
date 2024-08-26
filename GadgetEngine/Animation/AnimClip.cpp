@@ -12,80 +12,75 @@ FullClipSearchResult AnimClip::GetTransformAtTime(StringID name_, float time_, c
 	);
 }
 
-VectorResult AnimClip::GetTranslationAtTime(StringID name_, float time_, const VectorNode* posNode_) const{
-	if(!posKeys.Contains(name_)){
-		return VectorResult(nullptr);
+//I apologize in advance to anyone hoping to understand or debug this code
+template <class T>
+static inline const DList<T>::Node* Search(const typename DList<T>::Node* startNode_, float time_){
+	const auto* curNode = startNode_;
+	GADGET_BASIC_ASSERT(curNode != nullptr);
+	if(curNode == nullptr){
+		return nullptr;
 	}
 
-	const auto& keys = posKeys[name_];
+	if(time_ == curNode->value.time){
+		//Current node is already at the time we're looking for
+		return curNode;
+	}else{
+		const bool searchForward = time_ >= curNode->value.time;
+		while(curNode != nullptr){
+			if(curNode->value.time <= time_ && (curNode->next == nullptr || curNode->next->value.time >= time_)){
+				return curNode;
+			}
+
+			if(searchForward){
+				curNode = curNode->next;
+			}else{
+				curNode = curNode->prev;
+			}
+		}
+	}
+
+	GADGET_ASSERT_UNREACHABLE;
+	return nullptr;
+}
+
+template <class ResultT, class KeyT, class NodeT, class KeysT>
+static inline ResultT GetResultAtTime(StringID name_, float time_, const NodeT* node_, const KeysT& keys_){
+	if(!keys_.Contains(name_)){
+		//Default initialize the result if there are no keys for this joint
+		return ResultT(nullptr);
+	}
+
+	const auto& keys = keys_[name_];
 	if(keys.IsEmpty()){
-		return VectorResult(nullptr);
+		//Default initialize the result if there are no keys for this joint
+		GADGET_LOG_WARNING(SID("ANIM"), "List created for joint " + name_.GetString() + " with no keyframes!");
+		return ResultT(nullptr);
 	}
 
 	if(keys.Size() == 1 || Math::IsNearZero(time_)){
-		return VectorResult(keys.Front());
+		return ResultT(keys.Front(), time_);
 	}
 
 	if(time_ >= keys.Back()->value.time){
-		return VectorResult(keys.Back());
+		return ResultT(keys.Back(), time_);
 	}
 
-	const auto* node = posNode_;
-	if(node == nullptr){
-		node = keys.Front();
+	//If we don't have a cached node, start at the front
+	if(node_ == nullptr){
+		node_ = keys.Front();
 	}
-	
-	return VectorResult(Search<VectorKey>(node, time_));
+
+	return ResultT(Search<KeyT>(node_, time_), time_);
+}
+
+VectorResult AnimClip::GetTranslationAtTime(StringID name_, float time_, const VectorNode* posNode_) const{
+	return GetResultAtTime<VectorResult, VectorKey>(name_, time_, posNode_, posKeys);
 }
 
 QuatResult AnimClip::GetRotationAtTime(StringID name_, float time_, const QuatNode* rotNode_) const{
-	if(!rotKeys.Contains(name_)){
-		return QuatResult(nullptr);
-	}
-
-	const auto& keys = rotKeys[name_];
-	if(keys.IsEmpty()){
-		return QuatResult(nullptr);
-	}
-
-	if(keys.Size() == 1 || Math::IsNearZero(time_)){
-		return QuatResult(keys.Front());
-	}
-
-	if(time_ >= keys.Back()->value.time){
-		return QuatResult(keys.Back());
-	}
-
-	const auto* node = rotNode_;
-	if(node == nullptr){
-		node = keys.Front();
-	}
-
-	return QuatResult(Search<QuatKey>(node, time_));
+	return GetResultAtTime<QuatResult, QuatKey>(name_, time_, rotNode_, rotKeys);
 }
 
 VectorResult AnimClip::GetScaleAtTime(StringID name_, float time_, const VectorNode* scaleNode_) const{
-	if(!scaleKeys.Contains(name_)){
-		return VectorResult(nullptr);
-	}
-
-	const auto& keys = scaleKeys[name_];
-	if(keys.IsEmpty()){
-		return VectorResult(nullptr);
-	}
-
-	if(keys.Size() == 1 || Math::IsNearZero(time_)){
-		return VectorResult(keys.Front());
-	}
-
-	if(time_ >= keys.Back()->value.time){
-		return VectorResult(keys.Back());
-	}
-
-	const auto* node = scaleNode_;
-	if(node == nullptr){
-		node = keys.Front();
-	}
-
-	return VectorResult(Search<VectorKey>(node, time_));
+	return GetResultAtTime<VectorResult, VectorKey>(name_, time_, scaleNode_, scaleKeys);
 }
