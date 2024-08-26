@@ -17,6 +17,10 @@ namespace Gadget{
 			for(auto& i : jointIDs){
 				i = -1;
 			}
+
+			for(auto& w : jointWeights){
+				w = 0.0f;
+			}
 		}
 
 		void AddWeight(int32_t jointID_, float weight_){
