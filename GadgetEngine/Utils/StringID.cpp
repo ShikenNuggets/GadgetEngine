@@ -10,7 +10,7 @@ std::string StringID::GetString() const{
 	return GetStringFromID(*this);
 }
 
-StringID StringID::InternString(StringID sid_, const char* str_) noexcept{
+StringID StringID::InternString(StringID sid_, const char* str_){
 	auto& stringIdTable = StringIDTable();
 
 	if(stringIdTable.find(sid_.id) == stringIdTable.end()){

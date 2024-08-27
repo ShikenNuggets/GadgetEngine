@@ -38,7 +38,7 @@ namespace Gadget{
 		constexpr inline bool operator <=(StringID a_) const{ return id <= a_.id; }
 
 		//DON'T USE THIS DIRECTLY, USE THE SID() MACRO
-		static StringID InternString(StringID sid_, const char* str_) noexcept;
+		static StringID InternString(StringID sid_, const char* str_);
 		static std::string GetStringFromID(StringID id_);
 		static std::string GetStringFromID(uint64_t id_);
 
