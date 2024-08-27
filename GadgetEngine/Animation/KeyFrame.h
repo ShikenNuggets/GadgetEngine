@@ -23,10 +23,10 @@ namespace Gadget{
 
 	template <class T1, class T2>
 	struct ClipSearchResult{
-		explicit ClipSearchResult(const T2* node_ = nullptr, float time_ = 0.0f) : result(), node(node_){
-			if(node_ != nullptr && node_->next == nullptr){
+		explicit ClipSearchResult(const T2* node_ = nullptr, float time_ = 0.0f, bool useInterpolation_ = true) : result(), node(node_){
+			if(node_ != nullptr && (node_->next == nullptr || !useInterpolation_)){
 				result = node_->value.value;
-			}else if(node_ != nullptr && node_->next != nullptr){
+			}else if(useInterpolation_ && node_ != nullptr && node_->next != nullptr){
 				GADGET_ASSERT(node_->prev == nullptr || node_->value.time <= time_, "Node passed to ClipSearchResult has an unexpectedly high time value");
 				GADGET_ASSERT(node_->next->value.time >= time_, "Node->next passed to ClipSearchResult has an unexpectedly low time value");
 				const float delta = node_->next->value.time - node_->value.time;
