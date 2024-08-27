@@ -381,6 +381,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Utils\Hash.h" />
     <ClInclude Include="Utils\NamedVar.h" />
     <ClInclude Include="Utils\Profiler.h" />
+    <ClInclude Include="Utils\SIDArrayCache.h" />
     <ClInclude Include="Utils\StringID.h" />
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="Utils\Var.h" />
