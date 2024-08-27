@@ -20,8 +20,11 @@
 #include "Graphics/Text/TextMesh.h"
 #include "Platform/Windows/Win32_Window.h"
 #include "Resource/ResourceManager.h"
+#include "Utils/SIDArrayCache.h"
 
 using namespace Gadget;
+
+static inline SIDArrayCache gBoneIDs = SIDArrayCache("bones[", "]");
 
 Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr){
 	GADGET_BASIC_ASSERT(w_ > 0);
@@ -204,7 +207,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				aMesh->Bind(i);
 				
 				for(int32_t j = 0; j < skeletonInstance.Size(); j++){
-					aMesh->GetShader(i)->BindMatrix4(StringID::ProcessString("bones[" + std::to_string(j) + "]"), skeletonInstance[j]);
+					aMesh->GetShader(i)->BindMatrix4(gBoneIDs.Get(j), skeletonInstance[j]);
 				}
 
 				aMesh->GetShader(i)->BindMatrix4(SID("projectionMatrix"), proj);
