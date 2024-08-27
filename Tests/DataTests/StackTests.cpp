@@ -125,3 +125,84 @@ TEST_CASE("Stack QueueOfStacks", "[stack_queue_of_stacks]"){
 	queue.Remove();	REQUIRE(queue.Size() == 1); REQUIRE(queue.Peek() == 5);
 	queue.Remove();	REQUIRE(queue.Size() == 0);
 }
+
+//------------------------------------------------------------//
+//----------------- Sort Stack (CTCI 3.4) --------------------//
+//------------------------------------------------------------//
+
+static inline void SortStack(Stack<int>& stack){
+	if(stack.IsEmpty()){
+		return;
+	}
+
+	Stack<int> tempStack;
+	while(!stack.IsEmpty()){
+		tempStack.Push(stack.Pop());
+	}
+
+	while(!tempStack.IsEmpty()){
+		int temp = tempStack.Pop();
+
+		while(!stack.IsEmpty() && stack.Peek() < temp){
+			tempStack.Push(stack.Pop());
+		}
+
+		stack.Push(temp);
+	}
+}
+
+TEST_CASE("Stack Sort", "[stack_sort]"){
+	Stack<int> stack;	REQUIRE(stack.IsEmpty());
+	stack.Push(5);		REQUIRE(stack.Size() == 1); REQUIRE(stack.Peek() == 5);
+	stack.Push(1);		REQUIRE(stack.Size() == 2); REQUIRE(stack.Peek() == 1);
+	stack.Push(2);		REQUIRE(stack.Size() == 3); REQUIRE(stack.Peek() == 2);
+	stack.Push(3);		REQUIRE(stack.Size() == 4); REQUIRE(stack.Peek() == 3);
+	stack.Push(4);		REQUIRE(stack.Size() == 5); REQUIRE(stack.Peek() == 4);
+
+	SortStack(stack);
+
+	REQUIRE(stack.Size() == 5);
+	REQUIRE(stack.Pop() == 1);	REQUIRE(stack.Size() == 4);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 2);	REQUIRE(stack.Size() == 3);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 3);	REQUIRE(stack.Size() == 2);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 4);	REQUIRE(stack.Size() == 1);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 5);	REQUIRE(stack.Size() == 0);	REQUIRE(stack.IsEmpty());
+
+	//--------------------------------------------------//
+
+	stack.Push(5);	REQUIRE(stack.Size() == 1); REQUIRE(stack.Peek() == 5);
+	stack.Push(6);	REQUIRE(stack.Size() == 2); REQUIRE(stack.Peek() == 6);
+	stack.Push(4);	REQUIRE(stack.Size() == 3); REQUIRE(stack.Peek() == 4);
+	stack.Push(1);	REQUIRE(stack.Size() == 4); REQUIRE(stack.Peek() == 1);
+	stack.Push(9);	REQUIRE(stack.Size() == 5); REQUIRE(stack.Peek() == 9);
+
+	SortStack(stack);
+
+	REQUIRE(stack.Size() == 5);
+	REQUIRE(stack.Pop() == 1);	REQUIRE(stack.Size() == 4);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 4);	REQUIRE(stack.Size() == 3);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 5);	REQUIRE(stack.Size() == 2);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 6);	REQUIRE(stack.Size() == 1);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 9);	REQUIRE(stack.Size() == 0);	REQUIRE(stack.IsEmpty());
+
+	//--------------------------------------------------//
+
+	stack.Push(1);	REQUIRE(stack.Size() == 1); REQUIRE(stack.Peek() == 1);
+	stack.Push(3);	REQUIRE(stack.Size() == 2); REQUIRE(stack.Peek() == 3);
+	stack.Push(8);	REQUIRE(stack.Size() == 3); REQUIRE(stack.Peek() == 8);
+	stack.Push(12);	REQUIRE(stack.Size() == 4); REQUIRE(stack.Peek() == 12);
+	stack.Push(5);	REQUIRE(stack.Size() == 5); REQUIRE(stack.Peek() == 5);
+	stack.Push(10);	REQUIRE(stack.Size() == 6); REQUIRE(stack.Peek() == 10);
+	stack.Push(17);	REQUIRE(stack.Size() == 7); REQUIRE(stack.Peek() == 17);
+
+	SortStack(stack);
+
+	REQUIRE(stack.Size() == 7);
+	REQUIRE(stack.Pop() == 1);	REQUIRE(stack.Size() == 6);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 3);	REQUIRE(stack.Size() == 5);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 5);	REQUIRE(stack.Size() == 4);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 8);	REQUIRE(stack.Size() == 3);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 10);	REQUIRE(stack.Size() == 2);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 12);	REQUIRE(stack.Size() == 1);	REQUIRE(!stack.IsEmpty());
+	REQUIRE(stack.Pop() == 17);	REQUIRE(stack.Size() == 0);	REQUIRE(stack.IsEmpty());
+}
