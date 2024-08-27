@@ -26,6 +26,24 @@ using namespace Gadget;
 
 static inline SIDArrayCache gBoneIDs = SIDArrayCache("bones[", "]");
 
+static inline SIDArrayCache gPointPositions		= SIDArrayCache("pointLights[", "].position");
+static inline SIDArrayCache gPointLightColors	= SIDArrayCache("pointLights[", "].lightColor");
+static inline SIDArrayCache gPointConstants		= SIDArrayCache("pointLights[", "].constant");
+static inline SIDArrayCache gPointLinears		= SIDArrayCache("pointLights[", "].linear");
+static inline SIDArrayCache gPointQuadratics	= SIDArrayCache("pointLights[", "].quadratic");
+
+static inline SIDArrayCache gSpotPositions		= SIDArrayCache("spotLights[", "].position");
+static inline SIDArrayCache gSpotDirections		= SIDArrayCache("spotLights[", "].direction");
+static inline SIDArrayCache gSpotCutOffs		= SIDArrayCache("spotLights[", "].cutOff");
+static inline SIDArrayCache gSpotOuterCutOffs	= SIDArrayCache("spotLights[", "].outerCutOff");
+static inline SIDArrayCache gSpotLightColors	= SIDArrayCache("spotLights[", "].lightColor");
+static inline SIDArrayCache gSpotConstants		= SIDArrayCache("spotLights[", "].constant");
+static inline SIDArrayCache gSpotLinears		= SIDArrayCache("spotLights[", "].linear");
+static inline SIDArrayCache gSpotQuadratics		= SIDArrayCache("spotLights[", "].quadratic");
+
+static inline SIDArrayCache gDirDirections	= SIDArrayCache("dirLights[", "].direction");
+static inline SIDArrayCache gDirLightColors	= SIDArrayCache("dirLights[", "].lightColor");
+
 Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(API::OpenGL), glContext(nullptr), mainFBO(nullptr), screenShader(nullptr), screenQuad(nullptr){
 	GADGET_BASIC_ASSERT(w_ > 0);
 	GADGET_BASIC_ASSERT(h_ > 0);
@@ -225,32 +243,34 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					aMesh->GetShader(i)->BindInt(SID("numSpotLights"), static_cast<int>(spotLightsBuffer.size()));
 					aMesh->GetShader(i)->BindInt(SID("numDirLights"), static_cast<int>(dirLightsBuffer.size()));
 
-					//TODO - Handle indexing for multiple light sources of one type
-					for(const auto* light : pointLightsBuffer){
+					for(int64_t j = 0; j < pointLightsBuffer.size(); j++){
+						const auto* light = pointLightsBuffer[j];
 						GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
-						aMesh->GetShader(i)->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
-						aMesh->GetShader(i)->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
-						aMesh->GetShader(i)->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
-						aMesh->GetShader(i)->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
-						aMesh->GetShader(i)->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+						aMesh->GetShader(i)->BindVector3(gPointPositions.Get(j),	light->GetParent()->GetPosition());
+						aMesh->GetShader(i)->BindColor(gPointLightColors.Get(j),	light->GetLightSource().GetColor());
+						aMesh->GetShader(i)->BindFloat(gPointConstants.Get(j),		light->GetLightSource().GetConstant());
+						aMesh->GetShader(i)->BindFloat(gPointLinears.Get(j),		light->GetLightSource().GetLinear());
+						aMesh->GetShader(i)->BindFloat(gPointQuadratics.Get(j),		light->GetLightSource().GetQuadratic());
 					}
 
-					for(const auto* light : spotLightsBuffer){
+					for(int64_t j = 0; j < spotLightsBuffer.size(); j++){
+						const auto* light = spotLightsBuffer[j];
 						GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
-						aMesh->GetShader(i)->BindVector3(SID("spotLights[0].position"), light->GetParent()->GetPosition());
-						aMesh->GetShader(i)->BindVector3(SID("spotLights[0].direction"), light->GetLightSource().GetDirection());
-						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].cutOff"), light->GetLightSource().GetCutOff());
-						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].outerCutOff"), light->GetLightSource().GetOuterCutOff());
-						aMesh->GetShader(i)->BindColor(SID("spotLights[0].lightColor"), light->GetLightSource().GetColor());
-						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].constant"), light->GetLightSource().GetConstant());
-						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].linear"), light->GetLightSource().GetLinear());
-						aMesh->GetShader(i)->BindFloat(SID("spotLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+						aMesh->GetShader(i)->BindVector3(gSpotPositions.Get(j),		light->GetParent()->GetPosition());
+						aMesh->GetShader(i)->BindVector3(gSpotDirections.Get(j),	light->GetLightSource().GetDirection());
+						aMesh->GetShader(i)->BindFloat(gSpotCutOffs.Get(j),			light->GetLightSource().GetCutOff());
+						aMesh->GetShader(i)->BindFloat(gSpotOuterCutOffs.Get(j),	light->GetLightSource().GetOuterCutOff());
+						aMesh->GetShader(i)->BindColor(gSpotLightColors.Get(j),		light->GetLightSource().GetColor());
+						aMesh->GetShader(i)->BindFloat(gSpotConstants.Get(j),		light->GetLightSource().GetConstant());
+						aMesh->GetShader(i)->BindFloat(gSpotLinears.Get(j),			light->GetLightSource().GetLinear());
+						aMesh->GetShader(i)->BindFloat(gSpotQuadratics.Get(j),		light->GetLightSource().GetQuadratic());
 					}
 
-					for(const auto* light : dirLightsBuffer){
+					for(int64_t j = 0; j < dirLightsBuffer.size(); j++){
+						const auto* light = dirLightsBuffer[j];
 						GADGET_BASIC_ASSERT(light != nullptr);
-						aMesh->GetShader(i)->BindVector3(SID("dirLights[0].direction"), light->GetLightSource().GetDirection());
-						aMesh->GetShader(i)->BindColor(SID("dirLights[0].lightColor"), light->GetLightSource().GetColor());
+						aMesh->GetShader(i)->BindVector3(gDirDirections.Get(j), light->GetLightSource().GetDirection());
+						aMesh->GetShader(i)->BindColor(gDirLightColors.Get(j), light->GetLightSource().GetColor());
 					}
 				}
 
