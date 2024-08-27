@@ -50,6 +50,11 @@ Checks: '-*
 , bugprone-unsafe-functions
 , bugprone-use-after-move
 , bugprone-virtual-near-miss
+, cert-dcl58-cpp
+, cert-err52-cpp
+, cert-err60-cpp
+, cert-flp30-c
+, cert-oop58-cpp
 '
 
 CheckOptions:
