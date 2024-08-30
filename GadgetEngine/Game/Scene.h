@@ -14,7 +14,7 @@ namespace Gadget{
 		void CreateObject(GameObject* gameObject_);
 		void AddSceneComponent(SceneComponent* sceneComp_);
 
-		void Update(float deltaTime_);
+		virtual void Update(float deltaTime_);
 
 		GUID GetGUID() const{ return guid; }
 		StringID GetName() const{ return name; }
