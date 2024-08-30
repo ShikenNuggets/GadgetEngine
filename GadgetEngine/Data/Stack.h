@@ -48,7 +48,7 @@ namespace Gadget{
 		}
 
 		bool IsEmpty() const{ return data.IsEmpty(); }
-		size_t Size() const{ return data.Size(); }
+		int64_t Size() const{ return data.Size(); }
 
 	private:
 		List<T> data;

@@ -38,12 +38,12 @@ public:
 	T& Peek(){ return TopStack().Peek(); }
 
 	bool IsEmpty() const{ return size == 0; }
-	size_t Size() const{ return size; }
-	size_t NumStacks() const{ return stacks.Size(); }
+	int64_t Size() const{ return size; }
+	int64_t NumStacks() const{ return stacks.Size(); }
 
 private:
 	Stack<Stack<T>> stacks;
-	size_t size;
+	int64_t size;
 
 	Stack<T>& TopStack(){
 		GADGET_BASIC_ASSERT(!stacks.IsEmpty());

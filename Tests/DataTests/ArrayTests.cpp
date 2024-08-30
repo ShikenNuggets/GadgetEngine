@@ -16,13 +16,13 @@ void RotateMatrixRight90(Array<Array<T>>& inMatrix_){
 		return;
 	}
 
-	const size_t n = inMatrix_.Size();
-	for(size_t layer = 0; layer < n / 2; layer++){
-		size_t first = layer;
-		size_t last = n - 1 - layer;
+	const int64_t n = inMatrix_.Size();
+	for(int64_t layer = 0; layer < n / 2; layer++){
+		int64_t first = layer;
+		int64_t last = n - 1 - layer;
 
-		for(size_t i = first; i < last; i++){
-			size_t offset = i - first;
+		for(int64_t i = first; i < last; i++){
+			int64_t offset = i - first;
 			T top = inMatrix_[first][i];
 			inMatrix_[first][i] = inMatrix_[last - offset][first];
 			inMatrix_[last - offset][first] = inMatrix_[last][last - offset];
@@ -126,11 +126,11 @@ TEST_CASE("Array Accessor" "[array_access]"){
 //O(rows * cols)
 template <typename T>
 static inline void ZeroMatrix(Array<Array<T>>& inMatrix_){
-	Array<size_t> rows;
-	Array<size_t> cols;
+	Array<int64_t> rows;
+	Array<int64_t> cols;
 
-	for(size_t i = 0; i < inMatrix_.Size(); i++){
-		for(size_t j = 0; j < inMatrix_[i].Size(); j++){
+	for(int64_t i = 0; i < inMatrix_.Size(); i++){
+		for(int64_t j = 0; j < inMatrix_[i].Size(); j++){
 			if(inMatrix_[i][j] == 0){
 				rows.Add(j);
 				cols.Add(i);
@@ -138,14 +138,14 @@ static inline void ZeroMatrix(Array<Array<T>>& inMatrix_){
 		}
 	}
 
-	for(size_t i = 0; i < rows.Size(); i++){
-		for(size_t j = 0; j < inMatrix_.Size(); j++){
+	for(int64_t i = 0; i < rows.Size(); i++){
+		for(int64_t j = 0; j < inMatrix_.Size(); j++){
 			inMatrix_[j][rows[i]] = 0;
 		}
 	}
 
-	for(size_t i = 0; i < cols.Size(); i++){
-		for(size_t j = 0; j < inMatrix_[cols[i]].Size(); j++){
+	for(int64_t i = 0; i < cols.Size(); i++){
+		for(int64_t j = 0; j < inMatrix_[cols[i]].Size(); j++){
 			inMatrix_[cols[i]][j] = 0;
 		}
 	}
@@ -233,7 +233,7 @@ struct Person{
 static inline Array<String> SortPeopleByHeight(const Array<String>& names_, const Array<int> heights_){
 	GADGET_BASIC_ASSERT(names_.Size() == heights_.Size());
 	Array<Person> people = Array<Person>(names_.Size());
-	for(size_t i = 0; i < names_.Size(); i++){
+	for(int64_t i = 0; i < names_.Size(); i++){
 		people.Add(Person(names_[i], heights_[i]));
 	}
 
@@ -374,7 +374,7 @@ static inline int64_t SemiOrderedPermutation(const Array<int>& nums){
 	int64_t bigIdx = -1;
 	int bigNum = -1;
 
-	for(size_t i = 0; i < nums.Size(); i++){
+	for(int64_t i = 0; i < nums.Size(); i++){
 		if(nums[i] == 1){
 			smallIdx = i;
 		}

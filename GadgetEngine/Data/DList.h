@@ -76,7 +76,7 @@ namespace Gadget{
 		inline Node* Add(const T& value_, Node* nodePos_){
 			GADGET_BASIC_ASSERT(IsEmpty() || nodePos_ != nullptr);
 			GADGET_BASIC_ASSERT(nodePos_ == nullptr || ContainsNode(nodePos_));
-			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
+			GADGET_BASIC_ASSERT(size < std::numeric_limits<int64_t>::max());
 
 			Node* newNode = new Node(value_);
 
@@ -110,7 +110,7 @@ namespace Gadget{
 		}
 
 		inline Node* AddFront(const T& value_){
-			GADGET_BASIC_ASSERT(size < std::numeric_limits<size_t>::max());
+			GADGET_BASIC_ASSERT(size < std::numeric_limits<int64_t>::max());
 
 			Node* newNode = new Node(value_);
 
@@ -250,12 +250,12 @@ namespace Gadget{
 			tail = oldHead;
 		}
 
-		constexpr inline size_t Size() const{ return size; }
+		constexpr inline int64_t Size() const{ return size; }
 		constexpr inline bool IsEmpty() const{ return size == 0; }
 		constexpr inline Node* Front() const{ return head; }
 		constexpr inline Node* Back() const{ return tail; }
 
-		constexpr inline Node* GetNode(size_t index_) const{
+		constexpr inline Node* GetNode(int64_t index_) const{
 			GADGET_BASIC_ASSERT(index_ < size);
 
 			if(index_ == 0){
@@ -267,7 +267,7 @@ namespace Gadget{
 			}
 
 			Node* current = head;
-			for(size_t i = 1; i <= index_; i++){
+			for(int64_t i = 1; i <= index_; i++){
 				current = current->next;
 			}
 
@@ -275,7 +275,7 @@ namespace Gadget{
 			return current;
 		}
 
-		constexpr inline Node* GetNthLastNode(size_t index_) const{
+		constexpr inline Node* GetNthLastNode(int64_t index_) const{
 			GADGET_BASIC_ASSERT(index_ <= size);
 			GADGET_BASIC_ASSERT(index_ > 0);
 			if(index_ > size || index_ == 0){
@@ -288,7 +288,7 @@ namespace Gadget{
 			}
 
 			Node* current = tail;
-			for(size_t i = 1; i < index_; i++){
+			for(int64_t i = 1; i < index_; i++){
 				current = current->prev;
 			}
 
@@ -325,7 +325,7 @@ namespace Gadget{
 			}
 
 			Node* current = head;
-			size_t count = 0;
+			int64_t count = 0;
 			while(current != nullptr){
 				count++;
 				if(count > Size()){
@@ -375,7 +375,7 @@ namespace Gadget{
 		constexpr const Iterator end() const{ return Iterator(nullptr); }
 
 	private:
-		size_t size;
+		int64_t size;
 		Node* head;
 		Node* tail;
 

@@ -43,12 +43,12 @@ namespace Gadget{
 
 		Array(const Array<T>& array_) : data(nullptr), size(0), capacity(0){
 			Reserve(array_.Capacity());
-			for(size_t i = 0; i < array_.Size(); i++){
+			for(int64_t i = 0; i < array_.Size(); i++){
 				Add(array_[i]);
 			}
 		}
 
-		explicit Array(size_t initialCapacity_) : data(nullptr), size(0), capacity(0){
+		explicit Array(int64_t initialCapacity_) : data(nullptr), size(0), capacity(0){
 			Reserve(initialCapacity_);
 		}
 
@@ -72,10 +72,10 @@ namespace Gadget{
 			size++;
 		}
 
-		void Add(const T* range_, size_t rangeSize_){
+		void Add(const T* range_, int64_t rangeSize_){
 			Reserve(size + rangeSize_);
 
-			for(size_t i = 0; i < rangeSize_; i++){
+			for(int64_t i = 0; i < rangeSize_; i++){
 				Add(range_[i]);
 			}
 		}
@@ -85,7 +85,7 @@ namespace Gadget{
 			Add(range_.data, range_.Size());
 		}
 
-		void InsertAt(size_t index_, const T& value_){
+		void InsertAt(int64_t index_, const T& value_){
 			if(index_ >= size){
 				Add(value_);
 				return;
@@ -97,7 +97,7 @@ namespace Gadget{
 			new (&data[index_]) T(value_);
 		}
 
-		void InsertAt(size_t index_, const T* range_, size_t rangeSize_){
+		void InsertAt(int64_t index_, const T* range_, int64_t rangeSize_){
 			if(index_ >= size){
 				Add(range_, rangeSize_);
 				return;
@@ -106,18 +106,18 @@ namespace Gadget{
 			Reserve(size + rangeSize_);
 			ShiftElements(index_, rangeSize_);
 
-			for(size_t i = 0; i < rangeSize_; i++){
+			for(int64_t i = 0; i < rangeSize_; i++){
 				new (&data[i + index_]) T(range_[i]);
 			}
 		}
 
-		void InsertAt(size_t index_, const Array<T>& range_){
+		void InsertAt(int64_t index_, const Array<T>& range_){
 			GADGET_ASSERT(range_.Capacity() > 0, "Adding an Array of 0 to another array... did you mean to do that?");
 			InsertAt(index_, range_.data, range_.Size());
 		}
 
-		constexpr void Pop(size_t elementsToPop = 1){
-			for(size_t i = 0; i < elementsToPop; i++){
+		constexpr void Pop(int64_t elementsToPop = 1){
+			for(int64_t i = 0; i < elementsToPop; i++){
 				data[i].~T();
 				size--;
 			}
@@ -125,7 +125,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(size < capacity);
 		}
 
-		constexpr void RemoveAt(size_t index_){
+		constexpr void RemoveAt(int64_t index_){
 			GADGET_BASIC_ASSERT(index_ < size);
 			if(index_ >= size){
 				return;
@@ -135,7 +135,7 @@ namespace Gadget{
 			ShiftElements(index_ + 1, -1);
 		}
 
-		constexpr void RemoveAt(size_t startIndex_, size_t rangeSize_){
+		constexpr void RemoveAt(int64_t startIndex_, int64_t rangeSize_){
 			if(startIndex_ >= size || rangeSize_ == 0){
 				return;
 			}
@@ -146,7 +146,7 @@ namespace Gadget{
 			}
 
 			GADGET_BASIC_ASSERT(rangeSize_ < size);
-			for(size_t i = startIndex_; i < startIndex_ + rangeSize_; i++){
+			for(int64_t i = startIndex_; i < startIndex_ + rangeSize_; i++){
 				data[i].~T();
 			}
 
@@ -154,7 +154,7 @@ namespace Gadget{
 		}
 
 		constexpr void Remove(const T& value_){
-			for(size_t i = 0; i < size; i++){
+			for(int64_t i = 0; i < size; i++){
 				if(data[i] == value_){
 					RemoveAt(i);
 					return;
@@ -163,7 +163,7 @@ namespace Gadget{
 		}
 
 		constexpr void RemoveAll(const T& value_){
-			for(size_t i = 0; i < size; i++){
+			for(int64_t i = 0; i < size; i++){
 				if(data[i] == value_){
 					RemoveAt(i);
 				}
@@ -174,7 +174,7 @@ namespace Gadget{
 			Pop(size);
 		}
 
-		void Reserve(size_t newCapacity_){
+		void Reserve(int64_t newCapacity_){
 			if(newCapacity_ <= capacity){
 				return;
 			}
@@ -204,8 +204,8 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(IsSorted());
 		}
 
-		constexpr int64_t Find(const T& value_, size_t startPos_ = 0) const{
-			for(int64_t i = startPos_; static_cast<size_t>(i) < size; i++){
+		constexpr int64_t Find(const T& value_, int64_t startPos_ = 0) const{
+			for(int64_t i = startPos_; static_cast<int64_t>(i) < size; i++){
 				if(data[i] == value_){
 					return i;
 				}
@@ -216,7 +216,7 @@ namespace Gadget{
 
 		constexpr bool Contains(const T& value_) const{ return Find(value_) != -1; }
 
-		Array SubRange(size_t startIndex_, size_t endIndex_) const{
+		Array SubRange(int64_t startIndex_, int64_t endIndex_) const{
 			GADGET_BASIC_ASSERT(startIndex_ != endIndex_);
 			if(startIndex_ >= size){
 				return Array();
@@ -226,21 +226,21 @@ namespace Gadget{
 				endIndex_ = size;
 			}
 
-			size_t subRangeSize = endIndex_ - startIndex_;
+			int64_t subRangeSize = endIndex_ - startIndex_;
 			Array arr = Array(subRangeSize);
-			for(size_t i = startIndex_; i < endIndex_; i++){
+			for(int64_t i = startIndex_; i < endIndex_; i++){
 				arr.Add(data[i]);
 			}
 
 			return arr;
 		}
 
-		constexpr const T& operator[](size_t i_) const{
+		constexpr const T& operator[](int64_t i_) const{
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];
 		}
 
-		constexpr T& operator[](size_t i_){
+		constexpr T& operator[](int64_t i_){
 			GADGET_BASIC_ASSERT(i_ < size);
 			return data[i_];
 		}
@@ -251,7 +251,7 @@ namespace Gadget{
 				return false;
 			}
 
-			for(size_t i = 0; i < size; i++){
+			for(int64_t i = 0; i < size; i++){
 				if(data[i] != array_[i]){
 					return false;
 				}
@@ -282,7 +282,7 @@ namespace Gadget{
 		}
 
 		constexpr bool IsSorted(){
-			for(size_t i = 0; i < size - 1; i++){
+			for(int64_t i = 0; i < size - 1; i++){
 				if(data[i] > data[i + 1]){
 					return false;
 				}
@@ -291,9 +291,9 @@ namespace Gadget{
 			return true;
 		}
 
-		constexpr size_t Size() const{ return size; }
-		constexpr size_t IsEmpty() const{ return size == 0; }
-		constexpr size_t Capacity() const{ return capacity; }
+		constexpr int64_t Size() const{ return size; }
+		constexpr int64_t IsEmpty() const{ return size == 0; }
+		constexpr int64_t Capacity() const{ return capacity; }
 
 		constexpr Iterator begin(){ return Iterator(*this, 0); }
 		constexpr const ConstIterator begin() const{ return ConstIterator(*this, 0); }
@@ -302,8 +302,8 @@ namespace Gadget{
 
 	private:
 		T* data;
-		size_t size;
-		size_t capacity;
+		int64_t size;
+		int64_t capacity;
 
 		void Reallocate(){
 			GADGET_BASIC_ASSERT(size <= capacity);
@@ -319,7 +319,7 @@ namespace Gadget{
 			data = newData;
 		}
 
-		void ShiftElements(size_t startIndex_, int64_t amountToShift_){
+		void ShiftElements(int64_t startIndex_, int64_t amountToShift_){
 			if(amountToShift_ == 0){
 				return;
 			}
@@ -348,20 +348,20 @@ namespace Gadget{
 			size += amountToShift_;
 		}
 
-		constexpr void QuickSort(size_t low_, size_t high_){
+		constexpr void QuickSort(int64_t low_, int64_t high_){
 			if(low_ >= 0 && high_ >= 0 && low_ < high_){
-				size_t pivot = QuickSortPartition(low_, high_);
+				int64_t pivot = QuickSortPartition(low_, high_);
 				QuickSort(low_, pivot);
 				QuickSort(pivot + 1, high_);
 			}
 		}
 
 		//Hoare Partition Scheme
-		constexpr size_t QuickSortPartition(size_t low_, size_t high_){
+		constexpr int64_t QuickSortPartition(int64_t low_, int64_t high_){
 			const T pivot = data[low_];
 
-			size_t leftIndex = low_ - 1;
-			size_t rightIndex = high_ + 1;
+			int64_t leftIndex = low_ - 1;
+			int64_t rightIndex = high_ + 1;
 
 			while(true){
 				do{

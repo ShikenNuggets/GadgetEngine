@@ -10,13 +10,13 @@ using namespace Gadget;
 //---------------- Two Sum (Leetcode 1) ----------------------//
 //------------------------------------------------------------//
 
-static inline Array<size_t> TwoSum(Array<size_t>& nums_, size_t target_){
-	StaticHashTable<size_t, size_t> table;
+static inline Array<int64_t> TwoSum(Array<int64_t>& nums_, int64_t target_){
+	StaticHashTable<int64_t, int64_t> table;
 
-	for(size_t i = 0; i < nums_.Size(); i++){
-		size_t complement = target_ - nums_[i];
+	for(int64_t i = 0; i < nums_.Size(); i++){
+		int64_t complement = target_ - nums_[i];
 		if(table.Contains(complement) && table[complement] != i){
-			Array<size_t> result = Array<size_t>(2);
+			Array<int64_t> result = Array<int64_t>(2);
 			result.Add(table[complement]);
 			result.Add(i);
 			return result;
@@ -25,18 +25,18 @@ static inline Array<size_t> TwoSum(Array<size_t>& nums_, size_t target_){
 		table[nums_[i]] = i;
 	}
 
-	return Array<size_t>();
+	return Array<int64_t>();
 }
 
 TEST_CASE("StaticHashTable TwoSum", "[hash_table_two_sum]"){
-	Array<size_t> nums;
+	Array<int64_t> nums;
 	nums.Reserve(4);
 	nums.Add(2);
 	nums.Add(7);
 	nums.Add(11);
 	nums.Add(15);
 
-	Array<size_t> result1 = TwoSum(nums, 9);
+	Array<int64_t> result1 = TwoSum(nums, 9);
 	REQUIRE(result1.Size() == 2);
 	REQUIRE(result1[0] == 0);
 	REQUIRE(result1[1] == 1);
@@ -46,7 +46,7 @@ TEST_CASE("StaticHashTable TwoSum", "[hash_table_two_sum]"){
 	nums.Add(2);
 	nums.Add(4);
 
-	Array<size_t> result2 = TwoSum(nums, 6);
+	Array<int64_t> result2 = TwoSum(nums, 6);
 	REQUIRE(result2.Size() == 2);
 	REQUIRE(result2[0] == 1);
 	REQUIRE(result2[1] == 2);
@@ -55,7 +55,7 @@ TEST_CASE("StaticHashTable TwoSum", "[hash_table_two_sum]"){
 	nums.Add(3);
 	nums.Add(3);
 
-	Array<size_t> result3 = TwoSum(nums, 6);
+	Array<int64_t> result3 = TwoSum(nums, 6);
 	REQUIRE(result3.Size() == 2);
 	REQUIRE(result3[0] == 0);
 	REQUIRE(result3[1] == 1);

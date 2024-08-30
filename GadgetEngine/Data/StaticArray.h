@@ -72,11 +72,11 @@ namespace Gadget{
 		constexpr bool Contains(const T& value_) const{ return Find(value_) != -1; }
 
 		template <int SubSize>
-		StaticArray<T, SubSize> SubRange(size_t startIndex_) const{
+		StaticArray<T, SubSize> SubRange(int64_t startIndex_) const{
 			static_assert(SubSize <= Size);
 
 			StaticArray<T, SubSize> newArray;
-			for(size_t i = startIndex_; i < Size && i - startIndex_ < SubSize; i++){
+			for(int64_t i = startIndex_; i < Size && i - startIndex_ < SubSize; i++){
 				newArray[i] = data[i];
 			}
 
@@ -126,7 +126,7 @@ namespace Gadget{
 			return true;
 		}
 
-		constexpr size_t GetSize() const{ return Size; }
+		constexpr int64_t GetSize() const{ return Size; }
 
 		constexpr Iterator begin(){ return Iterator(*this, 0); }
 		constexpr const ConstIterator begin() const{ return ConstIterator(*this, 0); }

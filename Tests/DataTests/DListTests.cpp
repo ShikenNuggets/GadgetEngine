@@ -25,11 +25,11 @@ static inline DList<int> AddTwoNumbers(const DList<int>& l1_, const DList<int>& 
 		l2Digits.Add(d->value);
 	}
 
-	size_t totalDigits = std::max(l1Digits.Size(), l2Digits.Size());
+	int64_t totalDigits = std::max(l1Digits.Size(), l2Digits.Size());
 
 	Array<int> finalDigits = Array<int>(totalDigits);
 	int extra = 0;
-	for(size_t i = 0; i < totalDigits; i++){
+	for(int64_t i = 0; i < totalDigits; i++){
 		int newDigit = extra;
 		extra = 0;
 
@@ -63,7 +63,7 @@ static inline DList<int> AddTwoNumbers(const DList<int>& l1_, const DList<int>& 
 
 	DList<int> finalList;
 	GADGET_BASIC_ASSERT(finalList.IsValid());
-	for(size_t i = 0; i < finalDigits.Size(); i++){
+	for(int64_t i = 0; i < finalDigits.Size(); i++){
 		finalList.Add(finalDigits[i]);
 		GADGET_BASIC_ASSERT(finalList.IsValid());
 	}
@@ -278,14 +278,14 @@ TEST_CASE("DList Remove Dupes", "[dlist_remove_dupes]"){
 //-------------- Kth to Last Node (CTCI 2.2) -----------------//
 //------------------------------------------------------------//
 
-static inline DList<int>::Node* GetNthLastNode_UnknownSize(DList<int>::Node* const head, size_t nthLast){
+static inline DList<int>::Node* GetNthLastNode_UnknownSize(DList<int>::Node* const head, int64_t nthLast){
 	GADGET_BASIC_ASSERT(head != nullptr);
 
 	DList<int>::Node* current = head;
 	DList<int>::Node* skipNode = head;
 
-	size_t currentIndex = 0;
-	size_t size = 0;
+	int64_t currentIndex = 0;
+	int64_t size = 0;
 	while(skipNode != nullptr){
 		GADGET_BASIC_ASSERT(current != nullptr);
 		current = current->next;
@@ -301,14 +301,14 @@ static inline DList<int>::Node* GetNthLastNode_UnknownSize(DList<int>::Node* con
 	}
 
 	GADGET_BASIC_ASSERT(nthLast <= size);
-	size_t targetIndex = size - nthLast;
+	int64_t targetIndex = size - nthLast;
 	if(currentIndex > targetIndex){
 		//We went too far. Start over
 		current = head;
 		currentIndex = 0;
 	}
 
-	for(size_t i = currentIndex; i < targetIndex; i++){
+	for(int64_t i = currentIndex; i < targetIndex; i++){
 		GADGET_BASIC_ASSERT(current != nullptr);
 		if(current == nullptr){
 			break;

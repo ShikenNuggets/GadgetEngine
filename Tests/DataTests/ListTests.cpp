@@ -23,11 +23,11 @@ static inline List<int> AddTwoNumbers(const List<int>& l1_, const List<int>& l2_
 		l2Digits.Add(d->value);
 	}
 
-	size_t totalDigits = std::max(l1Digits.Size(), l2Digits.Size());
+	int64_t totalDigits = std::max(l1Digits.Size(), l2Digits.Size());
 
 	Array<int> finalDigits = Array<int>(totalDigits);
 	int extra = 0;
-	for(size_t i = 0; i < totalDigits; i++){
+	for(int64_t i = 0; i < totalDigits; i++){
 		int newDigit = extra;
 		extra = 0;
 
@@ -60,7 +60,7 @@ static inline List<int> AddTwoNumbers(const List<int>& l1_, const List<int>& l2_
 	}
 
 	List<int> finalList;
-	for(size_t i = 0; i < finalDigits.Size(); i++){
+	for(int64_t i = 0; i < finalDigits.Size(); i++){
 		finalList.Add(finalDigits[i]);
 	}
 
@@ -217,7 +217,7 @@ TEST_CASE("List Remove Dupes", "[list_remove_dupes]"){
 
 	List<int>::Node* current1 = list1.Front();
 	List<int>::Node* current2 = list1_2.Front();
-	size_t count = 0;
+	int64_t count = 0;
 	while(current1 != nullptr && current2 != nullptr){
 		REQUIRE(current1->value == current2->value);
 		current1 = current1->next;
@@ -274,14 +274,14 @@ TEST_CASE("List Remove Dupes", "[list_remove_dupes]"){
 //-------------- Kth to Last Node (CTCI 2.2) -----------------//
 //------------------------------------------------------------//
 
-static inline List<int>::Node* GetNthLastNode_UnknownSize(List<int>::Node* const head, size_t nthLast){
+static inline List<int>::Node* GetNthLastNode_UnknownSize(List<int>::Node* const head, int64_t nthLast){
 	GADGET_BASIC_ASSERT(head != nullptr);
 
 	List<int>::Node* current = head;
 	List<int>::Node* skipNode = head;
 
-	size_t currentIndex = 0;
-	size_t size = 0;
+	int64_t currentIndex = 0;
+	int64_t size = 0;
 	while(skipNode != nullptr){
 		GADGET_BASIC_ASSERT(current != nullptr);
 		current = current->next;
@@ -297,14 +297,14 @@ static inline List<int>::Node* GetNthLastNode_UnknownSize(List<int>::Node* const
 	}
 
 	GADGET_BASIC_ASSERT(nthLast <= size);
-	size_t targetIndex = size - nthLast;
+	int64_t targetIndex = size - nthLast;
 	if(currentIndex > targetIndex){
 		//We went too far. Start over
 		current = head;
 		currentIndex = 0;
 	}
 
-	for(size_t i = currentIndex; i < targetIndex; i++){
+	for(int64_t i = currentIndex; i < targetIndex; i++){
 		GADGET_BASIC_ASSERT(current != nullptr);
 		if(current == nullptr){
 			break;
@@ -595,7 +595,7 @@ TEST_CASE("List Sum", "[list_sum]"){
 //----------------- Palindrome (CTCI 2.6) --------------------//
 //------------------------------------------------------------//
 
-bool IsPalindrome(List<int>::Node* head, size_t debugListSize_){
+bool IsPalindrome(List<int>::Node* head, int64_t debugListSize_){
 	GADGET_BASIC_ASSERT(head != nullptr);
 
 	List<int>::Node* cur = head;
@@ -607,7 +607,7 @@ bool IsPalindrome(List<int>::Node* head, size_t debugListSize_){
 
 	std::stack<int> firstHalf;
 
-	size_t size = 1;
+	int64_t size = 1;
 	while(skip != nullptr){
 		firstHalf.push(cur->value);
 		cur = cur->next;
@@ -677,7 +677,7 @@ TEST_CASE("List Palindrome", "[list_palindrome]"){
 //------------------------------------------------------------//
 
 template <class T>
-static inline List<T>::Node* ListIntersects(const List<T>& a, const List<T>& b, size_t bListTrueSize_){
+static inline List<T>::Node* ListIntersects(const List<T>& a, const List<T>& b, int64_t bListTrueSize_){
 	if(a.IsEmpty() || b.IsEmpty()){
 		return nullptr;
 	}
@@ -796,8 +796,8 @@ static inline List<int>::Node* DetectLoop(List<int>::Node* head_){
 	return nullptr;
 }
 
-static inline List<int>::Node* DetectLoop_LowMemory(List<int>::Node* head_, size_t debugListSize_){
-	size_t debugNumIterations = 0;
+static inline List<int>::Node* DetectLoop_LowMemory(List<int>::Node* head_, int64_t debugListSize_){
+	int64_t debugNumIterations = 0;
 
 	//If there's an intersection, these will eventually collide
 	List<int>::Node* slowRunner = head_;

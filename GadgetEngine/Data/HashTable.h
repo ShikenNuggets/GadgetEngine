@@ -22,7 +22,7 @@ namespace Gadget{
 
 		class Iterator{
 		public:
-			constexpr Iterator(const Array<List<KeyValuePair>>& data_, size_t index_, List<KeyValuePair>::Node* node_) : data(data_), currentIndex(index_), currentNode(node_){}
+			constexpr Iterator(const Array<List<KeyValuePair>>& data_, int64_t index_, List<KeyValuePair>::Node* node_) : data(data_), currentIndex(index_), currentNode(node_){}
 
 			constexpr inline const V& operator*() const{ return currentNode->value.value; }
 			constexpr inline V& operator*(){ return currentNode->value.value; }
@@ -53,14 +53,14 @@ namespace Gadget{
 
 		private:
 			const Array<List<KeyValuePair>>& data;
-			size_t currentIndex;
+			int64_t currentIndex;
 			List<KeyValuePair>::Node* currentNode;
 		};
 
-		HashTable(size_t capacity = 1024) : data(Math::NextPrime(capacity)){}
+		HashTable(int64_t capacity = 1024) : data(Math::NextPrime(capacity)){}
 
 		void Add(const K& key_, const V& value_){
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			while(index >= data.Size()){
 				data.Add(List<KeyValuePair>());
@@ -76,7 +76,7 @@ namespace Gadget{
 		}
 
 		bool Contains(const K& key_) const{
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				return false;
@@ -95,7 +95,7 @@ namespace Gadget{
 
 		void RemoveAt(const K& key_){
 			GADGET_BASIC_ASSERT(Contains(key_));
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				GADGET_LOG_WARNING(SID("DataStructure"), "Tried to remove value at unknown key!");
@@ -123,7 +123,7 @@ namespace Gadget{
 
 		constexpr const V& operator[](const K& key_) const{
 			GADGET_BASIC_ASSERT(Contains(key_));
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				//There's no safe way to handle this request, so just error out
@@ -142,7 +142,7 @@ namespace Gadget{
 		}
 
 		V& operator[](const K& key_){
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 
 			if(!Contains(key_)){
@@ -212,12 +212,12 @@ namespace Gadget{
 	private:
 		Array<List<KeyValuePair>> data;
 
-		size_t KeyToIndex(const K& key_) const{
+		int64_t KeyToIndex(const K& key_) const{
 			if constexpr(std::is_same_v<K, StringID>){
 				return key_.GetID() % data.Capacity();
 			}else if constexpr(std::is_enum<K>()){
-				GADGET_BASIC_ASSERT(data.Capacity() > static_cast<size_t>(key_));
-				return static_cast<size_t>(key_);
+				GADGET_BASIC_ASSERT(data.Capacity() > static_cast<int64_t>(key_));
+				return static_cast<int64_t>(key_);
 			}else{
 				return Hash::MurmurHash64A(reinterpret_cast<const char*>(&key_), sizeof(key_)) % data.Capacity();
 			}

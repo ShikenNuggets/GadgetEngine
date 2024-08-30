@@ -41,13 +41,13 @@ namespace Gadget{
 
 		private:
 			StaticArray<KeyValuePair, Size>& data;
-			size_t index;
+			int64_t index;
 		};
 
 		StaticHashTable() : data(), elementsInUse(0){}
 
 		void Add(const K& key_, const V& value_){
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 			GADGET_BASIC_ASSERT(data[index].isInUse == false);
@@ -60,7 +60,7 @@ namespace Gadget{
 		}
 
 		bool Contains(const K& key_) const{
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 
@@ -68,7 +68,7 @@ namespace Gadget{
 		}
 
 		void RemoveAt(const K& key_){
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 
@@ -87,7 +87,7 @@ namespace Gadget{
 
 		const V& operator[](const K& key_) const{
 			GADGET_BASIC_ASSERT(Contains(key_));
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 
@@ -101,7 +101,7 @@ namespace Gadget{
 		}
 
 		V& operator[](const K& key_){
-			size_t index = KeyToIndex(key_);
+			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 
@@ -152,14 +152,14 @@ namespace Gadget{
 
 	private:
 		StaticArray<KeyValuePair, Size> data;
-		size_t elementsInUse;
+		int64_t elementsInUse;
 
-		size_t KeyToIndex(const K& key_) const{
+		int64_t KeyToIndex(const K& key_) const{
 			if constexpr(std::is_same_v<K, StringID>){
 				return key_.GetID() % Size;
 			}else if constexpr(std::is_enum<K>()){
-				GADGET_BASIC_ASSERT(Size > static_cast<size_t>(key_));
-				return static_cast<size_t>(key_);
+				GADGET_BASIC_ASSERT(Size > static_cast<int64_t>(key_));
+				return static_cast<int64_t>(key_);
 			}else{
 				return Hash::MurmurHash64A(reinterpret_cast<const char*>(&key_), sizeof(key_)) % Size;
 			}
