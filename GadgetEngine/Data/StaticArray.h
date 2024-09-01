@@ -7,8 +7,9 @@
 
 namespace Gadget{
 	template <class T, int64_t Size>
-	class StaticArray{
-	public:
+	struct StaticArray{
+		static_assert(Size > 0);
+
 		class Iterator{
 		public:
 			constexpr Iterator(StaticArray<T, Size>& data_, int64_t index_) : data(data_), index(index_){}
@@ -37,16 +38,6 @@ namespace Gadget{
 			const StaticArray<T, Size>& data;
 			int64_t index;
 		};
-
-		StaticArray() : data(){ static_assert(Size > 0); }
-
-		StaticArray(const StaticArray<T, Size>& array_) : data(){
-			for(int64_t i = 0; i < Size; i++){
-				data[i] = array_[i];
-			}
-		}
-
-		~StaticArray() = default;
 
 		constexpr void QuickSort(){
 			if constexpr(Size < 2){
@@ -133,9 +124,6 @@ namespace Gadget{
 		constexpr Iterator end(){ return Iterator(*this, Size); }
 		constexpr const ConstIterator end() const{ return ConstIterator(*this, Size); }
 
-	private:
-		T data[Size];
-
 		constexpr void QuickSort(int64_t low_, int64_t high_){
 			if(low_ >= 0 && high_ >= 0 && low_ < high_){
 				int64_t pivot = QuickSortPartition(low_, high_);
@@ -169,6 +157,8 @@ namespace Gadget{
 				data[rightIndex] = tmp;
 			}
 		}
+
+		T data[Size];
 	};
 }
 
