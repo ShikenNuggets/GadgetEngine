@@ -31,7 +31,7 @@ unsigned int AssimpAnimLoader::GetNumAnimClipsInFile(const std::string& filePath
 
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath_, 0); //No flags, no need to do any special post-processing since we're literally just checking the number of animations
-	if(scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == nullptr){
+	if(scene == nullptr || scene->mRootNode == nullptr){
 		GADGET_LOG_ERROR(SID("ASSET"), "AssImp could not load data! AssImp Error: " + std::string(importer.GetErrorString()));
 		return 0;
 	}
@@ -44,7 +44,7 @@ AnimClip* AssimpAnimLoader::LoadAnimClip(const std::string& filePath_, unsigned 
 
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath_, gLoadFlags);
-	if(scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == nullptr){
+	if(scene == nullptr || scene->mRootNode == nullptr){
 		GADGET_LOG_ERROR(SID("ASSET"), "AssImp could not load data! AssImp Error: " + std::string(importer.GetErrorString()));
 		return nullptr;
 	}
