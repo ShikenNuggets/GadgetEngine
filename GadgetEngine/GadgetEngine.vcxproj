@@ -389,6 +389,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation\AnimClip.cpp" />
+    <ClCompile Include="Animation\AnimMesh.cpp" />
     <ClCompile Include="Animation\Animator.cpp" />
     <ClCompile Include="Animation\Components\AnimRenderComponent.cpp" />
     <ClCompile Include="Animation\Loaders\AssimpAnimLoader.cpp" />

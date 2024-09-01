@@ -23,7 +23,7 @@ namespace Gadget{
 
 	class AnimMesh : public Resource{
 	public:
-		AnimMesh(const Array<AnimSubmesh>& submeshes_, const Skeleton& skeleton_) : submeshes(submeshes_), skeleton(skeleton_){}
+		AnimMesh(const Array<AnimSubmesh>& submeshes_, const Skeleton& skeleton_);
 
 		static constexpr const char* typeName = "AnimMesh";
 
