@@ -600,6 +600,9 @@
     <ClInclude Include="Serializers\ResourceContainerSerializer.h">
       <Filter>Serializers</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\ActionTimer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Utils\ByteSequencer.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -950,6 +953,9 @@
     </ClCompile>
     <ClCompile Include="Resource\ResourceManager.cpp">
       <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ActionTimer.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\ByteSequencer.cpp">
       <Filter>Utils</Filter>
