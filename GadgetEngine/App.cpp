@@ -100,7 +100,6 @@ void App::Initialize(const std::string& name_){
 
 	GUID::SetInitialGUID(); //Temp, in the future we'll pull the number of unique entities from the project files or whatever, and then set that here
 
-	materialCache = std::make_unique<MaterialCache>(); //Init before the renderer in case the renderer would like to cache some materials
 	InitRenderer();
 
 	audio = std::make_unique<Audio>();
@@ -153,6 +152,10 @@ void App::InitRenderer(){
 #else
 	static_assert(false, "Unhandled platform in App::Initialize!")
 #endif //GADGET_PLATFORM_WIN32
+
+	//MaterialCache must be created after the renderer so it can create material(s)
+	//But we'll create it before PostInit in case PostInit wants to cache any materials
+	materialCache = std::make_unique<MaterialCache>();
 
 	renderer->PostInit();
 }
