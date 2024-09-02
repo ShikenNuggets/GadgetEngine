@@ -57,6 +57,12 @@ void Animator::Update(float deltaTime_){
 		return;
 	}
 
+	//TODO - IsLooping
+	GADGET_BASIC_ASSERT(currentClip->GetLength() > 0.0f);
+	while(globalTime >= currentClip->GetLength()){
+		globalTime -= currentClip->GetLength();
+	}
+
 	UpdateSkeletonInstance(currentClip, globalTime);
 }
 
