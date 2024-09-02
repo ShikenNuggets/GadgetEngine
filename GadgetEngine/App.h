@@ -12,7 +12,6 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/Materials/MaterialCache.h"
 #include "Input/Input.h"
-#include "Memory/GlobalAllocator.h"
 #include "Memory/StackAllocator.h"
 #include "Physics/PhysManager.h"
 #include "Resource/ResourceManager.h"
