@@ -362,11 +362,20 @@
 	],
 	[
 		{
-			"string": "YBotModel"
+			"string": "YBotAnimModel"
 		},
 		{
 			"path": "Resources/YBot.fbx",
 			"resource_type": "AnimMesh"
+		}
+	],
+	[
+		{
+			"string": "StandUpAnim"
+		},
+		{
+			"path": "Resources/StandingUp.fbx",
+			"resource_type": "AnimClip"
 		}
 	]
 ]

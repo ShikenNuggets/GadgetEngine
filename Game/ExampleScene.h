@@ -7,6 +7,7 @@
 #include <Graphics/Components/LightComponent.h>
 #include <Graphics/Components/RenderComponent.h>
 #include <Graphics/Components/SkyboxComponent.h>
+#include <Graphics/GUI/FpsDisplayElement.h>
 #include <Graphics/Materials/EngineMaterial.h>
 #include <Physics/CubeCollider.h>
 #include <Physics/Rigidbody.h>
@@ -19,11 +20,30 @@ namespace Example{
 	public:
 		ExampleScene() : Gadget::Scene(SID("ExampleScene")){}
 
+		virtual void Update(float deltaTime_) override{
+			Scene::Update(deltaTime_);
+
+			static bool normalTimeScale = true;
+			if(Gadget::App::GetInput().GetButtonDown(Gadget::ButtonID::Keyboard_Q)){
+				normalTimeScale = !normalTimeScale;
+
+				if(!normalTimeScale){
+					Gadget::App::GetTime().SetTimeScale(0.25f);
+				}else{
+					Gadget::App::GetTime().SetTimeScale(1.0f);
+				}
+			}
+		}
+
 	protected:
 		virtual void SetToDefaultState() final override{
 			Gadget::Scene::SetToDefaultState();
 
 			AddSceneComponent(new Gadget::SkyboxComponent(this, SID("Skybox")));
+
+			Gadget::GuiCanvas* gc = new Gadget::GuiCanvas(SID("MainCanvas"));
+			gc->AddElement(new Gadget::FpsDisplayElement(SID("FPS"), SID("ArialFont"), Gadget::Vector2(1.65f, -0.95f), Gadget::Vector2(0.125f, 0.125f), Gadget::GuiAnchor::Center));
+			AddSceneComponent(new Gadget::CanvasSceneComponent(this, gc));
 
 			Gadget::EngineMaterial* redMaterial = new Gadget::EngineMaterial(Gadget::Color::Red());
 			Gadget::EngineMaterial* blueMaterial = new Gadget::EngineMaterial(Gadget::Color::Blue());
@@ -43,7 +63,9 @@ namespace Example{
 
 			Gadget::GameObject* player = new Gadget::GameObject(SID("Player"));
 			player->SetScale(0.02f);
-			player->AddComponent(new Gadget::AnimRenderComponent(player, SID("YBotModel"), materials));
+			auto* animRender = new Gadget::AnimRenderComponent(player, SID("YBotAnimModel"), materials);
+			animRender->AddClip(SID("StandUpAnim"));
+			player->AddComponent(animRender);
 			CreateObject(player);
 
 			//Gadget::GameObject* floor = new Gadget::GameObject();
