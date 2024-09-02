@@ -64,6 +64,10 @@ void Animator::AddClip(StringID clipName_){
 	GADGET_BASIC_ASSERT(clipName_ != StringID::None);
 	clips.Add(clipName_, App::GetResourceManager().LoadResource<AnimClip>(clipName_));
 	GADGET_BASIC_ASSERT(clips[clipName_] != nullptr);
+
+	if(currentClip == nullptr){
+		currentClip = clips[clipName_];
+	}
 }
 
 Matrix4 Animator::GetJointTransform(int32_t jointID_) const{
