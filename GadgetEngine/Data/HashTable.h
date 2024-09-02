@@ -72,6 +72,13 @@ namespace Gadget{
 			}
 		#endif //GADGET_DEBUG
 
+			for(const auto& n : data[index]){
+				if(n->value.key == key_){
+					GADGET_LOG_WARNING(SID("DATA"), "HashTable::Add called with key that's already present. This can result in memory leaks");
+					return; //Overwriting the existing value could result in a memory leak, so we just have to leave
+				}
+			}
+
 			data[index].Add(KeyValuePair(key_, value_));
 		}
 
