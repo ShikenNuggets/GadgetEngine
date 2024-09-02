@@ -13,15 +13,7 @@ namespace Gadget{
 		StaticArray<int32_t, maxJointWeights> jointIDs;
 		StaticArray<float, maxJointWeights> jointWeights;
 
-		AnimVertex(const Vector3& pos_, const Vector3& normal_, const Vector2& texCoords_) : vertex(pos_, normal_, texCoords_){
-			for(auto& i : jointIDs){
-				i = -1;
-			}
-
-			for(auto& w : jointWeights){
-				w = 0.0f;
-			}
-		}
+		AnimVertex(const Vector3& pos_, const Vector3& normal_, const Vector2& texCoords_) : vertex(pos_, normal_, texCoords_), jointIDs{ -1, -1, -1, -1 }, jointWeights{0.0f, 0.0f, 0.0f, 0.0f}{}
 
 		void AddWeight(int32_t jointID_, float weight_){
 			for(int i = 0; i < maxJointWeights; i++){
