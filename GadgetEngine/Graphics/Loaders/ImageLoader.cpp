@@ -19,8 +19,11 @@ Texture* ImageLoader::LoadImage(const std::string& filePath_){
 		return nullptr;
 	}
 
+	const size_t numPixels = static_cast<size_t>(surface->pitch) * surface->h;
+
 	std::vector<uint8_t> pixelData;
-	for(size_t i = 0; i < static_cast<size_t>(surface->pitch) * surface->h; i++){
+	pixelData.reserve(numPixels);
+	for(size_t i = 0; i < numPixels; i++){
 		pixelData.push_back(reinterpret_cast<uint8_t*>(surface->pixels)[i]);
 	}
 
