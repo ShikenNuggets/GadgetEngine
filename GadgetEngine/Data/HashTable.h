@@ -67,8 +67,8 @@ namespace Gadget{
 			}
 
 		#ifdef GADGET_DEBUG
-			if(!data[index].IsEmpty()){
-				GADGET_LOG_WARNING(SID("DataStructure"), "Performance: HashTable collision occured. Increasing your hash table size could improve performance");
+			if(data[index].Size() >= warnOnCollisionCount - 1){
+				GADGET_LOG_WARNING(SID("DataStructure"), "Performance: HashTable collision occured. Increasing your hash table size could improve performance (current capacity is " + std::to_string(data.Capacity()) + ")");
 			}
 		#endif //GADGET_DEBUG
 
@@ -218,6 +218,11 @@ namespace Gadget{
 
 	private:
 		Array<List<KeyValuePair>> data;
+
+		//Log a debug warning if more than N keys have the same hash
+		//Too low can trigger many irrelevant warnings, too high will hide legitimate optimization concerns
+		//N was chosen somewhat arbitrarily, so adjust this as you see fit
+		static constexpr int warnOnCollisionCount = 3;
 
 		int64_t KeyToIndex(const K& key_) const{
 			if constexpr(std::is_same_v<K, StringID>){
