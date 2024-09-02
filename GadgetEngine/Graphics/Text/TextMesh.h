@@ -13,7 +13,7 @@ namespace Gadget{
 
 		FreetypeFont* GetFont() const{ return font; }
 		Shader* GetShader() const{ return shader; }
-		std::string GetText() const{ return text; }
+		const std::string& GetText() const{ return text; }
 		MeshInfo* GetMeshInfo() const{ return meshInfo; }
 
 		size_t GetTotalWidthInPixels() const;

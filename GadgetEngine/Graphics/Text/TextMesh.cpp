@@ -26,7 +26,7 @@ TextMesh::~TextMesh(){
 size_t TextMesh::GetTotalWidthInPixels() const{
 	size_t totalWidthInPixels = 0;
 	for(const char c : text){
-		const FreetypeFontCharacter ch = font->GetCharacters().at(c);
+		const FreetypeFontCharacter& ch = font->GetCharacters().at(c);
 		totalWidthInPixels += (static_cast<size_t>(ch.advanceX) >> 6);
 	}
 
@@ -36,7 +36,7 @@ size_t TextMesh::GetTotalWidthInPixels() const{
 size_t TextMesh::GetTotalHeightInPixels() const{
 	size_t totalHeightInPixels = 0;
 	for(const char c : text){
-		const FreetypeFontCharacter ch = font->GetCharacters().at(c);
+		const FreetypeFontCharacter& ch = font->GetCharacters().at(c);
 
 		if(ch.rows > totalHeightInPixels){
 			totalHeightInPixels = static_cast<size_t>(ch.rows);

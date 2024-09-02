@@ -17,7 +17,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(color_.IsValid());
 		}
 
-		std::string GetText() const{ return textMesh.GetText(); }
+		const std::string& GetText() const{ return textMesh.GetText(); }
 		void SetText(const std::string& text_){ textMesh.SetText(text_); }
 
 		const TextMesh& GetTextMesh() const{ return textMesh; }

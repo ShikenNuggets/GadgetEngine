@@ -314,7 +314,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 			GL_DynamicMeshInfo* meshInfo = dynamic_cast<GL_DynamicMeshInfo*>(text->GetTextMesh().GetMeshInfo());
 
 			for(const char c : text->GetText()){
-				const FreetypeFontCharacter ch = text->GetTextMesh().GetFont()->GetCharacters().at(c);
+				const FreetypeFontCharacter& ch = text->GetTextMesh().GetFont()->GetCharacters().at(c);
 
 				GLfloat xpos = x + static_cast<float>(ch.left) * screenWidthPerPixel;
 				GLfloat ypos = y - static_cast<float>(ch.rows - ch.top) * screenHeightPerPixel;
