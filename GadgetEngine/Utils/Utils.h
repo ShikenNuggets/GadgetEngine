@@ -5,6 +5,7 @@
 //A LOT of engine code depends on this header, so it would quickly become circular dependency city
 
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstdint>
 #include <format>
@@ -205,6 +206,32 @@ namespace Gadget{
 
 		consteval std::string Stringify_CE(int64_t value_){
 			return Stringify(value_);
+		}
+
+		inline std::string FormatToByteSizeString(size_t bytes_){
+			static constexpr std::array<const char*, 11> postfixes{
+				"bytes",
+				"KB", "MB", "GB", "TB",
+				"PB", "EB", "ZB", "YB", "RB", "QB"
+			};
+
+			if(bytes_ <= 1024){
+				return std::to_string(bytes_) + " " + postfixes[0];
+			}
+
+			int currentPostFix = 0;
+			double finalNumber = static_cast<double>(bytes_);
+			while(finalNumber >= 1024.0){
+				currentPostFix++;
+				finalNumber /= 1024.0;
+			}
+
+			_ASSERT(currentPostFix < postfixes.size());
+
+			std::stringstream stream;
+			stream << std::setprecision(2) << finalNumber;
+			stream << " " << postfixes[currentPostFix];
+			return stream.str();
 		}
 
 		//----------------------------------------------------------------------------------------------------//
