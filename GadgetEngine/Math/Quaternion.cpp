@@ -76,7 +76,11 @@ Quaternion Quaternion::Lerp(const Quaternion& q1_, const Quaternion& q2_, float 
 	GADGET_BASIC_ASSERT(q2_.IsValid());
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(t_));
 
-	return (q1_ * (1 - t_) + q2_ * t_).Normalized();
+	if(Dot(q1_, q2_) < 0.0f){
+		return (q1_ * (1.0f - t_) + -q2_ * t_).Normalized();
+	}
+
+	return (q1_ * (1.0f - t_) + q2_ * t_).Normalized();
 }
 
 Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float t_){
