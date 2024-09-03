@@ -120,6 +120,7 @@ namespace Gadget{
 		}
 
 		constexpr inline bool IsEmpty() const{ return elementsInUse == 0; }
+		constexpr inline size_t SizeInBytes() const{ return sizeof(*this); }
 
 		constexpr inline Iterator begin(){
 			if(IsEmpty()){

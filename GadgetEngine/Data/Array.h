@@ -291,9 +291,10 @@ namespace Gadget{
 			return true;
 		}
 
-		constexpr int64_t Size() const{ return size; }
-		constexpr int64_t IsEmpty() const{ return size == 0; }
-		constexpr int64_t Capacity() const{ return capacity; }
+		constexpr inline int64_t Size() const{ return size; }
+		constexpr inline size_t SizeInBytes() const{ return sizeof(Array<T>) + (sizeof(T) * capacity); }
+		constexpr inline int64_t IsEmpty() const{ return size == 0; }
+		constexpr inline int64_t Capacity() const{ return capacity; }
 
 		constexpr Iterator begin(){ return Iterator(*this, 0); }
 		constexpr const ConstIterator begin() const{ return ConstIterator(*this, 0); }

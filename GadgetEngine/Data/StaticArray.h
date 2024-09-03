@@ -122,6 +122,7 @@ namespace Gadget{
 		}
 
 		constexpr int64_t GetSize() const{ return Size; }
+		constexpr size_t SizeInBytes() const{ return sizeof(*this); }
 
 		constexpr Iterator begin(){ return Iterator(*this, 0); }
 		constexpr const ConstIterator begin() const{ return ConstIterator(*this, 0); }

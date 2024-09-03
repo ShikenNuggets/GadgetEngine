@@ -169,7 +169,16 @@ namespace Gadget{
 			Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 		}
 
-		constexpr inline bool IsEmpty(){ return data.IsEmpty(); }
+		constexpr inline size_t SizeInBytes() const{
+			size_t size = sizeof(data);
+			for(const auto& l : data){
+				size += l.SizeInBytes();
+			}
+
+			return size;
+		}
+
+		constexpr inline bool IsEmpty() const{ return data.IsEmpty(); }
 
 		constexpr inline Array<K> Keys() const{
 			Array<K> keys;

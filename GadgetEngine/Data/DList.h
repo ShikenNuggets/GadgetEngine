@@ -254,6 +254,7 @@ namespace Gadget{
 		}
 
 		constexpr inline int64_t Size() const{ return size; }
+		constexpr inline size_t SizeInBytes() const{ return sizeof(DList<T>) + (sizeof(Node) * size); }
 		constexpr inline bool IsEmpty() const{ return size == 0; }
 		constexpr inline Node* Front() const{ return head; }
 		constexpr inline Node* Back() const{ return tail; }
