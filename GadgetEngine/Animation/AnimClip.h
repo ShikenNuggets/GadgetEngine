@@ -15,7 +15,7 @@ namespace Gadget{
 	public:
 		AnimClip(float length_, const HashTable<StringID, DList<VectorKey>>& posKeys_, const HashTable<StringID, DList<QuatKey>>& rotKeys_, const HashTable<StringID, DList<VectorKey>>& scaleKeys_) : length(length_), posKeys(posKeys_), rotKeys(rotKeys_), scaleKeys(scaleKeys_){}
 
-		virtual ~AnimClip() override{}
+		virtual ~AnimClip() override = default;
 
 		static constexpr const char* typeName = "AnimClip";
 
