@@ -28,6 +28,7 @@ namespace Gadget{
 
 		static inline constexpr Quaternion Identity(){ return Quaternion(1.0f, 0.0f, 0.0f, 0.0f); }
 
+		inline constexpr Quaternion operator -() const{ return Quaternion(-w, -x, -y, -z); }
 		inline constexpr Quaternion operator +(const Quaternion& q_) const{ return Quaternion(w + q_.w, x + q_.x, y + q_.y, z + q_.z); }
 
 		inline constexpr Quaternion operator *(const Quaternion& q_) const{
