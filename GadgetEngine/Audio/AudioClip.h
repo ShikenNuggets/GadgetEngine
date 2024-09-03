@@ -18,6 +18,8 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "AudioClip";
 
+		virtual size_t SizeInBytes() const override{ return sizeof(*this); } //TODO - Figure out how to get the actual amount allocated by FMOD
+
 		FMOD::Sound* GetSound2D(){ return sound2D; }
 		FMOD::Sound* GetSound3D(){ return sound3D; }
 

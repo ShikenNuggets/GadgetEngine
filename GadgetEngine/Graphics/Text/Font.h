@@ -13,6 +13,15 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "Font";
 
+		virtual size_t SizeInBytes() const override{
+			size_t size = sizeof(*this);
+			for(const auto& g : glyphs){
+				size += g.SizeInBytes();
+			}
+
+			return size;
+		}
+
 		std::vector<Vector2> CalculatePolygonForGlyph(unsigned char glyph_);
 		std::vector<std::vector<Vector2>> CalculatePolygonsForString(const std::string& text_);
 

@@ -21,6 +21,8 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "Texture";
 
+		virtual size_t SizeInBytes() const override{ return sizeof(*this) + (pixelData.capacity() * sizeof(uint8_t)); }
+
 		int GetWidth() const{ return width; }
 		int GetHeight() const{ return height; }
 		int GetBitDepth() const{ return bitDepth; }

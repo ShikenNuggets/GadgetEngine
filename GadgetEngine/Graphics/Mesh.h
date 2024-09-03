@@ -14,6 +14,8 @@ namespace Gadget{
 
 		const std::vector<Vertex> vertices;
 		const std::vector<uint32_t> indices;
+
+		constexpr inline size_t SizeInBytes() const{ return sizeof(*this) + (vertices.capacity() * sizeof(Vertex)) + (indices.capacity() * sizeof(uint32_t)); }
 	};
 
 	class Mesh : public Resource{
@@ -22,6 +24,15 @@ namespace Gadget{
 		Mesh(const std::vector<Vertex>& verts_, const std::vector<uint32_t>& indices_) : submeshes(1, Submesh(verts_, indices_)){}
 
 		static constexpr const char* typeName = "Mesh";
+
+		virtual size_t SizeInBytes() const{
+			size_t size = sizeof(*this);
+			for(const auto& sm : submeshes){
+				size += sm.SizeInBytes();
+			}
+
+			return size;
+		}
 
 		const std::vector<Submesh> submeshes;
 	};

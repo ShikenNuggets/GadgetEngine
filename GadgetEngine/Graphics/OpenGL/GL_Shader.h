@@ -19,6 +19,8 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "GL_Shader";
 
+		virtual size_t SizeInBytes() const override{ return sizeof(*this); } //TODO - Memory dynamically allocated for uniforms is not considered
+
 		GLuint GetShaderProgram();
 		virtual void Bind() override;
 		virtual void Unbind() override;

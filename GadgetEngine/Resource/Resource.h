@@ -7,6 +7,8 @@ namespace Gadget{
 	class Resource{
 	public:
 		virtual ~Resource() = default;
+
+		virtual size_t SizeInBytes() const = 0;
 	};
 
 	class ResourceContainer{
@@ -28,6 +30,7 @@ namespace Gadget{
 			if(!isLoaded){
 				GADGET_ASSERT(resource == nullptr, "Unloaded resource is not null!");
 				resource = LoadResource();
+				Debug::Log(SID("RESOURCE"), type + " [" + FileSystem::GetFileNameFromPath(path) + "] is using " + Utils::FormatToByteSizeString(resource->SizeInBytes()), Debug::Verbose);
 				isLoaded = true;
 			}
 

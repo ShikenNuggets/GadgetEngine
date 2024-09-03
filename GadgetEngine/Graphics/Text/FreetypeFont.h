@@ -41,6 +41,8 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "FreetypeFont";
 
+		virtual size_t SizeInBytes() const override{ return sizeof(*this); } //TODO - This isn't quite right
+
 		const std::map<char, FreetypeFontCharacter>& GetCharacters() const{ return characters; }
 		FontInfo* GetFontInfo() const{ return fontInfo; }
 

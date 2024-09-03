@@ -19,6 +19,8 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "AnimClip";
 
+		virtual size_t SizeInBytes() const override{ return sizeof(length) + posKeys.SizeInBytes() + rotKeys.SizeInBytes() + scaleKeys.SizeInBytes(); }
+
 		float GetLength() const{ return length; }
 		bool HasKeysForJoint(StringID jointName_) const;
 		FullClipSearchResult GetTransformAtTime(StringID jointName_, float time_, const VectorNode* posNode_, const QuatNode* rotNode_, const VectorNode* scaleNode_) const;

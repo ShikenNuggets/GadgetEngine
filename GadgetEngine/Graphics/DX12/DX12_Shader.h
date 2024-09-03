@@ -12,6 +12,8 @@ namespace Gadget{
 
 		static constexpr const char* typeName = "DX12_Shader";
 
+		virtual size_t SizeInBytes() const override{ return sizeof(*this); } //TODO - This isn't quite right
+
 		virtual void Bind() override{}
 		virtual void Unbind() override{}
 

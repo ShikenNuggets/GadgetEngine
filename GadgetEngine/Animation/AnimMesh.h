@@ -19,6 +19,8 @@ namespace Gadget{
 
 		const Array<AnimVertex> vertices;
 		const Array<uint32_t> indices;
+
+		constexpr inline size_t SizeInBytes() const{ return vertices.SizeInBytes() + indices.SizeInBytes(); }
 	};
 
 	class AnimMesh : public Resource{
@@ -26,6 +28,15 @@ namespace Gadget{
 		AnimMesh(const Array<AnimSubmesh>& submeshes_, const Skeleton& skeleton_);
 
 		static constexpr const char* typeName = "AnimMesh";
+
+		virtual size_t SizeInBytes() const override{
+			size_t size = sizeof(submeshes) + sizeof(skeleton);
+			for(const auto& sm : submeshes){
+				size += sm.SizeInBytes();
+			}
+
+			return size;
+		}
 
 		const Array<AnimSubmesh> submeshes;
 		const Skeleton skeleton;

@@ -27,6 +27,18 @@ namespace Gadget{
 		std::vector<int16_t> yCoordinates;
 
 		std::vector<GlyphContourPoint> points;
+
+		constexpr inline size_t SizeInBytes() const{
+			size_t size = sizeof(*this);
+			size += sizeof(uint16_t) * endPtsOfContours.capacity();
+			size += sizeof(uint8_t) * instructions.capacity();
+			size += sizeof(uint8_t) * flags.capacity();
+			size += sizeof(int16_t) * xCoordinates.capacity();
+			size += sizeof(int16_t) * yCoordinates.capacity();
+			size += sizeof(GlyphContourPoint) * points.capacity();
+
+			return size;
+		}
 	};
 }
 
