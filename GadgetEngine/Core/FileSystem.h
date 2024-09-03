@@ -32,8 +32,10 @@ namespace Gadget{
 
 	#ifdef GADGET_PLATFORM_WIN32
 		static constexpr char PathSeparator = '\\';
+		static constexpr char PathSeparator2 = '/';
 	#else
 		static constexpr char PathSeparator = '/';
+		static constexpr char PathSeparator2 = '\\';
 	#endif //GADGET_PLATFORM_WIN32
 		
 		static bool FileExists(const std::string& filePath_);
@@ -56,7 +58,12 @@ namespace Gadget{
 				return(path_.substr(i + 1, path_.length() - i));
 			}
 
-			return "";
+			i = path_.rfind(PathSeparator2, path_.length());
+			if(i != std::string::npos){
+				return(path_.substr(i + 1, path_.length() - i));
+			}
+
+			return path_;
 		}
 
 		static std::string GetPersistentDataDir();
