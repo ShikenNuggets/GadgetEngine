@@ -31,6 +31,11 @@ namespace Gadget{
 		
 		virtual Vector3 GetColliderSize() const override{
 			GADGET_BASIC_ASSERT(parent != nullptr);
+			if(parent == nullptr){
+				GADGET_LOG_ERROR(SID("PHYSICS"), "BoxCollider2D component has no parent!");
+				return Vector3(width, height, 1.0f);
+			}
+
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(width));
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(height));
 

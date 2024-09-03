@@ -12,6 +12,10 @@ namespace Gadget{
 
 		PointLightComponent(GameObject* parent_) : Component(type, parent_), lightSource(){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			if(parent_ == nullptr){
+				Debug::ThrowFatalError(SID("RENDER"), "PointLightComponent created with null parent!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+			}
+
 			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
 
 			componentCollection.Add(this);

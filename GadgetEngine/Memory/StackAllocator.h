@@ -45,6 +45,10 @@ namespace Gadget{
 
 		StackAllocator& CurrentBuffer(){
 			GADGET_BASIC_ASSERT(currentStack < numStacks);
+			if(currentStack >= numStacks){
+				Debug::ThrowFatalError(SID("MEMORY"), "DoubleBufferedStackAllocator::currentStack was invalid!", ErrorCode::Unknown, __FILE__, __LINE__);
+			}
+
 			return stacks[currentStack];
 		}
 

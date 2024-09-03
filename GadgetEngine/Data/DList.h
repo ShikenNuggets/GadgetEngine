@@ -158,6 +158,9 @@ namespace Gadget{
 
 			GADGET_BASIC_ASSERT(size > 0);
 			GADGET_BASIC_ASSERT(tail != nullptr && tail->prev != nullptr);
+			if(size == 0 || tail == nullptr || tail->prev == nullptr){
+				Debug::ThrowFatalError(SID("DATA"), "An error occurred while trying to pop from a doubly-linked lists!", ErrorCode::Unknown, __FILE__, __LINE__);
+			}
 
 			tail = tail->prev;
 			delete tail->next;

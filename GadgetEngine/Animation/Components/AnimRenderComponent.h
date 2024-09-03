@@ -59,6 +59,10 @@ namespace Gadget{
 
 		inline const Array<Matrix4>& GetCurrentSkeletonInstance() const{
 			GADGET_BASIC_ASSERT(animator != nullptr);
+			if(animator == nullptr){
+				Debug::ThrowFatalError(SID("ANIM"), "Tried to get skeleton instance, but AnimRenderComponent has no animator!", Gadget::ErrorCode::Invalid_State, __FILE__, __LINE__);
+			}
+
 			return animator->GetCurrentSkeletonInstance();
 		}
 

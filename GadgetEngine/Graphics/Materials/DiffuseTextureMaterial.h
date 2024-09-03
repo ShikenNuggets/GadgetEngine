@@ -19,8 +19,11 @@ namespace Gadget{
 			Texture* tex = App::GetResourceManager().LoadResource<Texture>(textureResourceName);
 			GADGET_ASSERT(tex != nullptr, "Could not load texture [" + textureResourceName.GetString() + "]!");
 
-			textureInfo = App::GetRenderer().GenerateAPITextureInfo(*tex);
-			GADGET_ASSERT(textureInfo != nullptr, "Could not generate texture info!");
+			if(tex != nullptr){
+				textureInfo = App::GetRenderer().GenerateAPITextureInfo(*tex);
+				GADGET_ASSERT(textureInfo != nullptr, "Could not generate texture info!");
+			}
+			
 			App::GetResourceManager().UnloadResource(textureResourceName);
 
 			GADGET_BASIC_ASSERT(shader != nullptr);
@@ -39,16 +42,26 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(shader != nullptr);
 			GADGET_BASIC_ASSERT(textureInfo != nullptr);
 
-			shader->Bind();
-			textureInfo->Bind();
+			if(shader != nullptr){
+				shader->Bind();
+			}
+
+			if(textureInfo != nullptr){
+				textureInfo->Bind();
+			}
 		}
 
 		virtual void Unbind() override{
 			GADGET_BASIC_ASSERT(shader != nullptr);
 			GADGET_BASIC_ASSERT(textureInfo != nullptr);
 
-			textureInfo->Unbind();
-			shader->Unbind();
+			if(textureInfo != nullptr){
+				textureInfo->Unbind();
+			}
+
+			if(shader != nullptr){
+				shader->Unbind();
+			}
 		}
 
 		virtual StringID TextureResourceName() const{ return textureResourceName; }

@@ -91,6 +91,11 @@ namespace Gadget{
 
 			void Add(T* element_){
 				GADGET_BASIC_ASSERT(element_ != nullptr);
+				if(element_ == nullptr){
+					GADGET_LOG_WARNING(SID("COMP"), "Tried to add nullptr to the ComponentCollection!");
+					return;
+				}
+
 				GADGET_BASIC_ASSERT(element_->GetGUID() != GUID::Invalid);
 				GADGET_BASIC_ASSERT(element_->GetParent() != nullptr);
 				GADGET_BASIC_ASSERT(element_->GetParent()->GetGUID() != GUID::Invalid);
@@ -110,6 +115,11 @@ namespace Gadget{
 
 			void Remove(T* element_){
 				GADGET_BASIC_ASSERT(element_ != nullptr);
+				if(element_ == nullptr){
+					GADGET_LOG_WARNING(SID("COMP"), "Tried to remove nullptr from the ComponentCollection!");
+					return;
+				}
+
 				GADGET_BASIC_ASSERT(element_->GetGUID() != GUID::Invalid);
 				GADGET_BASIC_ASSERT(element_->GetParent() != nullptr);
 				GADGET_BASIC_ASSERT(element_->GetParent()->GetGUID() != GUID::Invalid);

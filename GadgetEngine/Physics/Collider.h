@@ -50,6 +50,11 @@ namespace Gadget{
 
 		virtual Vector3 GetColliderSize() const{
 			GADGET_BASIC_ASSERT(parent != nullptr);
+			if(parent == nullptr){
+				GADGET_LOG_ERROR(SID("PHYSICS"), "Collider component has no parent!");
+				return Vector3::Fill(1.0f);
+			}
+
 			GADGET_BASIC_ASSERT(parent->GetScale().IsValid());
 			return parent->GetScale();
 		}

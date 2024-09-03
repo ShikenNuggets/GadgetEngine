@@ -14,6 +14,7 @@ namespace Gadget{
 		Invalid_Args,
 		FileIO,
 		Constructor_Failed,
+		Out_Of_Memory,
 
 		//Platform Errors
 		Win32_Error,
@@ -50,6 +51,7 @@ namespace Gadget{
 		"Invalid_Args",
 		"FileIO",
 		"Constructor_Failed",
+		"Out_Of_Memory",
 
 		//Platform Errors
 		"Win32_Error",

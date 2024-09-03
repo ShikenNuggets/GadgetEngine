@@ -166,6 +166,11 @@ namespace Gadget{
 
 			static void Add(GameObject* element_){
 				GADGET_BASIC_ASSERT(element_ != nullptr);
+				if(element_ == nullptr){
+					GADGET_LOG_WARNING(SID("GAMEOBJECT"), "Tried to add nullptr to the GameObjectCollection!");
+					return;
+				}
+
 				guidMap.emplace(element_->GetGUID(), element_);
 			}
 
@@ -176,6 +181,11 @@ namespace Gadget{
 
 			static void Remove(GameObject* element_){
 				GADGET_BASIC_ASSERT(element_ != nullptr);
+				if(element_ == nullptr){
+					GADGET_LOG_WARNING(SID("GAMEOBJECT"), "Tried to remove from the GameObjectCollection!");
+					return;
+				}
+
 				GADGET_BASIC_ASSERT(Utils::ContainsKey(guidMap, element_->GetGUID()));
 
 				Remove(element_->GetGUID());

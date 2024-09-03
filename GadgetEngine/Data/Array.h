@@ -312,6 +312,11 @@ namespace Gadget{
 			if(capacity > 0){
 				newData = static_cast<T*>(std::malloc(capacity * sizeof(T)));
 				GADGET_BASIC_ASSERT(newData != nullptr);
+				if(newData == nullptr){
+					//TODO - Out of Memory is probably recoverable, we just need a way to trigger "garbage collection"
+					Debug::ThrowFatalError(SID("DATA"), "Array::Reallocate failed!", ErrorCode::Out_Of_Memory, __FILE__, __LINE__);
+				}
+
 				std::memcpy(newData, data, size * sizeof(T));
 			}
 

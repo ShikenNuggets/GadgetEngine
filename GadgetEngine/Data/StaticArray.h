@@ -83,6 +83,10 @@ namespace Gadget{
 		constexpr T& operator[](int64_t i_){
 			GADGET_BASIC_ASSERT(i_ >= 0);
 			GADGET_BASIC_ASSERT(i_ < Size);
+			if(i_ <= 0 || i_ >= Size){
+				Debug::ThrowFatalError(SID("DATA"), "Invalid array index for StaticArray!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+			}
+
 			return data[i_];
 		}
 

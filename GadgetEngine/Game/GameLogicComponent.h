@@ -9,6 +9,10 @@ namespace Gadget{
 	public:
 		GameLogicComponent(StringID typeName_, GameObject* parent_) : Component(typeName_, parent_), hasStarted(false), collisionsToHandle(){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
+			if(parent_ == nullptr){
+				Debug::ThrowFatalError(SID("GAMELOGIC"), "GameLogicComponent initialized with null parent!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+			}
+
 			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);
 
 			componentCollection.Add(this);
