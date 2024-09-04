@@ -39,6 +39,12 @@ namespace Gadget{
 			int64_t index;
 		};
 
+		void Fill(const T& value_){
+			for(int64_t i = 0; i < Size; i++){
+				data[i] = value_;
+			}
+		}
+
 		constexpr void QuickSort(){
 			if constexpr(Size < 2){
 				return;
