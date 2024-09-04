@@ -121,6 +121,24 @@ TEST_CASE("Array Accessor" "[array_access]"){
 }
 
 //------------------------------------------------------------//
+//--------------- Array Assignment Operator ------------------//
+//------------------------------------------------------------//
+TEST_CASE("Array Assignment" "[array_assignment]"){
+	Array<int> test;
+	test.Add(0);
+	test.Add(1);
+	test.Add(2);
+	test.Add(3);
+	test.Add(4);
+
+	Array<int> test2 = test;
+
+	for(size_t i = 0; i < test2.Size(); i++){
+		REQUIRE(test2[i] == i);
+	}
+}
+
+//------------------------------------------------------------//
 //--------------- Zero Matrix (CTCI 1.8) ---------------------//
 //------------------------------------------------------------//
 //O(rows * cols)

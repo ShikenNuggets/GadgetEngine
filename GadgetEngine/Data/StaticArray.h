@@ -109,6 +109,8 @@ namespace Gadget{
 			for(int64_t i = 0; i < Size; i++){
 				data[i] = other_[i];
 			}
+
+			return *this;
 		}
 
 		constexpr bool IsSorted() const{

@@ -88,6 +88,18 @@ TEST_CASE("StaticArray Accessor" "[static_array_access]"){
 }
 
 //------------------------------------------------------------//
+//------------ StaticArray Assignment Operator ---------------//
+//------------------------------------------------------------//
+TEST_CASE("StaticArray Assignment" "[static_array_assignment]"){
+	StaticArray<int, 5> test{ 0, 1, 2, 3, 4 };
+	auto test2 = test;
+
+	for(size_t i = 0; i < test2.GetSize(); i++){
+		REQUIRE(test2[i] == i);
+	}
+}
+
+//------------------------------------------------------------//
 //--------------- Zero Matrix (CTCI 1.8) ---------------------//
 //------------------------------------------------------------//
 //O(rows * cols)
