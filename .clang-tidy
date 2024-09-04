@@ -67,6 +67,11 @@ Checks: '-*
 , cppcoreguidelines-slicing
 , cppcoreguidelines-special-member-functions
 , cppcoreguidelines-virtual-class-destructor
+, fuchsia-trailing-return
+, google-global-names-in-headers
+, google-readability-casting
+, google-runtime-int
+, google-runtime-operator
 '
 
 CheckOptions:
