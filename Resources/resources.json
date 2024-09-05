@@ -106,7 +106,27 @@
     ],
     [
         {
-            "string": "AnimColorShader"
+            "string": "UnlitColorShader"
+        },
+        {
+            "path1": "Resources/Shaders/OpenGL/defaultVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/unlitColorFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "AnimUnlitColorShader"
+        },
+        {
+            "path1": "Resources/Shaders/OpenGL/animVert.glsl",
+            "path2": "Resources/Shaders/OpenGL/unlitColorFrag.glsl",
+            "resource_type": "GL_Shader"
+        }
+    ],
+    [
+        {
+            "string": "AnimLitColorShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/animVert.glsl",
