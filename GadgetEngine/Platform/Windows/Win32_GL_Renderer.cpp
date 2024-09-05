@@ -163,6 +163,8 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 		//------------------------------------------------------------------------------------------------------------------------
 		//Render all meshes in the scene
+		static constexpr int maxLightSources = 8;
+
 		for(const auto& mesh : rendersBuffer){
 			for(size_t i = 0; i < mesh->GetNumSubmeshes(); i++){
 				mesh->Bind(i);
@@ -180,32 +182,34 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				mesh->GetShader(i)->BindInt(SID("numSpotLights"), static_cast<int>(spotLightsBuffer.size()));
 				mesh->GetShader(i)->BindInt(SID("numDirLights"), static_cast<int>(dirLightsBuffer.size()));
 
-				//TODO - Handle indexing for multiple light sources of one type
-				for(const auto* light : pointLightsBuffer){
+				for(int64_t j = 0; j < pointLightsBuffer.size() && j < maxLightSources; j++){
+					const auto* light = pointLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
-					mesh->GetShader(i)->BindVector3(SID("pointLights[0].position"), light->GetParent()->GetPosition());
-					mesh->GetShader(i)->BindColor(SID("pointLights[0].lightColor"), light->GetLightSource().GetColor());
-					mesh->GetShader(i)->BindFloat(SID("pointLights[0].constant"), light->GetLightSource().GetConstant());
-					mesh->GetShader(i)->BindFloat(SID("pointLights[0].linear"), light->GetLightSource().GetLinear());
-					mesh->GetShader(i)->BindFloat(SID("pointLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+					mesh->GetShader(i)->BindVector3(gPointPositions.Get(j), light->GetParent()->GetPosition());
+					mesh->GetShader(i)->BindColor(gPointLightColors.Get(j), light->GetLightSource().GetColor());
+					mesh->GetShader(i)->BindFloat(gPointConstants.Get(j), light->GetLightSource().GetConstant());
+					mesh->GetShader(i)->BindFloat(gPointLinears.Get(j), light->GetLightSource().GetLinear());
+					mesh->GetShader(i)->BindFloat(gPointQuadratics.Get(j), light->GetLightSource().GetQuadratic());
 				}
 
-				for(const auto* light : spotLightsBuffer){
+				for(int64_t j = 0; j < spotLightsBuffer.size() && j < maxLightSources; j++){
+					const auto* light = spotLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
-					mesh->GetShader(i)->BindVector3(SID("spotLights[0].position"), light->GetParent()->GetPosition());
-					mesh->GetShader(i)->BindVector3(SID("spotLights[0].direction"), light->GetLightSource().GetDirection());
-					mesh->GetShader(i)->BindFloat(SID("spotLights[0].cutOff"), light->GetLightSource().GetCutOff());
-					mesh->GetShader(i)->BindFloat(SID("spotLights[0].outerCutOff"), light->GetLightSource().GetOuterCutOff());
-					mesh->GetShader(i)->BindColor(SID("spotLights[0].lightColor"), light->GetLightSource().GetColor());
-					mesh->GetShader(i)->BindFloat(SID("spotLights[0].constant"), light->GetLightSource().GetConstant());
-					mesh->GetShader(i)->BindFloat(SID("spotLights[0].linear"), light->GetLightSource().GetLinear());
-					mesh->GetShader(i)->BindFloat(SID("spotLights[0].quadratic"), light->GetLightSource().GetQuadratic());
+					mesh->GetShader(i)->BindVector3(gSpotPositions.Get(j), light->GetParent()->GetPosition());
+					mesh->GetShader(i)->BindVector3(gSpotDirections.Get(j), light->GetLightSource().GetDirection());
+					mesh->GetShader(i)->BindFloat(gSpotCutOffs.Get(j), light->GetLightSource().GetCutOff());
+					mesh->GetShader(i)->BindFloat(gSpotOuterCutOffs.Get(j), light->GetLightSource().GetOuterCutOff());
+					mesh->GetShader(i)->BindColor(gSpotLightColors.Get(j), light->GetLightSource().GetColor());
+					mesh->GetShader(i)->BindFloat(gSpotConstants.Get(j), light->GetLightSource().GetConstant());
+					mesh->GetShader(i)->BindFloat(gSpotLinears.Get(j), light->GetLightSource().GetLinear());
+					mesh->GetShader(i)->BindFloat(gSpotQuadratics.Get(j), light->GetLightSource().GetQuadratic());
 				}
 
-				for(const auto* light : dirLightsBuffer){
+				for(int64_t j = 0; j < dirLightsBuffer.size() && j < maxLightSources; j++){
+					const auto* light = dirLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr);
-					mesh->GetShader(i)->BindVector3(SID("dirLights[0].direction"), light->GetLightSource().GetDirection());
-					mesh->GetShader(i)->BindColor(SID("dirLights[0].lightColor"), light->GetLightSource().GetColor());
+					mesh->GetShader(i)->BindVector3(gDirDirections.Get(j), light->GetLightSource().GetDirection());
+					mesh->GetShader(i)->BindColor(gDirLightColors.Get(j), light->GetLightSource().GetColor());
 				}
 
 				glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->GetMeshNumIndices(i)), GL_UNSIGNED_INT, nullptr);
@@ -240,7 +244,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				aMesh->GetShader(i)->BindInt(SID("numSpotLights"), static_cast<int>(spotLightsBuffer.size()));
 				aMesh->GetShader(i)->BindInt(SID("numDirLights"), static_cast<int>(dirLightsBuffer.size()));
 
-				for(int64_t j = 0; j < pointLightsBuffer.size(); j++){
+				for(int64_t j = 0; j < pointLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = pointLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
 					aMesh->GetShader(i)->BindVector3(gPointPositions.Get(j),	light->GetParent()->GetPosition());
@@ -250,7 +254,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					aMesh->GetShader(i)->BindFloat(gPointQuadratics.Get(j),		light->GetLightSource().GetQuadratic());
 				}
 
-				for(int64_t j = 0; j < spotLightsBuffer.size(); j++){
+				for(int64_t j = 0; j < spotLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = spotLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
 					aMesh->GetShader(i)->BindVector3(gSpotPositions.Get(j),		light->GetParent()->GetPosition());
@@ -263,7 +267,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					aMesh->GetShader(i)->BindFloat(gSpotQuadratics.Get(j),		light->GetLightSource().GetQuadratic());
 				}
 
-				for(int64_t j = 0; j < dirLightsBuffer.size(); j++){
+				for(int64_t j = 0; j < dirLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = dirLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr);
 					aMesh->GetShader(i)->BindVector3(gDirDirections.Get(j), light->GetLightSource().GetDirection());
