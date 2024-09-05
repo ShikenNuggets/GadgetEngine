@@ -8,6 +8,57 @@
 using namespace Gadget;
 
 //------------------------------------------------------------//
+//------------ List Construction/Assignment -----------------//
+//------------------------------------------------------------//
+
+TEST_CASE("List - Construction/Assignment", "[list_construct_assign]"){
+	List<int> test1;
+	test1.Add(0);
+	test1.Add(1);
+	test1.Add(2);
+	test1.Add(3);
+	test1.Add(4);
+	REQUIRE(test1.Size() == 5);
+
+	int64_t idx = 0;
+	for(const auto& n : test1){
+		REQUIRE(n != nullptr);
+		REQUIRE(n->value == idx);
+		idx++;
+	}
+
+	//Copy construction
+	List<int> test2(test1);
+	REQUIRE(test1.Size() == test2.Size());
+	for(int64_t i = 0; i < test2.Size(); i++){
+		REQUIRE(test1.GetNode(i)->value == test2.GetNode(i)->value);
+	}
+
+	//Move construction
+	List<int> test3(std::move(test2));
+	REQUIRE(test1.Size() == test3.Size());
+	REQUIRE(test2.IsEmpty());
+	for(int64_t i = 0; i < test3.Size(); i++){
+		REQUIRE(test1.GetNode(i)->value == test3.GetNode(i)->value);
+	}
+
+	//Copy assignment
+	List<int> test4 = test1;
+	REQUIRE(test1.Size() == test4.Size());
+	for(int64_t i = 0; i < test4.Size(); i++){
+		REQUIRE(test1.GetNode(i)->value == test4.GetNode(i)->value);
+	}
+
+	//Move assignment
+	List<int> test5 = std::move(test4);
+	REQUIRE(test1.Size() == test5.Size());
+	REQUIRE(test4.IsEmpty());
+	for(int64_t i = 0; i < test5.Size(); i++){
+		REQUIRE(test1.GetNode(i)->value == test5.GetNode(i)->value);
+	}
+}
+
+//------------------------------------------------------------//
 //------------ Add Two Numbers (Leetcode 2) ------------------//
 //------------------------------------------------------------//
 static inline List<int> AddTwoNumbers(const List<int>& l1_, const List<int>& l2_){

@@ -47,7 +47,7 @@ namespace Gadget{
 			}
 		}
 
-		constexpr DList(DList<T>&& other_) : size(other_.size), head(other_.head), tail(other_.tail){
+		constexpr DList(DList<T>&& other_) noexcept : size(other_.size), head(other_.head), tail(other_.tail){
 			other_.size = 0;
 			other_.head = nullptr;
 			other_.tail = nullptr;
@@ -71,7 +71,7 @@ namespace Gadget{
 			return *this;
 		}
 
-		constexpr DList<T>& operator=(DList<T>&& other_){
+		constexpr DList<T>& operator=(DList<T>&& other_) noexcept{
 			if(&other_ == this){
 				return *this; //Self-assignment
 			}

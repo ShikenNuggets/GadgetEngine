@@ -121,20 +121,49 @@ TEST_CASE("Array Accessor" "[array_access]"){
 }
 
 //------------------------------------------------------------//
-//--------------- Array Assignment Operator ------------------//
+//------------- Array Construction/Assignment ----------------//
 //------------------------------------------------------------//
-TEST_CASE("Array Assignment" "[array_assignment]"){
-	Array<int> test;
-	test.Add(0);
-	test.Add(1);
-	test.Add(2);
-	test.Add(3);
-	test.Add(4);
+TEST_CASE("Array Construction/Assignment" "[array_construct_assign]"){
+	//Default construction
+	Array<int> test1;
+	test1.Add(0);
+	test1.Add(1);
+	test1.Add(2);
+	test1.Add(3);
+	test1.Add(4);
+	REQUIRE(test1.Size() == 5);
+	for(size_t i = 0; i < test1.Size(); i++){
+		REQUIRE(test1[i] == i);
+	}
 
-	Array<int> test2 = test;
+	//Copy construction
+	Array<int> test2(test1);
+	REQUIRE(test1.Size() == test2.Size());
+	for(int64_t i = 0; i < test1.Size(); i++){
+		REQUIRE(test1[i] == test2[i]);
+	}
 
-	for(size_t i = 0; i < test2.Size(); i++){
-		REQUIRE(test2[i] == i);
+	//Move construction
+	Array<int> test3(std::move(test2));
+	REQUIRE(test3.Size() == test1.Size());
+	REQUIRE(test2.IsEmpty());
+	for(int64_t i = 0; i < test1.Size(); i++){
+		REQUIRE(test1[i] == test3[i]);
+	}
+
+	//Copy assignment
+	Array<int> test4 = test1;
+	REQUIRE(test1.Size() == test4.Size());
+	for(int64_t i = 0; i < test4.Size(); i++){
+		REQUIRE(test1[i] == test4[i]);
+	}
+
+	//Move assignment
+	Array<int> test5 = std::move(test4);
+	REQUIRE(test5.Size() == test1.Size());
+	REQUIRE(test4.IsEmpty());
+	for(int64_t i = 0; i < test1.Size(); i++){
+		REQUIRE(test1[i] == test5[i]);
 	}
 }
 

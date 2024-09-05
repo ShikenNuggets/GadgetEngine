@@ -34,7 +34,7 @@ void RotateMatrixRight90(StaticArray<StaticArray<T, Size>, Size>& inMatrix_){
 
 TEST_CASE("StaticArray Accessor" "[static_array_access]"){
 	//----- 2x2 rotation -----//
-	StaticArray<StaticArray<int, 2>, 2> matrix2;
+	StaticArray<StaticArray<int, 2>, 2> matrix2{};
 	matrix2[0][0] = 0;
 	matrix2[0][1] = 1;
 	matrix2[1][0] = 2;
@@ -53,7 +53,7 @@ TEST_CASE("StaticArray Accessor" "[static_array_access]"){
 	REQUIRE(matrix2[1][1] == 1);
 
 	//----- 3x3 rotation -----//
-	StaticArray<StaticArray<int, 3>, 3> matrix3;
+	StaticArray<StaticArray<int, 3>, 3> matrix3{};
 	matrix3[0][0] = 0;
 	matrix3[0][1] = 1;
 	matrix3[0][2] = 2;
@@ -88,14 +88,41 @@ TEST_CASE("StaticArray Accessor" "[static_array_access]"){
 }
 
 //------------------------------------------------------------//
-//------------ StaticArray Assignment Operator ---------------//
+//----------- StaticArray Construction/Assignment ------------//
 //------------------------------------------------------------//
-TEST_CASE("StaticArray Assignment" "[static_array_assignment]"){
-	StaticArray<int, 5> test{ 0, 1, 2, 3, 4 };
-	auto test2 = test;
+TEST_CASE("StaticArray Construction/Assignment" "[staticarray_construct_assign]"){
+	static constexpr StaticArray<int, 5> test1 = { 0, 1, 2, 3, 4 };
+	REQUIRE(test1.GetSize() == 5);
+	for(size_t i = 0; i < test1.GetSize(); i++){
+		REQUIRE(test1[i] == i);
+	}
 
-	for(size_t i = 0; i < test2.GetSize(); i++){
-		REQUIRE(test2[i] == i);
+	//Copy construction
+	StaticArray<int, 5> test2(test1);
+	REQUIRE(test1.GetSize() == test2.GetSize());
+	for(int64_t i = 0; i < test1.GetSize(); i++){
+		REQUIRE(test1[i] == test2[i]);
+	}
+
+	//Move construction
+	StaticArray<int, 5> test3(std::move(test2));
+	REQUIRE(test3.GetSize() == test1.GetSize());
+	for(int64_t i = 0; i < test1.GetSize(); i++){
+		REQUIRE(test1[i] == test3[i]);
+	}
+
+	//Copy assignment
+	StaticArray<int, 5> test4 = test1;
+	REQUIRE(test1.GetSize() == test4.GetSize());
+	for(int64_t i = 0; i < test4.GetSize(); i++){
+		REQUIRE(test1[i] == test4[i]);
+	}
+
+	//Move assignment
+	StaticArray<int, 5> test5 = std::move(test4);
+	REQUIRE(test5.GetSize() == test1.GetSize());
+	for(int64_t i = 0; i < test1.GetSize(); i++){
+		REQUIRE(test1[i] == test5[i]);
 	}
 }
 
@@ -218,7 +245,7 @@ TEST_CASE("StaticArray Sort the People", "[staticarray_sort_the_people]"){
 	names1[1] = "John";
 	names1[2] = "Emma";
 
-	StaticArray<int, 3> heights1;
+	StaticArray<int, 3> heights1{};
 	heights1[0] = 180;
 	heights1[1] = 165;
 	heights1[2] = 170;
@@ -237,7 +264,7 @@ TEST_CASE("StaticArray Sort the People", "[staticarray_sort_the_people]"){
 	names2[1] = "Bob";
 	names2[2] = "Bob";
 
-	StaticArray<int, 3> heights2;
+	StaticArray<int, 3> heights2{};
 	heights2[0] = 155;
 	heights2[1] = 185;
 	heights2[2] = 150;
@@ -285,21 +312,21 @@ static inline bool LemonadeChange(const StaticArray<int, Size>& bills){
 }
 
 TEST_CASE("StaticArray Lemonade Change", "[staticarray_lemonade_change]"){
-	StaticArray<int, 5> case1;
+	StaticArray<int, 5> case1{};
 	case1[0] = 5;
 	case1[1] = 5;
 	case1[2] = 5;
 	case1[3] = 10;
 	case1[4] = 20;
 
-	StaticArray<int, 5> case2;
+	StaticArray<int, 5> case2{};
 	case2[0] = 5;
 	case2[1] = 5;
 	case2[2] = 10;
 	case2[3] = 10;
 	case2[4] = 20;
 
-	StaticArray<int, 20> case3;
+	StaticArray<int, 20> case3{};
 	case3[0] = 5;
 	case3[1] = 5;
 	case3[2] = 10;
@@ -361,21 +388,21 @@ static inline int64_t SemiOrderedPermutation(const StaticArray<int, _Capacity>& 
 }
 
 TEST_CASE("StaticArray Semi-Ordered Permutation", "[staticarray_semi_ordered_permuation]"){
-	StaticArray<int, 4> test1;
+	StaticArray<int, 4> test1{};
 	test1[0] = 2;
 	test1[1] = 1;
 	test1[2] = 4;
 	test1[3] = 3;
 	REQUIRE(SemiOrderedPermutation(test1) == 2);
 
-	StaticArray<int, 4> test2;
+	StaticArray<int, 4> test2{};
 	test2[0] = 2;
 	test2[1] = 4;
 	test2[2] = 1;
 	test2[3] = 3;
 	REQUIRE(SemiOrderedPermutation(test2) == 3);
 
-	StaticArray<int, 5> test3;
+	StaticArray<int, 5> test3{};
 	test3[0] = 1;
 	test3[1] = 3;
 	test3[2] = 4;

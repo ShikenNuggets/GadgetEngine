@@ -48,7 +48,7 @@ namespace Gadget{
 			}
 		}
 
-		Array(Array<T>&& other_) : data(other_.data), size(other_.size), capacity(other_.capacity){
+		Array(Array<T>&& other_) noexcept : data(other_.data), size(other_.size), capacity(other_.capacity){
 			other_.data = nullptr;
 			other_.size = 0;
 			other_.capacity = 0;
@@ -74,7 +74,7 @@ namespace Gadget{
 			return *this;
 		}
 
-		constexpr Array<T>& operator=(Array<T>&& other_){
+		constexpr Array<T>& operator=(Array<T>&& other_) noexcept{
 			if(&other_ == this){
 				return *this;
 			}
