@@ -126,7 +126,7 @@
     ],
     [
         {
-            "string": "AnimLitColorShader"
+            "string": "AnimColorShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/animVert.glsl",
