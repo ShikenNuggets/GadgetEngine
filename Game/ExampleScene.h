@@ -64,22 +64,27 @@ namespace Example{
 			Gadget::GameObject* player = new Gadget::GameObject(SID("Player"));
 			player->SetScale(0.02f);
 			auto* animRender = new Gadget::AnimRenderComponent(player, SID("YBotAnimModel"), materials);
+			animRender->AddClip(SID("IdleAnim"));
 			animRender->AddClip(SID("StandUpAnim"));
+			animRender->AddClip(SID("CrouchWalkAnim"));
 			player->AddComponent(animRender);
 			CreateObject(player);
 
-			//Gadget::GameObject* floor = new Gadget::GameObject();
-			//floor->SetPosition(Gadget::Vector3(0.0f, -2.5f, 0.0f));
-			//floor->SetScale(Gadget::Vector3(25.0f, 0.01f, 25.0f));
-			//floor->AddComponent(new Gadget::RenderComponent(floor->GetGUID(), SID("CubeModel"), SID("CubeTexture"), SID("DefaultShader")));
-			//floor->AddComponent(new Gadget::RenderComponent(floor->GetGUID(), SID("CubeModel"), blueMaterial));
-			//floor->AddComponent(new Gadget::CubeCollider(floor));
-			//CreateObject(floor);
+			Gadget::GameObject* floor = new Gadget::GameObject();
+			floor->SetScale(Gadget::Vector3(5.0f, 0.01f, 5.0f));
+			floor->AddComponent(new Gadget::RenderComponent(floor->GetGUID(), SID("CubeModel"), SID("BrickMaterial")));
+			floor->AddComponent(new Gadget::CubeCollider(floor));
+			CreateObject(floor);
 
 			Gadget::GameObject* light = new Gadget::GameObject();
 			light->SetPosition(2.0f, -1.0f, 1.0f);
 			light->AddComponent(new Gadget::PointLightComponent(light));
 			CreateObject(light);
+
+			Gadget::GameObject* dirLight = new Gadget::GameObject(SID("DirLight"));
+			dirLight->Rotate(-75.0f, 15.0f, 0.0f);
+			dirLight->AddComponent(new Gadget::DirectionalLightComponent(dirLight));
+			CreateObject(dirLight);
 
 			Gadget::GameObject* camera = new Gadget::GameObject();
 			camera->SetPosition(0.0f, 2.5f, 8.0f);

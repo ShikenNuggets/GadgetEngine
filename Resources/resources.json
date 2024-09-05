@@ -397,5 +397,23 @@
 			"path": "Resources/StandingUp.fbx",
 			"resource_type": "AnimClip"
 		}
+	],
+	[
+		{
+			"string": "CrouchWalkAnim"
+		},
+		{
+			"path": "Resources/CrouchWalk.fbx",
+			"resource_type": "AnimClip"
+		}
+	],
+	[
+		{
+			"string": "IdleAnim"
+		},
+		{
+			"path": "Resources/Idle.fbx",
+			"resource_type": "AnimClip"
+		}
 	]
 ]
