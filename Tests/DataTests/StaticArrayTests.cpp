@@ -93,7 +93,7 @@ TEST_CASE("StaticArray Accessor" "[static_array_access]"){
 TEST_CASE("StaticArray Construction/Assignment" "[staticarray_construct_assign]"){
 	static constexpr StaticArray<int, 5> test1 = { 0, 1, 2, 3, 4 };
 	REQUIRE(test1.GetSize() == 5);
-	for(size_t i = 0; i < test1.GetSize(); i++){
+	for(int64_t i = 0; i < test1.GetSize(); i++){
 		REQUIRE(test1[i] == i);
 	}
 
@@ -158,7 +158,7 @@ static inline void ZeroMatrix(StaticArray<StaticArray<T, SizeC>, SizeR>& inMatri
 }
 
 TEST_CASE("StaticArray Zero Matrix", "[static_array_zero_matrix]"){
-	StaticArray<StaticArray<int, 4>, 3> matrix;
+	StaticArray<StaticArray<int, 4>, 3> matrix{};
 	matrix[0][0] = 1;
 	matrix[0][1] = 1;
 	matrix[0][2] = 1;
