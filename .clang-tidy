@@ -72,6 +72,10 @@ Checks: '-*
 , google-readability-casting
 , google-runtime-int
 , google-runtime-operator
+, hicpp-exception-baseclass
+, hicpp-ignored-remove-result
+, hicpp-no-assembler
+, hicpp-signed-bitwise
 '
 
 CheckOptions:
@@ -97,4 +101,7 @@ CheckOptions:
    value: true
    
  - key: "cppcoreguidelines-special-member-functions.AllowImplicitlyDeletedCopyOrMove"
+   value: true
+
+ - key: "hicpp-signed-bitwise.IgnorePositiveIntegerLiterals"
    value: true
