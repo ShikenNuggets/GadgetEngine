@@ -48,6 +48,53 @@ namespace Gadget{
 			}
 		}
 
+		Array(Array<T>&& other_) : data(other_.data), size(other_.size), capacity(other_.capacity){
+			other_.data = nullptr;
+			other_.size = 0;
+			other_.capacity = 0;
+
+			GADGET_BASIC_ASSERT(other_.IsEmpty());
+		}
+
+		constexpr Array<T>& operator=(const Array<T>& other_){
+			if(&other_ == this){
+				return *this;
+			}
+
+			GADGET_BASIC_ASSERT(other_.Capacity() > 0);
+
+			Clear();
+
+			capacity = other_.Capacity();
+			Reallocate();
+			for(int64_t i = 0; i < other_.Size(); i++){
+				Add(other_[i]);
+			}
+
+			return *this;
+		}
+
+		constexpr Array<T>& operator=(Array<T>&& other_){
+			if(&other_ == this){
+				return *this;
+			}
+
+			Clear();
+
+			capacity = other_.capacity;
+			Reallocate();
+			for(int64_t i = 0; i < other_.Size(); i++){
+				Add(other_[i]);
+			}
+
+			other_.data = nullptr;
+			other_.size = 0;
+			other_.capacity = 0;
+
+			GADGET_BASIC_ASSERT(other_.IsEmpty());
+			return *this;
+		}
+
 		explicit Array(int64_t initialCapacity_) : data(nullptr), size(0), capacity(0){
 			Reserve(initialCapacity_);
 		}
@@ -258,27 +305,6 @@ namespace Gadget{
 			}
 
 			return true;
-		}
-
-		constexpr Array<T>& operator=(const Array<T>& other_){
-			if(&other_ == this){
-				return *this;
-			}
-
-			GADGET_BASIC_ASSERT(other_.Capacity() > 0);
-
-			if(data != nullptr){
-				std::free(data);
-				size = 0;
-			}
-
-			capacity = other_.Capacity();
-			data = static_cast<T*>(std::malloc(capacity * sizeof(T)));
-			for(int i = 0; i < other_.Size(); i++){
-				Add(other_[i]);
-			}
-
-			return *this;
 		}
 
 		constexpr bool IsSorted(){

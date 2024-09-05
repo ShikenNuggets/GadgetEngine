@@ -106,19 +106,6 @@ namespace Gadget{
 			return true;
 		}
 
-		constexpr StaticArray<T, Size>& operator=(const StaticArray<T, Size>& other_){
-			GADGET_BASIC_ASSERT(&other_ != this);
-			if(&other_ == this){
-				return *this;
-			}
-
-			for(int64_t i = 0; i < Size; i++){
-				data[i] = other_[i];
-			}
-
-			return *this;
-		}
-
 		constexpr bool IsSorted() const{
 			for(int64_t i = 0; i < Size - 1; i++){
 				if(data[i] > data[i + 1]){

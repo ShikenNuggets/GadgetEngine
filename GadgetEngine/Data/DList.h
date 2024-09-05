@@ -47,18 +47,48 @@ namespace Gadget{
 			}
 		}
 
+		constexpr DList(DList<T>&& other_) : size(other_.size), head(other_.head), tail(other_.tail){
+			other_.size = 0;
+			other_.head = nullptr;
+			other_.tail = nullptr;
+
+			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_BASIC_ASSERT(other_.IsEmpty());
+			GADGET_BASIC_ASSERT(other_.IsValid());
+		}
+
 		constexpr DList<T>& operator=(const DList<T>& other_){
 			if(&other_ == this){
 				return *this; //Self-assignment
 			}
 
-			while(!IsEmpty()){
-				Pop();
-			}
+			Clear();
 
 			for(const auto& n : other_){
 				Add(n->value);
 			}
+
+			return *this;
+		}
+
+		constexpr DList<T>& operator=(DList<T>&& other_){
+			if(&other_ == this){
+				return *this; //Self-assignment
+			}
+
+			Clear();
+
+			size = other_.size;
+			head = other_.head;
+			tail = other_.tail;
+
+			other_.size = 0;
+			other_.head = nullptr;
+			other_.tail = nullptr;
+
+			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_BASIC_ASSERT(other_.IsEmpty());
+			GADGET_BASIC_ASSERT(other_.IsValid());
 
 			return *this;
 		}

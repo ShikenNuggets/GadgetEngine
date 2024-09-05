@@ -45,20 +45,48 @@ namespace Gadget{
 			}
 		}
 
+		constexpr List(List<T>&& other_) : size(other_.size), head(other_.head), tail(other_.tail){
+			other_.size = 0;
+			other_.head = nullptr;
+			other_.tail = nullptr;
+
+			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_BASIC_ASSERT(other_.IsEmpty());
+			GADGET_BASIC_ASSERT(other_.IsValid());
+		}
+
 		constexpr List<T>& operator=(const List<T>& other_){
 			if(&other_ == this){
 				return *this; //Self-assignment
 			}
 
-			while(!IsEmpty()){
-				Pop();
-			}
+			Clear();
 
 			for(const auto& n : other_){
 				Add(n->value);
 			}
 
 			return *this;
+		}
+
+		constexpr List<T>& operator=(List<T>&& other_){
+			if(&other_ == this){
+				return *this; //Self-assignment
+			}
+
+			Clear();
+
+			size = other_.size;
+			head = other_.head;
+			tail = other_.tail;
+
+			other_.size = 0;
+			other_.head = nullptr;
+			other_.tail = nullptr;
+
+			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_BASIC_ASSERT(other_.IsEmpty());
+			GADGET_BASIC_ASSERT(other_.IsValid());
 		}
 
 		constexpr ~List(){
@@ -125,11 +153,11 @@ namespace Gadget{
 		//Absorbs all nodes from the other list
 		//The other list will be empty after this operation
 		inline void Merge(List<T>& other_){
-			tail->next = other_->head;
-			tail = other_->tail;
+			tail->next = other_.head;
+			tail = other_.tail;
 			size += other_.size;
 
-			//Empty the other list so there's no ambiguity on ownership
+			//Empty the other list so there's no ambiguity on ownership - This operation is effectively a move
 			other_.head = nullptr;
 			other_.tail = nullptr;
 			other_.size = 0;

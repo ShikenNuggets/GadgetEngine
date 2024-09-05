@@ -59,6 +59,12 @@ namespace Gadget{
 
 		HashTable(int64_t capacity = 1024) : data(Math::NextPrime(capacity)){}
 
+		HashTable(const HashTable<K, V>& other_) = default;
+		HashTable(HashTable<K, V>&& other_) = default;
+		HashTable<K, V>& operator=(const HashTable<K, V>& other_) = default;
+		HashTable<K, V>& operator=(HashTable<K, V>&& other_) = default;
+		~HashTable() = default;
+
 		void Add(const K& key_, const V& value_){
 			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
