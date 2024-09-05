@@ -9,7 +9,7 @@
 namespace StarHawx{
 	class PlayerController : public Gadget::GameLogicComponent{
 	public:
-		PlayerController(Gadget::GameObject* parent_) : GameLogicComponent(SID("PlayerController"), parent_), rigidbody(nullptr), flightSpeed(15.0f), tiltDir(TiltDir::None), tiltAngle(35.0f), tiltLerpSpeed(0.5f), tiltLerpTimer(0.0f), isLerping(false){}
+		PlayerController(Gadget::GameObject* parent_) : GameLogicComponent(SID("PlayerController"), parent_), rigidbody(nullptr), flightSpeed(15.0f), tiltDir(TiltDir::None), tiltAngle(35.0f), tiltLerpSpeed(0.5f), tiltLerpTimer(0.0f), isLerping(false), muteAudio(false){}
 
 		virtual void OnStart() final override{
 			GADGET_BASIC_ASSERT(parent != nullptr);
@@ -69,6 +69,15 @@ namespace StarHawx{
 				SpawnProjectile();
 			}
 
+			if(Gadget::App::GetInput().GetButtonDown(Gadget::ButtonID::Keyboard_M)){
+				muteAudio = !muteAudio;
+				if(muteAudio){
+					Gadget::App::GetAudio().SetVolume(0.0f);
+				}else{
+					Gadget::App::GetAudio().SetVolume(1.0f);
+				}
+			}
+
 			GameLogicComponent::OnUpdate(deltaTime_);
 		}
 
@@ -84,6 +93,7 @@ namespace StarHawx{
 		float tiltLerpSpeed;
 		float tiltLerpTimer;
 		bool isLerping;
+		bool muteAudio;
 
 		void SetNewTiltDir(TiltDir newDir_){
 			if(newDir_ == tiltDir){
