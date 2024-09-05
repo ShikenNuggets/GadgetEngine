@@ -41,9 +41,11 @@ uniform int numPointLights;
 uniform int numSpotLights;
 uniform int numDirLights;
 
-uniform PointLight pointLights[4];
-uniform SpotLight spotLights[4];
-uniform DirLight dirLights[1];
+const int gMaxLights = 8;
+
+uniform PointLight pointLights[gMaxLights];
+uniform SpotLight spotLights[gMaxLights];
+uniform DirLight dirLights[gMaxLights];
 
 //Function Prototypes
 vec3 GetPointLightShading(PointLight light, vec3 viewDir);
@@ -54,15 +56,15 @@ void main(){
 	vec3 viewDir = normalize(viewPos - outFragPos);
 
 	vec3 result = vec3(0.0, 0.0, 0.0);
-	for(int i = 0; i < numPointLights; i++){
+	for(int i = 0; i < numPointLights && i < gMaxLights; i++){
 		result += GetPointLightShading(pointLights[i], viewDir);
 	}
 
-	for(int i = 0; i < numSpotLights; i++){
+	for(int i = 0; i < numSpotLights && i < gMaxLights; i++){
 		result += GetSpotLightShading(spotLights[i], viewDir);
 	}
 
-	for(int i = 0; i < numDirLights; i++){
+	for(int i = 0; i < numDirLights && i < gMaxLights; i++){
 		result += GetDirLightShading(dirLights[i], viewDir);
 	}
 
