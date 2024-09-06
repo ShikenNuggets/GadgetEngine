@@ -222,6 +222,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Data\Array.h" />
     <ClInclude Include="Data\Bitset.h" />
     <ClInclude Include="Data\DList.h" />
+    <ClInclude Include="Data\Graph.h" />
     <ClInclude Include="Data\HashTable.h" />
     <ClInclude Include="Data\List.h" />
     <ClInclude Include="Data\Pair.h" />

@@ -20,6 +20,9 @@
     <ClCompile Include="DataTests\DListTests.cpp">
       <Filter>DataTests</Filter>
     </ClCompile>
+    <ClCompile Include="DataTests\GraphTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
     <ClCompile Include="DataTests\HashTableTests.cpp">
       <Filter>DataTests</Filter>
     </ClCompile>
