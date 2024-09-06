@@ -9,6 +9,9 @@
 #include "GadgetEnums.h"
 #include "Random.h"
 
+#include "Animation/Animator.h"
+#include "Animation/Components/AnimRenderComponent.h"
+
 #include "Audio/AudioListener.h"
 #include "Audio/AudioSource.h"
 

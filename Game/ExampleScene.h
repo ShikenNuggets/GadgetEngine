@@ -14,6 +14,7 @@
 
 #include "CameraController.h"
 #include "ObjectRotator.h"
+#include "PlayerController.h"
 
 namespace Example{
 	class ExampleScene : public Gadget::Scene{
@@ -69,6 +70,7 @@ namespace Example{
 			animRender->AddClip(SID("StandUpAnim"));
 			animRender->AddClip(SID("CrouchWalkAnim"));
 			player->AddComponent(animRender);
+			player->AddComponent(new PlayerController(player));
 			CreateObject(player);
 
 			Gadget::GameObject* floor = new Gadget::GameObject();
