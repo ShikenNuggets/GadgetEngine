@@ -24,7 +24,7 @@ namespace Example{
 			Scene::Update(deltaTime_);
 
 			static bool normalTimeScale = true;
-			if(Gadget::App::GetInput().GetButtonDown(Gadget::ButtonID::Keyboard_Q)){
+			if(Gadget::App::GetInput().GetButtonDown(Gadget::ButtonID::Keyboard_T)){
 				normalTimeScale = !normalTimeScale;
 
 				if(!normalTimeScale){
@@ -62,6 +62,7 @@ namespace Example{
 			materials.push_back(SID("BlackMaterial"));
 
 			Gadget::GameObject* player = new Gadget::GameObject(SID("Player"));
+			player->SetRotation(0.0f, 180.0f, 0.0f);
 			player->SetScale(0.02f);
 			auto* animRender = new Gadget::AnimRenderComponent(player, SID("YBotAnimModel"), materials);
 			animRender->AddClip(SID("IdleAnim"));
@@ -77,17 +78,18 @@ namespace Example{
 			CreateObject(floor);
 
 			Gadget::GameObject* light = new Gadget::GameObject();
-			light->SetPosition(2.0f, -1.0f, 1.0f);
+			light->SetPosition(2.0f, -1.0f, -1.0f);
 			light->AddComponent(new Gadget::PointLightComponent(light));
 			CreateObject(light);
 
 			Gadget::GameObject* dirLight = new Gadget::GameObject(SID("DirLight"));
-			dirLight->Rotate(-75.0f, 15.0f, 0.0f);
+			dirLight->Rotate(-75.0f, 165.0f, 0.0f);
 			dirLight->AddComponent(new Gadget::DirectionalLightComponent(dirLight));
 			CreateObject(dirLight);
 
 			Gadget::GameObject* camera = new Gadget::GameObject();
-			camera->SetPosition(0.0f, 2.5f, 8.0f);
+			camera->SetPosition(0.0f, 2.5f, -8.0f);
+			camera->SetRotation(0.0f, 180.0f, 0.0f);
 			camera->AddComponent(new Gadget::CameraComponent(camera));
 			camera->AddComponent(new CameraController(camera));
 			CreateObject(camera);
