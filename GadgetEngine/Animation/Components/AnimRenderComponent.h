@@ -32,6 +32,8 @@ namespace Gadget{
 		void Unbind(size_t index_);
 
 		void AddClip(StringID clipName_);
+		void PlayClip(StringID clipName_);
+		void Stop();
 
 		inline constexpr size_t GetNumSubmeshes() const{ return meshInfos.size(); }
 

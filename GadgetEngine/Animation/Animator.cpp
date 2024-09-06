@@ -73,8 +73,25 @@ void Animator::AddClip(StringID clipName_){
 
 	if(currentClip == nullptr){
 		currentClip = clips[clipName_];
+		ClearCurrentNodes();
 	}
 }
+
+void Animator::PlayClip(StringID clipName_){
+	GADGET_BASIC_ASSERT(clipName_ != StringID::None);
+	GADGET_BASIC_ASSERT(clips.Contains(clipName_));
+	if(!clips.Contains(clipName_)){
+		GADGET_LOG_WARNING(SID("ANIM"), "Tried playing animation clip [" + clipName_.GetString() + "] that wasn't added to the animator!");
+		return;
+	}
+
+	GADGET_BASIC_ASSERT(clips[clipName_] != nullptr);
+	currentClip = clips[clipName_];
+	globalTime = 0.0f;
+	ClearCurrentNodes();
+}
+
+void Animator::Stop(){ currentClip = nullptr; }
 
 Matrix4 Animator::GetJointTransform(int32_t jointID_) const{
 	GADGET_BASIC_ASSERT(jointID_ >= 0);
@@ -116,5 +133,14 @@ void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 		const Matrix4 transform = parentTransform * result.result;
 		globalTransformCache.Add(transform);
 		skeletonInstance[i] = skeleton->GetGlobalInverse() * transform * joint.inverseBindPose;
+	}
+}
+
+void Animator::ClearCurrentNodes(){
+	for(int32_t i = 0; i < skeletonInstance.Size(); i++){
+		const Joint& joint = skeleton->GetJoint(i);
+		currentPosNodes[joint.name] = nullptr;
+		currentRotNodes[joint.name] = nullptr;
+		currentScaleNodes[joint.name] = nullptr;
 	}
 }

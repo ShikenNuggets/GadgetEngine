@@ -107,6 +107,20 @@ void AnimRenderComponent::AddClip(StringID clipName_){
 	}
 }
 
+void AnimRenderComponent::PlayClip(StringID clipName_){
+	if(animator != nullptr){
+		animator->PlayClip(clipName_);
+	}else{
+		GADGET_LOG_WARNING(SID("ANIM"), "Tried to play animation clip on an AnimRenderComponent with no Animator");
+	}
+}
+
+void AnimRenderComponent::Stop(){
+	if(animator != nullptr){
+		animator->Stop();
+	}
+}
+
 void AnimRenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(modelName != StringID::None);
 

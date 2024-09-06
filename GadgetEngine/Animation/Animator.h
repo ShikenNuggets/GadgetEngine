@@ -15,6 +15,8 @@ namespace Gadget{
 		void Update(float deltaTime_);
 
 		void AddClip(StringID clipName_);
+		void PlayClip(StringID clipName_);
+		void Stop();
 
 		const Skeleton& GetSkeleton() const{
 			GADGET_BASIC_ASSERT(skeleton != nullptr);
@@ -41,6 +43,8 @@ namespace Gadget{
 		Array<Matrix4> globalTransformCache;
 
 		virtual void UpdateSkeletonInstance(AnimClip* clip_, float time_);
+
+		void ClearCurrentNodes();
 	};
 }
 
