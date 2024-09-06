@@ -13,10 +13,6 @@ Cubemap::Cubemap(StringID right_, StringID left_, StringID top_, StringID bottom
 	GADGET_BASIC_ASSERT(front_ != StringID::None);
 	GADGET_BASIC_ASSERT(back_ != StringID::None);
 	
-	//Flip top and bottom
-	textureNames[Top] = bottom_;
-	textureNames[Bottom] = top_;
-	
 	for(size_t i = 0; i < numTextures; i++){
 		textures[i] = App::GetResourceManager().LoadResource<Texture>(textureNames[i]);
 		GADGET_ASSERT(textures[i] != nullptr, "An error occurred while trying to load texture [" + textureNames[i].GetString() + "] for cubemap!");
