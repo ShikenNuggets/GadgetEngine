@@ -16,7 +16,10 @@ namespace Gadget{
 			constexpr inline T& operator*(){ return data[index]; }
 
 			constexpr inline Iterator& operator++(){ index++; return *this; }
+			constexpr inline Iterator& operator--(){ index--; return *this; }
 			constexpr inline bool operator!=(const Iterator& it_) const{ return index != it_.index; }
+
+			constexpr inline int64_t Index() const{ return index; }
 
 		private:
 			Array<T>& data;
@@ -30,7 +33,10 @@ namespace Gadget{
 			constexpr inline const T& operator*() const{ return data[index]; }
 
 			constexpr inline ConstIterator& operator++(){ index++; return *this; }
+			constexpr inline ConstIterator& operator--(){ index--; return *this; }
 			constexpr inline bool operator!=(const ConstIterator& it_) const{ return index != it_.index; }
+
+			constexpr inline int64_t Index() const{ return index; }
 
 		private:
 			const Array<T>& data;
