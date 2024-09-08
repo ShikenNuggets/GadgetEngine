@@ -29,6 +29,9 @@
     <ClCompile Include="DataTests\GraphTests.cpp">
       <Filter>DataTests</Filter>
     </ClCompile>
+    <ClCompile Include="DataTests\HashSetTests.cpp">
+      <Filter>DataTests</Filter>
+    </ClCompile>
     <ClCompile Include="DataTests\HashTableTests.cpp">
       <Filter>DataTests</Filter>
     </ClCompile>

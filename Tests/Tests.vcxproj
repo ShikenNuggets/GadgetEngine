@@ -177,6 +177,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     <ClCompile Include="DataTests\ArrayTests.cpp" />
     <ClCompile Include="DataTests\DListTests.cpp" />
     <ClCompile Include="DataTests\GraphTests.cpp" />
+    <ClCompile Include="DataTests\HashSetTests.cpp" />
     <ClCompile Include="DataTests\HashTableTests.cpp" />
     <ClCompile Include="DataTests\ListTests.cpp" />
     <ClCompile Include="DataTests\QueueTests.cpp" />

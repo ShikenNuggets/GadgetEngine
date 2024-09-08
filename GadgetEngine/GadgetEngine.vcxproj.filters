@@ -159,6 +159,9 @@
     <ClInclude Include="Data\Graph.h">
       <Filter>Data</Filter>
     </ClInclude>
+    <ClInclude Include="Data\HashSet.h">
+      <Filter>Data</Filter>
+    </ClInclude>
     <ClInclude Include="Data\HashTable.h">
       <Filter>Data</Filter>
     </ClInclude>
