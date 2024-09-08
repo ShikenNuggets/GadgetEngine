@@ -247,6 +247,10 @@ namespace Gadget{
 			GADGET_LOG_WARNING(SID("DataStructures"), "Tried to remove a node from a list, but could not find the node - There's either a bug in your code, a bug in the List code, or List nodes were manually altered by other code (do not do that)");
 		}
 
+		//Removes the node at the specified iterator
+		//If successful, the iterator will no longer be valid
+		constexpr inline void Remove(const Iterator& it_){ Remove(*it_); }
+
 		constexpr inline void Clear(){
 			while(!IsEmpty()){
 				Pop();
