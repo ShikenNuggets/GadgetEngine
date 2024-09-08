@@ -44,8 +44,8 @@ void EventHandler::UnregisterCallback(EventType type_, void* obj_){
 }
 
 void EventHandler::UnregisterCallbacks(void* obj_){
-	for(auto& e : eventCallbacks){
-		e[obj_].Clear();
+	for(auto& [key, value] : eventCallbacks){
+		value[obj_].Clear();
 	}
 }
 
@@ -53,8 +53,8 @@ void EventHandler::HandleEvent(const Event& e_){
 	GADGET_BASIC_ASSERT(e_.GetEventType() != EventType::None);
 	GADGET_BASIC_ASSERT(e_.GetEventType() < EventType::Count);
 
-	for(auto& callbacks : eventCallbacks[e_.GetEventType()]){
-		for(auto& callback : callbacks){
+	for(auto& [key, value] : eventCallbacks[e_.GetEventType()]){
+		for(const auto& callback : value){
 			callback(e_);
 		}
 	}

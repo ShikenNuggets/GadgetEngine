@@ -13,8 +13,8 @@ MaterialCache::MaterialCache() : materials(){
 }
 
 MaterialCache::~MaterialCache(){
-	for(const auto& m : materials){
-		delete m;
+	for(auto& [key, value] : materials){
+		delete value;
 	}
 }
 

@@ -24,8 +24,8 @@ namespace Gadget{
 		public:
 			constexpr Iterator(const Array<List<KeyValuePair>>& data_, int64_t index_, List<KeyValuePair>::Node* node_) : data(data_), currentIndex(index_), currentNode(node_){}
 
-			constexpr inline const V& operator*() const{ return currentNode->value.value; }
-			constexpr inline V& operator*(){ return currentNode->value.value; }
+			constexpr inline const KeyValuePair& operator*() const{ return currentNode->value; }
+			constexpr inline KeyValuePair& operator*(){ return currentNode->value; }
 
 			inline Iterator& operator++(){
 				if(currentNode != nullptr){
