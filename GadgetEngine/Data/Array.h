@@ -104,8 +104,8 @@ namespace Gadget{
 		}
 
 		void Add(const T& value_){
-			GADGET_BASIC_ASSERT(capacity != 0);
-			if(capacity == 0){
+			GADGET_BASIC_ASSERT(capacity >= 0);
+			if(capacity <= 0){
 				Reserve(16);
 			}
 
@@ -130,6 +130,23 @@ namespace Gadget{
 		void Add(const Array<T>& range_){
 			GADGET_ASSERT(range_.Capacity() > 0, "Adding an Array of 0 to another array... did you mean to do that?");
 			Add(range_.data, range_.Size());
+		}
+
+		template <typename... Args>
+		void Emplace(Args... args_){
+			GADGET_BASIC_ASSERT(capacity >= 0);
+			if(capacity == 0){
+				Reserve(16);
+			}
+
+			if(size >= capacity){
+				Reserve(capacity * 2);
+			}
+
+			GADGET_BASIC_ASSERT(size < capacity);
+
+			new (&data[size]) T(args_...);
+			size++;
 		}
 
 		void InsertAt(int64_t index_, const T& value_){

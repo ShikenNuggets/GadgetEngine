@@ -170,6 +170,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="TestUtils\LifetimeTester.h" />
     <ClInclude Include="_Catch2\catch_amalgamated.hpp" />
   </ItemGroup>
   <ItemGroup>

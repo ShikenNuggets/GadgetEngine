@@ -3,6 +3,7 @@
 #include <Data/String.h>
 
 #include "_Catch2/catch_amalgamated.hpp"
+#include "TestUtils/LifetimeTester.h"
 
 using namespace Gadget;
 
@@ -132,7 +133,7 @@ TEST_CASE("Array Construction/Assignment" "[array_construct_assign]"){
 	test1.Add(3);
 	test1.Add(4);
 	REQUIRE(test1.Size() == 5);
-	for(size_t i = 0; i < test1.Size(); i++){
+	for(int64_t i = 0; i < test1.Size(); i++){
 		REQUIRE(test1[i] == i);
 	}
 
@@ -165,6 +166,25 @@ TEST_CASE("Array Construction/Assignment" "[array_construct_assign]"){
 	for(int64_t i = 0; i < test1.Size(); i++){
 		REQUIRE(test1[i] == test5[i]);
 	}
+}
+
+//------------------------------------------------------------//
+//--------------------- Array Emplace ------------------------//
+//------------------------------------------------------------//
+TEST_CASE("Array Emplace", "[array_emplace]"){
+	{
+		Array<LifetimeTester> array1;	REQUIRE(array1.Size() == 0);
+		array1.Emplace(1, 2, "Hello");	REQUIRE(array1.Size() == 1);	REQUIRE(array1[0].GetA() == 1);	REQUIRE(LifetimeTester::numConstructs == 1);
+		array1.Emplace(3, 4, "World");	REQUIRE(array1.Size() == 2);	REQUIRE(array1[1].GetA() == 3);	REQUIRE(LifetimeTester::numConstructs == 2);
+		array1.Emplace(5, 6, "!");		REQUIRE(array1.Size() == 3);	REQUIRE(array1[2].GetA() == 5);	REQUIRE(LifetimeTester::numConstructs == 3);
+
+		REQUIRE(LifetimeTester::numDestructs == 0);
+		REQUIRE(LifetimeTester::numCopies == 0);
+		REQUIRE(LifetimeTester::numMoves == 0);
+	}
+
+	REQUIRE(LifetimeTester::numDestructs == LifetimeTester::numConstructs);
+	LifetimeTester::Reset();
 }
 
 //------------------------------------------------------------//

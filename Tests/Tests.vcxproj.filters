@@ -4,11 +4,17 @@
     <Filter Include="DataTests">
       <UniqueIdentifier>{D289ED31-3EF4-A1A8-8732-534EF3DB7FFD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestUtils">
+      <UniqueIdentifier>{36DB2D0A-A245-E280-EB83-9326572DC0D5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="_Catch2">
       <UniqueIdentifier>{B9620238-2542-81D3-2E5A-0CAA9AB8E734}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TestUtils\LifetimeTester.h">
+      <Filter>TestUtils</Filter>
+    </ClInclude>
     <ClInclude Include="_Catch2\catch_amalgamated.hpp">
       <Filter>_Catch2</Filter>
     </ClInclude>
