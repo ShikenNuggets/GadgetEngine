@@ -101,7 +101,7 @@ namespace Gadget{
 
 		~Array(){
 			Clear();
-			std::free(data);
+			::operator delete[](data, capacity * sizeof(T));
 		}
 
 		void Add(const T& value_){
@@ -358,7 +358,7 @@ namespace Gadget{
 
 			T* newData = nullptr;
 			if(capacity > 0){
-				newData = static_cast<T*>(std::malloc(capacity * sizeof(T)));
+				newData = static_cast<T*>(::operator new[](capacity * sizeof(T)));
 				GADGET_BASIC_ASSERT(newData != nullptr);
 				if(newData == nullptr){
 					//TODO - Out of Memory is probably recoverable, we just need a way to trigger "garbage collection"
@@ -368,7 +368,7 @@ namespace Gadget{
 				std::memcpy(newData, data, size * sizeof(T));
 			}
 
-			std::free(data);
+			::operator delete[](data);
 			data = newData;
 		}
 
