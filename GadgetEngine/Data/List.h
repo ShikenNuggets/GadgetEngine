@@ -87,6 +87,8 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(IsValid());
 			GADGET_BASIC_ASSERT(other_.IsEmpty());
 			GADGET_BASIC_ASSERT(other_.IsValid());
+
+			return *this;
 		}
 
 		constexpr ~List(){
