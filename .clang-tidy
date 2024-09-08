@@ -76,6 +76,25 @@ Checks: '-*
 , hicpp-ignored-remove-result
 , hicpp-no-assembler
 , hicpp-signed-bitwise
+, misc-confusable-identifiers
+, misc-const-correctness
+, misc-definitions-in-headers
+, misc-header-include-cycle
+, misc-include-cleaner
+, misc-misleading-bidirectional
+, misc-misleading-identifier
+, misc-misplaced-const
+, misc-new-delete-overloads
+, misc-non-copyable-objects
+, misc-redundant-expression
+, misc-static-assert
+, misc-throw-by-value-catch-by-reference
+, misc-unconventional-assign-operator
+, misc-unused-alias-decls
+, misc-unused-parameters
+, misc-unused-using-decls
+, misc-use-anonymous-namespace
+, misc-use-internal-linkage
 '
 
 CheckOptions:
@@ -85,23 +104,26 @@ CheckOptions:
  - key: bugprone-misplaced-widening-cast.CheckImplicitCasts
    value: true
 
- - key: "bugprone-sizeof-expression.WarnOnSizeOfPointer"
+ - key: bugprone-sizeof-expression.WarnOnSizeOfPointer
    value: true
    
- - key: "cppcoreguidelines-narrowing-conversions.PedanticMode"
+ - key: cppcoreguidelines-narrowing-conversions.PedanticMode
    value: true
    
- - key: "cppcoreguidelines-pro-type-const-cast.StrictMode"
+ - key: cppcoreguidelines-pro-type-const-cast.StrictMode
    value: true
    
- - key: "cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor"
+ - key: cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
    value: true
    
- - key: "cppcoreguidelines-special-member-functions.AllowMissingMoveFunctions"
+ - key: cppcoreguidelines-special-member-functions.AllowMissingMoveFunctions
    value: true
    
- - key: "cppcoreguidelines-special-member-functions.AllowImplicitlyDeletedCopyOrMove"
+ - key: cppcoreguidelines-special-member-functions.AllowImplicitlyDeletedCopyOrMove
    value: true
 
- - key: "hicpp-signed-bitwise.IgnorePositiveIntegerLiterals"
+ - key: hicpp-signed-bitwise.IgnorePositiveIntegerLiterals
+   value: true
+
+ - key: misc-unused-parameters.IgnoreVirtual
    value: true
