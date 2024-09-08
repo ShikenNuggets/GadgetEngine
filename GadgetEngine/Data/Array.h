@@ -104,7 +104,7 @@ namespace Gadget{
 			::operator delete[](data, capacity * sizeof(T));
 		}
 
-		void Add(const T& value_){
+		T& Add(const T& value_){
 			GADGET_BASIC_ASSERT(capacity >= 0);
 			if(capacity <= 0){
 				Reserve(16);
@@ -118,6 +118,8 @@ namespace Gadget{
 
 			new (&data[size]) T(value_);
 			size++;
+
+			return data[size - 1];
 		}
 
 		void Add(const T* range_, int64_t rangeSize_){
@@ -134,7 +136,7 @@ namespace Gadget{
 		}
 
 		template <typename... Args>
-		void Emplace(Args... args_){
+		T& Emplace(Args... args_){
 			GADGET_BASIC_ASSERT(capacity >= 0);
 			if(capacity == 0){
 				Reserve(16);
@@ -148,6 +150,8 @@ namespace Gadget{
 
 			new (&data[size]) T(args_...);
 			size++;
+
+			return data[size - 1];
 		}
 
 		void InsertAt(int64_t index_, const T& value_){
