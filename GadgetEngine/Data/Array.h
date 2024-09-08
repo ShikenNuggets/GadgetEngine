@@ -100,6 +100,7 @@ namespace Gadget{
 		}
 
 		~Array(){
+			Clear();
 			std::free(data);
 		}
 
@@ -181,12 +182,15 @@ namespace Gadget{
 		}
 
 		constexpr void Pop(int64_t elementsToPop = 1){
-			for(int64_t i = 0; i < elementsToPop; i++){
-				data[i].~T();
+			GADGET_BASIC_ASSERT(elementsToPop <= size);
+			const int64_t startSize = size;
+			for(int64_t i = 0; i < elementsToPop && i < startSize; i++){
+				data[size - 1].~T();
 				size--;
 			}
 
-			GADGET_BASIC_ASSERT(size < capacity);
+			GADGET_BASIC_ASSERT(size >= 0);
+			GADGET_BASIC_ASSERT(size <= capacity);
 		}
 
 		constexpr void RemoveAt(int64_t index_){
