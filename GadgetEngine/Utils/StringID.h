@@ -24,6 +24,7 @@ namespace Gadget{
 		constexpr StringID() noexcept : id(0){}
 		explicit constexpr StringID(uint64_t id_) noexcept : id(id_){}
 		constexpr StringID(const StringID& a_) noexcept = default;
+		constexpr ~StringID() = default;
 
 		constexpr StringID& operator=(const StringID& a_) noexcept = default;
 

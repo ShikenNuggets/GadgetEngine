@@ -14,7 +14,7 @@ FullClipSearchResult AnimClip::GetTransformAtTime(StringID name_, float time_, c
 
 //I apologize in advance to anyone hoping to understand or debug this code
 template <class T>
-static inline const DList<T>::Node* Search(const typename DList<T>::Node* startNode_, float time_){
+inline const DList<T>::Node* Search(const typename DList<T>::Node* startNode_, float time_){
 	const auto* curNode = startNode_;
 	GADGET_BASIC_ASSERT(curNode != nullptr);
 	if(curNode == nullptr){
@@ -44,7 +44,7 @@ static inline const DList<T>::Node* Search(const typename DList<T>::Node* startN
 }
 
 template <class ResultT, class KeyT, class NodeT, class KeysT>
-static inline ResultT GetResultAtTime(StringID name_, float time_, const NodeT* node_, const KeysT& keys_){
+inline ResultT GetResultAtTime(StringID name_, float time_, const NodeT* node_, const KeysT& keys_){
 	if(!keys_.Contains(name_)){
 		//Default initialize the result if there are no keys for this joint
 		return ResultT(nullptr);

@@ -54,7 +54,7 @@ AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-AnimRenderComponent::AnimRenderComponent(const ComponentProperties& props_) : Component(props_){
+AnimRenderComponent::AnimRenderComponent(const ComponentProperties& props_) : Component(props_), animator(nullptr){
 	GADGET_BASIC_ASSERT(props_.parentGuid != GUID::Invalid);
 
 	AnimRenderComponent::Deserialize(props_);
@@ -62,6 +62,7 @@ AnimRenderComponent::AnimRenderComponent(const ComponentProperties& props_) : Co
 	componentCollection.Add(this);
 
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
+	GADGET_BASIC_ASSERT(animator != nullptr);
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
