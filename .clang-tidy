@@ -80,7 +80,6 @@ Checks: '-*
 , misc-const-correctness
 , misc-definitions-in-headers
 , misc-header-include-cycle
-, misc-include-cleaner
 , misc-misleading-bidirectional
 , misc-misleading-identifier
 , misc-misplaced-const
@@ -95,6 +94,33 @@ Checks: '-*
 , misc-unused-using-decls
 , misc-use-anonymous-namespace
 , misc-use-internal-linkage
+, modernize-avoid-bind
+, modernize-avoid-c-arrays
+, modernize-concat-nested-namespaces
+, modernize-deprecated-headers
+, modernize-deprecated-ios-base-aliases
+, modernize-loop-convert
+, modernize-macro-to-enum
+, modernize-make-shared
+, modernize-make-unique
+, modernize-min-max-use-initializer-list
+, modernize-pass-by-value
+, modernize-raw-string-literal
+, modernize-redundant-void-arg
+, modernize-replace-auto-ptr
+, modernize-replace-random-shuffle
+, modernize-shrink-to-fit
+, modernize-type-traits
+, modernize-use-bool-literals
+, modernize-use-emplace
+, modernize-use-equals-default
+, modernize-use-equals-delete
+, modernize-use-noexcept
+, modernize-use-nullptr
+, modernize-use-ranges
+, modernize-use-starts-ends-with
+, modernize-use-std-numbers
+, modernize-use-using
 '
 
 CheckOptions:
@@ -126,4 +152,13 @@ CheckOptions:
    value: true
 
  - key: misc-unused-parameters.IgnoreVirtual
+   value: true
+
+ - key: modernize-avoid-c-arrays.AllowStringArrays
+   value: true
+
+ - key: modernize-min-max-use-initializer-list.IgnoreTrivialTypesOfSizeAbove
+   value: 64
+
+ - key: modernize-use-using.IgnoreExternC
    value: true
