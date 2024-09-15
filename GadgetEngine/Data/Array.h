@@ -43,9 +43,7 @@ namespace Gadget{
 			int64_t index;
 		};
 
-		Array() : data(nullptr), size(0), capacity(0){
-			Reserve(16);
-		}
+		Array() : data(nullptr), size(0), capacity(0){}
 
 		Array(const Array<T>& array_) : data(nullptr), size(0), capacity(0){
 			Reserve(array_.Capacity());
