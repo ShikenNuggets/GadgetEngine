@@ -77,7 +77,6 @@ EditorWindow::~EditorWindow(){
 bool EditorWindow::HandleEvents(){
 	SDL_Event e;
 	while(SDL_PollEvent(&e) != 0){
-		SDL_PollEvent(&e);
 		ImGui_ImplSDL2_ProcessEvent(&e);
 
 		if(e.type == SDL_QUIT){
