@@ -1,77 +1,155 @@
 #ifndef GADGET_STRING_H
 #define GADGET_STRING_H
 
+#include <cstdint>
+
 #include "Data/Array.h"
+#include "Data/StaticArray.h"
 #include "Math/Math.h"
 
 namespace Gadget{
 	class String{
 	public:
-		String(const char* str_ = "") : data(Math::Clamp<int64_t>(16, std::numeric_limits<int64_t>::max(), std::strlen(str_))){
-			data.Add('\0');
+		String(const char* str_ = "") : size(0), capacity(gStackStrSize), data(){
+			GADGET_BASIC_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
 			Append(str_);
+			GADGET_BASIC_ASSERT(HasNullTerminator());
 		}
 
-		String(const Array<char>& strArray_) : data(strArray_.Size()){
-			data.Add('\0');
+		explicit String(const Array<char>& strArray_) : size(0), capacity(gStackStrSize), data(){
+			GADGET_BASIC_ASSERT(strArray_.Size() < std::numeric_limits<int32_t>::max());
 			Append(strArray_);
+			GADGET_BASIC_ASSERT(HasNullTerminator());
 		}
 
-		explicit String(int64_t capacity_) : data(capacity_ + 1){
-			data.Add('\0');
+		explicit String(int32_t capacity_) : size(0), capacity(gStackStrSize), data(){
+			Reserve(capacity_);
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+		}
+
+		String(const String& other_) : size(0), capacity(gStackStrSize), data(){
+			Append(other_);
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+		}
+
+		String(String&& other_) noexcept : size(other_.size), capacity(other_.capacity), data(other_.data){
+			other_.size = 0;
+			other_.capacity = gStackStrSize;
+			other_.data.stackStr.Fill('\0');
+
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+			GADGET_BASIC_ASSERT(other_.HasNullTerminator());
+		}
+
+		constexpr String& operator=(const String& other_){
+			if(&other_ == this){
+				return *this;
+			}
+
+			if(!IsStackStr()){
+				delete[] data.heapStr;
+				data.heapStr = nullptr;
+			}
+			size = 0;
+			capacity = gStackStrSize;
+			data.stackStr.Fill('\0');
+
+			Append(other_);
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+			return *this;
+		}
+
+		constexpr String& operator=(String&& other_) noexcept{
+			if(&other_ == this){
+				return *this;
+			}
+
+			if(!IsStackStr()){
+				delete[] data.heapStr;
+				data.heapStr = nullptr;
+			}
+
+			size = other_.size;
+			capacity = other_.capacity;
+			data = other_.data;
+
+			other_.size = 0;
+			other_.capacity = gStackStrSize;
+			other_.data.stackStr.Fill('\0');
+
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+			GADGET_BASIC_ASSERT(other_.HasNullTerminator());
+			return *this;
+		}
+
+		constexpr ~String(){
+			if(!IsStackStr()){
+				delete[] data.heapStr;
+			}
 		}
 
 		void Append(const char* str_){
-			GADGET_BASIC_ASSERT(HasNullTerminator());
-
-			data.Reserve(data.Size() + 1);
-
-			data.Pop(); //Pop the null terminator
-			data.Add(str_, std::strlen(str_));
-			data.Add('\0');
+			GADGET_BASIC_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
+			Append(str_, static_cast<int32_t>(std::strlen(str_)));
 		}
 
-		void Append(char c){
-			GADGET_BASIC_ASSERT(HasNullTerminator());
+		void Append(const char* str_, int32_t len_){
+			GADGET_BASIC_ASSERT(len_ >= 0);
+			GADGET_BASIC_ASSERT(len_ == std::strlen(str_));
+			if(len_ == 0){
+				Value()[size] = '\0';
+				return;
+			}
 
-			data.Reserve(data.Size() + 1);
+			const int32_t desiredSize = len_ + size;
+			Reserve(desiredSize);
 
-			data.Pop();
-			data.Add(c);
-			data.Add('\0');
+			char* strData = Value();
+			GADGET_BASIC_ASSERT(strData != nullptr);
+			for(int32_t i = 0; i < len_; i++){
+				strData[size] = str_[i];
+				size++;
+			}
+			
+			GADGET_BASIC_ASSERT(size < capacity);
+			strData[size] = '\0';
 		}
 
-		void Append(const String& str_){
-			GADGET_BASIC_ASSERT(str_.HasNullTerminator());
-			Append(str_.Value());
+		constexpr void Append(char c_){
+			const int32_t desiredSize = size + 1;
+			Reserve(desiredSize);
+
+			char* strData = Value();
+			strData[size] = c_;
+			size++;
+
+			GADGET_BASIC_ASSERT(size < capacity);
+			strData[size] = '\0';
 		}
+
+		void Append(const String& str_){ Append(str_.Value(), str_.Length()); }
 
 		void Append(const Array<char>& strArray_){
-			GADGET_BASIC_ASSERT(HasNullTerminator());
-
-			data.Pop();
-			data.Add(strArray_);
-			data.Add('\0');
+			GADGET_BASIC_ASSERT(strArray_.Size() < std::numeric_limits<int32_t>::max());
+			Append(&strArray_[0], static_cast<int32_t>(strArray_.Size()));
 		}
 
 		void Append(int32_t number){
-			char buffer[10]{};
-			itoa(number, buffer, 10);
-			Append(buffer);
+			StaticArray<char, 16> buffer{};
+			itoa(number, &buffer[0], 10);
+			Append(&buffer[0]);
 		}
 
 		void Append(const Array<String>& strs_){
-			//This technically has higher time complexity than just doing one loop,
-			//but doing only one memory allocation is worth it if we're appending lots of strings/large strings
-			int64_t newLength = Length();
-			for(int64_t i = 0; i < strs_.Size(); i++){
+			int32_t newLength = size;
+			for(int32_t i = 0; i < strs_.Size(); i++){
 				newLength += strs_[i].Length();
 			}
 
-			data.Reserve(newLength);
+			Reserve(newLength);
 
 			for(int64_t i = 0; i < strs_.Size(); i++){
-				Append(strs_[i].Value());
+				Append(strs_[i].Value(), strs_[i].Length());
 			}
 		}
 
@@ -93,117 +171,213 @@ namespace Gadget{
 			return finalStr;
 		}
 
-		void operator+=(const String& str_){ *this = *this + str_; }
-		void operator+=(char c_){ *this = *this + c_; }
-		void operator+=(int32_t number_){ *this = *this + number_; }
+		void operator+=(const String& str_){ Append(str_); }
+		constexpr void operator+=(char c_){ Append(c_); }
+		void operator+=(int32_t number_){ Append(number_); }
 
-		void InsertAt(int64_t index_, char c){
-			if(index_ >= Length()){
-				Append(c);
-				return;
-			}
+		constexpr void Pop(int32_t elementsToRemove_ = 1){
+			GADGET_BASIC_ASSERT(elementsToRemove_ >= 0);
+			GADGET_BASIC_ASSERT(elementsToRemove_ <= size);
 
-			data.InsertAt(index_, c);
+			size = Math::Clamp<int32_t>(0, std::numeric_limits<int32_t>::max(), size - elementsToRemove_);
+			Value()[size] = '\0';
+
+			GADGET_BASIC_ASSERT(size >= 0);
+			GADGET_BASIC_ASSERT(size < capacity);
+			GADGET_BASIC_ASSERT(HasNullTerminator());
 		}
 
-		constexpr void RemoveAt(int64_t index_){
+		constexpr void InsertAt(int32_t index_, char c_){
+			if(index_ >= Length()){
+				Append(c_);
+				return;
+			}
+
+			Reserve(size + 1);
+			ShiftElements(index_, 1);
+
+			char* strData = Value();
+			strData[index_] = c_;
+			
+			GADGET_BASIC_ASSERT(size < capacity);
+			strData[size] = '\0';
+		}
+
+		constexpr void RemoveAt(int32_t index_){
 			if(index_ >= Length()){
 				return;
 			}
 
-			data.RemoveAt(index_);
+			ShiftElements(index_ + 1, -1);
+			char* strData = Value();
+			
+			GADGET_BASIC_ASSERT(size < capacity);
+			strData[size] = '\0';
+		}
+
+		constexpr void RemoveAt(int32_t startIndex_, int32_t rangeSize_){
+			if(startIndex_ >= size || rangeSize_ == 0){
+				return;
+			}
+
+			if(startIndex_ + rangeSize_ > size){
+				size -= (size - startIndex_);
+				Pop(size - startIndex_);
+				return;
+			}
+
+			GADGET_BASIC_ASSERT(rangeSize_ < size);
+			ShiftElements(startIndex_, -rangeSize_);
 		}
 
 		constexpr void Remove(char value_){
-			GADGET_BASIC_ASSERT(value_ != '\0'); //Do not remove the null terminator
-			data.Remove(value_);
+			GADGET_BASIC_ASSERT(value_ != '\0'); //Don't try to remove the null terminator
+			char* strData = Value();
+			for(int32_t i = 0; i < Length(); i++){
+				if(strData[i] == value_){
+					RemoveAt(i);
+					return;
+				}
+			}
 		}
 
 		constexpr void RemoveAll(char value_){
-			GADGET_BASIC_ASSERT(value_ != '\0'); //Do not remove the null terminator
-			data.RemoveAll(value_);
+			GADGET_BASIC_ASSERT(value_ != '\0'); //Don't try to remove the null terminator
+			char* strData = Value();
+			for(int32_t i = 0; i < Length(); i++){
+				if(strData[i] == value_){
+					RemoveAt(i);
+					i--;
+				}
+			}
 		}
 
-		void Reserve(int64_t capacity){
-			data.Reserve(capacity + 1); //Make sure there's room for the null terminator!
+		//Generous, allocates more memory than you asked for
+		constexpr void Reserve(int32_t capacity_){
+			if(capacity > capacity_){
+				return;
+			}
+
+			GADGET_BASIC_ASSERT(capacity_ > 0);
+			int32_t newCapacity = capacity;
+			while(newCapacity <= capacity_){
+				GADGET_BASIC_ASSERT(newCapacity > 0);
+				newCapacity *= 2;
+			}
+
+			ReserveExact(newCapacity);
 		}
 
-		void ShrinkToFit(){
-			data.ShrinkToFit();
+		//Allocates exactly what you asked for (well, +1 for the null terminator)
+		constexpr void ReserveExact(int32_t capacity_){
+			if(capacity_ < capacity){
+				return;
+			}
+
+			ReallocateHeapStr(capacity_);
 		}
 
-		static constexpr inline bool IsWhitespace(char c){
-			return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
+		constexpr void ShrinkToFit(){
+			if(IsStackStr() || size == capacity){
+				return;
+			}
+
+			if(size < gStackStrSize){
+				MoveHeapStrToStack();
+			}else{
+				ReallocateHeapStr(size);
+			}
 		}
-		
-		void Trim(){
-			int64_t whitespaceAtStart;
-			for(whitespaceAtStart = 0; whitespaceAtStart < Length(); whitespaceAtStart++){
-				if(!IsWhitespace(data[whitespaceAtStart])){
+
+		static constexpr inline bool IsWhitespace(char c){ return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f'; }
+
+		constexpr void Trim(){
+			char* str = Value();
+			int32_t whitespaceAtStart = 0;
+			for(whitespaceAtStart = 0; whitespaceAtStart < size; whitespaceAtStart++){
+				if(!IsWhitespace(str[whitespaceAtStart])){
 					break;
 				}
 			}
 
-			data.RemoveAt(0, whitespaceAtStart);
+			RemoveAt(0, whitespaceAtStart);
 
-			GADGET_BASIC_ASSERT(data.Size() >= 1);
+			GADGET_BASIC_ASSERT(size >= 1);
 
-			if(Length() > 0){
-				GADGET_BASIC_ASSERT(data.Size() < std::numeric_limits<int64_t>::max()); //I doubt this will ever be an issue, but just in case
-				int64_t indexToEndWhitespace;
-				for(indexToEndWhitespace = data.Size() - 2; indexToEndWhitespace >= 0; indexToEndWhitespace--){
-					if(!IsWhitespace(data[indexToEndWhitespace])){
+			if(size > 0){
+				int32_t indexToEndWhitespace = 0;
+				for(indexToEndWhitespace = size - 1; indexToEndWhitespace >= 0; indexToEndWhitespace--){
+					if(!IsWhitespace(str[indexToEndWhitespace])){
 						break;
 					}
 				}
 
-				data.RemoveAt(indexToEndWhitespace + 1, data.Size());
-				data.Add('\0');
+				RemoveAt(indexToEndWhitespace + 1, size);
+				str[size] = '\0';
 			}
+
+			GADGET_BASIC_ASSERT(size < capacity);
 		}
 
-		void FindAndReplace(char find_, const String& replace_){
+		constexpr void FindAndReplace(char find_, const String& replace_){
 			GADGET_BASIC_ASSERT(find_ != '\0'); //Do not try to replace the null terminator
-
-			for(int64_t i = 0; i < Length(); i++){
-				if(data[i] == find_){
+			
+			char* str = Value();
+			for(int32_t i = 0; i < size; i++){
+				if(str[i] == find_){
 					RemoveAt(i);
 
-					for(int64_t j = 0; j < replace_.Length(); j++){
+					for(int32_t j = 0; j < replace_.size; j++){
 						InsertAt(i + j, replace_[j]);
 					}
+
+					str = Value();
 				}
 			}
+
+			GADGET_BASIC_ASSERT(size < capacity);
 		}
 
 		constexpr void ToLower(){
-			for(int64_t i = 0; i < Length(); i++){
-				data[i] = static_cast<char>(std::tolower(data[i]));
+			char* str = Value();
+			for(int32_t i = 0; i < size; i++){
+				str[i] = static_cast<char>(std::tolower(str[i]));
 			}
 		}
 
 		constexpr void ToUpper(){
-			for(int64_t i = 0; i < Length(); i++){
-				data[i] = static_cast<char>(std::toupper(data[i]));
+			char* str = Value();
+			for(int32_t i = 0; i < size; i++){
+				str[i] = static_cast<char>(std::toupper(str[i]));
 			}
 		}
 
-		constexpr inline int64_t Find(char c_, int64_t startPos_ = 0) const{ return data.Find(c_, startPos_); }
+		constexpr inline int32_t Find(char c_, int32_t startPos_ = 0) const{
+			const char* str = Value();
+			for(int32_t i = startPos_; i < size; i++){
+				if(str[i] == c_){
+					return i;
+				}
+			}
 
-		constexpr inline bool Contains(char c) const{ return data.Contains(c); }
+			return -1;
+		}
+
+		constexpr inline bool Contains(char c_) const{ return Find(c_) != -1; }
 
 		//TODO - Naive brute force implementation. Consider other options: https://en.wikipedia.org/wiki/String-searching_algorithm#Single-pattern_algorithms
-		bool Contains(const String& str_) const{
-			if(data.Size() < str_.Length()){
+		constexpr bool Contains(const String& str_) const{
+			const char* str = Value();
+			if(size < str_.Length()){
 				return false;
 			}
 
-			for(int64_t i = 0; i < data.Size(); i++){
+			for(int32_t i = 0; i < size; i++){
 				bool isEqual = true;
 
-				int64_t j = i;
-				for(int64_t k = 0; k < str_.Length(); j++, k++){
-					if(data[j] != str_[k]){
+				int32_t j = i;
+				for(int32_t k = 0; k < str_.Length(); j++, k++){
+					if(str[j] != str_[k]){
 						GADGET_ASSERT(str_[k] != '\0', "String comparison failing due to null terminator!");
 
 						isEqual = false;
@@ -219,34 +393,56 @@ namespace Gadget{
 			return false;
 		}
 
-		String SubString(int64_t startIndex_, int64_t endIndex_) const{
+		String SubString(int32_t startIndex_, int32_t endIndex_) const{
 			GADGET_BASIC_ASSERT(startIndex_ != endIndex_);
-			return String(data.SubRange(startIndex_, endIndex_));
-		}
-
-		void QuickSort(){
-			GADGET_BASIC_ASSERT(HasNullTerminator());
-
-			data.Pop(); //We typically don't want to sort the null terminator
-			data.QuickSort();
-			data.Add('\0');
-		}
-
-		constexpr const char* Value() const{
-			if(Length() == 0){
-				return "";
+			if(startIndex_ >= size){
+				return String();
 			}
 
-			return &data[0];
+			if(endIndex_ > size){
+				endIndex_ = size;
+			}
+
+			const int32_t subRangeSize = endIndex_ - startIndex_;
+			String result;
+			result.Reserve(subRangeSize);
+
+			const char* str = Value();
+			for(int32_t i = startIndex_; i < endIndex_; i++){
+				result.Append(str[i]);
+			}
+
+			return result;
+		}
+
+		constexpr void QuickSort(){
+			if(size < 2){
+				return;
+			}
+
+			QuickSort(0, size - 1);
+
+			GADGET_BASIC_ASSERT(IsSorted());
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+		}
+
+		constexpr inline const char* Value() const{
+			if(IsStackStr()){
+				return &data.stackStr[0];
+			}
+
+			return &data.heapStr[0];
 		}
 
 		bool operator==(const char* str_) const{
-			if(Length() != static_cast<int64_t>(std::strlen(str_))){
+			GADGET_BASIC_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
+			if(size != static_cast<int32_t>(std::strlen(str_))){
 				return false;
 			}
 
-			for(int64_t i = 0; i < Length(); i++){
-				if(data[i] != str_[i]){
+			const char* str = Value();
+			for(int64_t i = 0; i < size; i++){
+				if(str[i] != str_[i]){
 					return false;
 				}
 			}
@@ -254,39 +450,190 @@ namespace Gadget{
 			return true;
 		}
 
-		constexpr bool operator==(const String& str_) const{
-			return data == str_.data;
+		bool operator==(const String& str_) const{ return *this == str_.Value(); }
+
+		constexpr const char& operator[](int32_t i_) const{
+			GADGET_BASIC_ASSERT(i_ < Length());
+			return Value()[i_];
 		}
 
-		constexpr const char& operator[](int64_t i_) const{
-			GADGET_BASIC_ASSERT(i_ < data.Size());
-			return data[i_];
+		constexpr char& operator[](int32_t i_){
+			GADGET_BASIC_ASSERT(i_ < size);
+			return Value()[i_];
 		}
 
-		constexpr char& operator[](int64_t i_){
-			GADGET_BASIC_ASSERT(i_ < data.Size());
-			return data[i_];
-		}
+		constexpr inline int32_t Length() const{ return size; }
 
-		constexpr int64_t Length() const{ return data.Size() - 1; }
-
-		constexpr bool IsEmpty() const{
-			GADGET_BASIC_ASSERT(data.Size() > 0);
-			if(data.Size() == 1){
-				GADGET_BASIC_ASSERT(data[0] == '\0');
-			}else if(data.Size() > 1){
-				GADGET_BASIC_ASSERT(data[0] != '\0');
-				GADGET_BASIC_ASSERT(data[data.Size() - 1] == '\0');
-			}
-
-			return data.Size() == 1 || data[0] == '\0';
-		}
+		constexpr bool IsEmpty() const{ return size > 0; }
 
 	private:
-		Array<char> data;
+		static inline constexpr int gStackStrSize = 8;
+
+		union StrData{
+			StrData() : stackStr(){ stackStr.Fill('\0'); }
+
+			StaticArray<char, gStackStrSize> stackStr;
+			char* heapStr;
+		};
+
+		int32_t size;
+		int32_t capacity;
+		StrData data;
+
+		constexpr void ReallocateHeapStr(int32_t newCapacity_){
+			if(newCapacity_ < gStackStrSize || newCapacity_ < capacity){
+				return;
+			}
+
+			char* strRaw = Value();
+			Array<char> oldData;
+			oldData.Reserve(size);
+			for(int32_t i = 0; i < size; i++){
+				oldData.Add(strRaw[i]);
+			}
+
+			if(!IsStackStr()){
+				delete[] data.heapStr;
+				data.heapStr = nullptr;
+			}
+
+			capacity = newCapacity_ + 1;
+			data.heapStr = new char[capacity];
+			for(int32_t i = 0; i < capacity; i++){
+				if(oldData.Size() > i){
+					data.heapStr[i] = oldData[i];
+				}else{
+					data.heapStr[i] = '\0';
+				}
+			}
+
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+			GADGET_BASIC_ASSERT(size < capacity);
+		}
+
+		constexpr void MoveHeapStrToStack(){
+			GADGET_BASIC_ASSERT(size < gStackStrSize);
+			GADGET_BASIC_ASSERT(!IsStackStr());
+			if(size >= gStackStrSize || IsStackStr()){
+				return;
+			}
+
+			Array<char> oldData;
+			oldData.Reserve(size);
+			for(int32_t i = 0; i < size; i++){
+				oldData.Add(data.heapStr[i]);
+			}
+
+			delete[] data.heapStr;
+			data.heapStr = nullptr;
+
+			capacity = gStackStrSize;
+			data.stackStr.Fill('\0');
+			for(int32_t i = 0; i < Length(); i++){
+				data.stackStr[i] = oldData[i];
+			}
+
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+			GADGET_BASIC_ASSERT(size < capacity);
+		}
+
+		constexpr void ShiftElements(int32_t startIdx_, int32_t amount_){
+			if(amount_ == 0){
+				return;
+			}
+
+			if(size + amount_ > capacity){
+				Reserve(size + amount_);
+			}
+
+			int32_t srcIndex = startIdx_;
+			int32_t destIndex = startIdx_ + amount_;
+			while(destIndex < 0){
+				//To avoid memmoving outside the buffer - ignore the first N elements if amount to shift is -N
+				srcIndex++;
+				destIndex++;
+			}
+
+			const int32_t numElementsToShift = size - srcIndex;
+			const int32_t numBytesToShift = Math::Abs<int32_t>(numElementsToShift /* * sizeof(char) */);
+			const int32_t shiftEndPos = srcIndex + numElementsToShift + amount_;
+
+			GADGET_BASIC_ASSERT(numElementsToShift <= static_cast<int32_t>(size));
+			GADGET_BASIC_ASSERT(startIdx_ <= size);
+			GADGET_BASIC_ASSERT(shiftEndPos <= static_cast<int32_t>(capacity));
+
+			char* str = Value();
+			std::memmove(&str[destIndex], &str[srcIndex], numBytesToShift);
+			size += amount_;
+
+			GADGET_BASIC_ASSERT(size < capacity);
+			str[size] = '\0';
+
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+		}
 
 		constexpr inline bool HasNullTerminator() const{
-			return !data.IsEmpty() && data[Length()] == '\0';
+			const char* str = Value();
+			GADGET_BASIC_ASSERT(str != nullptr);
+			GADGET_BASIC_ASSERT(capacity > size);
+			return str[size] == '\0';
+		}
+
+		constexpr inline char* Value(){
+			if(IsStackStr()){
+				return &data.stackStr[0];
+			}
+
+			return &data.heapStr[0];
+		}
+
+		constexpr inline bool IsStackStr() const{ return capacity == gStackStrSize; }
+
+		constexpr void QuickSort(int32_t low_, int32_t high_){
+			if(low_ >= 0 && high_ >= 0 && low_ < high_){
+				const int32_t pivot = QuickSortPartition(low_, high_);
+				QuickSort(low_, pivot);
+				QuickSort(pivot + 1, high_);
+			}
+		}
+
+		//Hoare Partition Scheme
+		constexpr int32_t QuickSortPartition(int32_t low_, int32_t high_){
+			char* str = Value();
+
+			const char pivot = str[low_];
+
+			int32_t leftIndex = low_ - 1;
+			int32_t rightIndex = high_ + 1;
+
+			while(true){
+				do{
+					leftIndex++;
+				} while(str[leftIndex] < pivot);
+
+				do{
+					rightIndex--;
+				} while(str[rightIndex] > pivot);
+
+				if(leftIndex >= rightIndex){
+					return rightIndex;
+				}
+
+				const char tmp = str[leftIndex];
+				str[leftIndex] = str[rightIndex];
+				str[rightIndex] = tmp;
+			}
+		}
+
+		constexpr bool IsSorted() const{
+			const char* str = Value();
+			for(int32_t i = 0; i < size - 1; i++){
+				if(str[i] > str[i + 1]){
+					return false;
+				}
+			}
+
+			return true;
 		}
 	};
 }
