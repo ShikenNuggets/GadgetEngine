@@ -200,6 +200,11 @@ project "WorkbenchCPP"
 		"SDK/ImGui/backends/imgui_impl_sdl2.cpp",
 	}
 
+	includedirs
+	{
+		"SDK/ImGui/"
+	}
+
 	filter "system:windows"
 		postbuildcommands
 		{

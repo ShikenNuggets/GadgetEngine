@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{071D880B-7326-887C-FCA1-9E7C68AA937C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\ImGui">
+      <UniqueIdentifier>{71FB4978-DD65-FEEE-26A4-AF94924DDC43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\ImGui\backends">
+      <UniqueIdentifier>{BBE4F3EC-A7C8-B442-1029-AF95FC2B9FC4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_opengl3.h">
+      <Filter>SDK\ImGui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_sdl2.h">
+      <Filter>SDK\ImGui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\ImGui\imconfig.h">
+      <Filter>SDK\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\ImGui\imgui.h">
+      <Filter>SDK\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\ImGui\imgui_internal.h">
+      <Filter>SDK\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\ImGui\imstb_rectpack.h">
+      <Filter>SDK\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\ImGui\imstb_textedit.h">
+      <Filter>SDK\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\ImGui\imstb_truetype.h">
+      <Filter>SDK\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\EditorWindow.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_opengl3.cpp">
+      <Filter>SDK\ImGui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_sdl2.cpp">
+      <Filter>SDK\ImGui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDK\ImGui\imgui.cpp">
+      <Filter>SDK\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDK\ImGui\imgui_demo.cpp">
+      <Filter>SDK\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDK\ImGui\imgui_draw.cpp">
+      <Filter>SDK\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDK\ImGui\imgui_tables.cpp">
+      <Filter>SDK\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDK\ImGui\imgui_widgets.cpp">
+      <Filter>SDK\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\EditorWindow.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+</Project>
