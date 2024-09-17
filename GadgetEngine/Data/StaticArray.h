@@ -39,7 +39,7 @@ namespace Gadget{
 			int64_t index;
 		};
 
-		void Fill(const T& value_){
+		constexpr void Fill(const T& value_){
 			for(int64_t i = 0; i < Size; i++){
 				data[i] = value_;
 			}
@@ -69,7 +69,7 @@ namespace Gadget{
 		constexpr bool Contains(const T& value_) const{ return Find(value_) != -1; }
 
 		template <int SubSize>
-		StaticArray<T, SubSize> SubRange(int64_t startIndex_) const{
+		constexpr StaticArray<T, SubSize> SubRange(int64_t startIndex_) const{
 			static_assert(SubSize <= Size);
 
 			StaticArray<T, SubSize> newArray;

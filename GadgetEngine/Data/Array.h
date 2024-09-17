@@ -43,16 +43,16 @@ namespace Gadget{
 			int64_t index;
 		};
 
-		Array() : data(nullptr), size(0), capacity(0){}
+		constexpr Array() : data(nullptr), size(0), capacity(0){}
 
-		Array(const Array<T>& array_) : data(nullptr), size(0), capacity(0){
+		constexpr Array(const Array<T>& array_) : data(nullptr), size(0), capacity(0){
 			Reserve(array_.Capacity());
 			for(int64_t i = 0; i < array_.Size(); i++){
 				Add(array_[i]);
 			}
 		}
 
-		Array(Array<T>&& other_) noexcept : data(other_.data), size(other_.size), capacity(other_.capacity){
+		constexpr Array(Array<T>&& other_) noexcept : data(other_.data), size(other_.size), capacity(other_.capacity){
 			other_.data = nullptr;
 			other_.size = 0;
 			other_.capacity = 0;
@@ -64,8 +64,6 @@ namespace Gadget{
 			if(&other_ == this){
 				return *this;
 			}
-
-			GADGET_BASIC_ASSERT(other_.Capacity() > 0);
 
 			Clear();
 
@@ -103,12 +101,12 @@ namespace Gadget{
 			Reserve(initialCapacity_);
 		}
 
-		~Array(){
+		constexpr ~Array(){
 			Clear();
 			::operator delete[](data, capacity * sizeof(T));
 		}
 
-		T& Add(const T& value_){
+		constexpr T& Add(const T& value_){
 			GADGET_BASIC_ASSERT(capacity >= 0);
 			if(capacity <= 0){
 				Reserve(16);
@@ -126,7 +124,7 @@ namespace Gadget{
 			return data[size - 1];
 		}
 
-		void Add(const T* range_, int64_t rangeSize_){
+		constexpr void Add(const T* range_, int64_t rangeSize_){
 			Reserve(size + rangeSize_);
 
 			for(int64_t i = 0; i < rangeSize_; i++){
@@ -134,13 +132,13 @@ namespace Gadget{
 			}
 		}
 
-		void Add(const Array<T>& range_){
+		constexpr void Add(const Array<T>& range_){
 			GADGET_ASSERT(range_.Capacity() > 0, "Adding an Array of 0 to another array... did you mean to do that?");
 			Add(range_.data, range_.Size());
 		}
 
 		template <typename... Args>
-		T& Emplace(Args... args_){
+		constexpr T& Emplace(Args... args_){
 			GADGET_BASIC_ASSERT(capacity >= 0);
 			if(capacity == 0){
 				Reserve(16);
@@ -158,7 +156,7 @@ namespace Gadget{
 			return data[size - 1];
 		}
 
-		void InsertAt(int64_t index_, const T& value_){
+		constexpr void InsertAt(int64_t index_, const T& value_){
 			if(index_ >= size){
 				Add(value_);
 				return;
@@ -170,7 +168,7 @@ namespace Gadget{
 			new (&data[index_]) T(value_);
 		}
 
-		void InsertAt(int64_t index_, const T* range_, int64_t rangeSize_){
+		constexpr void InsertAt(int64_t index_, const T* range_, int64_t rangeSize_){
 			if(index_ >= size){
 				Add(range_, rangeSize_);
 				return;
@@ -184,7 +182,7 @@ namespace Gadget{
 			}
 		}
 
-		void InsertAt(int64_t index_, const Array<T>& range_){
+		constexpr void InsertAt(int64_t index_, const Array<T>& range_){
 			GADGET_ASSERT(range_.Capacity() > 0, "Adding an Array of 0 to another array... did you mean to do that?");
 			InsertAt(index_, range_.data, range_.Size());
 		}
@@ -242,6 +240,7 @@ namespace Gadget{
 			for(int64_t i = 0; i < size; i++){
 				if(data[i] == value_){
 					RemoveAt(i);
+					i--;
 				}
 			}
 		}
@@ -250,7 +249,7 @@ namespace Gadget{
 			Pop(size);
 		}
 
-		void Reserve(int64_t newCapacity_){
+		constexpr void Reserve(int64_t newCapacity_){
 			if(newCapacity_ <= capacity){
 				return;
 			}
@@ -259,7 +258,7 @@ namespace Gadget{
 			Reallocate();
 		}
 
-		void ShrinkToFit(){
+		constexpr void ShrinkToFit(){
 			GADGET_BASIC_ASSERT(capacity >= size);
 
 			if(capacity == size){
@@ -292,7 +291,7 @@ namespace Gadget{
 
 		constexpr bool Contains(const T& value_) const{ return Find(value_) != -1; }
 
-		Array SubRange(int64_t startIndex_, int64_t endIndex_) const{
+		constexpr Array SubRange(int64_t startIndex_, int64_t endIndex_) const{
 			GADGET_BASIC_ASSERT(startIndex_ != endIndex_);
 			if(startIndex_ >= size){
 				return Array();
@@ -361,7 +360,7 @@ namespace Gadget{
 		int64_t size;
 		int64_t capacity;
 
-		void Reallocate(){
+		constexpr void Reallocate(){
 			GADGET_BASIC_ASSERT(size <= capacity);
 
 			T* newData = nullptr;
@@ -380,7 +379,7 @@ namespace Gadget{
 			data = newData;
 		}
 
-		void ShiftElements(int64_t startIndex_, int64_t amountToShift_){
+		constexpr void ShiftElements(int64_t startIndex_, int64_t amountToShift_){
 			if(amountToShift_ == 0){
 				return;
 			}
