@@ -102,6 +102,7 @@ project "GadgetEngine"
 -- //-------------------- GadgetDLL ----------------------------//
 -- //-----------------------------------------------------------//
 
+--[[
 project "GadgetDLL"
 	CppProjectDefaults()
 	GadgetExternalIncludes()
@@ -132,6 +133,7 @@ project "GadgetDLL"
 
 	filter "configurations:Release"
 		IgnoreDefaultLibrariesForRelease()
+]]--
 
 -- //-----------------------------------------------------------//
 -- //----------------------- Game ------------------------------//
@@ -167,12 +169,39 @@ project "Game"
 -- //------------------ Workbench ------------------------------//
 -- //-----------------------------------------------------------//
 
+--[[
 externalproject "Workbench"
 	location "Workbench"
 	filename "Workbench"
 	kind "WindowedApp"
 	language "C#"
 	dependson "GadgetDLL"
+]]--
+
+project "WorkbenchCPP"
+	CppProjectDefaults()
+	GadgetExternalIncludes()
+	GadgetExternalLibDirs()
+	GadgetExternalLibs{ linkLibs="true" }
+	DependsOnGadgetEngine()
+
+	dpiawareness "HighPerMonitor"
+	debugdir ("%{cfg.targetdir}")
+
+	filter "system:windows"
+		postbuildcommands
+		{
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d"
+		}
+
+	filter "configurations:Debug or Develop"
+		kind "ConsoleApp"
+		IgnoreDefaultLibrariesForDebug()
+		
+	filter "configurations:Release"
+		kind "WindowedApp"
+		IgnoreDefaultLibrariesForRelease() 
 
 -- //-----------------------------------------------------------//
 -- //------------------ DataBuilder ----------------------------//
