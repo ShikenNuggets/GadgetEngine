@@ -179,6 +179,23 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_sdl2.h" />
+    <ClInclude Include="..\SDK\ImGui\imconfig.h" />
+    <ClInclude Include="..\SDK\ImGui\imgui.h" />
+    <ClInclude Include="..\SDK\ImGui\imgui_internal.h" />
+    <ClInclude Include="..\SDK\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="..\SDK\ImGui\imstb_textedit.h" />
+    <ClInclude Include="..\SDK\ImGui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="..\SDK\ImGui\imgui.cpp" />
+    <ClCompile Include="..\SDK\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="..\SDK\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="..\SDK\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="..\SDK\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

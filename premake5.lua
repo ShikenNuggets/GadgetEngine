@@ -188,6 +188,18 @@ project "WorkbenchCPP"
 	dpiawareness "HighPerMonitor"
 	debugdir ("%{cfg.targetdir}")
 
+	files
+	{
+		"SDK/ImGui/*.h",
+		"SDK/ImGui/*.hpp",
+		"SDK/ImGui/*.cpp",
+
+		"SDK/ImGui/backends/imgui_impl_opengl3.h",
+		"SDK/ImGui/backends/imgui_impl_opengl3.cpp",
+		"SDK/ImGui/backends/imgui_impl_sdl2.h",
+		"SDK/ImGui/backends/imgui_impl_sdl2.cpp",
+	}
+
 	filter "system:windows"
 		postbuildcommands
 		{
