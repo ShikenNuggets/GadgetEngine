@@ -27,5 +27,7 @@ Texture* ImageLoader::LoadImage(const std::string& filePath_){
 		pixelData.push_back(reinterpret_cast<uint8_t*>(surface->pixels)[i]);
 	}
 
-	return new Texture(surface->w, surface->h, surface->format->BitsPerPixel, pixelData);
+	Texture* texture = new Texture(surface->w, surface->h, surface->format->BitsPerPixel, pixelData);
+	SDL_FreeSurface(surface);
+	return texture;
 }
