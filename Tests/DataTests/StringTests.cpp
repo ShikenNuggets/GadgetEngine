@@ -26,7 +26,7 @@ static inline bool IsUnique1(const String& str){
 //O(n log n) average, O(n ^ 2) worst-case
 static inline bool IsUnique2(String str){ //Intentional copy so we can sort the string in place
 	str.QuickSort();
-	for(int64_t i = 0; i < str.Length() - 1; i++){
+	for(int32_t i = 0; i < str.Length() - 1; i++){
 		if(str[i] == str[i + 1]){
 			return false;
 		}
@@ -37,9 +37,9 @@ static inline bool IsUnique2(String str){ //Intentional copy so we can sort the 
 
 //O(n), with heavy space complexity
 static inline bool IsUnique3(const String& str){
-	HashTable<char, int64_t> hashTable;
+	HashTable<char, int32_t> hashTable;
 
-	for(int64_t i = 0; i < str.Length(); i++){
+	for(int32_t i = 0; i < str.Length(); i++){
 		if(hashTable.Contains(str[i])){
 			return false;
 		}
@@ -52,7 +52,7 @@ static inline bool IsUnique3(const String& str){
 
 //O(n)
 static inline bool IsOneEditAway(const String& str1, const String& str2){
-	int64_t lengthDist = str1.Length() - str2.Length();
+	int32_t lengthDist = str1.Length() - str2.Length();
 	if(Math::Abs(lengthDist) > 1){
 		return false; //Requires more than one edit no matter what
 	}
@@ -61,8 +61,8 @@ static inline bool IsOneEditAway(const String& str1, const String& str2){
 	bool canRemove = lengthDist == 1;
 	bool canSwap = lengthDist == 0;
 
-	int64_t i = 0;
-	int64_t j = 0;
+	int32_t i = 0;
+	int32_t j = 0;
 	for(; i < str1.Length() && j < str2.Length(); i++, j++){
 		if(str1[i] == str2[j]){
 			continue;
@@ -195,17 +195,17 @@ TEST_CASE("String::Contains", "[string_contains]"){
 	REQUIRE(IsPermutation(str3a, str3b));
 	REQUIRE(IsPermutation2(str3a, str3b));
 
-	int64_t oldLength4 = str4.Length();
+	int32_t oldLength4 = str4.Length();
 	str4.FindAndReplace(' ', "%20");
 	REQUIRE(str4.Length() >= oldLength4);
 	REQUIRE(!str4.Contains(' '));
 
-	int64_t oldLength5 = str5.Length();
+	int32_t oldLength5 = str5.Length();
 	str5.FindAndReplace(' ', "%20");
 	REQUIRE(str5.Length() >= oldLength5);
 	REQUIRE(!str5.Contains(' '));
 
-	int64_t oldLength6 = str6.Length();
+	int32_t oldLength6 = str6.Length();
 	str6.FindAndReplace(' ', "%20");
 	REQUIRE(str6.Length() >= oldLength6);
 	REQUIRE(!str6.Contains(' '));
@@ -229,7 +229,7 @@ TEST_CASE("String::Trim", "[string_trim]"){
 	REQUIRE(str2[0] == '_');
 	REQUIRE(str2[4] == '.');
 
-	int64_t oldLength = str3.Length();
+	int32_t oldLength = str3.Length();
 	str3.Trim();
 	REQUIRE(str3.Length() == oldLength);
 	REQUIRE(str3[0] == '.');
@@ -253,9 +253,9 @@ static inline bool IsPalindromePermutation(String str){ //Intentional copy
 
 	bool hasMiddle = str.Length() % 2 == 0; //True if even
 
-	for(int64_t i = 0; i < str.Length(); i++){
-		int64_t numOfThisChar = 1;
-		for(int64_t j = i + 1; j < str.Length(); j++){
+	for(int32_t i = 0; i < str.Length(); i++){
+		int32_t numOfThisChar = 1;
+		for(int32_t j = i + 1; j < str.Length(); j++){
 			if(str[j] != str[i]){
 				break;
 			}
@@ -290,9 +290,9 @@ TEST_CASE("String::ToLower", "[string_tolower]"){
 static inline String CompressString(const String& str){
 	String compressed = String(str.Length());
 
-	for(int64_t i = 0; i < str.Length(); i++){
+	for(int32_t i = 0; i < str.Length(); i++){
 		int charCount = 1;
-		for(int64_t j = i + 1; j <= str.Length(); j++){
+		for(int32_t j = i + 1; j <= str.Length(); j++){
 			if(j == str.Length() || str[i] != str[j]){
 				if(compressed.Length() + 2 == str.Length()){
 					return str;
@@ -330,17 +330,17 @@ static inline bool IsRotation(const String& s1, const String& s2){
 		return false;
 	}
 
-	const int64_t start = s2.Find(s1[0]);
+	const int32_t start = s2.Find(s1[0]);
 	if(start < 0){
 		return false;
 	}
 
 	String unrotated;
-	for(int64_t i = start; i < s2.Length(); i++){
+	for(int32_t i = start; i < s2.Length(); i++){
 		unrotated.Append(s2[i]);
 	}
 
-	for(int64_t i = 0; i < start; i++){
+	for(int32_t i = 0; i < start; i++){
 		unrotated.Append(s2[i]);
 	}
 
@@ -359,20 +359,20 @@ TEST_CASE("String Rotation", "[string_rotation]"){
 //Longest Substring Without Repeating Characters (Leetcode 3) //
 //------------------------------------------------------------//
 
-static inline int64_t LengthOfLongestSubstring(const String& s){
+static inline int32_t LengthOfLongestSubstring(const String& s){
 	if(s.Length() <= 1){
 		return s.Length();
 	}
 
 	String initialString = s;
-	int64_t longestSubStr = 0;
+	int32_t longestSubStr = 0;
 
-	for(int64_t i = 0; i < initialString.Length(); i++){
+	for(int32_t i = 0; i < initialString.Length(); i++){
 		bool endOfString = true;
 
 		String substr = initialString.SubString(i, i + 1);
 
-		for(int64_t j = i + 1; j < initialString.Length(); j++){
+		for(int32_t j = i + 1; j < initialString.Length(); j++){
 			if(substr.Find(initialString[j]) < 0){
 				substr += initialString[j];
 			}else{
@@ -415,16 +415,16 @@ TEST_CASE("String Longest Substring", "[string_longest_substring]"){
 //------------ Score of a String (Leetcode 3110) -------------//
 //------------------------------------------------------------//
 
-static inline int64_t GetStringScore(const String& str){
+static inline int32_t GetStringScore(const String& str){
 	if(str.Length() < 2){
 		return 0;
 	}
 
-	int64_t score = 0;
+	int32_t score = 0;
 
-	for(int64_t i = 0; i < str.Length() - 1; i++){
-		int64_t aVal = str[i];
-		int64_t bVal = str[i + 1];
+	for(int32_t i = 0; i < str.Length() - 1; i++){
+		int32_t aVal = str[i];
+		int32_t bVal = str[i + 1];
 
 		score += Math::Abs(aVal - bVal);
 	}
