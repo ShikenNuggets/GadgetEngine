@@ -4,6 +4,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Projects">
+      <UniqueIdentifier>{4FB858A2-3B85-B3AD-649E-A15550CAE83B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="SDK">
       <UniqueIdentifier>{071D880B-7326-887C-FCA1-9E7C68AA937C}</UniqueIdentifier>
     </Filter>
@@ -42,6 +45,12 @@
     <ClInclude Include="Core\EditorWindow.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Projects\Project.h">
+      <Filter>Projects</Filter>
+    </ClInclude>
+    <ClInclude Include="Projects\ProjectManager.h">
+      <Filter>Projects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_opengl3.cpp">
@@ -69,5 +78,8 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Projects\ProjectManager.cpp">
+      <Filter>Projects</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
