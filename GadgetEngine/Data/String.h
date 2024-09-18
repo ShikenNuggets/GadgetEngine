@@ -16,6 +16,11 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(HasNullTerminator());
 		}
 
+		String(const std::string& str_) : size(0), capacity(gStackStrSize), data(){
+			Append(str_.data(), str_.size());
+			GADGET_BASIC_ASSERT(HasNullTerminator());
+		}
+
 		explicit String(const Array<char>& strArray_) : size(0), capacity(gStackStrSize), data(){
 			GADGET_BASIC_ASSERT(strArray_.Size() < std::numeric_limits<int32_t>::max());
 			Append(strArray_);
