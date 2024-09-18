@@ -160,6 +160,12 @@ namespace Gadget{
 
 		T data[Size];
 	};
+
+	template <class T, int64_t X, int64_t Y>
+	using StaticArray2D = StaticArray<StaticArray<T, Y>, X>;
+
+	template <class T, int64_t X, int64_t Y, int64_t Z>
+	using StaticArray3D = StaticArray<StaticArray<StaticArray<float, Z>, Y>, X>;
 }
 
 #endif //!GADGET_DATA_STATIC_ARRAY_H
