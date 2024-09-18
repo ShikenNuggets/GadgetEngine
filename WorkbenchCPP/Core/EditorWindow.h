@@ -1,9 +1,9 @@
-#ifndef WORKBENCH_CORE_EDITOR_WINDOW_H
-#define WORKBENCH_CORE_EDITOR_WINDOW_H
+#ifndef GADGET_WORKBENCH_CORE_EDITOR_WINDOW_H
+#define GADGET_WORKBENCH_CORE_EDITOR_WINDOW_H
 
 #include <SDL.h>
 
-namespace Workbench{
+namespace Gadget::Workbench{
 	class EditorWindow{
 	public:
 		EditorWindow(int width_, int height_);
@@ -18,4 +18,4 @@ namespace Workbench{
 	};
 }
 
-#endif //!WORKBENCH_CORE_EDITOR_WINDOW_H
+#endif //!GADGET_WORKBENCH_CORE_EDITOR_WINDOW_H

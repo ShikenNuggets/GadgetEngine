@@ -1,6 +1,6 @@
 #include "Core/EditorWindow.h"
 
-using namespace Workbench;
+using namespace Gadget::Workbench;
 
 int main(int argc, char* argv[]){
 	EditorWindow window = EditorWindow(1280, 960);
