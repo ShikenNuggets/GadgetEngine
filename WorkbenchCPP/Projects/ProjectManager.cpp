@@ -36,7 +36,16 @@ void ProjectManager::Draw(){
 	//------------------------------//
 	//------- Project Browser ------//
 	//------------------------------//
-	if(ImGui::Begin("Project Browser")){
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y), ImGuiCond_Always);
+	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+
+	ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	if(guiShowCreateProjectWindow){
+		flags |= ImGuiWindowFlags_NoInputs;
+	}
+
+	if(ImGui::Begin("Project Browser", nullptr, flags)){
 		ImGui::Text("Choose a project:");
 		ImGui::Spacing();
 
@@ -57,7 +66,8 @@ void ProjectManager::Draw(){
 	//------- Create Project -------//
 	//------------------------------//
 	if(guiShowCreateProjectWindow){
-		if(ImGui::Begin("Create Project", &guiShowCreateProjectWindow, ImGuiWindowFlags_NoSavedSettings)){
+		if(ImGui::Begin("Create Project", &guiShowCreateProjectWindow, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse)){
+			ImGui::SetWindowFocus("Create Project");
 			ImGui::Text("Project Name");
 			ImGui::InputText("##ProjectName", guiProjectName.data(), guiProjectName.capacity());
 			ImGui::Text("Path");
