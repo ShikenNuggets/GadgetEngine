@@ -65,6 +65,16 @@ EditorWindow::EditorWindow(int width_, int height_) : window(nullptr), glContext
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
+#ifdef GADGET_DEBUG
+	io.ConfigDebugHighlightIdConflicts = true;
+	io.ConfigDebugIniSettings = true;
+#endif //GADGET_DEBUG
+
+#ifdef GADGET_RELEASE
+	io.ConfigDebugHighlightIdConflicts = false;
+	io.ConfigDebugIniSettings = false;
+#endif //GADGET_RELEASE
+
 	ImGui_ImplSDL2_InitForOpenGL(window, glContext);
 	ImGui_ImplOpenGL3_Init();
 }
