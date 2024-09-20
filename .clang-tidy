@@ -1,5 +1,4 @@
 Checks: '-*
-, altera-struct-pack-align
 , bugprone-assert-side-effect
 , bugprone-assignment-in-if-condition
 , bugprone-bool-pointer-implicit-conversion
@@ -75,7 +74,6 @@ Checks: '-*
 , hicpp-exception-baseclass
 , hicpp-ignored-remove-result
 , hicpp-no-assembler
-, hicpp-signed-bitwise
 , misc-confusable-identifiers
 , misc-const-correctness
 , misc-definitions-in-headers
@@ -92,7 +90,6 @@ Checks: '-*
 , misc-unused-alias-decls
 , misc-unused-parameters
 , misc-unused-using-decls
-, misc-use-anonymous-namespace
 , misc-use-internal-linkage
 , modernize-avoid-bind
 , modernize-avoid-c-arrays
@@ -121,15 +118,71 @@ Checks: '-*
 , modernize-use-starts-ends-with
 , modernize-use-std-numbers
 , modernize-use-using
+, performance-avoid-endl
+, performance-enum-size
+, performance-faster-string-find
+, performance-for-range-copy
+, performance-implicit-conversion-in-loop
+, performance-inefficient-algorithm
+, performance-inefficient-string-concatenation
+, performance-inefficient-vector-operation
+, performance-move-const-arg
+, performance-move-constructor-init
+, performance-no-automatic-move
+, performance-noexcept-destructor
+, performance-noexcept-move-constructor
+, performance-noexcept-swap
+, performance-trivially-destructible
+, performance-type-promotion-in-math-fn
+, performance-unnecessary-copy-initialization
+, performance-unnecessary-value-param
+, portability-std-allocator-const
+, readability-avoid-const-params-in-decls
+, readability-avoid-nested-conditional-operator
+, readability-avoid-return-with-void-value
+, readability-avoid-unconditional-preprocessor-if
+, readability-braces-around-statements
+, readability-const-return-type
+, readability-container-contains
+, readability-container-data-pointer
+, readability-container-size-empty
+, readability-convert-member-functions-to-static
+, readability-delete-null-pointer
+, readability-duplicate-include
+, readability-else-after-return
+, readability-enum-initial-value
+, readability-implicit-bool-conversion
+, readability-inconsistent-declaration-parameter-name
+, readability-magic-numbers
+, readability-make-member-function-const
+, readability-math-missing-parentheses
+, readability-misplaced-array-index
+, readability-named-parameter
+, readability-non-const-parameter
+, readability-qualified-auto
+, readability-redundant-access-specifiers
+, readability-redundant-casting
+, readability-redundant-control-flow
+, readability-redundant-declaration
+, readability-redundant-function-ptr-dereference
+, readability-redundant-preprocessor
+, readability-redundant-smartptr-get
+, readability-redundant-string-cstr
+, readability-reference-to-constructed-temporary
+, readability-simplify-boolean-expr
+, readability-simplify-subscript-expr
+, readability-static-accessed-through-instance
+, readability-string-compare
+, readability-uniqueptr-delete-release
 '
 
 CheckOptions:
  - key: bugprone-assert-side-effect.AssertMacros
    value: "assert,_ASSERT,GADGET_ASSERT"
-
+   
  - key: bugprone-misplaced-widening-cast.CheckImplicitCasts
    value: true
-
+   
  - key: bugprone-sizeof-expression.WarnOnSizeOfPointer
    value: true
    
@@ -147,18 +200,31 @@ CheckOptions:
    
  - key: cppcoreguidelines-special-member-functions.AllowImplicitlyDeletedCopyOrMove
    value: true
-
- - key: hicpp-signed-bitwise.IgnorePositiveIntegerLiterals
-   value: true
-
+   
  - key: misc-unused-parameters.IgnoreVirtual
    value: true
-
+   
  - key: modernize-avoid-c-arrays.AllowStringArrays
    value: true
-
+   
  - key: modernize-min-max-use-initializer-list.IgnoreTrivialTypesOfSizeAbove
    value: 64
-
+   
  - key: modernize-use-using.IgnoreExternC
    value: true
+   
+ - key: performance-inefficient-string-concatenation.StrictMode
+   value: true
+   
+ - key: readability-magic-numbers.IgnoredIntegerValues
+   value: 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; 13; 14; 15; 16; 36; 255;
+   
+ - key: readability-magic-numbers.IgnoredFloatingPointValues
+   value: 0.0001; 0.001; 0.01; 0.1; 0.25; 0.5; 0.75; 0.99; 1.0; 2.0; 10.0; 100.0; 1000.0;
+   
+ - key: readability-magic-numbers.IgnorePowersOf2IntegerValues
+   value: true
+   
+ - key: readability-simplify-boolean-expr.IgnoreMacros
+   value: true
+   

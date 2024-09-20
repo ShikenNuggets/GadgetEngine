@@ -83,7 +83,7 @@ GL_Shader::~GL_Shader(){
 	glDeleteProgram(shader);
 }
 
-GLuint GL_Shader::GetShaderProgram(){
+GLuint GL_Shader::GetShaderProgram() const{
 	return shader;
 }
 
@@ -176,21 +176,21 @@ std::string GL_Shader::GetShaderLog(GLuint shader_){
 
 	if(errorLogSize > 0){
 		errorLog.resize(errorLogSize);
-		glGetShaderInfoLog(shader_, errorLogSize, &errorLogSize, &errorLog[0]);
+		glGetShaderInfoLog(shader_, errorLogSize, &errorLogSize, errorLog.data());
 	}
 
 	return errorLog;
 }
 
-std::string GL_Shader::GetProgramLog(GLuint shader_){
+std::string GL_Shader::GetProgramLog(GLuint program_){
 	std::string errorLog = "";
 
 	GLsizei errorLogSize = 0;
-	glGetProgramiv(shader_, GL_INFO_LOG_LENGTH, &errorLogSize);
+	glGetProgramiv(program_, GL_INFO_LOG_LENGTH, &errorLogSize);
 
 	if(errorLogSize > 0){
 		errorLog.resize(errorLogSize);
-		glGetProgramInfoLog(shader_, errorLogSize, &errorLogSize, &errorLog[0]);
+		glGetProgramInfoLog(program_, errorLogSize, &errorLogSize, errorLog.data());
 	}
 
 	return errorLog;

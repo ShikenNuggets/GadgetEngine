@@ -23,7 +23,7 @@ FreetypeFontLoader::~FreetypeFontLoader(){
 	}
 }
 
-FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_){
+FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_) const{
 	GADGET_BASIC_ASSERT(!filePath_.empty());
 	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
 	GADGET_BASIC_ASSERT(ftLib != nullptr);

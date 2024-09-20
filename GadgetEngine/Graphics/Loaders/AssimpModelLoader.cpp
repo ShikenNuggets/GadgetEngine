@@ -45,7 +45,7 @@ Mesh* AssimpModelLoader::LoadMesh(const std::string& filePath_){
 
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(filePath_, gLoadFlags);
-	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
+	if(scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == nullptr){
 		Debug::Log("AssImp could not load model! AssImp Error: " + std::string(importer.GetErrorString()), Debug::Error, __FILE__, __LINE__);
 		return nullptr;
 	}
@@ -103,7 +103,7 @@ AnimMesh* AssimpModelLoader::LoadAnimMesh(const std::string& filePath_){
 	Assimp::Importer importer;
 	importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 	const aiScene* scene = importer.ReadFile(filePath_, gLoadFlags);
-	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
+	if(scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == nullptr){
 		GADGET_LOG_ERROR(SID("ASSET"), "AssImp could not load model! AssImp Error: " + std::string(importer.GetErrorString()));
 		return nullptr;
 	}
@@ -135,7 +135,7 @@ void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scen
 		Array<unsigned int> indices;
 
 		verts.Reserve(mesh->mNumVertices);
-		indices.Reserve(static_cast<size_t>(mesh->mNumFaces) * 3);
+		indices.Reserve(static_cast<int64_t>(mesh->mNumFaces) * 3);
 
 		//Vertices
 		for(unsigned int j = 0; j < mesh->mNumVertices; j++){
@@ -185,7 +185,8 @@ void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scen
 			for(unsigned int k = 0; k < bone->mNumWeights; k++){
 				const aiVertexWeight& weight = bone->mWeights[k];
 				GADGET_BASIC_ASSERT(verts.Size() > weight.mVertexId);
-				verts[weight.mVertexId].AddWeight(j, weight.mWeight);
+				GADGET_BASIC_ASSERT(j < std::numeric_limits<int32_t>::max());
+				verts[weight.mVertexId].AddWeight(static_cast<int32_t>(j), weight.mWeight);
 			}
 		}
 

@@ -172,7 +172,9 @@ namespace Gadget{
 		constexpr inline void Pop(){
 			if(IsEmpty()){
 				return;
-			}else if(size == 1){
+			}
+			
+			if(size == 1){
 				delete head;
 				head = nullptr;
 				tail = nullptr;
@@ -193,7 +195,9 @@ namespace Gadget{
 		constexpr inline void PopFront(){
 			if(IsEmpty()){
 				return;
-			}else if(size == 1){
+			}
+			
+			if(size == 1){
 				delete head;
 				head = nullptr;
 				tail = nullptr;
@@ -224,7 +228,9 @@ namespace Gadget{
 			if(node_ == head){
 				PopFront();
 				return;
-			}else if(node_ == tail){
+			}
+			
+			if(node_ == tail){
 				Pop();
 				return;
 			}
@@ -284,9 +290,13 @@ namespace Gadget{
 
 			if(index_ == 0){
 				return head;
-			}else if(index_ == size - 1){
+			}
+			
+			if(index_ == size - 1){
 				return tail;
-			}else if(index_ >= size){
+			}
+			
+			if(index_ >= size){
 				return nullptr;
 			}
 
@@ -378,9 +388,9 @@ namespace Gadget{
 		}
 
 		constexpr Iterator begin(){ return Iterator(head); }
-		constexpr const Iterator begin() const{ return Iterator(head); }
+		constexpr Iterator begin() const{ return Iterator(head); }
 		constexpr Iterator end(){ return Iterator(nullptr); }
-		constexpr const Iterator end() const{ return Iterator(nullptr); }
+		constexpr Iterator end() const{ return Iterator(nullptr); }
 
 	private:
 		int64_t size;

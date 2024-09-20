@@ -224,7 +224,7 @@ namespace Gadget{
 				data[i].~T();
 			}
 
-			ShiftElements(startIndex_, -static_cast<int64_t>(rangeSize_));
+			ShiftElements(startIndex_, -rangeSize_);
 		}
 
 		constexpr void Remove(const T& value_){
@@ -280,7 +280,7 @@ namespace Gadget{
 		}
 
 		constexpr int64_t Find(const T& value_, int64_t startPos_ = 0) const{
-			for(int64_t i = startPos_; static_cast<int64_t>(i) < size; i++){
+			for(int64_t i = startPos_; i < size; i++){
 				if(data[i] == value_){
 					return i;
 				}
@@ -347,13 +347,13 @@ namespace Gadget{
 
 		constexpr inline int64_t Size() const{ return size; }
 		constexpr inline size_t SizeInBytes() const{ return sizeof(Array<T>) + (sizeof(T) * capacity); }
-		constexpr inline int64_t IsEmpty() const{ return size == 0; }
+		constexpr inline bool IsEmpty() const{ return size == 0; }
 		constexpr inline int64_t Capacity() const{ return capacity; }
 
 		constexpr Iterator begin(){ return Iterator(*this, 0); }
-		constexpr const ConstIterator begin() const{ return ConstIterator(*this, 0); }
+		constexpr ConstIterator begin() const{ return ConstIterator(*this, 0); }
 		constexpr Iterator end(){ return Iterator(*this, size); }
-		constexpr const ConstIterator end() const{ return ConstIterator(*this, size); }
+		constexpr ConstIterator end() const{ return ConstIterator(*this, size); }
 
 	private:
 		T* data;

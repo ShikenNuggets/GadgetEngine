@@ -9,7 +9,7 @@ namespace Gadget{
 	public:
 		EngineMaterial(const Color& color_, bool materialInfoDeferred_ = true);
 		EngineMaterial(const Color& colorA_, const Color& colorB_, const Color& colorC_, bool materialInfoDeferred_ = true);
-		EngineMaterial(const std::vector<Color>& color_, bool materialInfoDeferred_);
+		EngineMaterial(const std::vector<Color>& colors_, bool materialInfoDeferred_);
 		~EngineMaterial();
 
 		void CreateMaterialInfo();

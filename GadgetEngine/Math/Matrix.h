@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Debug.h"
+#include "Data/StaticArray.h"
 #include "Math/Vector.h"
 
 namespace Gadget{
@@ -80,7 +81,7 @@ namespace Gadget{
 
 	private:
 		static constexpr int mat2Size = 4;
-		float m[mat2Size];
+		StaticArray<float, mat2Size> m;
 	};
 
 	//Column Major Order
@@ -155,7 +156,7 @@ namespace Gadget{
 
 	private:
 		static constexpr int mat3Size = 9;
-		float m[mat3Size];
+		StaticArray<float, mat3Size> m;
 	};
 
 	//Column Major Order
@@ -272,7 +273,7 @@ namespace Gadget{
 
 	private:
 		static constexpr int mat4Size = 16;
-		float m[mat4Size];
+		StaticArray<float, mat4Size> m;
 	};
 
 	//Column Major Order
@@ -372,7 +373,7 @@ namespace Gadget{
 
 	private:
 		static constexpr int mat4x3Size = 12;
-		float m[mat4x3Size];
+		StaticArray<float, mat4x3Size> m;
 	};
 }
 

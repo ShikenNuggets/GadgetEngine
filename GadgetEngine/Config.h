@@ -43,7 +43,7 @@ namespace Gadget{
 		std::string engineConfigPath;
 		EngineVars vars;
 
-		std::string CreateEngineConfigPath();
+		static std::string CreateEngineConfigPath();
 	};
 }
 

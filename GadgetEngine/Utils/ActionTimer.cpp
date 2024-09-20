@@ -19,17 +19,17 @@ ActionTimer::ActionTimer(TimerType timerType_, ActionType actionType_, float dur
 bool ActionTimer::Update(float deltaTime_){
 	if(timerType == TimerType::Countdown){
 		return UpdateCountdown(deltaTime_);
-	}else{
-		return UpdateStopwatch(deltaTime_);
 	}
+
+	return UpdateStopwatch(deltaTime_);
 }
 
 bool ActionTimer::IsDone() const{
 	if(timerType == TimerType::Countdown){
 		return timer <= 0.0f;
-	}else{
-		return timer >= duration;
 	}
+
+	return timer >= duration;
 }
 
 bool ActionTimer::UpdateStopwatch(float deltaTime_){

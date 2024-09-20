@@ -32,8 +32,7 @@ namespace Gadget{
 
 		Component(StringID typeName_, GUID parentGUID_);
 		Component(const ComponentProperties& props_);
-
-		virtual ~Component(){}
+		virtual ~Component() = default;
 
 		//Runs the first frame that the object is activated
 		virtual void OnActivated(){
@@ -64,7 +63,7 @@ namespace Gadget{
 		template <class T>
 		static Component* DeserializeToNewComponent(const ComponentProperties& props_)
 		{
-			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 			return new T(props_);
 		}
 
@@ -81,7 +80,7 @@ namespace Gadget{
 	//TODO - Thread safety
 	template <class T>
 	class ComponentCollection{
-		static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+		static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 
 		private:
 			std::map<GUID, std::vector<T*>> guidMap;

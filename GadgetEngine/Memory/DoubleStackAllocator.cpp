@@ -4,6 +4,9 @@
 
 using namespace Gadget;
 
+static constexpr int gCleanMemoryValue = 0xCD;
+static constexpr int gDeadMemoryValue = 0xDD;
+
 DoubleStackAllocator::DoubleStackAllocator(size_t bytes_) : size(bytes_), base(nullptr), lowerMarkers(), upperMarkers(){
 	GADGET_ASSERT(bytes_ != 0, "Tried to create a 0 byte allocator!");
 
@@ -13,7 +16,7 @@ DoubleStackAllocator::DoubleStackAllocator(size_t bytes_) : size(bytes_), base(n
 	#ifdef GADGET_DEBUG
 		//Fill the memory with garbage so we can detect memory corruption more easily
 		//0xCD is "clean" memory in Visual C++
-		memset(base, 0xCD, size);
+		memset(base, gCleanMemoryValue, size);
 	#endif //GADGET_DEBUG
 }
 
@@ -89,7 +92,7 @@ void DoubleStackAllocator::FreeLower(LowerMarker marker_){
 		#ifdef GADGET_DEBUG
 			//Fill the unused memory with garbage so we can detect memory corruption more easily
 			//0xDD is "dead" memory in Visual C++
-			memset(GetLowerPtr(), 0xDD, oldMarker - lowerMarkers.top());
+			memset(GetLowerPtr(), gDeadMemoryValue, oldMarker - lowerMarkers.top());
 		#endif //GADGET_DEBUG
 	}
 
@@ -110,7 +113,7 @@ void DoubleStackAllocator::FreeUpper(UpperMarker marker_){
 		#ifdef GADGET_DEBUG
 			//Fill the unused memory with garbage so we can detect memory corruption more easily
 			//0xDD is "dead" memory in Visual C++
-			memset(GetUpperMarkerPtr(oldMarker), 0xDD, upperMarkers.top() - oldMarker);
+			memset(GetUpperMarkerPtr(oldMarker), gDeadMemoryValue, upperMarkers.top() - oldMarker);
 		#endif //GADGET_DEBUG
 	}
 
@@ -129,7 +132,7 @@ void DoubleStackAllocator::Clear(){
 	#ifdef GADGET_DEBUG
 		//Fill the unused memory with garbage so we can detect memory corruption more easily
 		//0xDD is "dead" memory in Visual C++
-		memset(base, 0xDD, size);
+		memset(base, gDeadMemoryValue, size);
 	#endif //GADGET_DEBUG
 }
 

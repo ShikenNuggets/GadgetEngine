@@ -40,8 +40,8 @@ Matrix4::Matrix4(	float x1_, float x2_, float x3_, float x4_,
 Matrix4::Matrix4(float fill_) : m(){
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
 
-	for(unsigned int i = 0; i < mat4Size; i++){
-		m[i] = fill_;
+	for(auto& i : m){
+		i = fill_;
 	}
 }
 
@@ -211,7 +211,7 @@ Matrix4 Matrix4::Inverse() const{
 	inverseM[14] = -m[0] * m[5] * m[14] + m[0] * m[6] * m[13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6] + m[12] * m[2] * m[5];
 	inverseM[15] =  m[0] * m[5] * m[10] - m[0] * m[6] * m[9] - m[4] * m[1] * m[10] + m[4] * m[2] * m[9] + m[8] * m[1] * m[6] - m[8] * m[2] * m[5];
 
-	float determinant = m[0] * inverseM[0] + m[1] * inverseM[4] + m[2] * inverseM[8] + m[3] * inverseM[12];
+	const float determinant = m[0] * inverseM[0] + m[1] * inverseM[4] + m[2] * inverseM[8] + m[3] * inverseM[12];
 	inverseM /= determinant;
 
 	return inverseM;
@@ -221,14 +221,13 @@ Matrix4 Matrix4::Rotate(float angle_, const Vector3& v_){
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(angle_));
 	GADGET_BASIC_ASSERT(v_.IsValid());
 
-	float cosang, sinang, cosm, tempAngle;
 	Vector3 rotAxis(v_.x, v_.y, v_.z);
 
 	rotAxis.Normalize();
-	tempAngle = Math::DegreesToRadians(angle_);
-	cosang = cos(tempAngle);
-	sinang = sin(tempAngle);
-	cosm = (1.0f - cosang);
+	const float tempAngle = Math::DegreesToRadians(angle_);
+	const float cosang = cos(tempAngle);
+	const float sinang = sin(tempAngle);
+	const float cosm = (1.0f - cosang);
 
 	Matrix4 m;
 
@@ -280,15 +279,15 @@ Matrix4 Matrix4::LookAt(float eyeX_, float eyeY_, float eyeZ_,
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(upY_));
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(upZ_));
 
-	Vector3 at(atX_, atY_, atZ_);
+	const Vector3 at(atX_, atY_, atZ_);
 	Vector3 up(upX_, upY_, upZ_);
-	Vector3 eye(eyeX_, eyeY_, eyeZ_);
+	const Vector3 eye(eyeX_, eyeY_, eyeZ_);
 
 	Matrix4 result;
 
-	Vector3 forward = (at - eye).Normalized();
+	const Vector3 forward = (at - eye).Normalized();
 	up.Normalize();
-	Vector3 side = Vector3::Cross(forward, up).Normalized();
+	const Vector3 side = Vector3::Cross(forward, up).Normalized();
 	up = Vector3::Cross(side,forward);
 
 	result[0] = side.x;
@@ -372,7 +371,7 @@ Matrix4 Matrix4::Perspective(float fov_, float aspect_, float nearPlane_, float 
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(nearPlane_));
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(farPlane_));
 
-	float cot = 1.0f / Math::Tan(fov_ * 0.5f);
+	const float cot = 1.0f / Math::Tan(fov_ * 0.5f);
 	//Don't forget, this looks row centric but it really is a column matrix - right-hand rule rules
 	Matrix4 result(cot / aspect_, 0.0f, 0.0f, 0.0f,
 		0.0f, cot, 0.0f, 0.0f,
@@ -403,12 +402,12 @@ Matrix4 Matrix4::UnOrtho(const Matrix4& ortho){
 }
 
 Matrix4 Matrix4::ViewportNDC(int w_, int h_){
-	float minZ = 0.0f;
-	float maxZ = 1.0f;
+	const float minZ = 0.0f;
+	const float maxZ = 1.0f;
 	
-	Matrix4 m1 = Scale(Vector3(1.0f, -1.0f, 1.0f));
-	Matrix4 m2 = Scale(Vector3(float(w_) / 2.0f, float(h_) / 2.0f, maxZ - minZ));
-	Matrix4 m3 = Translate(Vector3(float(w_) / 2.0f, float(h_) / 2.0f, minZ));
+	const Matrix4 m1 = Scale(Vector3(1.0f, -1.0f, 1.0f));
+	const Matrix4 m2 = Scale(Vector3(static_cast<float>(w_) / 2.0f, static_cast<float>(h_) / 2.0f, maxZ - minZ));
+	const Matrix4 m3 = Translate(Vector3(static_cast<float>(w_) / 2.0f, static_cast<float>(h_) / 2.0f, minZ));
 	return m3 * m2 * m1;
 }
 

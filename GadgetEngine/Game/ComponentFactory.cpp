@@ -9,7 +9,7 @@
 
 using namespace Gadget;
 
-std::map<StringID, componentDeserializeFunc> ComponentFactory::deserializers;
+std::map<StringID, ComponentDeserializeFunc> ComponentFactory::deserializers;
 
 //This is pretty stupid but it's fine for now
 //TODO - Need a proper solution here so that this can go away, and also so game code can declare serializable components in a sane way

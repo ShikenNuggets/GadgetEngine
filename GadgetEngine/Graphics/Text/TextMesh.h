@@ -8,7 +8,7 @@
 namespace Gadget{
 	class TextMesh{
 	public:
-		TextMesh(StringID font_, StringID shader_, const std::string& initialText_);
+		TextMesh(StringID font_, StringID shader_, std::string initialText_);
 		~TextMesh();
 
 		FreetypeFont* GetFont() const{ return font; }

@@ -6,11 +6,11 @@
 #include "Math/Vector.h"
 
 namespace FMODHelper{
-	constexpr inline Gadget::Vector3 ConvertVector3(const FMOD_VECTOR& vec_){
+	static constexpr inline Gadget::Vector3 ConvertVector3(const FMOD_VECTOR& vec_){
 		return Gadget::Vector3(vec_.x, vec_.y, vec_.z);
 	}
 
-	inline FMOD_VECTOR ConvertVector3(const Gadget::Vector3& vec_){
+	static inline FMOD_VECTOR ConvertVector3(const Gadget::Vector3& vec_){
 		GADGET_BASIC_ASSERT(vec_.IsValid());
 		return FMOD_VECTOR(vec_.x, vec_.y, vec_.z);
 	}

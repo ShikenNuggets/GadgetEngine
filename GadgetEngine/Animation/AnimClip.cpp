@@ -14,7 +14,7 @@ FullClipSearchResult AnimClip::GetTransformAtTime(StringID name_, float time_, c
 
 //I apologize in advance to anyone hoping to understand or debug this code
 template <class T>
-inline const DList<T>::Node* Search(const typename DList<T>::Node* startNode_, float time_){
+static inline const DList<T>::Node* Search(const typename DList<T>::Node* startNode_, float time_){
 	const auto* curNode = startNode_;
 	GADGET_BASIC_ASSERT(curNode != nullptr);
 	if(curNode == nullptr){
@@ -24,18 +24,18 @@ inline const DList<T>::Node* Search(const typename DList<T>::Node* startNode_, f
 	if(time_ == curNode->value.time){
 		//Current node is already at the time we're looking for
 		return curNode;
-	}else{
-		const bool searchForward = time_ >= curNode->value.time;
-		while(curNode != nullptr){
-			if(curNode->value.time <= time_ && (curNode->next == nullptr || curNode->next->value.time >= time_)){
-				return curNode;
-			}
+	}
 
-			if(searchForward){
-				curNode = curNode->next;
-			}else{
-				curNode = curNode->prev;
-			}
+	const bool searchForward = time_ >= curNode->value.time;
+	while(curNode != nullptr){
+		if(curNode->value.time <= time_ && (curNode->next == nullptr || curNode->next->value.time >= time_)){
+			return curNode;
+		}
+
+		if(searchForward){
+			curNode = curNode->next;
+		}else{
+			curNode = curNode->prev;
 		}
 	}
 
@@ -44,7 +44,7 @@ inline const DList<T>::Node* Search(const typename DList<T>::Node* startNode_, f
 }
 
 template <class ResultT, class KeyT, class NodeT, class KeysT>
-inline ResultT GetResultAtTime(StringID name_, float time_, const NodeT* node_, const KeysT& keys_){
+static inline ResultT GetResultAtTime(StringID name_, float time_, const NodeT* node_, const KeysT& keys_){
 	if(!keys_.Contains(name_)){
 		//Default initialize the result if there are no keys for this joint
 		return ResultT(nullptr);

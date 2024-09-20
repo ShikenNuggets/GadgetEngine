@@ -120,9 +120,9 @@ namespace Gadget{
 		constexpr size_t SizeInBytes() const{ return sizeof(*this); }
 
 		constexpr Iterator begin(){ return Iterator(*this, 0); }
-		constexpr const ConstIterator begin() const{ return ConstIterator(*this, 0); }
+		constexpr ConstIterator begin() const{ return ConstIterator(*this, 0); }
 		constexpr Iterator end(){ return Iterator(*this, Size); }
-		constexpr const ConstIterator end() const{ return ConstIterator(*this, Size); }
+		constexpr ConstIterator end() const{ return ConstIterator(*this, Size); }
 
 		constexpr void QuickSort(int64_t low_, int64_t high_){
 			if(low_ >= 0 && high_ >= 0 && low_ < high_){

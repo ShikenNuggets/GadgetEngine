@@ -20,8 +20,8 @@ GL_ScreenQuad::GL_ScreenQuad() : vao(0), vbo(0), ebo(0){
 	};
 	static constexpr std::array<GLuint, 6> triangleIndices = { 0, 1, 2, 0, 2, 3 };
 
-	glNamedBufferData(vbo, sizeof(GLfloat) * 4 * 4, &triangleVerts[0], GL_STATIC_DRAW);
-	glNamedBufferData(ebo, sizeof(GLuint) * triangleIndices.size() * 4, &triangleIndices[0], GL_STATIC_DRAW);
+	glNamedBufferData(vbo, sizeof(GLfloat) * triangleVerts.size(), triangleVerts.data(), GL_STATIC_DRAW);
+	glNamedBufferData(ebo, sizeof(GLuint) * triangleIndices.size(), triangleIndices.data(), GL_STATIC_DRAW);
 
 	//Position
 	glEnableVertexArrayAttrib(vao, 0);

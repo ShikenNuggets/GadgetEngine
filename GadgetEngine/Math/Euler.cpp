@@ -37,10 +37,10 @@ Quaternion Euler::ToQuaternion() const{
 	const float s2 = Math::SinR(attitude / 2.0f);
 	const float s3 = Math::SinR(bank / 2.0f);
 
-	const float newW = c1 * c2 * c3 - s1 * s2 * s3;
-	const float newX = s1 * s2 * c3 + c1 * c2 * s3;
-	const float newY = s1 * c2 * c3 + c1 * s2 * s3;
-	const float newZ = c1 * s2 * c3 - s1 * c2 * s3;
+	const float newW = (c1 * c2 * c3) - (s1 * s2 * s3);
+	const float newX = (s1 * s2 * c3) + (c1 * c2 * s3);
+	const float newY = (s1 * c2 * c3) + (c1 * s2 * s3);
+	const float newZ = (c1 * s2 * c3) - (s1 * c2 * s3);
 
 	return Quaternion(newW, newX, newY, newZ).Normalized();
 }

@@ -137,21 +137,21 @@ void Rigidbody::SetMass(float mass_){
 	}
 }
 
-void Rigidbody::SetVelocity(const Vector3& vel_){
-	GADGET_BASIC_ASSERT(vel_.IsValid());
+void Rigidbody::SetVelocity(const Vector3& velocity_){
+	GADGET_BASIC_ASSERT(velocity_.IsValid());
 
 	if(bulletRb == nullptr){
 		//Set velocity on next update
-		cachedVelocity = vel_;
+		cachedVelocity = velocity_;
 		hasCachedVelocity = true;
 		return;
 	}
 
-	if(!Math::IsNearZero(vel_.x) || !Math::IsNearZero(vel_.y) || !Math::IsNearZero(vel_.z)){
+	if(!Math::IsNearZero(velocity_.x) || !Math::IsNearZero(velocity_.y) || !Math::IsNearZero(velocity_.z)){
 		bulletRb->activate(true); //Force activate the rigidbody if we're hard setting a non-zero velocity
 	}
 
-	bulletRb->setLinearVelocity(BulletHelper::ConvertVector3(vel_));
+	bulletRb->setLinearVelocity(BulletHelper::ConvertVector3(velocity_));
 }
 
 void Rigidbody::SetVelocity(float x_, float y_, float z_){
@@ -241,9 +241,9 @@ float Rigidbody::ApplyBrakes(float curVelocity_, float deltaTime_){
 	
 	if(curVelocity_ < 0.0f){
 		return curVelocity_ + brakingSpeed * deltaTime_;
-	}else{
-		return curVelocity_ - brakingSpeed * deltaTime_;
 	}
+
+	return curVelocity_ - brakingSpeed * deltaTime_;
 }
 
 ComponentProperties Rigidbody::Serialize() const{

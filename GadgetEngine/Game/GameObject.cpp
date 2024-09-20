@@ -72,7 +72,7 @@ void GameObject::Update([[maybe_unused]] float deltaTime_){
 }
 
 GameObject::~GameObject(){
-	for(auto c : components){
+	for(auto* c : components){
 		delete c;
 		c = nullptr;
 	}
@@ -111,12 +111,12 @@ void GameObject::SetLifeTime(float lifeTime_){
 
 GameObject* GameObject::FindWithTag(StringID tag_){
 	GADGET_BASIC_ASSERT(tag_ != StringID::None);
-	return App::GetInstance().GetSceneManager().CurrentScene()->FindWithTag(tag_);
+	return App::GetSceneManager().CurrentScene()->FindWithTag(tag_);
 }
 
 std::vector<GameObject*> GameObject::FindObjectsWithTag(StringID tag_){
 	GADGET_BASIC_ASSERT(tag_ != StringID::None);
-	return App::GetInstance().GetSceneManager().CurrentScene()->FindObjectsWithTag(tag_);
+	return App::GetSceneManager().CurrentScene()->FindObjectsWithTag(tag_);
 }
 
 void GameObject::OnTransformModified(){

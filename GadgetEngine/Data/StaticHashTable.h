@@ -9,7 +9,9 @@
 namespace Gadget{
 	class StringID;
 
-	template <class K, class V, int64_t Size = 1031>
+	static constexpr inline int64_t gDefaultStaticHashTableSize = 1031;
+
+	template <class K, class V, int64_t Size = gDefaultStaticHashTableSize>
 	class StaticHashTable{
 	public:
 		struct KeyValuePair{
@@ -23,7 +25,7 @@ namespace Gadget{
 
 		class Iterator{
 		public:
-			constexpr Iterator(StaticArray<KeyValuePair, Size>& data_, size_t index_) : data(data_), index(index_){}
+			constexpr Iterator(StaticArray<KeyValuePair, Size>& data_, int64_t index_) : data(data_), index(index_){}
 
 			constexpr inline const V& operator*() const{ return data[index].value; }
 			constexpr inline V& operator*(){ return data[index].value; }
@@ -135,7 +137,7 @@ namespace Gadget{
 			return it;
 		}
 
-		constexpr inline const Iterator begin() const{
+		constexpr inline Iterator begin() const{
 			if(IsEmpty()){
 				return Iterator(data, 0);
 			}
@@ -149,7 +151,7 @@ namespace Gadget{
 		}
 
 		constexpr inline Iterator end(){ return Iterator(data, Size); }
-		constexpr inline const Iterator end() const{ return Iterator(data, Size); }
+		constexpr inline Iterator end() const{ return Iterator(data, Size); }
 
 	private:
 		StaticArray<KeyValuePair, Size> data;

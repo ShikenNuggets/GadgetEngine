@@ -67,7 +67,7 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 		Debug::Log("Swap interval could not be set! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
 	}
 
-	if(!gladLoadGLLoader(static_cast<GLADloadproc>(SDL_GL_GetProcAddress))){
+	if(gladLoadGLLoader(static_cast<GLADloadproc>(SDL_GL_GetProcAddress)) == GL_FALSE){
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), ErrorCode::OpenGL_Error,  __FILE__, __LINE__);
 	}
 
@@ -90,7 +90,7 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 	if(glDebugMessageCallback){
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(static_cast<GLDEBUGPROC>(Win32_GL_Renderer::GLDebugCallback), nullptr);
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 	}else{
 		Debug::Log(SID("RENDER"), "Could not set up OpenGL debug callback, OpenGL issues will not be logged!", Debug::Warning, __FILE__, __LINE__);
 	}
@@ -133,8 +133,8 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 	scene_->GetAllComponentsInScene<PointLightComponent>(pointLightsBuffer);
 	scene_->GetAllComponentsInScene<DirectionalLightComponent>(dirLightsBuffer);
 	scene_->GetAllComponentsInScene<SpotLightComponent>(spotLightsBuffer);
-	auto skybox = scene_->GetSceneComponent<SkyboxComponent>();
-	auto canvas = scene_->GetSceneComponent<CanvasSceneComponent>();
+	auto* skybox = scene_->GetSceneComponent<SkyboxComponent>();
+	auto* canvas = scene_->GetSceneComponent<CanvasSceneComponent>();
 
 	if(canvas != nullptr){
 		canvas->GetCanvas().GetElements<GuiTextElement>(guiTextsBuffer);
@@ -316,21 +316,21 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 			for(const char c : text->GetText()){
 				const FreetypeFontCharacter& ch = text->GetTextMesh().GetFont()->GetCharacters().at(c);
 
-				GLfloat xpos = x + static_cast<float>(ch.left) * screenWidthPerPixel;
-				GLfloat ypos = y - static_cast<float>(ch.rows - ch.top) * screenHeightPerPixel;
+				const GLfloat xpos = x + static_cast<float>(ch.left) * screenWidthPerPixel;
+				const GLfloat ypos = y - static_cast<float>(ch.rows - ch.top) * screenHeightPerPixel;
 
 				const GLfloat w = static_cast<float>(ch.width) * screenWidthPerPixel;
 				const GLfloat h = static_cast<float>(ch.rows) * screenHeightPerPixel;
 				// Update VBO for each character
-				const GLfloat vertices[6][4] = {
-					{ xpos,     ypos + h,   0.0, 0.0 },
-					{ xpos,     ypos,		0.0, 1.0 },
-					{ xpos + w, ypos,       1.0, 1.0 },
+				const StaticArray2D<GLfloat, 6, 4> vertices = {{
+					{{ xpos,		ypos + h,	0.0, 0.0 }},
+					{{ xpos,		ypos,		0.0, 1.0 }},
+					{{ xpos + w,	ypos,		1.0, 1.0 }},
 
-					{ xpos,     ypos + h,   0.0, 0.0 },
-					{ xpos + w, ypos,       1.0, 1.0 },
-					{ xpos + w, ypos + h,   1.0, 0.0 }
-				};
+					{{ xpos,		ypos + h,	0.0, 0.0 }},
+					{{ xpos + w,	ypos,		1.0, 1.0 }},
+					{{ xpos + w,	ypos + h,	1.0, 0.0 }}
+				}};
 
 				//Don't bind the texture if it's a space, for some reason doing so causes OpenGL warnings
 				if(c != ' '){
@@ -373,15 +373,15 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 			const float w = texture->GetSize().x;
 			const float h = texture->GetSize().y;
 
-			const GLfloat vertices[6][4] = {
-				{ x - w, y + h, 0.0f, 0.0f },
-				{ x - w, y - h, 0.0f, 1.0f },
-				{ x + w, y - h, 1.0f, 1.0f },
+			const StaticArray2D<GLfloat, 6, 4> vertices = {{
+				{{ x - w, y + h, 0.0f, 0.0f }},
+				{{ x - w, y - h, 0.0f, 1.0f }},
+				{{ x + w, y - h, 1.0f, 1.0f }},
 
-				{ x - w, y + h, 0.0f, 0.0f },
-				{ x + w, y - h, 1.0f, 1.0f },
-				{ x + w, y + h, 1.0f, 0.0f }
-			};
+				{{ x - w, y + h, 0.0f, 0.0f }},
+				{{ x + w, y - h, 1.0f, 1.0f }},
+				{{ x + w, y + h, 1.0f, 0.0f }}
+			}};
 
 			GL_TextureInfo* textureInfo = dynamic_cast<GL_TextureInfo*>(texture->GetTextureInfo());
 
@@ -414,7 +414,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 	screenShader->Unbind();
 
 	//Do this only at the end
-	window.get()->SwapBuffers();
+	window->SwapBuffers();
 
 	//So we don't accidentally reuse these pointers later
 	camerasBuffer.clear();
@@ -443,10 +443,10 @@ void Win32_GL_Renderer::SetViewportRect(const Rect& rect_){
 	GADGET_ASSERT(rect_.w >= 0.0f && rect_.w <= 1.0f, "Tried to set invalid viewport rect!");
 	GADGET_ASSERT(rect_.h >= 0.0f && rect_.h <= 1.0f, "Tried to set invalid viewport rect!");
 
-	glViewport(static_cast<GLint>(window->GetWidth() * rect_.x),
-				static_cast<GLint>(window->GetHeight() * rect_.y),
-				static_cast<GLsizei>(window->GetWidth() * rect_.w),
-				static_cast<GLsizei>(window->GetHeight() * rect_.h));
+	glViewport(static_cast<GLint>(static_cast<float>(window->GetWidth()) * rect_.x),
+				static_cast<GLint>(static_cast<float>(window->GetHeight()) * rect_.y),
+				static_cast<GLsizei>(static_cast<float>(window->GetWidth()) * rect_.w),
+				static_cast<GLsizei>(static_cast<float>(window->GetHeight()) * rect_.h));
 }
 
 void Win32_GL_Renderer::OnResize(int width_, int height_){
@@ -548,11 +548,14 @@ FontInfo* Win32_GL_Renderer::GenerateAPIFontInfo(const FreetypeFont& font_){
 	return new GL_FontInfo(font_);
 }
 
-void __stdcall Win32_GL_Renderer::GLDebugCallback(GLenum source_, GLenum type_, GLuint id_, GLenum severity_, GLsizei, const GLchar* message_, const void*){
+static constexpr GLuint gDriverStorageWarning = 131169; //The driver allocated storage for renderbuffer - This should not be considered a warning
+static constexpr GLuint gBufferVideoMemWarning = 131185; //Buffer object will use VIDEO memory - Irrelevant
+
+void __stdcall Win32_GL_Renderer::GLDebugCallback(GLenum source_, GLenum type_, GLuint id_, GLenum severity_, [[maybe_unused]] GLsizei length_, const GLchar* message_, [[maybe_unused]] const void* useParam_){
 	//Suppress useless messages
 	switch(id_){
-		case 131169: //The driver allocated storage for renderbuffer - This should not be considered a warning
-		case 131185: //Buffer object will use VIDEO memory - Irrelevant
+		case gDriverStorageWarning:
+		case gBufferVideoMemWarning:
 			return;
 		default:
 			break;

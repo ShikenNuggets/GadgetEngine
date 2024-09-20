@@ -15,7 +15,6 @@
 namespace Gadget{
 	struct AnimSubmesh{
 		AnimSubmesh(const Array<AnimVertex>& verts_, const Array<uint32_t>& indices_) : vertices(verts_), indices(indices_){}
-		AnimSubmesh(const AnimSubmesh& other_) : vertices(other_.vertices), indices(other_.indices){}
 
 		const Array<AnimVertex> vertices;
 		const Array<uint32_t> indices;

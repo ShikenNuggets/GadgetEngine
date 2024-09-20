@@ -90,7 +90,9 @@ Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float
 
 	if(t_ <= 0.0f){
 		return q1_;
-	}else if(t_ >= 1.0f){
+	}
+	
+	if(t_ >= 1.0f){
 		return q2_;
 	}
 
@@ -162,7 +164,9 @@ Euler Quaternion::ToEuler() const{
 		attitude = Math::Pi / 2.0f;
 		bank = 0.0f;
 		return Euler(Math::RadiansToDegrees(bank), Math::RadiansToDegrees(heading), Math::RadiansToDegrees(attitude));
-	}else if (test < -0.499f * unit) { // singularity at south pole
+	}
+	
+	if(test < -0.499f * unit){ // singularity at south pole
 		heading = -2.0f * atan2(x, w);
 		attitude = -Math::Pi / 2.0f;
 		bank = 0.0f;

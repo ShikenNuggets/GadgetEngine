@@ -111,7 +111,7 @@ ErrorCode DX12::EnableDebugLayer([[maybe_unused]] bool gpuValidation_){
 	Microsoft::WRL::ComPtr<ID3D12_Debug> debugInterface;
 	if(SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(debugInterface.ReleaseAndGetAddressOf())))){
 		debugInterface->EnableDebugLayer();
-		debugInterface->SetEnableGPUBasedValidation(gpuValidation_);
+		debugInterface->SetEnableGPUBasedValidation(static_cast<BOOL>(gpuValidation_));
 	}else{
 		Debug::Log(SID("RENDER"), "Failed to get D3D12 Debug Interface!", Debug::Error, __FILE__, __LINE__);
 		return ErrorCode::D3D12_Error;

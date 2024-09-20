@@ -10,7 +10,7 @@ namespace Gadget{
 		MaterialCache();
 		~MaterialCache();
 
-		void AddMaterial(StringID id_, Material* mat_);
+		void AddMaterial(StringID id_, Material* material_);
 		Material* GetMaterial(StringID id_) const;
 
 	private:

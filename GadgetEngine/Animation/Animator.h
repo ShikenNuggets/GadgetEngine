@@ -25,7 +25,7 @@ namespace Gadget{
 
 		inline const Array<Matrix4>& GetCurrentSkeletonInstance() const{ return skeletonInstance; }
 
-		Matrix4 GetJointTransform(int32_t jointIndex_) const;
+		Matrix4 GetJointTransform(int32_t jointID_) const;
 
 	private:
 		StringID animMeshName;

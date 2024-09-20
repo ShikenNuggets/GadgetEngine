@@ -13,13 +13,13 @@ ErrorCode DX12_CommandFrame::Wait(HANDLE fenceEvent_, ID3D12Fence1* fence_) cons
 	GADGET_BASIC_ASSERT(fenceEvent_ != nullptr);
 
 	if(fence_->GetCompletedValue() < fenceValue){
-		HRESULT result = fence_->SetEventOnCompletion(fenceValue, fenceEvent_);
+		const HRESULT result = fence_->SetEventOnCompletion(fenceValue, fenceEvent_);
 		if(FAILED(result)){
 			Debug::Log(SID("RENDER"), "ID3D12Fence1::SetEventOnCompletion failed!", Debug::Error, __FILE__, __LINE__);
 			return ErrorCode::D3D12_Error;
 		}
 
-		DWORD err = WaitForSingleObject(fenceEvent_, INFINITE); //TODO - Infinite may not be wise here
+		const DWORD err = WaitForSingleObject(fenceEvent_, INFINITE); //TODO - Infinite may not be wise here
 		if(err != 0){
 			Debug::Log(SID("RENDER"), "An error occurred while waiting for the fence event!", Debug::Error, __FILE__, __LINE__);
 			return ErrorCode::D3D12_Error;

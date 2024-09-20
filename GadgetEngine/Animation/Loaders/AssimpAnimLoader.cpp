@@ -49,7 +49,7 @@ AnimClip* AssimpAnimLoader::LoadAnimClip(const std::string& filePath_, unsigned 
 		return nullptr;
 	}
 
-	if(scene->HasAnimations() == false){
+	if(!scene->HasAnimations()){
 		GADGET_LOG_ERROR(SID("ASSET"), "AssImp scene has no animations!");
 		return nullptr;
 	}

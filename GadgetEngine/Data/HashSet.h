@@ -129,7 +129,7 @@ namespace Gadget{
 			return it;
 		}
 
-		constexpr inline const Iterator begin() const{
+		constexpr inline Iterator begin() const{
 			if(data.IsEmpty()){
 				return Iterator(data, 0, nullptr);
 			}
@@ -143,7 +143,7 @@ namespace Gadget{
 		}
 
 		constexpr inline Iterator end(){ return Iterator(data, data.Size(), nullptr); }
-		constexpr inline const Iterator end() const{ return Iterator(data, data.Size(), nullptr); }
+		constexpr inline Iterator end() const{ return Iterator(data, data.Size(), nullptr); }
 
 	private:
 		Array<List<T>> data;

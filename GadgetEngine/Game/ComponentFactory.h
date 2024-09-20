@@ -5,7 +5,7 @@
 #include "Utils/StringID.h"
 
 namespace Gadget{
-	typedef std::function<Component* (const ComponentProperties&)> componentDeserializeFunc;
+	using ComponentDeserializeFunc = std::function<Component* (const ComponentProperties&)>;
 
 	class ComponentFactory{
 	public:
@@ -15,7 +15,7 @@ namespace Gadget{
 			return Utils::GetAllKeys(deserializers);
 		}
 
-		static constexpr void DeclareComponentDeserializer(StringID type_, const componentDeserializeFunc& deserializer_){
+		static constexpr void DeclareComponentDeserializer(StringID type_, const ComponentDeserializeFunc& deserializer_){
 			GADGET_BASIC_ASSERT(type_ != StringID::None);
 			
 			if(!Utils::ContainsKey(deserializers, type_)){
@@ -30,7 +30,7 @@ namespace Gadget{
 		}
 
 	private:
-		static std::map<StringID, componentDeserializeFunc> deserializers;
+		static std::map<StringID, ComponentDeserializeFunc> deserializers;
 	};
 
 	#define GADGET_DECLARE_SERIALIZABLE_COMPONENT(T) Gadget::ComponentFactory::DeclareComponentDeserializer(SID(#T), &Gadget::Component::DeserializeToNewComponent<T>)

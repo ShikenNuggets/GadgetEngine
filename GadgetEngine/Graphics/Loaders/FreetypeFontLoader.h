@@ -18,7 +18,7 @@ namespace Gadget{
 		FreetypeFontLoader();
 		~FreetypeFontLoader();
 
-		FreetypeFont* LoadFont(const std::string& filePath_);
+		FreetypeFont* LoadFont(const std::string& filePath_) const;
 
 	private:
 		FT_Library ftLib;

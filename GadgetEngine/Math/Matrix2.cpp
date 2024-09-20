@@ -23,8 +23,8 @@ Matrix2::Matrix2(float x1_, float x2_, float y1_, float y2_) : m(){
 Matrix2::Matrix2(float fill_) : m(){
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
 
-	for(int i = 0; i < mat2Size; i++){
-		m[i] = fill_;
+	for(auto& i : m){
+		i = fill_;
 	}
 }
 

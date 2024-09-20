@@ -8,7 +8,7 @@ namespace Gadget{
 	template <class T>
 	class Stack{
 	public:
-		Stack() : data(){}
+		Stack() = default;
 		~Stack() = default;
 
 		void Push(const T& item_){

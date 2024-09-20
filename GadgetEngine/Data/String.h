@@ -17,7 +17,8 @@ namespace Gadget{
 		}
 
 		String(const std::string& str_) : size(0), capacity(gStackStrSize), data(){
-			Append(str_.data(), str_.size());
+			GADGET_BASIC_ASSERT(str_.size() < std::numeric_limits<int32_t>::max());
+			Append(str_.data(), static_cast<int32_t>(str_.size()));
 			GADGET_BASIC_ASSERT(HasNullTerminator());
 		}
 
@@ -643,7 +644,7 @@ namespace Gadget{
 	};
 }
 
-inline std::ostream& operator<<(std::ostream& os_, const Gadget::String& str_){
+static inline std::ostream& operator<<(std::ostream& os_, const Gadget::String& str_){
 	os_ << str_.Value();
 	return os_;
 }

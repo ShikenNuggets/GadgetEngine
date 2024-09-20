@@ -46,7 +46,7 @@ void Debug::Init(){
 		std::cout << "ERROR: Could not write initial log message to " << FileSystem::GetFileNameFromPath(logFilePath) << "! We'll try again later...\n";
 
 		{
-			std::lock_guard lock{ logQueueMutex };
+			const std::lock_guard lock{ logQueueMutex };
 			queuedLogsForFileWrite.push(message);
 		}
 	}
@@ -189,7 +189,7 @@ void Debug::QueueLogForFileWrite(const std::string& message_){
 	GADGET_BASIC_ASSERT(!message_.empty());
 
 	{
-		std::lock_guard lock{ logQueueMutex };
+		const std::lock_guard lock{ logQueueMutex };
 		queuedLogsForFileWrite.push(message_);
 	}
 
@@ -197,7 +197,7 @@ void Debug::QueueLogForFileWrite(const std::string& message_){
 }
 
 void Debug::WriteQueuedLogs(){
-	std::lock_guard lock{ logQueueMutex };
+	const std::lock_guard lock{ logQueueMutex };
 	while(isInitialized && !queuedLogsForFileWrite.empty()){
 		auto err = FileSystem::WriteToFile(logFilePath, queuedLogsForFileWrite.front());
 		if(err != ErrorCode::OK){

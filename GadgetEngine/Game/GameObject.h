@@ -56,7 +56,7 @@ namespace Gadget{
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
 		template <class T> T* GetComponent() const{
-			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 			T* comp = dynamic_cast<T*>(T::Get(GetGUID())); //This dynamic_cast looks unnecessary but it ensures that this plays nice with the whole class hierarchy
 			if(comp != nullptr){
 				return comp;
@@ -89,7 +89,7 @@ namespace Gadget{
 		//If the Component subclass you're trying to use doesn't have a ComponentCollection, you'll need to either give it one or dynamic_cast these yourself
 		template <class T>
 		std::vector<T*> GetComponents() const{
-			static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 			std::vector<T*> comps = T::GetComponents(guid);
 			if(!comps.empty()){
 				return comps;
@@ -162,7 +162,7 @@ namespace Gadget{
 			static std::map<GUID, GameObject*> guidMap;
 
 		public:
-			GameObjectCollection(){}
+			GameObjectCollection() = default;
 
 			static void Add(GameObject* element_){
 				GADGET_BASIC_ASSERT(element_ != nullptr);

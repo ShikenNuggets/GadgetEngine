@@ -68,7 +68,7 @@ namespace Gadget{
 
 		static std::string GetPersistentDataDir();
 
-		[[nodiscard]] static ErrorCode CreateFile(const std::string& path_);
+		[[nodiscard]] static ErrorCode CreateFile(const std::string& file_);
 		[[nodiscard]] static ErrorCode CreateDir(const std::string& path_);
 
 		static bool IsLastWriteTimeNewer(const std::string& basePath_, const std::string& comparePath_);

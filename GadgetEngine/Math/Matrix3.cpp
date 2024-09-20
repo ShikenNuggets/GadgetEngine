@@ -27,11 +27,11 @@ Matrix3::Matrix3(	float x1_, float x2_, float x3_,
 	m[2] = x3_; m[5] = y3_; m[8] = z3_;
 }
 
-Matrix3::Matrix3(const float fillValue_) : m(){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(fillValue_));
+Matrix3::Matrix3(const float fill_) : m(){
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
 
-	for(int i = 0; i < mat3Size; i++){
-		m[i] = fillValue_;
+	for(auto& i : m){
+		i = fill_;
 	}
 }
 

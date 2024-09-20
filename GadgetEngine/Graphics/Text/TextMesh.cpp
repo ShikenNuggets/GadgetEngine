@@ -7,7 +7,7 @@ using namespace Gadget;
 static constexpr size_t gNumVertices = 4;
 static constexpr size_t gNumIndices = 6;
 
-TextMesh::TextMesh(StringID font_, StringID shader_, const std::string& initialText_) : text(initialText_), fontName(font_), font(nullptr), meshInfo(nullptr), shaderName(shader_), shader(nullptr){
+TextMesh::TextMesh(StringID font_, StringID shader_, std::string initialText_) : text(std::move(initialText_)), fontName(font_), font(nullptr), meshInfo(nullptr), shaderName(shader_), shader(nullptr){
 	GADGET_BASIC_ASSERT(fontName != StringID::None);
 	font = App::GetResourceManager().LoadResource<FreetypeFont>(fontName);
 	GADGET_BASIC_ASSERT(font != nullptr);

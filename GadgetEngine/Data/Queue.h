@@ -7,7 +7,7 @@ namespace Gadget{
 	template <class T>
 	class Queue{
 	public:
-		Queue() : data(){}
+		Queue() = default;
 		~Queue() = default;
 
 		void Add(const T& value_){

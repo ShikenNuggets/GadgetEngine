@@ -15,7 +15,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(guid != GUID::Invalid);
 		}
 
-		virtual ~SceneComponent(){}
+		virtual ~SceneComponent() = default;
 
 		virtual void OnUpdate([[maybe_unused]] float deltaTime_){}
 

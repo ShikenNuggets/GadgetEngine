@@ -111,12 +111,12 @@ bool Skeleton::IsValidSkeleton() const{
 			if(foundRootNode){
 				GADGET_LOG_WARNING(SID("ANIM"), "Skeleton joint [" + currentJoint.name.GetString() + "] identified as a root node, but skeleton already has a root node!");
 				return false; //Skeleton has multiple root nodes
-			}else{
-				foundRootNode = true;
 			}
+
+			foundRootNode = true;
 		}
 
-		if(currentJoint.parentID >= 0 && confirmedJoints[currentJoint.parentID].second == false){
+		if(currentJoint.parentID >= 0 && !confirmedJoints[currentJoint.parentID].second){
 			GADGET_LOG_WARNING(SID("ANIM"), "Skeleton joint ]" + currentJoint.name.GetString() + "]'s parent was not found");
 			return false; //Parent was not found yet
 		}

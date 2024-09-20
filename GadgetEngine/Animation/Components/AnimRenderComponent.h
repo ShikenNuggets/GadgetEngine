@@ -96,7 +96,7 @@ namespace Gadget{
 		virtual void Deserialize(const ComponentProperties& props_) override;
 
 		Material* GetCachedMaterial(size_t meshIndex_) const;
-		Material* GetCachedMaterial(StringID material_) const;
+		static Material* GetCachedMaterial(StringID material_);
 
 		void CreateMeshInfo();
 		void CreateAnimator();

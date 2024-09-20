@@ -31,20 +31,20 @@ namespace Gadget{
 			} bits;
 		};
 
-		Bitset(size_t sizeInBytes, bool defaultValue_ = false) : bytes(sizeInBytes){
+		Bitset(int64_t sizeInBytes, bool defaultValue_ = false) : bytes(sizeInBytes){
 			GADGET_BASIC_ASSERT(sizeInBytes > 0);
-			GADGET_ASSERT(sizeInBytes < std::numeric_limits<size_t>::max() / 8, "Bitset is too big, you won't be able to access all the bits");
+			GADGET_ASSERT(sizeInBytes < std::numeric_limits<int64_t>::max() / 8, "Bitset is too big, you won't be able to access all the bits");
 
-			for(size_t i = 0; i < sizeInBytes; i++){
+			for(int64_t i = 0; i < sizeInBytes; i++){
 				bytes.Add(Byte(defaultValue_));
 			}
 
 			GADGET_BASIC_ASSERT(bytes.Capacity() == bytes.Size());
 		}
 
-		constexpr bool Get(size_t bitIndex_) const{
-			size_t byteIndex = bitIndex_ / 8;
-			size_t bit = bitIndex_ % 8;
+		constexpr bool Get(int64_t bitIndex_) const{
+			const int64_t byteIndex = bitIndex_ / 8;
+			const int64_t bit = bitIndex_ % 8;
 			GADGET_BASIC_ASSERT(byteIndex < bytes.Size());
 
 			const Byte& byte = bytes[byteIndex];
@@ -73,11 +73,11 @@ namespace Gadget{
 			return false;
 		}
 
-		constexpr void Set(size_t bitIndex_, bool value_){
+		constexpr void Set(int64_t bitIndex_, bool value_){
 			GADGET_BASIC_ASSERT((int)value_ == 0 || (int)value_ == 1);
 
-			size_t byteIndex = bitIndex_ / 8;
-			size_t bit = bitIndex_ % 8;
+			const int64_t byteIndex = bitIndex_ / 8;
+			const int64_t bit = bitIndex_ % 8;
 			GADGET_BASIC_ASSERT(byteIndex < bytes.Size());
 
 			Byte& byte = bytes[byteIndex];

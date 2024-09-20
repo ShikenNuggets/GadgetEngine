@@ -6,11 +6,8 @@
 namespace Gadget{
 	class AudioClip;
 
-	class FMODAudioClipLoader{
-	public:
-		STATIC_CLASS(FMODAudioClipLoader);
-
-		static AudioClip* LoadClip(const std::string& str_);
+	namespace FMODAudioClipLoader{
+		extern AudioClip* LoadClip(const std::string& str_);
 	};
 }
 

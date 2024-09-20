@@ -21,7 +21,7 @@ namespace Gadget{
 
 		virtual size_t SizeInBytes() const override{ return sizeof(*this); } //TODO - Memory dynamically allocated for uniforms is not considered
 
-		GLuint GetShaderProgram();
+		GLuint GetShaderProgram() const;
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
@@ -46,8 +46,8 @@ namespace Gadget{
 			return uniforms[uniformName_] != -1;
 		}
 
-		std::string GetShaderLog(GLuint shader_);
-		std::string GetProgramLog(GLuint program_);
+		static std::string GetShaderLog(GLuint shader_);
+		static std::string GetProgramLog(GLuint program_);
 	};
 
 	class GL_ShaderResourceContainer : public ResourceContainer{

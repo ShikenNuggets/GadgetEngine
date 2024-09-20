@@ -51,7 +51,8 @@ void Scene::Update(float deltaTime_){
 		}
 	}
 
-	gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), nullptr), gameObjects.end());
+	const auto [first, last] = std::ranges::remove(gameObjects, nullptr);
+	gameObjects.erase(first, last);
 }
 
 GameObject* Scene::FindWithTag(StringID tag_){

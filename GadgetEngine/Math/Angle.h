@@ -6,7 +6,7 @@ namespace Gadget{
 	class Degree;
 	class Radian;
 
-	typedef Degree Angle; //Changing this will break everything but will allow you to use Radians by default if you desire
+	using Angle = Degree; //Changing this will break everything but will allow you to use Radians by default if you desire
 
 	class Degree{
 	public:
@@ -85,7 +85,7 @@ namespace Gadget{
 			return *this;
 		}
 		
-		Radian& operator =(Degree& r_);
+		Radian& operator =(Degree& d_);
 
 		Degree ToDegrees() const;
 		float ToDegreesValue() const;

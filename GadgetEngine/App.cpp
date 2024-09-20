@@ -275,6 +275,7 @@ void App::OnMouseMoved(const Event& e_){
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
 		if(GetSceneManager().CurrentScene() != nullptr && GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
+			//TODO - This is dumb. CanvasSceneComponents can process their own mouse events
 			GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>()->GetCanvas().OnMouseMoved(static_cast<int>(eventPtr->GetX()), static_cast<int>(eventPtr->GetY()));
 		}
 	}
@@ -330,10 +331,10 @@ Renderer::API App::GetCurrentRenderAPI(){
 
 	if(GetInstance().renderer != nullptr){
 		return GetInstance().renderer->GetRenderAPI();
-	}else{
-		Debug::Log(SID("CORE"), "GetCurrentRenderAPI called with no renderer loaded", Debug::Warning, __FILE__, __LINE__);
-		return Renderer::API::None;
 	}
+
+	Debug::Log(SID("CORE"), "GetCurrentRenderAPI called with no renderer loaded", Debug::Warning, __FILE__, __LINE__);
+	return Renderer::API::None;
 }
 
 float App::GetFixedDeltaTime(){

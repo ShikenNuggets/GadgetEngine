@@ -183,7 +183,7 @@ ErrorCode FileSystem::WriteToBinaryFile(const std::string& filePath_, const std:
 	}
 
 	const std::ostreambuf_iterator<char> osbi(outfile);
-	std::copy(data_.begin(), data_.end(), osbi);
+	std::ranges::copy(data_, osbi);
 	outfile.close();
 	
 	if(!outfile){

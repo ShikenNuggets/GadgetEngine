@@ -18,7 +18,7 @@ namespace Gadget{
 	class Event{
 	public:
 		Event(StringID name_) : name(name_), handled(false){}
-		virtual ~Event(){}
+		virtual ~Event() = default;
 
 		virtual EventType GetEventType() const = 0;
 		inline StringID GetName() const{ return name; }

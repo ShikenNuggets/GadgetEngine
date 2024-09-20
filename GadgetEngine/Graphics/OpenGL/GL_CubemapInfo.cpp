@@ -92,8 +92,8 @@ GL_CubemapInfo::GL_CubemapInfo(const Cubemap& cubemap_) : textureID(0), vao(0), 
 	};
 	static constexpr std::array<GLuint, 36> cubeIndices = { 0, 1, 2, 2, 3, 0, 4, 1, 0, 0, 5, 4, 2, 6, 7, 7, 3, 2, 4, 5, 7, 7, 6, 4, 0, 3, 7, 7, 5, 0, 1, 4, 2, 2, 4, 6 };
 
-	glNamedBufferData(vbo, sizeof(GLfloat) * 36 * 3, &cubeVerts[0], GL_STATIC_DRAW);
-	glNamedBufferData(ebo, sizeof(GLuint) * cubeIndices.size(), &cubeIndices[0], GL_STATIC_DRAW);
+	glNamedBufferData(vbo, sizeof(GLfloat) * cubeVerts.size(), cubeVerts.data(), GL_STATIC_DRAW);
+	glNamedBufferData(ebo, sizeof(GLuint) * cubeIndices.size(), cubeIndices.data(), GL_STATIC_DRAW);
 
 	//Position
 	glEnableVertexArrayAttrib(vao, 0);

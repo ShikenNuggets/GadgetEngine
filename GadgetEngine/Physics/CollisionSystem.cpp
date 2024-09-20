@@ -139,21 +139,33 @@ Vector3 CollisionSystem::CalculateContactPoint(const BoxCollider2D& cl1_, const 
 
 	if(topLeft && !topRight && !bottomLeft){
 		return Vector3(c1Left, c1Top);
-	}else if(topRight && !topLeft && !bottomRight){
+	}
+	
+	if(topRight && !topLeft && !bottomRight){
 		return Vector3(c1Right, c1Top);
-	}else if(bottomLeft && !topLeft && !bottomRight){
+	}
+	
+	if(bottomLeft && !topLeft && !bottomRight){
 		return Vector3(c1Left, c1Bottom);
-	}else if(bottomRight && !topRight && !bottomLeft){
+	}
+	
+	if(bottomRight && !topRight && !bottomLeft){
 		return Vector3(c1Right, c1Bottom);
 	}
 
 	if(topLeft && topRight){
 		return Vector3(c1Rect.x, c1Top);
-	}else if(topRight && bottomRight){
+	}
+	
+	if(topRight && bottomRight){
 		return Vector3(c1Right, c1Rect.y);
-	}else if(bottomRight && bottomLeft){
+	}
+	
+	if(bottomRight && bottomLeft){
 		return Vector3(c1Rect.x, c1Bottom);
-	}else if(bottomLeft && topLeft){
+	}
+	
+	if(bottomLeft && topLeft){
 		return Vector3(c1Left, c1Rect.y);
 	}
 

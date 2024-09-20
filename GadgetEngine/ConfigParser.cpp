@@ -71,7 +71,7 @@ std::string ConfigParser::SerializeSection(StringID section_, const std::map<Str
 				outputStrs.push_back(v.first.GetString() + "=" + v.second.ToStr().GetString());
 				break;
 			case Var::Type::Bool:
-				if(v.second.ToBool() == true){
+				if(v.second.ToBool()){
 					outputStrs.push_back(v.first.GetString() + "=" + "TRUE");
 				}else{
 					outputStrs.push_back(v.first.GetString() + "=" + "FALSE");
@@ -90,7 +90,7 @@ std::string ConfigParser::SerializeSection(StringID section_, const std::map<Str
 		}
 	}
 
-	std::sort(outputStrs.begin(), outputStrs.end(), [](const std::string& a, const std::string& b){return a < b; });
+	std::ranges::sort(outputStrs, [](const std::string& a, const std::string& b){return a < b; });
 
 	std::string output;
 	output += "[" + section_.GetString() + "]" + "\n";
