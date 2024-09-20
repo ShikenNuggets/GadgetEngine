@@ -66,6 +66,9 @@ void ProjectManager::Draw(){
 	//------- Create Project -------//
 	//------------------------------//
 	if(guiShowCreateProjectWindow){
+		ImGui::SetNextWindowSizeConstraints(ImVec2(400.0f, 100.0f), ImVec2(8000.0f, 8000.0f));
+		ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
 		if(ImGui::Begin("Create Project", &guiShowCreateProjectWindow, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse)){
 			ImGui::SetWindowFocus("Create Project");
 			ImGui::Text("Project Name");
