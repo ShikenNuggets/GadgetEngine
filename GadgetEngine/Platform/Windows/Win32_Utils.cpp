@@ -1,6 +1,9 @@
 #include "Win32_Utils.h"
 
+#include <comdef.h>
+#include <dwmapi.h>
 #include <ShlObj_core.h>
+#include <WinUser.h>
 
 #include "Debug.h"
 
@@ -38,4 +41,21 @@ void Win32_Utils::SetConsoleColorBlue(){ if(IsConsoleHandleValid()){ SetConsoleT
 
 void Win32_Utils::OutputToDebuggerConsole(const std::string& output_){
 	OutputDebugStringA(output_.c_str());
+}
+
+void Win32_Utils::TryApplyImmersiveDarkMode(uint64_t hwnd_){
+	HWND hwnd = reinterpret_cast<HWND>(hwnd_);
+	GADGET_BASIC_ASSERT(IsWindow(hwnd));
+
+	BOOL useDarkMode = TRUE;
+	const HRESULT result = DwmSetWindowAttribute(hwnd, DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE, &useDarkMode, sizeof(useDarkMode));
+	if(!SUCCEEDED(result)){
+		//Main reason this wouldn't work is on older versions of Windows (Immersive Dark Mode is only officially supported in Windows 11)
+		//We could be nice and try to find a way to support this feature on older Windows versions, but I'm not overly concerned about that
+		const _com_error err(result);
+		const std::wstring wStr = err.ErrorMessage();
+		const std::string str = std::string(wStr.begin(), wStr.end());
+
+		GADGET_LOG_WARNING(SID("WIN32"), "Could not apply Immersive Dark Mode: DWM Error: " + str);
+	}
 }

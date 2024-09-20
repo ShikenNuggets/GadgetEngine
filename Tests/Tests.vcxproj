@@ -95,7 +95,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;fsbank_vc.lib;dxgi.lib;d3d12.lib;fmodL_vc.lib;fmodstudioL_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;fsbank_vc.lib;dwmapi.lib;dxgi.lib;d3d12.lib;fmodL_vc.lib;fmodstudioL_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\SDK\lib;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;..\Build\GadgetEngine\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -129,7 +129,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;fsbank_vc.lib;dxgi.lib;d3d12.lib;fmodL_vc.lib;fmodstudioL_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;fsbank_vc.lib;dwmapi.lib;dxgi.lib;d3d12.lib;fmodL_vc.lib;fmodstudioL_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\SDK\lib;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;..\Build\GadgetEngine\Develop;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -160,7 +160,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;fsbank_vc.lib;dxgi.lib;d3d12.lib;fmod_vc.lib;fmodstudio_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mt.lib;Glad.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;BulletCollision.lib;BulletDynamics.lib;BulletLinearMath.lib;fsbank_vc.lib;dwmapi.lib;dxgi.lib;d3d12.lib;fmod_vc.lib;fmodstudio_vc.lib;GadgetEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\SDK\lib;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;..\Build\GadgetEngine\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmtd.lib;msvcrt.lib;msvcrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>

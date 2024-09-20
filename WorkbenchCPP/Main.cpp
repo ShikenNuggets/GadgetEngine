@@ -3,7 +3,7 @@
 
 using namespace Gadget::Workbench;
 
-int main(int argc, char* argv[]){
+int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]){
 	EditorWindow window = EditorWindow(1280, 960);
 
 	ProjectManager manager = ProjectManager();

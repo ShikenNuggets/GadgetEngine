@@ -14,6 +14,8 @@ namespace Gadget{
 		void SetConsoleColorBlue();
 
 		void OutputToDebuggerConsole(const std::string& output);
+
+		void TryApplyImmersiveDarkMode(uint64_t hwnd_);
 	};
 }
 

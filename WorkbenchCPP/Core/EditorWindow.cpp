@@ -1,11 +1,14 @@
 #include "EditorWindow.h"
 
+#include <SDL_syswm.h>
+
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_sdl2.h>
 
 #include <Debug.h>
 #include <Math/Math.h>
+#include <Platform/Windows/Win32_Utils.h>
 
 using namespace Gadget::Workbench;
 
@@ -54,6 +57,8 @@ EditorWindow::EditorWindow(int width_, int height_) : window(nullptr), glContext
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), ErrorCode::OpenGL_Error, __FILE__, __LINE__);
 	}
 
+	Win32_Utils::TryApplyImmersiveDarkMode(GetWindowHandle());
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
@@ -97,4 +102,11 @@ void EditorWindow::Render(){
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(window);
+}
+
+uint64_t EditorWindow::GetWindowHandle() const{
+	SDL_SysWMinfo wmInfo{};
+	SDL_VERSION(&wmInfo.version);
+	SDL_GetWindowWMInfo(window, &wmInfo);
+	return reinterpret_cast<uint64_t>(wmInfo.info.win.window);
 }

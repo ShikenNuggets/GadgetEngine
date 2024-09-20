@@ -136,6 +136,7 @@ function GadgetExternalLibs(options)
 		filter "system:windows"
 			links
 			{
+				"dwmapi.lib",
 				"dxgi.lib",
 				"d3d12.lib",
 			}
