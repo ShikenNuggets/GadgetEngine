@@ -8,9 +8,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]){
 
 	ProjectManager manager = ProjectManager();
 
-	bool shouldContinue = true;
-	while(shouldContinue){
-		shouldContinue = window.HandleEvents();
+	while(true){
+		if(!window.HandleEvents()){
+			break;
+		}
+
+		manager.Draw();
+
 		window.Render();
 	}
 

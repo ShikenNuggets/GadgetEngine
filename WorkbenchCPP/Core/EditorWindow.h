@@ -15,6 +15,8 @@ namespace Gadget::Workbench{
 	private:
 		SDL_Window* window;
 		SDL_GLContext glContext;
+
+		uint64_t GetWindowHandle() const;
 	};
 }
 
