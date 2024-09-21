@@ -16,6 +16,9 @@
     <Filter Include="SDK\ImGui\backends">
       <UniqueIdentifier>{BBE4F3EC-A7C8-B442-1029-AF95FC2B9FC4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{5032B729-BC11-36C5-C529-C19B31889C26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_opengl3.h">
@@ -45,11 +48,23 @@
     <ClInclude Include="Core\EditorWindow.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Core\WindowManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="Projects\Project.h">
       <Filter>Projects</Filter>
     </ClInclude>
     <ClInclude Include="Projects\ProjectManager.h">
       <Filter>Projects</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\CreateProjectWindow.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\ProjectBrowserWindow.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\SubWindow.h">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +92,18 @@
     <ClCompile Include="Core\EditorWindow.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\WindowManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projects\ProjectManager.cpp">
       <Filter>Projects</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\CreateProjectWindow.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\ProjectBrowserWindow.cpp">
+      <Filter>Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,20 +1,23 @@
 #include "Core/EditorWindow.h"
+#include "Core/WindowManager.h"
 #include "Projects/ProjectManager.h"
+#include "Windows/CreateProjectWindow.h"
+#include "Windows/ProjectBrowserWindow.h"
 
 using namespace Gadget::Workbench;
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]){
 	EditorWindow window = EditorWindow(1280, 960);
-
-	ProjectManager manager = ProjectManager();
+	ProjectManager projManager;
+	WindowManager wndManager;
+	wndManager.AddWindow(new ProjectBrowserWindow(projManager));
 
 	while(true){
 		if(!window.HandleEvents()){
 			break;
 		}
 
-		manager.Draw();
-
+		wndManager.Update();
 		window.Render();
 	}
 

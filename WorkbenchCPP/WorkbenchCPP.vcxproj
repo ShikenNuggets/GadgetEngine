@@ -188,8 +188,12 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     <ClInclude Include="..\SDK\ImGui\imstb_textedit.h" />
     <ClInclude Include="..\SDK\ImGui\imstb_truetype.h" />
     <ClInclude Include="Core\EditorWindow.h" />
+    <ClInclude Include="Core\WindowManager.h" />
     <ClInclude Include="Projects\Project.h" />
     <ClInclude Include="Projects\ProjectManager.h" />
+    <ClInclude Include="Windows\CreateProjectWindow.h" />
+    <ClInclude Include="Windows\ProjectBrowserWindow.h" />
+    <ClInclude Include="Windows\SubWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_opengl3.cpp">
@@ -214,8 +218,11 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</WarningLevel>
     </ClCompile>
     <ClCompile Include="Core\EditorWindow.cpp" />
+    <ClCompile Include="Core\WindowManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projects\ProjectManager.cpp" />
+    <ClCompile Include="Windows\CreateProjectWindow.cpp" />
+    <ClCompile Include="Windows\ProjectBrowserWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
