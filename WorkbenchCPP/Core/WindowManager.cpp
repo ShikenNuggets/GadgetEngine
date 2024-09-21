@@ -2,9 +2,7 @@
 
 using namespace Gadget::Workbench;
 
-WindowManager::WindowManager(){
-
-}
+WindowManager::WindowManager() : windows(16){}
 
 void WindowManager::AddWindow(SubWindow* window_){ windows.Add(window_); }
 

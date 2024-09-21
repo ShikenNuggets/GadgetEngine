@@ -4,7 +4,13 @@
 
 using namespace Gadget::Workbench;
 
-CreateProjectWindow::CreateProjectWindow() : SubWindow("Create Project"){}
+CreateProjectWindow::CreateProjectWindow() : SubWindow("Create Project"), projectName(), projectPath(), onExit(nullptr), onClickCreateProject(nullptr){
+	projectName.reserve(64);
+	projectPath.reserve(128);
+	
+	GADGET_BASIC_ASSERT(!onExit.IsValid());
+	GADGET_BASIC_ASSERT(!onClickCreateProject.IsValid());
+}
 
 void CreateProjectWindow::Draw(){
 	ImGui::SetNextWindowSizeConstraints(ImVec2(400.0f, 100.0f), ImVec2(8000.0f, 8000.0f));
@@ -18,6 +24,7 @@ void CreateProjectWindow::Draw(){
 		ImGui::InputText("##ProjectPath", projectPath.data(), projectPath.capacity());
 
 		if(ImGui::Button("Create")){
+			
 			//TODO
 		}
 	}

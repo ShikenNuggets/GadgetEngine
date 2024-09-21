@@ -10,7 +10,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]){
 	EditorWindow window = EditorWindow(1280, 960);
 	ProjectManager projManager;
 	WindowManager wndManager;
-	wndManager.AddWindow(new ProjectBrowserWindow(projManager));
+
+	auto* projBrowser = wndManager.AddWindow<ProjectBrowserWindow>(projManager);
+	projBrowser->OnClickCreateProject([&](){
+		auto* createProjWindow = wndManager.AddWindow<CreateProjectWindow>();
+	});
 
 	while(true){
 		if(!window.HandleEvents()){

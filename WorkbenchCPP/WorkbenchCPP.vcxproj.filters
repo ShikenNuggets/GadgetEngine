@@ -45,6 +45,9 @@
     <ClInclude Include="..\SDK\ImGui\imstb_truetype.h">
       <Filter>SDK\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Callback.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="Core\EditorWindow.h">
       <Filter>Core</Filter>
     </ClInclude>

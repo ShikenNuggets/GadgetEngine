@@ -4,7 +4,7 @@
 
 using namespace Gadget::Workbench;
 
-ProjectBrowserWindow::ProjectBrowserWindow(const ProjectManager& projectManager_) : SubWindow("Project Browser"), allowInput(true), projectManager(projectManager_){}
+ProjectBrowserWindow::ProjectBrowserWindow(const ProjectManager& projectManager_) : SubWindow("Project Browser"), allowInput(true), projectManager(projectManager_), onClickCreateProject(nullptr){}
 
 void ProjectBrowserWindow::Draw(){
 	ImGuiIO& io = ImGui::GetIO();
@@ -27,7 +27,9 @@ void ProjectBrowserWindow::Draw(){
 		}
 
 		if(ImGui::Button("Create New Project")){
-			allowInput = true;
+			GADGET_BASIC_ASSERT(onClickCreateProject.IsValid());
+			DisableInput();
+			onClickCreateProject();
 		}
 	}
 
