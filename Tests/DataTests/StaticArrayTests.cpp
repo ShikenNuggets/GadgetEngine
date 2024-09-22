@@ -92,36 +92,36 @@ TEST_CASE("StaticArray Accessor" "[static_array_access]"){
 //------------------------------------------------------------//
 TEST_CASE("StaticArray Construction/Assignment" "[staticarray_construct_assign]"){
 	static constexpr StaticArray<int, 5> test1 = { 0, 1, 2, 3, 4 };
-	REQUIRE(test1.GetSize() == 5);
-	for(int64_t i = 0; i < test1.GetSize(); i++){
+	REQUIRE(test1.Size() == 5);
+	for(int64_t i = 0; i < test1.Size(); i++){
 		REQUIRE(test1[i] == i);
 	}
 
 	//Copy construction
 	StaticArray<int, 5> test2(test1);
-	REQUIRE(test1.GetSize() == test2.GetSize());
-	for(int64_t i = 0; i < test1.GetSize(); i++){
+	REQUIRE(test1.Size() == test2.Size());
+	for(int64_t i = 0; i < test1.Size(); i++){
 		REQUIRE(test1[i] == test2[i]);
 	}
 
 	//Move construction
 	StaticArray<int, 5> test3(std::move(test2));
-	REQUIRE(test3.GetSize() == test1.GetSize());
-	for(int64_t i = 0; i < test1.GetSize(); i++){
+	REQUIRE(test3.Size() == test1.Size());
+	for(int64_t i = 0; i < test1.Size(); i++){
 		REQUIRE(test1[i] == test3[i]);
 	}
 
 	//Copy assignment
 	StaticArray<int, 5> test4 = test1;
-	REQUIRE(test1.GetSize() == test4.GetSize());
-	for(int64_t i = 0; i < test4.GetSize(); i++){
+	REQUIRE(test1.Size() == test4.Size());
+	for(int64_t i = 0; i < test4.Size(); i++){
 		REQUIRE(test1[i] == test4[i]);
 	}
 
 	//Move assignment
 	StaticArray<int, 5> test5 = std::move(test4);
-	REQUIRE(test5.GetSize() == test1.GetSize());
-	for(int64_t i = 0; i < test1.GetSize(); i++){
+	REQUIRE(test5.Size() == test1.Size());
+	for(int64_t i = 0; i < test1.Size(); i++){
 		REQUIRE(test1[i] == test5[i]);
 	}
 }
@@ -250,9 +250,9 @@ TEST_CASE("StaticArray Sort the People", "[staticarray_sort_the_people]"){
 	heights1[1] = 165;
 	heights1[2] = 170;
 
-	REQUIRE(names1.GetSize() == heights1.GetSize());
+	REQUIRE(names1.Size() == heights1.Size());
 	StaticArray<String, 3> sorted1 = SortPeopleByHeight(names1, heights1);
-	REQUIRE(sorted1.GetSize() == names1.GetSize());
+	REQUIRE(sorted1.Size() == names1.Size());
 	REQUIRE(sorted1[0] == "John");
 	REQUIRE(sorted1[1] == "Emma");
 	REQUIRE(sorted1[2] == "Mary");
@@ -269,9 +269,9 @@ TEST_CASE("StaticArray Sort the People", "[staticarray_sort_the_people]"){
 	heights2[1] = 185;
 	heights2[2] = 150;
 
-	REQUIRE(names2.GetSize() == heights2.GetSize());
+	REQUIRE(names2.Size() == heights2.Size());
 	StaticArray<String, 3> sorted2 = SortPeopleByHeight(names2, heights2);
-	REQUIRE(sorted2.GetSize() == names2.GetSize());
+	REQUIRE(sorted2.Size() == names2.Size());
 	REQUIRE(sorted2[0] == "Bob");
 	REQUIRE(sorted2[1] == "Alice");
 	REQUIRE(sorted2[2] == "Bob");
@@ -419,9 +419,9 @@ template <int Size>
 static constexpr inline int64_t MaximumTripletValue(const StaticArray<int, Size>& nums_){
 	int64_t maxTriplet = 0;
 
-	for(int64_t i = 0; i < nums_.GetSize(); i++){
-		for(int64_t j = i + 1; j < nums_.GetSize(); j++){
-			for(int64_t k = j + 1; k < nums_.GetSize(); k++){
+	for(int64_t i = 0; i < nums_.Size(); i++){
+		for(int64_t j = i + 1; j < nums_.Size(); j++){
+			for(int64_t k = j + 1; k < nums_.Size(); k++){
 				int64_t value = static_cast<int64_t>(nums_[i] - nums_[j]) * nums_[k];
 				if(value > maxTriplet){
 					maxTriplet = value;
