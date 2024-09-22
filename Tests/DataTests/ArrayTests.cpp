@@ -487,3 +487,49 @@ TEST_CASE("Array Semi-Ordered Permutation", "[array_semi_ordered_permuation]"){
 	test3.ShrinkToFit(); REQUIRE(test3.Size() == test3.Capacity());
 	REQUIRE(SemiOrderedPermutation(test3) == 0);
 }
+
+//------------------------------------------------------------//
+//---- Maximum Value of an Ordered Triplet (Leetcode 2873) ---//
+//------------------------------------------------------------//
+
+static constexpr inline int64_t MaximumTripletValue(const Array<int>& nums_){
+	int64_t maxTriplet = 0;
+
+	for(int64_t i = 0; i < nums_.Size(); i++){
+		for(int64_t j = i + 1; j < nums_.Size(); j++){
+			for(int64_t k = j + 1; k < nums_.Size(); k++){
+				int64_t value = static_cast<int64_t>(nums_[i] - nums_[j]) * nums_[k];
+				if(value > maxTriplet){
+					maxTriplet = value;
+				}
+			}
+		}
+	}
+
+	return maxTriplet;
+}
+
+TEST_CASE("Array Max of Ordered Triplet", "[array_max_ordered_triplet]"){
+	Array<int> nums;	REQUIRE(nums.IsEmpty());
+	nums.Reserve(5);	REQUIRE(nums.Capacity() == 5);
+	nums.Add(12);		REQUIRE(nums.Size() == 1);	REQUIRE(nums[0] == 12);
+	nums.Add(6);		REQUIRE(nums.Size() == 2);	REQUIRE(nums[1] == 6);
+	nums.Add(1);		REQUIRE(nums.Size() == 3);	REQUIRE(nums[2] == 1);
+	nums.Add(2);		REQUIRE(nums.Size() == 4);	REQUIRE(nums[3] == 2);
+	nums.Add(7);		REQUIRE(nums.Size() == 5);	REQUIRE(nums[4] == 7);
+	REQUIRE(MaximumTripletValue(nums) == 77);
+
+	nums.Clear();		REQUIRE(nums.IsEmpty());
+	nums.Add(1);		REQUIRE(nums.Size() == 1);	REQUIRE(nums[0] == 1);
+	nums.Add(10);		REQUIRE(nums.Size() == 2);	REQUIRE(nums[1] == 10);
+	nums.Add(3);		REQUIRE(nums.Size() == 3);	REQUIRE(nums[2] == 3);
+	nums.Add(4);		REQUIRE(nums.Size() == 4);	REQUIRE(nums[3] == 4);
+	nums.Add(19);		REQUIRE(nums.Size() == 5);	REQUIRE(nums[4] == 19);
+	REQUIRE(MaximumTripletValue(nums) == 133);
+
+	nums.Clear();		REQUIRE(nums.IsEmpty());
+	nums.Add(1);		REQUIRE(nums.Size() == 1);	REQUIRE(nums[0] == 1);
+	nums.Add(2);		REQUIRE(nums.Size() == 2);	REQUIRE(nums[1] == 2);
+	nums.Add(3);		REQUIRE(nums.Size() == 3);	REQUIRE(nums[2] == 3);
+	REQUIRE(MaximumTripletValue(nums) == 0);
+}

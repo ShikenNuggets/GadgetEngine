@@ -410,3 +410,36 @@ TEST_CASE("StaticArray Semi-Ordered Permutation", "[staticarray_semi_ordered_per
 	test3[4] = 5;
 	REQUIRE(SemiOrderedPermutation(test3) == 0);
 }
+
+//------------------------------------------------------------//
+//---- Maximum Value of an Ordered Triplet (Leetcode 2873) ---//
+//------------------------------------------------------------//
+
+template <int Size>
+static constexpr inline int64_t MaximumTripletValue(const StaticArray<int, Size>& nums_){
+	int64_t maxTriplet = 0;
+
+	for(int64_t i = 0; i < nums_.GetSize(); i++){
+		for(int64_t j = i + 1; j < nums_.GetSize(); j++){
+			for(int64_t k = j + 1; k < nums_.GetSize(); k++){
+				int64_t value = static_cast<int64_t>(nums_[i] - nums_[j]) * nums_[k];
+				if(value > maxTriplet){
+					maxTriplet = value;
+				}
+			}
+		}
+	}
+
+	return maxTriplet;
+}
+
+TEST_CASE("StaticArray Maximum Value of an Ordered Triplet", "[staticarray_max_ordered_triplet]"){
+	StaticArray<int, 5> nums = { 12, 6, 1, 2, 7 };
+	REQUIRE(MaximumTripletValue(nums) == 77);
+
+	nums = { 1, 10, 3, 4, 19 };
+	REQUIRE(MaximumTripletValue(nums) == 133);
+
+	constexpr StaticArray<int, 3> nums3 = { 1, 2, 3 };
+	REQUIRE(MaximumTripletValue(nums3) == 0);
+}
