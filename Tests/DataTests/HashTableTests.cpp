@@ -11,9 +11,11 @@ using namespace Gadget;
 //------------------------------------------------------------//
 
 static inline Array<int64_t> TwoSum(Array<int64_t>& nums_, int64_t target_){
-	HashTable<int64_t, int64_t> table;
+	HashTable<int64_t, int64_t> table;	REQUIRE(table.IsEmpty());
 
 	for(int64_t i = 0; i < nums_.Size(); i++){
+		REQUIRE(table.Size() == i);
+
 		size_t complement = target_ - nums_[i];
 		if(table.Contains(complement) && table[complement] != i){
 			Array<int64_t> result = Array<int64_t>(2);
@@ -66,18 +68,18 @@ TEST_CASE("HashTable TwoSum", "[hash_table_two_sum]"){
 //------------------------------------------------------------//
 TEST_CASE("HashTable ForEach", "[hash_table_for_each]"){
 	HashTable<StringID, int> values;
-	values.Add(SID("Test0"), 0);
-	values.Add(SID("Test1"), 1);
-	values.Add(SID("Test2"), 2);
-	values.Add(SID("Test3"), 3);
-	values.Add(SID("Test4"), 4);
-	values.Add(SID("Test5"), 5);
-	values.Add(SID("Test6"), 6);
-	values.Add(SID("Test7"), 7);
-	values.Add(SID("Test8"), 8);
-	values.Add(SID("Test9"), 9);
-	values.Add(SID("Test10"), 10);
-	values.Add(SID("Test11"), 11);
+	values.Add(SID("Test0"), 0);	REQUIRE(values.Size() == 1);
+	values.Add(SID("Test1"), 1);	REQUIRE(values.Size() == 2);
+	values.Add(SID("Test2"), 2);	REQUIRE(values.Size() == 3);
+	values.Add(SID("Test3"), 3);	REQUIRE(values.Size() == 4);
+	values.Add(SID("Test4"), 4);	REQUIRE(values.Size() == 5);
+	values.Add(SID("Test5"), 5);	REQUIRE(values.Size() == 6);
+	values.Add(SID("Test6"), 6);	REQUIRE(values.Size() == 7);
+	values.Add(SID("Test7"), 7);	REQUIRE(values.Size() == 8);
+	values.Add(SID("Test8"), 8);	REQUIRE(values.Size() == 9);
+	values.Add(SID("Test9"), 9);	REQUIRE(values.Size() == 10);
+	values.Add(SID("Test10"), 10);	REQUIRE(values.Size() == 11);
+	values.Add(SID("Test11"), 11);	REQUIRE(values.Size() == 12);
 
 	REQUIRE(values.Contains(SID("Test0")));
 	REQUIRE(values.Contains(SID("Test1")));
@@ -109,11 +111,11 @@ TEST_CASE("HashTable ForEach", "[hash_table_for_each]"){
 	for([[maybe_unused]] const auto& _ : values){
 		count++;
 	}
-	REQUIRE(count > 0);
+	REQUIRE(count == values.Size());
 	
 	count = 0;
 	for([[maybe_unused]] auto& _ : values){
 		count++;
 	}
-	REQUIRE(count > 0);
+	REQUIRE(count == values.Size());
 }

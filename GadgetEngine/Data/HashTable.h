@@ -57,7 +57,7 @@ namespace Gadget{
 			List<KeyValuePair>::Node* currentNode;
 		};
 
-		HashTable(int64_t capacity = 1024) : data(Math::NextPrime(capacity)){}
+		HashTable(int64_t capacity = 1024) : data(Math::NextPrime(capacity)), numElements(0){}
 
 		HashTable(const HashTable<K, V>& other_) = default;
 		HashTable(HashTable<K, V>&& other_) = default;
@@ -86,6 +86,7 @@ namespace Gadget{
 			}
 
 			data[index].Add(KeyValuePair(key_, value_));
+			numElements++;
 		}
 
 		bool Contains(const K& key_) const{
@@ -125,6 +126,7 @@ namespace Gadget{
 				GADGET_BASIC_ASSERT(node != nullptr);
 				if(node->value.key == key_){
 					data[index].Remove(node);
+					numElements--;
 					return;
 				}
 			}
@@ -132,6 +134,7 @@ namespace Gadget{
 
 		void Clear(){
 			data.Clear();
+			numElements = 0;
 		}
 
 		constexpr const V& operator[](const K& key_) const{
@@ -174,6 +177,8 @@ namespace Gadget{
 			//This shouldn't be possible - there's no safe way to handle this, so just error out
 			Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 		}
+
+		constexpr inline int64_t Size() const{ return numElements; }
 
 		constexpr inline size_t SizeInBytes() const{
 			size_t size = sizeof(data);
@@ -233,6 +238,7 @@ namespace Gadget{
 
 	private:
 		Array<List<KeyValuePair>> data;
+		int64_t numElements;
 
 		//Log a debug warning if more than N keys have the same hash
 		//Too low can trigger many irrelevant warnings, too high will hide legitimate optimization concerns
