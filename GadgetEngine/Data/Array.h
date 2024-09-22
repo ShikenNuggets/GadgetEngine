@@ -401,7 +401,7 @@ namespace Gadget{
 			const int64_t shiftEndPos = srcIndex + numElementsToShift + amountToShift_;
 
 			GADGET_BASIC_ASSERT(numElementsToShift <= static_cast<int64_t>(size));
-			GADGET_BASIC_ASSERT(startIndex_ < size);
+			GADGET_BASIC_ASSERT(startIndex_ <= size);
 			GADGET_BASIC_ASSERT(shiftEndPos <= static_cast<int64_t>(capacity));
 
 			std::memmove(&data[destIndex], &data[srcIndex], numBytesToShift);
