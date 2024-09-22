@@ -26,5 +26,5 @@ void GameLogicManager::Update(const Scene* scene_, float deltaTime_){
 	}
 
 	//So we don't accidentally reuse these pointers later
-	gameLogicsBuffer.clear();
+	gameLogicsBuffer.Clear();
 }

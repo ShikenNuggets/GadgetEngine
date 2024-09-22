@@ -61,8 +61,8 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 	}
 
 	//So we don't accidentally reuse these pointers later
-	rigidbodiesBuffer.clear();
-	collidersBuffer.clear();
+	rigidbodiesBuffer.Clear();
+	collidersBuffer.Clear();
 }
 
 //TODO - This is kinda weird. Maybe gravity *shouldn't* be in a config file? Game interfaces need to be able to set new config defaults? Idk

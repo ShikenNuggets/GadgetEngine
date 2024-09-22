@@ -1,6 +1,7 @@
 #ifndef GADGET_SCENE_H
 #define GADGET_SCENE_H
 
+#include "Data/Array.h"
 #include "Game/GameObject.h"
 #include "Game/SceneComponent.h"
 #include "Utils/GUID.h"
@@ -36,34 +37,34 @@ namespace Gadget{
 		}
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache results when possible
-		template <class T> std::vector<T*> GetAllComponentsInScene() const{
+		template <class T> Array<T*> GetAllComponentsInScene() const{
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 
-			std::vector<T*> comps;
+			Array<T*> comps;
 
 			for(const auto& go : gameObjects){
 				//TODO - This assumes only one of each kind of component on an object
 				T* t = go->GetComponent<T>();
 				if(t != nullptr){
-					comps.push_back(t);
+					comps.Add(t);
 				}
 			}
 
-			comps.shrink_to_fit();
+			comps.ShrinkToFit();
 			return comps;
 		}
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache results when possible
-		template <class T> void GetAllComponentsInScene(std::vector<T*>& inBuffer_) const{
-			GADGET_ASSERT(inBuffer_.empty(), "Non-empty std::vector passed to GetAllComponentsInScene, existing data will be lost!");
-			inBuffer_.clear();
-			inBuffer_.reserve(gameObjects.size());
+		template <class T> void GetAllComponentsInScene(Array<T*>& inBuffer_) const{
+			GADGET_ASSERT(inBuffer_.IsEmpty(), "Non-empty std::vector passed to GetAllComponentsInScene, existing data will be lost!");
+			inBuffer_.Clear();
+			inBuffer_.Reserve(gameObjects.size());
 
 			for(const auto& go : gameObjects){
 				//TODO - This assumes only one of each kind of component on an object
 				T* t = go->GetComponent<T>();
 				if(t != nullptr){
-					inBuffer_.push_back(t);
+					inBuffer_.Add(t);
 				}
 			}
 		}

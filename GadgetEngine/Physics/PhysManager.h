@@ -41,8 +41,8 @@ namespace Gadget{
 
 		std::vector<btCollisionShape*> cachedCollisionShapes;
 
-		std::vector<Rigidbody*> rigidbodiesBuffer;
-		std::vector<Collider*> collidersBuffer;
+		Array<Rigidbody*> rigidbodiesBuffer;
+		Array<Collider*> collidersBuffer;
 
 		void HandleCollisionResponse(Collider* collider_, Collider* other_);
 	};

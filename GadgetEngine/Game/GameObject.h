@@ -1,6 +1,7 @@
 #ifndef GADGET_GAME_OBJECT_H
 #define GADGET_GAME_OBJECT_H
 
+#include "Data/Array.h"
 #include "Game/Component.h"
 #include "Math/Euler.h"
 #include "Math/Matrix.h"
@@ -88,23 +89,25 @@ namespace Gadget{
 		//Unlike GetComponent, this function won't play nice with the whole class hierarchy
 		//If the Component subclass you're trying to use doesn't have a ComponentCollection, you'll need to either give it one or dynamic_cast these yourself
 		template <class T>
-		std::vector<T*> GetComponents() const{
+		Array<T*> GetComponents() const{
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
-			std::vector<T*> comps = T::GetComponents(guid);
-			if(!comps.empty()){
-				return comps;
-			}
+			Array<T*> comps;
+			//TODO
+			//Array<T*> comps = T::GetComponents(guid);
+			//if(!comps.IsEmpty()){
+			//	return comps;
+			//}
 
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis
 			for(Component* c : components){
 				auto comp = dynamic_cast<T*>(c);
 				if(comp != nullptr){
-					comps.push_back(comp);
+					comps.Add(comp);
 				}
 			}
 
-			comps.shrink_to_fit();
+			comps.ShrinkToFit();
 			return comps;
 		}
 

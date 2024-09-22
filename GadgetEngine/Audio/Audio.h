@@ -29,8 +29,8 @@ namespace Gadget{
 		FMOD::System* coreSystem;
 
 		//Member variables so we can reuse their memory, but DO NOT reuse their contents!
-		std::vector<AudioListener*> audioListenersBuffer;
-		std::vector<AudioSource*> audioSourcesBuffer;
+		Array<AudioListener*> audioListenersBuffer;
+		Array<AudioSource*> audioSourcesBuffer;
 	};
 }
 

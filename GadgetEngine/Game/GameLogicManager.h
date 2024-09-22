@@ -12,7 +12,7 @@ namespace Gadget{
 		void Update(const Scene* scene_, float deltaTime_);
 
 	private:
-		std::vector<GameLogicComponent*> gameLogicsBuffer;
+		Array<GameLogicComponent*> gameLogicsBuffer;
 	};
 }
 

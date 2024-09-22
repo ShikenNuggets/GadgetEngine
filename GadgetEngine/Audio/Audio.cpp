@@ -73,8 +73,8 @@ void Audio::Update(Scene* scene_){
 	coreSystem->update();
 
 	//So we don't accidentally reuse these pointers later
-	audioListenersBuffer.clear();
-	audioSourcesBuffer.clear();
+	audioListenersBuffer.Clear();
+	audioSourcesBuffer.Clear();
 }
 
 float Audio::GetVolume(VolumeChannel channel_){

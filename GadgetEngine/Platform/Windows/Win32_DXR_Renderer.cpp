@@ -102,7 +102,7 @@ void Win32_DXR_Renderer::Render([[maybe_unused]] const Scene* scene_){
 	}
 
 	auto cams = scene_->GetAllComponentsInScene<CameraComponent>();
-	if(cams.size() <= 0){
+	if(cams.IsEmpty()){
 		return;
 	}
 
