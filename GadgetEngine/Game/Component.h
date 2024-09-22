@@ -2,6 +2,8 @@
 #define GADGET_COMPONENT_H
 
 #include "Debug.h"
+#include "Data/Array.h"
+#include "Data/HashTable.h"
 #include "Math/Quaternion.h"
 #include "Utils/GUID.h"
 #include "Utils/NamedVar.h"
@@ -61,8 +63,7 @@ namespace Gadget{
 		virtual ComponentProperties Serialize() const;
 
 		template <class T>
-		static Component* DeserializeToNewComponent(const ComponentProperties& props_)
-		{
+		static Component* DeserializeToNewComponent(const ComponentProperties& props_){
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 			return new T(props_);
 		}
@@ -77,13 +78,18 @@ namespace Gadget{
 		virtual void Deserialize(const ComponentProperties& props_);
 	};
 
+	template <typename T>
+	concept HasComponentCollection = std::is_base_of_v<Component, T> && requires{
+		{ T::GetComponents(GUID::Invalid) } -> std::same_as<std::vector<T*>>;
+	};
+
 	//TODO - Thread safety
 	template <class T>
 	class ComponentCollection{
 		static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 
 		private:
-			std::map<GUID, std::vector<T*>> guidMap;
+			HashTable<GUID, Array<T*>> guidMap;
 
 		public:
 			ComponentCollection() noexcept = default;
@@ -100,16 +106,16 @@ namespace Gadget{
 				GADGET_BASIC_ASSERT(element_->GetParent()->GetGUID() != GUID::Invalid);
 
 				GUID objectGuid = element_->GetParent()->GetGUID();
-				if(Utils::ContainsKey(guidMap, objectGuid)){
-					guidMap.at(objectGuid).push_back(element_);
-				}else{
-					guidMap.emplace(element_->GetParent()->GetGUID(), std::vector<T*>{ element_ });
+				if(!guidMap.Contains(objectGuid)){
+					guidMap.Add(element_->GetParent()->GetGUID(), {});
 				}
+
+				guidMap[objectGuid].Add(element_);
 			}
 
 			void Remove(GUID objectGuid_){
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-				guidMap.erase(objectGuid_);
+				guidMap.RemoveAt(objectGuid_);
 			}
 
 			void Remove(T* element_){
@@ -122,11 +128,11 @@ namespace Gadget{
 				GADGET_BASIC_ASSERT(element_->GetGUID() != GUID::Invalid);
 				GADGET_BASIC_ASSERT(element_->GetParent() != nullptr);
 				GADGET_BASIC_ASSERT(element_->GetParent()->GetGUID() != GUID::Invalid);
-				GADGET_BASIC_ASSERT(Utils::ContainsKey(guidMap, element_->GetParent()->GetGUID()));
+				GADGET_BASIC_ASSERT(guidMap.Contains(element_->GetParent()->GetGUID()));
 
-				auto& vec = guidMap.at(element_->GetParent()->GetGUID());
-				vec.erase(std::remove(vec.begin(), vec.end(), element_), vec.end());
-				if(vec.empty()){
+				auto& arr = guidMap[element_->GetParent()->GetGUID()];
+				arr.Remove(element_);
+				if(arr.IsEmpty()){
 					Remove(element_->GetParent()->GetGUID());
 				}
 			}
@@ -134,29 +140,29 @@ namespace Gadget{
 			T* Get(GUID objectGuid_) const{
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 
-				if(!Utils::ContainsKey(guidMap, objectGuid_)){
+				if(!guidMap.Contains(objectGuid_)){
 					return nullptr;
 				}
 
-				const auto& vec = guidMap.at(objectGuid_);
-				if(vec.empty()){
+				const auto& arr = guidMap[objectGuid_];
+				if(arr.IsEmpty()){
 					return nullptr;
 				}
 
-				return vec.front();
+				return arr[0];
 			}
 
-			std::vector<T*> GetComponents(GUID objectGuid_) const{
+			Array<T*> GetComponents(GUID objectGuid_) const{
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-
-				if(!Utils::ContainsKey(guidMap, objectGuid_)){
-					return std::vector<T*>();
+				
+				if(!guidMap.Contains(objectGuid_)){
+					return Array<T*>();
 				}
 
-				return guidMap.at(objectGuid_);
+				return guidMap[objectGuid_];
 			}
 
-			size_t Count() const{ return guidMap.size(); }
+			size_t Count() const{ return guidMap.Size(); }
 	};
 }
 

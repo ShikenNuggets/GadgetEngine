@@ -36,7 +36,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static std::vector<AudioSource*> GetComponents(GUID objectGuid_){
+		static Array<AudioSource*> GetComponents(GUID objectGuid_){
 			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 			return componentCollection.GetComponents(objectGuid_);
 		}

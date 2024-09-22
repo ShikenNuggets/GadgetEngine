@@ -40,7 +40,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static std::vector<GameLogicComponent*> GetComponents(GUID objectGuid_){
+		static Array<GameLogicComponent*> GetComponents(GUID objectGuid_){
 			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 			return componentCollection.GetComponents(objectGuid_);
 		}

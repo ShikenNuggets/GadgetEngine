@@ -19,7 +19,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static std::vector<CameraComponent*> GetComponents(GUID objectGuid_){
+		static Array<CameraComponent*> GetComponents(GUID objectGuid_){
 			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 			return componentCollection.GetComponents(objectGuid_);
 		}

@@ -91,15 +91,13 @@ namespace Gadget{
 		template <class T>
 		Array<T*> GetComponents() const{
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
-			Array<T*> comps;
-			//TODO
-			//Array<T*> comps = T::GetComponents(guid);
-			//if(!comps.IsEmpty()){
-			//	return comps;
-			//}
+			if constexpr(HasComponentCollection<T>){
+				return T::GetComponents(guid);
+			}
 
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis
+			Array<T*> comps;
 			for(Component* c : components){
 				auto comp = dynamic_cast<T*>(c);
 				if(comp != nullptr){
