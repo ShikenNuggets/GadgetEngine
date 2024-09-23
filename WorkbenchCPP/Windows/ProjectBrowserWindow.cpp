@@ -21,8 +21,8 @@ void ProjectBrowserWindow::Draw(){
 		ImGui::Spacing();
 
 		for(const auto& proj : projectManager.RecentProjects()){
-			ImGui::Text(proj.GetName().Value());
-			ImGui::Text(proj.GetPath().Value());
+			ImGui::Text(proj.GetName().c_str());
+			ImGui::Text(proj.GetPath().c_str());
 			ImGui::Spacing();
 		}
 

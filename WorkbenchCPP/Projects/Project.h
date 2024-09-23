@@ -2,21 +2,34 @@
 #define GADGET_WORKBENCH_PROJECTS_PROJECT_H
 
 #include <chrono>
+#include <string>
 
-#include <Data/String.h>
+#include <nlohmann/json.hpp>
 
 namespace Gadget::Workbench{
 	class Project{
 	public:
-		Project(const String name_, const String path_) : name(name_), path(path_){}
+		Project() : name(), path(){}
+		Project(std::string name_, std::string path_) : name(std::move(name_)), path(std::move(path_)){}
 
-		const String& GetName() const{ return name; }
-		const String& GetPath() const{ return path; }
+		const std::string& GetName() const{ return name; }
+		const std::string& GetPath() const{ return path; }
 
 	private:
-		String name;
-		String path;
+		std::string name;
+		std::string path;
 	};
+}
+
+namespace Gadget{
+	inline void to_json(nlohmann::json& j_, const Workbench::Project& p_){
+		j_["name"] = p_.GetName();
+		j_["path"] = p_.GetPath();
+	}
+
+	inline void from_json(const nlohmann::json& j_, Workbench::Project& p_){
+		p_ = Workbench::Project(j_.at("name"), j_.at("path"));
+	}
 }
 
 #endif //!GADGET_WORKBENCH_PROJECTS_PROJECT_H

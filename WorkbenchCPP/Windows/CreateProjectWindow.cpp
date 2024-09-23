@@ -16,7 +16,8 @@ void CreateProjectWindow::Draw(){
 	ImGui::SetNextWindowSizeConstraints(ImVec2(400.0f, 100.0f), ImVec2(8000.0f, 8000.0f));
 	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-	if(ImGui::Begin("Create Project", nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse)){
+	bool keepOpen = true;
+	if(ImGui::Begin("Create Project", &keepOpen, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse)){
 		ImGui::SetWindowFocus("Create Project");
 		ImGui::Text("Project Name");
 		ImGui::InputText("##ProjectName", projectName.data(), projectName.capacity());
@@ -24,10 +25,13 @@ void CreateProjectWindow::Draw(){
 		ImGui::InputText("##ProjectPath", projectPath.data(), projectPath.capacity());
 
 		if(ImGui::Button("Create")){
-			
-			//TODO
+			onClickCreateProject();
 		}
 	}
 
 	ImGui::End();
+
+	if(!keepOpen){
+		onExit();
+	}
 }

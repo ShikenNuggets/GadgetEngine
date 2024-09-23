@@ -10,17 +10,14 @@ namespace Gadget::Workbench{
 	public:
 		ProjectManager();
 
-		void Draw();
-
 		bool HasRecentProjects() const{ return projects.IsEmpty(); }
 		const Array<Project>& RecentProjects() const{ return projects; }
 
 	private:
 		Array<Project> projects;
 
-		bool guiShowCreateProjectWindow;
-		std::string guiProjectName;
-		std::string guiProjectPath;
+		ErrorCode LoadProjects();
+		ErrorCode SaveProjects();
 	};
 }
 
