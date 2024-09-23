@@ -46,10 +46,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static Array<PointLightComponent*> GetComponents(GUID objectGuid_){
-			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-			return componentCollection.GetComponents(objectGuid_);
-		}
+		static const ComponentCollection<PointLightComponent>& GetCollection(){ return componentCollection; }
 
 		const PointLight& GetLightSource() const{ return lightSource; }
 		PointLight& GetLightSource(){ return lightSource; }

@@ -22,10 +22,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static Array<AnimRenderComponent*> GetComponents(GUID objectGuid_){
-			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-			return componentCollection.GetComponents(objectGuid_);
-		}
+		static const ComponentCollection<AnimRenderComponent>& GetCollection(){ return componentCollection; }
 
 		void Update(float deltaTime_);
 		void Bind(size_t index_);

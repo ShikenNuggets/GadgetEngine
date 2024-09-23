@@ -32,10 +32,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static Array<Rigidbody*> GetComponents(GUID objectGuid_){
-			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-			return componentCollection.GetComponents(objectGuid_);
-		}
+		static const ComponentCollection<Rigidbody>& GetCollection(){ return componentCollection; }
 
 		void Update(float deltaTime_);
 

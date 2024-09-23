@@ -78,11 +78,6 @@ namespace Gadget{
 		virtual void Deserialize(const ComponentProperties& props_);
 	};
 
-	template <typename T>
-	concept HasComponentCollection = std::is_base_of_v<Component, T> && requires{
-		{ T::GetComponents(GUID::Invalid) } -> std::same_as<std::vector<T*>>;
-	};
-
 	//TODO - Thread safety
 	template <class T>
 	class ComponentCollection{
@@ -137,6 +132,16 @@ namespace Gadget{
 				}
 			}
 
+			T* GetAny() const{
+				for(const auto& arr : guidMap){
+					for(auto* c : arr.value){
+						return c;
+					}
+				}
+
+				return nullptr;
+			}
+
 			T* Get(GUID objectGuid_) const{
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 
@@ -152,6 +157,7 @@ namespace Gadget{
 				return arr[0];
 			}
 
+			//TODO - Could we avoid this copy?
 			Array<T*> GetComponents(GUID objectGuid_) const{
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 				
@@ -162,8 +168,35 @@ namespace Gadget{
 				return guidMap[objectGuid_];
 			}
 
+			Array<T*> GetAllComponents() const{
+				Array<T*> allComps;
+				allComps.Reserve(guidMap.Size());
+				for(const auto& arr : guidMap){
+					allComps.Reserve(allComps.Size() + arr.value.Size());
+					for(auto* comp : arr.value){
+						allComps.Add(comp);
+					}
+				}
+
+				return allComps;
+			}
+
+			void GetAllComponents(Array<T*>& inArray_) const{
+				inArray_.Reserve(guidMap.Size());
+				for(const auto& arr : guidMap){
+					inArray_.Reserve(inArray_.Size() + arr.value.Size());
+					for(auto* comp : arr.value){
+						inArray_.Add(comp);
+					}
+				}
+			}
+
 			size_t Count() const{ return guidMap.Size(); }
 	};
+
+	template <typename T>
+	concept HasComponentCollection = std::is_base_of_v<Component, T> &&
+		requires{{ T::GetCollection() } -> std::same_as<const ComponentCollection<T>&>; };
 }
 
 #endif //!GADGET_COMPONENT_H

@@ -19,10 +19,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static Array<CameraComponent*> GetComponents(GUID objectGuid_){
-			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-			return componentCollection.GetComponents(objectGuid_);
-		}
+		static const ComponentCollection<CameraComponent>& GetCollection(){ return componentCollection; }
 
 		Matrix4 GetUpdatedViewMatrix();
 		Matrix4 GetUpdatedProjectionMatrix();

@@ -32,10 +32,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static Array<Collider*> GetComponents(GUID objectGuid_){
-			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-			return componentCollection.GetComponents(objectGuid_);
-		}
+		static const ComponentCollection<Collider>& GetCollection(){ return componentCollection; }
 
 		virtual void OnActivated() override;
 		virtual void OnTransformModified() override;

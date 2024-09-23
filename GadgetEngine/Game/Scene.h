@@ -23,48 +23,65 @@ namespace Gadget{
 		GameObject* FindWithTag(StringID tag_);
 		std::vector<GameObject*> FindObjectsWithTag(StringID tag_);
 
-		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache result when possible
+		//If T doesn't have a ComponentCollection, this function will be significantly slower
 		template <class T> T* GetComponentInScene() const{
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
-			for(const auto& go : gameObjects){
-				T* t = go->GetComponent<T>();
-				if(t != nullptr){
-					return t;
+			if constexpr(HasComponentCollection<T>){
+				return T::GetCollection().GetAny();
+			}else{
+				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize Scene::GetComponentInScene by giving it one"));
+				for(const auto& go : gameObjects){
+					T* t = go->GetComponent<T>();
+					if(t != nullptr){
+						return t;
+					}
 				}
-			}
 
-			return nullptr;
+				return nullptr;
+			}
 		}
 
-		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache results when possible
+		//If T doesn't have a ComponentCollection, this function will be significantly slower
+		//Prefer the overload that takes a preallocated Array to reduce copying and memory allocations
 		template <class T> Array<T*> GetAllComponentsInScene() const{
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
-
-			Array<T*> comps;
-
-			for(const auto& go : gameObjects){
-				//TODO - This assumes only one of each kind of component on an object
-				T* t = go->GetComponent<T>();
-				if(t != nullptr){
-					comps.Add(t);
+			if constexpr(HasComponentCollection<T>){
+				return T::GetCollection().GetAllComponents();
+			}else{
+				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize Scene::GetAllComponentsInScene by giving it one"));
+			
+				Array<T*> comps;
+				for(const auto& go : gameObjects){
+					//TODO - This assumes only one of each kind of component on an object
+					T* t = go->GetComponent<T>();
+					if(t != nullptr){
+						comps.Add(t);
+					}
 				}
-			}
 
-			comps.ShrinkToFit();
-			return comps;
+				comps.ShrinkToFit();
+				return comps;
+			}
 		}
 
-		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache results when possible
+		//If T doesn't have a ComponentCollection, this function will be significantly slower
 		template <class T> void GetAllComponentsInScene(Array<T*>& inBuffer_) const{
 			GADGET_ASSERT(inBuffer_.IsEmpty(), "Non-empty std::vector passed to GetAllComponentsInScene, existing data will be lost!");
 			inBuffer_.Clear();
 			inBuffer_.Reserve(gameObjects.size());
 
-			for(const auto& go : gameObjects){
-				//TODO - This assumes only one of each kind of component on an object
-				T* t = go->GetComponent<T>();
-				if(t != nullptr){
-					inBuffer_.Add(t);
+			if constexpr(HasComponentCollection<T>){
+				T::GetCollection().GetAllComponents(inBuffer_);
+				return;
+			}else{
+				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize Scene::GetAllComponentsInScene by giving it one"));
+			
+				for(const auto& go : gameObjects){
+					//TODO - This assumes only one of each kind of component on an object
+					T* t = go->GetComponent<T>();
+					if(t != nullptr){
+						inBuffer_.Add(t);
+					}
 				}
 			}
 		}
@@ -74,7 +91,7 @@ namespace Gadget{
 			T* comp = nullptr;
 
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
-			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
+			//This seems to be the simplest way to do this generically, but there are ways to avoid this
 			for(SceneComponent* c : sceneComponents){
 				comp = dynamic_cast<T*>(c);
 				if(comp != nullptr){

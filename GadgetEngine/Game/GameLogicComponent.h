@@ -40,10 +40,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static Array<GameLogicComponent*> GetComponents(GUID objectGuid_){
-			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-			return componentCollection.GetComponents(objectGuid_);
-		}
+		static const ComponentCollection<GameLogicComponent>& GetCollection(){ return componentCollection; }
 
 		virtual void OnStart(){ hasStarted = true; }
 		virtual void OnUpdate([[maybe_unused]] float deltaTime_){}

@@ -55,24 +55,25 @@ namespace Gadget{
 
 		GUID GetGUID() const{ return guid; }
 
-		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
+		//If T doesn't have a ComponentCollection, this function will be significantly slower
 		template <class T> T* GetComponent() const{
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
-			T* comp = dynamic_cast<T*>(T::Get(GetGUID())); //This dynamic_cast looks unnecessary but it ensures that this plays nice with the whole class hierarchy
-			if(comp != nullptr){
-				return comp;
-			}
+			if constexpr(HasComponentCollection<T>){
+				return T::GetCollection().Get(GetGUID());
+			}else{
+				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize GameObject::GetComponent by giving it one"));
 
-			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
-			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
-			for(Component* c : components){
-				comp = dynamic_cast<T*>(c);
-				if(comp != nullptr){
-					return comp;
+				//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
+				//This seems to be the simplest way to do this generically, but you should set up ComponentCollections to avoid this
+				for(Component* c : components){
+					T* comp = dynamic_cast<T*>(c);
+					if(comp != nullptr){
+						return comp;
+					}
 				}
-			}
 
-			return nullptr;
+				return nullptr;
+			}
 		}
 
 		Component* GetComponent(GUID componentGuid_){
@@ -85,28 +86,29 @@ namespace Gadget{
 			return nullptr;
 		}
 
-		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the results when possible
 		//Unlike GetComponent, this function won't play nice with the whole class hierarchy
-		//If the Component subclass you're trying to use doesn't have a ComponentCollection, you'll need to either give it one or dynamic_cast these yourself
+		//If T doesn't have a ComponentCollection, this function will be significantly slower
 		template <class T>
 		Array<T*> GetComponents() const{
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 			if constexpr(HasComponentCollection<T>){
-				return T::GetComponents(guid);
-			}
+				return T::GetCollection().GetComponents(guid);
+			}else{
+				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize GameObject::GetComponents by giving it one"));
 
-			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
-			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis
-			Array<T*> comps;
-			for(Component* c : components){
-				auto comp = dynamic_cast<T*>(c);
-				if(comp != nullptr){
-					comps.Add(comp);
+				//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
+				//This seems to be the simplest way to do this generically, but you should set up ComponentCollections to avoid this
+				Array<T*> comps;
+				for(Component* c : components){
+					auto comp = dynamic_cast<T*>(c);
+					if(comp != nullptr){
+						comps.Add(comp);
+					}
 				}
-			}
 
-			comps.ShrinkToFit();
-			return comps;
+				comps.ShrinkToFit();
+				return comps;
+			}
 		}
 
 		StringID GetName() const{ return name; }

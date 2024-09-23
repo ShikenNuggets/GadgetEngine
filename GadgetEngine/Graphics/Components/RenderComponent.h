@@ -25,10 +25,7 @@ namespace Gadget{
 			return componentCollection.Get(objectGuid_);
 		}
 
-		static Array<RenderComponent*> GetComponents(GUID objectGuid_){
-			GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-			return componentCollection.GetComponents(objectGuid_);
-		}
+		static const ComponentCollection<RenderComponent>& GetCollection(){ return componentCollection; }
 
 		void Bind(size_t index_);
 		void Unbind(size_t index_);
