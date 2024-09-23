@@ -34,7 +34,7 @@ namespace Gadget{
 	}
 
 	//TODO - I feel like there's a better way to approach this
-	inline void from_json(nlohmann::json& j_, ResourceContainer*& value_){
+	inline void from_json(const nlohmann::json& j_, ResourceContainer*& value_){
 		std::string typeStr = j_.at("resource_type");
 		StringID typeID = StringID::ProcessString(typeStr);
 
