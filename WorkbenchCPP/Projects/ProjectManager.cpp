@@ -15,6 +15,11 @@ ProjectManager::ProjectManager() : projects(){
 	SaveProjects();
 }
 
+void ProjectManager::AddNewProject(Project project_){
+	projects.Add(project_);
+	SaveProjects();
+}
+
 ErrorCode ProjectManager::LoadProjects(){
 	if(!FileSystem::FileExists(gRecentProjectsFilePath)){
 		return ErrorCode::OK;
@@ -24,6 +29,11 @@ ErrorCode ProjectManager::LoadProjects(){
 	if(!json.is_null()){
 		Array<Project> temp = json.get<Array<Project>>();
 		for(const auto& p : temp){
+			if(p.GetName().empty() || p.GetPath().empty()){
+				GADGET_LOG_WARNING(SID("PROJ"), "Invalid data in recent projects file, ignoring...");
+				continue;
+			}
+
 			if(FileSystem::FileExists(p.GetPath())){
 				projects.Add(p);
 			}else{

@@ -14,12 +14,15 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]){
 	auto* projBrowser = wndManager.AddWindow<ProjectBrowserWindow>(projManager);
 	projBrowser->OnClickCreateProject([&](){
 		auto* createProjWindow = wndManager.AddWindow<CreateProjectWindow>();
+		GADGET_BASIC_ASSERT(createProjWindow != nullptr);
 		createProjWindow->OnExit([&wndManager, createProjWindow, projBrowser](){
 			wndManager.RemoveWindow(createProjWindow);
 			projBrowser->EnableInput();
 		});
 
 		createProjWindow->OnClickCreateProject([&projManager, &wndManager, projBrowser, createProjWindow](){
+			projManager.AddNewProject(Project(createProjWindow->GetNameField(), createProjWindow->GetPathField()));
+
 			wndManager.RemoveWindow(createProjWindow);
 			wndManager.RemoveWindow(projBrowser);
 		});

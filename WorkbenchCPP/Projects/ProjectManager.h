@@ -13,6 +13,8 @@ namespace Gadget::Workbench{
 		bool HasRecentProjects() const{ return projects.IsEmpty(); }
 		const Array<Project>& RecentProjects() const{ return projects; }
 
+		void AddNewProject(Project project_);
+
 	private:
 		Array<Project> projects;
 

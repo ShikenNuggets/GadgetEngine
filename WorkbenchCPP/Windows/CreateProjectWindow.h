@@ -31,9 +31,15 @@ namespace Gadget::Workbench{
 			onClickCreateProject = func_;
 		}
 
+		std::string GetNameField() const{ return projectName; }
+		std::string GetPathField() const{ return projectPath; }
+
 	private:
-		std::string projectName;
-		std::string projectPath;
+		static inline constexpr size_t gNameCapacity = 64;
+		static inline constexpr size_t gPathCapacity = 128;
+
+		char projectName[gNameCapacity];
+		char projectPath[gPathCapacity];
 
 		Callback onExit;
 		Callback onClickCreateProject;

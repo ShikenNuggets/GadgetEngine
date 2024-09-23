@@ -5,8 +5,13 @@
 using namespace Gadget::Workbench;
 
 CreateProjectWindow::CreateProjectWindow() : SubWindow("Create Project"), projectName(), projectPath(), onExit(nullptr), onClickCreateProject(nullptr){
-	projectName.reserve(64);
-	projectPath.reserve(128);
+	for(size_t i = 0; i < gNameCapacity; i++){
+		projectName[i] = '\0';
+	}
+
+	for(size_t i = 0; i < gPathCapacity; i++){
+		projectPath[i] = '\0';
+	}
 	
 	GADGET_BASIC_ASSERT(!onExit.IsValid());
 	GADGET_BASIC_ASSERT(!onClickCreateProject.IsValid());
@@ -20,9 +25,9 @@ void CreateProjectWindow::Draw(){
 	if(ImGui::Begin("Create Project", &keepOpen, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse)){
 		ImGui::SetWindowFocus("Create Project");
 		ImGui::Text("Project Name");
-		ImGui::InputText("##ProjectName", projectName.data(), projectName.capacity());
+		ImGui::InputText("##ProjectName", projectName, gNameCapacity);
 		ImGui::Text("Path");
-		ImGui::InputText("##ProjectPath", projectPath.data(), projectPath.capacity());
+		ImGui::InputText("##ProjectPath", projectPath, gPathCapacity);
 
 		if(ImGui::Button("Create")){
 			onClickCreateProject();
