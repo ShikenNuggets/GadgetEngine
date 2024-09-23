@@ -377,6 +377,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\ResourceManager.h" />
     <ClInclude Include="ScreenCoordinate.h" />
+    <ClInclude Include="Serializers\ContainerSerializer.h" />
     <ClInclude Include="Serializers\ResourceContainerSerializer.h" />
     <ClInclude Include="Utils\ActionTimer.h" />
     <ClInclude Include="Utils\ByteSequencer.h" />

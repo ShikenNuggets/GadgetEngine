@@ -603,6 +603,9 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="ScreenCoordinate.h" />
+    <ClInclude Include="Serializers\ContainerSerializer.h">
+      <Filter>Serializers</Filter>
+    </ClInclude>
     <ClInclude Include="Serializers\ResourceContainerSerializer.h">
       <Filter>Serializers</Filter>
     </ClInclude>
