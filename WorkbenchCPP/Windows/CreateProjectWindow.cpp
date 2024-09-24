@@ -18,19 +18,39 @@ CreateProjectWindow::CreateProjectWindow() : SubWindow("Create Project"), projec
 }
 
 void CreateProjectWindow::Draw(){
-	ImGui::SetNextWindowSizeConstraints(ImVec2(400.0f, 100.0f), ImVec2(8000.0f, 8000.0f));
+	ImGui::SetNextWindowSizeConstraints(ImVec2(700.0f, 100.0f), ImVec2(8000.0f, 8000.0f));
 	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
 	bool keepOpen = true;
 	if(ImGui::Begin("Create Project", &keepOpen, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse)){
-		ImGui::SetWindowFocus("Create Project");
-		ImGui::Text("Project Name");
-		ImGui::InputText("##ProjectName", projectName, gNameCapacity);
-		ImGui::Text("Path");
-		ImGui::InputText("##ProjectPath", projectPath, gPathCapacity);
+		if(ImGui::BeginTable("CP_Table1", 2)){
+			ImGui::TableSetupColumn("CP_Table1_Col1", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("CP_Table1_Col2", ImGuiTableColumnFlags_WidthFixed, 100.0f);
 
-		if(ImGui::Button("Create")){
-			onClickCreateProject();
+			ImGui::TableNextColumn();
+			ImGui::SetWindowFocus("Create Project");
+			ImGui::Text("Project Name");
+
+			ImGui::TableNextColumn(); ImGui::TableNextColumn();
+			ImGui::PushItemWidth(600.0f);
+			ImGui::InputText("##ProjectName", projectName, gNameCapacity);
+
+			ImGui::TableNextColumn(); ImGui::TableNextColumn();
+			ImGui::Text("Path");
+
+			ImGui::TableNextColumn(); ImGui::TableNextColumn();
+			ImGui::InputText("##ProjectPath", projectPath, gPathCapacity);
+
+			if(ImGui::Button("Create")){
+				onClickCreateProject();
+			}
+
+			ImGui::TableNextColumn();
+			if(ImGui::Button("...")){
+				//TODO
+			}
+
+			ImGui::EndTable();
 		}
 	}
 
