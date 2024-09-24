@@ -14,7 +14,7 @@ namespace Gadget::Workbench{
 		void AddWindow(SubWindow* window_);
 
 		template <class T, typename... Args>
-		T* AddWindow(Args... args_){
+		T* AddWindow(Args&&... args_){
 			static_assert(std::is_base_of_v<SubWindow, T>, "T must derive from SubWindow");
 			T* subWnd = new T(args_...);
 			GADGET_BASIC_ASSERT(subWnd != nullptr);
