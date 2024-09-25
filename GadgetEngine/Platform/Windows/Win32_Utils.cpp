@@ -74,8 +74,6 @@ std::string Win32_Utils::BrowseForFolder(uint64_t hwnd_, const wchar_t* dialogTi
 	HWND hwnd = reinterpret_cast<HWND>(hwnd_);
 	GADGET_BASIC_ASSERT(IsWindow(hwnd));
 
-	//auto callback = [callback_](HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) -> int{ /*callback_();*/ };
-
 	BROWSEINFO browseInfo{};
 	browseInfo.lpszTitle = dialogTitle_;
 	browseInfo.hwndOwner = hwnd;
@@ -83,12 +81,16 @@ std::string Win32_Utils::BrowseForFolder(uint64_t hwnd_, const wchar_t* dialogTi
 	browseInfo.ulFlags = BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS;
 
 	LPITEMIDLIST pidl = SHBrowseForFolder(&browseInfo);
-	if(pidl == 0){
+	if(pidl == nullptr){
 		return "";
 	}
 
-	std::array<TCHAR, MAX_PATH> path{};
-	SHGetPathFromIDList(pidl, path.data());
+	TCHAR path[MAX_PATH]{};
+	const BOOL result = SHGetPathFromIDList(pidl, path);
+	if(result == FALSE){
+		return "";
+	}
 
-	return std::string(path.begin(), path.end());
+	std::wstring wstr = path;
+	return std::string(wstr.begin(), wstr.end()) + FileSystem::PathSeparator;
 }
