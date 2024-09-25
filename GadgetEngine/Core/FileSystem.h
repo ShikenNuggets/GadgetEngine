@@ -41,6 +41,9 @@ namespace Gadget{
 		static bool FileExists(const std::string& filePath_);
 		static bool DirExists(const std::string& path_);
 
+		static bool IsFileEmpty(const std::string& filePath_);
+		static bool IsDirEmpty(const std::string& path_);
+
 		static std::vector<std::string> ReadFile(const std::string& filePath_);
 		static std::string ReadFileToString(const std::string& filePath_);
 		static std::vector<uint8_t> ReadBinaryFile(const std::string& filePath_);

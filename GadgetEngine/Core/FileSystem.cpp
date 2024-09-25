@@ -26,6 +26,44 @@ bool FileSystem::DirExists(const std::string& path_){
 	return std::filesystem::is_directory(path_);
 }
 
+bool FileSystem::IsFileEmpty(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(!filePath_.empty());
+	GADGET_BASIC_ASSERT(filePath_.size() == std::strlen(filePath_.c_str()));
+	GADGET_BASIC_ASSERT(filePath_.size() == Utils::StrLen(filePath_.c_str()));
+	GADGET_BASIC_ASSERT(FileExists(filePath_)); //You can call this function with a file path that doesn't exist, but the result may surprise you
+
+	if(!FileExists(filePath_)){
+		return false;
+	}
+
+	std::error_code err;
+	const bool result = std::filesystem::is_empty(filePath_, err);
+	if(err){
+		GADGET_LOG_ERROR(SID("FILESYSTEM"), err.message());
+	}
+
+	return result;
+}
+
+bool FileSystem::IsDirEmpty(const std::string& path_){
+	GADGET_BASIC_ASSERT(!path_.empty());
+	GADGET_BASIC_ASSERT(path_.size() == std::strlen(path_.c_str()));
+	GADGET_BASIC_ASSERT(path_.size() == Utils::StrLen(path_.c_str()));
+	GADGET_BASIC_ASSERT(DirExists(path_)); //You can call this function with a directory that doesn't exist, but the result may surprise you
+	
+	if(!DirExists(path_)){
+		return false;
+	}
+
+	std::error_code err;
+	const bool result = std::filesystem::is_empty(path_, err);
+	if(err){
+		GADGET_LOG_ERROR(SID("FILESYSTEM"), err.message());
+	}
+
+	return result;
+}
+
 std::vector<std::string> FileSystem::ReadFile(const std::string& filePath_){
 	GADGET_BASIC_ASSERT(!filePath_.empty());
 
