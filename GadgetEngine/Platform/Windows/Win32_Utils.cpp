@@ -59,3 +59,36 @@ void Win32_Utils::TryApplyImmersiveDarkMode(uint64_t hwnd_){
 		GADGET_LOG_WARNING(SID("WIN32"), "Could not apply Immersive Dark Mode: DWM Error: " + str);
 	}
 }
+
+static int CallBack(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData){
+	if(uMsg == BFFM_INITIALIZED && lpData != 0){
+		const std::string tmp = reinterpret_cast<const char*>(lpData);
+		GADGET_LOG(SID("BROWSER"), tmp);
+		SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
+	}
+
+	return 0;
+}
+
+std::string Win32_Utils::BrowseForFolder(uint64_t hwnd_, const wchar_t* dialogTitle_){
+	HWND hwnd = reinterpret_cast<HWND>(hwnd_);
+	GADGET_BASIC_ASSERT(IsWindow(hwnd));
+
+	//auto callback = [callback_](HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) -> int{ /*callback_();*/ };
+
+	BROWSEINFO browseInfo{};
+	browseInfo.lpszTitle = dialogTitle_;
+	browseInfo.hwndOwner = hwnd;
+	browseInfo.lpfn = CallBack;
+	browseInfo.ulFlags = BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS;
+
+	LPITEMIDLIST pidl = SHBrowseForFolder(&browseInfo);
+	if(pidl == 0){
+		return "";
+	}
+
+	std::array<TCHAR, MAX_PATH> path{};
+	SHGetPathFromIDList(pidl, path.data());
+
+	return std::string(path.begin(), path.end());
+}

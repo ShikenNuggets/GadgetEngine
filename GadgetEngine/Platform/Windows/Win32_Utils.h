@@ -16,6 +16,8 @@ namespace Gadget{
 		void OutputToDebuggerConsole(const std::string& output);
 
 		void TryApplyImmersiveDarkMode(uint64_t hwnd_);
+
+		std::string BrowseForFolder(uint64_t hwnd_, const wchar_t* dialogTitle_);
 	};
 }
 
