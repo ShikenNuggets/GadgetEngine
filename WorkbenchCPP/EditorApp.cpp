@@ -8,21 +8,22 @@ using namespace Workbench;
 
 std::unique_ptr<EditorApp> EditorApp::instance;
 
-EditorApp::EditorApp() : isRunning(true), window(1280, 960), projManager(), wndManager(){
-	auto* projBrowser = wndManager.AddWindow<ProjectBrowserWindow>(projManager);
-	projBrowser->OnClickCreateProject([&](){
-		auto* createProjWindow = wndManager.AddWindow<CreateProjectWindow>();
-		GADGET_BASIC_ASSERT(createProjWindow != nullptr);
-		createProjWindow->OnExit([createProjWindow, projBrowser](){
-			EditorApp::GetWndManager().RemoveWindow(createProjWindow);
-			projBrowser->EnableInput();
+EditorApp::EditorApp() : isRunning(true), window(1280, 960), projManager(), wndManager(), createProjectWindowPtr(nullptr), projectBrowserWindowPtr(nullptr){
+	//TODO - This is getting pretty gross, I think there's a better way
+	projectBrowserWindowPtr = wndManager.AddWindow<ProjectBrowserWindow>(projManager);
+	projectBrowserWindowPtr->OnClickCreateProject([&](){
+		createProjectWindowPtr = wndManager.AddWindow<CreateProjectWindow>();
+		GADGET_BASIC_ASSERT(createProjectWindowPtr != nullptr);
+		createProjectWindowPtr->OnExit([&](){
+			EditorApp::GetWndManager().RemoveWindow(createProjectWindowPtr);
+			projectBrowserWindowPtr->EnableInput();
 		});
 
-		createProjWindow->OnClickCreateProject([projBrowser, createProjWindow](){
-			EditorApp::GetProjectManager().AddNewProject(Project(createProjWindow->GetNameField(), createProjWindow->GetPathField()));
+		createProjectWindowPtr->OnClickCreateProject([&](){
+			EditorApp::GetProjectManager().AddNewProject(Project(createProjectWindowPtr->GetNameField(), createProjectWindowPtr->GetPathField()));
 
-			EditorApp::GetWndManager().RemoveWindow(createProjWindow);
-			EditorApp::GetWndManager().RemoveWindow(projBrowser);
+			EditorApp::GetWndManager().RemoveWindow(createProjectWindowPtr);
+			EditorApp::GetWndManager().RemoveWindow(projectBrowserWindowPtr);
 		});
 	});
 }

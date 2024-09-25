@@ -6,6 +6,9 @@
 #include "Projects/ProjectManager.h"
 
 namespace Gadget::Workbench{
+	class CreateProjectWindow;
+	class ProjectBrowserWindow;
+
 	class EditorApp{
 	public:
 		EditorApp();
@@ -35,6 +38,9 @@ namespace Gadget::Workbench{
 		EditorWindow window;
 		ProjectManager projManager;
 		WindowManager wndManager;
+
+		CreateProjectWindow* createProjectWindowPtr;
+		ProjectBrowserWindow* projectBrowserWindowPtr;
 	};
 }
 
