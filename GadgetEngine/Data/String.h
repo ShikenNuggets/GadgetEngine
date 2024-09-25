@@ -582,6 +582,7 @@ namespace Gadget{
 			const char* str = Value();
 			GADGET_BASIC_ASSERT(str != nullptr);
 			GADGET_BASIC_ASSERT(capacity > size);
+			GADGET_BASIC_ASSERT(size == Utils::StrLen(str));
 			return str[size] == '\0';
 		}
 
