@@ -36,7 +36,7 @@ namespace Gadget::Workbench{
 
 	private:
 		static inline constexpr size_t gNameCapacity = 64;
-		static inline constexpr size_t gPathCapacity = 128;
+		static inline constexpr size_t gPathCapacity = 260;
 
 		char projectName[gNameCapacity];
 		char projectPath[gPathCapacity];

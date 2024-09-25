@@ -2,6 +2,10 @@
 
 #include <imgui.h>
 
+#include <Platform/Windows/Win32_Utils.h>
+
+#include "EditorApp.h"
+
 using namespace Gadget::Workbench;
 
 CreateProjectWindow::CreateProjectWindow() : SubWindow("Create Project"), projectName(), projectPath(), onExit(nullptr), onClickCreateProject(nullptr){
@@ -47,7 +51,30 @@ void CreateProjectWindow::Draw(){
 
 			ImGui::TableNextColumn();
 			if(ImGui::Button("...")){
-				//TODO
+				while(true){
+					std::string result = Win32_Utils::BrowseForFolder(EditorApp::GetMainWindowHandle(), L"Choose a directory for your new project...");
+					if(result.empty()){
+						break; //User cancelled
+					}
+
+					if(!FileSystem::DirExists(result)){
+						Debug::PopupErrorMessage("Invalid Directory", "The path you chose is not a valid directory. Please try again.");
+						continue;
+					}
+
+					if(!FileSystem::IsDirEmpty(result)){
+						Debug::PopupErrorMessage("Non-Empty Directory", "The path you chose was not an empty directory. Please try again");
+						continue;
+					}
+
+					GADGET_BASIC_ASSERT(result.size() < gPathCapacity - 1);
+					for(size_t i = 0; i < gPathCapacity - 1 && i < result.size(); i++){
+						projectPath[i] = result[i];
+						projectPath[i + 1] = '\0'; //This is inefficient, but it's easier to write, and paths are small enough that it's fine
+					}
+
+					break;
+				}
 			}
 
 			ImGui::EndTable();
