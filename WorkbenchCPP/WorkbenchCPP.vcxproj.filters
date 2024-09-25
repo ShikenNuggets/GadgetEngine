@@ -54,6 +54,7 @@
     <ClInclude Include="Core\WindowManager.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="EditorApp.h" />
     <ClInclude Include="Projects\Project.h">
       <Filter>Projects</Filter>
     </ClInclude>
@@ -98,6 +99,7 @@
     <ClCompile Include="Core\WindowManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="EditorApp.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projects\ProjectManager.cpp">
       <Filter>Projects</Filter>

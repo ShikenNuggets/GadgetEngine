@@ -12,11 +12,11 @@ namespace Gadget::Workbench{
 		bool HandleEvents();
 		void Render();
 
+		uint64_t GetWindowHandle() const;
+
 	private:
 		SDL_Window* window;
 		SDL_GLContext glContext;
-
-		uint64_t GetWindowHandle() const;
 	};
 }
 
