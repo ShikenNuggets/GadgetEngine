@@ -229,7 +229,7 @@ namespace Gadget{
 			_ASSERT(currentPostFix < postfixes.size());
 
 			std::stringstream stream;
-			stream << std::setprecision(2) << finalNumber;
+			stream << std::setprecision(2) << std::fixed << finalNumber;
 			stream << " " << postfixes[currentPostFix];
 			return stream.str();
 		}
