@@ -76,6 +76,9 @@
     <ClInclude Include="Windows\CreateProjectWindow.h">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Windows\EditorToolbar.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
     <ClInclude Include="Windows\ProjectBrowserWindow.h">
       <Filter>Windows</Filter>
     </ClInclude>
@@ -123,6 +126,9 @@
       <Filter>Projects</Filter>
     </ClCompile>
     <ClCompile Include="Windows\CreateProjectWindow.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\EditorToolbar.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
     <ClCompile Include="Windows\ProjectBrowserWindow.cpp">

@@ -12,6 +12,7 @@ namespace Gadget::Workbench{
 	class ProjectStartupFlow : public Flow{
 	public:
 		ProjectStartupFlow();
+		virtual ~ProjectStartupFlow() override;
 
 		virtual Flow* NextFlow() override;
 		

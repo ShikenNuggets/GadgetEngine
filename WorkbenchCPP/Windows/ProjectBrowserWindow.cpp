@@ -4,7 +4,7 @@
 
 using namespace Gadget::Workbench;
 
-ProjectBrowserWindow::ProjectBrowserWindow(const ProjectManager& projectManager_) : SubWindow("Project Browser"), allowInput(true), projectManager(projectManager_), onClickCreateProject(nullptr){}
+ProjectBrowserWindow::ProjectBrowserWindow(const ProjectManager& projectManager_) : SubWindow("Project Browser"), allowInput(true), projectManager(projectManager_), onClickCreateProject(nullptr), onClickOpenProject(nullptr){}
 
 void ProjectBrowserWindow::Draw(){
 	ImGuiIO& io = ImGui::GetIO();
@@ -23,6 +23,9 @@ void ProjectBrowserWindow::Draw(){
 		for(const auto& proj : projectManager.RecentProjects()){
 			ImGui::Text(proj.GetName().c_str());
 			ImGui::Text(proj.GetPath().c_str());
+			if(ImGui::Button(("Load " + proj.GetName()).c_str())){
+				onClickOpenProject();
+			}
 			ImGui::Spacing();
 		}
 

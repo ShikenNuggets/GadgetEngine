@@ -25,10 +25,21 @@ namespace Gadget::Workbench{
 			onClickCreateProject = func_;
 		}
 
+		void OnClickOpenProject(Callback func_){
+			GADGET_BASIC_ASSERT(func_.IsValid());
+			GADGET_BASIC_ASSERT(!onClickOpenProject.IsValid());
+			if(onClickOpenProject.IsValid()){
+				GADGET_LOG_WARNING(SID("PROJECT_BROWSER"), "OnClickOpenProject handler was set twice. Original value will be overwritten. Are you sure this is what you wanted?");
+			}
+
+			onClickOpenProject = func_;
+		}
+
 	private:
 		bool allowInput;
 		const ProjectManager& projectManager;
 		Callback onClickCreateProject;
+		Callback onClickOpenProject;
 	};
 }
 

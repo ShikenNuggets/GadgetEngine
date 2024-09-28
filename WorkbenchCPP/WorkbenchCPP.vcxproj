@@ -197,6 +197,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     <ClInclude Include="Projects\Project.h" />
     <ClInclude Include="Projects\ProjectManager.h" />
     <ClInclude Include="Windows\CreateProjectWindow.h" />
+    <ClInclude Include="Windows\EditorToolbar.h" />
     <ClInclude Include="Windows\ProjectBrowserWindow.h" />
     <ClInclude Include="Windows\SubWindow.h" />
   </ItemGroup>
@@ -244,6 +245,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projects\ProjectManager.cpp" />
     <ClCompile Include="Windows\CreateProjectWindow.cpp" />
+    <ClCompile Include="Windows\EditorToolbar.cpp" />
     <ClCompile Include="Windows\ProjectBrowserWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

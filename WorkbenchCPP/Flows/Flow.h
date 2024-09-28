@@ -5,6 +5,7 @@ namespace Gadget::Workbench{
 	class Flow{
 	public:
 		Flow() : isFlowComplete(false){}
+		virtual ~Flow() = default;
 
 		bool IsFlowComplete() const{ return isFlowComplete; }
 		virtual Flow* NextFlow(){ return nullptr; }

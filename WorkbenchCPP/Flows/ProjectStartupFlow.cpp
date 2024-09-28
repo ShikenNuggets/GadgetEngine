@@ -23,13 +23,24 @@ ProjectStartupFlow::ProjectStartupFlow() : Flow(), createProjectWindow(nullptr),
 
 		createProjectWindow->OnClickCreateProject([&](){
 			EditorApp::GetProjectManager().AddNewProject(Project(createProjectWindow->GetNameField(), createProjectWindow->GetPathField()));
-
-			EditorApp::GetWndManager().RemoveWindow(createProjectWindow);
-			EditorApp::GetWndManager().RemoveWindow(projectBrowserWindow);
-
 			isFlowComplete = true;
 		});
 	});
+
+	projectBrowserWindow->OnClickOpenProject([&](){
+		isFlowComplete = true;
+	});
+}
+
+ProjectStartupFlow::~ProjectStartupFlow(){
+	if(createProjectWindow != nullptr){
+		EditorApp::GetWndManager().RemoveWindow(createProjectWindow);
+	}
+
+	GADGET_BASIC_ASSERT(projectBrowserWindow != nullptr);
+	if(projectBrowserWindow != nullptr){
+		EditorApp::GetWndManager().RemoveWindow(projectBrowserWindow);
+	}
 }
 
 Flow* ProjectStartupFlow::NextFlow(){
