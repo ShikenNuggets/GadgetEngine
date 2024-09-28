@@ -533,3 +533,69 @@ TEST_CASE("Array Max of Ordered Triplet", "[array_max_ordered_triplet]"){
 	nums.Add(3);		REQUIRE(nums.Size() == 3);	REQUIRE(nums[2] == 3);
 	REQUIRE(MaximumTripletValue(nums) == 0);
 }
+
+//------------------------------------------------------------//
+//--------------- My Calendar II (Leetcode 731) --------------//
+//------------------------------------------------------------//
+
+namespace LC731{
+	struct Event{
+		int64_t start;
+		int64_t end;
+
+		constexpr inline bool HasOverlap(int64_t start_, int64_t end_) const{ return end_ > start && start_ < end; }
+		constexpr Event GetDoubleBooking(int64_t start_, int64_t end_) const{ return Event{ std::max(start, start_), std::min(end, end_) }; }
+	};
+
+	class Calendar{
+	public:
+		Calendar() = default;
+
+		bool Book(int64_t start_, int64_t end_){
+			for(const auto& db : doubleBookings){
+				if(db.HasOverlap(start_, end_)){
+					return false;
+				}
+			}
+
+			for(const auto& b : bookings){
+				if(b.HasOverlap(start_, end_)){
+					doubleBookings.Add(b.GetDoubleBooking(start_, end_));
+				}
+			}
+
+			bookings.Add(Event{ start_, end_ });
+			return true;
+		}
+
+	private:
+		Array<Event> bookings;
+		Array<Event> doubleBookings;
+	};
+}
+
+TEST_CASE("Array My Calendar II", "[array_my_calendar_ii]"){
+	{
+		LC731::Calendar calendar;
+		REQUIRE(calendar.Book(10, 20) == true);
+		REQUIRE(calendar.Book(50, 60) == true);
+		REQUIRE(calendar.Book(10, 40) == true);
+		REQUIRE(calendar.Book(5, 15) == false);
+		REQUIRE(calendar.Book(5, 10) == true);
+		REQUIRE(calendar.Book(25, 55) == true);
+	}
+
+	{
+		LC731::Calendar calendar;
+		REQUIRE(calendar.Book(26, 35) == true);
+		REQUIRE(calendar.Book(26, 32) == true);
+		REQUIRE(calendar.Book(25, 32) == false);
+		REQUIRE(calendar.Book(18, 26) == true);
+		REQUIRE(calendar.Book(40, 45) == true);
+		REQUIRE(calendar.Book(19, 26) == true);
+		REQUIRE(calendar.Book(48, 50) == true);
+		REQUIRE(calendar.Book(1, 6) == true);
+		REQUIRE(calendar.Book(46, 50) == true);
+		REQUIRE(calendar.Book(11, 18) == true);
+	}
+}

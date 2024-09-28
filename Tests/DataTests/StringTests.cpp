@@ -439,3 +439,39 @@ TEST_CASE("String Get String Score", "[string_get_string_score]"){
 	REQUIRE(GetStringScore("a") == 0);
 	REQUIRE(GetStringScore("aaaaaaaaaaaa") == 0);
 }
+
+//------------------------------------------------------------//
+//-------- Reverse Vowels of a String (Leetcode 345) ---------//
+//------------------------------------------------------------//
+
+static inline String ReverseVowels(const String& s_){
+	Array<int32_t> vowelIndices;
+	for(int32_t i = 0; i < s_.Length(); i++){
+		auto lower = std::tolower(s_[i]);
+		if(lower == 'a' || lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u'){
+			vowelIndices.Add(i);
+		}
+	}
+	
+	String result = s_;
+	for(int32_t i = 0; i < vowelIndices.Size(); i++){
+		GADGET_BASIC_ASSERT(i < s_.Length());
+		GADGET_BASIC_ASSERT(i < result.Length());
+		GADGET_BASIC_ASSERT(vowelIndices.Size() - 1 - i >= 0);
+
+		result[vowelIndices[i]] = s_[vowelIndices[vowelIndices.Size() - 1 - i]];
+	}
+
+	GADGET_BASIC_ASSERT(result.Length() == s_.Length());
+	return result;
+}
+
+TEST_CASE("String Reverse Vowels", "[string_reverse_vowels]"){
+	REQUIRE(ReverseVowels("") == "");
+	REQUIRE(ReverseVowels("a") == "a");
+	REQUIRE(ReverseVowels("b") == "b");
+	REQUIRE(ReverseVowels("aaaaaaaaaaaa") == "aaaaaaaaaaaa");
+	REQUIRE(ReverseVowels("bbbbbbbbbbbb") == "bbbbbbbbbbbb");
+	REQUIRE(ReverseVowels("IceCreAm") == "AceCreIm");
+	REQUIRE(ReverseVowels("leetcode") == "leotcede");
+}
