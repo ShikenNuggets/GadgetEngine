@@ -4,6 +4,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Flows">
+      <UniqueIdentifier>{50D42E0D-BCE8-56BE-856A-FA1DF13D53EF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Projects">
       <UniqueIdentifier>{4FB858A2-3B85-B3AD-649E-A15550CAE83B}</UniqueIdentifier>
     </Filter>
@@ -55,6 +58,12 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="EditorApp.h" />
+    <ClInclude Include="Flows\Flow.h">
+      <Filter>Flows</Filter>
+    </ClInclude>
+    <ClInclude Include="Flows\ProjectStartupFlow.h">
+      <Filter>Flows</Filter>
+    </ClInclude>
     <ClInclude Include="Projects\Project.h">
       <Filter>Projects</Filter>
     </ClInclude>
@@ -100,6 +109,9 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="EditorApp.cpp" />
+    <ClCompile Include="Flows\ProjectStartupFlow.cpp">
+      <Filter>Flows</Filter>
+    </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projects\ProjectManager.cpp">
       <Filter>Projects</Filter>

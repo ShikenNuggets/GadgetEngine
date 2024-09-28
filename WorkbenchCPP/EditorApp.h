@@ -3,12 +3,10 @@
 
 #include "Core/EditorWindow.h"
 #include "Core/WindowManager.h"
+#include "Flows/Flow.h"
 #include "Projects/ProjectManager.h"
 
 namespace Gadget::Workbench{
-	class CreateProjectWindow;
-	class ProjectBrowserWindow;
-
 	class EditorApp{
 	public:
 		EditorApp();
@@ -38,9 +36,7 @@ namespace Gadget::Workbench{
 		EditorWindow window;
 		ProjectManager projManager;
 		WindowManager wndManager;
-
-		CreateProjectWindow* createProjectWindowPtr;
-		ProjectBrowserWindow* projectBrowserWindowPtr;
+		Flow* currentFlow;
 	};
 }
 
