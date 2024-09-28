@@ -18,16 +18,10 @@ namespace Gadget::Workbench{
 	private:
 		Array<Project> projects;
 
-		static constexpr inline const char* gProjectExtension = ".wbn";
-
 		ErrorCode LoadProjects();
 		ErrorCode SaveProjects();
 
 		ErrorCode CreateNewProjectFile(const Project& project_);
-
-		static constexpr inline std::string FullProjectFilePath(const std::string& name_, const std::string& path_){
-			return path_ + name_ + gProjectExtension;
-		}
 	};
 }
 

@@ -15,7 +15,11 @@ namespace Gadget::Workbench{
 		const std::string& GetName() const{ return name; }
 		const std::string& GetPath() const{ return path; }
 
+		constexpr inline std::string FullProjectFilePath() const{ return path + name + gProjectExtension; }
+
 	private:
+		static constexpr inline const char* gProjectExtension = ".wbn";
+
 		std::string name;
 		std::string path;
 	};
