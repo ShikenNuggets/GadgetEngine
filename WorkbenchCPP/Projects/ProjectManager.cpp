@@ -15,8 +15,9 @@ ProjectManager::ProjectManager() : projects(){
 	SaveProjects();
 }
 
-void ProjectManager::AddNewProject(Project project_){
+void ProjectManager::AddNewProject(const Project& project_){
 	projects.Add(project_);
+	CreateNewProjectFile(project_);
 	SaveProjects();
 }
 
@@ -34,7 +35,7 @@ ErrorCode ProjectManager::LoadProjects(){
 				continue;
 			}
 
-			if(FileSystem::FileExists(p.GetPath())){
+			if(FileSystem::FileExists(FullProjectFilePath(p.GetName(), p.GetPath()))){
 				projects.Add(p);
 			}else{
 				GADGET_LOG(SID("PROJ"), "Project [" + p.GetName() + "] file not found, removing from recent projects list...");
@@ -47,4 +48,17 @@ ErrorCode ProjectManager::LoadProjects(){
 
 ErrorCode ProjectManager::SaveProjects(){
 	return FileSystem::WriteJSONToPlainTextFile(gRecentProjectsFilePath, projects);
+}
+
+ErrorCode ProjectManager::CreateNewProjectFile(const Project& project_){
+	GADGET_BASIC_ASSERT(!project_.GetName().empty());
+	GADGET_BASIC_ASSERT(!project_.GetPath().empty());
+
+	const std::string projectFilePath = FullProjectFilePath(project_.GetName(), project_.GetPath());
+	GADGET_BASIC_ASSERT(!FileSystem::FileExists(projectFilePath));
+	if(FileSystem::FileExists(projectFilePath)){
+		return ErrorCode::Invalid_Args;
+	}
+
+	return FileSystem::WriteJSONToPlainTextFile(projectFilePath, {});
 }

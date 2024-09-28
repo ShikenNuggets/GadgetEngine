@@ -13,13 +13,21 @@ namespace Gadget::Workbench{
 		bool HasRecentProjects() const{ return projects.IsEmpty(); }
 		const Array<Project>& RecentProjects() const{ return projects; }
 
-		void AddNewProject(Project project_);
+		void AddNewProject(const Project& project_);
 
 	private:
 		Array<Project> projects;
 
+		static constexpr inline const char* gProjectExtension = ".wbn";
+
 		ErrorCode LoadProjects();
 		ErrorCode SaveProjects();
+
+		ErrorCode CreateNewProjectFile(const Project& project_);
+
+		static constexpr inline std::string FullProjectFilePath(const std::string& name_, const std::string& path_){
+			return path_ + name_ + gProjectExtension;
+		}
 	};
 }
 
