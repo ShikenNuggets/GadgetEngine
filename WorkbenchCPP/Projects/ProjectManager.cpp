@@ -60,5 +60,8 @@ ErrorCode ProjectManager::CreateNewProjectFile(const Project& project_){
 		return ErrorCode::Invalid_Args;
 	}
 
-	return FileSystem::WriteJSONToPlainTextFile(projectFilePath, {});
+	nlohmann::json j;
+	j["project_name"] = project_.GetName();
+
+	return FileSystem::WriteJSONToPlainTextFile(projectFilePath, j);
 }
