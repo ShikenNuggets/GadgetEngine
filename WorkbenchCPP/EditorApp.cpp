@@ -30,7 +30,9 @@ void EditorApp::Run(){
 	isRunning = true;
 	while(isRunning){
 		if(currentFlow != nullptr && currentFlow->IsFlowComplete()){
-			currentFlow = currentFlow->NextFlow();
+			Flow* nextFlow = currentFlow->NextFlow();
+			delete currentFlow;
+			currentFlow = nextFlow;
 		}
 		
 		if(!window.HandleEvents()){

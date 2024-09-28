@@ -58,6 +58,9 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="EditorApp.h" />
+    <ClInclude Include="Flows\EditorFlow.h">
+      <Filter>Flows</Filter>
+    </ClInclude>
     <ClInclude Include="Flows\Flow.h">
       <Filter>Flows</Filter>
     </ClInclude>
@@ -109,6 +112,9 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="EditorApp.cpp" />
+    <ClCompile Include="Flows\EditorFlow.cpp">
+      <Filter>Flows</Filter>
+    </ClCompile>
     <ClCompile Include="Flows\ProjectStartupFlow.cpp">
       <Filter>Flows</Filter>
     </ClCompile>

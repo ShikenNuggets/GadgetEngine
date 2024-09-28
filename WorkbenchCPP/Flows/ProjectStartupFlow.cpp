@@ -1,6 +1,7 @@
 #include "ProjectStartupFlow.h"
 
 #include "EditorApp.h"
+#include "Flows/EditorFlow.h"
 #include "Windows/CreateProjectWindow.h"
 #include "Windows/ProjectBrowserWindow.h"
 
@@ -29,4 +30,8 @@ ProjectStartupFlow::ProjectStartupFlow() : Flow(), createProjectWindow(nullptr),
 			isFlowComplete = true;
 		});
 	});
+}
+
+Flow* ProjectStartupFlow::NextFlow(){
+	return new EditorFlow();
 }
