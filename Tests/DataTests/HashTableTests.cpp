@@ -1,6 +1,7 @@
 #include <Gadget.h>
 #include <Data/Array.h>
 #include <Data/HashTable.h>
+#include <Data/String.h>
 
 #include "_Catch2/catch_amalgamated.hpp"
 
@@ -118,4 +119,178 @@ TEST_CASE("HashTable ForEach", "[hash_table_for_each]"){
 		count++;
 	}
 	REQUIRE(count == values.Size());
+}
+
+//------------------------------------------------------------//
+//-------- All O(1) Data Structure (Leetcode 432) ------------//
+//------------------------------------------------------------//
+
+namespace LC432{
+	class AllOne{
+	public:
+		AllOne() = default;
+
+		void Increment(const String& key){
+			if(!data.Contains(key)){
+				data[key] = 1;
+
+				if(minValue > 1){
+					minKey = key;
+					minValue = 1;
+				}
+
+			} else{
+				data[key]++;
+				if(data[key] > maxValue){
+					maxKey = key;
+					maxValue = data[key];
+				}
+			}
+
+			if(key == minKey){
+				minKey = "";
+				minValue = -1;
+			}
+		}
+
+		void Decrement(const String& key){
+			data[key]--;
+
+			if(key == maxKey){
+				maxKey = "";
+				maxValue = -1;
+			}
+
+			if(data[key] <= 0){
+				data.RemoveAt(key);
+				minKey = "";
+				minValue = -1;
+			} else if(data[key] < minValue){
+				minKey = key;
+				minValue = data[key];
+			}
+		}
+
+		String GetMaxKey(){
+			if(maxValue > 0){
+				return maxKey;
+			}
+
+			Update();
+			return maxKey;
+		}
+
+		String GetMinKey(){
+			if(minValue > 0){
+				return minKey;
+			}
+
+			Update();
+			return minKey;
+		}
+
+	private:
+		HashTable<String, int> data;
+
+		String maxKey = "";
+		int maxValue = -1;
+
+		String minKey = "";
+		int minValue = -1;
+
+		void Update(){
+			maxValue = -1;
+			minValue = std::numeric_limits<int>::max();
+			for(const auto& [key, value] : data){
+				if(value > maxValue){
+					maxKey = key;
+					maxValue = value;
+				}
+
+				if(value < minValue){
+					minKey = key;
+					minValue = value;
+				}
+			}
+		}
+	};
+}
+
+TEST_CASE("HashTable AllOne", "[hash_table_all_one]"){
+	{
+		LC432::AllOne data;
+		data.Increment("hello");
+		data.Increment("hello");
+		REQUIRE(data.GetMaxKey() == "hello");
+		REQUIRE(data.GetMinKey() == "hello");
+		data.Increment("leet");
+		REQUIRE(data.GetMaxKey() == "hello");
+		REQUIRE(data.GetMinKey() == "leet");
+	}
+	
+	{
+		LC432::AllOne data;
+		data.Increment("a");
+		data.Increment("b");
+		data.Increment("b");
+		data.Increment("c");
+		data.Increment("c");
+		data.Increment("c");
+		data.Decrement("b");
+		data.Decrement("b");
+		REQUIRE(data.GetMinKey() == "a");
+		data.Decrement("a");
+		REQUIRE(data.GetMaxKey() == "c");
+		REQUIRE(data.GetMinKey() == "c");
+	}
+
+	{
+		LC432::AllOne data;
+		data.Increment("hello");
+		data.Increment("world");
+		data.Increment("hello");
+		data.Decrement("world");
+		data.Increment("hello");
+		data.Increment("leet");
+		REQUIRE(data.GetMaxKey() == "hello");
+		data.Decrement("hello");
+		data.Decrement("hello");
+		data.Decrement("hello");
+		REQUIRE(data.GetMaxKey() == "leet");
+	}
+
+	{
+		LC432::AllOne data;
+		data.Increment("hello");
+		data.Increment("hello");
+		data.Increment("world");
+		data.Increment("world");
+		data.Increment("hello");
+		data.Decrement("world");
+		REQUIRE(data.GetMaxKey() == "hello");
+		REQUIRE(data.GetMinKey() == "world");
+		data.Increment("world");
+		data.Increment("world");
+		data.Increment("leet");
+		bool isValid = data.GetMaxKey() == "hello" || data.GetMaxKey() == "world";
+		REQUIRE(isValid);
+		REQUIRE(data.GetMinKey() == "leet");
+		data.Increment("leet");
+		data.Increment("leet");
+		isValid = data.GetMaxKey() == "hello" || data.GetMaxKey() == "world" || data.GetMinKey() == "leet";
+		REQUIRE(isValid);
+	}
+
+	{
+		LC432::AllOne data;
+		data.Increment("a");
+		data.Increment("b");
+		data.Increment("b");
+		data.Increment("b");
+		data.Increment("b");
+		data.Decrement("b");
+		data.Decrement("b");
+		REQUIRE(data.GetMaxKey() == "b");
+		REQUIRE(data.GetMinKey() == "a");
+	}
 }
