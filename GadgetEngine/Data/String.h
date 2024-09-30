@@ -141,9 +141,9 @@ namespace Gadget{
 		}
 
 		void Append(int32_t number){
-			StaticArray<char, 16> buffer{};
-			itoa(number, &buffer[0], 10);
-			Append(&buffer[0]);
+			//TODO - This can likely be done more efficiently
+			//This was just the easiest way to remove the non-standard itoa usage
+			Append(std::to_string(number));
 		}
 
 		void Append(const Array<String>& strs_){
