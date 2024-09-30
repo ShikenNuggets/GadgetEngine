@@ -923,3 +923,46 @@ TEST_CASE("List Loop Detection", "[list_loop_detection]"){
 	REQUIRE(DetectLoop(list2.Front()) == nullptr);
 	REQUIRE(DetectLoop_LowMemory(list2.Front(), list2.Size() + 1) == nullptr);
 }
+
+//-------------------------------------------------------------//
+//-- Design a Stack With Increment Operation (Leetcode 1381) --//
+//-------------------------------------------------------------//
+
+namespace LC1381{
+	class CustomStack{
+	public:
+		CustomStack(int32_t maxSize_) : data(), maxSize(maxSize_){}
+
+		void Push(int x){
+			if(data.Size() < maxSize){
+				data.Add(x);
+			}
+		}
+
+		int Pop(){
+			if(data.IsEmpty()){
+				return -1;
+			}
+
+			int p = data.Back()->value;
+			data.Pop();
+			return p;
+		}
+
+		void Increment(int k, int val){
+			int idx = 0;
+			for(auto* n : data){
+				n->value += val;
+
+				idx++;
+				if(idx == k){
+					break;
+				}
+			}
+		}
+
+	private:
+		List<int> data;
+		int32_t maxSize;
+	};
+}

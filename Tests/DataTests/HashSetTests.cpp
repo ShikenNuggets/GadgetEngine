@@ -1,6 +1,8 @@
 #include <Gadget.h>
 #include <Data/Array.h>
 #include <Data/HashSet.h>
+#include <Data/StaticArray.h>
+#include <Data/String.h>
 
 #include "_Catch2/catch_amalgamated.hpp"
 
@@ -48,4 +50,43 @@ TEST_CASE("HashSet ForEach", "[hash_set_for_each]"){
 		count++;
 	}
 	REQUIRE(count > 0);
+}
+
+//------------------------------------------------------------//
+//----------- Destination City (Leetcode 1436) ---------------//
+//------------------------------------------------------------//
+
+static inline String DestinationCity(const Array<StaticArray<String, 2>>& paths){
+	HashSet<String> starts;
+
+	for(const auto& p : paths){
+		starts.Add(p[0]);
+	}
+
+	for(const auto& p : paths){
+		if(!starts.Contains(p[1])){
+			return p[1];
+		}
+	}
+
+	GADGET_ASSERT_UNREACHABLE;
+	return "";
+}
+
+TEST_CASE("HashSet Destination City", "[hash_set_destination_city]"){
+	Array<StaticArray<String, 2>> data;
+	data.Add({ "London", "New York" });
+	data.Add({ "New York", "Lima" });
+	data.Add({ "Lima", "Sao Paulo" });
+	REQUIRE(DestinationCity(data) == "Sao Paulo");
+
+	data.Clear();
+	data.Add({ "B", "C" });
+	data.Add({ "D", "B" });
+	data.Add({ "C", "A" });
+	REQUIRE(DestinationCity(data) == "A");
+
+	data.Clear();
+	data.Add({ "A", "Z" });
+	REQUIRE(DestinationCity(data) == "Z");
 }
