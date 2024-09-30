@@ -57,6 +57,9 @@
     <ClInclude Include="Core\EditorWindow.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Core\FontManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="Core\WindowManager.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -118,6 +121,9 @@
       <Filter>SDK\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Core\EditorWindow.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FontManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\WindowManager.cpp">

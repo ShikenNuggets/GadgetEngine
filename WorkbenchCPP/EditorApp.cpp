@@ -7,7 +7,7 @@ using namespace Workbench;
 
 std::unique_ptr<EditorApp> EditorApp::instance;
 
-EditorApp::EditorApp() : isRunning(true), window(1280, 960), projManager(), wndManager(), currentFlow(nullptr){}
+EditorApp::EditorApp() : isRunning(true), window(1280, 960), projManager(), wndManager(), fontManager(), currentFlow(nullptr){}
 
 EditorApp& EditorApp::GetInstance(){
 	if(instance == nullptr){

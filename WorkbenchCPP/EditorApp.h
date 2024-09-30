@@ -2,6 +2,7 @@
 #define GADGET_WORKBENCH_EDITOR_APP_H
 
 #include "Core/EditorWindow.h"
+#include "Core/FontManager.h"
 #include "Core/WindowManager.h"
 #include "Flows/Flow.h"
 #include "Projects/ProjectManager.h"
@@ -24,6 +25,7 @@ namespace Gadget::Workbench{
 		static void Close();
 
 		static uint64_t GetMainWindowHandle();
+		static ImFont* GetFont(StringID name_){ return GetInstance().fontManager.Get(name_); }
 
 		static EditorWindow& GetEditorWindow(){ return GetInstance().window; }
 		static ProjectManager& GetProjectManager(){ return GetInstance().projManager; }
@@ -36,6 +38,7 @@ namespace Gadget::Workbench{
 		EditorWindow window;
 		ProjectManager projManager;
 		WindowManager wndManager;
+		FontManager fontManager;
 		Flow* currentFlow;
 	};
 }

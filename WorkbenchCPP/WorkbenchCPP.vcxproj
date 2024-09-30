@@ -104,7 +104,8 @@
     </Manifest>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -141,7 +142,8 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     </Manifest>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -175,7 +177,8 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     </Manifest>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -189,6 +192,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     <ClInclude Include="..\SDK\ImGui\imstb_truetype.h" />
     <ClInclude Include="Core\Callback.h" />
     <ClInclude Include="Core\EditorWindow.h" />
+    <ClInclude Include="Core\FontManager.h" />
     <ClInclude Include="Core\WindowManager.h" />
     <ClInclude Include="EditorApp.h" />
     <ClInclude Include="Flows\EditorFlow.h" />
@@ -240,6 +244,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">TurnOffAllWarnings</WarningLevel>
     </ClCompile>
     <ClCompile Include="Core\EditorWindow.cpp" />
+    <ClCompile Include="Core\FontManager.cpp" />
     <ClCompile Include="Core\WindowManager.cpp" />
     <ClCompile Include="EditorApp.cpp" />
     <ClCompile Include="Flows\EditorFlow.cpp" />
