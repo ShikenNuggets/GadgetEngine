@@ -6,9 +6,23 @@
 namespace Gadget::Workbench{
 	class EditorToolbar : public SubWindow{
 	public:
-		EditorToolbar() : SubWindow("Toolbar"){}
+		enum class Tab : uint8_t{
+			None = 0,
+			Scenes,
+			Objects,
+			Resources,
+
+			Tab_MAX
+		};
+
+		EditorToolbar() : SubWindow("Toolbar"), currentTab(Tab::None){}
 
 		virtual void Draw() override;
+
+		Tab GetCurrentTab() const{ return currentTab; }
+
+	private:
+		Tab currentTab;
 	};
 }
 

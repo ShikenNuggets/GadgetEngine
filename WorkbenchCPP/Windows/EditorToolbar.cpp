@@ -14,11 +14,31 @@ void EditorToolbar::Draw(){
 	
 	if(ImGui::Begin("MainToolbar", nullptr, flags)){
 		if(ImGui::BeginMenuBar()){
-			ImGui::MenuItem("Scenes");
-			ImGui::MenuItem("Objects");
-			ImGui::MenuItem("Resources");
+			if(ImGui::MenuItem("Scenes")){
+				currentTab = Tab::Scenes;
+			}
+
+			if(ImGui::MenuItem("Objects")){
+				currentTab = Tab::Objects;
+			}
+
+			if(ImGui::MenuItem("Resources")){
+				currentTab = Tab::Resources;
+			}
 
 			ImGui::EndMenuBar();
+		}
+		
+		GADGET_BASIC_ASSERT(currentTab != Tab::Tab_MAX);
+		switch(currentTab){
+			case Tab::Scenes:
+				break;
+			case Tab::Objects:
+				break;
+			case Tab::Resources:
+				break;
+			default:
+				break;
 		}
 	}
 
