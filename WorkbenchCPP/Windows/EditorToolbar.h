@@ -2,6 +2,7 @@
 #define GADGET_WORKBENCH_WINDOWS_EDITOR_TOOLBAR_H
 
 #include "Windows/SubWindow.h"
+#include "Windows/Tabs/SubTab.h"
 
 namespace Gadget::Workbench{
 	class EditorToolbar : public SubWindow{
@@ -15,7 +16,7 @@ namespace Gadget::Workbench{
 			Tab_MAX
 		};
 
-		EditorToolbar() : SubWindow("Toolbar"), currentTab(Tab::None){}
+		EditorToolbar();
 
 		virtual void Draw() override;
 
@@ -23,6 +24,7 @@ namespace Gadget::Workbench{
 
 	private:
 		Tab currentTab;
+		StaticArray<SubTab*, static_cast<int64_t>(Tab::Tab_MAX)> tabs;
 	};
 }
 

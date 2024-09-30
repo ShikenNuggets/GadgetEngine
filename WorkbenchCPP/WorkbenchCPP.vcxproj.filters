@@ -22,6 +22,9 @@
     <Filter Include="Windows">
       <UniqueIdentifier>{5032B729-BC11-36C5-C529-C19B31889C26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows\Tabs">
+      <UniqueIdentifier>{895D2534-75C0-B4D8-1E46-ED8E0A88805B}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_opengl3.h">
@@ -85,6 +88,12 @@
     <ClInclude Include="Windows\SubWindow.h">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Windows\Tabs\ResourcesTab.h">
+      <Filter>Windows\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\Tabs\SubTab.h">
+      <Filter>Windows\Tabs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_opengl3.cpp">
@@ -133,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="Windows\ProjectBrowserWindow.cpp">
       <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\Tabs\ResourcesTab.cpp">
+      <Filter>Windows\Tabs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

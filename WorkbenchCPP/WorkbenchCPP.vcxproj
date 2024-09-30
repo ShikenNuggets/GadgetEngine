@@ -200,6 +200,8 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     <ClInclude Include="Windows\EditorToolbar.h" />
     <ClInclude Include="Windows\ProjectBrowserWindow.h" />
     <ClInclude Include="Windows\SubWindow.h" />
+    <ClInclude Include="Windows\Tabs\ResourcesTab.h" />
+    <ClInclude Include="Windows\Tabs\SubTab.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_opengl3.cpp">
@@ -247,6 +249,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
     <ClCompile Include="Windows\CreateProjectWindow.cpp" />
     <ClCompile Include="Windows\EditorToolbar.cpp" />
     <ClCompile Include="Windows\ProjectBrowserWindow.cpp" />
+    <ClCompile Include="Windows\Tabs\ResourcesTab.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
