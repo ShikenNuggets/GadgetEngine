@@ -245,6 +245,24 @@ namespace Gadget{
 			return size;
 		}
 
+		template <class T>
+		inline void ToFuzzyCompareStrInPlace(T& str_){
+			std::ranges::transform(str_, str_.begin(), [](auto c){ return std::tolower(c); });
+			str_.erase(std::ranges::remove_if(str_, ::isspace).end(), str_.end());
+		}
+
+		inline std::string CreateFuzzyCompareStr(const char* str_){
+			std::string str = str_;
+			ToFuzzyCompareStrInPlace(str);
+			return str;
+		}
+
+		inline std::wstring CreateFuzzyCompareStr(const wchar_t* str_){
+			std::wstring str = str_;
+			ToFuzzyCompareStrInPlace(str);
+			return str;
+		}
+
 		//----------------------------------------------------------------------------------------------------//
 		//---------- Binary ----------------------------------------------------------------------------------//
 		//----------------------------------------------------------------------------------------------------//
