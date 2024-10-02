@@ -8,6 +8,7 @@
 #include <array>
 #include <chrono>
 #include <cstdint>
+#include <cwctype>
 #include <format>
 #include <map>
 #include <vector>
@@ -245,10 +246,14 @@ namespace Gadget{
 			return size;
 		}
 
-		template <class T>
-		inline void ToFuzzyCompareStrInPlace(T& str_){
+		inline void ToFuzzyCompareStrInPlace(std::string& str_){
 			std::ranges::transform(str_, str_.begin(), [](auto c){ return std::tolower(c); });
-			str_.erase(std::ranges::remove_if(str_, ::isspace).end(), str_.end());
+			str_.erase(std::ranges::remove_if(str_, ::isspace).begin(), str_.end());
+		}
+
+		inline void ToFuzzyCompareStrInPlace(std::wstring& wstr_){
+			std::ranges::transform(wstr_, wstr_.begin(), [](auto c){ return std::towlower(c); });
+			wstr_.erase(std::ranges::remove_if(wstr_, ::iswspace).begin(), wstr_.end());
 		}
 
 		inline std::string CreateFuzzyCompareStr(const char* str_){
