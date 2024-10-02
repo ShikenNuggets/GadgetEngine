@@ -6,6 +6,10 @@
 #include <string>
 
 namespace Gadget{
+	//NOTE - DO NOT make any assumptions about the underlying numeric values of error codes
+	//"OK" will always be 0, "Unknown" will always be 1, and errors will always be > 0. Beyond that I make no promises
+	//In the (distant) future when the engine is more stable, I'll make some adjustments here so there can be some guarantees (TODO)
+	//But for now, depending on an error to have any specific value **WILL** break your code later
 	enum class ErrorCode : uint32_t{
 		OK = 0,
 		Unknown = 1,
@@ -18,6 +22,8 @@ namespace Gadget{
 
 		//Platform Errors
 		Win32_Error,
+		Win32_FileIO_PermissionsError,
+		Win32_NoAssociationError,
 
 		//SDK Errors
 		SDL_Error,
@@ -55,6 +61,8 @@ namespace Gadget{
 
 		//Platform Errors
 		"Win32_Error",
+		"Win32_FileIO_PermissionsError",
+		"Win32_NoAssociationError",
 
 		//SDK Errors
 		"SDL_Error",
