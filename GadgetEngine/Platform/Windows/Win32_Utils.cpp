@@ -60,7 +60,7 @@ void Win32_Utils::TryApplyImmersiveDarkMode(uint64_t hwnd_){
 	}
 }
 
-static int CallBack(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData){
+static int CallBack(HWND hwnd, UINT uMsg, [[maybe_unused]] LPARAM lParam, LPARAM lpData){
 	if(uMsg == BFFM_INITIALIZED && lpData != 0){
 		const std::string tmp = reinterpret_cast<const char*>(lpData);
 		GADGET_LOG(SID("BROWSER"), tmp);
@@ -93,4 +93,122 @@ std::string Win32_Utils::BrowseForFolder(uint64_t hwnd_, const wchar_t* dialogTi
 
 	std::wstring wstr = path;
 	return std::string(wstr.begin(), wstr.end()) + FileSystem::PathSeparator;
+}
+
+ErrorCode Win32_Utils::ShowWindow(uint64_t hwnd_){
+	if(hwnd_ == 0){
+		return ErrorCode::Invalid_Args;
+	}
+
+	HWND hwnd = reinterpret_cast<HWND>(hwnd_);
+	GADGET_BASIC_ASSERT(IsWindow(hwnd));
+	if(IsWindow(hwnd) == FALSE){
+		return ErrorCode::Invalid_Args;
+	}
+
+	const BOOL result = ShowWindow(hwnd, SW_RESTORE);
+	if(result == FALSE){
+		return ErrorCode::Win32_Error;
+	}
+
+	return ErrorCode::OK;
+}
+
+ErrorCode Win32_Utils::BringWindowToForeground(uint64_t hwnd_){
+	if(hwnd_ == 0){
+		return ErrorCode::Invalid_Args;
+	}
+
+	HWND hwnd = reinterpret_cast<HWND>(hwnd_);
+	GADGET_BASIC_ASSERT(IsWindow(hwnd));
+	if(IsWindow(hwnd) == FALSE){
+		return ErrorCode::Invalid_Args;
+	}
+
+	const BOOL result = SetForegroundWindow(hwnd);
+	if(result == FALSE){
+		return ErrorCode::Win32_Error;
+	}
+
+	return ErrorCode::OK;
+}
+
+ErrorCode Win32_Utils::OpenFileInDefaultApplication(const std::string& filePath_){
+	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
+	if(!FileSystem::FileExists(filePath_)){
+		return ErrorCode::Invalid_Args;
+	}
+
+	const std::wstring wFilePath = std::wstring(filePath_.begin(), filePath_.end());
+	const auto result = reinterpret_cast<INT_PTR>(ShellExecute(nullptr, nullptr, wFilePath.c_str(), nullptr, nullptr, SW_SHOW));
+	if(result > 32){
+		return ErrorCode::OK;
+	}
+
+	switch(result){
+		case 0:						[[fallthrough]];
+		case SE_ERR_ASSOCINCOMPLETE:[[fallthrough]];
+		case SE_ERR_DDEBUSY:		[[fallthrough]];
+		case SE_ERR_DDEFAIL:		[[fallthrough]];
+		case SE_ERR_DDETIMEOUT:
+			return ErrorCode::Win32_Error;
+
+		case ERROR_FILE_NOT_FOUND:	[[fallthrough]];
+		case ERROR_PATH_NOT_FOUND:	[[fallthrough]];
+		case SE_ERR_DLLNOTFOUND:
+			return ErrorCode::Invalid_Args;
+
+		case ERROR_ACCESS_DENIED:	[[fallthrough]];
+		case SE_ERR_SHARE:
+			return ErrorCode::Win32_FileIO_PermissionsError;
+
+		case SE_ERR_NOASSOC:
+			return ErrorCode::Win32_NoAssociationError;
+
+		case SE_ERR_OOM:
+			return ErrorCode::Out_Of_Memory;
+
+		default:
+			break;
+	}
+	
+	GADGET_ASSERT(false, "Unhandled error in Win32_Utils::OpenFileInDefaultApplication");
+	return ErrorCode::Unknown;
+}
+
+uint64_t Win32_Utils::GetWindowOfRunningApplication(const std::string& windowName_, const std::string& subTitle_){
+	std::wstring wNameStr = { windowName_.begin(), windowName_.end() };
+	std::wstring wSubTitleStr = { subTitle_.begin(), subTitle_.end() };
+	
+	Utils::ToFuzzyCompareStrInPlace(wNameStr);
+	Utils::ToFuzzyCompareStrInPlace(wSubTitleStr);
+
+	EnumerateWindowsInfo info{};
+	info.hwnd = 0;
+	info.windowTitle = wNameStr.c_str();
+	info.subTitle = nullptr;
+	if(!wSubTitleStr.empty()){
+		info.subTitle = wSubTitleStr.c_str();
+	}
+
+	EnumWindows([](HWND hWnd, LPARAM lParam) -> BOOL {
+		std::array<WCHAR, 256> title{ '\0' };
+		static_assert(title.size() < std::numeric_limits<int>::max());
+		GetWindowText(hWnd, title.data(), static_cast<int>(title.size()));
+
+		const std::wstring wTitleStr = Utils::CreateFuzzyCompareStr(title.data());
+
+		EnumerateWindowsInfo* info = reinterpret_cast<EnumerateWindowsInfo*>(lParam);
+		if(wcsstr(wTitleStr.c_str(), info->windowTitle) != nullptr){
+			if(info->subTitle == nullptr || wcsstr(wTitleStr.c_str(), info->subTitle) != nullptr){
+				info->hwnd = reinterpret_cast<uint64_t>(hWnd);
+				return FALSE;
+			}
+		}
+
+		return TRUE;
+	}, reinterpret_cast<LPARAM>(&info));
+
+	GADGET_BASIC_ASSERT(info.hwnd == 0 || IsWindow(reinterpret_cast<HWND>(info.hwnd)));
+	return info.hwnd;
 }
