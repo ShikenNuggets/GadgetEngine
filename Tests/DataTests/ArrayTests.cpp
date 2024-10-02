@@ -1,5 +1,7 @@
 #include <Gadget.h>
 #include <Data/Array.h>
+#include <Data/HashSet.h>
+#include <Data/HashTable.h>
 #include <Data/String.h>
 
 #include "_Catch2/catch_amalgamated.hpp"
@@ -598,4 +600,82 @@ TEST_CASE("Array My Calendar II", "[array_my_calendar_ii]"){
 		REQUIRE(calendar.Book(46, 50) == true);
 		REQUIRE(calendar.Book(11, 18) == true);
 	}
+}
+
+//------------------------------------------------------------//
+//-------- Rank Transform of an Array (Leetcode 1331) --------//
+//------------------------------------------------------------//
+
+Array<int> ArrayRankTransform(const Array<int>& arr_){
+	std::set<int> set; //TODO - I currently do not have an equivalent to this
+	for(const auto& i : arr_){
+		set.emplace(i);
+	}
+
+	HashTable<int, int> items;
+	int idx = 1;
+	for(const auto& i : set){
+		items.Add(i, idx);
+		idx++;
+	}
+
+	Array<int> ranks;
+	ranks.Reserve(arr_.Size());
+	for(const auto& i : arr_){
+		ranks.Add(items[i]);
+	}
+
+	return ranks;
+}
+
+TEST_CASE("Array Rank Transform", "[array_rank_transform]"){
+	//------- Test 1 ------//
+	Array<int> test;
+	test.Add(40);
+	test.Add(10);
+	test.Add(20);
+	test.Add(30);
+
+	auto result = ArrayRankTransform(test);
+	REQUIRE(result.Size() == test.Size());
+	REQUIRE(result[0] == 4);
+	REQUIRE(result[1] == 1);
+	REQUIRE(result[2] == 2);
+	REQUIRE(result[3] == 3);
+
+	//------- Test 2 ------//
+	test.Clear();
+	test.Add(100);
+	test.Add(100);
+	test.Add(100);
+
+	result = ArrayRankTransform(test);
+	REQUIRE(result.Size() == test.Size());
+	REQUIRE(result[0] == 1);
+	REQUIRE(result[1] == 1);
+	REQUIRE(result[2] == 1);
+
+	//------- Test 3 ------//
+	test.Clear();
+	test.Add(37);
+	test.Add(12);
+	test.Add(28);
+	test.Add(9);
+	test.Add(100);
+	test.Add(56);
+	test.Add(80);
+	test.Add(5);
+	test.Add(12);
+
+	result = ArrayRankTransform(test);
+	REQUIRE(result.Size() == test.Size());
+	REQUIRE(result[0] == 5);
+	REQUIRE(result[1] == 3);
+	REQUIRE(result[2] == 4);
+	REQUIRE(result[3] == 2);
+	REQUIRE(result[4] == 8);
+	REQUIRE(result[5] == 6);
+	REQUIRE(result[6] == 7);
+	REQUIRE(result[7] == 1);
+	REQUIRE(result[8] == 3);
 }

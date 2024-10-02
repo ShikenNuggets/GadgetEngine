@@ -443,3 +443,41 @@ TEST_CASE("StaticArray Maximum Value of an Ordered Triplet", "[staticarray_max_o
 	constexpr StaticArray<int, 3> nums3 = { 1, 2, 3 };
 	REQUIRE(MaximumTripletValue(nums3) == 0);
 }
+
+//------------------------------------------------------------//
+//-------- Find the Key of the Numbers (Leetcode 3270) -------//
+//------------------------------------------------------------//
+
+template <int NumDigits>
+static inline StaticArray<int, NumDigits> GetDigits(int num_){
+	static_assert(NumDigits > 0);
+	GADGET_BASIC_ASSERT(num_ >= 0); //This only makes sense for positive integers
+	StaticArray<int, NumDigits> result{};
+	for(int64_t i = result.Size() - 1; i >= 0; i--){
+		result[i] = num_ % 10;
+		num_ /= 10;
+	}
+
+	return result;
+}
+
+static inline int GenerateKey(int num1_, int num2_, int num3_){
+	auto digits1 = GetDigits<4>(num1_);
+	auto digits2 = GetDigits<4>(num2_);
+	auto digits3 = GetDigits<4>(num3_);
+
+	StaticArray<int, 4> keyDigits{
+		std::min({ digits1[0], digits2[0], digits3[0] }),
+		std::min({ digits1[1], digits2[1], digits3[1] }),
+		std::min({ digits1[2], digits2[2], digits3[2] }),
+		std::min({ digits1[3], digits2[3], digits3[3] }),
+	};
+
+	return (keyDigits[0] * 1000) + (keyDigits[1] * 100) + (keyDigits[2] * 10) + keyDigits[3];
+}
+
+TEST_CASE("StaticArray Find Key of the Numbers", "[staticarray_find_key]"){
+	REQUIRE(GenerateKey(1, 10, 1000) == 0);
+	REQUIRE(GenerateKey(987, 879, 798) == 777);
+	REQUIRE(GenerateKey(1, 2, 3) == 1);
+}
