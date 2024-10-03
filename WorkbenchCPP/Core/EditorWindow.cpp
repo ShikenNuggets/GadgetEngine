@@ -19,7 +19,7 @@ static constexpr int gUpperSizeBound = 8000;
 static constexpr int gGLMajorVersion = 4;
 static constexpr int gGLMinorVersion = 6;
 
-EditorWindow::EditorWindow(int width_, int height_) : window(nullptr), glContext(nullptr){
+EditorWindow::EditorWindow(int width_, int height_) : window(nullptr), glContext(nullptr), fullscreen(false){
 	GADGET_BASIC_ASSERT(width_ > 0);
 	GADGET_BASIC_ASSERT(height_ > 0);
 
@@ -97,6 +97,10 @@ bool EditorWindow::HandleEvents(){
 		if(e.type == SDL_QUIT){
 			return false;
 		}
+
+		if(e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_F11){
+			ToggleFullscreen();
+		}
 	}
 
 	ImGui_ImplOpenGL3_NewFrame();
@@ -118,4 +122,13 @@ uint64_t EditorWindow::GetWindowHandle() const{
 	SDL_VERSION(&wmInfo.version);
 	SDL_GetWindowWMInfo(window, &wmInfo);
 	return reinterpret_cast<uint64_t>(wmInfo.info.win.window);
+}
+
+void EditorWindow::ToggleFullscreen(){
+	fullscreen = !fullscreen;
+	if(fullscreen){
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}else{
+		SDL_SetWindowFullscreen(window, 0);
+	}
 }
