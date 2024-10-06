@@ -105,7 +105,8 @@
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d
+echo D|xcopy "$(ProjectDir)..\premake\*.*" "$(TargetDir)premake\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -143,7 +144,8 @@ echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d
+echo D|xcopy "$(ProjectDir)..\premake\*.*" "$(TargetDir)premake\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -178,7 +180,8 @@ echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\Resources\*.ttf" "$(TargetDir)Resources\Fonts\" /y /E /d
+echo D|xcopy "$(ProjectDir)..\premake\*.*" "$(TargetDir)premake\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

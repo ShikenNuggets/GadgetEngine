@@ -211,6 +211,7 @@ project "WorkbenchCPP"
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\Resources\\*.ttf\" \"$(TargetDir)Resources\\Fonts\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\premake\\*.*\" \"$(TargetDir)premake\\\" /y /E /d",
 		}
 
 	filter "configurations:Debug or Develop"
