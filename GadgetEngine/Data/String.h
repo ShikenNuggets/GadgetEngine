@@ -245,7 +245,7 @@ namespace Gadget{
 			}
 
 			GADGET_BASIC_ASSERT(rangeSize_ < size);
-			ShiftElements(startIndex_, -rangeSize_);
+			ShiftElements(startIndex_ + rangeSize_, -rangeSize_);
 		}
 
 		constexpr void Remove(char value_){
