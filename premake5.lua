@@ -214,7 +214,7 @@ project "WorkbenchCPP"
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\include\\*.*\" \"$(TargetDir)SDK\\_Gadget\\include\\\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\Resources\\*.ttf\" \"$(TargetDir)Resources\\Fonts\\\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\premake\\*.*\" \"$(TargetDir)premake\\\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)premake-template.lua\" \"$(TargetDir)\" /y /d",
+			"echo D|xcopy \"$(ProjectDir)*.template\" \"$(TargetDir)\" /y /d",
 		}
 
 	filter "configurations:Debug or Develop"

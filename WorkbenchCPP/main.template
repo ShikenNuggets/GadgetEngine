@@ -1,0 +1,70 @@
+#include <iostream>
+
+#pragma warning(disable : 26819) //Kill unfixable warning from SDL2
+#include <SDL.h>
+#pragma warning(default : 26819)
+
+#ifdef GADGET_DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#include <cstdlib>
+#endif //GADGET_DEBUG
+
+#include <Gadget.h>
+#include <Memory/GlobalAllocator.h>
+
+namespace Gadget::__MACRO_PROJECT_NAME__{
+	class ExampleScene : public Scene{
+	public:
+		ExampleScene() : Scene(SID("ExampleScene")){}
+
+		virtual void Update(float deltaTime_) final override{ Scene::Update(deltaTime_); }
+
+	protected:
+		virtual void SetToDefaultState() final override{ Scene::SetToDefaultState(); }
+	};
+	
+	class ExampleGame : public GameInterface{
+	public:
+		ExampleGame() : GameInterface("Example Game"){}
+
+		virtual void LoadGame() final override{ App::GetSceneManager().AddScene(new ExampleScene()); }
+	}
+}
+
+using namespace Gadget;
+using namespace __MACRO_PROJECT_NAME__;
+
+int main(int argc, char* argv[]){
+#ifdef GADGET_DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif // GADGET_DEBUG
+
+	if(argc > 0){
+		std::cout << "Launching with arguments:\n";
+	}
+
+	for(int i = 0; i < argc; i++){
+		std::cout << argv[i] << "\n";
+	}
+
+	ExampleGame game = ExampleGame();
+
+	try{
+		App::GetInstance().Run(game);
+	}catch([[maybe_unused]] const std::runtime_error& e){
+		_ASSERT(false);
+	}
+
+	App::DeleteInstance();
+
+#ifdef GADGET_DEBUG
+	std::cout << GlobalAllocator::GetNumAllocs() << " - " << GlobalAllocator::GetNumFrees() << "\n";
+	std::cout << "Total time spent allocating memory: " << GlobalAllocator::GetAllocTime() << " seconds\n";
+	std::cout << "Total time spent freeing memory: " << GlobalAllocator::GetFreeTime() << " seconds\n";
+
+	std::cout << "The program is now complete.\n";
+#endif //_DEBUG
+
+	return 0;
+}
