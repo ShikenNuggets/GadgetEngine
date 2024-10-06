@@ -31,6 +31,7 @@ namespace Gadget::Workbench::VisualStudio{
 		String str = FileSystem::ReadFileToString(gPremakeTemplateFile);
 		str.FindAndReplace("__MACRO_PROJECT_NAME__", projectName_);
 		str.FindAndReplace("__MACRO_PROJECT_PATH__", projectPath_);
+		str.FindAndReplace("__WORKBENCH_DIR__", FileSystem::WorkingDir());
 		ErrorCode err = FileSystem::WriteToFile(gPremakeFile, str, FileSystem::WriteType::Overwrite);
 		if(err != ErrorCode::OK){
 			return err;
