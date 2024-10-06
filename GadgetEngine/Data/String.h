@@ -484,7 +484,10 @@ namespace Gadget{
 
 		constexpr inline int32_t Length() const{ return size; }
 
-		constexpr bool IsEmpty() const{ return size > 0; }
+		constexpr bool IsEmpty() const{
+			GADGET_BASIC_ASSERT(size >= 0);
+			return size <= 0;
+		}
 
 	private:
 		static inline constexpr int gStackStrSize = 8;
