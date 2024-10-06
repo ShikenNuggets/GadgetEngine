@@ -37,6 +37,8 @@ namespace Gadget{
 		static constexpr char PathSeparator = '/';
 		static constexpr char PathSeparator2 = '\\';
 	#endif //GADGET_PLATFORM_WIN32
+
+		static std::string WorkingDir();
 		
 		static bool FileExists(const std::string& filePath_);
 		static bool DirExists(const std::string& path_);

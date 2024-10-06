@@ -12,6 +12,8 @@
 
 using namespace Gadget;
 
+std::string FileSystem::WorkingDir(){ return std::filesystem::current_path().string(); }
+
 bool FileSystem::FileExists(const std::string& filePath_){
 	GADGET_BASIC_ASSERT(!filePath_.empty());
 
