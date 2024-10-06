@@ -23,6 +23,9 @@ project "__MACRO_PROJECT_NAME__"
 
 	location "__MACRO_PROJECT_PATH__"
 
+	targetdir ("__MACRO_PROJECT_PATH__/Build/%{cfg.buildcfg}/") 
+	objdir ("__MACRO_PROJECT_PATH__/Build/Intermediate/%{cfg.buildcfg}/")
+
 	dpiawareness "HighPerMonitor"
 	debugdir ("%{cfg.targetdir}")
 	
@@ -31,6 +34,7 @@ project "__MACRO_PROJECT_NAME__"
 		{
 			"echo D|xcopy \"__MACRO_WORKBENCH_DIR__\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
 			"echo D|xcopy \"__MACRO_WORKBENCH_DIR__\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)Resources\\*.*\" \"$(TargetDir)Resources\\\" /y /E /d",
 		}
 		
 	filter "configurations:Debug or Develop"
