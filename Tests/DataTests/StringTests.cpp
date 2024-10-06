@@ -325,12 +325,27 @@ TEST_CASE("String::Append", "[string_append]"){
 //------------------- String::InsertAt -----------------------//
 //------------------------------------------------------------//
 
-TEST_CASE("String::FindAndReplace", "[string_find_and_replace]"){
+TEST_CASE("String::InsertAt", "[string_insert_at]"){
 	String test = "TestAndTest";
 	test.InsertAt(0, "Test");
 	REQUIRE(test == "TestTestAndTest");
 	test.InsertAt(8, "_");
 	REQUIRE(test == "TestTest_AndTest");
+}
+
+//------------------------------------------------------------//
+//------------------- String::InsertAt -----------------------//
+//------------------------------------------------------------//
+
+TEST_CASE("String::FindAndReplace", "[string_find_and_replace]"){
+	String test = "TestAndTest";
+	String t = "Test";
+	test.FindAndReplace(t, "Mess");
+	REQUIRE(test == "MessAndMess");
+	test.FindAndReplace("Mess", "Me");
+	REQUIRE(test == "MeAndMe");
+	test.FindAndReplace("Me", "Myself");
+	REQUIRE(test == "MyselfAndMyself");
 }
 
 //------------------------------------------------------------//

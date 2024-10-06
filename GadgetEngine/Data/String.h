@@ -238,7 +238,7 @@ namespace Gadget{
 				return;
 			}
 
-			if(startIndex_ + rangeSize_ > size){
+			if(startIndex_ + rangeSize_ >= size){
 				size -= (size - startIndex_);
 				Pop(size - startIndex_);
 				return;
@@ -354,6 +354,39 @@ namespace Gadget{
 			}
 
 			GADGET_BASIC_ASSERT(size < capacity);
+		}
+
+		constexpr void FindAndReplace(const String& find_, const String& replace_){
+			GADGET_BASIC_ASSERT(!find_.IsEmpty());
+			if(find_.IsEmpty()){
+				return;
+			}
+
+			Array<int32_t> replace;
+			replace.Reserve(4);
+
+			char* str = Value();
+			int32_t findIdx = 0;
+			for(int32_t i = 0; i < size; i++){
+				if(str[i] == find_[findIdx]){
+					findIdx++;
+					GADGET_BASIC_ASSERT(findIdx <= find_.Length());
+					if(findIdx >= find_.Length()){
+						replace.Add(i + 1 - find_.Length());
+						findIdx = 0;
+					}
+				}
+			}
+
+			int32_t diff = 0;
+			for(const auto& i : replace){
+				GADGET_BASIC_ASSERT(i >= 0);
+				RemoveAt(i + diff, find_.Length());
+				InsertAt(i + diff, replace_);
+
+				diff -= find_.Length();
+				diff += replace_.Length();
+			}
 		}
 
 		constexpr void ToLower(){
