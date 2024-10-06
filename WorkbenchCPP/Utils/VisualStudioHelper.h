@@ -5,9 +5,11 @@
 #include "Platform/Windows/Win32_Utils.h"
 
 namespace Gadget::Workbench::VisualStudio{
-	static inline constexpr const char* gPremakeTemplateFile = "premake-template.lua";
+	static inline constexpr const char* gPremakeTemplateFile = "premake.template";
 	static inline constexpr const char* gPremakeFile = "premake5.lua";
 	static inline constexpr const char* gVsSolutionExtension = ".sln";
+	static inline constexpr const char* gMainTemplateFile = "main.template";
+	static inline constexpr const char* gMainFile = "Main.cpp";
 
 	inline ErrorCode OpenSolution(const String& projectName_, const String& projectPath_){
 		uint64_t hwnd = Win32_Utils::GetWindowOfRunningApplication("Microsoft Visual Studio", projectName_);
@@ -41,6 +43,13 @@ namespace Gadget::Workbench::VisualStudio{
 
 		str.FindAndReplace("__MACRO_WORKBENCH_DIR__", workingDir);
 		ErrorCode err = FileSystem::WriteToFile(gPremakeFile, str, FileSystem::WriteType::Overwrite);
+		if(err != ErrorCode::OK){
+			return err;
+		}
+
+		str = FileSystem::ReadFileToString(gMainTemplateFile);
+		str.FindAndReplace("__MACRO_PROJECT_NAME__", projectName_);
+		err = FileSystem::WriteToFile(projectPath_ + FileSystem::PathSeparator + gMainFile, str, FileSystem::WriteType::Overwrite);
 		if(err != ErrorCode::OK){
 			return err;
 		}
