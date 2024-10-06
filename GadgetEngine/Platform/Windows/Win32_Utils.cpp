@@ -133,14 +133,15 @@ ErrorCode Win32_Utils::BringWindowToForeground(uint64_t hwnd_){
 	return ErrorCode::OK;
 }
 
-ErrorCode Win32_Utils::OpenFileInDefaultApplication(const std::string& filePath_){
+ErrorCode Win32_Utils::OpenFileInDefaultApplication(const std::string& filePath_, const std::string& args_){
 	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
 	if(!FileSystem::FileExists(filePath_)){
 		return ErrorCode::Invalid_Args;
 	}
 
 	const std::wstring wFilePath = std::wstring(filePath_.begin(), filePath_.end());
-	const auto result = reinterpret_cast<INT_PTR>(ShellExecute(nullptr, nullptr, wFilePath.c_str(), nullptr, nullptr, SW_SHOW));
+	const std::wstring wArgs = std::wstring(args_.begin(), args_.end());
+	const auto result = reinterpret_cast<INT_PTR>(ShellExecute(nullptr, nullptr, wFilePath.c_str(), wArgs.c_str(), nullptr, SW_SHOW));
 	if(result > 32){
 		return ErrorCode::OK;
 	}
@@ -192,11 +193,10 @@ uint64_t Win32_Utils::GetWindowOfRunningApplication(const std::string& windowNam
 	}
 
 	EnumWindows([](HWND hWnd, LPARAM lParam) -> BOOL {
-		std::array<WCHAR, 256> title{ '\0' };
-		static_assert(title.size() < std::numeric_limits<int>::max());
-		GetWindowText(hWnd, title.data(), static_cast<int>(title.size()));
+		WCHAR title[256]{ '\0' };
+		GetWindowText(hWnd, title, 256);
 
-		const std::wstring wTitleStr = Utils::CreateFuzzyCompareStr(title.data());
+		const std::wstring wTitleStr = Utils::CreateFuzzyCompareStr(title);
 
 		EnumerateWindowsInfo* info = reinterpret_cast<EnumerateWindowsInfo*>(lParam);
 		if(wcsstr(wTitleStr.c_str(), info->windowTitle) != nullptr){

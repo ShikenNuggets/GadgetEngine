@@ -29,7 +29,7 @@ namespace Gadget{
 
 		ErrorCode ShowWindow(uint64_t hwnd_);
 		ErrorCode BringWindowToForeground(uint64_t hwnd_);
-		ErrorCode OpenFileInDefaultApplication(const std::string& filePath_);
+		ErrorCode OpenFileInDefaultApplication(const std::string& filePath_, const std::string& args_ = "");
 
 		uint64_t GetWindowOfRunningApplication(const std::string& windowName_, const std::string& subTitle_ = "");
 	};
