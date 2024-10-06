@@ -1,4 +1,4 @@
-gRootPath = ""
+gRootPath = "__MACRO_WORKBENCH_DIR__/"
 dofile("premake/common.lua")
 
 workspace "__MACRO_PROJECT_NAME__"
@@ -16,8 +16,8 @@ workspace "__MACRO_PROJECT_NAME__"
 
 project "__MACRO_PROJECT_NAME__"
 	CppProjectDefaults()
-	GadgetExternalIncludes()
-	GadgetExternalLibDirs()
+	GadgetUserExternalIncludes()
+	GadgetUserExternalLibDirs()
 	GadgetExternalLibs { linkLibs="true" }
 	DependsOnGadgetEngine()
 

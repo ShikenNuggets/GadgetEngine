@@ -29,7 +29,7 @@ namespace Gadget::__MACRO_PROJECT_NAME__{
 		ExampleGame() : GameInterface("Example Game"){}
 
 		virtual void LoadGame() final override{ App::GetSceneManager().AddScene(new ExampleScene()); }
-	}
+	};
 }
 
 using namespace Gadget;
