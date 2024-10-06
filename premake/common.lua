@@ -13,9 +13,9 @@ function CppProjectDefaults()
 
 	files
 	{
-		"%{prj.name}/**.h",
-		"%{prj.name}/**.hpp",
-		"%{prj.name}/**.cpp",
+		"%{prj.location}/**.h",
+		"%{prj.location}/**.hpp",
+		"%{prj.location}/**.cpp",
 	}
 
 	flags
