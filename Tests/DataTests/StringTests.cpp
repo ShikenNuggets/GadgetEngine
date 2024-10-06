@@ -322,6 +322,18 @@ TEST_CASE("String::Append", "[string_append]"){
 }
 
 //------------------------------------------------------------//
+//------------------- String::InsertAt -----------------------//
+//------------------------------------------------------------//
+
+TEST_CASE("String::FindAndReplace", "[string_find_and_replace]"){
+	String test = "TestAndTest";
+	test.InsertAt(0, "Test");
+	REQUIRE(test == "TestTestAndTest");
+	test.InsertAt(8, "_");
+	REQUIRE(test == "TestTest_AndTest");
+}
+
+//------------------------------------------------------------//
 //-------------- String Rotation (CTCI 1.9) ------------------//
 //------------------------------------------------------------//
 //O(n)

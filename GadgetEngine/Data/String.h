@@ -209,6 +209,18 @@ namespace Gadget{
 			strData[size] = '\0';
 		}
 
+		constexpr void InsertAt(int32_t index_, const String& str_){
+			if(index_ > Length()){
+				Append(str_);
+				return;
+			}
+
+			Reserve(size + str_.Length());
+			for(int32_t i = 0; i < str_.Length(); i++){
+				InsertAt(index_ + i, str_[i]);
+			}
+		}
+
 		constexpr void RemoveAt(int32_t index_){
 			if(index_ >= Length()){
 				return;
