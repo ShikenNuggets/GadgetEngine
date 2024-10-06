@@ -2,6 +2,7 @@ gRootPath = ""
 dofile("premake/common.lua")
 
 workspace "__MACRO_PROJECT_NAME__"
+	location "__MACRO_PROJECT_PATH__"
 	architecture "x64"
 	
 	configurations
@@ -28,8 +29,8 @@ project "__MACRO_PROJECT_NAME__"
 	filter "system:windows"
 		postbuildcommands
 		{
-			"echo D|xcopy \"__WORKBENCH_DIR__\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"__WORKBENCH_DIR__\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"__MACRO_WORKBENCH_DIR__\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"__MACRO_WORKBENCH_DIR__\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
 		}
 		
 	filter "configurations:Debug or Develop"

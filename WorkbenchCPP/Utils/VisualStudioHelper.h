@@ -30,8 +30,15 @@ namespace Gadget::Workbench::VisualStudio{
 	inline ErrorCode GenerateSolution(const String& projectName_, const String& projectPath_){
 		String str = FileSystem::ReadFileToString(gPremakeTemplateFile);
 		str.FindAndReplace("__MACRO_PROJECT_NAME__", projectName_);
-		str.FindAndReplace("__MACRO_PROJECT_PATH__", projectPath_);
-		str.FindAndReplace("__WORKBENCH_DIR__", FileSystem::WorkingDir());
+
+		String projectPathDir = projectPath_;
+		projectPathDir.FindAndReplace(String(FileSystem::PathSeparator), String(FileSystem::PathSeparator) + FileSystem::PathSeparator);
+		str.FindAndReplace("__MACRO_PROJECT_PATH__", projectPathDir);
+
+		String workingDir = FileSystem::WorkingDir();
+		workingDir.FindAndReplace(String(FileSystem::PathSeparator), String(FileSystem::PathSeparator) + FileSystem::PathSeparator);
+
+		str.FindAndReplace("__MACRO_WORKBENCH_DIR__", workingDir);
 		ErrorCode err = FileSystem::WriteToFile(gPremakeFile, str, FileSystem::WriteType::Overwrite);
 		if(err != ErrorCode::OK){
 			return err;

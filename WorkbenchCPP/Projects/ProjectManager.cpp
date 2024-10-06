@@ -5,6 +5,8 @@
 #include <Core/FileSystem.h>
 #include <Serializers/ContainerSerializer.h>
 
+#include "Utils/VisualStudioHelper.h"
+
 using namespace Gadget;
 using namespace Workbench;
 
@@ -62,6 +64,12 @@ ErrorCode ProjectManager::CreateNewProjectFile(const Project& project_){
 
 	nlohmann::json j;
 	j["project_name"] = project_.GetName();
+	j["vs_solution"] = project_.GetName() + ".sln";
 
-	return FileSystem::WriteJSONToPlainTextFile(projectFilePath, j);
+	ErrorCode err = FileSystem::WriteJSONToPlainTextFile(projectFilePath, j);
+	if(err != ErrorCode::OK){
+		return err;
+	}
+
+	return VisualStudio::GenerateSolution(project_.GetName(), project_.GetPath());
 }
