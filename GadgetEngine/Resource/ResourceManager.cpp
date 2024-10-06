@@ -11,11 +11,11 @@
 using namespace Gadget;
 
 ResourceManager::ResourceManager(){
-	if(!FileSystem::FileExists("Resources/resources.json")){
+	if(!FileSystem::FileExists(gResourcesJsonFile)){
 		Debug::ThrowFatalError(SID("RESOURCE"), "resources.json file does not exist!", ErrorCode::FileIO, __FILE__, __LINE__);
 	}
 
-	auto resJson = FileSystem::ReadPlainTextJSONFile("Resources/resources.json");
+	auto resJson = FileSystem::ReadPlainTextJSONFile(gResourcesJsonFile);
 	//resources = resJson; //TODO - Ideally this would work, but I'm just getting template errors that are hard to diagnose
 
 	if(resJson.is_null()){

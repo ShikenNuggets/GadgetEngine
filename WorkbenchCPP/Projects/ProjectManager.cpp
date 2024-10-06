@@ -64,12 +64,18 @@ ErrorCode ProjectManager::CreateNewProjectFile(const Project& project_){
 
 	nlohmann::json j;
 	j["project_name"] = project_.GetName();
-	j["vs_solution"] = project_.GetName() + ".sln";
+	j["vs_solution"] = project_.GetName() + VisualStudio::gVsSolutionExtension;
+	j["resources_file"] = ResourceManager::gResourcesJsonFile;
 
 	ErrorCode err = FileSystem::WriteJSONToPlainTextFile(projectFilePath, j);
 	if(err != ErrorCode::OK){
 		return err;
 	}
 
-	return VisualStudio::GenerateSolution(project_.GetName(), project_.GetPath());
+	err = VisualStudio::GenerateSolution(project_.GetName(), project_.GetPath());
+	if(err != ErrorCode::OK){
+		return err;
+	}
+
+	return FileSystem::WriteJSONToPlainTextFile(project_.GetPath() + ResourceManager::gResourcesJsonFile, {});
 }
