@@ -114,9 +114,13 @@ echo D|xcopy "$(ProjectDir)..\SDK\Assimp\bin\x64\*.*" "$(ProjectDir)..\SDK\_Gadg
 echo D|xcopy "$(ProjectDir)..\SDK\Assimp\lib\x64\*.*" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\freetype\libs\$(Configuration)\*.*" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\FMOD\core\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\core\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\FMOD\fsbank\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\fsbank\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">
@@ -163,9 +167,13 @@ echo D|xcopy "$(ProjectDir)..\SDK\Assimp\bin\x64\*.*" "$(ProjectDir)..\SDK\_Gadg
 echo D|xcopy "$(ProjectDir)..\SDK\Assimp\lib\x64\*.*" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\freetype\libs\$(Configuration)\*.*" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\FMOD\core\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\core\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\FMOD\fsbank\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\fsbank\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -211,9 +219,13 @@ echo D|xcopy "$(ProjectDir)..\SDK\Assimp\bin\x64\*.*" "$(ProjectDir)..\SDK\_Gadg
 echo D|xcopy "$(ProjectDir)..\SDK\Assimp\lib\x64\*.*" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\freetype\libs\$(Configuration)\*.*" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\FMOD\core\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\core\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\SDK\FMOD\fsbank\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d</Command>
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\fsbank\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.dll" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

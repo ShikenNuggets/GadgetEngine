@@ -97,9 +97,13 @@ project "GadgetEngine"
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\lib\\x64\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\lib\\*.lib\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\lib\\*.lib\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\lib\\*.lib\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\lib\\*.lib\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 		}
 		
 	filter "configurations:Release"
