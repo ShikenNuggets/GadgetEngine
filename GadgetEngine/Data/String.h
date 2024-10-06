@@ -468,6 +468,8 @@ namespace Gadget{
 			return Value()[i_];
 		}
 
+		operator std::string() const{ return Value(); }
+
 		constexpr inline int32_t Length() const{ return size; }
 
 		constexpr bool IsEmpty() const{ return size > 0; }
