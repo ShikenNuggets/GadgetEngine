@@ -106,6 +106,26 @@ function GadgetExternalLibDirs()
 	}
 end
 
+function GadgetUserExternalIncludes()
+	includedirs
+	{
+		gRootPath .. "SDK/_Gadget/include/Assimp",
+		gRootPath .. "SDK/_Gadget/include/bullet3",
+		gRootPath .. "SDK/_Gadget/include/common",
+		gRootPath .. "SDK/_Gadget/include/freetype",
+		gRootPath .. "SDK/_Gadget/include/GadgetEngine",
+		gRootPath .. "SDK/_Gadget/include/Glad",
+		gRootPath .. "SDK/_Gadget/include/SDL2",
+	}
+end
+
+function GadgetUserExternalLibDirs()
+	libdirs
+	{
+		gRootPath .. "SDK/_Gadget/lib/%{cfg.buildcfg}/"
+	}
+end
+
 function GadgetExternalLibs(options)
 	dependson
 	{
