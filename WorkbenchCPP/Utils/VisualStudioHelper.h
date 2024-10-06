@@ -7,11 +7,12 @@
 namespace Gadget::Workbench::VisualStudio{
 	static inline constexpr const char* gPremakeTemplateFile = "premake-template.lua";
 	static inline constexpr const char* gPremakeFile = "premake5.lua";
+	static inline constexpr const char* gVsSolutionExtension = ".sln";
 
 	inline ErrorCode OpenSolution(const String& projectName_, const String& projectPath_){
 		uint64_t hwnd = Win32_Utils::GetWindowOfRunningApplication("Microsoft Visual Studio", projectName_);
 		if(hwnd == NULL){
-			const ErrorCode err = Win32_Utils::OpenFileInDefaultApplication(projectPath_ + FileSystem::PathSeparator + projectName_);
+			const ErrorCode err = Win32_Utils::OpenFileInDefaultApplication(projectPath_ + FileSystem::PathSeparator + projectName_ + gVsSolutionExtension);
 			GADGET_BASIC_ASSERT(err == ErrorCode::OK);
 			return err;
 		}else{

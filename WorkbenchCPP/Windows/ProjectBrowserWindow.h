@@ -8,7 +8,7 @@
 namespace Gadget::Workbench{
 	class ProjectBrowserWindow : public SubWindow{
 	public:
-		ProjectBrowserWindow(const ProjectManager& projectManager_);
+		ProjectBrowserWindow(ProjectManager& projectManager_);
 
 		void EnableInput(){ allowInput = true; }
 		void DisableInput(){ allowInput = false; }
@@ -37,7 +37,7 @@ namespace Gadget::Workbench{
 
 	private:
 		bool allowInput;
-		const ProjectManager& projectManager;
+		ProjectManager& projectManager;
 		Callback onClickCreateProject;
 		Callback onClickOpenProject;
 	};

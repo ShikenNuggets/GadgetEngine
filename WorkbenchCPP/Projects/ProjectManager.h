@@ -12,11 +12,16 @@ namespace Gadget::Workbench{
 
 		bool HasRecentProjects() const{ return projects.IsEmpty(); }
 		const Array<Project>& RecentProjects() const{ return projects; }
+		Array<Project>& RecentProjects(){ return projects; }
 
 		void AddNewProject(const Project& project_);
 
+		void SetCurrentProject(Project* project_){ currentProject = project_; }
+		Project* CurrentProject() const{ return currentProject; }
+
 	private:
 		Array<Project> projects;
+		Project* currentProject;
 
 		ErrorCode LoadProjects();
 		ErrorCode SaveProjects();

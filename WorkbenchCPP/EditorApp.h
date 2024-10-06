@@ -31,6 +31,8 @@ namespace Gadget::Workbench{
 		static ProjectManager& GetProjectManager(){ return GetInstance().projManager; }
 		static WindowManager& GetWndManager(){ return GetInstance().wndManager; }
 
+		static Project* CurrentProject(){ return GetInstance().projManager.CurrentProject(); }
+
 	private:
 		static std::unique_ptr<EditorApp> instance;
 

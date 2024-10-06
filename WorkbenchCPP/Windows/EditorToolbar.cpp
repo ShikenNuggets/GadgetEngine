@@ -4,6 +4,7 @@
 
 #include <Platform/Windows/Win32_Utils.h>
 
+#include "EditorApp.h"
 #include "Utils/VisualStudioHelper.h"
 #include "Windows/Tabs/ResourcesTab.h"
 
@@ -39,7 +40,13 @@ void EditorToolbar::Draw(){
 			}
 
 			if(ImGui::MenuItem("Code")){
-				const ErrorCode err = VisualStudio::OpenSolution("Gadget", "E:\\Coding\\GadgetEngine\\GadgetEngine.sln");
+				auto* currentProject = EditorApp::CurrentProject();
+				GADGET_BASIC_ASSERT(currentProject != nullptr);
+				if(currentProject == nullptr){
+					return;
+				}
+
+				const ErrorCode err = VisualStudio::OpenSolution(currentProject->GetName(), currentProject->GetPath());
 				switch(err){
 					case ErrorCode::OK: break;
 					case ErrorCode::Win32_FileIO_PermissionsError:

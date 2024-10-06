@@ -18,7 +18,7 @@ ProjectManager::ProjectManager() : projects(){
 }
 
 void ProjectManager::AddNewProject(const Project& project_){
-	projects.Add(project_);
+	currentProject = &(projects.Add(project_));
 	CreateNewProjectFile(project_);
 	SaveProjects();
 }
