@@ -112,6 +112,7 @@ function GadgetUserExternalIncludes()
 		gRootPath .. "SDK/_Gadget/include/Assimp",
 		gRootPath .. "SDK/_Gadget/include/bullet3",
 		gRootPath .. "SDK/_Gadget/include/common",
+		gRootPath .. "SDK/_Gadget/include/FMOD",
 		gRootPath .. "SDK/_Gadget/include/freetype",
 		gRootPath .. "SDK/_Gadget/include/GadgetEngine",
 		gRootPath .. "SDK/_Gadget/include/Glad",
