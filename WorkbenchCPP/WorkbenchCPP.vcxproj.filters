@@ -19,6 +19,9 @@
     <Filter Include="SDK\ImGui\backends">
       <UniqueIdentifier>{BBE4F3EC-A7C8-B442-1029-AF95FC2B9FC4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Windows">
       <UniqueIdentifier>{5032B729-BC11-36C5-C529-C19B31889C26}</UniqueIdentifier>
     </Filter>
@@ -78,6 +81,9 @@
     </ClInclude>
     <ClInclude Include="Projects\ProjectManager.h">
       <Filter>Projects</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\VisualStudioHelper.h">
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Windows\CreateProjectWindow.h">
       <Filter>Windows</Filter>

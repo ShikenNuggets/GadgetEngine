@@ -4,6 +4,7 @@
 
 #include <Platform/Windows/Win32_Utils.h>
 
+#include "Utils/VisualStudioHelper.h"
 #include "Windows/Tabs/ResourcesTab.h"
 
 using namespace Gadget;
@@ -38,28 +39,21 @@ void EditorToolbar::Draw(){
 			}
 
 			if(ImGui::MenuItem("Code")){
-				uint64_t hwnd = Win32_Utils::GetWindowOfRunningApplication("Microsoft Visual Studio", "Gadget"); //TODO - Harcoded for testing purposes
-				if(hwnd == NULL){
-					const ErrorCode err = Win32_Utils::OpenFileInDefaultApplication("E:\\Coding\\GadgetEngine\\GadgetEngine.sln"); //TODO - Harcoded for testing purposes
-					if(err == ErrorCode::Win32_FileIO_PermissionsError){
+				const ErrorCode err = VisualStudio::OpenSolution("Gadget", "E:\\Coding\\GadgetEngine\\GadgetEngine.sln");
+				switch(err){
+					case ErrorCode::OK: break;
+					case ErrorCode::Win32_FileIO_PermissionsError:
 						Debug::PopupErrorMessage("File Permissions Error", "Workbench does not have permission to open the Visual Studio solution. Try running Workbench as administrator.");
-					}else if(err == ErrorCode::Win32_NoAssociationError){
+						break;
+					case ErrorCode::Win32_NoAssociationError:
 						Debug::PopupErrorMessage("No Associated Program Error", "You do not have a default program set in Windows for opening Visual Studio solutions.");
-					}else if(err != ErrorCode::OK){
+						break;
+					case ErrorCode::Invalid_Args:
+						Debug::PopupErrorMessage("Error", "Could not focus the existing Visual Studio window. If the issue persists, please contact the developer of Gadget Engine/Workbench. Error Code: " + GetErrorCodeString(err));
+						break;
+					default:
 						Debug::PopupErrorMessage("Error", "Could not open Visual Studio. If the issue persists, please contact the developer of Gadget Engine/Workbench. Error Code: " + GetErrorCodeString(err));
-					}
-				}else{
-					ErrorCode err = Win32_Utils::ShowWindow(hwnd);
-					GADGET_BASIC_ASSERT(err != ErrorCode::Invalid_Args);
-					if(err != ErrorCode::OK){
-						Debug::PopupErrorMessage("Error", "Could not focus show the existing Visual Studio window. If the issue persists, please contact the developer of Gadget Engine/Workbench. Error Code: " + GetErrorCodeString(err));
-					}
-
-					err = Win32_Utils::BringWindowToForeground(hwnd);
-					GADGET_BASIC_ASSERT(err != ErrorCode::Invalid_Args);
-					if(err != ErrorCode::OK){
-						Debug::PopupErrorMessage("Error", "Could not focus bring the existing Visual Studio window to the foreground. If the issue persists, please contact the developer of Gadget Engine/Workbench. Error Code: " + GetErrorCodeString(err));
-					}
+						break;
 				}
 			}
 
