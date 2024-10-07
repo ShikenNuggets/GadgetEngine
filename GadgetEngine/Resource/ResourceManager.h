@@ -11,6 +11,8 @@
 namespace Gadget{
 	class ResourceManager{
 	public:
+		static inline constexpr const char* gResourcesJsonFile = "Resources\\resources.json";
+
 		ResourceManager();
 		~ResourceManager();
 		DISABLE_COPY_AND_MOVE(ResourceManager);
