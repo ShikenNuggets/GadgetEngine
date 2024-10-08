@@ -71,6 +71,17 @@ namespace Gadget{
 			return values[index_];
 		}
 
+		constexpr void SetValue(StringID name_, Var value_){
+			for(auto& nv : values){
+				if(nv.Name() == name_){
+					nv = value_;
+					return;
+				}
+			}
+
+			Add(name_, value_);
+		}
+
 		constexpr void Add(const NamedVar& value_){
 			values.push_back(value_);
 		}
