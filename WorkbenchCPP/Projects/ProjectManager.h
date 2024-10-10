@@ -4,6 +4,7 @@
 #include <Data/String.h>
 
 #include "Project.h"
+#include "ProjectResources.h"
 
 namespace Gadget::Workbench{
 	class ProjectManager{
@@ -16,12 +17,23 @@ namespace Gadget::Workbench{
 
 		void AddNewProject(const Project& project_);
 
-		void SetCurrentProject(Project* project_){ currentProject = project_; }
+		void SetCurrentProject(Project* project_){
+			currentProject = project_;
+			delete currentProjectResources;
+			currentProjectResources = nullptr;
+
+			if(currentProject != nullptr){
+				currentProjectResources = new ProjectResources(*currentProject);
+			}
+		}
+
 		Project* CurrentProject() const{ return currentProject; }
+		ProjectResources* GetResources(){ return currentProjectResources; }
 
 	private:
 		Array<Project> projects;
 		Project* currentProject;
+		ProjectResources* currentProjectResources;
 
 		ErrorCode LoadProjects();
 		ErrorCode SaveProjects();

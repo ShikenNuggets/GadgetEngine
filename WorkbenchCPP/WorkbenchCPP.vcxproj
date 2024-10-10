@@ -215,6 +215,7 @@ echo D|xcopy "$(ProjectDir)*.template" "$(TargetDir)" /y /d</Command>
     <ClInclude Include="Flows\ProjectStartupFlow.h" />
     <ClInclude Include="Projects\Project.h" />
     <ClInclude Include="Projects\ProjectManager.h" />
+    <ClInclude Include="Projects\ProjectResources.h" />
     <ClInclude Include="Utils\VisualStudioHelper.h" />
     <ClInclude Include="Windows\CreateProjectWindow.h" />
     <ClInclude Include="Windows\EditorToolbar.h" />
@@ -267,6 +268,7 @@ echo D|xcopy "$(ProjectDir)*.template" "$(TargetDir)" /y /d</Command>
     <ClCompile Include="Flows\ProjectStartupFlow.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projects\ProjectManager.cpp" />
+    <ClCompile Include="Projects\ProjectResources.cpp" />
     <ClCompile Include="Windows\CreateProjectWindow.cpp" />
     <ClCompile Include="Windows\EditorToolbar.cpp" />
     <ClCompile Include="Windows\ProjectBrowserWindow.cpp" />

@@ -82,6 +82,9 @@
     <ClInclude Include="Projects\ProjectManager.h">
       <Filter>Projects</Filter>
     </ClInclude>
+    <ClInclude Include="Projects\ProjectResources.h">
+      <Filter>Projects</Filter>
+    </ClInclude>
     <ClInclude Include="Utils\VisualStudioHelper.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -144,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projects\ProjectManager.cpp">
+      <Filter>Projects</Filter>
+    </ClCompile>
+    <ClCompile Include="Projects\ProjectResources.cpp">
       <Filter>Projects</Filter>
     </ClCompile>
     <ClCompile Include="Windows\CreateProjectWindow.cpp">

@@ -5,6 +5,7 @@
 #include <Core/FileSystem.h>
 #include <Serializers/ContainerSerializer.h>
 
+#include "ProjectResources.h"
 #include "Utils/VisualStudioHelper.h"
 
 using namespace Gadget;
@@ -12,7 +13,7 @@ using namespace Workbench;
 
 static constexpr const char* gRecentProjectsFilePath = "recent_projects.json";
 
-ProjectManager::ProjectManager() : projects(){
+ProjectManager::ProjectManager() : projects(), currentProject(nullptr), currentProjectResources(nullptr){
 	LoadProjects();
 	SaveProjects();
 }
@@ -76,6 +77,8 @@ ErrorCode ProjectManager::CreateNewProjectFile(const Project& project_){
 	if(err != ErrorCode::OK){
 		return err;
 	}
+
+	currentProjectResources = new ProjectResources(project_);
 
 	return FileSystem::WriteJSONToPlainTextFile(project_.GetPath() + ResourceManager::gResourcesJsonFile, {});
 }
