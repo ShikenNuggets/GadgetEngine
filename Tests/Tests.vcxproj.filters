@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="CoreTests">
+      <UniqueIdentifier>{21E66A18-8D50-1F8F-D68E-D0344238FDE3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="DataTests">
       <UniqueIdentifier>{D289ED31-3EF4-A1A8-8732-534EF3DB7FFD}</UniqueIdentifier>
     </Filter>
@@ -20,6 +23,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CoreTests\FileSystemTests.cpp">
+      <Filter>CoreTests</Filter>
+    </ClCompile>
     <ClCompile Include="DataTests\ArrayTests.cpp">
       <Filter>DataTests</Filter>
     </ClCompile>
