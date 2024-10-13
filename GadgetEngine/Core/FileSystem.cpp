@@ -255,7 +255,7 @@ ErrorCode FileSystem::CreateFile(const std::string& file_){
 	//TODO - Check if file name is valid
 
 	const std::string dir = RemoveFileNameFromPath(file_);
-	if(Utils::ContainsChar(dir, PathSeparator) && !DirExists(dir)){
+	if(!DirExists(dir)){
 		auto err = CreateDir(dir);
 		if(err != ErrorCode::OK){
 			return err;
@@ -265,6 +265,7 @@ ErrorCode FileSystem::CreateFile(const std::string& file_){
 	std::fstream filestream;
 	filestream.open(file_, std::ios::out | std::ios_base::trunc);
 	if(!filestream.is_open()){
+		GADGET_LOG_WARNING(SID("FILESYSTEM"), "Could not create file. std error: " + std::string(std::strerror(errno)));
 		return ErrorCode::FileIO;
 	}
 
