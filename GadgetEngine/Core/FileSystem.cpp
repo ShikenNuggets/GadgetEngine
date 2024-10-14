@@ -255,7 +255,7 @@ ErrorCode FileSystem::CreateFile(const std::string& file_){
 	//TODO - Check if file name is valid
 
 	const std::string dir = RemoveFileNameFromPath(file_);
-	if(!DirExists(dir)){
+	if(file_.find(PathSeparator) != std::string::npos && !DirExists(dir)){
 		auto err = CreateDir(dir);
 		if(err != ErrorCode::OK){
 			return err;
