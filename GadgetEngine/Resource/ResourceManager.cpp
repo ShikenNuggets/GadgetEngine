@@ -24,7 +24,7 @@ ResourceManager::ResourceManager(){
 
 	//Parsing manually for now
 	for(auto& element : resJson){
-		const std::string key = element.at(0).at("string");
+		const std::string key = element.at(0).at("name");
 		ResourceContainer* ptr = nullptr;
 		from_json(element.at(1), ptr);
 		resources.emplace(StringID::ProcessString(key), ptr);

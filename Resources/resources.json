@@ -1,7 +1,7 @@
 [
 	[
         {
-            "string": "EngineShaders_DX12"
+            "name": "EngineShaders_DX12"
         },
         {
             "path": "Resources/Shaders/DX12/EngineShaders.bin",
@@ -10,7 +10,7 @@
     ],
     [
         {
-            "string": "ScreenGrayscaleShader"
+            "name": "ScreenGrayscaleShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/screenVert.glsl",
@@ -20,7 +20,7 @@
     ],
     [
         {
-            "string": "CubeModel"
+            "name": "CubeModel"
         },
         {
             "path": "Resources/cube.obj",
@@ -29,7 +29,7 @@
     ],
 	[
         {
-            "string": "ArwingModel"
+            "name": "ArwingModel"
         },
         {
             "path": "Resources/Arwing/Arwing.obj",
@@ -38,7 +38,7 @@
     ],
     [
         {
-            "string": "SkyboxBackTexture"
+            "name": "SkyboxBackTexture"
         },
         {
             "path": "Resources/skybox/back.png",
@@ -47,7 +47,7 @@
     ],
     [
         {
-            "string": "SkyboxRightTexture"
+            "name": "SkyboxRightTexture"
         },
         {
             "path": "Resources/skybox/right.png",
@@ -56,7 +56,7 @@
     ],
     [
         {
-            "string": "DefaultShader"
+            "name": "DefaultShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/defaultVert.glsl",
@@ -66,7 +66,7 @@
     ],
     [
         {
-            "string": "UnlitShader"
+            "name": "UnlitShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/defaultVert.glsl",
@@ -76,7 +76,7 @@
     ],
     [
         {
-            "string": "Text2DShader"
+            "name": "Text2DShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/text2DVert.glsl",
@@ -86,7 +86,7 @@
     ],
     [
         {
-            "string": "Texture2DShader"
+            "name": "Texture2DShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/text2DVert.glsl",
@@ -96,7 +96,7 @@
     ],
     [
         {
-            "string": "ColorShader"
+            "name": "ColorShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/defaultVert.glsl",
@@ -106,7 +106,7 @@
     ],
     [
         {
-            "string": "UnlitColorShader"
+            "name": "UnlitColorShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/defaultVert.glsl",
@@ -116,7 +116,7 @@
     ],
     [
         {
-            "string": "AnimUnlitColorShader"
+            "name": "AnimUnlitColorShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/animVert.glsl",
@@ -126,7 +126,7 @@
     ],
     [
         {
-            "string": "AnimColorShader"
+            "name": "AnimColorShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/animVert.glsl",
@@ -136,7 +136,7 @@
     ],
     [
         {
-            "string": "SkyboxShader"
+            "name": "SkyboxShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/skyboxVert.glsl",
@@ -146,7 +146,7 @@
     ],
     [
         {
-            "string": "SkyboxTopTexture"
+            "name": "SkyboxTopTexture"
         },
         {
             "path": "Resources/skybox/top.png",
@@ -155,7 +155,7 @@
     ],
     [
         {
-            "string": "ArialFont"
+            "name": "ArialFont"
         },
         {
             "path": "Resources/arial.ttf",
@@ -164,7 +164,7 @@
     ],
     [
         {
-            "string": "CubeTexture"
+            "name": "CubeTexture"
         },
         {
             "path": "Resources/wall.png",
@@ -173,7 +173,7 @@
     ],
 	[
         {
-            "string": "ButtonTexture"
+            "name": "ButtonTexture"
         },
         {
             "path": "Resources/button.png",
@@ -182,7 +182,7 @@
     ],
     [
         {
-            "string": "SkyboxLeftTexture"
+            "name": "SkyboxLeftTexture"
         },
         {
             "path": "Resources/skybox/left.png",
@@ -191,7 +191,7 @@
     ],
     [
         {
-            "string": "ScreenInvertShader"
+            "name": "ScreenInvertShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/screenVert.glsl",
@@ -201,7 +201,7 @@
     ],
     [
         {
-            "string": "ScreenShader"
+            "name": "ScreenShader"
         },
         {
             "path1": "Resources/Shaders/OpenGL/screenVert.glsl",
@@ -211,7 +211,7 @@
     ],
     [
         {
-            "string": "SkyboxBottomTexture"
+            "name": "SkyboxBottomTexture"
         },
         {
             "path": "Resources/skybox/bottom.png",
@@ -220,7 +220,7 @@
     ],
     [
         {
-            "string": "SkyboxFrontTexture"
+            "name": "SkyboxFrontTexture"
         },
         {
             "path": "Resources/skybox/front.png",
@@ -229,7 +229,7 @@
     ],
 	[
 		{
-			"string": "ArwingTexture1"
+			"name": "ArwingTexture1"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material1.png",
@@ -238,7 +238,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture2"
+			"name": "ArwingTexture2"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material2.png",
@@ -247,7 +247,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture3"
+			"name": "ArwingTexture3"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material3.png",
@@ -256,7 +256,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture4"
+			"name": "ArwingTexture4"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material4.png",
@@ -265,7 +265,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture5"
+			"name": "ArwingTexture5"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material5.png",
@@ -274,7 +274,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture6"
+			"name": "ArwingTexture6"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material6.png",
@@ -283,7 +283,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture7"
+			"name": "ArwingTexture7"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material7.png",
@@ -292,7 +292,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture8"
+			"name": "ArwingTexture8"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material8.png",
@@ -301,7 +301,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture9"
+			"name": "ArwingTexture9"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material9.png",
@@ -310,7 +310,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture10"
+			"name": "ArwingTexture10"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material10.png",
@@ -319,7 +319,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture11"
+			"name": "ArwingTexture11"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material11.png",
@@ -328,7 +328,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture12"
+			"name": "ArwingTexture12"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material12.png",
@@ -337,7 +337,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture13"
+			"name": "ArwingTexture13"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/M_7CF8406C_c.png",
@@ -346,7 +346,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture14"
+			"name": "ArwingTexture14"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material14.png",
@@ -355,7 +355,7 @@
 	],
 	[
 		{
-			"string": "ArwingTexture15"
+			"name": "ArwingTexture15"
 		},
 		{
 			"path": "Resources/Arwing/Arwing/Material15.png",
@@ -364,7 +364,7 @@
 	],
 	[
 		{
-			"string": "CorneriaMusic"
+			"name": "CorneriaMusic"
 		},
 		{
 			"path": "Resources/Music/Corneria.mp3",
@@ -373,7 +373,7 @@
 	],
 	[
 		{
-			"string": "LazerSFX"
+			"name": "LazerSFX"
 		},
 		{
 			"path": "Resources/SFX/Lazer1.wav",
@@ -382,7 +382,7 @@
 	],
 	[
 		{
-			"string": "YBotAnimModel"
+			"name": "YBotAnimModel"
 		},
 		{
 			"path": "Resources/YBot.fbx",
@@ -391,7 +391,7 @@
 	],
 	[
 		{
-			"string": "StandUpAnim"
+			"name": "StandUpAnim"
 		},
 		{
 			"path": "Resources/StandingUp.fbx",
@@ -400,7 +400,7 @@
 	],
 	[
 		{
-			"string": "CrouchWalkAnim"
+			"name": "CrouchWalkAnim"
 		},
 		{
 			"path": "Resources/CrouchWalk.fbx",
@@ -409,7 +409,7 @@
 	],
 	[
 		{
-			"string": "IdleAnim"
+			"name": "IdleAnim"
 		},
 		{
 			"path": "Resources/Idle.fbx",
