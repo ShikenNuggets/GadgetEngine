@@ -88,7 +88,7 @@ consteval inline Gadget::StringID operator "" _sid(const char* str_, size_t len_
 //JSON Serializing/Deserializing
 namespace Gadget{
 	inline void to_json(nlohmann::json& j_, const StringID& s_){
-		j_ = nlohmann::json{ {"string", s_.GetString()} };
+		j_ = s_.GetString();
 	}
 
 	inline void from_json(nlohmann::json& j_, StringID& s_){
