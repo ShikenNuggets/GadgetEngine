@@ -301,6 +301,37 @@ bool FileSystem::IsLastWriteTimeNewer(const std::string& basePath_, const std::s
 	return path2WriteTime < path1WriteTime;
 }
 
+std::string FileSystem::GetLatestFileFromSet(const std::vector<std::string>& files_){
+	std::string latest = "";
+	GADGET_BASIC_ASSERT(!files_.empty());
+	if(files_.empty()){
+		return latest;
+	}
+	
+	std::filesystem::file_time_type latestWriteTime;
+	for(const auto& f : files_){
+		GADGET_BASIC_ASSERT(!f.empty());
+		GADGET_BASIC_ASSERT(latest != f);
+		if(latest == f || f.empty() || !FileExists(f)){
+			continue;
+		}
+
+		if(latest.empty()){
+			latest = f;
+			latestWriteTime = std::filesystem::last_write_time(latest);
+			continue;
+		}
+		
+		auto fWriteTime = std::filesystem::last_write_time(f);
+		if(fWriteTime > latestWriteTime){
+			latest = f;
+			latestWriteTime = fWriteTime;
+		}
+	}
+
+	return latest;
+}
+
 std::string FileSystem::RemoveFileNameFromPath(const std::string& path_){
 	GADGET_BASIC_ASSERT(!path_.empty());
 	return path_.substr(0, path_.find_last_of(PathSeparator));

@@ -77,6 +77,7 @@ namespace Gadget{
 		[[nodiscard]] static ErrorCode CreateDir(const std::string& path_);
 
 		static bool IsLastWriteTimeNewer(const std::string& basePath_, const std::string& comparePath_);
+		static std::string GetLatestFileFromSet(const std::vector<std::string>& files_);
 
 		static std::string ConstructFilePath(std::convertible_to<std::string_view> auto&& ...s){
 			std::string finalStr = "";
