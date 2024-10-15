@@ -11,10 +11,13 @@ namespace Gadget::Workbench{
 		ProjectResources(const Project& project_);
 
 		void AddResource(const StringID& name_);
+		void RenameResource(const StringID& oldName_, const StringID& newName_);
 		void SetVar(const StringID& name_, const StringID& varName_, const Var& value_);
 
 		void Load();
 		ErrorCode Save();
+
+		const HashTable<StringID, NamedVarList>& GetResources() const{ return resources; }
 
 	private:
 		HashTable<StringID, NamedVarList> resources;

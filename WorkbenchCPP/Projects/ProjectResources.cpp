@@ -17,6 +17,11 @@ void ProjectResources::AddResource(const StringID& name_){
 	}
 }
 
+void ProjectResources::RenameResource(const StringID& oldName_, const StringID& newName_){
+	resources.Add(newName_, resources[oldName_]);
+	resources.RemoveAt(oldName_);
+}
+
 void ProjectResources::SetVar(const StringID& name_, const StringID& varName_, const Var& value_){
 	if(!resources.Contains(name_)){
 		AddResource(name_);
