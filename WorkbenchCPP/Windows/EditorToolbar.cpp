@@ -65,7 +65,26 @@ void EditorToolbar::Draw(){
 			}
 
 			if(ImGui::MenuItem("Play")){
-				//TODO - Launch game
+				auto* currentProject = EditorApp::CurrentProject();
+				GADGET_BASIC_ASSERT(currentProject != nullptr);
+				if(currentProject == nullptr){
+					return;
+				}
+
+				std::string latestExePath = FileSystem::GetLatestFileFromSet({
+					currentProject->GetPath() + "Build\\Debug\\" + currentProject->GetName() + ".exe",
+					currentProject->GetPath() + "Build\\Develop\\" + currentProject->GetName() + ".exe",
+					currentProject->GetPath() + "Build\\Release\\" + currentProject->GetName() + ".exe"
+				});
+
+				if(latestExePath.empty()){
+					Debug::PopupErrorMessage("Cannot Run Game", "Game EXE has not been compiled in any configuration!");
+				}else{
+					const ErrorCode err = Win32_Utils::OpenFileInDefaultApplication(latestExePath);
+					if(err != ErrorCode::OK){
+						Debug::PopupErrorMessage("Error", "Could not open exe! Error Code: " + GetErrorCodeString(err));
+					}
+				}
 			}
 
 			ImGui::EndMenuBar();
