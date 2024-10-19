@@ -2,25 +2,36 @@ ShikenNuggets Limited License (SNLL)
 
 Copyright (c) 2024 ShikenNuggets
 
-Except where otherwise noted by a separate license or copyright notice, all code
-in this repository is the property of ShikenNuggets (the "Author"). This includes
-but is not limited to source code files, documentation, and any other associated
-materials. Any use, reproduction, or distribution of the code must comply with
-the terms of this license.
+Except where otherwise noted by a separate license or copyright notice, the
+contents of this repository are the property of ShikenNuggets (the "Author").
+This includes but is not limited to source code files, documentation, and other
+associated materials. Any use, reproduction, or distribution of the content
+must comply with the terms of this license.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software with the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software with the following conditions:
 
-1. The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. This notice shall be included with all copies of the Software.
 
-2. Commercial use of the Software requires the explicit permission of
-the Author. This includes, but is not limited to, using the Software in any
-application intended for commercial purposes, selling the Software, or using the
-Software in conjunction with commercial products or services.
+2. Commercial use of the Software requires explicit permission from the Author.
+This includes, but is not limited to:
+* Using the Software in any application intended for commercial purposes.
+* Selling the Software, or any products created with the Software.
+* Using the Software in conjunction with commercial products or services.
+* Using the Software or its output to train or fine-tune large language models,
+machine learning algorithms, or any other artificial intelligence systems.
 
 3. Non-commercial use of the Software is permitted without explicit permission.
+This includes, but is not limited to:
+* Personal projects that do not generate revenue.
+* Educational use.
+* Open source projects.
+* Use by Non-profit Organizations.
+
+4. In the event of any ambiguity or uncertainty regarding the terms of this
+license, users of the Software are encouraged to make a good-faith effort to
+contact the Author for clarification.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
