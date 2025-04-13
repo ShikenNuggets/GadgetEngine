@@ -30,3 +30,12 @@ jobs:
 
     - name: Build Solution (Release)
       run: MSBuild.exe -restore GadgetEngine.sln /property:Configuration=Release
+      
+    - name: Run Tests (Debug)
+      run: .\Build\Tests\Debug\Tests.exe
+      
+    - name: Run Tests (Develop)
+      run: .\Build\Tests\Develop\Tests.exe
+      
+    - name: Run Tests (Release)
+      run: .\Build\Tests\Release\Tests.exe
