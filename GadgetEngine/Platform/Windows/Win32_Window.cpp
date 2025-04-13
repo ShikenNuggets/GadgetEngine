@@ -1,6 +1,6 @@
 #include "Win32_Window.h"
 
-#include <SDL_syswm.h>
+#include <SDL3/SDL.h>
 #include <glad/glad.h>
 
 #include "App.h"
@@ -22,23 +22,23 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderA
 	GADGET_BASIC_ASSERT(w_ > 0);
 	GADGET_BASIC_ASSERT(h_ > 0);
 
-	if(SDL_Init(SDL_INIT_EVERYTHING) > 0){
+	if(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMEPAD)){
 		Debug::ThrowFatalError(SID("RENDER"), "SDL could not be initialized! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 	}
 
-	Uint32 windowFlag = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
+	Uint32 windowFlag = SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_RESIZABLE;
 	if(renderAPI_ == Renderer::API::OpenGL){
 		windowFlag |= SDL_WINDOW_OPENGL;
 
-		if(SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1) != 0){
+		if(!SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1)){
 			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 
-		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, gGLMajorVersion) != 0){
+		if(!SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, gGLMajorVersion)){
 			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 
-		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, gGLMinorVersion) != 0){
+		if(!SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, gGLMinorVersion)){
 			Debug::ThrowFatalError(SID("RENDER"), "Issue with setting OpenGL attribute! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 		}
 	}
@@ -48,21 +48,22 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderA
 		pos.y = SDL_WINDOWPOS_CENTERED;
 	}
 
-	sdlWindow = SDL_CreateWindow(App::GetGameName().c_str(), pos.x, pos.y, GetWidth(), GetHeight(), windowFlag);
+	sdlWindow = SDL_CreateWindow(App::GetGameName().c_str(), /*pos.x, pos.y,*/ GetWidth(), GetHeight(), windowFlag);
 	if(sdlWindow == nullptr){
 		Debug::ThrowFatalError(SID("RENDER"), "Window could not be created! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 	}
 
 	//This is enabled by default but it's good to be explicit
-	if(SDL_JoystickEventState(SDL_ENABLE) != 1){
+	SDL_SetJoystickEventsEnabled(true);
+	if(!SDL_JoystickEventsEnabled()){
 		Debug::ThrowFatalError(SID("INPUT"), "Joystick events could not be enabled! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 	}
 
-	SDL_DisplayMode mode;
-	if(SDL_GetCurrentDisplayMode(0, &mode) != 0){
+	const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(0);
+	if(mode == nullptr){
 		Debug::Log("Could not get Display Mode! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
 	}else{
-		refreshRate = static_cast<float>(mode.refresh_rate);
+		refreshRate = static_cast<float>(mode->refresh_rate);
 	}
 
 	Win32_Utils::TryApplyImmersiveDarkMode(GetWindowHandle());
@@ -79,10 +80,7 @@ Win32_Window::~Win32_Window(){
 }
 
 uint64_t Win32_Window::GetWindowHandle() const{
-	SDL_SysWMinfo wmInfo{};
-	SDL_VERSION(&wmInfo.version);
-	SDL_GetWindowWMInfo(sdlWindow, &wmInfo);
-	return reinterpret_cast<uint64_t>(wmInfo.info.win.window);
+	return reinterpret_cast<uint64_t>(SDL_GetPointerProperty(SDL_GetWindowProperties(sdlWindow), SDL_PROP_WINDOW_WIN32_HWND_POINTER, NULL));
 }
 
 SDL_Window* Win32_Window::GetSDLWindow() const{ return sdlWindow; }
@@ -96,46 +94,48 @@ void Win32_Window::HandleEvents(){
 	SDL_Event e;
 	while(SDL_PollEvent(&e) != 0){
 		switch(e.type){
-			case SDL_QUIT:
+			case SDL_EVENT_QUIT:
 				App::CloseGame();
 				return;
-			case SDL_WINDOWEVENT:
+			case SDL_EVENT_WINDOW_RESIZED:
+			case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
+			case SDL_EVENT_WINDOW_MOVED:
 				HandleWindowEvent(e);
 				break;
-			case SDL_KEYDOWN:
+			case SDL_EVENT_KEY_DOWN:
 				if(e.key.repeat == 0){ //Ignore key repeats - TODO - maybe repeats should be a separate keyboard event?
-					EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(SDL2_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
+					EventHandler::GetInstance()->HandleEvent(KeyPressedEvent(SDL2_Utils::ConvertSDLKeycodeToButtonID(e.key.key)));
 				}
 				break;
-			case SDL_KEYUP:
-				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(SDL2_Utils::ConvertSDLKeycodeToButtonID(e.key.keysym.sym)));
+			case SDL_EVENT_KEY_UP:
+				EventHandler::GetInstance()->HandleEvent(KeyReleasedEvent(SDL2_Utils::ConvertSDLKeycodeToButtonID(e.key.key)));
 				break;
-			case SDL_MOUSEMOTION:
+			case SDL_EVENT_MOUSE_MOTION:
 				GADGET_BASIC_ASSERT(GetWidth() > 0);
 				GADGET_BASIC_ASSERT(GetHeight() > 0);
 				EventHandler::GetInstance()->HandleEvent(MouseMovedEvent(static_cast<float>(e.motion.xrel) / static_cast<float>(GetWidth()), static_cast<float>(e.motion.yrel) / static_cast<float>(GetHeight()), static_cast<float>(e.motion.x), static_cast<float>(e.motion.y)));
 				break;
-			case SDL_MOUSEBUTTONDOWN:
+			case SDL_EVENT_MOUSE_BUTTON_DOWN:
 				EventHandler::GetInstance()->HandleEvent(MouseButtonPressedEvent(SDL2_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));
 				break;
-			case SDL_MOUSEBUTTONUP:
+			case SDL_EVENT_MOUSE_BUTTON_UP:
 				EventHandler::GetInstance()->HandleEvent(MouseButtonReleasedEvent(SDL2_Utils::ConvertSDLMouseButtonToButtonID(e.button.button)));
 				break;
-			case SDL_MOUSEWHEEL:
-				EventHandler::GetInstance()->HandleEvent(MouseScrollEvent(e.wheel.preciseX, e.wheel.preciseY));
+			case SDL_EVENT_MOUSE_WHEEL:
+				EventHandler::GetInstance()->HandleEvent(MouseScrollEvent(e.wheel.mouse_x, e.wheel.mouse_y));
 				break;
-			case SDL_JOYDEVICEADDED:
-				joystick = SDL_JoystickOpen(e.jdevice.which);
+			case SDL_EVENT_JOYSTICK_ADDED:
+				joystick = SDL_OpenJoystick(e.jdevice.which);
 				joysticks.push_back(joystick);
 				Debug::Log("Gamepad " + std::to_string(e.jdevice.which) + " connected.");
 				break;
-			case SDL_JOYDEVICEREMOVED:
+			case SDL_EVENT_JOYSTICK_REMOVED:
 				RemoveJoystick(e.jdevice.which);
 				Debug::Log("Gamepad " + std::to_string(e.jdevice.which) + " disconnected.");
 				break;
 			//TODO - None of the following joystick events know or care WHICH joystick is being used
 			//For a singleplayer game this doesn't really matter but this is a HUGE problem for splitscreen
-			case SDL_JOYAXISMOTION:
+			case SDL_EVENT_JOYSTICK_AXIS_MOTION:
 				joystickAxis = SDL2_Utils::ConvertSDLJoystickAxisToAxisID(e.jaxis.axis);
 				range = static_cast<float>(e.jaxis.value) / static_cast<float>(std::numeric_limits<int16_t>::max()); //Convert the quantized value we get from SDL to a float between -1 and 1
 				
@@ -146,13 +146,13 @@ void Win32_Window::HandleEvents(){
 				EventHandler::GetInstance()->HandleEvent(GamepadAxisEvent(e.jaxis.which, joystickAxis, range));
 				//TODO - Trigger button events here as well
 				break;
-			case SDL_JOYBUTTONDOWN:
+			case SDL_EVENT_JOYSTICK_BUTTON_DOWN:
 				EventHandler::GetInstance()->HandleEvent(GamepadButtonPressedEvent(e.jbutton.which, SDL2_Utils::ConvertSDLJoystickButtonToButtonID(e.jbutton.button)));
 				break;
-			case SDL_JOYBUTTONUP:
+			case SDL_EVENT_JOYSTICK_BUTTON_UP:
 				EventHandler::GetInstance()->HandleEvent(GamepadButtonReleasedEvent(e.jbutton.which, SDL2_Utils::ConvertSDLJoystickButtonToButtonID(e.jbutton.button)));
 				break;
-			case SDL_JOYHATMOTION:
+			case SDL_EVENT_JOYSTICK_HAT_MOTION:
 				HandleHatMotionEvent(e);
 				break;
 			default:
@@ -168,8 +168,9 @@ void Win32_Window::SwapBuffers(){
 void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 	int w = 0, h = 0;
 	ErrorCode err = ErrorCode::OK;
-	switch(e_.window.event){
-		case SDL_WINDOWEVENT_SIZE_CHANGED:
+	switch(e_.type){
+		case SDL_EVENT_WINDOW_RESIZED:
+		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
 			SDL_GetWindowSize(sdlWindow, &w, &h);
 			size.x = w;
 			size.y = h;
@@ -183,7 +184,7 @@ void Win32_Window::HandleWindowEvent(const SDL_Event& e_){
 
 			EventHandler::GetInstance()->HandleEvent(WindowResizedEvent(w, h));
 			break;
-		case SDL_WINDOWEVENT_MOVED:
+		case SDL_EVENT_WINDOW_MOVED:
 			SDL_GetWindowPosition(sdlWindow, &w, &h);
 			EventHandler::GetInstance()->HandleEvent(WindowMovedEvent(w, h));
 			break;
@@ -236,7 +237,7 @@ void Win32_Window::RemoveJoystick(Sint32 instanceID_){
 			continue;
 		}
 
-		auto result = SDL_JoystickInstanceID(joysticks[i]);
+		auto result = SDL_GetJoystickID(joysticks[i]);
 		if(result < 0){
 			Debug::Log("Could not query Joystick Instance ID for joystick " + std::to_string(i) + "! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
 			continue;
@@ -248,6 +249,6 @@ void Win32_Window::RemoveJoystick(Sint32 instanceID_){
 		}
 	}
 
-	SDL_JoystickClose(joysticks[index]);
+	SDL_CloseJoystick(joysticks[index]);
 	joysticks[index] = nullptr;
 }

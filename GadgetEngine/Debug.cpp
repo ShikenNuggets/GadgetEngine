@@ -5,7 +5,7 @@
 #ifdef GADGET_PLATFORM_WIN32
 //Hide warnings from external code that we can't/won't modify - WNF
 #pragma warning(disable : 26819) //Unnanotated fallthrough in switch statement
-#include <SDL_messagebox.h>
+#include <SDL3/SDL_messagebox.h>
 #pragma warning(default : 26819)
 
 #include "Platform/Windows/Win32_Utils.h"

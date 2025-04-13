@@ -31,21 +31,11 @@ externalproject "Glad"
 	kind "StaticLib"
 	language "C"
 
-externalproject "SDL2"
+externalproject "SDL"
 	location "SDK/_prj"
-	filename "SDL2"
+	filename "SDL"
 	kind "SharedLib"
 	language "C++"
-	
-externalproject "SDL2main"
-	location "SDK/_prj"
-	filename "SDL2main"
-	kind "StaticLib"
-	language "C++"
-	dependson
-	{
-		"SDL2",
-	}
 	
 externalproject "BulletCollision"
 	location "SDK/_prj"
@@ -207,8 +197,8 @@ project "WorkbenchCPP"
 
 		"SDK/ImGui/backends/imgui_impl_opengl3.h",
 		"SDK/ImGui/backends/imgui_impl_opengl3.cpp",
-		"SDK/ImGui/backends/imgui_impl_sdl2.h",
-		"SDK/ImGui/backends/imgui_impl_sdl2.cpp",
+		"SDK/ImGui/backends/imgui_impl_sdl3.h",
+		"SDK/ImGui/backends/imgui_impl_sdl3.cpp",
 	}
 
 	includedirs

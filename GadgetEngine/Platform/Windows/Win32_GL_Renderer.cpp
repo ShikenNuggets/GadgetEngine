@@ -57,13 +57,11 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 	}
 
 	const int swapInterval = App::GetConfig().GetOptionBool(EngineVars::Display::vsyncKey) ? -1 : 0;
-	int status = SDL_GL_SetSwapInterval(swapInterval);
-	if(status != 0 && swapInterval < 0){
+	bool status = SDL_GL_SetSwapInterval(swapInterval);
+	if(status && swapInterval < 0){
 		//Adaptive sync isn't supported, try again with regular vsync
 		status = SDL_GL_SetSwapInterval(1);
-	}
-
-	if(status != 0){
+	}else if(!status){
 		Debug::Log("Swap interval could not be set! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
 	}
 
@@ -102,7 +100,7 @@ Win32_GL_Renderer::~Win32_GL_Renderer(){
 	App::GetResourceManager().UnloadResource(SID("ScreenShader"));
 	delete mainFBO;
 
-	SDL_GL_DeleteContext(glContext);
+	SDL_GL_DestroyContext(glContext); // TODO - Check return value
 
 	window.reset();
 }

@@ -1,3 +1,7 @@
+#ifdef GADGET_RELEASE
+#include <SDL3/SDL_main.h>
+#endif //GADGET_RELEASE
+
 #include "Core/EditorWindow.h"
 #include "Core/WindowManager.h"
 #include "Projects/ProjectManager.h"

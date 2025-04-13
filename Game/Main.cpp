@@ -1,7 +1,7 @@
 #include <iostream>
 
 #pragma warning(disable : 26819) //Kill unfixable warning from SDL2
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #pragma warning(default : 26819)
 
 #ifdef GADGET_DEBUG
@@ -9,6 +9,10 @@
 #include <crtdbg.h>
 #include <cstdlib>
 #endif //GADGET_DEBUG
+
+#ifdef GADGET_RELEASE
+#include <SDL3/SDL_main.h>
+#endif //GADGET_RELEASE
 
 #include <Gadget.h>
 #include <Memory/GlobalAllocator.h>

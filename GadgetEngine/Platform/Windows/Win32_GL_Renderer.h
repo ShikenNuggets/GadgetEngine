@@ -3,7 +3,7 @@
 
 //Hide warnings from external code that we can't/won't modify - WNF
 #pragma warning(disable : 26819) //Unnanotated fallthrough in switch statement
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #pragma warning(default : 26819)
 
 #include "Animation/Components/AnimRenderComponent.h"

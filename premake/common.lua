@@ -11,6 +11,11 @@ function CppProjectDefaults()
 	targetdir ("Build/%{prj.name}/%{cfg.buildcfg}/") 
 	objdir ("Build/Intermediate/%{prj.name}/%{cfg.buildcfg}/")
 
+	defines
+	{
+		"SDL_FUNCTION_POINTER_IS_VOID_POINTER"
+	}
+
 	files
 	{
 		"%{prj.location}/**.h",
@@ -91,8 +96,7 @@ end
 function GadgetExternalLibDirs()
 	libdirs
 	{
-		gRootPath .. "Build/SDL2/%{cfg.buildcfg}/",
-		gRootPath .. "Build/SDL2main/%{cfg.buildcfg}/",
+		gRootPath .. "Build/SDL3/%{cfg.buildcfg}/",
 		gRootPath .. "Build/Glad/%{cfg.buildcfg}/",
 		gRootPath .. "SDK/Assimp/lib/x64/",
 		gRootPath .. "SDK/freetype/libs/%{cfg.buildcfg}/",
@@ -131,8 +135,7 @@ function GadgetExternalLibs(options)
 	dependson
 	{
 		"Glad",
-		"SDL2",
-		"SDL2main",
+		"SDL3",
 		"BulletCollision",
 		"BulletDynamics",
 		"BulletLinearMath",
@@ -144,9 +147,8 @@ function GadgetExternalLibs(options)
 		{
 			"assimp-vc143-mt.lib",
 			"Glad.lib",
-			"SDL2.lib",
-			"SDL2main.lib",
-			"SDL2_image.lib",
+			"SDL3.lib",
+			"SDL3_image.lib",
 			"freetype.lib",
 			"BulletCollision.lib",
 			"BulletDynamics.lib",

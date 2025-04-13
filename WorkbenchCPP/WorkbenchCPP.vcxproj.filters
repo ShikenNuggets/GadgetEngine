@@ -33,7 +33,7 @@
     <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_opengl3.h">
       <Filter>SDK\ImGui\backends</Filter>
     </ClInclude>
-    <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_sdl2.h">
+    <ClInclude Include="..\SDK\ImGui\backends\imgui_impl_sdl3.h">
       <Filter>SDK\ImGui\backends</Filter>
     </ClInclude>
     <ClInclude Include="..\SDK\ImGui\imconfig.h">
@@ -111,7 +111,7 @@
     <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_opengl3.cpp">
       <Filter>SDK\ImGui\backends</Filter>
     </ClCompile>
-    <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_sdl2.cpp">
+    <ClCompile Include="..\SDK\ImGui\backends\imgui_impl_sdl3.cpp">
       <Filter>SDK\ImGui\backends</Filter>
     </ClCompile>
     <ClCompile Include="..\SDK\ImGui\imgui.cpp">

@@ -3,10 +3,12 @@
 
 #include <cstdint>
 
-#include "Input/InputEnums.h"
+//Hide warnings from external code that we can't/won't modify - WNF
+#pragma warning(disable : 26819) //Unnanotated fallthrough in switch statement
+#include <SDL3/SDL.h>
+#pragma warning(default : 26819)
 
-typedef int32_t SDL_Keycode; //Yes this is correct, and it's weird
-typedef uint8_t Uint8;
+#include "Input/InputEnums.h"
 
 namespace Gadget{
 	namespace SDL2_Utils{

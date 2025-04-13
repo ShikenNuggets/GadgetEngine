@@ -11,7 +11,7 @@ namespace Gadget{
 	protected:
 		GamepadEvent(StringID name_, int joystickIndex_) : Event(name_), joystickIndex(joystickIndex_){
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
-			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			//GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
 		}
 
 		virtual ~GamepadEvent(){}
@@ -22,7 +22,7 @@ namespace Gadget{
 	class GamepadAxisEvent : public GamepadEvent{
 	public:
 		GamepadAxisEvent(int joystickIndex_, AxisID axisID_, float value_) : GamepadEvent(SID("GamepadAxisEvent"), joystickIndex_), axisID(axisID_), value(value_){
-			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			//GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
 			GADGET_BASIC_ASSERT(axisID_ < AxisID::AxisID_MAX);
 			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
 		}
@@ -49,7 +49,7 @@ namespace Gadget{
 	protected:
 		GamepadButtonEvent(StringID name_, int joystickIndex_, ButtonID button_) : GamepadEvent(name_, joystickIndex_), button(button_){
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
-			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			//GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
 			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
 		}
 
@@ -61,7 +61,7 @@ namespace Gadget{
 	class GamepadButtonPressedEvent : public GamepadButtonEvent{
 	public:
 		GamepadButtonPressedEvent(int joystickIndex_, ButtonID button_) : GamepadButtonEvent(SID("GamepadButtonPressedEvent"), joystickIndex_, button_){
-			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			//GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
 			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
 		}
 
@@ -74,7 +74,7 @@ namespace Gadget{
 	class GamepadButtonReleasedEvent : public GamepadButtonEvent{
 	public:
 		GamepadButtonReleasedEvent(int joystickIndex_, ButtonID button_) : GamepadButtonEvent(SID("MouseButtonReleasedEvent"), joystickIndex_, button_){
-			GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
+			//GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
 			GADGET_BASIC_ASSERT(button_ < ButtonID::ButtonID_MAX);
 		}
 

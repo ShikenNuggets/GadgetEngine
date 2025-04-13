@@ -81,7 +81,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
-      <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_FUNCTION_POINTER_IS_VOID_POINTER;GADGET_PLATFORM_WIN32;GADGET_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\SDK\FMOD\core\inc;..\SDK\FMOD\fsbank\inc;..\SDK\FMOD\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -96,7 +96,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Debug;..\Build\SDL2main\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\SDK\lib;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Build\SDL3\Debug;..\Build\Glad\Debug;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Debug;..\SDK\lib;..\Build\BulletCollision\Debug;..\Build\BulletDynamics\Debug;..\Build\BulletLinearMath\Debug;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)*.h*" "$(ProjectDir)..\SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d
@@ -129,7 +129,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_G
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_DEBUG;GADGET_DEVELOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_FUNCTION_POINTER_IS_VOID_POINTER;GADGET_PLATFORM_WIN32;GADGET_DEBUG;GADGET_DEVELOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\SDK\FMOD\core\inc;..\SDK\FMOD\fsbank\inc;..\SDK\FMOD\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
@@ -149,7 +149,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_G
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Develop;..\Build\SDL2main\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\SDK\lib;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Build\SDL3\Develop;..\Build\Glad\Develop;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Develop;..\SDK\lib;..\Build\BulletCollision\Develop;..\Build\BulletDynamics\Develop;..\Build\BulletLinearMath\Develop;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)*.h*" "$(ProjectDir)..\SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d
@@ -181,7 +181,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_G
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
-      <PreprocessorDefinitions>GADGET_PLATFORM_WIN32;GADGET_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_FUNCTION_POINTER_IS_VOID_POINTER;GADGET_PLATFORM_WIN32;GADGET_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\SDK\FMOD\core\inc;..\SDK\FMOD\fsbank\inc;..\SDK\FMOD\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
@@ -201,7 +201,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_G
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>..\Build\SDL2\Release;..\Build\SDL2main\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\SDK\lib;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Build\SDL3\Release;..\Build\Glad\Release;..\SDK\Assimp\lib\x64;..\SDK\freetype\libs\Release;..\SDK\lib;..\Build\BulletCollision\Release;..\Build\BulletDynamics\Release;..\Build\BulletLinearMath\Release;..\SDK\FMOD\core\lib;..\SDK\FMOD\fsbank\lib;..\SDK\FMOD\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo D|xcopy "$(ProjectDir)*.h*" "$(ProjectDir)..\SDK\_Gadget\include\$(ProjectName)\" /s /y /E /d

@@ -1,10 +1,5 @@
 #include "SDL2_Utils.h"
 
-//Hide warnings from external code that we can't/won't modify - WNF
-#pragma warning(disable : 26819) //Unnanotated fallthrough in switch statement
-#include <SDL.h>
-#pragma warning(default : 26819)
-
 #include "Debug.h"
 
 using namespace Gadget;
@@ -26,7 +21,7 @@ ButtonID SDL2_Utils::ConvertSDLKeycodeToButtonID(SDL_Keycode key_){
 			return ButtonID::Keyboard_Space;
 		case SDLK_EXCLAIM:
 			return ButtonID::Keyboard_Exclaim;
-		case SDLK_QUOTEDBL:
+		case SDLK_DBLAPOSTROPHE:
 			return ButtonID::Keyboard_QuoteDouble;
 		case SDLK_HASH:
 			return ButtonID::Keyboard_Hash;
@@ -36,7 +31,7 @@ ButtonID SDL2_Utils::ConvertSDLKeycodeToButtonID(SDL_Keycode key_){
 			return ButtonID::Keyboard_Dollar;
 		case SDLK_AMPERSAND:
 			return ButtonID::Keyboard_Ampersand;
-		case SDLK_QUOTE:
+		case SDLK_APOSTROPHE:
 			return ButtonID::Keyboard_Quote;
 		case SDLK_LEFTPAREN:
 			return ButtonID::Keyboard_LeftParenthesis;
@@ -98,59 +93,59 @@ ButtonID SDL2_Utils::ConvertSDLKeycodeToButtonID(SDL_Keycode key_){
 			return ButtonID::Keyboard_Caret;
 		case SDLK_UNDERSCORE:
 			return ButtonID::Keyboard_Underscore;
-		case SDLK_BACKQUOTE:
+		case SDLK_GRAVE:
 			return ButtonID::Keyboard_BackQuote;
-		case SDLK_a:
+		case SDLK_A:
 			return ButtonID::Keyboard_A;
-		case SDLK_b:
+		case SDLK_B:
 			return ButtonID::Keyboard_B;
-		case SDLK_c:
+		case SDLK_C:
 			return ButtonID::Keyboard_C;
-		case SDLK_d:
+		case SDLK_D:
 			return ButtonID::Keyboard_D;
-		case SDLK_e:
+		case SDLK_E:
 			return ButtonID::Keyboard_E;
-		case SDLK_f:
+		case SDLK_F:
 			return ButtonID::Keyboard_F;
-		case SDLK_g:
+		case SDLK_G:
 			return ButtonID::Keyboard_G;
-		case SDLK_h:
+		case SDLK_H:
 			return ButtonID::Keyboard_H;
-		case SDLK_i:
+		case SDLK_I:
 			return ButtonID::Keyboard_I;
-		case SDLK_j:
+		case SDLK_J:
 			return ButtonID::Keyboard_J;
-		case SDLK_k:
+		case SDLK_K:
 			return ButtonID::Keyboard_K;
-		case SDLK_l:
+		case SDLK_L:
 			return ButtonID::Keyboard_L;
-		case SDLK_m:
+		case SDLK_M:
 			return ButtonID::Keyboard_M;
-		case SDLK_n:
+		case SDLK_N:
 			return ButtonID::Keyboard_N;
-		case SDLK_o:
+		case SDLK_O:
 			return ButtonID::Keyboard_O;
-		case SDLK_p:
+		case SDLK_P:
 			return ButtonID::Keyboard_P;
-		case SDLK_q:
+		case SDLK_Q:
 			return ButtonID::Keyboard_Q;
-		case SDLK_r:
+		case SDLK_R:
 			return ButtonID::Keyboard_R;
-		case SDLK_s:
+		case SDLK_S:
 			return ButtonID::Keyboard_S;
-		case SDLK_t:
+		case SDLK_T:
 			return ButtonID::Keyboard_T;
-		case SDLK_u:
+		case SDLK_U:
 			return ButtonID::Keyboard_U;
-		case SDLK_v:
+		case SDLK_V:
 			return ButtonID::Keyboard_V;
-		case SDLK_w:
+		case SDLK_W:
 			return ButtonID::Keyboard_W;
-		case SDLK_x:
+		case SDLK_X:
 			return ButtonID::Keyboard_X;
-		case SDLK_y:
+		case SDLK_Y:
 			return ButtonID::Keyboard_Y;
-		case SDLK_z:
+		case SDLK_Z:
 			return ButtonID::Keyboard_Z;
 		case SDLK_CAPSLOCK:
 			return ButtonID::Keyboard_CapsLock;
@@ -432,26 +427,26 @@ ButtonID SDL2_Utils::ConvertSDLKeycodeToButtonID(SDL_Keycode key_){
 			return ButtonID::Keyboard_RightGUI;
 		case SDLK_MODE:
 			return ButtonID::Keyboard_ModeSwitch;
-		case SDLK_AUDIONEXT:
+		case SDLK_MEDIA_NEXT_TRACK:
 			return ButtonID::Keyboard_Audio_Next;
-		case SDLK_AUDIOPREV:
+		case SDLK_MEDIA_PREVIOUS_TRACK:
 			return ButtonID::Keyboard_Audio_Previous;
-		case SDLK_AUDIOSTOP:
+		case SDLK_MEDIA_STOP:
 			return ButtonID::Keyboard_Audio_Stop;
-		case SDLK_AUDIOPLAY:
+		case SDLK_MEDIA_PLAY:
 			return ButtonID::Keyboard_Audio_Play;
-		case SDLK_AUDIOMUTE:
-			return ButtonID::Keyboard_Audio_Mute;
-		case SDLK_MEDIASELECT:
+		//case SDLK_MUTE:
+		//	return ButtonID::Keyboard_Audio_Mute;
+		case SDLK_MEDIA_SELECT:
 			return ButtonID::Keyboard_MediaSelect;
-		case SDLK_WWW:
-			return ButtonID::Keyboard_WWW;
-		case SDLK_MAIL:
-			return ButtonID::Keyboard_Mail;
-		case SDLK_CALCULATOR:
-			return ButtonID::Keyboard_Calculator;
-		case SDLK_COMPUTER:
-			return ButtonID::Keyboard_Computer;
+		//case SDLK_WWW:
+		//	return ButtonID::Keyboard_WWW;
+		//case SDLK_MAIL:
+		//	return ButtonID::Keyboard_Mail;
+		//case SDLK_CALCULATOR:
+		//	return ButtonID::Keyboard_Calculator;
+		//case SDLK_COMPUTER:
+		//	return ButtonID::Keyboard_Computer;
 		case SDLK_AC_SEARCH:
 			return ButtonID::Keyboard_ApplicationControl_Search;
 		case SDLK_AC_HOME:
@@ -466,29 +461,29 @@ ButtonID SDL2_Utils::ConvertSDLKeycodeToButtonID(SDL_Keycode key_){
 			return ButtonID::Keyboard_ApplicationControl_Refresh;
 		case SDLK_AC_BOOKMARKS:
 			return ButtonID::Keyboard_ApplicationControl_Bookmarks;
-		case SDLK_BRIGHTNESSDOWN:
-			return ButtonID::Keyboard_Brightness_Down;
-		case SDLK_BRIGHTNESSUP:
-			return ButtonID::Keyboard_Brightness_Up;
-		case SDLK_DISPLAYSWITCH:
-			return ButtonID::Keyboard_DisplaySwitch;
-		case SDLK_KBDILLUMTOGGLE:
-			return ButtonID::Keyboard_Illumination_Toggle;
-		case SDLK_KBDILLUMDOWN:
-			return ButtonID::Keyboard_Illumination_Down;
-		case SDLK_KBDILLUMUP:
-			return ButtonID::Keyboard_Illumination_Up;
-		case SDLK_EJECT:
+		//case SDLK_BRIGHTNESSDOWN:
+		//	return ButtonID::Keyboard_Brightness_Down;
+		//case SDLK_BRIGHTNESSUP:
+		//	return ButtonID::Keyboard_Brightness_Up;
+		//case SDLK_DISPLAYSWITCH:
+		//	return ButtonID::Keyboard_DisplaySwitch;
+		//case SDLK_KBDILLUMTOGGLE:
+		//	return ButtonID::Keyboard_Illumination_Toggle;
+		//case SDLK_KBDILLUMDOWN:
+		//	return ButtonID::Keyboard_Illumination_Down;
+		//case SDLK_KBDILLUMUP:
+		//	return ButtonID::Keyboard_Illumination_Up;
+		case SDLK_MEDIA_EJECT:
 			return ButtonID::Keyboard_Eject;
 		case SDLK_SLEEP:
 			return ButtonID::Keyboard_Sleep;
-		case SDLK_APP1:
-			return ButtonID::Keyboard_App1;
-		case SDLK_APP2:
-			return ButtonID::Keyboard_App2;
-		case SDLK_AUDIOREWIND:
+		//case SDLK_APP1:
+		//	return ButtonID::Keyboard_App1;
+		//case SDLK_APP2:
+		//	return ButtonID::Keyboard_App2;
+		case SDLK_MEDIA_REWIND:
 			return ButtonID::Keyboard_Audio_Rewind;
-		case SDLK_AUDIOFASTFORWARD:
+		case SDLK_MEDIA_FAST_FORWARD:
 			return ButtonID::Keyboard_Audio_FastForward;
 		case SDLK_SOFTLEFT:
 			return ButtonID::Keyboard_SoftLeft;

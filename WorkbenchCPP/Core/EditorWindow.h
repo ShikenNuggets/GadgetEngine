@@ -1,7 +1,7 @@
 #ifndef GADGET_WORKBENCH_CORE_EDITOR_WINDOW_H
 #define GADGET_WORKBENCH_CORE_EDITOR_WINDOW_H
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 namespace Gadget::Workbench{
 	class EditorWindow{
