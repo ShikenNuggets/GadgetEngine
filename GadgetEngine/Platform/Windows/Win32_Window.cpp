@@ -59,11 +59,19 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderA
 		Debug::ThrowFatalError(SID("INPUT"), "Joystick events could not be enabled! SDL Error: " + std::string(SDL_GetError()), ErrorCode::SDL_Error, __FILE__, __LINE__);
 	}
 
-	const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(0);
-	if(mode == nullptr){
-		Debug::Log("Could not get Display Mode! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
-	}else{
-		refreshRate = static_cast<float>(mode->refresh_rate);
+	const SDL_DisplayID id = SDL_GetPrimaryDisplay();
+	if (id == 0)
+	{
+		GADGET_LOG_WARNING(SID("RENDER"), "Could not get primary display ID! SDL Error: " + std::string(SDL_GetError()));
+	}
+	else
+	{
+		const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(id);
+		if(mode == nullptr){
+			Debug::Log("Could not get Display Mode! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
+		}else{
+			refreshRate = mode->refresh_rate;
+		}
 	}
 
 	Win32_Utils::TryApplyImmersiveDarkMode(GetWindowHandle());
@@ -92,7 +100,7 @@ void Win32_Window::HandleEvents(){
 	float range = 0.0f;
 
 	SDL_Event e;
-	while(SDL_PollEvent(&e) != 0){
+	while(SDL_PollEvent(&e)){
 		switch(e.type){
 			case SDL_EVENT_QUIT:
 				App::CloseGame();
@@ -228,7 +236,7 @@ void Win32_Window::HandleHatMotionEvent(const SDL_Event& e_){
 }
 
 //TODO - I'm honestly not really sure that this is correct, the documentation is a little vague on all this. Validate this
-void Win32_Window::RemoveJoystick(Sint32 instanceID_){
+void Win32_Window::RemoveJoystick(SDL_JoystickID instanceID_){
 	GADGET_ASSERT(joysticks.size() <= 256, "More than 256 joysticks are connected, something has likely gone wrong"); //Everything *should* work fine for up to int max, but I cannot imagine a scenario where we need that many
 
 	int index = -1;

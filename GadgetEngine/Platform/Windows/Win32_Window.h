@@ -33,7 +33,7 @@ namespace Gadget{
 		void HandleWindowEvent(const SDL_Event& e_);
 		void HandleHatMotionEvent(const SDL_Event& e_);
 
-		void RemoveJoystick(Sint32 instanceID_);
+		void RemoveJoystick(SDL_JoystickID instanceID_);
 	};
 }
 
