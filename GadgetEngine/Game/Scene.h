@@ -29,7 +29,11 @@ namespace Gadget{
 			if constexpr(HasComponentCollection<T>){
 				return T::GetCollection().GetAny();
 			}else{
+				// Ironically, this logging is potentially very bad for performance, so best to only do it in debug builds
+				#ifdef GADGET_DEBUG
 				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize Scene::GetComponentInScene by giving it one"));
+				#endif //GADGET_DEBUG
+
 				for(const auto& go : gameObjects){
 					T* t = go->GetComponent<T>();
 					if(t != nullptr){
@@ -48,8 +52,11 @@ namespace Gadget{
 			if constexpr(HasComponentCollection<T>){
 				return T::GetCollection().GetAllComponents();
 			}else{
+				// Ironically, this logging is potentially very bad for performance, so best to only do it in debug builds
+				#ifdef GADGET_DEBUG
 				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize Scene::GetAllComponentsInScene by giving it one"));
-			
+				#endif //GADGET_DEBUG
+
 				Array<T*> comps;
 				for(const auto& go : gameObjects){
 					//TODO - This assumes only one of each kind of component on an object
@@ -74,8 +81,11 @@ namespace Gadget{
 				T::GetCollection().GetAllComponents(inBuffer_);
 				return;
 			}else{
+				// Ironically, this logging is potentially very bad for performance, so best to only do it in debug builds
+				#ifdef GADGET_DEBUG
 				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize Scene::GetAllComponentsInScene by giving it one"));
-			
+				#endif //GADGET_DEBUG
+
 				for(const auto& go : gameObjects){
 					//TODO - This assumes only one of each kind of component on an object
 					T* t = go->GetComponent<T>();

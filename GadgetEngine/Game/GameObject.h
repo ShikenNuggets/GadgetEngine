@@ -61,7 +61,10 @@ namespace Gadget{
 			if constexpr(HasComponentCollection<T>){
 				return T::GetCollection().Get(GetGUID());
 			}else{
+				// Ironically, this logging is potentially very bad for performance, so best to only do it in debug builds
+				#ifdef GADGET_DEBUG
 				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize GameObject::GetComponent by giving it one"));
+				#endif //GADGET_DEBUG 
 
 				//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 				//This seems to be the simplest way to do this generically, but you should set up ComponentCollections to avoid this
@@ -94,7 +97,10 @@ namespace Gadget{
 			if constexpr(HasComponentCollection<T>){
 				return T::GetCollection().GetComponents(guid);
 			}else{
+				// Ironically, this logging is potentially very bad for performance, so best to only do it in debug builds
+				#ifdef GADGET_DEBUG
 				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize GameObject::GetComponents by giving it one"));
+				#endif //GADGET_DEBUG
 
 				//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 				//This seems to be the simplest way to do this generically, but you should set up ComponentCollections to avoid this
