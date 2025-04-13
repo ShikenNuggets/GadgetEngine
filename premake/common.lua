@@ -135,7 +135,7 @@ function GadgetExternalLibs(options)
 	dependson
 	{
 		"Glad",
-		"SDL3",
+		"SDL",
 		"BulletCollision",
 		"BulletDynamics",
 		"BulletLinearMath",
