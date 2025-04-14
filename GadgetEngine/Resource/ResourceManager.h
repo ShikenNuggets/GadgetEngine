@@ -42,6 +42,8 @@ namespace Gadget{
 
 		void UnloadResource(StringID name_);
 
+		size_t GetMemoryUsageOfAllResources() const;
+		size_t GetMemoryUsageOfUnusedResources() const;
 		void DeleteAllUnusedResources();
 
 	private:

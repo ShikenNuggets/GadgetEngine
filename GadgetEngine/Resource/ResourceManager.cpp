@@ -56,6 +56,36 @@ void ResourceManager::UnloadResource(StringID name_){
 	resources[name_]->RemoveReference();
 }
 
+size_t ResourceManager::GetMemoryUsageOfAllResources() const{
+	size_t resourceSize = 0;
+	for(const auto& r : resources){
+		GADGET_BASIC_ASSERT(r.second != nullptr);
+		if(r.second == nullptr){
+			continue;
+		}
+
+		resourceSize += r.second->ResourceSizeInBytes();
+	}
+
+	return resourceSize;
+}
+
+size_t ResourceManager::GetMemoryUsageOfUnusedResources() const{
+	size_t resourceSize = 0;
+	for(const auto& r : resources){
+		GADGET_BASIC_ASSERT(r.second != nullptr);
+		if(r.second == nullptr){
+			continue;
+		}
+
+		if(r.second->GetReferenceCount() == 0){
+			resourceSize += r.second->ResourceSizeInBytes();
+		}
+	}
+
+	return resourceSize;
+}
+
 void ResourceManager::DeleteAllUnusedResources(){
 	for(auto& c : resources){
 		GADGET_BASIC_ASSERT(c.second != nullptr);
