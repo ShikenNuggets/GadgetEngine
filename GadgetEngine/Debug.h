@@ -29,7 +29,7 @@
 
 #define GADGET_BASIC_ASSERT(expr) GADGET_ASSERT(expr, "Condition Failed: " #expr)
 #define GADGET_ASSERT_NOT_IMPLEMENTED GADGET_ASSERT(false, "Case not implemented - Ask a dev!")
-#define GADGET_ASSERT_UNREACHABLE GADGET_ASSERT(false, "Executing code that was expected to be unreachable-  Ask a dev!");
+#define GADGET_ASSERT_UNREACHABLE GADGET_ASSERT(false, "Executing code that was expected to be unreachable - Ask a dev!");
 #define GADGET_ASSERT_FILE_EXISTS(expr) GADGET_ASSERT(FileSystem::FileExists(expr), std::string("Condition Failed: FileSystem::FileExists(") + expr + ")");
 
 #if defined GADGET_DEBUG
