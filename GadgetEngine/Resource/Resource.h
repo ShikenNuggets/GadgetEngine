@@ -26,6 +26,20 @@ namespace Gadget{
 		bool IsLoaded() const{ return resource != nullptr; }
 		size_t GetReferenceCount() const{ return referenceCount; }
 
+		size_t ResourceSizeInBytes() const{
+			if(!isLoaded){
+				return 0;
+			}
+
+			GADGET_BASIC_ASSERT(resource != nullptr);
+			if(resource != nullptr){
+				return resource->SizeInBytes();
+			}
+
+			GADGET_ASSERT_UNREACHABLE;
+			return 0;
+		}
+
 		virtual Resource* AddReference(){
 			if(!isLoaded){
 				GADGET_ASSERT(resource == nullptr, "Unloaded resource is not null!");
