@@ -46,6 +46,10 @@ namespace Gadget{
 		size_t GetMemoryUsageOfAllResources() const;
 		size_t GetMemoryUsageOfUnusedResources() const;
 
+		void SetUnusedResourceMemoryBudget(size_t max_){
+			maxUnusedResourceMemory = max_;
+		}
+
 		void Cleanup(); // (gradually) delete (some) unused resources
 		void ForceDeleteAllUnusedResources();
 
