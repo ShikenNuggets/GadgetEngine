@@ -10,7 +10,7 @@
 
 using namespace Gadget;
 
-ResourceManager::ResourceManager(){
+ResourceManager::ResourceManager() : resources(), maxUnusedResourceMemory(64ULL * 1024 * 1024){
 	if(!FileSystem::FileExists(gResourcesJsonFile)){
 		Debug::ThrowFatalError(SID("RESOURCE"), "resources.json file does not exist!", ErrorCode::FileIO, __FILE__, __LINE__);
 	}
@@ -32,7 +32,7 @@ ResourceManager::ResourceManager(){
 }
 
 ResourceManager::~ResourceManager(){
-	DeleteAllUnusedResources();
+	ForceDeleteAllUnusedResources();
 
 	for(auto& c : resources){
 		if(c.second != nullptr){
@@ -54,6 +54,9 @@ void ResourceManager::UnloadResource(StringID name_){
 	}
 
 	resources[name_]->RemoveReference();
+	if(resources[name_]->GetReferenceCount() == 0){
+		resourcesToUnload.Add(name_);
+	}
 }
 
 size_t ResourceManager::GetMemoryUsageOfAllResources() const{
@@ -86,7 +89,20 @@ size_t ResourceManager::GetMemoryUsageOfUnusedResources() const{
 	return resourceSize;
 }
 
-void ResourceManager::DeleteAllUnusedResources(){
+void ResourceManager::Cleanup(){
+	if(GetMemoryUsageOfUnusedResources() < maxUnusedResourceMemory){
+		return;
+	}
+
+	const StringID resourceName = resourcesToUnload.Peek();
+	resourcesToUnload.Remove();
+	GADGET_BASIC_ASSERT(resources.contains(resourceName));
+	if(resources.contains(resourceName)){
+		resources[resourceName]->DeleteIfUnused();
+	}
+}
+
+void ResourceManager::ForceDeleteAllUnusedResources(){
 	for(auto& c : resources){
 		GADGET_BASIC_ASSERT(c.second != nullptr);
 		if(c.second != nullptr){

@@ -192,7 +192,7 @@ void App::Run(GameInterface& gameInterface_){
 		twoFrameAllocator.SwapBuffers();
 		twoFrameAllocator.CurrentBuffer().Clear();
 
-		resourceMgr->DeleteAllUnusedResources(); //TODO - We don't necessarily need to do this every frame
+		resourceMgr->Cleanup();
 
 		//Regular update follows
 		time->Update();

@@ -4,6 +4,7 @@
 #include <map>
 
 #include "Debug.h"
+#include "Data/Queue.h"
 #include "Resource/Resource.h"
 #include "Utils/StringID.h"
 #include "Utils/Utils.h"
@@ -44,10 +45,14 @@ namespace Gadget{
 
 		size_t GetMemoryUsageOfAllResources() const;
 		size_t GetMemoryUsageOfUnusedResources() const;
-		void DeleteAllUnusedResources();
+
+		void Cleanup(); // (gradually) delete (some) unused resources
+		void ForceDeleteAllUnusedResources();
 
 	private:
 		std::map<StringID, ResourceContainer*> resources;
+		Queue<StringID> resourcesToUnload;
+		size_t maxUnusedResourceMemory;
 	};
 }
 
