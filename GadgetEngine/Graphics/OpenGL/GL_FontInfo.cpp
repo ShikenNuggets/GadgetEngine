@@ -8,6 +8,12 @@ GL_FontInfo::GL_FontInfo(const FreetypeFont& font_) : FontInfo(){
 
 	const auto& characters = font_.GetCharacters();
 	for(const auto& c : characters){
+		if(c.second.width == 0 || c.second.top == 0 || c.second.bitmapBuffer.empty()){
+			// Character has no data - probably whitespace. We'll just use no texture here
+			textures.emplace(c.first, 0);
+			continue;
+		}
+
 		GLuint texture = 0;
 		glActiveTexture(GL_TEXTURE1);
 		glGenTextures(1, &texture);
