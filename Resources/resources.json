@@ -162,6 +162,24 @@
             "resource_type": "FreetypeFont"
         }
     ],
+	[
+        {
+            "name": "TimesFont"
+        },
+        {
+            "path": "Resources/times.ttf",
+            "resource_type": "FreetypeFont"
+        }
+    ],
+	[
+        {
+            "name": "ImpactFont"
+        },
+        {
+            "path": "Resources/impact.ttf",
+            "resource_type": "FreetypeFont"
+        }
+    ],
     [
         {
             "name": "CubeTexture"
