@@ -44,10 +44,10 @@ FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_) const{
 
 	//Load the first 128 ASCII characters
 	//TODO - Unicode?
-	for(unsigned char c = 0; c < gNumCharacters; c++) {
+	for(char c = 0; c < gNumCharacters; c++) {
 		//Load character glyph 
-		err = FT_Load_Char(fontFace, c, FT_LOAD_RENDER);
-		GADGET_ASSERT(err == FT_Err_Ok, std::string("Could not load glyph for character ") + static_cast<char>(c) + std::string("! FreeType Error Code" + std::to_string(err)));
+		err = FT_Load_Char(fontFace, static_cast<FT_ULong>(c), FT_LOAD_RENDER);
+		GADGET_ASSERT(err == FT_Err_Ok, std::string("Could not load glyph for character '") + c + std::string("'! FreeType Error Code" + std::to_string(err)));
 
 		const FreetypeFontCharacter character = FreetypeFontCharacter(
 			fontFace->glyph->bitmap.width,
