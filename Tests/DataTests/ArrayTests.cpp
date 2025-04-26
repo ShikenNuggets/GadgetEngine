@@ -679,3 +679,21 @@ TEST_CASE("Array Rank Transform", "[array_rank_transform]"){
 	REQUIRE(result[7] == 1);
 	REQUIRE(result[8] == 3);
 }
+
+TEST_CASE("Array IsValidIndex", "[array_is_valid_index]"){
+	Array<int> test;
+	test.Add(40);
+	test.Add(10);
+	test.Add(20);
+	test.Add(30);
+
+	REQUIRE(test.IsValidIndex(0));
+	REQUIRE(test.IsValidIndex(1));
+	REQUIRE(test.IsValidIndex(2));
+	REQUIRE(test.IsValidIndex(3));
+	REQUIRE(!test.IsValidIndex(4));
+	REQUIRE(!test.IsValidIndex(5));
+	REQUIRE(!test.IsValidIndex(std::numeric_limits<int64_t>::max()));
+	REQUIRE(!test.IsValidIndex(-1));
+	REQUIRE(!test.IsValidIndex(-25));
+}

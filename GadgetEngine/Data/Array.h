@@ -345,6 +345,8 @@ namespace Gadget{
 			return true;
 		}
 
+		constexpr bool IsValidIndex(int64_t index_){ return index_ >= 0 && index_ < Size(); }
+
 		constexpr inline int64_t Size() const{ return size; }
 		constexpr inline size_t SizeInBytes() const{ return sizeof(Array<T>) + (sizeof(T) * capacity); }
 		constexpr inline bool IsEmpty() const{ return size == 0; }
