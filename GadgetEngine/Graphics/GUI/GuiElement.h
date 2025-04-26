@@ -60,7 +60,9 @@ namespace Gadget{
 		}
 
 		void SetPosition(const Vector2& pos_){ position = pos_; }
+		void SetPosition(float x_, float y_){ position = Vector2(x_, y_); }
 		void SetSize(const Vector2& size_){ size = size_; }
+		void SetSize(float x_, float y_){ size = Vector2(x_, y_); }
 		void SetAnchor(GuiAnchor anchor_){ anchor = anchor_; }
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
