@@ -9,19 +9,19 @@
 
 namespace Gadget{
 	struct FreetypeFontCharacter{
-		FreetypeFontCharacter(size_t width_, size_t rows_, int pitch_, int left_, int top_, long advanceX_, unsigned char* oldBufferToCopy_) : width(width_), rows(rows_), pitch(pitch_), left(left_), top(top_), advanceX(advanceX_){
+		FreetypeFontCharacter(int64_t width_, int64_t rows_, int64_t pitch_, int64_t left_, int64_t top_, int64_t advanceX_, unsigned char* oldBufferToCopy_) : width(width_), rows(rows_), pitch(pitch_), left(left_), top(top_), advanceX(advanceX_){
 			if(oldBufferToCopy_ != nullptr){
 				bitmapBuffer.reserve(rows * pitch);
 				std::copy(oldBufferToCopy_, oldBufferToCopy_ + (rows * pitch), std::back_inserter(bitmapBuffer));
 			}
 		}
 
-		size_t width;
-		size_t rows;
-		int pitch;
-		int left;
-		int top;
-		long advanceX;
+		int64_t width;
+		int64_t rows;
+		int64_t pitch;
+		int64_t left;
+		int64_t top;
+		int64_t advanceX;
 		std::vector<unsigned char> bitmapBuffer;
 	};
 
