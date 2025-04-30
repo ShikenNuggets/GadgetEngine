@@ -395,6 +395,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_G
     <ClInclude Include="Physics\PhysManager.h" />
     <ClInclude Include="Physics\Rigidbody.h" />
     <ClInclude Include="Physics\SphereCollider.h" />
+    <ClInclude Include="Platform\PlatformUtils.h" />
     <ClInclude Include="Platform\Windows\SDL2_Utils.h" />
     <ClInclude Include="Platform\Windows\Win32_DX12_Renderer.h" />
     <ClInclude Include="Platform\Windows\Win32_DXR_Renderer.h" />
@@ -526,6 +527,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\FMOD\studio\lib\*.lib" "$(ProjectDir)..\SDK\_G
     <ClCompile Include="Physics\MeshCollider.cpp" />
     <ClCompile Include="Physics\PhysManager.cpp" />
     <ClCompile Include="Physics\Rigidbody.cpp" />
+    <ClCompile Include="Platform\PlatformUtils.cpp" />
     <ClCompile Include="Platform\Windows\SDL2_Utils.cpp" />
     <ClCompile Include="Platform\Windows\Win32_DX12_Renderer.cpp" />
     <ClCompile Include="Platform\Windows\Win32_DXR_Renderer.cpp" />

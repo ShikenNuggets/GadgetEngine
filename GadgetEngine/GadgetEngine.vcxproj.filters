@@ -573,6 +573,9 @@
     <ClInclude Include="Physics\SphereCollider.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\PlatformUtils.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
     <ClInclude Include="Platform\Windows\SDL2_Utils.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -941,6 +944,9 @@
     </ClCompile>
     <ClCompile Include="Physics\Rigidbody.cpp">
       <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\PlatformUtils.cpp">
+      <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="Platform\Windows\SDL2_Utils.cpp">
       <Filter>Platform\Windows</Filter>
