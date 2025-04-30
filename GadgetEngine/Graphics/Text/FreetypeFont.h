@@ -44,11 +44,11 @@ namespace Gadget{
 
 		virtual size_t SizeInBytes() const override{ return sizeof(*this); } //TODO - This isn't quite right
 
-		const std::map<char, FreetypeFontCharacter>& GetCharacters() const{ return characters; }
+		const std::unordered_map<char, FreetypeFontCharacter>& GetCharacters() const{ return characters; }
 		FontInfo* GetFontInfo() const{ return fontInfo; }
 
 	private:
-		std::map<char, FreetypeFontCharacter> characters;
+		std::unordered_map<char, FreetypeFontCharacter> characters;
 		FontInfo* fontInfo;
 	};
 
