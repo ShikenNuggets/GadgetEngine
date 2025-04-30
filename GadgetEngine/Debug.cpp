@@ -90,7 +90,6 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 		finalMessage += ")";
 	}
 
-#ifdef GADGET_PLATFORM_WIN32
 	switch(type_){
 		case Verbose: [[fallthrough]];
 		case Info:
@@ -107,15 +106,11 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 			GADGET_ASSERT_NOT_IMPLEMENTED;
 			break;
 	}
-#endif //GADGET_PLATFORM_WIN32
 
 	std::cout << finalMessage << "\n";
 
-#ifdef GADGET_PLATFORM_WIN32
 	PlatformUtils::SetConsoleColorWhite();
-
 	PlatformUtils::OutputToDebuggerConsole(finalMessage + "\n");
-#endif //GADGET_PLATFORM_WIN32
 
 	if(writeToLogFile_){
 		QueueLogForFileWrite(finalMessage + "\n");
