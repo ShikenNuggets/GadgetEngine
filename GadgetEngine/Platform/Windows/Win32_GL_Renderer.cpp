@@ -321,13 +321,13 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				const GLfloat h = static_cast<float>(ch.rows) * screenHeightPerPixel;
 				// Update VBO for each character
 				const StaticArray2D<GLfloat, 6, 4> vertices = {{
-					{{ xpos,		ypos + h,	0.0, 0.0 }},
-					{{ xpos,		ypos,		0.0, 1.0 }},
-					{{ xpos + w,	ypos,		1.0, 1.0 }},
+					{{ xpos,		ypos + h,	0.0f, 0.0f }},
+					{{ xpos,		ypos,		0.0f, 1.0f }},
+					{{ xpos + w,	ypos,		1.0f, 1.0f }},
 
-					{{ xpos,		ypos + h,	0.0, 0.0 }},
-					{{ xpos + w,	ypos,		1.0, 1.0 }},
-					{{ xpos + w,	ypos + h,	1.0, 0.0 }}
+					{{ xpos,		ypos + h,	0.0f, 0.0f }},
+					{{ xpos + w,	ypos,		1.0f, 1.0f }},
+					{{ xpos + w,	ypos + h,	1.0f, 0.0f }}
 				}};
 
 				//Don't bind the texture if it's a space, for some reason doing so causes OpenGL warnings
