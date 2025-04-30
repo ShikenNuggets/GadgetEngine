@@ -8,7 +8,7 @@
 
 #include <Debug.h>
 #include <Math/Math.h>
-#include <Platform/Windows/Win32_Utils.h>
+#include <Platform/PlatformUtils.h>
 
 using namespace Gadget::Workbench;
 
@@ -57,7 +57,7 @@ EditorWindow::EditorWindow(int width_, int height_) : window(nullptr), glContext
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), ErrorCode::OpenGL_Error, __FILE__, __LINE__);
 	}
 
-	Win32_Utils::TryApplyImmersiveDarkMode(GetWindowHandle());
+	PlatformUtils::TryApplyImmersiveDarkMode(GetWindowHandle());
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

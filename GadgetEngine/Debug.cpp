@@ -7,12 +7,11 @@
 #pragma warning(disable : 26819) //Unnanotated fallthrough in switch statement
 #include <SDL3/SDL_messagebox.h>
 #pragma warning(default : 26819)
-
-#include "Platform/Windows/Win32_Utils.h"
 #endif //GADGET_PLATFORM_WIN32
 
 #include "App.h"
 #include "Core/FileSystem.h"
+#include "Platform/PlatformUtils.h"
 #include "Utils/Utils.h"
 
 using namespace Gadget;
@@ -95,14 +94,14 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	switch(type_){
 		case Verbose: [[fallthrough]];
 		case Info:
-			Win32_Utils::SetConsoleColorWhite();
+			PlatformUtils::SetConsoleColorWhite();
 			break;
 		case Warning:
-			Win32_Utils::SetConsoleColorYellow();
+			PlatformUtils::SetConsoleColorYellow();
 			break;
 		case Error: [[fallthrough]];
 		case FatalError:
-			Win32_Utils::SetConsoleColorRed();
+			PlatformUtils::SetConsoleColorRed();
 			break;
 		default:
 			GADGET_ASSERT_NOT_IMPLEMENTED;
@@ -113,9 +112,9 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	std::cout << finalMessage << "\n";
 
 #ifdef GADGET_PLATFORM_WIN32
-	Win32_Utils::SetConsoleColorWhite();
+	PlatformUtils::SetConsoleColorWhite();
 
-	Win32_Utils::OutputToDebuggerConsole(finalMessage + "\n");
+	PlatformUtils::OutputToDebuggerConsole(finalMessage + "\n");
 #endif //GADGET_PLATFORM_WIN32
 
 	if(writeToLogFile_){

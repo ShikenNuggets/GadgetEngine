@@ -2,7 +2,7 @@
 
 #include <imgui.h>
 
-#include <Platform/Windows/Win32_Utils.h>
+#include <Platform/PlatformUtils.h>
 
 #include "EditorApp.h"
 #include "Utils/VisualStudioHelper.h"
@@ -80,7 +80,7 @@ void EditorToolbar::Draw(){
 				if(latestExePath.empty()){
 					Debug::PopupErrorMessage("Cannot Run Game", "Game EXE has not been compiled in any configuration!");
 				}else{
-					const ErrorCode err = Win32_Utils::OpenFileInDefaultApplication(latestExePath);
+					const ErrorCode err = PlatformUtils::OpenFileInDefaultApplication(latestExePath);
 					if(err != ErrorCode::OK){
 						Debug::PopupErrorMessage("Error", "Could not open exe! Error Code: " + GetErrorCodeString(err));
 					}

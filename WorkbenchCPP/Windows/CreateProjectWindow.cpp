@@ -2,7 +2,7 @@
 
 #include <imgui.h>
 
-#include <Platform/Windows/Win32_Utils.h>
+#include <Platform/PlatformUtils.h>
 
 #include "EditorApp.h"
 
@@ -52,7 +52,7 @@ void CreateProjectWindow::Draw(){
 			ImGui::TableNextColumn();
 			if(ImGui::Button("...")){
 				while(true){
-					std::string result = Win32_Utils::BrowseForFolder(EditorApp::GetMainWindowHandle(), L"Choose a directory for your new project...");
+					std::string result = PlatformUtils::BrowseForFolder(EditorApp::GetMainWindowHandle(), L"Choose a directory for your new project...");
 					if(result.empty()){
 						break; //User cancelled
 					}

@@ -2,7 +2,7 @@
 #define GADGET_WORKBENCH_UTILS_VISUAL_STUDIO_HELPER_H
 
 #include "Core/FileSystem.h"
-#include "Platform/Windows/Win32_Utils.h"
+#include "Platform/PlatformUtils.h"
 
 namespace Gadget::Workbench::VisualStudio{
 	static inline constexpr const char* gPremakeTemplateFile = "premake.template";
@@ -12,19 +12,19 @@ namespace Gadget::Workbench::VisualStudio{
 	static inline constexpr const char* gMainFile = "Main.cpp";
 
 	inline ErrorCode OpenSolution(const String& projectName_, const String& projectPath_){
-		uint64_t hwnd = Win32_Utils::GetWindowOfRunningApplication("Microsoft Visual Studio", projectName_);
+		uint64_t hwnd = PlatformUtils::GetWindowOfRunningApplication("Microsoft Visual Studio", projectName_);
 		if(hwnd == NULL){
-			const ErrorCode err = Win32_Utils::OpenFileInDefaultApplication(projectPath_ + FileSystem::PathSeparator + projectName_ + gVsSolutionExtension);
+			const ErrorCode err = PlatformUtils::OpenFileInDefaultApplication(projectPath_ + FileSystem::PathSeparator + projectName_ + gVsSolutionExtension);
 			GADGET_BASIC_ASSERT(err == ErrorCode::OK);
 			return err;
 		}else{
-			ErrorCode err = Win32_Utils::ShowWindow(hwnd);
+			ErrorCode err = PlatformUtils::ShowWindow(hwnd);
 			GADGET_BASIC_ASSERT(err == ErrorCode::OK);
 			if(err != ErrorCode::OK){
 				return err;
 			}
 
-			err = Win32_Utils::BringWindowToForeground(hwnd);
+			err = PlatformUtils::BringWindowToForeground(hwnd);
 			GADGET_BASIC_ASSERT(err == ErrorCode::OK);
 			return err;
 		}
@@ -54,7 +54,7 @@ namespace Gadget::Workbench::VisualStudio{
 			return err;
 		}
 
-		return Win32_Utils::OpenFileInDefaultApplication("premake\\premake5.exe", "vs2022");
+		return PlatformUtils::OpenFileInDefaultApplication("premake\\premake5.exe", "vs2022");
 	}
 }
 

@@ -4,11 +4,8 @@
 #include <fstream>
 
 #include "Debug.h"
+#include "Platform/PlatformUtils.h"
 #include "Utils/Utils.h"
-
-#ifdef GADGET_PLATFORM_WIN32
-#include "Platform/Windows/Win32_Utils.h"
-#endif //GADGET_PLATFORM_WIN32
 
 using namespace Gadget;
 
@@ -243,11 +240,7 @@ ErrorCode FileSystem::WriteJSONToBinaryFile(const std::string& filePath_, const 
 }
 
 std::string FileSystem::GetPersistentDataDir(){
-	#ifdef GADGET_PLATFORM_WIN32
-		return Win32_Utils::GetUserDocumentsPath();
-	#else
-		static_assert(false, "Unhandled platform in FileSystem::GetDocumentsPath!");
-	#endif //!GADGET_PLATFORM_WIN32
+	return PlatformUtils::GetUserDocumentsPath();
 }
 
 ErrorCode FileSystem::CreateFile(const std::string& file_){

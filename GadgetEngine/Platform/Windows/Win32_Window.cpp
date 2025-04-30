@@ -10,8 +10,8 @@
 #include "Input/KeyEvent.h"
 #include "Input/MouseEvent.h"
 #include "Input/GamepadEvent.h"
+#include "Platform/PlatformUtils.h"
 #include "Platform/Windows/SDL2_Utils.h"
-#include "Platform/Windows/Win32_Utils.h"
 
 using namespace Gadget;
 
@@ -74,7 +74,7 @@ Win32_Window::Win32_Window(int w_, int h_, int x_, int y_, Renderer::API renderA
 		}
 	}
 
-	Win32_Utils::TryApplyImmersiveDarkMode(GetWindowHandle());
+	PlatformUtils::TryApplyImmersiveDarkMode(GetWindowHandle());
 }
 
 Win32_Window::~Win32_Window(){
