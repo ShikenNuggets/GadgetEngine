@@ -169,6 +169,7 @@ void App::Run(GameInterface& gameInterface_){
 	Initialize(gameInterface_.GetName()); //Init engine
 	GADGET_BASIC_ASSERT(IsFullyInitialized());
 
+	gameInterface_.CacheMaterials();
 	gameInterface_.LoadGame(); //Init game
 
 	GADGET_BASIC_ASSERT(sceneManager->GetNumScenes() > 0);
@@ -234,6 +235,7 @@ void App::Run(GameInterface& gameInterface_){
 		//Hot reload the renderer when F11 is pressed - useful for testing
 		if(input->GetButtonDown(ButtonID::Keyboard_F11)){
 			ResetRenderer();
+			gameInterface_.CacheMaterials();
 			EventHandler::GetInstance()->HandleEvent(WindowRestartedEvent());
 		}
 	#endif // GADGET_DEBUG

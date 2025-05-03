@@ -53,6 +53,16 @@ namespace Gadget{
 		void Cleanup(); // (gradually) delete (some) unused resources
 		void ForceDeleteAllUnusedResources();
 
+		template <class T>
+		void ForceUnloadAssetsOfType(){
+			static_assert(std::is_base_of_v<Resource, T>);
+			for(auto& r : resources){
+				if(r.second->GetResourceTypeInfo() == typeid(T)){
+					r.second->DeleteIfUnused();
+				}
+			}
+		}
+
 	private:
 		std::map<StringID, ResourceContainer*> resources;
 		Queue<StringID> resourcesToUnload;

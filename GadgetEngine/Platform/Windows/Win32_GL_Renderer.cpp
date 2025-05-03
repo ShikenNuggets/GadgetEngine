@@ -96,9 +96,25 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 }
 
 Win32_GL_Renderer::~Win32_GL_Renderer(){
+	RenderComponent::GetCollection().GetAllComponents(rendersBuffer);
+	for(auto& render : rendersBuffer){
+		render->InvalidateMeshInfo();
+	}
+
+	AnimRenderComponent::GetCollection().GetAllComponents(animRendersBuffer);
+	for(auto& animRender : animRendersBuffer){
+		animRender->InvalidateMeshInfo();
+	}
+
+	for(auto& pair : App::GetMaterialCache().GetMaterials()){
+		pair.value->InvalidateAllAPIInfos();
+	}
+
 	delete screenQuad;
 	App::GetResourceManager().UnloadResource(SID("ScreenShader"));
 	delete mainFBO;
+
+	App::GetResourceManager().ForceUnloadAssetsOfType<GL_Shader>();
 
 	SDL_GL_DestroyContext(glContext); // TODO - Check return value
 

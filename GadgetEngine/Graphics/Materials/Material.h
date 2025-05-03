@@ -30,6 +30,10 @@ namespace Gadget{
 
 		void InvalidateShader();
 
+		virtual void InvalidateAllAPIInfos(){
+			InvalidateShader();
+		}
+
 		virtual void Serialize(NamedVarList& varList_) const;
 
 	protected:

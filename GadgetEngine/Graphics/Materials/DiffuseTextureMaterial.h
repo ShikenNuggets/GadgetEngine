@@ -87,6 +87,11 @@ namespace Gadget{
 			textureInfo = nullptr;
 		}
 
+		virtual void InvalidateAllAPIInfos() override{
+			Material::InvalidateAllAPIInfos();
+			InvalidateTextureInfo();
+		}
+
 	protected:
 		virtual void Deserialize(const NamedVarList& varList_) override{
 			GADGET_BASIC_ASSERT(DiffuseTextureMaterial::Type() == varList_.GetValue(SID("MaterialType"), StringID::None).ToStr());

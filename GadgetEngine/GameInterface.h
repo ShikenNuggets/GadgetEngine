@@ -9,6 +9,7 @@ namespace Gadget{
 		GameInterface(const std::string& name_) : name(name_){}
 		virtual ~GameInterface(){}
 
+		virtual void CacheMaterials(){}
 		virtual void LoadGame() = 0;
 
 		std::string GetName() const{ return name; }

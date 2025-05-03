@@ -129,6 +129,7 @@ void RenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(modelName != StringID::None);
 
 	InvalidateMeshInfo();
+	auto oldMeshInfos = meshInfos;
 	meshInfos.clear();
 
 	Mesh* mesh = App::GetResourceManager().LoadResource<Mesh>(modelName);
@@ -142,6 +143,10 @@ void RenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 
 	App::GetResourceManager().UnloadResource(modelName);
+
+	for(size_t i = 0; i < oldMeshInfos.size() && i < meshInfos.size(); i++){
+		meshInfos[i].second = oldMeshInfos[i].second;
+	}
 }
 
 void RenderComponent::InvalidateMeshInfo(){

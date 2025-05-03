@@ -126,6 +126,7 @@ void AnimRenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(modelName != StringID::None);
 
 	InvalidateMeshInfo();
+	const auto oldMeshInfos = meshInfos;
 	meshInfos.clear();
 
 	AnimMesh* mesh = App::GetResourceManager().LoadResource<AnimMesh>(modelName);
@@ -139,6 +140,10 @@ void AnimRenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 
 	App::GetResourceManager().UnloadResource(modelName);
+
+	for(size_t i = 0; i < oldMeshInfos.size() && i < meshInfos.size(); i++){
+		meshInfos[i].second = oldMeshInfos[i].second;
+	}
 }
 
 void AnimRenderComponent::InvalidateMeshInfo(){
