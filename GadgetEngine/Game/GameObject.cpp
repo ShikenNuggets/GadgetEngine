@@ -109,6 +109,10 @@ void GameObject::SetLifeTime(float lifeTime_){
 	lifeTimeTimer = 0.0f;
 }
 
+void GameObject::Destroy(){
+	SetLifeTime(0.0f); // Object will be destroyed at the start of the next frame
+}
+
 GameObject* GameObject::FindWithTag(StringID tag_){
 	GADGET_BASIC_ASSERT(tag_ != StringID::None);
 	return App::GetSceneManager().CurrentScene()->FindWithTag(tag_);

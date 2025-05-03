@@ -132,6 +132,8 @@ namespace Gadget{
 		void SetLifeTime(float lifeTime);
 		inline bool HasLifeTimeEnded() const{ return lifeTime >= 0.0f && lifeTimeTimer >= lifeTime; }
 
+		void Destroy();
+
 		void SetPosition(const Vector3& pos_){ transform.position = pos_; OnTransformModified(); }
 		void SetPosition(float x_, float y_, float z_){ transform.position = Vector3(x_, y_, z_); OnTransformModified(); }
 
