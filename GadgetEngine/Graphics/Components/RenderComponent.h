@@ -75,12 +75,18 @@ namespace Gadget{
 		Shader* GetShader(size_t index_){
 			GADGET_BASIC_ASSERT(index_ < meshInfos.size());
 			if(index_ >= meshInfos.size()){
-				GADGET_LOG_WARNING(SID("RENDER"), "Trying to access invalid material at index " + std::to_string(index_));
+				GADGET_LOG_WARNING(SID("RENDER"), "Trying to access material at invalid index " + std::to_string(index_));
 				return nullptr;
 			}
 			
-			GADGET_BASIC_ASSERT(GetCachedMaterial(index_) != nullptr);
-			return GetCachedMaterial(index_)->GetShader();
+			Material* material = GetCachedMaterial(index_);
+			GADGET_BASIC_ASSERT(material != nullptr);
+			if(material == nullptr){
+				GADGET_LOG_WARNING(SID("RENDER"), "No valid material cached at index !" + std::to_string(index_));
+				return nullptr;
+			}
+
+			return material->GetShader();
 		}
 
 		virtual ComponentProperties Serialize() const override;

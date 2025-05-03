@@ -204,6 +204,7 @@ Material* RenderComponent::GetCachedMaterial(size_t meshIndex_) const{
 }
 
 Material* RenderComponent::GetCachedMaterial(StringID material_){
-	GADGET_BASIC_ASSERT(App::GetMaterialCache().GetMaterial(material_) != nullptr);
-	return App::GetMaterialCache().GetMaterial(material_);
+	Material* cachedMaterial = App::GetMaterialCache().GetMaterial(material_);
+	GADGET_BASIC_ASSERT(cachedMaterial != nullptr);
+	return cachedMaterial;
 }
