@@ -13,8 +13,7 @@ const StringID DiffuseTextureMaterial::type = SID("DiffuseTextureMaterial");
 Material::Material(StringID shaderResource_) : shaderResourceName(shaderResource_), shader(nullptr){
 	GADGET_BASIC_ASSERT(shaderResourceName != StringID::None);
 
-	shader = App::GetRenderer().GenerateAPIShader(shaderResourceName);
-	GADGET_ASSERT(shader != nullptr, "Could not load shader [" + shaderResourceName.GetString() + "]!");
+	LoadShader();
 }
 
 Material::Material(const NamedVarList& varList_) : shaderResourceName(StringID::None), shader(nullptr){
@@ -22,13 +21,23 @@ Material::Material(const NamedVarList& varList_) : shaderResourceName(StringID::
 }
 
 Material::~Material(){
-	//delete shader; //TODO - I don't know who's supposed to own the shader now but this causes a crash
-	App::GetResourceManager().UnloadResource(shaderResourceName);
+	InvalidateShader();
 }
 
 void Material::Serialize(NamedVarList& varList_) const{
 	varList_.Add(SID("MaterialType"), Type());
 	varList_.Add(SID("ShaderName"), shaderResourceName);
+}
+
+void Material::LoadShader(){
+	InvalidateShader();
+	shader = App::GetRenderer().GenerateAPIShader(shaderResourceName);
+	GADGET_ASSERT(shader != nullptr, "Could not load shader [" + shaderResourceName.GetString() + "]!");
+}
+
+void Material::InvalidateShader(){
+	App::GetResourceManager().UnloadResource(shaderResourceName);
+	shader = nullptr;
 }
 
 void Material::Deserialize(const NamedVarList& varList_){

@@ -17,9 +17,18 @@ namespace Gadget{
 		virtual bool HasLighting() const = 0;
 
 		inline StringID GetShaderName() const{ return shaderResourceName; }
-		inline Shader* GetShader() const{ return shader; }
+
+		inline Shader* GetShader(){
+			if(shader == nullptr){
+				LoadShader();
+			}
+
+			return shader;
+		}
 
 		virtual StringID Type() const = 0;
+
+		void InvalidateShader();
 
 		virtual void Serialize(NamedVarList& varList_) const;
 
@@ -27,6 +36,7 @@ namespace Gadget{
 		StringID shaderResourceName;
 		Shader* shader;
 
+		void LoadShader();
 		virtual void Deserialize(const NamedVarList& varList_);
 	};
 }

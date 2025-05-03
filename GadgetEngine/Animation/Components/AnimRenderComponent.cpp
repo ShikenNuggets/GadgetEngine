@@ -89,7 +89,7 @@ void AnimRenderComponent::Update(float deltaTime_){
 void AnimRenderComponent::Bind(size_t index_){
 	GADGET_BASIC_ASSERT(index_ < meshInfos.size());
 
-	meshInfos[index_].first->Bind();
+	GetMeshInfo(index_)->Bind();
 	GetCachedMaterial(index_)->Bind();
 }
 
@@ -97,7 +97,7 @@ void AnimRenderComponent::Unbind(size_t index_){
 	GADGET_BASIC_ASSERT(index_ < meshInfos.size());
 
 	GetCachedMaterial(index_)->Unbind();
-	meshInfos[index_].first->Unbind();
+	GetMeshInfo(index_)->Unbind();
 }
 
 void AnimRenderComponent::AddClip(StringID clipName_){
@@ -125,6 +125,9 @@ void AnimRenderComponent::Stop(){
 void AnimRenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(modelName != StringID::None);
 
+	InvalidateMeshInfo();
+	meshInfos.clear();
+
 	AnimMesh* mesh = App::GetResourceManager().LoadResource<AnimMesh>(modelName);
 	GADGET_BASIC_ASSERT(mesh != nullptr);
 
@@ -136,6 +139,13 @@ void AnimRenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 
 	App::GetResourceManager().UnloadResource(modelName);
+}
+
+void AnimRenderComponent::InvalidateMeshInfo(){
+	for(auto& mi : meshInfos){
+		delete mi.first;
+		mi.first = nullptr;
+	}
 }
 
 void AnimRenderComponent::CreateAnimator(){
