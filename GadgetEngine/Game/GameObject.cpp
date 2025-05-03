@@ -66,7 +66,7 @@ void GameObject::Update([[maybe_unused]] float deltaTime_){
 		}
 	}
 
-	if(lifeTime > 0.0f){
+	if(lifeTime >= 0.0f){
 		lifeTimeTimer += deltaTime_;
 	}
 }
@@ -104,7 +104,7 @@ void GameObject::AddTag(StringID tag_){
 }
 
 void GameObject::SetLifeTime(float lifeTime_){
-	GADGET_BASIC_ASSERT(lifeTime_ > 0);
+	GADGET_BASIC_ASSERT(lifeTime_ >= 0.0f);
 	lifeTime = lifeTime_;
 	lifeTimeTimer = 0.0f;
 }
