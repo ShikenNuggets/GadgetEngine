@@ -114,7 +114,7 @@ void RenderComponent::OnTransformModified(){
 void RenderComponent::Bind(size_t index_){
 	GADGET_BASIC_ASSERT(index_ < meshInfos.size());
 
-	meshInfos[index_].first->Bind();
+	GetMeshInfo(index_)->Bind();
 	GetCachedMaterial(index_)->Bind();
 }
 
@@ -128,6 +128,9 @@ void RenderComponent::Unbind(size_t index_){
 void RenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(modelName != StringID::None);
 
+	InvalidateMeshInfo();
+	meshInfos.clear();
+
 	Mesh* mesh = App::GetResourceManager().LoadResource<Mesh>(modelName);
 	GADGET_BASIC_ASSERT(mesh != nullptr);
 
@@ -139,6 +142,13 @@ void RenderComponent::CreateMeshInfo(){
 	GADGET_BASIC_ASSERT(!meshInfos.empty());
 
 	App::GetResourceManager().UnloadResource(modelName);
+}
+
+void RenderComponent::InvalidateMeshInfo(){
+	for(auto& m : meshInfos){
+		delete m.first;
+		m.first = nullptr;
+	}
 }
 
 void RenderComponent::CreateMeshInstanceInfo(){

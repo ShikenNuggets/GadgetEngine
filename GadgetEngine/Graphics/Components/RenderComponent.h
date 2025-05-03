@@ -32,11 +32,15 @@ namespace Gadget{
 
 		inline constexpr size_t GetNumSubmeshes() const{ return meshInfos.size(); }
 
-		inline constexpr MeshInfo* GetMeshInfo(size_t index_) const{
+		inline constexpr MeshInfo* GetMeshInfo(size_t index_){
 			GADGET_BASIC_ASSERT(index_ < meshInfos.size());
 			if(index_ >= meshInfos.size()){
 				GADGET_LOG_WARNING(SID("RENDER"), "Tried to access invalid mesh at index " + std::to_string(index_));
 				return nullptr;
+			}
+
+			if(meshInfos[index_].first == nullptr){
+				CreateMeshInfo();
 			}
 
 			GADGET_BASIC_ASSERT(meshInfos[index_].first != nullptr);
@@ -92,6 +96,7 @@ namespace Gadget{
 		virtual ComponentProperties Serialize() const override;
 
 		void CreateMeshInfo();
+		void InvalidateMeshInfo();
 
 	protected:
 		virtual void Deserialize(const ComponentProperties& props_) override;
