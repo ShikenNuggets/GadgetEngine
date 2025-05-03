@@ -69,6 +69,9 @@ namespace Gadget{
 
 		EngineMaterial* GetEngineMaterial(){ return engineMaterial; }
 
+		void SetMaterial(StringID cachedMaterial);
+		void SetMaterial(size_t index_, StringID cachedMaterial);
+
 		Shader* GetShader(size_t index_){
 			GADGET_BASIC_ASSERT(index_ < meshInfos.size());
 			if(index_ >= meshInfos.size()){

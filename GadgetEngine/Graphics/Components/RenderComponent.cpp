@@ -145,6 +145,22 @@ void RenderComponent::CreateMeshInstanceInfo(){
 	meshInstanceInfo = App::GetRenderer().GenerateAPIMeshInstanceInfo(parent->GetTransformMatrix());
 }
 
+void RenderComponent::SetMaterial(StringID cachedMaterial_){
+	for(auto& m : meshInfos){
+		m.second = cachedMaterial_;
+	}
+}
+
+void RenderComponent::SetMaterial(size_t index_, StringID cachedMaterial_){
+	GADGET_BASIC_ASSERT(index_ < meshInfos.size());
+	if(meshInfos.size() <= index_){
+		GADGET_LOG_WARNING(SID("RENDER"), "Invalid index for SetMaterial!");
+		return;
+	}
+
+	meshInfos[index_].second = cachedMaterial_;
+}
+
 ComponentProperties RenderComponent::Serialize() const{
 	ComponentProperties props = Component::Serialize();
 	props.variables.Add(SID("ModelName"), modelName);
