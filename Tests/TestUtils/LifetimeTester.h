@@ -2,6 +2,7 @@
 #define GADGET_TESTS_TEST_UTILS_LIFETIME_TESTER_H
 
 #include <atomic>
+#include <string>
 
 class LifetimeTester{
 public:
@@ -17,6 +18,7 @@ public:
 		c = other_.c;
 
 		numCopies++;
+		return *this;
 	};
 
 	LifetimeTester& operator=(LifetimeTester&& other_) noexcept{
@@ -25,6 +27,7 @@ public:
 		c = std::move(other_.c);
 
 		numMoves++;
+		return *this;
 	};
 
 	int GetA() const{ return a; }
