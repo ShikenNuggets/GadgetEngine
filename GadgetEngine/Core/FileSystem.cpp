@@ -256,9 +256,12 @@ ErrorCode FileSystem::CreateFile(const std::string& file_){
 	}
 
 	std::fstream filestream;
-	filestream.open(file_, std::ios::out | std::ios_base::trunc);
-	if(!filestream.is_open()){
-		GADGET_LOG_WARNING(SID("FILESYSTEM"), "Could not create file. std error: " + std::string(std::strerror(errno)));
+	filestream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+	try{
+		filestream.open(file_, std::ios::out | std::ios_base::trunc);
+	}catch(std::system_error& e){
+		GADGET_LOG_WARNING(SID("FILESYSTEM"), "Could not create file. std error: " + e.code().message());
 		return ErrorCode::FileIO;
 	}
 
