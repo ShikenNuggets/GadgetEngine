@@ -16,7 +16,7 @@ static inline nlohmann::json JsonRW(const nlohmann::json& j_, const std::string&
 	return FileSystem::ReadPlainTextJSONFile(file_);
 }
 
-template <int Count>
+template <int64_t Count>
 static inline void CheckEquals(const nlohmann::json& j_, const std::string& raw_, const StaticArray<nlohmann::json, Count>& jsons_, const StaticArray<std::string, Count>& raws_){
 	for(int64_t i = 0; i < Count; i++){
 		REQUIRE(jsons_[i] == j_);

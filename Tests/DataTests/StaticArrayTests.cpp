@@ -10,7 +10,7 @@ using namespace Gadget;
 //------------------ StaticArray Accessor --------------------//
 //------------------------------------------------------------//
 //O(N^2) for NxN matrix
-template <typename T, int Size>
+template <typename T, int64_t Size>
 void RotateMatrixRight90(StaticArray<StaticArray<T, Size>, Size>& inMatrix_){
 	if constexpr(Size <= 1){
 		return;
@@ -130,7 +130,7 @@ TEST_CASE("StaticArray Construction/Assignment" "[staticarray_construct_assign]"
 //--------------- Zero Matrix (CTCI 1.8) ---------------------//
 //------------------------------------------------------------//
 //O(rows * cols)
-template <typename T, int SizeR, int SizeC>
+template <typename T, int64_t SizeR, int64_t SizeC>
 static inline void ZeroMatrix(StaticArray<StaticArray<T, SizeC>, SizeR>& inMatrix_){
 	Array<int64_t> rows;
 	Array<int64_t> cols;
@@ -222,7 +222,7 @@ struct Person{
 };
 
 //O(n log n)
-template <int NumPeople>
+template <int64_t NumPeople>
 static inline StaticArray<String, NumPeople> SortPeopleByHeight(const StaticArray<String, NumPeople>& names_, const StaticArray<int, NumPeople> heights_){
 	StaticArray<Person, NumPeople> people;
 	for(int64_t i = 0; i < NumPeople; i++){
@@ -280,7 +280,7 @@ TEST_CASE("StaticArray Sort the People", "[staticarray_sort_the_people]"){
 //------------------------------------------------------------//
 //------------ Lemonade Change (Leetcode 860) ----------------//
 //------------------------------------------------------------//
-template <int Size>
+template <int64_t Size>
 static inline bool LemonadeChange(const StaticArray<int, Size>& bills){
 	int bill5 = 0;
 	int bill10 = 0;
@@ -357,7 +357,7 @@ TEST_CASE("StaticArray Lemonade Change", "[staticarray_lemonade_change]"){
 //--------- Semi-Ordered Permutation (Leetcode 2717) ---------//
 //------------------------------------------------------------//
 
-template<int _Capacity>
+template<int64_t _Capacity>
 static inline int64_t SemiOrderedPermutation(const StaticArray<int, _Capacity>& nums){
 	if constexpr(_Capacity <= 1){
 		return 0;
@@ -415,7 +415,7 @@ TEST_CASE("StaticArray Semi-Ordered Permutation", "[staticarray_semi_ordered_per
 //---- Maximum Value of an Ordered Triplet (Leetcode 2873) ---//
 //------------------------------------------------------------//
 
-template <int Size>
+template <int64_t Size>
 static constexpr inline int64_t MaximumTripletValue(const StaticArray<int, Size>& nums_){
 	int64_t maxTriplet = 0;
 
@@ -448,7 +448,7 @@ TEST_CASE("StaticArray Maximum Value of an Ordered Triplet", "[staticarray_max_o
 //-------- Find the Key of the Numbers (Leetcode 3270) -------//
 //------------------------------------------------------------//
 
-template <int NumDigits>
+template <int64_t NumDigits>
 static inline StaticArray<int, NumDigits> GetDigits(int num_){
 	static_assert(NumDigits > 0);
 	GADGET_BASIC_ASSERT(num_ >= 0); //This only makes sense for positive integers
