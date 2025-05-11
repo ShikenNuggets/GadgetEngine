@@ -53,10 +53,7 @@ void Win32_Utils::TryApplyImmersiveDarkMode(uint64_t hwnd_){
 		//Main reason this wouldn't work is on older versions of Windows (Immersive Dark Mode is only officially supported in Windows 11)
 		//We could be nice and try to find a way to support this feature on older Windows versions, but I'm not overly concerned about that
 		const _com_error err(result);
-		const std::wstring wStr = err.ErrorMessage();
-		const std::string str = std::string(wStr.begin(), wStr.end());
-
-		GADGET_LOG_WARNING(SID("WIN32"), "Could not apply Immersive Dark Mode: DWM Error: " + str);
+		GADGET_LOG_WARNING(SID("WIN32"), "Could not apply Immersive Dark Mode: DWM Error: " + WStringToString(err.ErrorMessage()));
 	}
 }
 
@@ -91,8 +88,8 @@ std::string Win32_Utils::BrowseForFolder(uint64_t hwnd_, const wchar_t* dialogTi
 		return "";
 	}
 
-	std::wstring wstr = path;
-	return std::string(wstr.begin(), wstr.end()) + FileSystem::PathSeparator;
+	const std::wstring wstr = path;
+	return WStringToString(wstr) + FileSystem::PathSeparator;
 }
 
 ErrorCode Win32_Utils::ShowWindow(uint64_t hwnd_){
@@ -211,4 +208,22 @@ uint64_t Win32_Utils::GetWindowOfRunningApplication(const std::string& windowNam
 
 	GADGET_BASIC_ASSERT(info.hwnd == 0 || IsWindow(reinterpret_cast<HWND>(info.hwnd)));
 	return info.hwnd;
+}
+
+std::wstring Win32_Utils::ToWString(const std::string& str_){
+	const int len = MultiByteToWideChar(CP_ACP, 0, str_.data(), static_cast<int>(str_.size()), nullptr, -1);
+
+	std::wstring data;
+	data.resize(len);
+	MultiByteToWideChar(CP_ACP, 0, str_.data(), static_cast<int>(str_.size()), data.data(), static_cast<int>(data.size()));
+	return data;
+}
+
+std::string Win32_Utils::WStringToString(const std::wstring& wstr_){
+	const int len = WideCharToMultiByte(CP_ACP, 0, wstr_.data(), static_cast<int>(wstr_.size()), nullptr, -1, nullptr, nullptr);
+
+	std::string data;
+	data.resize(len);
+	WideCharToMultiByte(CP_ACP, 0, wstr_.data(), static_cast<int>(wstr_.size()), data.data(), static_cast<int>(data.size()), nullptr, nullptr);
+	return data;
 }

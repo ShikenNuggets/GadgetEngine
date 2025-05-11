@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Platform/PlatformUtils.h"
+
 using namespace DB;
 
 DX12_ShaderCompiler::DX12_ShaderCompiler(){
@@ -152,10 +154,10 @@ IDxcBlob* DX12_ShaderCompiler::Compile(const ShaderFileInfo& info_, const std::f
 	assert(sourceBlob->GetBufferPointer() != nullptr);
 	assert(sourceBlob->GetBufferSize() != 0);
 
-	std::wstring file = Gadget::Utils::ToWString(info_.file);
-	std::wstring func = Gadget::Utils::ToWString(info_.func);
-	std::wstring prof = Gadget::Utils::ToWString(std::string(profileStrings[(uint32_t)info_.type]) + versionStr);
-	std::wstring incl = Gadget::Utils::ToWString(shaderSourcePath);
+	std::wstring file = Gadget::PlatformUtils::ToWString(info_.file);
+	std::wstring func = Gadget::PlatformUtils::ToWString(info_.func);
+	std::wstring prof = Gadget::PlatformUtils::ToWString(std::string(profileStrings[(uint32_t)info_.type]) + versionStr);
+	std::wstring incl = Gadget::PlatformUtils::ToWString(shaderSourcePath);
 
 	LPCWSTR args[]
 	{

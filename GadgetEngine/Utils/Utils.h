@@ -143,9 +143,6 @@ namespace Gadget{
 			}
 		}
 
-		inline constexpr std::wstring ToWString(const std::string& s_){ return { s_.begin(), s_.end() }; }
-		inline constexpr std::wstring ToWString(const char* s_){ return ToWString(std::string(s_)); }
-
 		inline std::string FloatSecondsToTimeString(float timeInSeconds_){
 			size_t hours = 0;
 			size_t minutes = 0;

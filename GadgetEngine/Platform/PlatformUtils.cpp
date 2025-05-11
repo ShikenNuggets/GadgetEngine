@@ -60,3 +60,11 @@ ErrorCode PlatformUtils::OpenFileInDefaultApplication(const std::string& filePat
 uint64_t PlatformUtils::GetWindowOfRunningApplication(const std::string& windowName_, const std::string& subTitle_){
 	return CURRENT_PLATFORM_UTILS::GetWindowOfRunningApplication(windowName_, subTitle_);
 }
+
+std::wstring PlatformUtils::ToWString(const std::string& str_){
+	return CURRENT_PLATFORM_UTILS::ToWString(str_);
+}
+
+std::string PlatformUtils::WStringToString(const std::wstring& wstr_){
+	return CURRENT_PLATFORM_UTILS::WStringToString(wstr_);
+}

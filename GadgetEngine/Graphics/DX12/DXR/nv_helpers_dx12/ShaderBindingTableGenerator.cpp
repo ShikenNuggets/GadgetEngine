@@ -38,6 +38,8 @@ dispatch rays description.
 
 #include <stdexcept>
 
+#include "Platform/PlatformUtils.h"
+
 // Helper to compute aligned buffer sizes
 #ifndef ROUND_UP
 #define ROUND_UP(v, powerOf2Alignment) (((v) + (powerOf2Alignment)-1) & ~((powerOf2Alignment)-1))
@@ -214,7 +216,7 @@ uint32_t ShaderBindingTableGenerator::CopyShaderData(
     {
       std::wstring errMsg(std::wstring(L"Unknown shader identifier used in the SBT: ") +
                           shader.m_entryPoint);
-      throw std::logic_error(std::string(errMsg.begin(), errMsg.end()));
+      throw std::logic_error(Gadget::PlatformUtils::WStringToString(errMsg));
     }
     // Copy the shader identifier
     memcpy(pData, id, m_progIdSize);

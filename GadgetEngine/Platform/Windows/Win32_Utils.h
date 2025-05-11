@@ -32,6 +32,9 @@ namespace Gadget{
 		ErrorCode OpenFileInDefaultApplication(const std::string& filePath_, const std::string& args_ = "");
 
 		uint64_t GetWindowOfRunningApplication(const std::string& windowName_, const std::string& subTitle_ = "");
+
+		extern std::wstring ToWString(const std::string& str_);
+		extern std::string WStringToString(const std::wstring& wstr_);
 	};
 }
 
