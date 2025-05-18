@@ -32,6 +32,14 @@
 #define GADGET_ASSERT_UNREACHABLE GADGET_ASSERT(false, "Executing code that was expected to be unreachable - Ask a dev!");
 #define GADGET_ASSERT_FILE_EXISTS(expr) GADGET_ASSERT(FileSystem::FileExists(expr), std::string("Condition Failed: FileSystem::FileExists(") + expr + ")");
 
+#if defined GADGET_RELEASE || defined GADGET_FAST_ASSERTS
+	#define GADGET_SLOW_ASSERT(expr)
+	#define GADGET_SLOW_ASSERT_MSG(expr, msg)
+#else
+	#define GADGET_SLOW_ASSERT(expr) GADGET_BASIC_ASSERT(expr)
+	#define GADGET_SLOW_ASSERT_MSG(expr, msg) GADGET_ASSERT(expr, msg)
+#endif
+
 #if defined GADGET_DEBUG
 	#define GADGET_DEBUG_INT(var) int var
 #else
