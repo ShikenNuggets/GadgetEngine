@@ -83,6 +83,7 @@ namespace Gadget{
 consteval inline Gadget::StringID operator "" _sid(const char* str_, size_t len_) noexcept{ return Gadget::StringID(Gadget::Hash::MurmurHash64A(str_, len_)); }
 
 //Use this to create a hashed string ID and add it to the string database
+//O(1), but not necessarily fast - avoid doing this in loops, cache the result if you can
 #define SID(str) Gadget::StringID::InternString(str ""_sid, str)
 
 //JSON Serializing/Deserializing
