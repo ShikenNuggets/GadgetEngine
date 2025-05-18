@@ -24,6 +24,15 @@
 
 using namespace Gadget;
 
+static inline StringID gProjectionMatrixSID = SID("projectionMatrix");
+static inline StringID gViewMatrixSID = SID("viewMatrix");
+static inline StringID gModelMatrixSID = SID("modelMatrix");
+static inline StringID gNormalMatrixSID = SID("normalMatrix");
+static inline StringID gViewPosSID = SID("viewPos");
+static inline StringID gNumPointLightsSID = SID("numPointLights");
+static inline StringID gNumSpotLightsSID = SID("numSpotLights");
+static inline StringID gNumDirLightsSID = SID("numDirLights");
+
 static inline SIDArrayCache gBoneIDs = SIDArrayCache("bones[", "]");
 
 static inline SIDArrayCache gPointPositions		= SIDArrayCache("pointLights[", "].position");
@@ -182,19 +191,19 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		for(const auto& mesh : rendersBuffer){
 			for(size_t i = 0; i < mesh->GetNumSubmeshes(); i++){
 				mesh->Bind(i);
-				mesh->GetShader(i)->BindMatrix4(SID("projectionMatrix"), proj);
-				mesh->GetShader(i)->BindMatrix4(SID("viewMatrix"), view);
+				mesh->GetShader(i)->BindMatrix4(gProjectionMatrixSID, proj);
+				mesh->GetShader(i)->BindMatrix4(gViewMatrixSID, view);
 
 				const Matrix4 modelMatrix = mesh->GetParent()->GetTransformMatrix();
-				mesh->GetShader(i)->BindMatrix4(SID("modelMatrix"), modelMatrix);
+				mesh->GetShader(i)->BindMatrix4(gModelMatrixSID, modelMatrix);
 
-				mesh->GetShader(i)->BindMatrix3(SID("normalMatrix"), (modelMatrix.Inverse()).Transpose().ToMatrix3());
+				mesh->GetShader(i)->BindMatrix3(gNormalMatrixSID, (modelMatrix.Inverse()).Transpose().ToMatrix3());
 
-				mesh->GetShader(i)->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
+				mesh->GetShader(i)->BindVector3(gViewPosSID, cam->GetParent()->GetPosition());
 
-				mesh->GetShader(i)->BindInt(SID("numPointLights"), static_cast<int>(pointLightsBuffer.Size()));
-				mesh->GetShader(i)->BindInt(SID("numSpotLights"), static_cast<int>(spotLightsBuffer.Size()));
-				mesh->GetShader(i)->BindInt(SID("numDirLights"), static_cast<int>(dirLightsBuffer.Size()));
+				mesh->GetShader(i)->BindInt(gNumPointLightsSID, static_cast<int>(pointLightsBuffer.Size()));
+				mesh->GetShader(i)->BindInt(gNumSpotLightsSID, static_cast<int>(spotLightsBuffer.Size()));
+				mesh->GetShader(i)->BindInt(gNumDirLightsSID, static_cast<int>(dirLightsBuffer.Size()));
 
 				for(int64_t j = 0; j < pointLightsBuffer.Size() && j < maxLightSources; j++){
 					const auto* light = pointLightsBuffer[j];
@@ -244,19 +253,19 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					aMesh->GetShader(i)->BindMatrix4(gBoneIDs.Get(j), skeletonInstance[j]);
 				}
 
-				aMesh->GetShader(i)->BindMatrix4(SID("projectionMatrix"), proj);
-				aMesh->GetShader(i)->BindMatrix4(SID("viewMatrix"), view);
+				aMesh->GetShader(i)->BindMatrix4(gProjectionMatrixSID, proj);
+				aMesh->GetShader(i)->BindMatrix4(gViewMatrixSID, view);
 
 				const Matrix4 modelMatrix = aMesh->GetParent()->GetTransformMatrix();
-				aMesh->GetShader(i)->BindMatrix4(SID("modelMatrix"), modelMatrix);
+				aMesh->GetShader(i)->BindMatrix4(gModelMatrixSID, modelMatrix);
 
-				aMesh->GetShader(i)->BindMatrix3(SID("normalMatrix"), (modelMatrix.Inverse()).Transpose().ToMatrix3());
+				aMesh->GetShader(i)->BindMatrix3(gNormalMatrixSID, (modelMatrix.Inverse()).Transpose().ToMatrix3());
 
-				aMesh->GetShader(i)->BindVector3(SID("viewPos"), cam->GetParent()->GetPosition());
+				aMesh->GetShader(i)->BindVector3(gViewMatrixSID, cam->GetParent()->GetPosition());
 
-				aMesh->GetShader(i)->BindInt(SID("numPointLights"), static_cast<int>(pointLightsBuffer.Size()));
-				aMesh->GetShader(i)->BindInt(SID("numSpotLights"), static_cast<int>(spotLightsBuffer.Size()));
-				aMesh->GetShader(i)->BindInt(SID("numDirLights"), static_cast<int>(dirLightsBuffer.Size()));
+				aMesh->GetShader(i)->BindInt(gNumPointLightsSID, static_cast<int>(pointLightsBuffer.Size()));
+				aMesh->GetShader(i)->BindInt(gNumSpotLightsSID, static_cast<int>(spotLightsBuffer.Size()));
+				aMesh->GetShader(i)->BindInt(gNumDirLightsSID, static_cast<int>(dirLightsBuffer.Size()));
 
 				for(int64_t j = 0; j < pointLightsBuffer.Size() && j < maxLightSources; j++){
 					const auto* light = pointLightsBuffer[j];
