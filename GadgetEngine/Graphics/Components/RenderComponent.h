@@ -47,7 +47,10 @@ namespace Gadget{
 			return meshInfos[index_].first;
 		}
 
-		inline constexpr MeshInstanceInfo* GetMeshInstanceInfo() const{ return meshInstanceInfo; }
+		inline constexpr MeshInstanceInfo* GetMeshInstanceInfo() const{
+			return nullptr;
+			//return meshInstanceInfo;
+		}
 
 		inline constexpr size_t GetMeshNumIndices(size_t index_) const{
 			GADGET_BASIC_ASSERT(index_ < meshInfos.size());
@@ -71,7 +74,11 @@ namespace Gadget{
 			return GetCachedMaterial(index_);
 		}
 
-		EngineMaterial* GetEngineMaterial(){ return engineMaterial; }
+		EngineMaterial* GetEngineMaterial(){
+			GADGET_ASSERT_NOT_IMPLEMENTED;
+			return nullptr;
+			//return engineMaterial;
+		}
 
 		void SetMaterial(StringID cachedMaterial);
 		void SetMaterial(size_t index_, StringID cachedMaterial);
@@ -107,8 +114,8 @@ namespace Gadget{
 	private:
 		StringID modelName;
 		std::vector<Pair<MeshInfo*, StringID>> meshInfos;
-		EngineMaterial* engineMaterial;
-		MeshInstanceInfo* meshInstanceInfo;
+		//EngineMaterial* engineMaterial;
+		//MeshInstanceInfo* meshInstanceInfo;
 
 		void CreateMeshInstanceInfo();
 
