@@ -91,21 +91,41 @@ namespace Gadget{
 		}
 
 		bool Contains(const K& key_) const{
+			return Find(key_) != nullptr;
+		}
+
+		const V* Find(const K& key_) const{
 			int64_t index = KeyToIndex(key_);
 			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
-				return false;
+				return nullptr;
 			}
 
-			for(const auto& node : data[index]){
+			for(const auto* node : data[index]){
 				GADGET_BASIC_ASSERT(node != nullptr);
 				if(node->value.key == key_){
-					return true;
+					return &node->value.value;
 				}
 			}
 
-			return false;
+			return nullptr;
+		}
 
+		V* Find(const K& key_){
+			int64_t index = KeyToIndex(key_);
+			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
+			if(index >= data.Size()){
+				return nullptr;
+			}
+
+			for(auto* node : data[index]){
+				GADGET_BASIC_ASSERT(node != nullptr);
+				if(node->value.key == key_){
+					return &node->value.value;
+				}
+			}
+
+			return nullptr;
 		}
 
 		void RemoveAt(const K& key_){
