@@ -222,6 +222,10 @@ namespace Gadget{
 			while(finalNumber >= 1024.0){
 				currentPostFix++;
 				finalNumber /= 1024.0;
+
+				if(currentPostFix == postfixes.size() - 1){
+					break;
+				}
 			}
 
 			_ASSERT(currentPostFix < postfixes.size());
