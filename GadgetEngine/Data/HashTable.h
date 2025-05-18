@@ -68,7 +68,7 @@ namespace Gadget{
 
 		void Add(const K& key_, const V& value_){
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			while(index >= data.Size()){
 				data.Add(List<KeyValuePair>());
 			}
@@ -129,9 +129,9 @@ namespace Gadget{
 		}
 
 		void RemoveAt(const K& key_){
-			GADGET_BASIC_ASSERT(Contains(key_));
+			GADGET_SLOW_ASSERT(Contains(key_));
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				GADGET_LOG_WARNING(SID("DataStructure"), "Tried to remove value at unknown key!");
 				return;
@@ -159,9 +159,9 @@ namespace Gadget{
 		}
 
 		constexpr const V& operator[](const K& key_) const{
-			GADGET_BASIC_ASSERT(Contains(key_));
+			GADGET_BASIC_ASSERT(Contains(key_)); // This could be marked as a slow assert, but bounds checks are important
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				//There's no safe way to handle this request, so just error out
 				Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
@@ -180,13 +180,13 @@ namespace Gadget{
 
 		V& operator[](const K& key_){
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 
 			if(!Contains(key_)){
 				Add(key_, V());
 			}
 
-			GADGET_BASIC_ASSERT(Contains(key_));
+			GADGET_SLOW_ASSERT(Contains(key_));
 
 			for(auto* node : data[index]){
 				GADGET_BASIC_ASSERT(node != nullptr);
@@ -196,6 +196,7 @@ namespace Gadget{
 			}
 
 			//This shouldn't be possible - there's no safe way to handle this, so just error out
+			GADGET_ASSERT_UNREACHABLE;
 			Debug::ThrowFatalError(SID("DataStructure"), "Tried to get value at unrecognized key!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 		}
 

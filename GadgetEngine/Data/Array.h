@@ -276,7 +276,7 @@ namespace Gadget{
 
 			QuickSort(0, size - 1);
 
-			GADGET_BASIC_ASSERT(IsSorted());
+			GADGET_SLOW_ASSERT(IsSorted());
 		}
 
 		constexpr int64_t Find(const T& value_, int64_t startPos_ = 0) const{

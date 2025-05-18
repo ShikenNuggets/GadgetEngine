@@ -50,7 +50,7 @@ namespace Gadget{
 
 		void Add(const K& key_, const V& value_){
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 			GADGET_BASIC_ASSERT(data[index].isInUse == false);
 			if(data[index].isInUse){
@@ -63,7 +63,7 @@ namespace Gadget{
 
 		bool Contains(const K& key_) const{
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 
 			return data[index].isInUse && data[index].key == key_;
@@ -71,7 +71,7 @@ namespace Gadget{
 
 		void RemoveAt(const K& key_){
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 
 			GADGET_BASIC_ASSERT(data[index].key == key_);
@@ -90,7 +90,7 @@ namespace Gadget{
 		const V& operator[](const K& key_) const{
 			GADGET_BASIC_ASSERT(Contains(key_));
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 
 			GADGET_BASIC_ASSERT(data[index].key == key_);
@@ -104,7 +104,7 @@ namespace Gadget{
 
 		V& operator[](const K& key_){
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "StaticHashTable::KeyToIndex providing non-deterministic result!");
 			GADGET_BASIC_ASSERT(index < Size);
 
 			if(!Contains(key_)){

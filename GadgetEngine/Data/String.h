@@ -11,7 +11,7 @@ namespace Gadget{
 	class String{
 	public:
 		String(const char* str_ = "") : size(0), capacity(gStackStrSize), data(){
-			GADGET_BASIC_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
+			GADGET_SLOW_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
 			Append(str_);
 			GADGET_BASIC_ASSERT(HasNullTerminator());
 		}
@@ -100,13 +100,13 @@ namespace Gadget{
 		}
 
 		void Append(const char* str_){
-			GADGET_BASIC_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
+			GADGET_SLOW_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
 			Append(str_, static_cast<int32_t>(std::strlen(str_)));
 		}
 
 		void Append(const char* str_, int32_t len_){
 			GADGET_BASIC_ASSERT(len_ >= 0);
-			GADGET_BASIC_ASSERT(len_ == std::strlen(str_));
+			GADGET_SLOW_ASSERT(len_ == std::strlen(str_));
 			if(len_ == 0){
 				Value()[size] = '\0';
 				return;
@@ -478,7 +478,7 @@ namespace Gadget{
 
 			QuickSort(0, size - 1);
 
-			GADGET_BASIC_ASSERT(IsSorted());
+			GADGET_SLOW_ASSERT(IsSorted());
 			GADGET_BASIC_ASSERT(HasNullTerminator());
 		}
 
@@ -491,7 +491,7 @@ namespace Gadget{
 		}
 
 		bool operator==(const char* str_) const{
-			GADGET_BASIC_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
+			GADGET_SLOW_ASSERT(std::strlen(str_) < std::numeric_limits<int32_t>::max());
 			if(size != static_cast<int32_t>(std::strlen(str_))){
 				return false;
 			}
@@ -637,7 +637,7 @@ namespace Gadget{
 			const char* str = Value();
 			GADGET_BASIC_ASSERT(str != nullptr);
 			GADGET_BASIC_ASSERT(capacity > size);
-			GADGET_BASIC_ASSERT(size == Utils::StrLen(str));
+			GADGET_SLOW_ASSERT(size == Utils::StrLen(str));
 			return str[size] == '\0';
 		}
 

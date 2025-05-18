@@ -50,9 +50,9 @@ namespace Gadget{
 			other_.head = nullptr;
 			other_.tail = nullptr;
 
-			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_SLOW_ASSERT(IsValid());
 			GADGET_BASIC_ASSERT(other_.IsEmpty());
-			GADGET_BASIC_ASSERT(other_.IsValid());
+			GADGET_SLOW_ASSERT(other_.IsValid());
 		}
 
 		constexpr List<T>& operator=(const List<T>& other_){
@@ -84,9 +84,9 @@ namespace Gadget{
 			other_.head = nullptr;
 			other_.tail = nullptr;
 
-			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_SLOW_ASSERT(IsValid());
 			GADGET_BASIC_ASSERT(other_.IsEmpty());
-			GADGET_BASIC_ASSERT(other_.IsValid());
+			GADGET_SLOW_ASSERT(other_.IsValid());
 
 			return *this;
 		}
@@ -103,7 +103,7 @@ namespace Gadget{
 
 		inline Node* Add(const T& value_, Node* nodePos_){
 			GADGET_BASIC_ASSERT(IsEmpty() || nodePos_ != nullptr);
-			GADGET_BASIC_ASSERT(nodePos_ == nullptr || ContainsNode(nodePos_));
+			GADGET_SLOW_ASSERT(nodePos_ == nullptr || ContainsNode(nodePos_));
 			GADGET_BASIC_ASSERT(size < std::numeric_limits<int64_t>::max());
 
 			Node* newNode = new Node(value_);
@@ -130,7 +130,7 @@ namespace Gadget{
 
 			size++;
 			GADGET_BASIC_ASSERT(tail->next == nullptr);
-			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_SLOW_ASSERT(IsValid());
 			return newNode;
 		}
 
@@ -164,9 +164,9 @@ namespace Gadget{
 			other_.tail = nullptr;
 			other_.size = 0;
 
-			GADGET_BASIC_ASSERT(IsValid());
+			GADGET_SLOW_ASSERT(IsValid());
 			GADGET_BASIC_ASSERT(other_.IsEmpty());
-			GADGET_BASIC_ASSERT(other_.IsValid());
+			GADGET_SLOW_ASSERT(other_.IsValid());
 		}
 
 		constexpr inline void Pop(){
@@ -277,6 +277,8 @@ namespace Gadget{
 			}
 
 			head = prev;
+
+			GADGET_SLOW_ASSERT(IsValid());
 		}
 
 		constexpr inline int64_t Size() const{ return size; }

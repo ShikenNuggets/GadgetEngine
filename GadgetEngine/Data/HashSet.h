@@ -57,7 +57,7 @@ namespace Gadget{
 
 		void Add(const T& value_){
 			int64_t index = KeyToIndex(value_);
-			GADGET_ASSERT(index == KeyToIndex(T(value_)), "HashSet::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(T(value_)), "HashSet::KeyToIndex providing non-deterministic result!");
 
 			while(index >= data.Size()){
 				data.Add(List<T>());
@@ -80,7 +80,7 @@ namespace Gadget{
 
 		bool Contains(const T& value_) const{
 			int64_t index = KeyToIndex(value_);
-			GADGET_ASSERT(index == KeyToIndex(T(value_)), "HashSet::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(T(value_)), "HashSet::KeyToIndex providing non-deterministic result!");
 
 			if(index >= data.Size()){
 				return false;
@@ -97,7 +97,7 @@ namespace Gadget{
 
 		void Remove(const T& value_) const{
 			int64_t index = KeyToIndex(value_);
-			GADGET_ASSERT(index == KeyToIndex(T(value_)), "HashSet::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(T(value_)), "HashSet::KeyToIndex providing non-deterministic result!");
 
 			if(index >= data.Size()){
 				return; //Element is not in the set
