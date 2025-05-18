@@ -110,7 +110,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <PreprocessorDefinitions>SDL_FUNCTION_POINTER_IS_VOID_POINTER;GADGET_PLATFORM_WIN32;GADGET_DEBUG;GADGET_DEVELOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_FUNCTION_POINTER_IS_VOID_POINTER;GADGET_PLATFORM_WIN32;GADGET_DEBUG;GADGET_DEVELOP;GADGET_FAST_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\SDK\FMOD\core\inc;..\SDK\FMOD\fsbank\inc;..\SDK\FMOD\studio\inc;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -143,7 +143,7 @@ echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetD
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <TreatSpecificWarningsAsErrors>4715;4834;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
-      <PreprocessorDefinitions>SDL_FUNCTION_POINTER_IS_VOID_POINTER;GADGET_PLATFORM_WIN32;GADGET_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_FUNCTION_POINTER_IS_VOID_POINTER;GADGET_PLATFORM_WIN32;GADGET_RELEASE;GADGET_FAST_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\SDK\include;..\SDK\Assimp\include;..\SDK\Glad\include;..\SDK\SDL\include;..\SDK\freetype\include;..\SDK\bullet3\src;..\SDK\FMOD\core\inc;..\SDK\FMOD\fsbank\inc;..\SDK\FMOD\studio\inc;..\GadgetEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Gadget.h</ForcedIncludeFiles>
       <Optimization>MaxSpeed</Optimization>

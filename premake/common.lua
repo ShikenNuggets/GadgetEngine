@@ -53,6 +53,7 @@ function CppProjectDefaults()
 		{
 			"GADGET_DEBUG",
 			"GADGET_DEVELOP",
+			"GADGET_FAST_ASSERTS",
 		}
 		
 		symbols "On"
@@ -65,7 +66,11 @@ function CppProjectDefaults()
 		}
 	
 	filter "configurations:Release"
-		defines "GADGET_RELEASE"
+		defines
+		{
+			"GADGET_RELEASE",
+			"GADGET_FAST_ASSERTS",
+		}
 		optimize "Speed"
 		runtime "Release"
 	
