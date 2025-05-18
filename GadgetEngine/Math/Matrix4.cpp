@@ -73,7 +73,7 @@ Matrix4::Matrix4(const Matrix4x3& m_) : m(){
 }
 
 float& Matrix4::operator [](unsigned int i_){
-	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_SLOW_ASSERT(IsValid());
 	GADGET_ASSERT(i_ < mat4Size, "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(mat4Size) + "!");
 	return m[i_];
 }
@@ -103,7 +103,7 @@ Matrix4 Matrix4::operator -(const Matrix4& m_) const{
 }
 
 Matrix4 Matrix4::operator *(float s_) const{
-	GADGET_BASIC_ASSERT(IsValid());
+	GADGET_SLOW_ASSERT(IsValid());
 	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
 
 	return Matrix4(	m[0] * s_,	m[1] * s_,	m[2] * s_,	m[3] * s_,
@@ -114,8 +114,8 @@ Matrix4 Matrix4::operator *(float s_) const{
 }
 
 Matrix4 Matrix4::operator*(const Matrix4& m_) const{
-	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(m_.IsValid());
+	GADGET_SLOW_ASSERT(IsValid());
+	GADGET_SLOW_ASSERT(m_.IsValid());
 
 	return Matrix4(
 		//COLUMN 1

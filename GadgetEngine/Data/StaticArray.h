@@ -52,7 +52,7 @@ namespace Gadget{
 
 			QuickSort(0, T_Size - 1);
 
-			GADGET_BASIC_ASSERT(IsSorted());
+			GADGET_SLOW_ASSERT(IsSorted());
 		}
 
 		constexpr int64_t Find(const T& value_, int64_t startPos_ = 0) const{
@@ -80,15 +80,15 @@ namespace Gadget{
 			return newArray;
 		}
 
-		constexpr const T& operator[](int64_t i_) const{
-			GADGET_BASIC_ASSERT(i_ >= 0);
-			GADGET_BASIC_ASSERT(i_ < T_Size);
+		inline constexpr const T& operator[](int64_t i_) const{
+			GADGET_SLOW_ASSERT(i_ >= 0);
+			GADGET_SLOW_ASSERT(i_ < T_Size);
 			return data[i_];
 		}
 
-		constexpr T& operator[](int64_t i_){
-			GADGET_BASIC_ASSERT(i_ >= 0);
-			GADGET_BASIC_ASSERT(i_ < T_Size);
+		inline constexpr T& operator[](int64_t i_){
+			GADGET_SLOW_ASSERT(i_ >= 0);
+			GADGET_SLOW_ASSERT(i_ < T_Size);
 			if(i_ < 0 || i_ >= T_Size){
 				Debug::ThrowFatalError(SID("DATA"), "Invalid array index for StaticArray!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 			}
