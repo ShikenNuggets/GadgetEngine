@@ -25,11 +25,13 @@ void MaterialCache::AddMaterial(StringID id_, Material* material_){
 }
 
 Material* MaterialCache::GetMaterial(StringID id_) const{
-	GADGET_BASIC_ASSERT(materials.Contains(id_));
-	if(!materials.Contains(id_)){
+	GADGET_SLOW_ASSERT(materials.Contains(id_));
+
+	auto* material = materials.Find(id_);
+	if(material != nullptr){
 		GADGET_LOG_WARNING(SID("RENDER"), "Tried to get invalid material ID [" + id_.GetString() + "]! Using placeholder material");
 		return materials[SID("Invalid")];
 	}
 
-	return materials[id_];
+	return *material;
 }

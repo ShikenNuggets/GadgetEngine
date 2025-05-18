@@ -39,11 +39,18 @@ namespace Gadget{
 		std::map<StringID, GLint> uniforms;
 
 		inline bool HasUniform(StringID uniformName_){
-			if(uniforms.find(uniformName_) == uniforms.end()){
-				uniforms.insert(std::make_pair(uniformName_, glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str())));
+			const auto& find = uniforms.find(uniformName_);
+			if(find != uniforms.end()){
+				return find->second != -1;
 			}
 
-			return uniforms[uniformName_] != -1;
+			const auto& insertedPair = uniforms.insert(std::make_pair(uniformName_, glGetUniformLocation(GetShaderProgram(), uniformName_.GetString().c_str())));
+			if(!insertedPair.second){
+				Debug::Log("Failed to insert StringID \"" + uniformName_.GetString() + "\" into uniform map!", Debug::Error);
+				return false;
+			}
+
+			return insertedPair.first->second != -1;
 		}
 
 		static std::string GetShaderLog(GLuint shader_);

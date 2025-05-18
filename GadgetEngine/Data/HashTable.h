@@ -96,7 +96,7 @@ namespace Gadget{
 
 		const V* Find(const K& key_) const{
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				return nullptr;
 			}
@@ -113,7 +113,7 @@ namespace Gadget{
 
 		V* Find(const K& key_){
 			int64_t index = KeyToIndex(key_);
-			GADGET_ASSERT(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
+			GADGET_SLOW_ASSERT_MSG(index == KeyToIndex(key_), "HashTable::KeyToIndex providing non-deterministic result!");
 			if(index >= data.Size()){
 				return nullptr;
 			}
