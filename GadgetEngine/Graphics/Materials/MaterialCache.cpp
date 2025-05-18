@@ -28,7 +28,7 @@ Material* MaterialCache::GetMaterial(StringID id_) const{
 	GADGET_SLOW_ASSERT(materials.Contains(id_));
 
 	auto* material = materials.Find(id_);
-	if(material != nullptr){
+	if(material == nullptr){
 		GADGET_LOG_WARNING(SID("RENDER"), "Tried to get invalid material ID [" + id_.GetString() + "]! Using placeholder material");
 		return materials[SID("Invalid")];
 	}
