@@ -71,29 +71,29 @@ project "GadgetEngine"
 	filter "system:windows"
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(ProjectDir)*.h*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\include\\*.h*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\common\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\include\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\Assimp\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\bullet3\\src\\*.h\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\bullet3\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\bullet3\\src\\*.hpp\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\bullet3\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\inc\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\FMOD\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\inc\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\FMOD\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\inc\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\FMOD\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\freetype\\include\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\freetype\\\" /s /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Glad\\include\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\include\\Glad\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)*.h*\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\$(ProjectName)\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\include\\*.h*\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\common\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\include\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\Assimp\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\bullet3\\src\\*.h\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\bullet3\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\bullet3\\src\\*.hpp\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\bullet3\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\inc\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\FMOD\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\inc\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\FMOD\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\inc\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\FMOD\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\freetype\\include\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\freetype\\\" /s /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Glad\\include\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\include\\Glad\\\" /s /y /E /d",
 
-			"echo D|xcopy \"$(TargetDir)*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\bin\\x64\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\lib\\x64\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\lib\\*.lib\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\lib\\*.lib\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\lib\\*.lib\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\lib\\*.dll\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\lib\\*.lib\" \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(TargetDir)*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\bin\\x64\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\Assimp\\lib\\x64\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\freetype\\libs\\$(Configuration)\\*.*\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\lib\\*.dll\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\lib\\*.lib\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\lib\\*.dll\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\core\\lib\\*.lib\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\lib\\*.dll\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\fsbank\\lib\\*.lib\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\lib\\*.dll\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\SDK\\FMOD\\studio\\lib\\*.lib\" \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\" /y /E /d",
 		}
 		
 	filter "configurations:Release"
@@ -153,8 +153,8 @@ project "Game"
 	filter "system:windows"
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\Resources\\\" \"$(TargetDir)Resources\\\" /y /E /d",
 		}
 		
@@ -209,10 +209,10 @@ project "WorkbenchCPP"
 	filter "system:windows"
 		postbuildcommands
 		{
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\lib\\*.*\" \"$(TargetDir)SDK\\_Gadget\\lib\\\" /y /E /d",
-			"echo D|xcopy \"$(ProjectDir)..\\SDK\\_Gadget\\include\\*.*\" \"$(TargetDir)SDK\\_Gadget\\include\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\\*.dll\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\Build\\_Gadget\\lib\\$(Configuration)\\*.pdb\" \"$(TargetDir)\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\Build\\_Gadget\\lib\\*.*\" \"$(TargetDir)Build\\_Gadget\\lib\\\" /y /E /d",
+			"echo D|xcopy \"$(ProjectDir)..\\Build\\_Gadget\\include\\*.*\" \"$(TargetDir)Build\\_Gadget\\include\\\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\Resources\\*.ttf\" \"$(TargetDir)Resources\\Fonts\\\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\Resources\\Shaders\\*.*\" \"$(TargetDir)Resources\\Shaders\\\" /y /E /d",
 			"echo D|xcopy \"$(ProjectDir)..\\premake\\*.*\" \"$(TargetDir)premake\\\" /y /E /d",

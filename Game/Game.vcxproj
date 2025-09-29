@@ -103,8 +103,8 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
+      <Command>echo D|xcopy "$(ProjectDir)..\Build\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\Build\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\Resources\" "$(TargetDir)Resources\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -141,8 +141,8 @@ echo D|xcopy "$(ProjectDir)..\Resources\" "$(TargetDir)Resources\" /y /E /d</Com
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
+      <Command>echo D|xcopy "$(ProjectDir)..\Build\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\Build\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\Resources\" "$(TargetDir)Resources\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -176,8 +176,8 @@ echo D|xcopy "$(ProjectDir)..\Resources\" "$(TargetDir)Resources\" /y /E /d</Com
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PostBuildEvent>
-      <Command>echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
-echo D|xcopy "$(ProjectDir)..\SDK\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
+      <Command>echo D|xcopy "$(ProjectDir)..\Build\_Gadget\lib\$(Configuration)\*.dll" "$(TargetDir)" /y /E /d
+echo D|xcopy "$(ProjectDir)..\Build\_Gadget\lib\$(Configuration)\*.pdb" "$(TargetDir)" /y /E /d
 echo D|xcopy "$(ProjectDir)..\Resources\" "$(TargetDir)Resources\" /y /E /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
