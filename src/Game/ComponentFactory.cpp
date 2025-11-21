@@ -1,4 +1,4 @@
-#include "ComponentFactory.h"
+#include "Game/ComponentFactory.h"
 
 #include "Graphics/Components/CameraComponent.h"
 #include "Graphics/Components/LightComponent.h"

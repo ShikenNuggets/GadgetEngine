@@ -1,4 +1,4 @@
-#include "SkyboxComponent.h"
+#include "Graphics/Components/SkyboxComponent.h"
 
 #include "App.h"
 

@@ -1,4 +1,4 @@
-#include "RenderComponent.h"
+#include "Graphics/Components/RenderComponent.h"
 
 #include "App.h"
 #include "Graphics/Materials/ColorMaterial.h"

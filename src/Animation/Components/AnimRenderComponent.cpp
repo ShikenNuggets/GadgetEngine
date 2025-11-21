@@ -1,4 +1,4 @@
-#include "AnimRenderComponent.h"
+#include "Animation/Components/AnimRenderComponent.h"
 
 #include "App.h"
 #include "Game/GameObject.h"

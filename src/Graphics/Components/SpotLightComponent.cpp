@@ -1,4 +1,4 @@
-#include "SpotLightComponent.h"
+#include "Graphics/Components/SpotLightComponent.h"
 
 using namespace Gadget;
 

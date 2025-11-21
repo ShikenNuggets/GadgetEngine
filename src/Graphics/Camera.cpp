@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "Graphics/Camera.h"
 
 #include "App.h"
 #include "Events/EventHandler.h"

@@ -1,4 +1,4 @@
-#include "GameLogicManager.h"
+#include "Game/GameLogicManager.h"
 
 #include "Game/GameLogicComponent.h"
 

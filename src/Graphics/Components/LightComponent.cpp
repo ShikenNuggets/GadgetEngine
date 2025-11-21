@@ -1,4 +1,4 @@
-#include "LightComponent.h"
+#include "Graphics/Components/LightComponent.h"
 
 using namespace Gadget;
 

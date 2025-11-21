@@ -1,4 +1,4 @@
-#include "CameraComponent.h"
+#include "Graphics/Components/CameraComponent.h"
 
 #include "App.h"
 

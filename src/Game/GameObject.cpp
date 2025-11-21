@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#include "Game/GameObject.h"
 
 #include "App.h"
 #include "Utils/Utils.h"

@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "Game/Scene.h"
 #include "Utils/Utils.h"
 
 using namespace Gadget;

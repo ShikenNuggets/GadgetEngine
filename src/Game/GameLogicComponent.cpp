@@ -1,4 +1,4 @@
-#include "GameLogicComponent.h"
+#include "Game/GameLogicComponent.h"
 
 using namespace Gadget;
 

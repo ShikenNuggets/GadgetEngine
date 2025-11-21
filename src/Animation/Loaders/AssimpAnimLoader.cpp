@@ -1,4 +1,4 @@
-#include "AssimpAnimLoader.h"
+#include "Animation/Loaders/AssimpAnimLoader.h"
 
 //Hide warnings from external code that we can't/won't modify
 #pragma warning(disable : 4244)		//Possible loss of data from type conversion
