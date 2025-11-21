@@ -1,4 +1,4 @@
-#include "Cubemap.h"
+#include "Graphics/Cubemap.h"
 
 #include "App.h"
 #include "Resource/ResourceManager.h"
