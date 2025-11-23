@@ -89,7 +89,8 @@ namespace StarHawx{
 			player->AddComponent(new Gadget::RenderComponent(player->GetGUID(), SID("ArwingModel"), materialNames));
 			player->AddComponent(new Gadget::Rigidbody(player, 100.0f, false, Gadget::FreezeRotationType::FreezeAll));
 			player->AddComponent(new Gadget::CubeCollider(player));
-			player->AddComponent(new Gadget::AudioSource(player, SID("CorneriaMusic"), Gadget::SoundType::_2D, Gadget::VolumeChannel::Music, Gadget::SoundPlayMode::PlayLooping));
+			// TODO - Re-enable audio
+			// player->AddComponent(new Gadget::AudioSource(player, SID("CorneriaMusic"), Gadget::SoundType::_2D, Gadget::VolumeChannel::Music, Gadget::SoundPlayMode::PlayLooping));
 			player->AddComponent(new PlayerController(player));
 			CreateObject(player);
 
@@ -108,7 +109,8 @@ namespace StarHawx{
 			Gadget::GameObject* camera = new Gadget::GameObject();
 			camera->SetPosition(0.0f, 0.0f, 8.0f);
 			camera->AddComponent(new Gadget::CameraComponent(camera));
-			camera->AddComponent(new Gadget::AudioListener(camera));
+			// TODO - Re-enable audio
+			// camera->AddComponent(new Gadget::AudioListener(camera));
 			camera->AddComponent(new PlayerCamera(camera));
 			CreateObject(camera);
 		}

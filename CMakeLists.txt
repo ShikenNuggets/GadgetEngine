@@ -110,6 +110,8 @@ set_target_properties(GadgetEngine PROPERTIES
 	CXX_EXTENSIONS NO
 )
 
+target_compile_features(GadgetEngine PUBLIC cxx_std_23)
+
 target_include_directories(GadgetEngine PUBLIC
 	include
 	${assimp_SOURCE_DIR}/include
@@ -170,3 +172,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 	target_compile_definitions(GadgetEngine PUBLIC GADGET_RELEASE)
 endif()
 
+# --------------------------------------- #
+# ------------- Tests/Demos ------------- #
+# --------------------------------------- #
+add_subdirectory(demos)

@@ -72,9 +72,10 @@ namespace StarHawx{
 			if(Gadget::App::GetInput().GetButtonDown(Gadget::ButtonID::Keyboard_M)){
 				muteAudio = !muteAudio;
 				if(muteAudio){
-					Gadget::App::GetAudio().SetVolume(0.0f);
+					// TODO - Re-enable audio
+					//Gadget::App::GetAudio().SetVolume(0.0f);
 				}else{
-					Gadget::App::GetAudio().SetVolume(1.0f);
+					//Gadget::App::GetAudio().SetVolume(1.0f);
 				}
 			}
 
