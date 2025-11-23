@@ -101,7 +101,6 @@ void App::Initialize(const std::string& name_){
 
 	InitRenderer();
 
-	audio = std::make_unique<Audio>();
 	physics = std::make_unique<PhysManager>();
 	sceneManager = std::make_unique<BasicSceneManager>();
 	gameLogicManager = std::make_unique<GameLogicManager>();
@@ -115,7 +114,6 @@ void App::Destroy(){
 	gameLogicManager.reset();
 	sceneManager.reset();
 	physics.reset();
-	audio.reset();
 	renderer.reset();
 	materialCache.reset();
 	input.reset();
@@ -225,7 +223,7 @@ void App::Run(GameInterface& gameInterface_){
 		Profiler::End(SID("Render"));
 
 		Profiler::Start(SID("Audio"));
-		audio->Update(sceneManager->CurrentScene());
+		// TODO - Audio
 		Profiler::End(SID("Audio"));
 
 		Profiler::End(SID("Main Loop"));
