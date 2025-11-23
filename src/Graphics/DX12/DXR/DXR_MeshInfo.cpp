@@ -1,4 +1,4 @@
-#include "DXR_MeshInfo.h"
+#include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 
 #include "Random.h"
 #include "Graphics/Color.h"

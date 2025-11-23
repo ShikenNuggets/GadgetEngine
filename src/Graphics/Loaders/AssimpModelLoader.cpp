@@ -1,4 +1,4 @@
-#include "AssimpModelLoader.h"
+#include "Graphics/Loaders/AssimpModelLoader.h"
 
 //Hide warnings from external code that we can't/won't modify
 #pragma warning(disable : 26451)	//Possible arithmetic overflow

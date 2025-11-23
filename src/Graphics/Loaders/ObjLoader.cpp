@@ -1,4 +1,4 @@
-#include "ObjLoader.h"
+#include "Graphics/Loaders/ObjLoader.h"
 
 #include <sstream>
 

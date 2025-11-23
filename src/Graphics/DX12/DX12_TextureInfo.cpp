@@ -1,4 +1,4 @@
-#include "DX12_TextureInfo.h"
+#include "Graphics/DX12/DX12_TextureInfo.h"
 
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Helpers.h"

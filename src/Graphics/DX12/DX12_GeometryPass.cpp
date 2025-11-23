@@ -1,4 +1,4 @@
-#include "DX12_GeometryPass.h"
+#include "Graphics/DX12/DX12_GeometryPass.h"
 
 #include "Graphics/DX12/DX12_Helpers.h"
 #include "Graphics/DX12/DX12_MeshInfo.h"

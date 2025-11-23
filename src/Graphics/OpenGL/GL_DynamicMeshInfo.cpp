@@ -1,4 +1,4 @@
-#include "GL_DynamicMeshInfo.h"
+#include "Graphics/OpenGL/GL_DynamicMeshInfo.h"
 
 #include "App.h"
 #include "Graphics/Vertex.h"

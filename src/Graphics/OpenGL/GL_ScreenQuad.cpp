@@ -1,4 +1,4 @@
-#include "GL_ScreenQuad.h"
+#include "Graphics/OpenGL/GL_ScreenQuad.h"
 
 #include "Debug.h"
 

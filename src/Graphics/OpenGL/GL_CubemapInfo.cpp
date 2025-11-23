@@ -1,4 +1,4 @@
-#include "GL_CubemapInfo.h"
+#include "Graphics/OpenGL/GL_CubemapInfo.h"
 
 #include "Debug.h"
 

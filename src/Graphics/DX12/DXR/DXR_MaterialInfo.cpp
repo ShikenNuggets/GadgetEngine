@@ -1,4 +1,4 @@
-#include "DXR_MaterialInfo.h"
+#include "Graphics/DX12/DXR/DXR_MaterialInfo.h"
 
 #include "Graphics/DX12/DX12.h"
 

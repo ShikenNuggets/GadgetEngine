@@ -1,4 +1,4 @@
-#include "FreetypeFontLoader.h"
+#include "Graphics/Loaders/FreetypeFontLoader.h"
 
 #include "App.h"
 #include "Core/FileSystem.h"

@@ -1,4 +1,4 @@
-#include "GL_MeshInfo.h"
+#include "Graphics/OpenGL/GL_MeshInfo.h"
 
 #include "App.h"
 #include "Graphics/Vertex.h"

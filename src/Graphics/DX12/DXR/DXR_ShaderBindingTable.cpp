@@ -1,4 +1,4 @@
-#include "DXR_ShaderBindingTable.h"
+#include "Graphics/DX12/DXR/DXR_ShaderBindingTable.h"
 
 #include "Graphics/DX12/DX12.h"
 #include "Math/Vector.h"

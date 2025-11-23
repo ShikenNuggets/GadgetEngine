@@ -39,7 +39,7 @@ compiling in debug mode.
 
 */
 
-#include "RaytracingPipelineGenerator.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/RaytracingPipelineGenerator.h"
 
 #include "dxcapi.h"
 #include <stdexcept>

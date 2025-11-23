@@ -1,4 +1,4 @@
-#include "DXR_OutputResource.h"
+#include "Graphics/DX12/DXR/DXR_OutputResource.h"
 
 #include "Debug.h"
 #include "Graphics/DX12/DX12.h"

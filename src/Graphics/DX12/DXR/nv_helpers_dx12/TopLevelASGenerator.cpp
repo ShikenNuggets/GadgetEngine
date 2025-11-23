@@ -45,7 +45,7 @@ buffer needs to be kept until the command list execution is finished.
 
 */
 
-#include "TopLevelASGenerator.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/TopLevelASGenerator.h"
 
 #include <stdexcept>
 

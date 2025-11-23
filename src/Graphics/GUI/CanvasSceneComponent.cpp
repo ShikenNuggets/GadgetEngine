@@ -1,4 +1,4 @@
-#include "CanvasSceneComponent.h"
+#include "Graphics/GUI/CanvasSceneComponent.h"
 
 using namespace Gadget;
 

@@ -34,7 +34,7 @@ dispatch rays description.
 
 */
 
-#include "ShaderBindingTableGenerator.h"
+#include "Graphics/DX12/DXR/nv_helpers_dx12/ShaderBindingTableGenerator.h"
 
 #include <stdexcept>
 

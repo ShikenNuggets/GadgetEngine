@@ -1,4 +1,4 @@
-#include "GL_FontInfo.h"
+#include "Graphics/OpenGL/GL_FontInfo.h"
 
 using namespace Gadget;
 

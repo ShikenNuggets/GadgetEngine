@@ -1,4 +1,4 @@
-#include "GuiCanvas.h"
+#include "Graphics/GUI/GuiCanvas.h"
 
 #include "App.h"
 #include "Utils/Utils.h"

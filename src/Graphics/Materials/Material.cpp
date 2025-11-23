@@ -1,7 +1,7 @@
-#include "Material.h"
+#include "Graphics/Materials/Material.h"
 
-#include "ColorMaterial.h"
-#include "DiffuseTextureMaterial.h"
+#include "Graphics/Materials/ColorMaterial.h"
+#include "Graphics/Materials/DiffuseTextureMaterial.h"
 #include "App.h"
 #include "Resource/ResourceManager.h"
 

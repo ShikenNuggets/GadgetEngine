@@ -1,4 +1,4 @@
-#include "GL_DepthFrameBuffer.h"
+#include "Graphics/OpenGL/FrameBuffers/GL_DepthFrameBuffer.h"
 
 #include "Debug.h"
 

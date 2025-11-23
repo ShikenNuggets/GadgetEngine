@@ -1,4 +1,4 @@
-#include "BmpLoader.h"
+#include "Graphics/Loaders/BmpLoader.h"
 
 #include "Debug.h"
 #include "Core/FileSystem.h"
