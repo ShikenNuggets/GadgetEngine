@@ -12,10 +12,8 @@
 
 #include "Animation/AnimClip.h"
 #include "Animation/AnimMesh.h"
-#include "Audio/AudioClip.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
-#include "Graphics/Text/Font.h"
 #include "Graphics/Text/FreetypeFont.h"
 #include "Graphics/OpenGL/GL_Shader.h"
 #include "Resource/BinaryBlobResource.h"
@@ -42,16 +40,12 @@ namespace Gadget{
 			value_ = new MeshResourceContainer(j_.at("path"));
 		}else if(typeID == StringID::ProcessString(GL_Shader::typeName)){
 			value_ = new GL_ShaderResourceContainer(j_.at("path1"), j_.at("path2"));
-		}else if(typeID == StringID::ProcessString(Font::typeName)){
-			value_ = new FontResourceContainer(j_.at("path"));
 		}else if(typeID == StringID::ProcessString(FreetypeFont::typeName)){
 			value_ = new FreetypeFontResourceContainer(j_.at("path"));
 		}else if(typeID == StringID::ProcessString(Texture::typeName)){
 			value_ = new TextureResourceContainer(j_.at("path"));
 		}else if(typeID == StringID::ProcessString(BinaryBlobResource::typeName)){
 			value_ = new BinaryBlobResourceContainer(j_.at("path"));
-		}else if(typeID == StringID::ProcessString(AudioClip::typeName)){
-			value_ = new AudioClipResourceContainer(j_.at("path"));
 		}else if(typeID == StringID::ProcessString(AnimMesh::typeName)){
 			value_ = new AnimMeshResourceContainer(j_.at("path"));
 		}else if(typeID == StringID::ProcessString(AnimClip::typeName)){

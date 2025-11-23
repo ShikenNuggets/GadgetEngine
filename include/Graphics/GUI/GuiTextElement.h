@@ -2,7 +2,6 @@
 #define GADGET_GUI_TEXT_ELEMENT_H
 
 #include "GuiElement.h"
-#include "Graphics/Text/Font.h"
 #include "Graphics/Text/TextMesh.h"
 
 namespace Gadget{
