@@ -74,7 +74,7 @@ Win32_GL_Renderer::Win32_GL_Renderer(int w_, int h_, int x_, int y_) : Renderer(
 		Debug::Log("Swap interval could not be set! SDL Error: " + std::string(SDL_GetError()), Debug::Error, __FILE__, __LINE__);
 	}
 
-	if(gladLoadGLLoader(static_cast<GLADloadproc>(SDL_GL_GetProcAddress)) == GL_FALSE){
+	if(gladLoadGLLoader(reinterpret_cast<GLADloadproc>(SDL_GL_GetProcAddress)) == GL_FALSE){
 		Debug::ThrowFatalError(SID("RENDER"), "Failed to initialize Glad! SDL Error: " + std::string(SDL_GetError()), ErrorCode::OpenGL_Error,  __FILE__, __LINE__);
 	}
 

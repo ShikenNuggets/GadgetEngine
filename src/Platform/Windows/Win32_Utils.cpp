@@ -3,6 +3,7 @@
 #include <comdef.h>
 #include <dwmapi.h>
 #include <ShlObj_core.h>
+#include <shellapi.h>
 #include <WinUser.h>
 
 #include "Debug.h"
