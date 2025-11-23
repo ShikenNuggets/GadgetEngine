@@ -150,15 +150,11 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 
 	Debug::Log(SID("FATAL"), message_, FatalError);
 
-	#ifdef GADGET_PLATFORM_WIN32
 	//Extra spacing at the end to prevent text from getting cut off
 	const bool status = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title_.c_str(), (message_ + "         \n         ").c_str(), nullptr);
 	if(!status){
 		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, Gadget::FileSystem::GetFileNameFromPath(__FILE__), __LINE__);
 	}
-	#else
-	static_assert(false, "Unhandled platform in Debug::PopupErrorMessage!");
-	#endif //GADGET_PLATFORM_WIN32
 }
 
 void Debug::ThrowFatalError(StringID channel_, const std::string& message_, ErrorCode err_, const std::string& file_, int line_){

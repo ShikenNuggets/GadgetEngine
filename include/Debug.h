@@ -27,6 +27,10 @@
 	#define GADGET_ASSERT(expr, msg) { if(!(expr)){ Gadget::Debug::PopupErrorMessage(std::string("Assert Failed! ") + Gadget::FileSystem::GetFileNameFromPath(__FILE__) + std::string(" : ") + std::to_string(__LINE__), msg); } }
 #endif //GADGET_RELEASE || !GADGET_PLATFORM_WIN32
 
+#ifndef GADGET_ASSERT
+	#define GADGET_ASSER(expr, msg)
+#endif
+
 #define GADGET_BASIC_ASSERT(expr) GADGET_ASSERT(expr, "Condition Failed: " #expr)
 #define GADGET_ASSERT_NOT_IMPLEMENTED GADGET_ASSERT(false, "Case not implemented - Ask a dev!")
 #define GADGET_ASSERT_UNREACHABLE GADGET_ASSERT(false, "Executing code that was expected to be unreachable - Ask a dev!");

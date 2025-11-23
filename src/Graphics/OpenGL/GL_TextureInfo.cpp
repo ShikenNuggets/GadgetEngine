@@ -1,4 +1,4 @@
-#include "GL_TextureInfo.h"
+#include "Graphics/OpenGL/GL_TextureInfo.h"
 
 #include "App.h"
 #include "Debug.h"

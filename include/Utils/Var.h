@@ -87,7 +87,7 @@ namespace Gadget{
 				case Type::Number:
 					return *this == var_.ToNumber();
 				default:
-					GADGET_ASSERT_NOT_IMPLEMENTED
+					GADGET_ASSERT_NOT_IMPLEMENTED;
 					break;
 			}
 
@@ -115,7 +115,7 @@ namespace Gadget{
 				case Type::Number:
 					return *this != var_.ToNumber();
 				default:
-					GADGET_ASSERT_NOT_IMPLEMENTED
+					GADGET_ASSERT_NOT_IMPLEMENTED;
 					break;
 			}
 

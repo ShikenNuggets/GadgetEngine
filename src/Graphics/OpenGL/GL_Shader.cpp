@@ -1,4 +1,4 @@
-#include "GL_Shader.h"
+#include "Graphics/OpenGL/GL_Shader.h"
 
 #include "App.h"
 #include "Debug.h"

@@ -5,7 +5,7 @@
 
 //Hide warnings from external code that we can't/won't modify - WNF
 #pragma warning(disable : 26819) //Unnanotated fallthrough in switch statement
-#include <SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #pragma warning(default : 26819)
 
 namespace Gadget{

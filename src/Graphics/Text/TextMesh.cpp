@@ -1,4 +1,4 @@
-#include "TextMesh.h"
+#include "Graphics/Text/TextMesh.h"
 
 #include "App.h"
 
