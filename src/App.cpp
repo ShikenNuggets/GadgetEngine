@@ -259,7 +259,7 @@ void App::OnWindowResizeEvent(const Event& e_){
 	GADGET_BASIC_ASSERT(e_.GetEventType() == WindowResizedEvent::Type());
 	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
 
-	const WindowResizedEvent* eventPtr = dynamic_cast<const WindowResizedEvent*>(&e_);
+	const auto* eventPtr = dynamic_cast<const WindowResizedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
 		renderer->OnResize(eventPtr->GetWidth(), eventPtr->GetHeight());
@@ -270,7 +270,7 @@ void App::OnMouseMoved(const Event& e_){
 	GADGET_BASIC_ASSERT(e_.GetEventType() == MouseMovedEvent::Type());
 	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
 
-	const MouseMovedEvent* eventPtr = dynamic_cast<const MouseMovedEvent*>(&e_);
+	const auto* eventPtr = dynamic_cast<const MouseMovedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
 		if(GetSceneManager().CurrentScene() != nullptr && GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
@@ -284,7 +284,7 @@ void App::OnMouseButtonPressed(const Event& e_){
 	GADGET_BASIC_ASSERT(e_.GetEventType() == MouseButtonPressedEvent::Type());
 	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
 
-	const MouseButtonPressedEvent* eventPtr = dynamic_cast<const MouseButtonPressedEvent*>(&e_);
+	const auto* eventPtr = dynamic_cast<const MouseButtonPressedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
 		if(GetSceneManager().CurrentScene() != nullptr && GetSceneManager().CurrentScene()->GetSceneComponent<CanvasSceneComponent>() != nullptr){
@@ -339,7 +339,7 @@ Renderer::API App::GetCurrentRenderAPI(){
 float App::GetFixedDeltaTime(){
 	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
 
-	const float physicsUpdatesPerSecond = static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey));
+	const auto physicsUpdatesPerSecond = static_cast<float>(App::GetConfig().GetOptionFloat(EngineVars::Physics::physicsUpdatesKey));
 	GADGET_BASIC_ASSERT(physicsUpdatesPerSecond > 0.0f);
 	if(physicsUpdatesPerSecond <= 0.0f){
 		Debug::Log("PhysicsUpdates was an invalid value!", Debug::Warning, __FILE__, __LINE__);
@@ -352,7 +352,7 @@ float App::GetFixedDeltaTime(){
 float App::GetCurrentFramerateCap(){
 	GADGET_BASIC_ASSERT(instance != nullptr && instance->IsFullyInitialized());
 
-	const float targetFPS = static_cast<float>(GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
+	const auto targetFPS = static_cast<float>(GetConfig().GetOptionFloat(EngineVars::Display::targetFPSKey));
 	const bool vsyncEnabled = GetConfig().GetOptionBool(EngineVars::Display::vsyncKey);
 
 	if(targetFPS == 0.0f && !vsyncEnabled){

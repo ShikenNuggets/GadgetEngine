@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-Skeleton::Skeleton(const Matrix4& globalInverse_) : joints(), globalInverse(globalInverse_){}
+Skeleton::Skeleton(const Matrix4& globalInverse_) : globalInverse(globalInverse_){}
 
 void Skeleton::AddJoint(const Joint& joint_){
 	GADGET_BASIC_ASSERT(joint_.name != StringID::None);

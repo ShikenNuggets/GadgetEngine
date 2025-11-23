@@ -66,7 +66,7 @@ AnimClip* AssimpAnimLoader::LoadAnimClip(const std::string& filePath_, unsigned 
 		return nullptr;
 	}
 
-	const float duration = static_cast<float>(anim->mDuration / anim->mTicksPerSecond);
+	const auto duration = static_cast<float>(anim->mDuration / anim->mTicksPerSecond);
 	auto posKeys = HashTable<StringID, DList<VectorKey>>(128);
 	auto rotKeys = HashTable<StringID, DList<QuatKey>>(128);
 	auto scaleKeys = HashTable<StringID, DList<VectorKey>>(128);

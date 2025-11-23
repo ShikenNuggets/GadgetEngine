@@ -45,7 +45,7 @@ ErrorCode ConfigParser::SerializeConfigs(const std::string& path_, const EngineV
 		return ErrorCode::Invalid_State;
 	}
 
-	std::string output = "";
+	std::string output;
 	for(const auto& s : vars_.sections){
 		GADGET_BASIC_ASSERT(s != nullptr);
 		if(s == nullptr){

@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : animMeshName(animMeshName_), skeleton(nullptr), globalTime(0.0f), skeletonInstance(), clips(), currentClip(nullptr), currentPosNodes(), currentRotNodes(), currentScaleNodes(), globalTransformCache(){
+Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : animMeshName(animMeshName_), skeleton(nullptr), globalTime(0.0f), currentClip(nullptr){
 	GADGET_BASIC_ASSERT(animMeshName != StringID::None);
 	AnimMesh* animMeshPtr = App::GetResourceManager().LoadResource<AnimMesh>(animMeshName_); //Claim ownership of the mesh so we can keep the skeleton loaded
 	GADGET_BASIC_ASSERT(animMeshPtr != nullptr);

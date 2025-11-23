@@ -5,11 +5,11 @@ using namespace Gadget;
 bool AnimClip::HasKeysForJoint(StringID jointName_) const{ return posKeys.Contains(jointName_) || rotKeys.Contains(jointName_) || scaleKeys.Contains(jointName_); }
 
 FullClipSearchResult AnimClip::GetTransformAtTime(StringID name_, float time_, const VectorNode* posNode_, const QuatNode* rotNode_, const VectorNode* scaleNode_) const{
-	return FullClipSearchResult(
+	return {
 		GetTranslationAtTime(name_, time_, posNode_),
 		GetRotationAtTime(name_, time_, rotNode_),
 		GetScaleAtTime(name_, time_, scaleNode_)
-	);
+	};
 }
 
 //I apologize in advance to anyone hoping to understand or debug this code

@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-BasicSceneManager::BasicSceneManager() : scenes(), sceneIndex(0){}
+BasicSceneManager::BasicSceneManager() : sceneIndex(0){}
 
 BasicSceneManager::~BasicSceneManager(){
 	for(auto& s : scenes){
