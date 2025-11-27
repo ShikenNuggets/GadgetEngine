@@ -15,7 +15,7 @@ namespace Gadget{
 		}
 		
 		virtual void Update([[maybe_unused]] float deltaTime_) override{
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f);
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f);
 			
 			frameCount++;
 			timer += deltaTime_;

@@ -9,7 +9,7 @@ using namespace Gadget;
 
 ComponentCollection<AnimRenderComponent> AnimRenderComponent::componentCollection = ComponentCollection<AnimRenderComponent>();
 
-AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, std::vector<StringID> cachedMaterials_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), meshInfos(), animator(nullptr){
+AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, std::vector<StringID> cachedMaterials_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), animator(nullptr){
 	GADGET_BASIC_ASSERT(parent != nullptr && parent->GetGUID() != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	for(const auto& cm : cachedMaterials_){
@@ -35,7 +35,7 @@ AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
-AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, StringID cachedMaterial_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), meshInfos(), animator(nullptr){
+AnimRenderComponent::AnimRenderComponent(GameObject* parent_, StringID modelName_, StringID cachedMaterial_) : Component(SID("AnimRenderComponent"), parent_), modelName(modelName_), animator(nullptr){
 	GADGET_BASIC_ASSERT(parent != nullptr && parent->GetGUID() != GUID::Invalid);
 	GADGET_BASIC_ASSERT(modelName_ != StringID::None);
 	GADGET_BASIC_ASSERT(cachedMaterial_ != StringID::None);
@@ -129,7 +129,7 @@ void AnimRenderComponent::CreateMeshInfo(){
 	const auto oldMeshInfos = meshInfos;
 	meshInfos.clear();
 
-	AnimMesh* mesh = App::GetResourceManager().LoadResource<AnimMesh>(modelName);
+	auto* mesh = App::GetResourceManager().LoadResource<AnimMesh>(modelName);
 	GADGET_BASIC_ASSERT(mesh != nullptr);
 
 	const std::vector<MeshInfo*> mi = App::GetRenderer().GenerateAPIAnimMeshInfos(*mesh);

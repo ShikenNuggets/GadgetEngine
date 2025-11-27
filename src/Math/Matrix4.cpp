@@ -1,7 +1,8 @@
 #include "Math/Matrix.h"
 
+#include <GCore/Math/Math.hpp>
+
 #include "Math/Euler.h"
-#include "Math/Math.h"
 #include "Math/Quaternion.h"
 
 using namespace Gadget;
@@ -14,22 +15,22 @@ Matrix4::Matrix4(	float x1_, float x2_, float x3_, float x4_,
 					float y1_, float y2_, float y3_, float y4_,
 					float z1_, float z2_, float z3_, float z4_,
 					float w1_, float w2_, float w3_, float w4_) : m(){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x1_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x2_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x3_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x4_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y1_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y2_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y3_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y4_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z1_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z2_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z3_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z4_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(w1_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(w2_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(w3_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(w4_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x1_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x2_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x3_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x4_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y1_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y2_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y3_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y4_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z1_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z2_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z3_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z4_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(w1_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(w2_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(w3_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(w4_));
 
 	m[0] = x1_; m[4] = y1_; m[8] = z1_;  m[12] = w1_;
 	m[1] = x2_; m[5] = y2_; m[9] = z2_;  m[13] = w2_;
@@ -38,7 +39,7 @@ Matrix4::Matrix4(	float x1_, float x2_, float x3_, float x4_,
 }
 
 Matrix4::Matrix4(float fill_) : m(){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(fill_));
 
 	for(auto& i : m){
 		i = fill_;
@@ -104,7 +105,7 @@ Matrix4 Matrix4::operator -(const Matrix4& m_) const{
 
 Matrix4 Matrix4::operator *(float s_) const{
 	GADGET_SLOW_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(s_));
 
 	return Matrix4(	m[0] * s_,	m[1] * s_,	m[2] * s_,	m[3] * s_,
 					m[4] * s_,	m[5] * s_,	m[6] * s_,	m[7] * s_,
@@ -119,25 +120,25 @@ Matrix4 Matrix4::operator*(const Matrix4& m_) const{
 
 	return Matrix4(
 		//COLUMN 1
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[0], m_[1], m_[2], m_[3]),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ m_[0], m_[1], m_[2], m_[3]),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ m_[0], m_[1], m_[2], m_[3]),
-		Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ m_[0], m_[1], m_[2], m_[3]),
+		GCore::Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[0], m_[1], m_[2], m_[3]),
+		GCore::Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ m_[0], m_[1], m_[2], m_[3]),
+		GCore::Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ m_[0], m_[1], m_[2], m_[3]),
+		GCore::Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ m_[0], m_[1], m_[2], m_[3]),
 		//COLUMN 2
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[4], m_[5], m_[6], m_[7]),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ m_[4], m_[5], m_[6], m_[7]),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ m_[4], m_[5], m_[6], m_[7]),
-		Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ m_[4], m_[5], m_[6], m_[7]),
+		GCore::Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[4], m_[5], m_[6], m_[7]),
+		GCore::Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ m_[4], m_[5], m_[6], m_[7]),
+		GCore::Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ m_[4], m_[5], m_[6], m_[7]),
+		GCore::Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ m_[4], m_[5], m_[6], m_[7]),
 		//COLUMN 3
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[8], m_[9], m_[10], m_[11]),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ m_[8], m_[9], m_[10], m_[11]),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ m_[8], m_[9], m_[10], m_[11]),
-		Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ m_[8], m_[9], m_[10], m_[11]),
+		GCore::Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[8], m_[9], m_[10], m_[11]),
+		GCore::Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ m_[8], m_[9], m_[10], m_[11]),
+		GCore::Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ m_[8], m_[9], m_[10], m_[11]),
+		GCore::Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ m_[8], m_[9], m_[10], m_[11]),
 		//COLUMN 4
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[12], m_[13], m_[14], m_[15]),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ m_[12], m_[13], m_[14], m_[15]),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ m_[12], m_[13], m_[14], m_[15]),
-		Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ m_[12], m_[13], m_[14], m_[15])
+		GCore::Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ m_[12], m_[13], m_[14], m_[15]),
+		GCore::Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ m_[12], m_[13], m_[14], m_[15]),
+		GCore::Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ m_[12], m_[13], m_[14], m_[15]),
+		GCore::Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ m_[12], m_[13], m_[14], m_[15])
 	);
 }
 
@@ -146,9 +147,9 @@ Vector3 Matrix4::operator *(const Vector3& v_) const{
 	GADGET_BASIC_ASSERT(v_.IsValid());
 
 	return Vector3(
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, 1.0f)
+		GCore::Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		GCore::Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		GCore::Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, 1.0f)
 	);
 }
 
@@ -157,21 +158,21 @@ Vector4 Matrix4::operator *(const Vector4& v_) const{
 	GADGET_BASIC_ASSERT(v_.IsValid());
 
 	return Vector4(
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ v_.x, v_.y, v_.z, v_.w)
+		GCore::Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, v_.w),
+		GCore::Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, v_.w),
+		GCore::Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, v_.w),
+		GCore::Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ v_.x, v_.y, v_.z, v_.w)
 	);
 }
 
 Matrix4 Matrix4::operator /(float s_) const{
 	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(s_));
 
-	return Matrix4(	Math::SafeDivide(m[0], s_), Math::SafeDivide(m[1], s_), Math::SafeDivide(m[2], s_), Math::SafeDivide(m[3], s_),
-					Math::SafeDivide(m[4], s_), Math::SafeDivide(m[5], s_), Math::SafeDivide(m[6], s_), Math::SafeDivide(m[7], s_),
-					Math::SafeDivide(m[8], s_), Math::SafeDivide(m[9], s_), Math::SafeDivide(m[10], s_), Math::SafeDivide(m[11], s_),
-					Math::SafeDivide(m[12], s_), Math::SafeDivide(m[13], s_), Math::SafeDivide(m[14], s_), Math::SafeDivide(m[15], s_)
+	return Matrix4(	GCore::Math::SafeDivide(m[0], s_), GCore::Math::SafeDivide(m[1], s_), GCore::Math::SafeDivide(m[2], s_), GCore::Math::SafeDivide(m[3], s_),
+					GCore::Math::SafeDivide(m[4], s_), GCore::Math::SafeDivide(m[5], s_), GCore::Math::SafeDivide(m[6], s_), GCore::Math::SafeDivide(m[7], s_),
+					GCore::Math::SafeDivide(m[8], s_), GCore::Math::SafeDivide(m[9], s_), GCore::Math::SafeDivide(m[10], s_), GCore::Math::SafeDivide(m[11], s_),
+					GCore::Math::SafeDivide(m[12], s_), GCore::Math::SafeDivide(m[13], s_), GCore::Math::SafeDivide(m[14], s_), GCore::Math::SafeDivide(m[15], s_)
 	);
 }
 
@@ -218,13 +219,13 @@ Matrix4 Matrix4::Inverse() const{
 }
 
 Matrix4 Matrix4::Rotate(float angle_, const Vector3& v_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(angle_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(angle_));
 	GADGET_BASIC_ASSERT(v_.IsValid());
 
 	Vector3 rotAxis(v_.x, v_.y, v_.z);
 
 	rotAxis.Normalize();
-	const float tempAngle = Math::DegreesToRadians(angle_);
+	const float tempAngle = GCore::Math::DegreesToRadians(angle_);
 	const float cosang = cos(tempAngle);
 	const float sinang = sin(tempAngle);
 	const float cosm = (1.0f - cosang);
@@ -269,15 +270,15 @@ Matrix4 Matrix4::LookAt(float eyeX_, float eyeY_, float eyeZ_,
 	float atX_, float atY_, float atZ_,
 	float upX_, float upY_, float upZ_){
 
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(eyeX_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(eyeY_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(eyeZ_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(atX_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(atY_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(atZ_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(upX_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(upY_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(upZ_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(eyeX_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(eyeY_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(eyeZ_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(atX_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(atY_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(atZ_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(upX_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(upY_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(upZ_));
 
 	const Vector3 at(atX_, atY_, atZ_);
 	Vector3 up(upX_, upY_, upZ_);
@@ -323,10 +324,10 @@ Matrix4 Matrix4::LookAt(const Vector3& eye_, const Vector3& at_, const Vector3& 
 }
 
 Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float top_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(left_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(right_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(bottom_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(top_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(left_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(right_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(bottom_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(top_));
 
 	Matrix4 ortho = Matrix4(0.0f);
 
@@ -343,12 +344,12 @@ Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float to
 }
 
 Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float top_, float near_, float far_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(left_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(right_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(bottom_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(top_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(near_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(far_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(left_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(right_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(bottom_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(top_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(near_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(far_));
 
 	Matrix4 ortho = Matrix4(0.0f);
 
@@ -366,12 +367,12 @@ Matrix4 Matrix4::Orthographic(float left_, float right_, float bottom_, float to
 
 //TODO - Validate this
 Matrix4 Matrix4::Perspective(float fov_, float aspect_, float nearPlane_, float farPlane_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(fov_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(aspect_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(nearPlane_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(farPlane_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(fov_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(aspect_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(nearPlane_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(farPlane_));
 
-	const float cot = 1.0f / Math::Tan(fov_ * 0.5f);
+	const float cot = 1.0f / GCore::Math::Tan(fov_ * 0.5f);
 	//Don't forget, this looks row centric but it really is a column matrix - right-hand rule rules
 	Matrix4 result(cot / aspect_, 0.0f, 0.0f, 0.0f,
 		0.0f, cot, 0.0f, 0.0f,

@@ -1,11 +1,12 @@
 #ifndef GADGET_HASH_TABLE_H
 #define GADGET_HASH_TABLE_H
 
+#include <GCore/Math/Math.hpp>
+
 #include "Debug.h"
 #include "Data/Array.h"
 #include "Data/List.h"
 #include "Data/String.h"
-#include "Math/Math.h"
 #include "Utils/Hash.h"
 
 namespace Gadget{
@@ -58,7 +59,7 @@ namespace Gadget{
 			List<KeyValuePair>::Node* currentNode;
 		};
 
-		HashTable(int64_t capacity = 1024) : data(Math::NextPrime(capacity)), numElements(0){}
+		HashTable(int64_t capacity = 1024) : data(GCore::Math::NextPrime(capacity)), numElements(0){}
 
 		HashTable(const HashTable<K, V>& other_) = default;
 		HashTable(HashTable<K, V>&& other_) = default;

@@ -37,7 +37,7 @@ void DX12_UploadFrame::Release(){
 
 std::unique_ptr<DX12_UploadHandler> DX12_UploadHandler::instance = nullptr;
 
-DX12_UploadHandler::DX12_UploadHandler(ID3D12_Device* device_) : uploadFrames(), cmdQueue(nullptr), fence(nullptr), fenceValue(0), fenceEvent(nullptr), frameMutex(), queueMutex(){
+DX12_UploadHandler::DX12_UploadHandler(ID3D12_Device* device_) : uploadFrames(), cmdQueue(nullptr), fence(nullptr), fenceValue(0), fenceEvent(nullptr){
 	GADGET_BASIC_ASSERT(device_ != nullptr);
 
 	HRESULT hr = S_OK;
@@ -113,7 +113,7 @@ void DX12_UploadHandler::DeleteInstance(){
 RaceConditionDetector gSpinLock; //TODO - This is not ideal
 
 DX12_UploadFrame* DX12_UploadHandler::ReserveAvailableUploadFrame(){
-	std::lock_guard lock{ frameMutex };
+	const std::lock_guard lock{ frameMutex };
 
 	for(uint32_t i = 0; i < MaxUploads; i++){
 		if(uploadFrames[i].IsReady()){

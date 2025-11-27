@@ -28,7 +28,7 @@ Matrix3::Matrix3(	float x1_, float x2_, float x3_,
 }
 
 Matrix3::Matrix3(const float fill_) : m(){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(fill_));
 
 	for(auto& i : m){
 		i = fill_;
@@ -99,7 +99,7 @@ Matrix3 Matrix3::operator -(const Matrix3& m_) const{
 
 Matrix3 Matrix3::operator *(float s_) const{
 	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(s_));
 
 	return Matrix3(	m[0] * s_, m[1] * s_, m[2] * s_,
 					m[3] * s_, m[4] * s_, m[5] * s_,
@@ -112,27 +112,27 @@ Matrix3 Matrix3::operator *(const Matrix3& m_) const{
 
 	return Matrix3(
 		//COLUMN 1
-		Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[0], m_[1], m_[2]),
-		Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[0], m_[1], m_[2]),
-		Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[0], m_[1], m_[2]),
+		GCore::Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[0], m_[1], m_[2]),
+		GCore::Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[0], m_[1], m_[2]),
+		GCore::Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[0], m_[1], m_[2]),
 		//COLUMN 2
-		Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[3], m_[4], m_[5]),
-		Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[3], m_[4], m_[5]),
-		Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[3], m_[4], m_[5]),
+		GCore::Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[3], m_[4], m_[5]),
+		GCore::Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[3], m_[4], m_[5]),
+		GCore::Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[3], m_[4], m_[5]),
 		//COLUMN 3
-		Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[6], m_[7], m_[8]),
-		Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[6], m_[7], m_[8]),
-		Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[6], m_[7], m_[8])
+		GCore::Math::Dot3D(/*A*/ m[0], m[3], m[6], /*B*/ m_[6], m_[7], m_[8]),
+		GCore::Math::Dot3D(/*A*/ m[1], m[4], m[7], /*B*/ m_[6], m_[7], m_[8]),
+		GCore::Math::Dot3D(/*A*/ m[2], m[5], m[8], /*B*/ m_[6], m_[7], m_[8])
 	);
 }
 
 Matrix3 Matrix3::operator /(float s_) const{
 	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(s_));
 
-	return Matrix3(	Math::SafeDivide(m[0], s_), Math::SafeDivide(m[1], s_), Math::SafeDivide(m[2], s_),
-					Math::SafeDivide(m[3], s_), Math::SafeDivide(m[4], s_), Math::SafeDivide(m[5], s_),
-					Math::SafeDivide(m[6], s_), Math::SafeDivide(m[7], s_), Math::SafeDivide(m[8], s_));
+	return Matrix3(	GCore::Math::SafeDivide(m[0], s_), GCore::Math::SafeDivide(m[1], s_), GCore::Math::SafeDivide(m[2], s_),
+					GCore::Math::SafeDivide(m[3], s_), GCore::Math::SafeDivide(m[4], s_), GCore::Math::SafeDivide(m[5], s_),
+					GCore::Math::SafeDivide(m[6], s_), GCore::Math::SafeDivide(m[7], s_), GCore::Math::SafeDivide(m[8], s_));
 }
 
 void Matrix3::operator +=(const Matrix3& m_){ *this = *this + m_; }
@@ -162,7 +162,7 @@ float Matrix3::Determinant() const{
 Matrix3 Matrix3::Inverse() const{
 	GADGET_BASIC_ASSERT(IsValid());
 
-	const float invdet = Math::SafeDivide(1.0f, Determinant());
+	const float invdet = GCore::Math::SafeDivide(1.0f, Determinant());
 
 	return Matrix3(
 		(m[4] * m[8] - m[7] * m[5]) * invdet,
@@ -196,15 +196,15 @@ Euler Matrix3::ToEuler() const{
 	GADGET_BASIC_ASSERT(IsValid());
 
 	Angle heading = Angle(0.0f);
-	Angle attitude = Math::Asin(m[1]);
+	Angle attitude = GCore::Math::Asin(m[1]);
 	Angle bank = Angle(0.0f);
 
 	if(m[1] >= 0.99f || m[1] <= -0.99f){
-		heading = Math::Atan2(m[6], m[8]);
+		heading = GCore::Math::Atan2(m[6], m[8]);
 	}else{
-		heading = Math::Atan2(-m[2], m[0]);
-		attitude = Math::Asin(m[1]);
-		bank = Math::Atan2(-m[7], m[4]);
+		heading = GCore::Math::Atan2(-m[2], m[0]);
+		attitude = GCore::Math::Asin(m[1]);
+		bank = GCore::Math::Atan2(-m[7], m[4]);
 	}
 
 	return Euler(bank, heading, attitude);
@@ -215,10 +215,10 @@ Quaternion Matrix3::ToQuaternion() const{
 
 	//TODO - This feels inefficient
 	Quaternion q = Quaternion(
-		Math::Sqrt(std::max(0.0f, 1.0f + m[0] + m[4] + m[8])) / 2.0f,
-		Math::Sqrt(std::max(0.0f, 1.0f + m[0] - m[4] - m[8])) / 2.0f,
-		Math::Sqrt(std::max(0.0f, 1.0f - m[0] + m[4] - m[8])) / 2.0f,
-		Math::Sqrt(std::max(0.0f, 1.0f - m[0] - m[4] + m[8])) / 2.0f
+		GCore::Math::Sqrt(std::max(0.0f, 1.0f + m[0] + m[4] + m[8])) / 2.0f,
+		GCore::Math::Sqrt(std::max(0.0f, 1.0f + m[0] - m[4] - m[8])) / 2.0f,
+		GCore::Math::Sqrt(std::max(0.0f, 1.0f - m[0] + m[4] - m[8])) / 2.0f,
+		GCore::Math::Sqrt(std::max(0.0f, 1.0f - m[0] - m[4] + m[8])) / 2.0f
 	);
 
 	if(m[5] - m[7] != 0.0f){

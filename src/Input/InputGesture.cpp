@@ -1,15 +1,16 @@
 #include "Input/InputGesture.h"
 
+#include <GCore/Math/Math.hpp>
+
 #include "App.h"
 #include "Core/Time.h"
 #include "Input/Input.h"
-#include "Math/Math.h"
 
 using namespace Gadget;
 
 InputGesture::InputGesture(StringID name_, float maxAllowedTime_) : name(name_), maxAllowedTime(maxAllowedTime_){
 	GADGET_BASIC_ASSERT(name_ != StringID::None);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(maxAllowedTime_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(maxAllowedTime_));
 	GADGET_BASIC_ASSERT(maxAllowedTime_ > 0.0f);
 }
 
@@ -20,7 +21,7 @@ ButtonMashGesture::ButtonMashGesture(StringID gestureName_, StringID buttonName_
 	GADGET_BASIC_ASSERT(gestureName_ != StringID::None);
 	GADGET_BASIC_ASSERT(buttonName_ != StringID::None);
 	GADGET_BASIC_ASSERT(requiredPresses_ > 0);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(maxAllowedTime_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(maxAllowedTime_));
 	GADGET_BASIC_ASSERT(maxAllowedTime_ > 0.0f);
 }
 
@@ -34,7 +35,7 @@ bool ButtonMashGesture::IsGestureComplete() const{
 
 float ButtonMashGesture::GetPercentComplete() const{
 	GADGET_ASSERT(requiredPresses > 0, "Buttom mash gesture with zero required presses exists!");
-	return Math::Clamp(0.0f, 1.0f, static_cast<float>(currentPresses) / static_cast<float>(requiredPresses));
+	return GCore::Math::Clamp(0.0f, 1.0f, static_cast<float>(currentPresses) / static_cast<float>(requiredPresses));
 }
 
 void ButtonMashGesture::Update(){
@@ -60,7 +61,7 @@ void ButtonMashGesture::Reset(){
 ButtonSequenceGesture::ButtonSequenceGesture(StringID name_, const std::vector<StringID>& sequence_, float maxAllowedTime_) : InputGesture(name_, maxAllowedTime_), buttonNames(sequence_), startTime(0.0f), currentButtonIndex(0){
 	GADGET_BASIC_ASSERT(name_ != StringID::None);
 	GADGET_BASIC_ASSERT(!sequence_.empty());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(maxAllowedTime_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(maxAllowedTime_));
 	GADGET_BASIC_ASSERT(maxAllowedTime_ > 0.0f);
 }
 
@@ -111,7 +112,7 @@ CircularRotationGesture::CircularRotationGesture(StringID gestureName_, StringID
 	GADGET_BASIC_ASSERT(horizontalAxisName_ != StringID::None);
 	GADGET_BASIC_ASSERT(verticalAxisName_ != StringID::None);
 	GADGET_ASSERT(!rotations.empty(), "CircularRotationGesture created with no rotations set!");
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(maxAllowedTime_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(maxAllowedTime_));
 	GADGET_BASIC_ASSERT(maxAllowedTime_ > 0.0f);
 }
 

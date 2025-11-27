@@ -1,6 +1,8 @@
 #include "Math/Angle.h"
 
-#include "Math/Math.h"
+#include <GCore/Math/Math.hpp>
+
+#include "Debug.h"
 
 using namespace Gadget;
 
@@ -22,17 +24,17 @@ Radian Degree::ToRadians() const{
 
 float Degree::ToRadiansValue() const{
 	GADGET_BASIC_ASSERT(IsValid());
-	return Math::DegreesToRadians(angle);
+	return GCore::Math::DegreesToRadians(angle);
 }
 
-Degree Degree::operator /(float a_) const{ return Math::SafeDivide(angle, a_); }
+Degree Degree::operator /(float a_) const{ return GCore::Math::SafeDivide(angle, a_); }
 
 Degree Degree::operator /(const Degree& d_) const{ return angle / d_.Get(); }
 
 void Degree::operator /=(float a_){ *this = *this / a_; }
 void Degree::operator /=(const Degree& d_){ *this = *this / d_; }
 
-bool Degree::IsValid() const{ return Math::IsValidNumber(angle); }
+bool Degree::IsValid() const{ return GCore::Math::IsValidNumber(angle); }
 
 //----------RADIANS----------//
 
@@ -51,14 +53,14 @@ Degree Radian::ToDegrees() const{
 
 float Radian::ToDegreesValue() const{
 	GADGET_BASIC_ASSERT(IsValid());
-	return Math::RadiansToDegrees(angle);
+	return GCore::Math::RadiansToDegrees(angle);
 }
 
-Radian Radian::operator /(float a_) const{ return Math::SafeDivide(angle, a_); }
+Radian Radian::operator /(float a_) const{ return GCore::Math::SafeDivide(angle, a_); }
 
 Radian Radian::operator /(const Radian& r_) const{ return *this / r_.Get(); }
 
 void Radian::operator /=(float a_){ *this = *this / a_; }
 void Radian::operator /=(const Radian& r_){ *this = *this / r_; }
 
-bool Radian::IsValid() const{ return Math::IsValidNumber(angle); }
+bool Radian::IsValid() const{ return GCore::Math::IsValidNumber(angle); }

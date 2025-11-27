@@ -8,16 +8,16 @@ namespace Gadget{
 	public:
 		CubeCollider(GameObject* parent_, float x_ = 1.0f, float y_ = 1.0f, float z_ = 1.0f, bool isTrigger_ = false) : Collider(SID("CubeCollider"), parent_, ColliderShape::Cube, isTrigger_), size(x_, y_, z_){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z_));
 		}
 
 		CubeCollider(GUID parentGUID_, float x_ = 1.0f, float y_ = 1.0f, float z_ = 1.0f, bool isTrigger_ = false) : Collider(SID("CubeCollider"), parentGUID_, ColliderShape::Cube, isTrigger_), size(x_, y_, z_){
 			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z_));
 		}
 
 		CubeCollider(const ComponentProperties& props_) : Collider(props_, ColliderShape::Cube), size(){
@@ -60,9 +60,9 @@ namespace Gadget{
 			size.y = props_.variables.GetValue(SID("Size_Y"), 1.0f).ToNumber<float>();
 			size.z = props_.variables.GetValue(SID("Size_Z"), 1.0f).ToNumber<float>();
 
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.x));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.y));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(size.z));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(size.x));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(size.y));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(size.z));
 		}
 
 	private:

@@ -7,12 +7,12 @@ using namespace Gadget;
 
 bool CollisionSystem::TestCollision(const BoxCollider2D& cl1_, const BoxCollider2D& cl2_){
 	GADGET_BASIC_ASSERT(cl1_.GetParent() != nullptr);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(cl1_.GetWidth()));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(cl1_.GetHeight()));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(cl1_.GetWidth()));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(cl1_.GetHeight()));
 
 	GADGET_BASIC_ASSERT(cl2_.GetParent() != nullptr);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(cl2_.GetWidth()));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(cl2_.GetHeight()));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(cl2_.GetWidth()));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(cl2_.GetHeight()));
 
 	//This assumes axis-aligned bounding boxes... TODO - allow oriented bounding boxes
 	const float c1Left =	cl1_.GetParent()->GetPosition().x - (cl1_.GetParent()->GetScale().x * (cl1_.GetWidth() / 2.0f));
@@ -25,14 +25,14 @@ bool CollisionSystem::TestCollision(const BoxCollider2D& cl1_, const BoxCollider
 	const float c2Bottom =	cl2_.GetParent()->GetPosition().y - (cl2_.GetParent()->GetScale().y * (cl2_.GetHeight() / 2.0f));
 	const float c2Top =		cl2_.GetParent()->GetPosition().y + (cl2_.GetParent()->GetScale().y * (cl2_.GetHeight() / 2.0f));
 
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(c1Left));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(c1Right));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(c1Bottom));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(c1Top));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(c2Left));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(c2Right));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(c2Bottom));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(c2Top));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(c1Left));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(c1Right));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(c1Bottom));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(c1Top));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(c2Left));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(c2Right));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(c2Bottom));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(c2Top));
 
 	return (c1Left <= c2Right && c1Right >= c2Left && c1Bottom <= c2Top && c1Top >= c2Bottom);
 }
@@ -195,16 +195,16 @@ float CollisionSystem::CalculateOverlapAmount(const Vector3& dir_, const BoxColl
 	float yOverlap = 0.0f;
 
 	if(dir_.x < 0.0f){
-		xOverlap = Math::Abs(c1Left - c2Right);
+		xOverlap = GCore::Math::Abs(c1Left - c2Right);
 	}else if(dir_.x > 0.0f){
-		xOverlap = Math::Abs(c1Right - c2Left);
+		xOverlap = GCore::Math::Abs(c1Right - c2Left);
 	}
 
 	if(dir_.y < 0.0f){
-		yOverlap = Math::Abs(c1Bottom - c2Top);
+		yOverlap = GCore::Math::Abs(c1Bottom - c2Top);
 	}else if(dir_.y > 0.0f){
-		yOverlap = Math::Abs(c1Top - c2Bottom);
+		yOverlap = GCore::Math::Abs(c1Top - c2Bottom);
 	}
 
-	return Math::Sqrt((xOverlap * xOverlap) + (yOverlap * yOverlap));
+	return GCore::Math::Sqrt((xOverlap * xOverlap) + (yOverlap * yOverlap));
 }

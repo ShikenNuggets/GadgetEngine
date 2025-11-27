@@ -69,7 +69,7 @@ namespace Gadget{
 
 		inline bool IsValid() const{
 			for(int i = 0; i < mat2Size; i++){
-				if(!Math::IsValidNumber(m[i])){
+				if(!GCore::Math::IsValidNumber(m[i])){
 					return false;
 				}
 			}
@@ -144,7 +144,7 @@ namespace Gadget{
 
 		inline bool IsValid() const{
 			for(int i = 0; i < mat3Size; i++){
-				if(!Math::IsValidNumber(m[i])){
+				if(!GCore::Math::IsValidNumber(m[i])){
 					return false;
 				}
 			}
@@ -261,7 +261,7 @@ namespace Gadget{
 
 		inline bool IsValid() const{
 			for(int i = 0; i < mat4Size; i++){
-				if(!Math::IsValidNumber(m[i])){
+				if(!GCore::Math::IsValidNumber(m[i])){
 					return false;
 				}
 			}
@@ -361,7 +361,7 @@ namespace Gadget{
 
 		inline bool IsValid() const{
 			for(int i = 0; i < mat4x3Size; i++){
-				if(!Math::IsValidNumber(m[i])){
+				if(!GCore::Math::IsValidNumber(m[i])){
 					return false;
 				}
 			}

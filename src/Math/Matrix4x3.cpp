@@ -13,18 +13,18 @@ Matrix4x3::Matrix4x3(float x1_, float x2_, float x3_,
 				float y1_, float y2_, float y3_,
 				float z1_, float z2_, float z3_,
 				float w1_, float w2_, float w3_) : m(){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x1_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x2_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x3_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y1_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y2_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y3_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z1_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z2_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z3_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(w1_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(w2_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(w3_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x1_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x2_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x3_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y1_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y2_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y3_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z1_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z2_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z3_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(w1_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(w2_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(w3_));
 
 	m[0] = x1_; m[3] = y1_; m[6] = z1_; m[9] = w1_;
 	m[1] = x2_; m[4] = y2_; m[7] = z2_; m[10] = w2_;
@@ -32,7 +32,7 @@ Matrix4x3::Matrix4x3(float x1_, float x2_, float x3_,
 }
 
 Matrix4x3::Matrix4x3(float fill_) : m(){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(fill_));
 
 	for(int i = 0; i < mat4x3Size; i++){
 		m[i] = fill_;
@@ -95,7 +95,7 @@ Matrix4x3 Matrix4x3::operator -(const Matrix4x3& m_) const{
 
 Matrix4x3 Matrix4x3::operator *(float s_) const{
 	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(s_));
 	return Matrix4x3(m[0] * s_, m[1] * s_, m[2] * s_, m[3] * s_, m[4] * s_, m[5] * s_, m[6] * s_, m[7] * s_, m[8] * s_, m[9] * s_, m[10] * s_, m[11] * s_);
 }
 
@@ -103,29 +103,29 @@ Vector3 Matrix4x3::operator *(const Vector3& v_) const{
 	GADGET_BASIC_ASSERT(IsValid());
 	GADGET_BASIC_ASSERT(v_.IsValid());
 	return Vector3(
-		Math::Dot4D(/*A*/ m[0], m[3], m[6], m[9], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[1], m[4], m[7], m[10], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[2], m[5], m[8], m[11], /*B*/ v_.x, v_.y, v_.z, 1.0f)
+		GCore::Math::Dot4D(/*A*/ m[0], m[3], m[6], m[9], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		GCore::Math::Dot4D(/*A*/ m[1], m[4], m[7], m[10], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		GCore::Math::Dot4D(/*A*/ m[2], m[5], m[8], m[11], /*B*/ v_.x, v_.y, v_.z, 1.0f)
 	);
 }
 
 Matrix4x3 Matrix4x3::operator /(const float s_) const{
 	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(s_));
 
 	return Matrix4x3(
-		Math::SafeDivide(m[0], s_),
-		Math::SafeDivide(m[1], s_),
-		Math::SafeDivide(m[2], s_),
-		Math::SafeDivide(m[3], s_),
-		Math::SafeDivide(m[4], s_),
-		Math::SafeDivide(m[5], s_),
-		Math::SafeDivide(m[6], s_),
-		Math::SafeDivide(m[7], s_),
-		Math::SafeDivide(m[8], s_),
-		Math::SafeDivide(m[9], s_),
-		Math::SafeDivide(m[10], s_),
-		Math::SafeDivide(m[11], s_)
+		GCore::Math::SafeDivide(m[0], s_),
+		GCore::Math::SafeDivide(m[1], s_),
+		GCore::Math::SafeDivide(m[2], s_),
+		GCore::Math::SafeDivide(m[3], s_),
+		GCore::Math::SafeDivide(m[4], s_),
+		GCore::Math::SafeDivide(m[5], s_),
+		GCore::Math::SafeDivide(m[6], s_),
+		GCore::Math::SafeDivide(m[7], s_),
+		GCore::Math::SafeDivide(m[8], s_),
+		GCore::Math::SafeDivide(m[9], s_),
+		GCore::Math::SafeDivide(m[10], s_),
+		GCore::Math::SafeDivide(m[11], s_)
 	);
 }
 
@@ -138,7 +138,7 @@ Matrix4x3::operator float*(){ return static_cast<float*>(&m[0]); }
 Matrix4x3::operator const float*() const{ return static_cast<const float*>(&m[0]); }
 
 Matrix4x3 Matrix4x3::Rotate(float angle_, const Vector3& v_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(angle_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(angle_));
 	GADGET_BASIC_ASSERT(v_.IsValid());
 	//TODO - This is convenient but not particularly efficient
 	return Matrix4::Rotate(angle_, v_).ToMatrix4x3();

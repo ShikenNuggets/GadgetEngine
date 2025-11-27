@@ -1,11 +1,12 @@
 #ifndef GADGET_ANIMATION_ANIM_CLIP_H
 #define GADGET_ANIMATION_ANIM_CLIP_H
 
+#include <GCore/Math/Math.hpp>
+
 #include "Animation/KeyFrame.h"
 #include "Animation/Loaders/AssimpAnimLoader.h"
 #include "Data/DList.h"
 #include "Data/HashTable.h"
-#include "Math/Math.h"
 #include "Math/Quaternion.h"
 #include "Math/Vector.h"
 #include "Resource/Resource.h"

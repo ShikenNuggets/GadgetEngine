@@ -2,7 +2,7 @@
 #define GADGET_ARRAY_H
 
 #include "Debug.h"
-#include "Math/Math.h"
+#include "GCore/Math/Math.hpp"
 
 namespace Gadget{
 	template <class T>
@@ -399,7 +399,7 @@ namespace Gadget{
 			}
 
 			const int64_t numElementsToShift = size - srcIndex;
-			const int64_t numBytesToShift = Math::Abs(numElementsToShift * sizeof(T));
+			const int64_t numBytesToShift = GCore::Math::Abs(numElementsToShift * sizeof(T));
 			const int64_t shiftEndPos = srcIndex + numElementsToShift + amountToShift_;
 
 			GADGET_BASIC_ASSERT(numElementsToShift <= static_cast<int64_t>(size));

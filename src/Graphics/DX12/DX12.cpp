@@ -16,7 +16,7 @@ DWORD DX12::callbackCookie = 0;
 DX12::DX12(const DX12_StartupOptions& options_) :	minimumFeatureLevel(D3D_FEATURE_LEVEL_12_0), dxgiFactory(nullptr), mainDevice(nullptr), gfxCommand(nullptr), resourceBarriers(),
 													rtvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), dsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV),
 													srvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), uavDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV),
-													deferredReleases(FrameBufferCount), deferredReleaseMutex(){
+													deferredReleases(FrameBufferCount){
 	GADGET_BASIC_ASSERT(deferredReleases.size() == FrameBufferCount);
 
 	if(options_.requireDXR){
@@ -145,7 +145,7 @@ ErrorCode DX12::RegisterDebugCallback(){
 		return ErrorCode::D3D12_Error;
 	}
 	
-	HRESULT hr = infoQueue->RegisterMessageCallback(&DebugMessageCallback, D3D12_MESSAGE_CALLBACK_FLAG_NONE, nullptr, &callbackCookie);
+	const HRESULT hr = infoQueue->RegisterMessageCallback(&DebugMessageCallback, D3D12_MESSAGE_CALLBACK_FLAG_NONE, nullptr, &callbackCookie);
 	if(FAILED(hr) || callbackCookie == 0){
 		GADGET_LOG_ERROR(SID("RENDER"), "Could not register message callback. D3D12 messages will not be debug logged.");
 		return ErrorCode::D3D12_Error;
@@ -173,7 +173,7 @@ ErrorCode DX12::UnregisterDebugCallback(){
 		return ErrorCode::D3D12_Error;
 	}
 	
-	HRESULT hr = infoQueue->UnregisterMessageCallback(callbackCookie);
+	const HRESULT hr = infoQueue->UnregisterMessageCallback(callbackCookie);
 	if(FAILED(hr)){
 		GADGET_LOG_ERROR(SID("RENDER"), "Could not unregister message callback.");
 		//Oh well
@@ -201,7 +201,7 @@ ErrorCode DX12::Shutdown(){
 	srvDescriptorHeap.Release();
 	uavDescriptorHeap.Release();
 
-	if(gfxCommand){
+	if(gfxCommand != nullptr){
 		delete gfxCommand;
 		gfxCommand = nullptr;
 	}
@@ -215,7 +215,7 @@ ErrorCode DX12::Shutdown(){
 	#ifdef GADGET_DEBUG
 	auto err = DebugShutdown();
 	if(err != ErrorCode::OK){
-		Debug::Log(SID("RENDER"), "An error occurred in DX12::DebugShutdown! Error Code: " + std::to_string((uint32_t)err), Debug::Warning, __FILE__, __LINE__);
+		Debug::Log(SID("RENDER"), "An error occurred in DX12::DebugShutdown! Error Code: " + std::to_string(static_cast<uint32_t>(err)), Debug::Warning, __FILE__, __LINE__);
 	}
 
 	#endif // GADGET_DEBUG
@@ -238,7 +238,7 @@ ErrorCode DX12::CreateDevice(uint32_t dxgiFactoryFlags_, bool requireDXR_){
 		return ErrorCode::D3D12_NoValidAdapter;
 	}
 
-	D3D_FEATURE_LEVEL maxFeatureLevel = GetMaxFeatureLevel(mainAdapter.Get());
+	const D3D_FEATURE_LEVEL maxFeatureLevel = GetMaxFeatureLevel(mainAdapter.Get());
 	GADGET_BASIC_ASSERT(maxFeatureLevel >= minimumFeatureLevel);
 	if(maxFeatureLevel < minimumFeatureLevel){
 		Debug::Log(SID("RENDER"), "Max supported feature level is too low, something is wrong with the DetermineMainAdapter logic. You also may need to update your graphics card drivers", Debug::Error, __FILE__, __LINE__);
@@ -397,7 +397,7 @@ ErrorCode DX12::ResizeSurface(DX12_RenderSurface* surface_, int width_, int heig
 	GADGET_BASIC_ASSERT(surface_ != nullptr);
 	GADGET_BASIC_ASSERT(gfxCommand != nullptr);
 
-	ErrorCode err = gfxCommand->Flush();
+	const ErrorCode err = gfxCommand->Flush();
 	if(err != ErrorCode::OK){
 		Debug::Log(SID("RENDER"), "Could not flush command list", Debug::Error, __FILE__, __LINE__);
 		return err;
@@ -415,7 +415,7 @@ void DX12::DeferredRelease(IUnknown* resource_){
 	GADGET_BASIC_ASSERT(CurrentFrameIndex() < deferredReleases.size());
 	GADGET_BASIC_ASSERT(deferredReleases.size() == FrameBufferCount);
 
-	std::lock_guard lock{ deferredReleaseMutex };
+	const std::lock_guard lock{ deferredReleaseMutex };
 
 	deferredReleases[CurrentFrameIndex()].resources.push_back(resource_);
 	SetDeferredReleaseFlag();
@@ -434,7 +434,7 @@ void DX12::ProcessDeferredReleases(uint32_t frameIndex_){
 		return;
 	}
 
-	std::lock_guard lock{ deferredReleaseMutex };
+	const std::lock_guard lock{ deferredReleaseMutex };
 
 	deferredReleases[frameIndex_].flag = 0;
 
@@ -539,14 +539,14 @@ IDXGI_Adapter* DX12::DetermineMainAdapter(bool requireDXR_){
 D3D_FEATURE_LEVEL DX12::GetMaxFeatureLevel(IDXGI_Adapter* adapter_){
 	GADGET_BASIC_ASSERT(adapter_ != nullptr);
 
-	constexpr D3D_FEATURE_LEVEL featureLevels[5]{
+	constexpr std::array<D3D_FEATURE_LEVEL, 5> featureLevels = {
 		D3D_FEATURE_LEVEL_12_1,
 		D3D_FEATURE_LEVEL_12_2,
 	};
 
 	D3D12_FEATURE_DATA_FEATURE_LEVELS featureLevelInfo{};
-	featureLevelInfo.NumFeatureLevels = static_cast<uint32_t>(std::size(featureLevels));
-	featureLevelInfo.pFeatureLevelsRequested = featureLevels;
+	featureLevelInfo.NumFeatureLevels = featureLevels.size();
+	featureLevelInfo.pFeatureLevelsRequested = featureLevels.data();
 
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
 	HRESULT result = D3D12CreateDevice(adapter_, minimumFeatureLevel, IID_PPV_ARGS(device.ReleaseAndGetAddressOf()));

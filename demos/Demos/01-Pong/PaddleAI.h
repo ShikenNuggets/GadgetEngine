@@ -46,11 +46,11 @@ namespace Pong{
 				paddlePos = leftPaddlePos_;
 			}
 
-			float distanceToWall = Gadget::Math::Abs(wallPos - startPos_.y) - (ballScale_.y / 2.0f);
-			float distanceToPaddle = Gadget::Math::Abs(paddlePos - startPos_.x) - (ballScale_.x / 2.0f);
+			float distanceToWall = GCore::Math::Abs(wallPos - startPos_.y) - (ballScale_.y / 2.0f);
+			float distanceToPaddle = GCore::Math::Abs(paddlePos - startPos_.x) - (ballScale_.x / 2.0f);
 
-			float timeToBounceWall = distanceToWall / Gadget::Math::Abs(velocity_.y);
-			float timeToHitPaddle = distanceToPaddle / Gadget::Math::Abs(velocity_.x);
+			float timeToBounceWall = distanceToWall / GCore::Math::Abs(velocity_.y);
+			float timeToHitPaddle = distanceToPaddle / GCore::Math::Abs(velocity_.x);
 
 			if(wallPos == 0.0f || (timeToBounceWall > timeToHitPaddle && finalStage)){
 				return startPos_ + (velocity_ * timeToHitPaddle);
@@ -127,8 +127,8 @@ namespace Pong{
 			}
 
 			float multiplier = 1.0f;
-			if(Gadget::Math::Abs(parent->GetPosition().y - targetPos) < (paddleMoveSpeed * deltaTime_)){
-				multiplier = Gadget::Math::Abs(parent->GetPosition().y - targetPos) / (paddleMoveSpeed * deltaTime_);
+			if(GCore::Math::Abs(parent->GetPosition().y - targetPos) < (paddleMoveSpeed * deltaTime_)){
+				multiplier = GCore::Math::Abs(parent->GetPosition().y - targetPos) / (paddleMoveSpeed * deltaTime_);
 			}
 
 			//Simply move towards the ball

@@ -3,9 +3,10 @@
 
 #include <cstdint>
 
+#include <GCore/Math/Math.hpp>
+
 #include "Data/Array.h"
 #include "Data/StaticArray.h"
-#include "Math/Math.h"
 
 namespace Gadget{
 	class String{
@@ -190,7 +191,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(elementsToRemove_ >= 0);
 			GADGET_BASIC_ASSERT(elementsToRemove_ <= size);
 
-			size = Math::Clamp<int32_t>(0, std::numeric_limits<int32_t>::max(), size - elementsToRemove_);
+			size = GCore::Math::Clamp<int32_t>(0, std::numeric_limits<int32_t>::max(), size - elementsToRemove_);
 			Value()[size] = '\0';
 
 			GADGET_BASIC_ASSERT(size >= 0);
@@ -616,7 +617,7 @@ namespace Gadget{
 			}
 
 			const int32_t numElementsToShift = size - srcIndex;
-			const int32_t numBytesToShift = Math::Abs<int32_t>(numElementsToShift /* * sizeof(char) */);
+			const int32_t numBytesToShift = GCore::Math::Abs<int32_t>(numElementsToShift /* * sizeof(char) */);
 			const int32_t shiftEndPos = srcIndex + numElementsToShift + amount_;
 
 			GADGET_BASIC_ASSERT(numElementsToShift <= static_cast<int32_t>(size));

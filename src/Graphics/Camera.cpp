@@ -10,7 +10,7 @@ static constexpr float gDefaultNearPlane = 0.1f;
 static constexpr float gDefaultFarPlane = 1000.0f;
 static constexpr float gDefaultOrthographicHeight = 12.0f;
 
-Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection projection_, const Rect& viewRect_) : view(), projection(), fov(gDefaultFOV), aspect(1.0f), nearPlane(gDefaultNearPlane), farPlane(gDefaultFarPlane), orthoHeight(gDefaultOrthographicHeight), viewRect(viewRect_), currentProjection(projection_){
+Camera::Camera(const Vector3& position_, const Quaternion& rotation_, Projection projection_, const Rect& viewRect_) : fov(gDefaultFOV), aspect(1.0f), nearPlane(gDefaultNearPlane), farPlane(gDefaultFarPlane), orthoHeight(gDefaultOrthographicHeight), viewRect(viewRect_), currentProjection(projection_){
 	GADGET_BASIC_ASSERT(position_.IsValid());
 	GADGET_BASIC_ASSERT(rotation_.IsValid());
 	GADGET_BASIC_ASSERT(projection_ < Projection::Projection_MAX);
@@ -101,31 +101,31 @@ void Camera::SetProjection(Projection projection_){
 }
 
 void Camera::SetFOV(float fov_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(fov_) && fov_ > 0.0f);
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(fov_) && fov_ > 0.0f);
 	fov = fov_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetAspect(float aspect_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(aspect_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(aspect_));
 	aspect = aspect_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetNearPlane(float near_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(near_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(near_));
 	nearPlane = near_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetFarPlane(float far_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(far_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(far_));
 	farPlane = far_;
 	CalculateProjectionMatrix();
 }
 
 void Camera::SetOrthoHeight(float height_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(height_));
 	orthoHeight = height_;
 }
 

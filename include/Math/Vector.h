@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Math/Math.h"
+#include "GCore/Math/Math.hpp"
 
 namespace Gadget{
 	struct Vector2;
@@ -24,7 +24,7 @@ namespace Gadget{
 		inline constexpr Vector2 operator -(const Vector2& v_) const{ return Vector2(x - v_.x, y - v_.y); }
 		inline constexpr Vector2 operator *(float s_) const{ return Vector2(x * s_, y * s_); }
 
-		inline constexpr Vector2 operator /(float s_) const{ return Vector2(Math::SafeDivide(x, s_), Math::SafeDivide(y, s_)); }
+		inline constexpr Vector2 operator /(float s_) const{ return Vector2(GCore::Math::SafeDivide(x, s_), GCore::Math::SafeDivide(y, s_)); }
 
 		inline friend constexpr Vector2 operator *(float s_, const Vector2& v_){ return v_ * s_; }
 
@@ -35,7 +35,7 @@ namespace Gadget{
 
 		inline constexpr float Average() const{ return (x + y) / 2.0f; }
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y); }
-		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
+		inline float Magnitude() const{ return GCore::Math::Sqrt(SquaredMagnitude()); }
 		inline Vector2 Normalized() const{ return *this / Magnitude(); }
 		inline void Normalize(){ *this = Normalized(); }
 		static inline constexpr float Dot(const Vector2& a_, const Vector2& b_){ return (a_.x * b_.x) + (a_.y * b_.y); }
@@ -47,8 +47,8 @@ namespace Gadget{
 		inline constexpr operator const float* () const{ return static_cast<const float*>(&x); }
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
 
-		inline constexpr bool IsNear(const Vector2& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y); }
-		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y); }
+		inline constexpr bool IsNear(const Vector2& b_){ return GCore::Math::IsNear(x, b_.x) && GCore::Math::IsNear(y, b_.y); }
+		inline bool IsValid() const{ return GCore::Math::IsValidNumber(x) && GCore::Math::IsValidNumber(y); }
 	};
 
 	struct Vector3{
@@ -68,7 +68,7 @@ namespace Gadget{
 		inline constexpr Vector3 operator -(const Vector3& v_) const{ return Vector3(x - v_.x, y - v_.y, z - v_.z); }
 		inline constexpr Vector3 operator *(float s_) const{ return Vector3(x * s_, y * s_, z * s_); }
 
-		inline constexpr Vector3 operator /(float s_) const{ return Vector3(Math::SafeDivide(x, s_), Math::SafeDivide(y, s_), Math::SafeDivide(z, s_)); }
+		inline constexpr Vector3 operator /(float s_) const{ return Vector3(GCore::Math::SafeDivide(x, s_), GCore::Math::SafeDivide(y, s_), GCore::Math::SafeDivide(z, s_)); }
 
 		inline friend constexpr Vector3 operator *(float s_, const Vector3& v_){ return v_ * s_; }
 
@@ -81,7 +81,7 @@ namespace Gadget{
 
 		inline constexpr float Average() const{ return (x + y + z) / 3.0f; }
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y) + (z * z); }
-		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
+		inline float Magnitude() const{ return GCore::Math::Sqrt(SquaredMagnitude()); }
 		inline Vector3 Normalized() const{ return *this / Magnitude(); }
 		inline void Normalize(){ *this = Normalized(); }
 		static inline constexpr float Dot(const Vector3& a_, const Vector3& b_){ return(a_.x * b_.x + a_.y * b_.y + a_.z * b_.z); }
@@ -105,8 +105,8 @@ namespace Gadget{
 		inline constexpr operator const float* () const{ return static_cast<const float*>(&x); }
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
 
-		inline constexpr bool IsNear(const Vector3& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y) && Math::Near(z, b_.z); }
-		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(z); }
+		inline constexpr bool IsNear(const Vector3& b_){ return GCore::Math::IsNear(x, b_.x) && GCore::Math::IsNear(y, b_.y) && GCore::Math::IsNear(z, b_.z); }
+		inline bool IsValid() const{ return GCore::Math::IsValidNumber(x) && GCore::Math::IsValidNumber(y) && GCore::Math::IsValidNumber(z); }
 
 		static inline constexpr Vector3 Up(){ return Vector3(0.0f, 1.0f, 0.0f); };
 		static inline constexpr Vector3 Forward(){ return Vector3(0.0f, 0.0f, -1.0f); };
@@ -133,7 +133,7 @@ namespace Gadget{
 		inline constexpr Vector4 operator -(const Vector4& v_) const{ return Vector4(x - v_.x, y - v_.y, z - v_.z, w - v_.w); }
 		inline constexpr Vector4 operator *(float s_) const{ return Vector4(x * s_, y * s_, z * s_, w * s_); }
 
-		inline constexpr Vector4 operator /(float s_) const{ return Vector4(Math::SafeDivide(x, s_), Math::SafeDivide(y, s_), Math::SafeDivide(z, s_), Math::SafeDivide(w, s_)); }
+		inline constexpr Vector4 operator /(float s_) const{ return Vector4(GCore::Math::SafeDivide(x, s_), GCore::Math::SafeDivide(y, s_), GCore::Math::SafeDivide(z, s_), GCore::Math::SafeDivide(w, s_)); }
 
 		inline friend constexpr Vector4 operator *(float s_, const Vector4& v_){ return v_ * s_; }
 
@@ -148,7 +148,7 @@ namespace Gadget{
 
 		inline constexpr float Average() const{ return (x + y + z + w) / 2.0f; }
 		inline constexpr float SquaredMagnitude() const{ return (x * x) + (y * y) + (z * z) + (w * w); }
-		inline float Magnitude() const{ return Math::Sqrt(SquaredMagnitude()); }
+		inline float Magnitude() const{ return GCore::Math::Sqrt(SquaredMagnitude()); }
 		inline Vector4 Normalized() const{ return *this / Magnitude(); }
 		inline void Normalize(){ *this = Normalized(); }
 		static inline constexpr float Dot(const Vector4& a_, const Vector4& b_){ return (a_.x * b_.x) + (a_.y * b_.y) + (a_.z * b_.z) + (a_.w * a_.w); }
@@ -160,8 +160,8 @@ namespace Gadget{
 		inline constexpr operator const float* () const{ return static_cast<const float*>(&x); }
 		inline constexpr operator float* (){ return static_cast<float*>(&x); }
 
-		inline constexpr bool IsNear(const Vector4& b_){ return Math::Near(x, b_.x) && Math::Near(y, b_.y) && Math::Near(z, b_.z) && Math::Near(w, b_.w); }
-		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(z) && Math::IsValidNumber(w); }
+		inline constexpr bool IsNear(const Vector4& b_){ return GCore::Math::IsNear(x, b_.x) && GCore::Math::IsNear(y, b_.y) && GCore::Math::IsNear(z, b_.z) && GCore::Math::IsNear(w, b_.w); }
+		inline bool IsValid() const{ return GCore::Math::IsValidNumber(x) && GCore::Math::IsValidNumber(y) && GCore::Math::IsValidNumber(z) && GCore::Math::IsValidNumber(w); }
 	};
 }
 

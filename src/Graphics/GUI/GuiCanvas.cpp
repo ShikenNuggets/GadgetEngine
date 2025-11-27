@@ -22,7 +22,7 @@ void GuiCanvas::AddElement(GuiElement* element_){
 }
 
 void GuiCanvas::Update(float deltaTime_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f);
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f);
 
 	for(auto& e : elements){
 		GADGET_BASIC_ASSERT(e != nullptr);

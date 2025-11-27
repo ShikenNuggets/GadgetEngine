@@ -1,7 +1,8 @@
 #include "Math/Quaternion.h"
 
+#include <GCore/Math/Math.hpp>
+
 #include "Math/Euler.h"
-#include "Math/Math.h"
 #include "Math/Matrix.h"
 #include "Math/Vector.h"
 
@@ -13,7 +14,7 @@ constexpr Quaternion::Quaternion(const Vector4& v_) : w(v_.w), x(v_.x), y(v_.y),
 
 float Quaternion::Magnitude() const{
 	GADGET_BASIC_ASSERT(IsValid());
-	return Math::Sqrt(SquaredMagnitude());
+	return GCore::Math::Sqrt(SquaredMagnitude());
 }
 
 Quaternion Quaternion::Normalized() const{
@@ -31,23 +32,23 @@ Quaternion Quaternion::Rotate(Angle angle_, const Vector3& axis_){
 	GADGET_BASIC_ASSERT(axis_.IsValid());
 
 	return Quaternion(
-		Math::CosR(angle_.ToRadians() / 2.0f),
-		axis_.x * Math::SinR(angle_.ToRadians() / 2.0f),
-		axis_.y * Math::SinR(angle_.ToRadians() / 2.0f),
-		axis_.z * Math::SinR(angle_.ToRadians() / 2.0f)
+		GCore::Math::CosR(angle_.ToRadiansValue() / 2.0f),
+		axis_.x * GCore::Math::SinR(angle_.ToRadiansValue() / 2.0f),
+		axis_.y * GCore::Math::SinR(angle_.ToRadiansValue() / 2.0f),
+		axis_.z * GCore::Math::SinR(angle_.ToRadiansValue() / 2.0f)
 	);
 }
 
 Angle Quaternion::GetRotationAngle(const Quaternion& q_){
 	GADGET_BASIC_ASSERT(q_.IsValid());
-	return Math::Acos(q_.w) * 2.0f;
+	return GCore::Math::Acos(q_.w) * 2.0f;
 }
 
 Vector3 Quaternion::GetRotationAxis(const Quaternion& q_){
 	GADGET_BASIC_ASSERT(q_.IsValid());
 
 	const Vector3 v = Vector3(q_.x, q_.y, q_.z);
-	return v / Math::SinR((GetRotationAngle(q_) / 2.0f).ToRadians());
+	return v / GCore::Math::SinR((GetRotationAngle(q_) / 2.0f).ToRadiansValue());
 }
 
 Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination_){
@@ -58,15 +59,15 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 
 	const float dot = Vector3::Dot(Vector3::Forward(), forwardVector);
 
-	if(Math::Abs(dot - (-1.0f)) < Math::NearZero){
-		return Quaternion(Math::Pi, Vector3::Up());
+	if(GCore::Math::Abs(dot - (-1.0f)) < GCore::Math::NearZero){
+		return Quaternion(GCore::Math::Pi, Vector3::Up());
 	}
 	
-	if(Math::Abs(dot - (1.0f)) < Math::NearZero){
+	if(GCore::Math::Abs(dot - (1.0f)) < GCore::Math::NearZero){
 		return Quaternion::Identity();
 	}
 
-	const Angle rotAngle = Math::Acos(dot);
+	const Angle rotAngle = GCore::Math::Acos(dot);
 	const Vector3 rotAxis = Vector3::Cross(Vector3::Forward(), forwardVector).Normalized();
 	return Quaternion::Rotate(rotAngle.Get(), rotAxis);
 }
@@ -74,7 +75,7 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 Quaternion Quaternion::Lerp(const Quaternion& q1_, const Quaternion& q2_, float t_){
 	GADGET_BASIC_ASSERT(q1_.IsValid());
 	GADGET_BASIC_ASSERT(q2_.IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(t_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(t_));
 
 	if(Dot(q1_, q2_) < 0.0f){
 		return (q1_ * (1.0f - t_) + -q2_ * t_).Normalized();
@@ -86,7 +87,7 @@ Quaternion Quaternion::Lerp(const Quaternion& q1_, const Quaternion& q2_, float 
 Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float t_){
 	GADGET_BASIC_ASSERT(q1_.IsValid());
 	GADGET_BASIC_ASSERT(q2_.IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(t_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(t_));
 
 	if(t_ <= 0.0f){
 		return q1_;
@@ -100,8 +101,8 @@ Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float
 	const Quaternion q2 = q2_.Normalized();
 
 	const float dot = Quaternion::Dot(q1, q2);
-	const Angle theta = Math::Acos(dot);
-	const float sinTheta = Math::Sin(theta);
+	const Angle theta = GCore::Math::Acos(dot);
+	const float sinTheta = GCore::Math::Sin(theta.Get());
 
 	//Do a regular interpolation if theta is too small
 	//TODO - This cutoff is somewhat arbitrary and I don't know how it was chosen, or how necessary it really is
@@ -110,8 +111,8 @@ Quaternion Quaternion::Slerp(const Quaternion& q1_, const Quaternion& q2_, float
 	}
 
 	//Final Result
-	const Quaternion qA = q1 * Math::Sin((1.0f - t_) * theta) / sinTheta;
-	const Quaternion qB = q2 * Math::Sin(t_ * theta) / sinTheta;
+	const Quaternion qA = q1 * GCore::Math::Sin((1.0f - t_) * theta.Get()) / sinTheta;
+	const Quaternion qB = q2 * GCore::Math::Sin(t_ * theta.Get()) / sinTheta;
 	return qA + qB;
 }
 
@@ -161,22 +162,22 @@ Euler Quaternion::ToEuler() const{
 
 	if(test > 0.499f * unit){ // singularity at north pole
 		heading = 2.0f * atan2(x, w);
-		attitude = Math::Pi / 2.0f;
+		attitude = GCore::Math::Pi / 2.0f;
 		bank = 0.0f;
-		return Euler(Math::RadiansToDegrees(bank), Math::RadiansToDegrees(heading), Math::RadiansToDegrees(attitude));
+		return Euler(GCore::Math::RadiansToDegrees(bank), GCore::Math::RadiansToDegrees(heading), GCore::Math::RadiansToDegrees(attitude));
 	}
 	
 	if(test < -0.499f * unit){ // singularity at south pole
 		heading = -2.0f * atan2(x, w);
-		attitude = -Math::Pi / 2.0f;
+		attitude = -GCore::Math::Pi / 2.0f;
 		bank = 0.0f;
-		return Euler(Math::RadiansToDegrees(bank), Math::RadiansToDegrees(heading), Math::RadiansToDegrees(attitude));
+		return Euler(GCore::Math::RadiansToDegrees(bank), GCore::Math::RadiansToDegrees(heading), GCore::Math::RadiansToDegrees(attitude));
 	}
 
 	heading = atan2(2.0f * y * w - 2.0f * x * z, sqx - sqy - sqz + sqw);
 	attitude = asin(2.0f * test / unit);
 	bank = atan2(2.0f * x * w - 2.0f * y * z, -sqx + sqy - sqz + sqw);
-	return Euler(Math::RadiansToDegrees(bank), Math::RadiansToDegrees(heading), Math::RadiansToDegrees(attitude));
+	return Euler(GCore::Math::RadiansToDegrees(bank), GCore::Math::RadiansToDegrees(heading), GCore::Math::RadiansToDegrees(attitude));
 }
 
 std::string Quaternion::ToString() const{

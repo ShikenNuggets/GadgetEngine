@@ -35,7 +35,7 @@ PhysManager::~PhysManager(){
 
 void PhysManager::Update(Scene* scene_, float deltaTime_){
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deltaTime_));
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
 
 	bulletDynamicsWorld->stepSimulation(deltaTime_, 0); //TODO - We should eventually do proper interpolation w/ fixed time step
@@ -67,7 +67,7 @@ void PhysManager::Update(Scene* scene_, float deltaTime_){
 
 //TODO - This is kinda weird. Maybe gravity *shouldn't* be in a config file? Game interfaces need to be able to set new config defaults? Idk
 void PhysManager::SetWorldGravity(float gravity_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(gravity_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(gravity_));
 	GADGET_BASIC_ASSERT(bulletDynamicsWorld != nullptr);
 	if(bulletDynamicsWorld == nullptr){
 		GADGET_LOG_WARNING(SID("PHYSICS"), "Tried to set world gravity before PhysManager was fully initialized!");
@@ -83,7 +83,7 @@ btRigidBody* PhysManager::AddToSimulation(const Collider* col_, const Rigidbody*
 	GADGET_BASIC_ASSERT(col_ != nullptr);
 	GADGET_BASIC_ASSERT(col_->GetShape() != ColliderShape::None);
 	GADGET_BASIC_ASSERT(col_->GetShape() < ColliderShape::ColliderShape_MAX);
-	GADGET_ASSERT(rb_ == nullptr || !Math::IsNearZero(rb_->GetMass()), "Rigidbody with mass of 0 is not supported!");
+	GADGET_ASSERT(rb_ == nullptr || !GCore::Math::IsNearZero(rb_->GetMass()), "Rigidbody with mass of 0 is not supported!");
 
 	btCollisionShape* shape = col_->CreateCollisionShape();
 	if(shape == nullptr){

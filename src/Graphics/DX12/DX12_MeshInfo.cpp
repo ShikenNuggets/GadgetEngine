@@ -18,10 +18,10 @@ DX12_MeshInfo::DX12_MeshInfo(const Submesh& mesh_) : MeshInfo(mesh_.indices.size
 	GADGET_BASIC_ASSERT(sizeof(uint32_t) * mesh_.indices.size() < std::numeric_limits<UINT>::max());
 
 	constexpr auto alignment = D3D12_RAW_UAV_SRV_BYTE_ALIGNMENT;
-	const uint32_t alignedVertexSize = static_cast<uint32_t>(Utils::AlignSizeUp<alignment>(positions.size() * sizeof(Vector3)));
+	const auto alignedVertexSize = static_cast<uint32_t>(Utils::AlignSizeUp<alignment>(positions.size() * sizeof(Vector3)));
 	vertexBuffer = DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), positions.data(), alignedVertexSize);
 
-	const uint32_t alignedIndexSize = static_cast<uint32_t>(Utils::AlignSizeUp<alignment>(mesh_.indices.size() * sizeof(uint32_t)));
+	const auto alignedIndexSize = static_cast<uint32_t>(Utils::AlignSizeUp<alignment>(mesh_.indices.size() * sizeof(uint32_t)));
 	indexBuffer = DX12_Helpers::CreateBuffer(DX12::GetInstance().MainDevice(), positions.data(), alignedIndexSize);
 
 	vertexBufferView = D3D12_VERTEX_BUFFER_VIEW{};

@@ -22,7 +22,7 @@ CameraComponent::CameraComponent(GameObject* parent_, Camera::Projection project
 
 	GADGET_BASIC_ASSERT(lastPosition.IsValid());
 	GADGET_BASIC_ASSERT(lastRotation.IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(lastAspect));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(lastAspect));
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
@@ -40,7 +40,7 @@ CameraComponent::CameraComponent(GUID parentGUID_, Camera::Projection projection
 
 	GADGET_BASIC_ASSERT(lastPosition.IsValid());
 	GADGET_BASIC_ASSERT(lastRotation.IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(lastAspect));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(lastAspect));
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
@@ -57,7 +57,7 @@ CameraComponent::CameraComponent(const ComponentProperties& props_) : Component(
 
 	GADGET_BASIC_ASSERT(lastPosition.IsValid());
 	GADGET_BASIC_ASSERT(lastRotation.IsValid());
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(lastAspect));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(lastAspect));
 	GADGET_BASIC_ASSERT(componentCollection.Get(parent->GetGUID()) == this);
 }
 
@@ -90,15 +90,15 @@ Matrix4 CameraComponent::GetUpdatedViewMatrix(){
 }
 
 Matrix4 CameraComponent::GetUpdatedProjectionMatrix(){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(App::GetAspectRatio()));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(lastAspect));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(App::GetAspectRatio()));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(lastAspect));
 
-	if(!Math::Near(lastAspect, App::GetAspectRatio())){
+	if(!GCore::Math::IsNear(lastAspect, App::GetAspectRatio())){
 		camera.SetAspect(App::GetAspectRatio()); //This calls CalculateProjectionMatrix() on its own
 		lastAspect = App::GetAspectRatio();
 	}
 
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(lastAspect));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(lastAspect));
 	GADGET_BASIC_ASSERT(camera.GetProjectionMatrix().IsValid());
 
 	return camera.GetProjectionMatrix();

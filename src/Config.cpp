@@ -71,7 +71,7 @@ void Config::OnWindowMovedEvent(const Event& e_){
 	GADGET_BASIC_ASSERT(e_.GetEventType() < EventType::Count);
 	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
 
-	const WindowMovedEvent* eventPtr = dynamic_cast<const WindowMovedEvent*>(&e_);
+	const auto* eventPtr = dynamic_cast<const WindowMovedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
 		SetOption(EngineVars::Display::sectionName, EngineVars::Display::lastWindowXKey, eventPtr->GetX());
@@ -83,7 +83,7 @@ void Config::OnWindowResizedEvent(const Event& e_){
 	GADGET_BASIC_ASSERT(e_.GetEventType() == WindowResizedEvent::Type());
 	GADGET_BASIC_ASSERT(e_.GetName() != StringID::None);
 
-	const WindowResizedEvent* eventPtr = dynamic_cast<const WindowResizedEvent*>(&e_);
+	const auto* eventPtr = dynamic_cast<const WindowResizedEvent*>(&e_);
 	GADGET_BASIC_ASSERT(eventPtr != nullptr);
 	if(eventPtr != nullptr){
 		SetOption(EngineVars::Display::sectionName, EngineVars::Display::displayWidthKey, eventPtr->GetWidth());

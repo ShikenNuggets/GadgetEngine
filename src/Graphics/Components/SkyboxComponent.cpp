@@ -22,7 +22,7 @@ SkyboxComponent::SkyboxComponent(Scene* parent_, StringID skyboxName_, StringID 
 		StringID::ProcessString(skyboxName_.GetString() + "BackTexture"),
 	};
 
-	Cubemap* cubemap = new Cubemap(textures[0], textures[1], textures[2], textures[3], textures[4], textures[5]);
+	auto* cubemap = new Cubemap(textures[0], textures[1], textures[2], textures[3], textures[4], textures[5]);
 	cubemapInfo = new GL_CubemapInfo(*cubemap);
 	delete cubemap;
 

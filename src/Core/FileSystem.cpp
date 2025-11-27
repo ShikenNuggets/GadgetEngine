@@ -110,10 +110,10 @@ std::vector<uint8_t> FileSystem::ReadBinaryFile(const std::string& filePath_){
 	std::ifstream input(filePath_, std::ios::binary);
 	if(!input.is_open()){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
-		return std::vector<uint8_t>();
+		return {};
 	}
 
-	return std::vector<uint8_t>(std::istreambuf_iterator<char>(input), {}); //TODO - This is not particularly efficient
+	return { std::istreambuf_iterator<char>(input), {} }; //TODO - This is not particularly efficient
 }
 
 nlohmann::json FileSystem::ReadPlainTextJSONFile(const std::string& filePath_){
@@ -121,7 +121,7 @@ nlohmann::json FileSystem::ReadPlainTextJSONFile(const std::string& filePath_){
 
 	if(!FileExists(filePath_)){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
-		return nlohmann::json(nullptr);
+		return nullptr;
 	}
 
 	return nlohmann::json::parse(ReadFileToString(filePath_));
@@ -132,7 +132,7 @@ nlohmann::json FileSystem::ReadBinaryJSONFile(const std::string& filePath_){
 
 	if(!FileExists(filePath_)){
 		Debug::Log(SID("FILESYSTEM"), "Could not open " + filePath_ + " for reading!", Debug::Error, __FILE__, __LINE__);
-		return nlohmann::json(nullptr);
+		return nullptr;
 	}
 
 	return nlohmann::json::from_bson(ReadBinaryFile(filePath_)); //We're gonna use BSON https://bsonspec.org/
@@ -298,7 +298,7 @@ bool FileSystem::IsLastWriteTimeNewer(const std::string& basePath_, const std::s
 }
 
 std::string FileSystem::GetLatestFileFromSet(const std::vector<std::string>& files_){
-	std::string latest = "";
+	std::string latest;
 	GADGET_BASIC_ASSERT(!files_.empty());
 	if(files_.empty()){
 		return latest;

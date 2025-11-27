@@ -24,7 +24,7 @@ namespace Gadget{
 		GamepadAxisEvent(int joystickIndex_, AxisID axisID_, float value_) : GamepadEvent(SID("GamepadAxisEvent"), joystickIndex_), axisID(axisID_), value(value_){
 			//GADGET_BASIC_ASSERT(joystickIndex_ < Input::MaxGamepads);
 			GADGET_BASIC_ASSERT(axisID_ < AxisID::AxisID_MAX);
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(value_));
 		}
 
 		virtual ~GamepadAxisEvent(){}

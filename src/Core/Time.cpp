@@ -1,10 +1,11 @@
-#include "Time.h"
+#include "Core/Time.h"
 
 #include <thread>
 
+#include <GCore/Math/Math.hpp>
+
 #include "App.h"
 #include "Config.h"
-#include "Math/Math.h"
 
 using namespace Gadget;
 
@@ -73,7 +74,7 @@ float Time::RealDeltaTime() const{
 	//If it's too low it'll affect normal framerates, and if it's too high it won't be effective enough
 
 	//We also don't want the delta time to be negative for various reasons
-	return Math::Clamp(0.0f, gMinRealDeltaTime, PureDeltaTime());
+	return GCore::Math::Clamp(0.0f, gMinRealDeltaTime, PureDeltaTime());
 }
 
 float Time::PureDeltaTime() const{

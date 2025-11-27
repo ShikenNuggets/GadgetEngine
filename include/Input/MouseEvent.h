@@ -1,18 +1,19 @@
 #ifndef GADGET_MOUSE_EVENT_H
 #define GADGET_MOUSE_EVENT_H
 
+#include <GCore/Math/Math.hpp>
+
 #include "Events/Event.h"
 #include "Input/InputEnums.h"
-#include "Math/Math.h"
 
 namespace Gadget{
 	class MouseMovedEvent : public Event{
 	public:
 		MouseMovedEvent(float x_, float y_, float xAbs_, float yAbs_) : Event(SID("MouseMovedEvent")), x(x_), y(y_), xAbsolute(xAbs_), yAbsolute(yAbs_){
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(xAbs_));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(yAbs_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(xAbs_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(yAbs_));
 		}
 
 		static constexpr EventType Type(){ return EventType::MouseMoved; }
@@ -35,8 +36,8 @@ namespace Gadget{
 	class MouseScrollEvent : public Event{
 	public:
 		MouseScrollEvent(float xOffset_, float yOffset_) : Event(SID("MouseScrollEvent")), xOffset(xOffset_), yOffset(yOffset_){
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(xOffset_));
-			GADGET_BASIC_ASSERT(Math::IsValidNumber(yOffset_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(xOffset_));
+			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(yOffset_));
 		}
 
 		static constexpr EventType Type(){ return EventType::MouseScroll; }

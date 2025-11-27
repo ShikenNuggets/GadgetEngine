@@ -127,7 +127,7 @@ void DX12_GeometryPass::AddTransitionsForPostProcess(DX12_Helpers::DX12_Resource
 void DX12_GeometryPass::SetRenderTargetsForDepthPrepass(ID3D12_GraphicsCommandList* cmdList_){
 	GADGET_BASIC_ASSERT(cmdList_ != nullptr);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE dsv = depthBuffer->DSV();
+	const D3D12_CPU_DESCRIPTOR_HANDLE dsv = depthBuffer->DSV();
 	cmdList_->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 0.0f, 0, 0, nullptr);
 	cmdList_->OMSetRenderTargets(0, nullptr, 0, &dsv);
 }
@@ -135,8 +135,8 @@ void DX12_GeometryPass::SetRenderTargetsForDepthPrepass(ID3D12_GraphicsCommandLi
 void DX12_GeometryPass::SetRenderTargetsForGeometryPass(ID3D12_GraphicsCommandList* cmdList_){
 	GADGET_BASIC_ASSERT(cmdList_ != nullptr);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE rtv = mainBuffer->RTV(0);
-	D3D12_CPU_DESCRIPTOR_HANDLE dsv = depthBuffer->DSV();
+	const D3D12_CPU_DESCRIPTOR_HANDLE rtv = mainBuffer->RTV(0);
+	const D3D12_CPU_DESCRIPTOR_HANDLE dsv = depthBuffer->DSV();
 
 	cmdList_->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
 	cmdList_->OMSetRenderTargets(1, &rtv, 0, &dsv);

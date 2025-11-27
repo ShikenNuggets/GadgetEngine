@@ -2,6 +2,8 @@
 #define GADGET_GADGET_H
 
 //Convenience include header for engine users
+#include <GCore/Math/Math.hpp>
+
 #include "App.h"
 #include "Config.h"
 #include "Debug.h"
@@ -39,7 +41,6 @@
 
 #include "Math/Angle.h"
 #include "Math/Euler.h"
-#include "Math/Math.h"
 #include "Math/Quaternion.h"
 #include "Math/Vector.h"
 

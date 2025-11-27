@@ -15,7 +15,7 @@ DX12_DescriptorHeap::~DX12_DescriptorHeap(){
 }
 
 ErrorCode DX12_DescriptorHeap::Initialize(ID3D12_Device* const device_, uint32_t capacity_, bool isShaderVisible_){
-	std::lock_guard lock{ mutex };
+	const std::lock_guard lock{ mutex };
 
 	GADGET_BASIC_ASSERT(device_ != nullptr);
 	GADGET_BASIC_ASSERT(capacity_ > 0);
@@ -37,7 +37,7 @@ ErrorCode DX12_DescriptorHeap::Initialize(ID3D12_Device* const device_, uint32_t
 	desc.Type = type;
 	desc.NodeMask = 0;
 
-	HRESULT result = device_->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));
+	const HRESULT result = device_->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));
 	if(FAILED(result) || heap == nullptr){
 		Debug::Log(SID("RENDER"), "An error occured while creating the descriptor heap!", Debug::Error, __FILE__, __LINE__);
 		Release();

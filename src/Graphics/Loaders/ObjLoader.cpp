@@ -2,9 +2,10 @@
 
 #include <sstream>
 
+#include <GCore/Math/Math.hpp>
+
 #include "Graphics/Mesh.h"
 #include "Core/FileSystem.h"
-#include "Math/Math.h"
 
 using namespace Gadget;
 
@@ -107,11 +108,11 @@ Vector2 ObjLoader::ProcessVector2(const std::string& data_){
 	data >> v.y;
 
 	//Not strictly necessary but sometimes we get some very tiny garbage from the stringstream
-	if(Math::IsNearZero(v.x)){
+	if(GCore::Math::IsNearZero(v.x)){
 		v.x = 0.0f;
 	}
 
-	if(Math::IsNearZero(v.y)){
+	if(GCore::Math::IsNearZero(v.y)){
 		v.y = 0.0f;
 	}
 
@@ -129,15 +130,15 @@ Vector3 ObjLoader::ProcessVector3(const std::string& data_){
 	data >> v.z;
 
 	//Not strictly necessary but sometimes we get some very tiny garbage from the stringstream
-	if(Math::IsNearZero(v.x)){
+	if(GCore::Math::IsNearZero(v.x)){
 		v.x = 0.0f;
 	}
 
-	if(Math::IsNearZero(v.y)){
+	if(GCore::Math::IsNearZero(v.y)){
 		v.y = 0.0f;
 	}
 
-	if(Math::IsNearZero(v.z)){
+	if(GCore::Math::IsNearZero(v.z)){
 		v.z = 0.0f;
 	}
 

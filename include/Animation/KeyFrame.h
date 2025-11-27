@@ -30,7 +30,7 @@ namespace Gadget{
 				GADGET_ASSERT(node_->prev == nullptr || node_->value.time <= time_, "Node passed to ClipSearchResult has an unexpectedly high time value");
 				GADGET_ASSERT(node_->next->value.time >= time_, "Node->next passed to ClipSearchResult has an unexpectedly low time value");
 				const float delta = node_->next->value.time - node_->value.time;
-				const float factor = Math::Clamp(0.0f, 1.0f, (time_ - node_->value.time) / delta);
+				const float factor = GCore::Math::Clamp(0.0f, 1.0f, (time_ - node_->value.time) / delta);
 				result = T1::Lerp(node_->value.value, node_->next->value.value, factor);
 			}
 		}

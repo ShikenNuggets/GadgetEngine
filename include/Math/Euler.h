@@ -3,8 +3,9 @@
 
 #include <string>
 
+#include <GCore/Math/Math.hpp>
+
 #include "Math/Angle.h"
-#include "Math/Math.h"
 
 namespace Gadget{
 	//Forward Declarations
@@ -27,7 +28,7 @@ namespace Gadget{
 		inline constexpr Euler operator +(const Euler& e_) const{ return Euler(x + e_.x, y + e_.y, z + e_.z); }
 		inline constexpr Euler operator -(const Euler& e_) const{ return Euler(x - e_.x, y - e_.y, z - e_.z); }
 		inline constexpr Euler operator *(float f_) const{ return Euler(x * f_, y * f_, z * f_); }
-		inline constexpr Euler operator /(float f_) const{ return Euler(Math::SafeDivide(x, f_), Math::SafeDivide(y, f_)); }
+		inline constexpr Euler operator /(float f_) const{ return Euler(GCore::Math::SafeDivide(x.Get(), f_), GCore::Math::SafeDivide(y.Get(), f_)); }
 		inline constexpr void operator +=(const Euler& e_){ *this = *this + e_; }
 		inline constexpr void operator -=(const Euler& e_){ *this = *this - e_; }
 		inline constexpr void operator *=(float f_){ *this = *this * f_; }
@@ -41,7 +42,7 @@ namespace Gadget{
 		Matrix4 ToMatrix4() const;
 		Quaternion ToQuaternion() const;
 
-		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(z); }
+		inline bool IsValid() const{ return x.IsValid() && y.IsValid() && z.IsValid(); }
 
 		std::string ToString() const;
 	};

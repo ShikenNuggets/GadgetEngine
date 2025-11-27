@@ -26,7 +26,7 @@ namespace StarHawx{
 			float leftRightMove = Gadget::App::GetInput().GetAxis(StarHawx::LeftRightMoveAxis);
 
 			Gadget::Vector3 velocity = Gadget::Vector3(leftRightMove, upDownMove, 0.0f);
-			if(!Gadget::Math::IsNearZero(upDownMove) || !Gadget::Math::IsNearZero(leftRightMove)){
+			if(!GCore::Math::IsNearZero(upDownMove) || !GCore::Math::IsNearZero(leftRightMove)){
 				velocity.Normalize();
 			}
 			velocity *= flightSpeed;
@@ -34,19 +34,19 @@ namespace StarHawx{
 			rigidbody->ClearForces();
 			rigidbody->SetVelocity(velocity);
 
-			if(upDownMove > 0.0f && Gadget::Math::IsNearZero(leftRightMove)){
+			if(upDownMove > 0.0f && GCore::Math::IsNearZero(leftRightMove)){
 				SetNewTiltDir(TiltDir::Up);
 			}else if(upDownMove > 0.0f && leftRightMove > 0.0f){
 				SetNewTiltDir(TiltDir::UpRight);
-			}else if(Gadget::Math::IsNearZero(upDownMove) && leftRightMove > 0.0f){
+			}else if(GCore::Math::IsNearZero(upDownMove) && leftRightMove > 0.0f){
 				SetNewTiltDir(TiltDir::Right);
 			}else if(upDownMove < 0.0f && leftRightMove > 0.0f){
 				SetNewTiltDir(TiltDir::DownRight);
-			}else if(upDownMove < 0.0f && Gadget::Math::IsNearZero(leftRightMove)){
+			}else if(upDownMove < 0.0f && GCore::Math::IsNearZero(leftRightMove)){
 				SetNewTiltDir(TiltDir::Down);
 			}else if(upDownMove < 0.0f && leftRightMove < 0.0f){
 				SetNewTiltDir(TiltDir::DownLeft);
-			}else if(Gadget::Math::IsNearZero(upDownMove) && leftRightMove < 0.0f){
+			}else if(GCore::Math::IsNearZero(upDownMove) && leftRightMove < 0.0f){
 				SetNewTiltDir(TiltDir::Left);
 			}else if(upDownMove > 0.0f && leftRightMove < 0.0f){
 				SetNewTiltDir(TiltDir::UpLeft);

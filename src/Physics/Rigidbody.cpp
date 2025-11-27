@@ -6,29 +6,29 @@ using namespace Gadget;
 
 ComponentCollection<Rigidbody> Rigidbody::componentCollection;
 
-Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(GameObject* parent_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parent_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(GCore::Math::Infinity, GCore::Math::Infinity, GCore::Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	GADGET_BASIC_ASSERT(parent != nullptr);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
-	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(mass_));
+	GADGET_BASIC_ASSERT(!GCore::Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
 
-	mass = Math::Clamp(0.0001f, Math::Infinity, mass); //0.0001 is completely arbitrary
+	mass = GCore::Math::Clamp(0.0001f, GCore::Math::TInfinity<float>, mass); //0.0001 is completely arbitrary
 
 	componentCollection.Add(this);
 }
 
-Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(GUID parentGUID_, float mass_, bool useGravity_, FreezeRotationType freezeType_) : Component(SID("Rigidbody"), parentGUID_), mass(mass_), useGravity(useGravity_), freezeRotation(freezeType_), maxVelocity(GCore::Math::Infinity, GCore::Math::Infinity, GCore::Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	GADGET_BASIC_ASSERT(parent != nullptr);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
-	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(mass_));
+	GADGET_BASIC_ASSERT(!GCore::Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
 
-	mass = Math::Clamp(0.0001f, Math::Infinity, mass); //0.0001 is completely arbitrary
+	mass = GCore::Math::Clamp(0.0001f, GCore::Math::TInfinity<float>, mass); //0.0001 is completely arbitrary
 
 	componentCollection.Add(this);
 }
 
-Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), mass(1.0f), useGravity(true), freezeRotation(FreezeRotationType::None), maxVelocity(Math::Infinity, Math::Infinity, Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
+Rigidbody::Rigidbody(const ComponentProperties& props_) : Component(props_), mass(1.0f), useGravity(true), freezeRotation(FreezeRotationType::None), maxVelocity(GCore::Math::Infinity, GCore::Math::Infinity, GCore::Math::Infinity), brakingSpeed(0.0f), bulletRb(nullptr), hasCachedForce(false), hasCachedVelocity(false), cachedForces(), cachedVelocity(){
 	Rigidbody::Deserialize(props_);
 }
 
@@ -38,7 +38,7 @@ Rigidbody::~Rigidbody(){
 
 void Rigidbody::Update([[maybe_unused]] float deltaTime_){
 	GADGET_BASIC_ASSERT(parent != nullptr);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deltaTime_));
 	GADGET_BASIC_ASSERT(deltaTime_ >= 0.0f);
 
 	if(parent == nullptr){
@@ -80,7 +80,7 @@ void Rigidbody::Update([[maybe_unused]] float deltaTime_){
 
 void Rigidbody::AddForce(const Vector3& force_){
 	GADGET_BASIC_ASSERT(force_.IsValid());
-	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(!GCore::Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
 	GADGET_BASIC_ASSERT(bulletRb != nullptr);
 
@@ -96,22 +96,22 @@ void Rigidbody::AddForce(const Vector3& force_){
 
 void Rigidbody::AddVelocity(const Vector3& vel_){
 	GADGET_BASIC_ASSERT(vel_.IsValid());
-	if(Math::IsNearZero(vel_.x) && Math::IsNearZero(vel_.y) && Math::IsNearZero(vel_.z)){
+	if(GCore::Math::IsNearZero(vel_.x) && GCore::Math::IsNearZero(vel_.y) && GCore::Math::IsNearZero(vel_.z)){
 		return;
 	}
 
 	Vector3 newVelocity = BulletHelper::ConvertVector3(bulletRb->getLinearVelocity()) + vel_;
-	newVelocity.x = Math::Clamp(-maxVelocity.x, maxVelocity.x, newVelocity.x);
-	newVelocity.y = Math::Clamp(-maxVelocity.y, maxVelocity.y, newVelocity.y);
-	newVelocity.z = Math::Clamp(-maxVelocity.z, maxVelocity.z, newVelocity.z);
+	newVelocity.x = GCore::Math::Clamp(-maxVelocity.x, maxVelocity.x, newVelocity.x);
+	newVelocity.y = GCore::Math::Clamp(-maxVelocity.y, maxVelocity.y, newVelocity.y);
+	newVelocity.z = GCore::Math::Clamp(-maxVelocity.z, maxVelocity.z, newVelocity.z);
 
 	bulletRb->setLinearVelocity(BulletHelper::ConvertVector3(newVelocity));
 }
 
 void Rigidbody::AddVelocity(float x_, float y_, float z_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z_));
 
 	AddVelocity(Vector3(x_, y_, z_));
 }
@@ -125,9 +125,9 @@ Vector3 Rigidbody::GetVelocity() const{
 }
 
 void Rigidbody::SetMass(float mass_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(mass_));
 	GADGET_ASSERT(mass_ > 0.0f, "Mass <= 0 is not supported!");
-	GADGET_ASSERT(!Math::IsNearZero(mass_), "Mass of 0 is not supported!");
+	GADGET_ASSERT(!GCore::Math::IsNearZero(mass_), "Mass of 0 is not supported!");
 	mass = mass_;
 
 	if(bulletRb != nullptr && bulletRb->getCollisionShape() != nullptr){
@@ -147,7 +147,7 @@ void Rigidbody::SetVelocity(const Vector3& velocity_){
 		return;
 	}
 
-	if(!Math::IsNearZero(velocity_.x) || !Math::IsNearZero(velocity_.y) || !Math::IsNearZero(velocity_.z)){
+	if(!GCore::Math::IsNearZero(velocity_.x) || !GCore::Math::IsNearZero(velocity_.y) || !GCore::Math::IsNearZero(velocity_.z)){
 		bulletRb->activate(true); //Force activate the rigidbody if we're hard setting a non-zero velocity
 	}
 
@@ -155,9 +155,9 @@ void Rigidbody::SetVelocity(const Vector3& velocity_){
 }
 
 void Rigidbody::SetVelocity(float x_, float y_, float z_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(x_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(y_));
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(z_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(z_));
 
 	SetVelocity(Vector3(x_, y_, z_));
 }
@@ -205,7 +205,7 @@ void Rigidbody::SetMaxVelocity(const Vector3& maxVelocity_){
 
 void Rigidbody::SetBrakingSpeed(float brakingSpeed_){
 	GADGET_ASSERT(brakingSpeed_ >= 0.0f, "Negative number entered for brake speed - Will be treated as 0");
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(brakingSpeed_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(brakingSpeed_));
 	brakingSpeed = brakingSpeed_;
 }
 
@@ -235,7 +235,7 @@ void Rigidbody::Reset(){
 }
 
 float Rigidbody::ApplyBrakes(float curVelocity_, float deltaTime_){
-	if(Math::Abs(curVelocity_) < (brakingSpeed * deltaTime_)){
+	if(GCore::Math::Abs(curVelocity_) < (brakingSpeed * deltaTime_)){
 		return 0.0f;
 	}
 	
@@ -261,8 +261,8 @@ void Rigidbody::Deserialize(const ComponentProperties& props_){
 	useGravity = props_.variables.GetValue(SID("UseGravity"), true).ToBool();
 	freezeRotation = static_cast<FreezeRotationType>(props_.variables.GetValue(SID("FreezeRotation"), 0).ToNumber<int>());
 
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(mass));
-	GADGET_BASIC_ASSERT(!Math::IsNearZero(mass));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(mass));
+	GADGET_BASIC_ASSERT(!GCore::Math::IsNearZero(mass));
 	GADGET_BASIC_ASSERT(mass > 0.0f);
 	GADGET_BASIC_ASSERT(static_cast<int>(freezeRotation) >= 0);
 	GADGET_BASIC_ASSERT(freezeRotation < FreezeRotationType::FreezeRotationType_MAX);

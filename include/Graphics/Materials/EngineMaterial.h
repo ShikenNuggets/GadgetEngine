@@ -1,6 +1,8 @@
 #ifndef GADGET_ENGINE_MATERIAL_H
 #define GADGET_ENGINE_MATERIAL_H
 
+#include <vector>
+
 #include "Graphics/Color.h"
 #include "Graphics/Materials/MaterialInfo.h"
 

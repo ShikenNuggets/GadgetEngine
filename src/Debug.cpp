@@ -122,7 +122,7 @@ void Debug::Log(StringID channel_, const std::string& message_, LogType type_, c
 	GADGET_BASIC_ASSERT(!message_.empty());
 	GADGET_BASIC_ASSERT(type_ < LogType::LogType_MAX);
 
-	if(logChannelFilter.empty() || logChannelFilter.find(channel_) != logChannelFilter.end()){
+	if(logChannelFilter.empty() || logChannelFilter.contains(channel_)){
 		Debug::Log("[" + channel_.GetString() + "] " + message_, type_, fileName_, lineNumber_, writeToLogFile_); //Only print if there is no filter set or if this channel is in the filter list
 	}
 }

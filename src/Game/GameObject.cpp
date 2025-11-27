@@ -22,7 +22,7 @@ Matrix4 Transform::GetTransformMatrix() const{
 	return (positionMatrix * (rotationMatrix * scaleMatrix));
 }
 
-GameObject::GameObject(StringID name_) : guid(GUID::Generate()), name(name_), transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), components(), lifeTime(-1.0f), lifeTimeTimer(0.0f){
+GameObject::GameObject(StringID name_) : guid(GUID::Generate()), name(name_), transform(Vector3::Zero(), Quaternion::Identity(), Vector3::Fill(1.0f)), lifeTime(-1.0f), lifeTimeTimer(0.0f){
 	GADGET_BASIC_ASSERT(name_ != StringID::None);
 	GADGET_BASIC_ASSERT(guid != GUID::Invalid);
 
@@ -31,7 +31,7 @@ GameObject::GameObject(StringID name_) : guid(GUID::Generate()), name(name_), tr
 	GADGET_BASIC_ASSERT(GameObjectCollection::Get(guid) == this);
 }
 
-GameObject::GameObject(const GameObjectProperties& properties_) : guid(properties_.guid.ToNumber<uint64_t>()), name(properties_.name.ToStr()), tags(), transform(properties_.transform), components(), lifeTime(-1.0f), lifeTimeTimer(0.0f){
+GameObject::GameObject(const GameObjectProperties& properties_) : guid(properties_.guid.ToNumber<uint64_t>()), name(properties_.name.ToStr()), transform(properties_.transform), lifeTime(-1.0f), lifeTimeTimer(0.0f){
 	GADGET_BASIC_ASSERT(properties_.name.Value() != StringID::None);
 	GADGET_BASIC_ASSERT(properties_.transform.position.IsValid());
 	GADGET_BASIC_ASSERT(properties_.transform.rotation.IsValid());

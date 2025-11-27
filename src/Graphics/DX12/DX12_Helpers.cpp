@@ -26,7 +26,7 @@ ID3D12RootSignature* DX12_Helpers::DX12_RootSignatureDesc::Create(ID3D12Device* 
 		return nullptr;
 	}
 
-	ID3D12RootSignature* rootSignature;
+	ID3D12RootSignature* rootSignature = nullptr;
 	result = device_->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	if(FAILED(result) || rootSignature == nullptr){
 		Debug::Log(SID("RENDER"), "ID3D12Device::CreateRootSignature failed!", Debug::Error, __FILE__, __LINE__);
@@ -93,7 +93,7 @@ ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, const void* d
 	D3D12_RESOURCE_DESC desc{};
 	desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 	desc.Alignment = 0;
-	desc.Width = Math::Clamp(static_cast<size_t>(1), std::numeric_limits<UINT64>::max(), bufferSize_);
+	desc.Width = GCore::Math::Clamp(static_cast<size_t>(1), std::numeric_limits<UINT64>::max(), bufferSize_);
 	desc.Height = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels = 1;
@@ -122,9 +122,9 @@ ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, const void* d
 		return nullptr;
 	}
 
-	if(data_){
+	if(data_ != nullptr){
 		if(isCpuAccessible_){
-			D3D12_RANGE range{ 0, 0 };
+			const D3D12_RANGE range{ 0, 0 };
 			void* cpuAddress = nullptr;
 			resource->Map(0, &range, reinterpret_cast<void**>(&cpuAddress));
 			GADGET_BASIC_ASSERT(cpuAddress != nullptr);
@@ -150,7 +150,7 @@ void DX12_Helpers::UpdateBuffer(ID3D12_Resource* buffer_, const void* data_, uin
 	}
 
 	uint8_t* pData = nullptr;
-	D3D12_RANGE range{ 0, 0 };
+	const D3D12_RANGE range{ 0, 0 };
 	buffer_->Map(subResource_, &range, reinterpret_cast<void**>(&pData));
 	GADGET_BASIC_ASSERT(pData != nullptr);
 	memcpy(pData, data_, bufferSize_);

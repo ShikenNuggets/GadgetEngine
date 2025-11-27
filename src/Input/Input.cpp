@@ -1,5 +1,7 @@
 #include "Input/Input.h"
 
+#include <GCore/Math/Math.hpp>
+
 #include "App.h"
 #include "Window.h"
 #include "Events/AppEvent.h"
@@ -7,7 +9,6 @@
 #include "Input/GamepadEvent.h"
 #include "Input/KeyEvent.h"
 #include "Input/MouseEvent.h"
-#include "Math/Math.h"
 
 using namespace Gadget;
 
@@ -226,8 +227,8 @@ float Input::GetAxis(StringID axisName_) const{
 				}
 			}
 
-			totalAxisValue = Math::Clamp(-1.0f, 1.0f, totalAxisValue);
-			if(Math::Abs(totalAxisValue) < a.GetDeadZone()){
+			totalAxisValue = GCore::Math::Clamp(-1.0f, 1.0f, totalAxisValue);
+			if(GCore::Math::Abs(totalAxisValue) < a.GetDeadZone()){
 				return 0.0f;
 			}
 
@@ -235,7 +236,7 @@ float Input::GetAxis(StringID axisName_) const{
 				totalAxisValue *= -1.0f;
 			}
 
-			return Math::Clamp(-1.0f, 1.0f, totalAxisValue);
+			return GCore::Math::Clamp(-1.0f, 1.0f, totalAxisValue);
 		}
 	}
 
@@ -248,7 +249,7 @@ float Input::GetCurrentMouseXInGUICoordinates() const{
 	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock()->GetWidth() > 0);
 
 	const float value = static_cast<float>(currentMouseX) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetWidth());
-	return Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range
+	return GCore::Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range
 }
 
 float Input::GetCurrentMouseYInGUICoordinates() const{
@@ -256,7 +257,7 @@ float Input::GetCurrentMouseYInGUICoordinates() const{
 	GADGET_BASIC_ASSERT(App::GetRenderer().GetWindow().lock()->GetHeight() > 0);
 
 	const float value = static_cast<float>(currentMouseY) / static_cast<float>(App::GetRenderer().GetWindow().lock()->GetHeight());
-	return -Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range, then invert
+	return -GCore::Math::RemapRange(value, 0.0f, 1.0f, -1.0f, 1.0f); //Remap to a -1 to 1 range, then invert
 }
 
 bool Input::GetMultiButtonDown(StringID multiButton_) const{

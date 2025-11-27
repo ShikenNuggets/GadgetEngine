@@ -29,13 +29,13 @@ Quaternion Euler::ToQuaternion() const{
 	const float heading = y.ToRadians();
 	const float attitude = z.ToRadians();
 
-	const float c1 = Math::CosR(heading / 2.0f);
-	const float c2 = Math::CosR(attitude / 2.0f);
-	const float c3 = Math::CosR(bank / 2.0f);
+	const float c1 = GCore::Math::CosR(heading / 2.0f);
+	const float c2 = GCore::Math::CosR(attitude / 2.0f);
+	const float c3 = GCore::Math::CosR(bank / 2.0f);
 
-	const float s1 = Math::SinR(heading / 2.0f);
-	const float s2 = Math::SinR(attitude / 2.0f);
-	const float s3 = Math::SinR(bank / 2.0f);
+	const float s1 = GCore::Math::SinR(heading / 2.0f);
+	const float s2 = GCore::Math::SinR(attitude / 2.0f);
+	const float s3 = GCore::Math::SinR(bank / 2.0f);
 
 	const float newW = (c1 * c2 * c3) - (s1 * s2 * s3);
 	const float newX = (s1 * s2 * c3) + (c1 * c2 * s3);

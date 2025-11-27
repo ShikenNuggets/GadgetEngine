@@ -6,11 +6,12 @@
 #include <assimp/postprocess.h>
 #pragma warning(default : 26451)
 
+#include <GCore/Math/Math.hpp>
+
 #include "Animation/AnimMesh.h"
 #include "Animation/Skeleton.h"
 #include "Core/FileSystem.h"
 #include "Graphics/Mesh.h"
-#include "Math/Math.h"
 #include "Math/Vector.h"
 
 using namespace Gadget;

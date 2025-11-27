@@ -6,7 +6,7 @@ using namespace Gadget;
 
 Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : animMeshName(animMeshName_), skeleton(nullptr), globalTime(0.0f), currentClip(nullptr){
 	GADGET_BASIC_ASSERT(animMeshName != StringID::None);
-	AnimMesh* animMeshPtr = App::GetResourceManager().LoadResource<AnimMesh>(animMeshName_); //Claim ownership of the mesh so we can keep the skeleton loaded
+	auto* animMeshPtr = App::GetResourceManager().LoadResource<AnimMesh>(animMeshName_); //Claim ownership of the mesh so we can keep the skeleton loaded
 	GADGET_BASIC_ASSERT(animMeshPtr != nullptr);
 	if(animMeshPtr != nullptr){
 		skeleton = &animMeshPtr->skeleton;
@@ -48,7 +48,7 @@ Animator::~Animator(){
 }
 
 void Animator::Update(float deltaTime_){
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deltaTime_));
 	GADGET_BASIC_ASSERT(skeleton != nullptr);
 
 	globalTime += deltaTime_;
@@ -106,7 +106,7 @@ Matrix4 Animator::GetJointTransform(int32_t jointID_) const{
 
 void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 	GADGET_BASIC_ASSERT(clip_ != nullptr);
-	GADGET_BASIC_ASSERT(Math::IsValidNumber(time_));
+	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(time_));
 	if(clip_ == nullptr){
 		return;
 	}
