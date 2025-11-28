@@ -19,7 +19,7 @@ namespace Gadget{
 
 		constexpr Sphere(const Vector3& point_, float radius_) : point(point_), radius(radius_){}
 
-		inline bool IsValid() const{ return point.IsValid() && GCore::Math::IsValidNumber(radius); }
+		inline bool IsValid() const{ return point.IsValid() && Math::IsValidNumber(radius); }
 	};
 
 	struct Plane{
@@ -55,7 +55,7 @@ namespace Gadget{
 			return Intersects(v_.x, v_.y);
 		}
 
-		inline bool IsValid() const{ return GCore::Math::IsValidNumber(x) && GCore::Math::IsValidNumber(y) && GCore::Math::IsValidNumber(w) && GCore::Math::IsValidNumber(h); }
+		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(w) && Math::IsValidNumber(h); }
 	};
 
 	struct Cube{

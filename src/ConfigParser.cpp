@@ -79,7 +79,7 @@ std::string ConfigParser::SerializeSection(StringID section_, const std::map<Str
 				}
 				break;
 			case Var::Type::Number:
-				if(GCore::Math::IsInteger(v.second.ToNumber())){
+				if(Math::IsInteger(v.second.ToNumber())){
 					outputStrs.push_back(v.first.GetString() + "=" + std::to_string(static_cast<int64_t>(v.second.ToNumber())));
 				}else{
 					outputStrs.push_back(v.first.GetString() + "=" + std::to_string(v.second.ToNumber()));

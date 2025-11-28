@@ -20,12 +20,12 @@ namespace Gadget{
 		}
 
 		void SetAmbientIntensity(float value_){
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(value_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
 			ambientIntensity = value_;
 		}
 		
 		void SetDiffuseIntensity(float value_){
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(value_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(value_));
 			diffuseIntensity = value_;
 		}
 
@@ -66,12 +66,12 @@ namespace Gadget{
 		}
 
 		void SetCutOff(float cutOff_){
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(cutOff_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(cutOff_));
 			cutOff = cutOff_;
 		}
 
 		void SetOuterCutOff(float outerCutOff_){
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(outerCutOff_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(outerCutOff_));
 			outerCutOff = outerCutOff_;
 		}
 

@@ -6,10 +6,10 @@
 namespace Gadget{
 	struct Color{
 		constexpr Color(float r_, float g_, float b_, float a_ = 1.0f) noexcept : r(r_), g(g_), b(b_), a(a_){
-			r = GCore::Math::Clamp(0.0f, 1.0f, r_);
-			g = GCore::Math::Clamp(0.0f, 1.0f, g_);
-			b = GCore::Math::Clamp(0.0f, 1.0f, b_);
-			a = GCore::Math::Clamp(0.0f, 1.0f, a_);
+			r = Math::Clamp(0.0f, 1.0f, r_);
+			g = Math::Clamp(0.0f, 1.0f, g_);
+			b = Math::Clamp(0.0f, 1.0f, b_);
+			a = Math::Clamp(0.0f, 1.0f, a_);
 		}
 
 		float r, g, b, a;
@@ -31,7 +31,7 @@ namespace Gadget{
 		inline constexpr operator const float* () const{ return static_cast<const float*>(&r); }
 		inline constexpr operator float* (){ return static_cast<float*>(&r); }
 
-		inline bool IsValid() const{ return GCore::Math::IsValidNumber(r) && GCore::Math::IsValidNumber(g) && GCore::Math::IsValidNumber(b) && GCore::Math::IsValidNumber(a); }
+		inline bool IsValid() const{ return Math::IsValidNumber(r) && Math::IsValidNumber(g) && Math::IsValidNumber(b) && Math::IsValidNumber(a); }
 	};
 }
 

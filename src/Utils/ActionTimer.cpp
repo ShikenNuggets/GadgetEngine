@@ -8,7 +8,7 @@ using namespace Gadget;
 
 ActionTimer::ActionTimer(TimerType timerType_, ActionType actionType_, float duration_, const std::function<void(float)>& func_) : timerType(timerType_), actionType(actionType_), duration(duration_), func(func_), timer(0.0f){
 	GADGET_BASIC_ASSERT(duration > 0.0f);
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(duration));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(duration));
 
 	if(timerType == TimerType::Countdown){
 		timer = duration_;

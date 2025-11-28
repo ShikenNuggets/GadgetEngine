@@ -50,7 +50,7 @@ namespace Gadget{
 		}
 		
 		inline constexpr Quaternion operator *(float f_) const{ return Quaternion(w * f_, x * f_, y * f_, z * f_); }
-		inline constexpr Quaternion operator /(float f_) const{ return Quaternion(GCore::Math::SafeDivide(w, f_), GCore::Math::SafeDivide(x, f_), GCore::Math::SafeDivide(y, f_), GCore::Math::SafeDivide(z, f_)); }
+		inline constexpr Quaternion operator /(float f_) const{ return Quaternion(Math::SafeDivide(w, f_), Math::SafeDivide(x, f_), Math::SafeDivide(y, f_), Math::SafeDivide(z, f_)); }
 
 		inline constexpr void operator +=(const Quaternion& q_){ *this = *this + q_; }
 		inline constexpr void operator *=(const Quaternion& q_){ *this = *this * q_; }
@@ -69,7 +69,7 @@ namespace Gadget{
 		}
 
 		static inline constexpr float Dot(const Quaternion& a_, const Quaternion& b_){
-			return GCore::Math::Dot4D(/*A*/ a_.w, a_.x, a_.y, a_.z, /*B*/ b_.w, b_.x, b_.y, b_.z);
+			return Math::Dot4D(/*A*/ a_.w, a_.x, a_.y, a_.z, /*B*/ b_.w, b_.x, b_.y, b_.z);
 		}
 
 		static Quaternion Rotate(Angle angle_, const Vector3& axis_);
@@ -86,8 +86,8 @@ namespace Gadget{
 
 		std::string ToString() const;
 
-		inline constexpr bool IsNear(const Quaternion& b_) const{ return GCore::Math::IsNear(x, b_.x) && GCore::Math::IsNear(y, b_.y) && GCore::Math::IsNear(z, b_.z) && GCore::Math::IsNear(w, b_.w); }
-		inline bool IsValid() const{ return GCore::Math::IsValidNumber(x) && GCore::Math::IsValidNumber(y) && GCore::Math::IsValidNumber(z) && GCore::Math::IsValidNumber(w); }
+		inline constexpr bool IsNear(const Quaternion& b_) const{ return Math::IsNear(x, b_.x) && Math::IsNear(y, b_.y) && Math::IsNear(z, b_.z) && Math::IsNear(w, b_.w); }
+		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(z) && Math::IsValidNumber(w); }
 	};
 }
 

@@ -93,7 +93,7 @@ ID3D12Resource* DX12_Helpers::CreateBuffer(ID3D12_Device* device_, const void* d
 	D3D12_RESOURCE_DESC desc{};
 	desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 	desc.Alignment = 0;
-	desc.Width = GCore::Math::Clamp(static_cast<size_t>(1), std::numeric_limits<UINT64>::max(), bufferSize_);
+	desc.Width = Math::Clamp(static_cast<size_t>(1), std::numeric_limits<UINT64>::max(), bufferSize_);
 	desc.Height = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels = 1;

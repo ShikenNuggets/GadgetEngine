@@ -36,7 +36,7 @@ namespace Gadget{
 			}
 		}
 
-		virtual void Update([[maybe_unused]] float deltaTime_){ GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f); }
+		virtual void Update([[maybe_unused]] float deltaTime_){ GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f); }
 
 		StringID GetName() const{ return name; }
 		bool IsActive() const{ return isActive; }

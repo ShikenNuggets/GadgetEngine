@@ -23,12 +23,12 @@ namespace StarHawx{
 			GADGET_BASIC_ASSERT(parent != nullptr);
 			GADGET_BASIC_ASSERT(playerObj != nullptr);
 
-			const float distance = GCore::Math::Abs(playerObj->GetPosition().x - parent->GetPosition().x);
+			const float distance = Gadget::Math::Abs(playerObj->GetPosition().x - parent->GetPosition().x);
 			const float currentMoveSpeed = moveSpeed * (distance / 5.0f);
 			if(playerObj->GetPosition().x > parent->GetPosition().x){
-				parent->Translate(Gadget::Vector3::Lerp(Gadget::Vector3::Zero(), Gadget::Vector3(moveSpeed * deltaTime_, 0.0f, 0.0f), GCore::Math::Clamp(0.0f, 1.0f, currentMoveSpeed / moveSpeed)));
+				parent->Translate(Gadget::Vector3::Lerp(Gadget::Vector3::Zero(), Gadget::Vector3(moveSpeed * deltaTime_, 0.0f, 0.0f), Gadget::Math::Clamp(0.0f, 1.0f, currentMoveSpeed / moveSpeed)));
 			}else if(playerObj->GetPosition().x < parent->GetPosition().x){
-				parent->Translate(Gadget::Vector3::Lerp(Gadget::Vector3::Zero(), Gadget::Vector3(-moveSpeed * deltaTime_, 0.0f, 0.0f), GCore::Math::Clamp(0.0f, 1.0f, currentMoveSpeed / moveSpeed)));
+				parent->Translate(Gadget::Vector3::Lerp(Gadget::Vector3::Zero(), Gadget::Vector3(-moveSpeed * deltaTime_, 0.0f, 0.0f), Gadget::Math::Clamp(0.0f, 1.0f, currentMoveSpeed / moveSpeed)));
 			}
 
 			GameLogicComponent::OnUpdate(deltaTime_);

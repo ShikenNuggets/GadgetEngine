@@ -8,14 +8,14 @@ namespace Gadget{
 	public:
 		BoxCollider2D(GameObject* parent_, float width_ = 1.0f, float height_ = 1.0f, bool isTrigger_ = false) : Collider(SID("BoxCollider2D"), parent_, ColliderShape::Box2D, isTrigger_), width(width_), height(height_){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(width_));
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(height_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(width_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
 		}
 
 		BoxCollider2D(GUID parentGUID_, float width_ = 1.0f, float height_ = 1.0f, bool isTrigger_ = false) : Collider(SID("BoxCollider2D"), parentGUID_, ColliderShape::Box2D, isTrigger_), width(width_), height(height_){
 			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(width_));
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(height_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(width_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(height_));
 		}
 
 		BoxCollider2D(const ComponentProperties& props_) : Collider(props_, ColliderShape::Box2D){
@@ -36,8 +36,8 @@ namespace Gadget{
 				return Vector3(width, height, 1.0f);
 			}
 
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(width));
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(height));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(width));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(height));
 
 			return Vector3(
 				(parent->GetScale().x * width) / 2.0f,
@@ -62,8 +62,8 @@ namespace Gadget{
 			width = props_.variables.GetValue(SID("Width"), 1.0f).ToNumber<float>();
 			height = props_.variables.GetValue(SID("Height"), 1.0f).ToNumber<float>();
 
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(width));
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(height));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(width));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(height));
 		}
 
 	private:

@@ -28,7 +28,7 @@ namespace Gadget{
 		inline constexpr Euler operator +(const Euler& e_) const{ return Euler(x + e_.x, y + e_.y, z + e_.z); }
 		inline constexpr Euler operator -(const Euler& e_) const{ return Euler(x - e_.x, y - e_.y, z - e_.z); }
 		inline constexpr Euler operator *(float f_) const{ return Euler(x * f_, y * f_, z * f_); }
-		inline constexpr Euler operator /(float f_) const{ return Euler(GCore::Math::SafeDivide(x.Get(), f_), GCore::Math::SafeDivide(y.Get(), f_)); }
+		inline constexpr Euler operator /(float f_) const{ return Euler(Math::SafeDivide(x.Get(), f_), Math::SafeDivide(y.Get(), f_)); }
 		inline constexpr void operator +=(const Euler& e_){ *this = *this + e_; }
 		inline constexpr void operator -=(const Euler& e_){ *this = *this - e_; }
 		inline constexpr void operator *=(float f_){ *this = *this * f_; }

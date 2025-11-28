@@ -13,7 +13,7 @@ CanvasSceneComponent::~CanvasSceneComponent(){
 
 void CanvasSceneComponent::OnUpdate(float deltaTime_){
 	GADGET_BASIC_ASSERT(canvas != nullptr);
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f);
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(deltaTime_) && deltaTime_ >= 0.0f);
 
 	canvas->Update(deltaTime_);
 }

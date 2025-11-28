@@ -136,7 +136,7 @@ namespace Gadget{
 	public:
 		Axis(StringID name_, float deadzone_ = 0.05f, bool invert_ = false) : name(name_), axisIDs(), buttonAxisIDs(), deadzone(deadzone_), invert(invert_){
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deadzone_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(deadzone_));
 			GADGET_BASIC_ASSERT(deadzone_ >= 0.0f);
 			GADGET_BASIC_ASSERT(deadzone_ <= 1.0f);
 		}
@@ -144,7 +144,7 @@ namespace Gadget{
 		Axis(StringID name_, AxisID axisID_, float deadzone_ = 0.05f, bool invert_ = false) : name(name_), axisIDs(), buttonAxisIDs(), deadzone(deadzone_), invert(invert_){
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
 			GADGET_BASIC_ASSERT(axisID_ < AxisID::AxisID_MAX);
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deadzone_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(deadzone_));
 			GADGET_BASIC_ASSERT(deadzone_ >= 0.0f);
 			GADGET_BASIC_ASSERT(deadzone_ <= 1.0f);
 
@@ -155,7 +155,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
 			GADGET_BASIC_ASSERT(buttonAxis_.negative < ButtonID::ButtonID_MAX);
 			GADGET_BASIC_ASSERT(buttonAxis_.positive < ButtonID::ButtonID_MAX);
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deadzone_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(deadzone_));
 			GADGET_BASIC_ASSERT(deadzone_ >= 0.0f);
 			GADGET_BASIC_ASSERT(deadzone_ <= 1.0f);
 
@@ -165,7 +165,7 @@ namespace Gadget{
 		Axis(StringID name_, const std::set<AxisID>&& axisIDs_, float deadzone_ = 0.05f, bool invert_ = false) : name(name_), axisIDs(axisIDs_), buttonAxisIDs(), deadzone(deadzone_), invert(invert_){
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
 			GADGET_BASIC_ASSERT(!axisIDs_.empty());
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deadzone_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(deadzone_));
 			GADGET_BASIC_ASSERT(deadzone_ >= 0.0f);
 			GADGET_BASIC_ASSERT(deadzone_ <= 1.0f);
 
@@ -177,7 +177,7 @@ namespace Gadget{
 		Axis(StringID name_, const std::vector<ButtonAxis>&& buttonAxisIDs_, float deadzone_ = 0.05f) : name(name_), axisIDs(), buttonAxisIDs(buttonAxisIDs_), deadzone(deadzone_), invert(false){
 			GADGET_BASIC_ASSERT(name_ != StringID::None);
 			GADGET_BASIC_ASSERT(!buttonAxisIDs_.empty());
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(deadzone_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(deadzone_));
 			GADGET_BASIC_ASSERT(deadzone_ >= 0.0f);
 			GADGET_BASIC_ASSERT(deadzone_ <= 1.0f);
 

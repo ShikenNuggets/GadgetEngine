@@ -9,10 +9,10 @@ Matrix2::Matrix2() : m(){
 }
 
 Matrix2::Matrix2(float x1_, float x2_, float y1_, float y2_) : m(){
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x1_));
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(x2_));
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y1_));
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(y2_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x1_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(x2_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y1_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(y2_));
 
 	m[0] = x1_;
 	m[1] = x2_;
@@ -21,7 +21,7 @@ Matrix2::Matrix2(float x1_, float x2_, float y1_, float y2_) : m(){
 }
 
 Matrix2::Matrix2(float fill_) : m(){
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(fill_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(fill_));
 
 	for(auto& i : m){
 		i = fill_;
@@ -80,7 +80,7 @@ Matrix2 Matrix2::operator -(const Matrix2& m_) const{
 
 Matrix2 Matrix2::operator *(float s_) const{
 	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(s_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
 
 	return Matrix2(m[0] * s_, m[1] * s_, m[2] * s_, m[3] * s_);
 }
@@ -91,23 +91,23 @@ Matrix2 Matrix2::operator *(const Matrix2& m_) const{
 
 	return Matrix2(
 		//COLUMN 1
-		GCore::Math::Dot2D(/*A*/ m[0], m[2], /*B*/ m_[0], m_[1]),
-		GCore::Math::Dot2D(/*A*/ m[1], m[3], /*B*/ m_[0], m_[1]),
+		Math::Dot2D(/*A*/ m[0], m[2], /*B*/ m_[0], m_[1]),
+		Math::Dot2D(/*A*/ m[1], m[3], /*B*/ m_[0], m_[1]),
 		//COLUMN 2
-		GCore::Math::Dot2D(/*A*/ m[0], m[2], /*B*/ m_[2], m_[3]),
-		GCore::Math::Dot2D(/*A*/ m[1], m[3], /*B*/ m_[2], m_[3])
+		Math::Dot2D(/*A*/ m[0], m[2], /*B*/ m_[2], m_[3]),
+		Math::Dot2D(/*A*/ m[1], m[3], /*B*/ m_[2], m_[3])
 	);
 }
 
 Matrix2 Matrix2::operator /(const float s_) const{
 	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(s_));
+	GADGET_BASIC_ASSERT(Math::IsValidNumber(s_));
 
 	return Matrix2(
-		GCore::Math::SafeDivide(m[0], s_),
-		GCore::Math::SafeDivide(m[1], s_),
-		GCore::Math::SafeDivide(m[2], s_),
-		GCore::Math::SafeDivide(m[3], s_)
+		Math::SafeDivide(m[0], s_),
+		Math::SafeDivide(m[1], s_),
+		Math::SafeDivide(m[2], s_),
+		Math::SafeDivide(m[3], s_)
 	);
 }
 
@@ -133,7 +133,7 @@ float Matrix2::Determinant() const{
 
 Matrix2 Matrix2::Inverse() const{
 	GADGET_BASIC_ASSERT(IsValid());
-	const float invdet = GCore::Math::SafeDivide(1.0f, Determinant());
+	const float invdet = Math::SafeDivide(1.0f, Determinant());
 
 	return Matrix2(	m[3] * invdet, -m[1] * invdet,
 					-m[2] * invdet, m[0] * invdet);

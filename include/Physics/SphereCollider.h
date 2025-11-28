@@ -8,12 +8,12 @@ namespace Gadget{
 	public:
 		SphereCollider(GameObject* parent_, float radius_ = 1.0f, bool isTrigger_ = false) : Collider(SID("SphereCollider"), parent_, ColliderShape::Sphere, isTrigger_), radius(radius_){
 			GADGET_BASIC_ASSERT(parent_ != nullptr && parent->GetGUID() != GUID::Invalid);
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(radius_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(radius_));
 		}
 
 		SphereCollider(GUID parentGUID_, float radius_ = 1.0f, bool isTrigger_ = false) : Collider(SID("SphereCollider"), parentGUID_, ColliderShape::Sphere, isTrigger_), radius(radius_){
 			GADGET_BASIC_ASSERT(parentGUID_ != GUID::Invalid);
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(radius_));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(radius_));
 		}
 
 		SphereCollider(const ComponentProperties& props_) : Collider(props_, ColliderShape::Sphere), radius(1.0f){
@@ -27,7 +27,7 @@ namespace Gadget{
 		}
 
 		virtual Vector3 GetColliderSize() const override{
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(radius));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(radius));
 			return Vector3(
 				(parent->GetScale().x * radius),
 				(parent->GetScale().y * radius),
@@ -47,7 +47,7 @@ namespace Gadget{
 	protected:
 		virtual void Deserialize(const ComponentProperties& props_) override{
 			radius = props_.variables.GetValue(SID("Radius"), 1.0f).ToNumber<float>();
-			GADGET_BASIC_ASSERT(GCore::Math::IsValidNumber(radius));
+			GADGET_BASIC_ASSERT(Math::IsValidNumber(radius));
 		}
 
 	private:

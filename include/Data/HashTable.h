@@ -59,7 +59,7 @@ namespace Gadget{
 			List<KeyValuePair>::Node* currentNode;
 		};
 
-		HashTable(int64_t capacity = 1024) : data(GCore::Math::NextPrime(capacity)), numElements(0){}
+		HashTable(int64_t capacity = 1024) : data(Math::NextPrime(capacity)), numElements(0){}
 
 		HashTable(const HashTable<K, V>& other_) = default;
 		HashTable(HashTable<K, V>&& other_) = default;

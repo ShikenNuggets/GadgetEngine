@@ -57,7 +57,7 @@ static inline ResultT GetResultAtTime(StringID name_, float time_, const NodeT* 
 		return ResultT(nullptr);
 	}
 
-	if(keys.Size() == 1 || GCore::Math::IsNearZero(time_)){
+	if(keys.Size() == 1 || Math::IsNearZero(time_)){
 		return ResultT(keys.Front(), time_);
 	}
 
