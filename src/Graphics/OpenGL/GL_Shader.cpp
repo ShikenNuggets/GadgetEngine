@@ -119,7 +119,9 @@ void GL_Shader::BindVector2(StringID uniformName_, const Vector2& vec_){
 
 	if(HasUniform(uniformName_)){
 		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
-		glUniform2fv(uniforms[uniformName_], 1, vec_);
+
+		std::array<float, 2> data = { static_cast<float>(vec_.x), static_cast<float>(vec_.y) };
+		glUniform2fv(uniforms[uniformName_], 1, data.data());
 	}
 }
 
@@ -128,7 +130,9 @@ void GL_Shader::BindVector3(StringID uniformName_, const Vector3& vec_){
 
 	if(HasUniform(uniformName_)){
 		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
-		glUniform3fv(uniforms[uniformName_], 1, vec_);
+
+		std::array<float, 3> data = { static_cast<float>(vec_.x), static_cast<float>(vec_.y), static_cast<float>(vec_.z) };
+		glUniform3fv(uniforms[uniformName_], 1, data.data());
 	}
 }
 
@@ -137,7 +141,9 @@ void GL_Shader::BindVector4(StringID uniformName_, const Vector4& vec_){
 
 	if(HasUniform(uniformName_)){
 		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
-		glUniform4fv(uniforms[uniformName_], 1, vec_);
+
+		std::array<float, 4> data = { static_cast<float>(vec_.x), static_cast<float>(vec_.y), static_cast<float>(vec_.z), static_cast<float>(vec_.w) };
+		glUniform4fv(uniforms[uniformName_], 1, data.data());
 	}
 }
 

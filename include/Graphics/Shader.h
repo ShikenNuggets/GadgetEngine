@@ -3,7 +3,7 @@
 
 #include "Graphics/Color.h"
 #include "Math/Matrix.h"
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 #include "Resource/Resource.h"
 #include "Utils/StringID.h"
 

@@ -3,6 +3,7 @@
 
 //Convenience include header for engine users
 #include <GCore/Math/Math.hpp>
+#include <GCore/Math/Vector.hpp>
 
 #include "App.h"
 #include "Config.h"
@@ -42,7 +43,6 @@
 #include "Math/Angle.h"
 #include "Math/Euler.h"
 #include "Math/Quaternion.h"
-#include "Math/Vector.h"
 
 #include "Physics/BoxCollider2D.h"
 #include "Physics/CubeCollider.h"

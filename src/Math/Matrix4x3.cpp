@@ -103,9 +103,9 @@ Vector3 Matrix4x3::operator *(const Vector3& v_) const{
 	GADGET_BASIC_ASSERT(IsValid());
 	GADGET_BASIC_ASSERT(v_.IsValid());
 	return Vector3(
-		Math::Dot4D(/*A*/ m[0], m[3], m[6], m[9], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[1], m[4], m[7], m[10], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[2], m[5], m[8], m[11], /*B*/ v_.x, v_.y, v_.z, 1.0f)
+		Math::Dot4D<float>(/*A*/ m[0], m[3], m[6], m[9], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		Math::Dot4D<float>(/*A*/ m[1], m[4], m[7], m[10], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		Math::Dot4D<float>(/*A*/ m[2], m[5], m[8], m[11], /*B*/ v_.x, v_.y, v_.z, 1.0f)
 	);
 }
 

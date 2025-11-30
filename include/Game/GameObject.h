@@ -1,12 +1,13 @@
 #ifndef GADGET_GAME_OBJECT_H
 #define GADGET_GAME_OBJECT_H
 
+#include <GCore/Math/Vector.hpp>
+
 #include "Data/Array.h"
 #include "Game/Component.h"
 #include "Math/Euler.h"
 #include "Math/Matrix.h"
 #include "Math/Quaternion.h"
-#include "Math/Vector.h"
 #include "Utils/GUID.h"
 #include "Utils/NamedVar.h"
 

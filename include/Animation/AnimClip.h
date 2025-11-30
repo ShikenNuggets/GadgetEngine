@@ -2,13 +2,13 @@
 #define GADGET_ANIMATION_ANIM_CLIP_H
 
 #include <GCore/Math/Math.hpp>
+#include <GCore/Math/Vector.hpp>
 
 #include "Animation/KeyFrame.h"
 #include "Animation/Loaders/AssimpAnimLoader.h"
 #include "Data/DList.h"
 #include "Data/HashTable.h"
 #include "Math/Quaternion.h"
-#include "Math/Vector.h"
 #include "Resource/Resource.h"
 
 namespace Gadget{

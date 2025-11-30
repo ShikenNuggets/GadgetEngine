@@ -1,8 +1,9 @@
 #ifndef GADGET_LIGHT_SOURCE_H
 #define GADGET_LIGHT_SOURCE_H
 
+#include <GCore/Math/Vector.hpp>
+
 #include "Color.h"
-#include "Math/Vector.h"
 
 namespace Gadget{
 	class LightSource{

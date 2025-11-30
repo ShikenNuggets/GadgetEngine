@@ -7,8 +7,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "Math/Vector.h"
-
 namespace Gadget{
 	//Forward Declaration
 	class FreetypeFont;

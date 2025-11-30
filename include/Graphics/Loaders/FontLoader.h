@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 
 namespace Gadget{
 	//Forward Declaration

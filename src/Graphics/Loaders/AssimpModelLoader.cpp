@@ -12,7 +12,7 @@
 #include "Animation/Skeleton.h"
 #include "Core/FileSystem.h"
 #include "Graphics/Mesh.h"
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 
 using namespace Gadget;
 

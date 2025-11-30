@@ -1,10 +1,11 @@
 #ifndef GADGET_ANIMATION_KEY_FRAME_H
 #define GADGET_ANIMATION_KEY_FRAME_H
 
+#include <GCore/Math/Vector.hpp>
+
 #include "Data/DList.h"
 #include "Math/Matrix.h"
 #include "Math/Quaternion.h"
-#include "Math/Vector.h"
 
 namespace Gadget{
 	template <class T>

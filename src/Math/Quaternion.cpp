@@ -1,10 +1,10 @@
 #include "Math/Quaternion.h"
 
 #include <GCore/Math/Math.hpp>
+#include <GCore/Math/Vector.hpp>
 
 #include "Math/Euler.h"
 #include "Math/Matrix.h"
-#include "Math/Vector.h"
 
 using namespace Gadget;
 
@@ -55,7 +55,7 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 	GADGET_BASIC_ASSERT(source_.IsValid());
 	GADGET_BASIC_ASSERT(destination_.IsValid());
 
-	const Vector3 forwardVector = (destination_ - source_).Normalized();
+	const Vector3 forwardVector = (destination_ - source_).Normal();
 
 	const float dot = Vector3::Dot(Vector3::Forward(), forwardVector);
 
@@ -68,7 +68,7 @@ Quaternion Quaternion::LookAt(const Vector3& source_, const Vector3& destination
 	}
 
 	const Angle rotAngle = Math::Acos(dot);
-	const Vector3 rotAxis = Vector3::Cross(Vector3::Forward(), forwardVector).Normalized();
+	const Vector3 rotAxis = Vector3::Cross(Vector3::Forward(), forwardVector).Normal();
 	return Quaternion::Rotate(rotAngle.Get(), rotAxis);
 }
 

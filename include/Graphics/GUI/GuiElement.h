@@ -1,9 +1,10 @@
 #ifndef GADGET_GUI_ELEMENT_H
 #define GADGET_GUI_ELEMENT_H
 
+#include <GCore/Math/Vector.hpp>
+
 #include "Data/Array.h"
 #include "Input/InputEnums.h"
-#include "Math/Vector.h"
 
 namespace Gadget{
 	enum class GuiAnchor{

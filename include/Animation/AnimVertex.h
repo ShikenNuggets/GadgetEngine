@@ -1,9 +1,10 @@
 #ifndef GADGET_ANIMATION_ANIM_VERTEX_H
 #define GADGET_ANIMATION_ANIM_VERTEX_H
 
+#include <GCore/Math/Vector.hpp>
+
 #include "Data/StaticArray.h"
 #include "Graphics/Vertex.h"
-#include "Math/Vector.h"
 
 namespace Gadget{
 	struct AnimVertex{

@@ -2,7 +2,7 @@
 #define GADGET_RIGIDBODY_H
 
 #include "Game/Component.h"
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 #include "Physics/BulletHelper.h"
 #include "Physics/CollisionSystem.h"
 

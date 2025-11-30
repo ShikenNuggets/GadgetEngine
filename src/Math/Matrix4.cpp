@@ -147,9 +147,9 @@ Vector3 Matrix4::operator *(const Vector3& v_) const{
 	GADGET_BASIC_ASSERT(v_.IsValid());
 
 	return Vector3(
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, 1.0f),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, 1.0f)
+		Math::Dot4D<float>(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		Math::Dot4D<float>(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, 1.0f),
+		Math::Dot4D<float>(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, 1.0f)
 	);
 }
 
@@ -158,10 +158,10 @@ Vector4 Matrix4::operator *(const Vector4& v_) const{
 	GADGET_BASIC_ASSERT(v_.IsValid());
 
 	return Vector4(
-		Math::Dot4D(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, v_.w),
-		Math::Dot4D(/*A*/ m[3], m[7], m[11], m[15], /*B*/ v_.x, v_.y, v_.z, v_.w)
+		Math::Dot4D<float>(/*A*/ m[0], m[4], m[8], m[12], /*B*/ v_.x, v_.y, v_.z, v_.w),
+		Math::Dot4D<float>(/*A*/ m[1], m[5], m[9], m[13], /*B*/ v_.x, v_.y, v_.z, v_.w),
+		Math::Dot4D<float>(/*A*/ m[2], m[6], m[10], m[14], /*B*/ v_.x, v_.y, v_.z, v_.w),
+		Math::Dot4D<float>(/*A*/ m[3], m[7], m[11], m[15], /*B*/ v_.x, v_.y, v_.z, v_.w)
 	);
 }
 
@@ -286,9 +286,9 @@ Matrix4 Matrix4::LookAt(float eyeX_, float eyeY_, float eyeZ_,
 
 	Matrix4 result;
 
-	const Vector3 forward = (at - eye).Normalized();
+	const Vector3 forward = (at - eye).Normal();
 	up.Normalize();
-	const Vector3 side = Vector3::Cross(forward, up).Normalized();
+	const Vector3 side = Vector3::Cross(forward, up).Normal();
 	up = Vector3::Cross(side,forward);
 
 	result[0] = side.x;

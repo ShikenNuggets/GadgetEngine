@@ -1,9 +1,10 @@
 #include "Math/Euler.h"
 
+#include <GCore/Math/Vector.hpp>
+
 #include "Debug.h"
 #include "Math/Matrix.h"
 #include "Math/Quaternion.h"
-#include "Math/Vector.h"
 
 using namespace Gadget;
 

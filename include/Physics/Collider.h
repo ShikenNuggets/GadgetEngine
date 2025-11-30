@@ -3,7 +3,7 @@
 
 #include "Game/Component.h"
 #include "Game/GameObject.h"
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 #include "Physics/BulletHelper.h"
 
 namespace Gadget{

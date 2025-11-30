@@ -1,7 +1,7 @@
 #ifndef GADGET_COLLISION_SYSTEM_H
 #define GADGET_COLLISION_SYSTEM_H
 
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 #include "Physics/BoxCollider2D.h"
 #include "Utils/Utils.h"
 

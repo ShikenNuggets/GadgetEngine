@@ -189,7 +189,7 @@ void PhysManager::HandleCollisionResponse(Collider* collider_, Collider* other_)
 	collision.collisionVector = CollisionSystem::CalculateContactPoint(collider_, other_) - collider_->GetParent()->GetPosition();
 
 	if(!collision.collisionVector.IsNear(Vector3::Zero())){
-		collision.overlapAmount = CollisionSystem::CalculateOverlapAmount(collision.collisionVector.Normalized(), collider_, other_);
+		collision.overlapAmount = CollisionSystem::CalculateOverlapAmount(collision.collisionVector.Normal(), collider_, other_);
 	}
 
 	collision.isTrigger = collider_->IsTrigger() || other_->IsTrigger();

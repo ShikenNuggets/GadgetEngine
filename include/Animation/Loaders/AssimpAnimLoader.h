@@ -10,8 +10,9 @@
 #pragma warning(default : 4244)
 #pragma warning(default : 26451)
 
+#include <GCore/Math/Vector.hpp>
+
 #include "Math/Quaternion.h"
-#include "Math/Vector.h"
 
 namespace Gadget{
 	class AnimClip;

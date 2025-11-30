@@ -1,10 +1,12 @@
 #ifndef GADGET_QUATERNION_H
 #define GADGET_QUATERNION_H
 
+#include <string>
+
 #include <GCore/Math/Math.hpp>
+#include <GCore/Math/Vector.hpp>
 
 #include "Math/Angle.h"
-#include "Math/Vector.h"
 
 namespace Gadget{
 	//Forward declarations
@@ -13,9 +15,6 @@ namespace Gadget{
 	class Matrix3;
 	class Matrix4;
 	class Matrix4x3;
-	struct Vector2;
-	struct Vector3;
-	struct Vector4;
 
 	class Quaternion{
 	public:

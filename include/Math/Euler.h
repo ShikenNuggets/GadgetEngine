@@ -4,12 +4,12 @@
 #include <string>
 
 #include <GCore/Math/Math.hpp>
+#include <GCore/Math/Vector.hpp>
 
 #include "Math/Angle.h"
 
 namespace Gadget{
 	//Forward Declarations
-	struct Vector3;
 	class Matrix3;
 	class Matrix4;
 	class Matrix4x3;

@@ -23,7 +23,9 @@ namespace Gadget{
 		float GetRadius() const{ return radius; }
 
 		virtual btCollisionShape* CreateCollisionShape() const override{
-			return new btSphereShape(GetColliderSize().Average());
+			const auto collider = GetColliderSize();
+			const auto average = (collider.x + collider.y + collider.z) / 3.0f;
+			return new btSphereShape(average);
 		}
 
 		virtual Vector3 GetColliderSize() const override{

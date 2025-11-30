@@ -1,7 +1,8 @@
 #include "Graphics/DX12/DXR/DXR_ShaderBindingTable.h"
 
+#include <GCore/Math/Vector.hpp>
+
 #include "Graphics/DX12/DX12.h"
-#include "Math/Vector.h"
 
 using namespace Gadget;
 using Microsoft::WRL::ComPtr;

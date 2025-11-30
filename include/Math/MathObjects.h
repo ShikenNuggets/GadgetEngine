@@ -1,7 +1,7 @@
 #ifndef GADGET_MATH_OBJECTS_H
 #define GADGET_MATH_OBJECTS_H
 
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 
 namespace Gadget{
 	struct Line{

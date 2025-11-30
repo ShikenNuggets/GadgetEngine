@@ -5,7 +5,7 @@
 
 #include "Debug.h"
 #include "Data/StaticArray.h"
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 
 namespace Gadget{
 	//Forward declarations

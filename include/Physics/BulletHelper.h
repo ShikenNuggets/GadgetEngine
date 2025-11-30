@@ -11,7 +11,7 @@
 #pragma warning(default : 4127)
 
 #include "Math/Quaternion.h"
-#include "Math/Vector.h"
+#include <GCore/Math/Vector.hpp>
 #include "Game/GameObject.h"
 
 namespace BulletHelper{
