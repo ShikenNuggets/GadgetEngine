@@ -261,7 +261,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 				aMesh->GetShader(i)->BindMatrix3(gNormalMatrixSID, (modelMatrix.Inverse()).Transpose().ToMatrix3());
 
-				aMesh->GetShader(i)->BindVector3(gViewMatrixSID, cam->GetParent()->GetPosition());
+				aMesh->GetShader(i)->BindVector3(gViewPosSID, cam->GetParent()->GetPosition());
 
 				aMesh->GetShader(i)->BindInt(gNumPointLightsSID, static_cast<int>(pointLightsBuffer.Size()));
 				aMesh->GetShader(i)->BindInt(gNumSpotLightsSID, static_cast<int>(spotLightsBuffer.Size()));
