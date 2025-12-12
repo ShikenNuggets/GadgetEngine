@@ -1,9 +1,11 @@
 #ifndef GADGET_CAMERA_H
 #define GADGET_CAMERA_H
 
+#include <GCore/Math/Matrix.hpp>
+#include <GCore/Math/Quaternion.hpp>
+#include <GCore/Math/Vector.hpp>
+
 #include "Graphics/ViewportRect.h"
-#include "Math/Matrix.h"
-#include "Math/Quaternion.h"
 
 namespace Gadget{
 	class Camera{

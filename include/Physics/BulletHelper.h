@@ -10,8 +10,9 @@
 #pragma warning(default : 26495)
 #pragma warning(default : 4127)
 
-#include "Math/Quaternion.h"
+#include <GCore/Math/Quaternion.hpp>
 #include <GCore/Math/Vector.hpp>
+
 #include "Game/GameObject.h"
 
 namespace BulletHelper{

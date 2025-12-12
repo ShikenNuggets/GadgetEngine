@@ -152,7 +152,9 @@ void GL_Shader::BindMatrix3(StringID uniformName_, const Matrix3& mat3_){
 
 	if(HasUniform(uniformName_)){
 		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
-		glUniformMatrix3fv(uniforms[uniformName_], 1, GL_FALSE, mat3_);
+
+		std::array<float, 9> data = { static_cast<float>(mat3_[0]), static_cast<float>(mat3_[1]), static_cast<float>(mat3_[2]), static_cast<float>(mat3_[3]), static_cast<float>(mat3_[4]), static_cast<float>(mat3_[5]), static_cast<float>(mat3_[6]), static_cast<float>(mat3_[7]), static_cast<float>(mat3_[8]) };
+		glUniformMatrix3fv(uniforms[uniformName_], 1, GL_FALSE, data.data());
 	}
 }
 
@@ -161,7 +163,9 @@ void GL_Shader::BindMatrix4(StringID uniformName_, const Matrix4& mat4_){
 
 	if(HasUniform(uniformName_)){
 		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
-		glUniformMatrix4fv(uniforms[uniformName_], 1, GL_FALSE, mat4_);
+
+		std::array<float, 16> data = { static_cast<float>(mat4_[0]), static_cast<float>(mat4_[1]), static_cast<float>(mat4_[2]), static_cast<float>(mat4_[3]), static_cast<float>(mat4_[4]), static_cast<float>(mat4_[5]), static_cast<float>(mat4_[6]), static_cast<float>(mat4_[7]), static_cast<float>(mat4_[8]), static_cast<float>(mat4_[9]), static_cast<float>(mat4_[10]), static_cast<float>(mat4_[11]), static_cast<float>(mat4_[12]), static_cast<float>(mat4_[13]), static_cast<float>(mat4_[14]), static_cast<float>(mat4_[15]) };
+		glUniformMatrix4fv(uniforms[uniformName_], 1, GL_FALSE, data.data());
 	}
 }
 

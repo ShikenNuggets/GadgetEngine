@@ -6,12 +6,13 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+#include <GCore/Math/Matrix.hpp>
+
 #include "Graphics/DX12/DX12_Defines.h"
 #include "Graphics/DX12/DXR/DXR_BottomLevelAS.h"
 #include "Graphics/DX12/DXR/DXR_MaterialInfo.h"
 #include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 #include "Graphics/DX12/DXR/nv_helpers_dx12/TopLevelASGenerator.h"
-#include "Math/Matrix.h"
 
 namespace Gadget{
 	struct DXR_MeshInstance{

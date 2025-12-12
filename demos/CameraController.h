@@ -1,6 +1,8 @@
 #ifndef EXAMPLE_CAMERA_CONTROLLER_H
 #define EXAMPLE_CAMERA_CONTROLLER_H
 
+#include <GCore/Math/Math.hpp>
+
 #include <App.h>
 #include <Core/Time.h>
 #include <Game/GameLogicComponent.h>
@@ -40,7 +42,7 @@ namespace Example{
 				parent->Translate(Gadget::Vector3::Up() * moveSpeed * deltaTime_);
 			}
 
-			const Gadget::Euler oldRotation = parent->GetRotation().ToEuler();
+			const Gadget::Euler oldRotation = Gadget::Math::ToEuler(parent->GetRotation());
 
 			if(input.GetButtonHeld(Gadget::ButtonID::Keyboard_Arrow_Up)){
 				//This is a little unorthodox but working with Euler angles directly ensures that the camera never rolls

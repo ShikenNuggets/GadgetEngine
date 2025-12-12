@@ -17,8 +17,9 @@
 #pragma warning(default : 4244)
 #pragma warning(default : 26451)	//Possible arithmetic overflow
 
+#include <GCore/Math/Matrix.hpp>
+
 #include "Data/Array.h"
-#include "Math/Matrix.h"
 
 namespace Gadget{
 	//Forward Declaration

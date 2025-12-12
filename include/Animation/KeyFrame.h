@@ -1,11 +1,11 @@
 #ifndef GADGET_ANIMATION_KEY_FRAME_H
 #define GADGET_ANIMATION_KEY_FRAME_H
 
+#include <GCore/Math/Quaternion.hpp>
 #include <GCore/Math/Vector.hpp>
 
 #include "Data/DList.h"
-#include "Math/Matrix.h"
-#include "Math/Quaternion.h"
+#include <GCore/Math/Matrix.hpp>
 
 namespace Gadget{
 	template <class T>
@@ -46,9 +46,9 @@ namespace Gadget{
 	struct FullClipSearchResult{
 		FullClipSearchResult(const VectorResult& pos_, const QuatResult& rot_, const VectorResult& scale_) : posNode(pos_.node), rotNode(rot_.node), scaleNode(scale_.node){
 			result = Matrix4::Identity();
-			result *= Matrix4::Translate(pos_.result);
-			result *= rot_.result.ToMatrix4();
-			result *= Matrix4::Scale(scale_.result);
+			result *= Math::Translate(pos_.result);
+			result *= Math::ToMatrix4(rot_.result);
+			result *= Math::Scale(scale_.result);
 		}
 
 		Matrix4 result;

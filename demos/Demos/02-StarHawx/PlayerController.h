@@ -1,6 +1,8 @@
 #ifndef STAR_HAWX_PLAYER_CONTROLLER_H
 #define STAR_HAWX_PLAYER_CONTROLLER_H
 
+#include <GCore/Math/Math.hpp>
+
 #include <Game/GameLogicComponent.h>
 
 #include "ProjectileObject.h"
@@ -104,7 +106,7 @@ namespace StarHawx{
 			tiltDir = newDir_;
 			isLerping = true;
 			tiltLerpTimer = tiltLerpSpeed;
-			startTilt = parent->GetRotation().ToEuler();
+			startTilt = Gadget::Math::ToEuler(parent->GetRotation());
 
 			switch(tiltDir){
 				case TiltDir::Up:

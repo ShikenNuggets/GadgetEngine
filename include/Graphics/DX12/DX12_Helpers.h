@@ -10,7 +10,7 @@
 #include "Debug.h"
 #include "Graphics/DX12/DX12_Defines.h"
 #include "Graphics/DX12/DX12_UploadContext.h"
-#include "Math/Matrix.h"
+#include <GCore/Math/Matrix.hpp>
 
 namespace Gadget{
 	//Some of these are loosely based on Microsoft's d3dx12 helper library: https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/d3dx12.h

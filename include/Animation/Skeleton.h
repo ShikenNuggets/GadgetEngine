@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include "Data/Array.h"
-#include "Math/Matrix.h"
+#include <GCore/Math/Matrix.hpp>
 
 namespace Gadget{
 	struct Joint{

@@ -9,6 +9,8 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
+#include <GCore/Math/Matrix.hpp>
+
 #include "GadgetEnums.h"
 #include "ScreenCoordinate.h"
 #include "Graphics/DX12/DX12.h"
@@ -19,7 +21,6 @@
 #include "Graphics/DX12/DXR/DXR_ShaderBindingTable.h"
 #include "Graphics/DX12/DXR/DXR_ShaderResourceHeap.h"
 #include "Graphics/DX12/DXR/DXR_TopLevelAS.h"
-#include "Math/Matrix.h"
 #include "Utils/Utils.h"
 
 namespace Gadget{

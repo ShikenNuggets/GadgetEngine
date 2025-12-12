@@ -7,7 +7,7 @@ using namespace Gadget;
 
 std::map<GUID, GameObject*> GameObjectCollection::guidMap = std::map<GUID, GameObject*>();
 
-Transform::Transform(const Vector3& pos_, const Euler& euler_, const Vector3& scale_) : position(pos_), rotation(euler_.ToQuaternion()), scale(scale_){
+Transform::Transform(const Vector3& pos_, const Euler& euler_, const Vector3& scale_) : position(pos_), rotation(Math::ToQuaternion(euler_)), scale(scale_){
 	GADGET_BASIC_ASSERT(position.IsValid());
 	GADGET_BASIC_ASSERT(euler_.IsValid());
 	GADGET_BASIC_ASSERT(rotation.IsValid());
@@ -15,9 +15,9 @@ Transform::Transform(const Vector3& pos_, const Euler& euler_, const Vector3& sc
 }
 
 Matrix4 Transform::GetTransformMatrix() const{
-	const Matrix4 positionMatrix = Matrix4::Translate(position);
-	const Matrix4 rotationMatrix = rotation.ToMatrix4();
-	const Matrix4 scaleMatrix = Matrix4::Scale(scale);
+	const Matrix4 positionMatrix = Math::Translate(position);
+	const Matrix4 rotationMatrix = Math::ToMatrix4(rotation);
+	const Matrix4 scaleMatrix = Math::Scale(scale);
 
 	return (positionMatrix * (rotationMatrix * scaleMatrix));
 }

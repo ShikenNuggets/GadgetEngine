@@ -4,6 +4,7 @@
 #include <GCore/Math/Vector.hpp>
 
 #include "Color.h"
+#include "Math/Angle.h"
 
 namespace Gadget{
 	class LightSource{

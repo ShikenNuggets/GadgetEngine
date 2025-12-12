@@ -9,7 +9,7 @@
 #include "Debug.h"
 #include "Graphics/Color.h"
 #include "Graphics/Shader.h"
-#include "Math/Matrix.h"
+#include <GCore/Math/Matrix.hpp>
 
 namespace Gadget{
 	class GL_Shader : public Shader{

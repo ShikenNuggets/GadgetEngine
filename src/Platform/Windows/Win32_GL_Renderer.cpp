@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include <GCore/Math/Math.hpp>
+
 #include "App.h"
 #include "Config.h"
 #include "Debug.h"
@@ -176,7 +178,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		//Render the skybox
 		if(skybox != nullptr){
 			glDepthFunc(GL_LEQUAL);
-			skybox->Bind(proj, view.ToMatrix3().ToMatrix4());
+			skybox->Bind(proj, Math::ToMatrix4(Math::ToMatrix3(view)));
 
 			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 
@@ -197,7 +199,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				const Matrix4 modelMatrix = mesh->GetParent()->GetTransformMatrix();
 				mesh->GetShader(i)->BindMatrix4(gModelMatrixSID, modelMatrix);
 
-				mesh->GetShader(i)->BindMatrix3(gNormalMatrixSID, (modelMatrix.Inverse()).Transpose().ToMatrix3());
+				mesh->GetShader(i)->BindMatrix3(gNormalMatrixSID, Math::ToMatrix3((modelMatrix.Inverse()).Transpose()));
 
 				mesh->GetShader(i)->BindVector3(gViewPosSID, cam->GetParent()->GetPosition());
 
@@ -259,7 +261,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				const Matrix4 modelMatrix = aMesh->GetParent()->GetTransformMatrix();
 				aMesh->GetShader(i)->BindMatrix4(gModelMatrixSID, modelMatrix);
 
-				aMesh->GetShader(i)->BindMatrix3(gNormalMatrixSID, (modelMatrix.Inverse()).Transpose().ToMatrix3());
+				aMesh->GetShader(i)->BindMatrix3(gNormalMatrixSID, Math::ToMatrix3((modelMatrix.Inverse()).Transpose()));
 
 				aMesh->GetShader(i)->BindVector3(gViewPosSID, cam->GetParent()->GetPosition());
 

@@ -1,13 +1,13 @@
 #ifndef GADGET_GAME_OBJECT_H
 #define GADGET_GAME_OBJECT_H
 
+#include <GCore/Math/Euler.hpp>
+#include <GCore/Math/Matrix.hpp>
+#include <GCore/Math/Quaternion.hpp>
 #include <GCore/Math/Vector.hpp>
 
 #include "Data/Array.h"
 #include "Game/Component.h"
-#include "Math/Euler.h"
-#include "Math/Matrix.h"
-#include "Math/Quaternion.h"
 #include "Utils/GUID.h"
 #include "Utils/NamedVar.h"
 
@@ -139,8 +139,8 @@ namespace Gadget{
 		void SetPosition(float x_, float y_, float z_){ transform.position = Vector3(x_, y_, z_); OnTransformModified(); }
 
 		void SetRotation(const Quaternion& rot_){ transform.rotation = rot_; OnTransformModified(); }
-		void SetRotation(const Euler& rot_){ transform.rotation = rot_.ToQuaternion(); OnTransformModified(); }
-		void SetRotation(float x_, float y_, float z_){ transform.rotation = Euler(x_, y_, z_).ToQuaternion(); OnTransformModified(); }
+		void SetRotation(const Euler& rot_){ transform.rotation = Math::ToQuaternion(rot_); OnTransformModified(); }
+		void SetRotation(float x_, float y_, float z_){ transform.rotation = Math::ToQuaternion(Euler(x_, y_, z_)); OnTransformModified(); }
 
 		void SetScale(float scale_){ transform.scale = Vector3::Fill(scale_); OnTransformModified(); }
 		void SetScale(float x_, float y_, float z_){ transform.scale = Vector3(x_, y_, z_); OnTransformModified(); }
@@ -150,8 +150,8 @@ namespace Gadget{
 		void Translate(float x_, float y_, float z_){ transform.position += Vector3(x_, y_, z_); OnTransformModified(); }
 
 		void Rotate(const Quaternion& rotation_){ transform.rotation *= rotation_; OnTransformModified(); }
-		void Rotate(const Euler& rotation_){ transform.rotation *= rotation_.ToQuaternion(); OnTransformModified(); }
-		void Rotate(float x_, float y_, float z_){ transform.rotation *= Euler(x_, y_, z_).ToQuaternion(); OnTransformModified(); }
+		void Rotate(const Euler& rotation_){ transform.rotation *= Math::ToQuaternion(rotation_); OnTransformModified(); }
+		void Rotate(float x_, float y_, float z_){ transform.rotation *= Math::ToQuaternion(Euler(x_, y_, z_)); OnTransformModified(); }
 
 		static GameObject* FindWithTag(StringID tag_);
 		static std::vector<GameObject*> FindObjectsWithTag(StringID tag_);

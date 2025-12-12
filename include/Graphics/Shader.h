@@ -2,7 +2,7 @@
 #define GADGET_SHADER_H
 
 #include "Graphics/Color.h"
-#include "Math/Matrix.h"
+#include <GCore/Math/Matrix.hpp>
 #include <GCore/Math/Vector.hpp>
 #include "Resource/Resource.h"
 #include "Utils/StringID.h"

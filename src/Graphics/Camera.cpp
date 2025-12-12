@@ -33,8 +33,8 @@ void Camera::CalculateViewMatrix(const Vector3& position_, const Quaternion& rot
 	GADGET_BASIC_ASSERT(rotation_.IsValid());
 
 	view = Matrix4::Identity();
-	view *= rotation_.ToMatrix4().Inverse();
-	view *= Matrix4::Translate(position_).Inverse();
+	view *= Math::ToMatrix4(rotation_).Inverse();
+	view *= Math::Translate(position_).Inverse();
 }
 
 void Camera::CalculateProjectionMatrix(){

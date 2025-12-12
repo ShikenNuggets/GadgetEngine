@@ -1,7 +1,7 @@
 #ifndef GADGET_MESH_INSTANCE_INFO_H
 #define GADGET_MESH_INSTANCE_INFO_H
 
-#include "Math/Matrix.h"
+#include <GCore/Math/Matrix.hpp>
 
 namespace Gadget{
 	//For storing info for a specific instance of a mesh

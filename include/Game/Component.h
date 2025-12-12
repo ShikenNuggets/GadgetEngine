@@ -1,10 +1,13 @@
 #ifndef GADGET_COMPONENT_H
 #define GADGET_COMPONENT_H
 
+#include <GCore/Math/Matrix.hpp>
+#include <GCore/Math/Quaternion.hpp>
+#include <GCore/Math/Vector.hpp>
+
 #include "Debug.h"
 #include "Data/Array.h"
 #include "Data/HashTable.h"
-#include "Math/Quaternion.h"
 #include "Utils/GUID.h"
 #include "Utils/NamedVar.h"
 #include "Utils/Utils.h"
