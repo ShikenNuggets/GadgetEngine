@@ -3,6 +3,7 @@
 
 #include <GCore/Math/Matrix.hpp>
 #include <GCore/Math/Quaternion.hpp>
+#include <GCore/Math/Rect.hpp>
 #include <GCore/Math/Vector.hpp>
 
 #include "Graphics/ViewportRect.h"

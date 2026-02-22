@@ -154,19 +154,19 @@ Vector3 CollisionSystem::CalculateContactPoint(const BoxCollider2D& cl1_, const 
 	}
 
 	if(topLeft && topRight){
-		return Vector3(c1Rect.x, c1Top);
+		return Vector3(c1Rect.min.x, c1Top);
 	}
 	
 	if(topRight && bottomRight){
-		return Vector3(c1Right, c1Rect.y);
+		return Vector3(c1Right, c1Rect.min.y);
 	}
 	
 	if(bottomRight && bottomLeft){
-		return Vector3(c1Rect.x, c1Bottom);
+		return Vector3(c1Rect.min.x, c1Bottom);
 	}
 	
 	if(bottomLeft && topLeft){
-		return Vector3(c1Left, c1Rect.y);
+		return Vector3(c1Left, c1Rect.min.y);
 	}
 
 	return cl1_.GetParent()->GetPosition();

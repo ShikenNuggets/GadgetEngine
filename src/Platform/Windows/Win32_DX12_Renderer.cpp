@@ -178,10 +178,8 @@ void Win32_DX12_Renderer::SetClearColor([[maybe_unused]] const Color& color_){
 }
 
 void Win32_DX12_Renderer::SetViewportRect([[maybe_unused]] const Rect& rect_){
-	GADGET_ASSERT(rect_.x >= 0.0f && rect_.x <= 1.0f, "Tried to set invalid viewport rect!");
-	GADGET_ASSERT(rect_.y >= 0.0f && rect_.y <= 1.0f, "Tried to set invalid viewport rect!");
-	GADGET_ASSERT(rect_.w >= 0.0f && rect_.w <= 1.0f, "Tried to set invalid viewport rect!");
-	GADGET_ASSERT(rect_.h >= 0.0f && rect_.h <= 1.0f, "Tried to set invalid viewport rect!");
+	GADGET_ASSERT(rect_.min.x >= 0.0f && rect_.max.x <= 1.0f, "Tried to set invalid viewport rect!");
+	GADGET_ASSERT(rect_.min.y >= 0.0f && rect_.max.y <= 1.0f, "Tried to set invalid viewport rect!");
 
 	GADGET_ASSERT_NOT_IMPLEMENTED;
 }

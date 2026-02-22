@@ -1,7 +1,7 @@
 #ifndef GADGET_VIEWPORT_RECT_H
 #define GADGET_VIEWPORT_RECT_H
 
-#include "Math/MathObjects.h"
+#include <GCore/Math/Rect.hpp>
 
 namespace Gadget{
 	namespace ViewportRect{

@@ -31,33 +31,6 @@ namespace Gadget{
 		inline bool IsValid() const{ return point.IsValid() && normal.IsValid(); }
 	};
 
-	struct Rect{
-		float x;
-		float y;
-		float w;
-		float h;
-		
-		constexpr Rect(float x_ = 0.0f, float y_ = 0.0f, float w_ = 0.0f, float h_ = 0.0f) : x(x_), y(y_), w(w_), h(h_){}
-
-		inline constexpr bool Intersects(float x_, float y_) const{
-			const float halfWidth = w / 2.0f;
-			const float halfHeight = h / 2.0f;
-
-			const float left = x - halfWidth;
-			const float right = x + halfWidth;
-			const float top = y + halfHeight;
-			const float bottom = y - halfHeight;
-
-			return x_ >= left && x_ <= right && y_ <= top && y_ >= bottom;
-		}
-
-		inline constexpr bool Intersects(const Vector2& v_) const{
-			return Intersects(v_.x, v_.y);
-		}
-
-		inline bool IsValid() const{ return Math::IsValidNumber(x) && Math::IsValidNumber(y) && Math::IsValidNumber(w) && Math::IsValidNumber(h); }
-	};
-
 	struct Cube{
 		Vector3 min;
 		Vector3 max;

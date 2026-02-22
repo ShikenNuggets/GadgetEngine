@@ -463,15 +463,13 @@ void Win32_GL_Renderer::SetClearColor(const Color& color_){
 
 void Win32_GL_Renderer::SetViewportRect(const Rect& rect_){
 	GADGET_BASIC_ASSERT(rect_.IsValid());
-	GADGET_ASSERT(rect_.x >= 0.0f && rect_.x <= 1.0f, "Tried to set invalid viewport rect!");
-	GADGET_ASSERT(rect_.y >= 0.0f && rect_.y <= 1.0f, "Tried to set invalid viewport rect!");
-	GADGET_ASSERT(rect_.w >= 0.0f && rect_.w <= 1.0f, "Tried to set invalid viewport rect!");
-	GADGET_ASSERT(rect_.h >= 0.0f && rect_.h <= 1.0f, "Tried to set invalid viewport rect!");
+	GADGET_ASSERT(rect_.min.x >= 0.0f && rect_.max.x <= 1.0f, "Tried to set invalid viewport rect!");
+	GADGET_ASSERT(rect_.min.y >= 0.0f && rect_.max.y <= 1.0f, "Tried to set invalid viewport rect!");
 
-	glViewport(static_cast<GLint>(static_cast<float>(window->GetWidth()) * rect_.x),
-				static_cast<GLint>(static_cast<float>(window->GetHeight()) * rect_.y),
-				static_cast<GLsizei>(static_cast<float>(window->GetWidth()) * rect_.w),
-				static_cast<GLsizei>(static_cast<float>(window->GetHeight()) * rect_.h));
+	glViewport(static_cast<GLint>(static_cast<float>(window->GetWidth()) * rect_.min.x),
+				static_cast<GLint>(static_cast<float>(window->GetHeight()) * rect_.min.y),
+				static_cast<GLsizei>(static_cast<float>(window->GetWidth()) * rect_.GetWidth()),
+				static_cast<GLsizei>(static_cast<float>(window->GetHeight()) * rect_.GetHeight()));
 }
 
 void Win32_GL_Renderer::OnResize(int width_, int height_){
