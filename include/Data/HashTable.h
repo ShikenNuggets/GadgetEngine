@@ -6,7 +6,6 @@
 #include "Debug.h"
 #include "Data/Array.h"
 #include "Data/List.h"
-#include "Data/String.h"
 #include "Utils/Hash.h"
 
 namespace Gadget{
@@ -274,8 +273,8 @@ namespace Gadget{
 			}else if constexpr(std::is_enum<K>()){
 				GADGET_BASIC_ASSERT(data.Capacity() > static_cast<int64_t>(key_));
 				return static_cast<int64_t>(key_);
-			}else if constexpr(std::is_same_v<K, String>){
-				return Hash::MurmurHash64A(key_.Value(), key_.Length()) % data.Capacity();
+			}else if constexpr(std::is_same_v<K, std::string>){
+				return Hash::MurmurHash64A(key_.Value(), key_.length()) % data.Capacity();
 			}else{
 				return Hash::MurmurHash64A(reinterpret_cast<const char*>(&key_), sizeof(key_)) % data.Capacity();
 			}

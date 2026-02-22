@@ -1,8 +1,9 @@
 #ifndef GADGET_UTILS_SID_ARRAY_CACHE_H
 #define GADGET_UTILS_SID_ARRAY_CACHE_H
 
+#include <string>
+
 #include "Data/Array.h"
-#include "Data/String.h"
 #include "Utils/StringID.h"
 
 namespace Gadget{
