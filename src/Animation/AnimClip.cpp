@@ -2,7 +2,7 @@
 
 using namespace Gadget;
 
-bool AnimClip::HasKeysForJoint(StringID jointName_) const{ return posKeys.Contains(jointName_) || rotKeys.Contains(jointName_) || scaleKeys.Contains(jointName_); }
+bool AnimClip::HasKeysForJoint(StringID jointName_) const{ return posKeys.contains(jointName_) || rotKeys.contains(jointName_) || scaleKeys.contains(jointName_); }
 
 FullClipSearchResult AnimClip::GetTransformAtTime(StringID name_, float time_, const VectorNode* posNode_, const QuatNode* rotNode_, const VectorNode* scaleNode_) const{
 	return {
@@ -45,12 +45,12 @@ static inline const DList<T>::Node* Search(const typename DList<T>::Node* startN
 
 template <class ResultT, class KeyT, class NodeT, class KeysT>
 static inline ResultT GetResultAtTime(StringID name_, float time_, const NodeT* node_, const KeysT& keys_){
-	if(!keys_.Contains(name_)){
+	if(!keys_.contains(name_)){
 		//Default initialize the result if there are no keys for this joint
 		return ResultT(nullptr);
 	}
 
-	const auto& keys = keys_[name_];
+	const auto& keys = keys_.at(name_);
 	if(keys.IsEmpty()){
 		//Default initialize the result if there are no keys for this joint
 		GADGET_LOG_WARNING(SID("ANIM"), "List created for joint " + name_.GetString() + " with no keyframes!");

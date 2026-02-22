@@ -24,14 +24,14 @@ Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : 
 	for(int32_t i = 0; i < skeleton->GetJointCount(); i++){
 		skeletonInstance.Add(Matrix4::Identity());
 
-		currentPosNodes.Add(skeleton->GetJoint(i).name, nullptr);
-		currentRotNodes.Add(skeleton->GetJoint(i).name, nullptr);
-		currentScaleNodes.Add(skeleton->GetJoint(i).name, nullptr);
+		currentPosNodes[skeleton->GetJoint(i).name] = nullptr;
+		currentRotNodes[skeleton->GetJoint(i).name] = nullptr;
+		currentScaleNodes[skeleton->GetJoint(i).name] = nullptr;
 	}
 
 	for(const auto& name : clipNames_){
 		GADGET_BASIC_ASSERT(name != StringID::None);
-		clips.Add(name, App::GetResourceManager().LoadResource<AnimClip>(name));
+		clips[name] = App::GetResourceManager().LoadResource<AnimClip>(name);
 		GADGET_BASIC_ASSERT(clips[name] != nullptr);
 	}
 
@@ -41,9 +41,8 @@ Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : 
 Animator::~Animator(){
 	App::GetResourceManager().UnloadResource(animMeshName);
 
-	const Array<StringID> clipNames = clips.Keys();
-	for(const auto& c : clipNames){
-		App::GetResourceManager().UnloadResource(c);
+	for(const auto& [key, value] : clips){
+		App::GetResourceManager().UnloadResource(key);
 	}
 }
 
@@ -68,7 +67,7 @@ void Animator::Update(float deltaTime_){
 
 void Animator::AddClip(StringID clipName_){
 	GADGET_BASIC_ASSERT(clipName_ != StringID::None);
-	clips.Add(clipName_, App::GetResourceManager().LoadResource<AnimClip>(clipName_));
+	clips[clipName_] = App::GetResourceManager().LoadResource<AnimClip>(clipName_);
 	GADGET_BASIC_ASSERT(clips[clipName_] != nullptr);
 
 	if(currentClip == nullptr){
@@ -79,8 +78,8 @@ void Animator::AddClip(StringID clipName_){
 
 void Animator::PlayClip(StringID clipName_){
 	GADGET_BASIC_ASSERT(clipName_ != StringID::None);
-	GADGET_BASIC_ASSERT(clips.Contains(clipName_));
-	if(!clips.Contains(clipName_)){
+	GADGET_BASIC_ASSERT(clips.contains(clipName_));
+	if(!clips.contains(clipName_)){
 		GADGET_LOG_WARNING(SID("ANIM"), "Tried playing animation clip [" + clipName_.GetString() + "] that wasn't added to the animator!");
 		return;
 	}

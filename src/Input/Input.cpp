@@ -196,12 +196,12 @@ bool Input::GetAnyButtonHeld(StringID ignoreButtonName_) const{
 float Input::GetAxis(AxisID id_) const{
 	GADGET_BASIC_ASSERT(id_ < AxisID::AxisID_MAX);
 
-	if(axes.Contains(id_)){
-		return axes[id_];
+	if(axes.contains(id_)){
+		return axes.at(id_);
 	}
 
-	if(persistentAxes.Contains(id_)){
-		return persistentAxes[id_];
+	if(persistentAxes.contains(id_)){
+		return persistentAxes.at(id_);
 	}
 
 	return 0.0f;
@@ -362,7 +362,7 @@ void Input::DefineMultiButton(const MultiButton& multiButton_){
 void Input::ProcessInputs(){
 	buttonsDown.clear();
 	buttonsUp.clear();
-	axes.Clear();
+	axes.clear();
 
 	for(const auto& b : buttonEvents){
 		if(b.IsPressed()){
@@ -376,19 +376,19 @@ void Input::ProcessInputs(){
 	buttonEvents.clear();
 
 	for(const auto& a : axisEvents){
-		if(axes.Contains(a.GetAxisID())){
+		if(axes.contains(a.GetAxisID())){
 			axes[a.GetAxisID()] += a.Value(); //Update our existing axis value, in case there are multiple events for the same axis (common with mouse motion)
 		}else{
-			axes.Add(a.GetAxisID(), a.Value());
+			axes[a.GetAxisID()] = a.Value();
 		}
 	}
 	axisEvents.clear();
 
 	for(const auto& a : persistentAxisEvents){
-		if(persistentAxes.Contains(a.GetAxisID())){
+		if(persistentAxes.contains(a.GetAxisID())){
 			persistentAxes[a.GetAxisID()] = a.Value(); //Persistent axis has a single set value
 		}else{
-			persistentAxes.Add(a.GetAxisID(), a.Value());
+			persistentAxes[a.GetAxisID()] = a.Value();
 		}
 	}
 	persistentAxisEvents.clear();
@@ -408,8 +408,8 @@ void Input::OnWindowRestartedEvent(const Event& e_){
 	buttonsDown.clear();
 	buttonsHeld.clear();
 	buttonsUp.clear();
-	axes.Clear();
-	persistentAxes.Clear();
+	axes.clear();
+	persistentAxes.clear();
 }
 
 void Input::OnKeyPressedEvent(const Event& e_){

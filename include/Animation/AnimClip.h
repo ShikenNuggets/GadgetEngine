@@ -1,6 +1,8 @@
 #ifndef GADGET_ANIMATION_ANIM_CLIP_H
 #define GADGET_ANIMATION_ANIM_CLIP_H
 
+#include <unordered_map>
+
 #include <GCore/Math/Math.hpp>
 #include <GCore/Math/Quaternion.hpp>
 #include <GCore/Math/Vector.hpp>
@@ -8,19 +10,18 @@
 #include "Animation/KeyFrame.h"
 #include "Animation/Loaders/AssimpAnimLoader.h"
 #include "Data/DList.h"
-#include "Data/HashTable.h"
 #include "Resource/Resource.h"
 
 namespace Gadget{
 	class AnimClip : public Resource{
 	public:
-		AnimClip(float length_, const HashTable<StringID, DList<VectorKey>>& posKeys_, const HashTable<StringID, DList<QuatKey>>& rotKeys_, const HashTable<StringID, DList<VectorKey>>& scaleKeys_) : length(length_), posKeys(posKeys_), rotKeys(rotKeys_), scaleKeys(scaleKeys_){}
+		AnimClip(float length_, const std::unordered_map<StringID, DList<VectorKey>>& posKeys_, const std::unordered_map<StringID, DList<QuatKey>>& rotKeys_, const std::unordered_map<StringID, DList<VectorKey>>& scaleKeys_) : length(length_), posKeys(posKeys_), rotKeys(rotKeys_), scaleKeys(scaleKeys_){}
 
 		virtual ~AnimClip() override = default;
 
 		static constexpr const char* typeName = "AnimClip";
 
-		virtual size_t SizeInBytes() const override{ return sizeof(length) + posKeys.SizeInBytes() + rotKeys.SizeInBytes() + scaleKeys.SizeInBytes(); }
+		virtual size_t SizeInBytes() const override{ return (posKeys.size() * sizeof(DList<VectorKey>)) + (rotKeys.size() * sizeof(DList<QuatKey>)) + (scaleKeys.size() * sizeof(DList<VectorKey>)); }
 
 		float GetLength() const{ return length; }
 		bool HasKeysForJoint(StringID jointName_) const;
@@ -32,9 +33,9 @@ namespace Gadget{
 
 	private:
 		const float length;
-		const HashTable<StringID, DList<VectorKey>> posKeys;
-		const HashTable<StringID, DList<QuatKey>> rotKeys;
-		const HashTable<StringID, DList<VectorKey>> scaleKeys;
+		const std::unordered_map<StringID, DList<VectorKey>> posKeys;
+		const std::unordered_map<StringID, DList<QuatKey>> rotKeys;
+		const std::unordered_map<StringID, DList<VectorKey>> scaleKeys;
 	};
 
 	class AnimClipResourceContainer : public ResourceContainer{

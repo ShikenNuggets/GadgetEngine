@@ -5,13 +5,13 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 #include "Data/Array.h"
-#include "Data/HashTable.h"
 #include "Events/Event.h"
 
 namespace Gadget{
-	using FuncPointerHashTable = HashTable<void*, Array<std::function<void(const Event&)>>>;
+	using FuncPointerHashTable = std::unordered_map<void*, Array<std::function<void(const Event&)>>>;
 
 	class EventHandler{
 	public:
@@ -33,7 +33,7 @@ namespace Gadget{
 	private:
 		static std::unique_ptr<EventHandler> instance;
 
-		HashTable<EventType, FuncPointerHashTable> eventCallbacks;
+		std::unordered_map<EventType, FuncPointerHashTable> eventCallbacks;
 	};
 }
 

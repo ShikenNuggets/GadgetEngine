@@ -1,10 +1,11 @@
 #ifndef GADGET_ANIMATION_ANIMATOR_H
 #define GADGET_ANIMATION_ANIMATOR_H
 
+#include <unordered_map>
+
 #include "Animation/AnimClip.h"
 #include "Animation/AnimMesh.h"
 #include "Animation/Skeleton.h"
-#include "Data/HashTable.h"
 
 namespace Gadget{
 	class Animator{
@@ -33,12 +34,12 @@ namespace Gadget{
 		float globalTime;
 		Array<Matrix4> skeletonInstance;
 
-		HashTable<StringID, AnimClip*> clips;
+		std::unordered_map<StringID, AnimClip*> clips;
 		AnimClip* currentClip;
 
-		HashTable<StringID, const VectorNode*> currentPosNodes;
-		HashTable<StringID, const QuatNode*> currentRotNodes;
-		HashTable<StringID, const VectorNode*> currentScaleNodes;
+		std::unordered_map<StringID, const VectorNode*> currentPosNodes;
+		std::unordered_map<StringID, const QuatNode*> currentRotNodes;
+		std::unordered_map<StringID, const VectorNode*> currentScaleNodes;
 
 		Array<Matrix4> globalTransformCache;
 

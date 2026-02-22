@@ -8,12 +8,12 @@ std::unique_ptr<EventHandler> EventHandler::instance = nullptr;
 
 EventHandler::EventHandler() : eventCallbacks(static_cast<size_t>(EventType::Count)){
 	for(EventType i = EventType::None; i < EventType::Count; i = static_cast<EventType>(static_cast<size_t>(i) + 1)){
-		eventCallbacks.Add(i, FuncPointerHashTable(4096));
+		eventCallbacks[i] = FuncPointerHashTable(4096);
 	}
 }
 
 EventHandler::~EventHandler(){
-	eventCallbacks.Clear();
+	eventCallbacks.clear();
 }
 
 EventHandler* EventHandler::GetInstance(){

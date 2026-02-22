@@ -1,13 +1,14 @@
 #ifndef GADGET_COMPONENT_H
 #define GADGET_COMPONENT_H
 
+#include <unordered_map>
+
 #include <GCore/Math/Matrix.hpp>
 #include <GCore/Math/Quaternion.hpp>
 #include <GCore/Math/Vector.hpp>
 
 #include "Debug.h"
 #include "Data/Array.h"
-#include "Data/HashTable.h"
 #include "Utils/GUID.h"
 #include "Utils/NamedVar.h"
 #include "Utils/Utils.h"
@@ -87,7 +88,7 @@ namespace Gadget{
 		static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 
 		private:
-			HashTable<GUID, Array<T*>> guidMap;
+			std::unordered_map<GUID, Array<T*>> guidMap;
 
 		public:
 			ComponentCollection() noexcept = default;
@@ -104,8 +105,8 @@ namespace Gadget{
 				GADGET_BASIC_ASSERT(element_->GetParent()->GetGUID() != GUID::Invalid);
 
 				GUID objectGuid = element_->GetParent()->GetGUID();
-				if(!guidMap.Contains(objectGuid)){
-					guidMap.Add(element_->GetParent()->GetGUID(), {});
+				if(!guidMap.contains(objectGuid)){
+					guidMap[element_->GetParent()->GetGUID()] = {};
 				}
 
 				guidMap[objectGuid].Add(element_);
@@ -113,7 +114,7 @@ namespace Gadget{
 
 			void Remove(GUID objectGuid_){
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
-				guidMap.RemoveAt(objectGuid_);
+				guidMap.erase(objectGuid_);
 			}
 
 			void Remove(T* element_){
@@ -126,7 +127,7 @@ namespace Gadget{
 				GADGET_BASIC_ASSERT(element_->GetGUID() != GUID::Invalid);
 				GADGET_BASIC_ASSERT(element_->GetParent() != nullptr);
 				GADGET_BASIC_ASSERT(element_->GetParent()->GetGUID() != GUID::Invalid);
-				GADGET_BASIC_ASSERT(guidMap.Contains(element_->GetParent()->GetGUID()));
+				GADGET_BASIC_ASSERT(guidMap.contains(element_->GetParent()->GetGUID()));
 
 				auto& arr = guidMap[element_->GetParent()->GetGUID()];
 				arr.Remove(element_);
@@ -148,11 +149,11 @@ namespace Gadget{
 			T* Get(GUID objectGuid_) const{
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 
-				if(!guidMap.Contains(objectGuid_)){
+				if(!guidMap.contains(objectGuid_)){
 					return nullptr;
 				}
 
-				const auto& arr = guidMap[objectGuid_];
+				const auto& arr = guidMap.at(objectGuid_);
 				if(arr.IsEmpty()){
 					return nullptr;
 				}
@@ -164,19 +165,19 @@ namespace Gadget{
 			Array<T*> GetComponents(GUID objectGuid_) const{
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 				
-				if(!guidMap.Contains(objectGuid_)){
+				if(!guidMap.contains(objectGuid_)){
 					return Array<T*>();
 				}
 
-				return guidMap[objectGuid_];
+				return guidMap.at(objectGuid_);
 			}
 
 			Array<T*> GetAllComponents() const{
 				Array<T*> allComps;
-				allComps.Reserve(guidMap.Size());
+				allComps.Reserve(guidMap.size());
 				for(const auto& arr : guidMap){
-					allComps.Reserve(allComps.Size() + arr.value.Size());
-					for(auto* comp : arr.value){
+					allComps.Reserve(allComps.Size() + arr.second.Size());
+					for(auto* comp : arr.second){
 						allComps.Add(comp);
 					}
 				}
@@ -185,10 +186,10 @@ namespace Gadget{
 			}
 
 			void GetAllComponents(Array<T*>& inArray_) const{
-				inArray_.Reserve(guidMap.Size());
+				inArray_.Reserve(guidMap.size());
 				for(const auto& arr : guidMap){
-					inArray_.Reserve(inArray_.Size() + arr.value.Size());
-					for(auto* comp : arr.value){
+					inArray_.Reserve(inArray_.Size() + arr.second.Size());
+					for(auto* comp : arr.second){
 						inArray_.Add(comp);
 					}
 				}

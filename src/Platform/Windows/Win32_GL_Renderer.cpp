@@ -117,8 +117,8 @@ Win32_GL_Renderer::~Win32_GL_Renderer(){
 		animRender->InvalidateMeshInfo();
 	}
 
-	for(auto& pair : App::GetMaterialCache().GetMaterials()){
-		pair.value->InvalidateAllAPIInfos();
+	for(auto& [key, value] : App::GetMaterialCache().GetMaterials()){
+		value->InvalidateAllAPIInfos();
 	}
 
 	delete screenQuad;

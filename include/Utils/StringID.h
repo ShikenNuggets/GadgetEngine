@@ -97,4 +97,13 @@ namespace Gadget{
 	}
 }
 
+namespace std{
+	template <>
+	struct hash<Gadget::StringID>{
+		std::size_t operator()(const Gadget::StringID& sid) const noexcept{
+			return std::hash<uint64_t>{}(sid.GetID());
+		}
+	};
+}
+
 #endif //!GADGET_STRING_ID_H

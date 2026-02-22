@@ -3,9 +3,9 @@
 
 #include <map>
 #include <set>
+#include <unordered_map>
 #include <vector>
 
-#include "Data/StaticHashTable.h"
 #include "Events/Event.h"
 #include "Input/InputType.h"
 #include "Utils/Utils.h"
@@ -79,8 +79,8 @@ namespace Gadget{
 		std::set<ButtonID> buttonsDown;
 		std::set<ButtonID> buttonsHeld;
 		std::set<ButtonID> buttonsUp;
-		StaticHashTable<AxisID, float, static_cast<int64_t>(AxisID::AxisID_MAX)> axes;
-		StaticHashTable<AxisID, float, static_cast<int64_t>(AxisID::AxisID_MAX)> persistentAxes; //Special axes that are based on a persistent state rather than just motion (e.g. an analog stick)
+		std::unordered_map<AxisID, float> axes;
+		std::unordered_map<AxisID, float> persistentAxes; //Special axes that are based on a persistent state rather than just motion (e.g. an analog stick)
 
 		int currentMouseX;
 		int currentMouseY;

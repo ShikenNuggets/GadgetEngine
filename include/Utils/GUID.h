@@ -17,7 +17,10 @@ namespace Gadget{
 	public:
 		static constexpr uint64_t Invalid = 0;
 
+		GUID() : id(Invalid){}
 		GUID(uint64_t id_) : id(id_){}
+
+		GUID(const GUID& guid_) noexcept = default;
 
 		uint64_t Id() const{ return id; }
 
@@ -59,6 +62,15 @@ namespace Gadget{
 			GUID newId = GUID(nextUUID);
 			nextUUID++;
 			return newId;
+		}
+	};
+}
+
+namespace std{
+	template <>
+	struct hash<Gadget::GUID>{
+		std::size_t operator()(const Gadget::GUID& g) const noexcept{
+			return std::hash<uint64_t>{}(g.Id());
 		}
 	};
 }

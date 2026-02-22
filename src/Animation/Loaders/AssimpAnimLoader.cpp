@@ -67,9 +67,9 @@ AnimClip* AssimpAnimLoader::LoadAnimClip(const std::string& filePath_, unsigned 
 	}
 
 	const auto duration = static_cast<float>(anim->mDuration / anim->mTicksPerSecond);
-	auto posKeys = HashTable<StringID, DList<VectorKey>>(128);
-	auto rotKeys = HashTable<StringID, DList<QuatKey>>(128);
-	auto scaleKeys = HashTable<StringID, DList<VectorKey>>(128);
+	auto posKeys = std::unordered_map<StringID, DList<VectorKey>>();
+	auto rotKeys = std::unordered_map<StringID, DList<QuatKey>>();
+	auto scaleKeys = std::unordered_map<StringID, DList<VectorKey>>();
 
 	for(unsigned int i = 0; i < anim->mNumChannels; i++){
 		const aiNodeAnim* channel = anim->mChannels[i];
@@ -83,7 +83,7 @@ AnimClip* AssimpAnimLoader::LoadAnimClip(const std::string& filePath_, unsigned 
 
 		//Positions
 		if(channel->mNumPositionKeys > 0){
-			posKeys.Add(modelNameSID, DList<VectorKey>());
+			posKeys[modelNameSID] = {};
 		}
 
 		for(unsigned int j = 0; j < channel->mNumPositionKeys; j++){
@@ -93,7 +93,7 @@ AnimClip* AssimpAnimLoader::LoadAnimClip(const std::string& filePath_, unsigned 
 
 		//Rotations
 		if(channel->mNumRotationKeys > 0){
-			rotKeys.Add(modelNameSID, DList<QuatKey>());
+			rotKeys[modelNameSID] = {};
 		}
 
 		for(unsigned int j = 0; j < channel->mNumRotationKeys; j++){
@@ -103,7 +103,7 @@ AnimClip* AssimpAnimLoader::LoadAnimClip(const std::string& filePath_, unsigned 
 
 		//Scales
 		if(channel->mNumScalingKeys > 0){
-			scaleKeys.Add(modelNameSID, DList<VectorKey>());
+			scaleKeys[modelNameSID] = {};
 		}
 
 		for(unsigned int j = 0; j < channel->mNumScalingKeys; j++){
