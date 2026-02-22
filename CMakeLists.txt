@@ -17,14 +17,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(catch2)
 
 FetchContent_Declare(
-	Assimp
-	GIT_REPOSITORY https://github.com/assimp/assimp.git
-	GIT_TAG v6.0.2
-	EXCLUDE_FROM_ALL
-)
-FetchContent_MakeAvailable(Assimp)
-
-FetchContent_Declare(
 	Json
 	GIT_REPOSITORY https://github.com/nlohmann/json.git
 	GIT_TAG v3.12.0
@@ -119,6 +111,7 @@ target_include_directories(GadgetEngine PUBLIC
 target_link_libraries(GadgetEngine
 	PUBLIC
 		SDL3::SDL3
+		SDL3_image::SDL3_image
 		assimp::assimp
 		nlohmann_json::nlohmann_json
 		LinearMath
