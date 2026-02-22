@@ -85,8 +85,8 @@ struct TempFloatAnimVertex
 	TVec3<float> position;
 	TVec3<float> normal;
 	TVec2<float> texCoords;
-	StaticArray<int32_t, AnimVertex::maxJointWeights> jointIDs;
-	StaticArray<float, AnimVertex::maxJointWeights> jointWeights;
+	std::array<int32_t, AnimVertex::maxJointWeights> jointIDs;
+	std::array<float, AnimVertex::maxJointWeights> jointWeights;
 };
 
 GL_AnimMeshInfo::GL_AnimMeshInfo(const AnimSubmesh& mesh_) : MeshInfo(mesh_.indices.Size()), vao(0), vbo(0), ebo(0){

@@ -1,9 +1,11 @@
 #ifndef GADGET_ANIMATION_ANIM_VERTEX_H
 #define GADGET_ANIMATION_ANIM_VERTEX_H
 
+#include <array>
+
 #include <GCore/Math/Vector.hpp>
 
-#include "Data/StaticArray.h"
+#include "Debug.h"
 #include "Graphics/Vertex.h"
 
 namespace Gadget{
@@ -11,8 +13,8 @@ namespace Gadget{
 		static constexpr int maxJointWeights = 4;
 
 		Vertex vertex;
-		StaticArray<int32_t, maxJointWeights> jointIDs;
-		StaticArray<float, maxJointWeights> jointWeights;
+		std::array<int32_t, maxJointWeights> jointIDs;
+		std::array<float, maxJointWeights> jointWeights;
 
 		AnimVertex(const Vector3& pos_, const Vector3& normal_, const Vector2& texCoords_) : vertex(pos_, normal_, texCoords_), jointIDs{ -1, -1, -1, -1 }, jointWeights{0.0f, 0.0f, 0.0f, 0.0f}{}
 

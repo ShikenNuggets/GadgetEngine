@@ -1,12 +1,13 @@
 #ifndef GADGET_STRING_H
 #define GADGET_STRING_H
 
+#include <array>
 #include <cstdint>
 
 #include <GCore/Math/Math.hpp>
 
+#include "Debug.h"
 #include "Data/Array.h"
-#include "Data/StaticArray.h"
 
 namespace Gadget{
 	class String{
@@ -47,7 +48,7 @@ namespace Gadget{
 		String(String&& other_) noexcept : size(other_.size), capacity(other_.capacity), data(other_.data){
 			other_.size = 0;
 			other_.capacity = gStackStrSize;
-			other_.data.stackStr.Fill('\0');
+			other_.data.stackStr.fill('\0');
 
 			GADGET_BASIC_ASSERT(HasNullTerminator());
 			GADGET_BASIC_ASSERT(other_.HasNullTerminator());
@@ -64,7 +65,7 @@ namespace Gadget{
 			}
 			size = 0;
 			capacity = gStackStrSize;
-			data.stackStr.Fill('\0');
+			data.stackStr.fill('\0');
 
 			Append(other_);
 			GADGET_BASIC_ASSERT(HasNullTerminator());
@@ -87,7 +88,7 @@ namespace Gadget{
 
 			other_.size = 0;
 			other_.capacity = gStackStrSize;
-			other_.data.stackStr.Fill('\0');
+			other_.data.stackStr.fill('\0');
 
 			GADGET_BASIC_ASSERT(HasNullTerminator());
 			GADGET_BASIC_ASSERT(other_.HasNullTerminator());
@@ -532,9 +533,9 @@ namespace Gadget{
 		static inline constexpr int gStackStrSize = 8;
 
 		union StrData{
-			StrData() : stackStr(){ stackStr.Fill('\0'); }
+			StrData() : stackStr(){ stackStr.fill('\0'); }
 
-			StaticArray<char, gStackStrSize> stackStr;
+			std::array<char, gStackStrSize> stackStr;
 			char* heapStr;
 		};
 
@@ -590,7 +591,7 @@ namespace Gadget{
 			data.heapStr = nullptr;
 
 			capacity = gStackStrSize;
-			data.stackStr.Fill('\0');
+			data.stackStr.fill('\0');
 			for(int32_t i = 0; i < Length(); i++){
 				data.stackStr[i] = oldData[i];
 			}

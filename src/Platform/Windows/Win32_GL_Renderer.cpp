@@ -347,7 +347,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 				const GLfloat w = static_cast<float>(ch.width) * screenWidthPerPixel;
 				const GLfloat h = static_cast<float>(ch.rows) * screenHeightPerPixel;
 				// Update VBO for each character
-				const StaticArray2D<GLfloat, 6, 4> vertices = {{
+				const std::array<std::array<GLfloat, 4>, 6> vertices = {{
 					{{ xpos,		ypos + h,	0.0f, 0.0f }},
 					{{ xpos,		ypos,		0.0f, 1.0f }},
 					{{ xpos + w,	ypos,		1.0f, 1.0f }},
@@ -398,7 +398,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 			const float w = texture->GetSize().x;
 			const float h = texture->GetSize().y;
 
-			const StaticArray2D<GLfloat, 6, 4> vertices = {{
+			const std::array<std::array<GLfloat, 4>, 6> vertices = {{
 				{{ x - w, y + h, 0.0f, 0.0f }},
 				{{ x - w, y - h, 0.0f, 1.0f }},
 				{{ x + w, y - h, 1.0f, 1.0f }},

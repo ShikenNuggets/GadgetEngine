@@ -1,10 +1,10 @@
 #ifndef GADGET_DATA_STATIC_HASH_TABLE_H
 #define GADGET_DATA_STATIC_HASH_TABLE_H
 
+#include <array>
 #include <type_traits>
 
 #include "Debug.h"
-#include "Data/StaticArray.h"
 
 namespace Gadget{
 	class StringID;
@@ -25,7 +25,7 @@ namespace Gadget{
 
 		class Iterator{
 		public:
-			constexpr Iterator(StaticArray<KeyValuePair, Size>& data_, int64_t index_) : data(data_), index(index_){}
+			constexpr Iterator(std::array<KeyValuePair, Size>& data_, int64_t index_) : data(data_), index(index_){}
 
 			constexpr inline const V& operator*() const{ return data[index].value; }
 			constexpr inline V& operator*(){ return data[index].value; }
@@ -42,7 +42,7 @@ namespace Gadget{
 			constexpr bool IsValid() const{ return data[index].isInUse && index < Size; }
 
 		private:
-			StaticArray<KeyValuePair, Size>& data;
+			std::array<KeyValuePair, Size>& data;
 			int64_t index;
 		};
 
@@ -154,7 +154,7 @@ namespace Gadget{
 		constexpr inline Iterator end() const{ return Iterator(data, Size); }
 
 	private:
-		StaticArray<KeyValuePair, Size> data;
+		std::array<KeyValuePair, Size> data;
 		int64_t elementsInUse;
 
 		int64_t KeyToIndex(const K& key_) const{

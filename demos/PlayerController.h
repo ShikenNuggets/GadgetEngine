@@ -1,7 +1,7 @@
 #include <Gadget.h>
 
 namespace Example{
-	static constexpr Gadget::StaticArray<Gadget::StringID, 3> gPlayerAnimClipNames{
+	static constexpr std::array<Gadget::StringID, 3> gPlayerAnimClipNames{
 		"IdleAnim"_sid,
 		"StandUpAnim"_sid,
 		"CrouchWalkAnim"_sid,
