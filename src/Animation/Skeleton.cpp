@@ -1,6 +1,6 @@
 #include "Animation/Skeleton.h"
 
-#include "Data/Pair.h"
+#include <utility>
 
 using namespace Gadget;
 
@@ -89,9 +89,9 @@ bool Skeleton::IsValidSkeleton() const{
 	GADGET_ASSERT(joints.Size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
 	
 	bool foundRootNode = false;
-	Array<Pair<int32_t, bool>> confirmedJoints;
+	Array<std::pair<int32_t, bool>> confirmedJoints;
 	for(int32_t i = 0; i < joints.Size(); i++){
-		confirmedJoints.Add(Pair(i, false));
+		confirmedJoints.Add(std::pair(i, false));
 	}
 
 	for(int32_t i = 0; i < joints.Size(); i++){

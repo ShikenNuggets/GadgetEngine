@@ -1,7 +1,8 @@
 #ifndef GADGET_RENDER_COMPONENT_H
 #define GADGET_RENDER_COMPONENT_H
 
-#include "Data/Pair.h"
+#include <utility>
+
 #include "Game/Component.h"
 #include "Graphics/MeshInfo.h"
 #include "Graphics/MeshInstanceInfo.h"
@@ -113,7 +114,7 @@ namespace Gadget{
 
 	private:
 		StringID modelName;
-		std::vector<Pair<MeshInfo*, StringID>> meshInfos;
+		std::vector<std::pair<MeshInfo*, StringID>> meshInfos;
 		//EngineMaterial* engineMaterial;
 		//MeshInstanceInfo* meshInstanceInfo;
 

@@ -1,9 +1,10 @@
 #ifndef GADGET_ANIM_RENDER_COMPONENT_H
 #define GADGET_ANIM_RENDER_COMPONENT_H
 
+#include <utility>
+
 #include "Animation/Animator.h"
 #include "Animation/AnimMesh.h"
-#include "Data/Pair.h"
 #include "Game/Component.h"
 #include "Graphics/MeshInfo.h"
 #include "Graphics/Materials/Material.h"
@@ -106,7 +107,7 @@ namespace Gadget{
 
 	private:
 		StringID modelName;
-		std::vector<Pair<MeshInfo*, StringID>> meshInfos;
+		std::vector<std::pair<MeshInfo*, StringID>> meshInfos;
 		Animator* animator;
 
 		static ComponentCollection<AnimRenderComponent> componentCollection;
