@@ -55,7 +55,7 @@ void ResourceManager::UnloadResource(StringID name_){
 
 	resources[name_]->RemoveReference();
 	if(resources[name_]->GetReferenceCount() == 0){
-		resourcesToUnload.Add(name_);
+		resourcesToUnload.push(name_);
 	}
 }
 
@@ -94,8 +94,8 @@ void ResourceManager::Cleanup(){
 		return;
 	}
 
-	const StringID resourceName = resourcesToUnload.Peek();
-	resourcesToUnload.Remove();
+	const StringID resourceName = resourcesToUnload.front();
+	resourcesToUnload.pop();
 	GADGET_BASIC_ASSERT(resources.contains(resourceName));
 	if(resources.contains(resourceName)){
 		resources[resourceName]->DeleteIfUnused();

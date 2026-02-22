@@ -2,9 +2,9 @@
 #define GADGET_RESOURCE_MANAGER_H
 
 #include <map>
+#include <queue>
 
 #include "Debug.h"
-#include "Data/Queue.h"
 #include "Resource/Resource.h"
 #include "Utils/StringID.h"
 #include "Utils/Utils.h"
@@ -65,7 +65,7 @@ namespace Gadget{
 
 	private:
 		std::map<StringID, ResourceContainer*> resources;
-		Queue<StringID> resourcesToUnload;
+		std::queue<StringID> resourcesToUnload;
 		size_t maxUnusedResourceMemory;
 	};
 }
