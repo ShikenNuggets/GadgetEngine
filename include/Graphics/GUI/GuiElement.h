@@ -1,10 +1,14 @@
 #ifndef GADGET_GUI_ELEMENT_H
 #define GADGET_GUI_ELEMENT_H
 
+#include <vector>
+#include <numbers>
+
 #include <GCore/Math/Vector.hpp>
 
-#include "Data/Array.h"
+#include "Debug.h"
 #include "Input/InputEnums.h"
+#include "Utils/StringID.h"
 
 namespace Gadget{
 	enum class GuiAnchor{
@@ -89,9 +93,9 @@ namespace Gadget{
 		}
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
-		template <class T> Array<T*> GetSubElements() const{
+		template <class T> std::vector<T*> GetSubElements() const{
 			static_assert(std::is_base_of<GuiElement, T>::value, "T must inherit from GuiElement");
-			Array<T*> ems;
+			std::vector<T*> ems;
 
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
@@ -103,25 +107,25 @@ namespace Gadget{
 
 				T* element = dynamic_cast<T*>(e);
 				if(element != nullptr){
-					ems.Add(element);
+					ems.push_back(element);
 				}
 
 				//auto se = e->GetSubElements<T>();
 				//ems.append_range(se); //Cool feature, doesn't exist yet as of C++20
 				//ems.reserve(ems.size() + se.size());
 				//ems.insert(ems.end(), se.begin(), se.end());
-				ems.Add(e->GetSubElements<T>());
+				ems.push_back(e->GetSubElements<T>());
 			}
 
 			return ems;
 		}
 
-		template <class T> void GetSubElements(Array<T*>& inBuffer_) const{
-			inBuffer_.Reserve(inBuffer_.Size() + subElements.size());
+		template <class T> void GetSubElements(std::vector<T*>& inBuffer_) const{
+			inBuffer_.reserve(inBuffer_.size() + subElements.size());
 			for(const auto& e : subElements){
 				T* element = dynamic_cast<T*>(e);
 				if(element != nullptr){
-					inBuffer_.Add(element);
+					inBuffer_.push_back(element);
 				}
 			}
 		}

@@ -89,11 +89,11 @@ struct TempFloatAnimVertex
 	std::array<float, AnimVertex::maxJointWeights> jointWeights;
 };
 
-GL_AnimMeshInfo::GL_AnimMeshInfo(const AnimSubmesh& mesh_) : MeshInfo(mesh_.indices.Size()), vao(0), vbo(0), ebo(0){
+GL_AnimMeshInfo::GL_AnimMeshInfo(const AnimSubmesh& mesh_) : MeshInfo(mesh_.indices.size()), vao(0), vbo(0), ebo(0){
 	GADGET_ASSERT(App::GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 
 	std::vector<TempFloatAnimVertex> gpuVerts;
-	gpuVerts.reserve(mesh_.vertices.Size());
+	gpuVerts.reserve(mesh_.vertices.size());
 	for(const auto& vert : mesh_.vertices)
 	{
 		TempFloatAnimVertex tempVert;
@@ -110,7 +110,7 @@ GL_AnimMeshInfo::GL_AnimMeshInfo(const AnimSubmesh& mesh_) : MeshInfo(mesh_.indi
 	glCreateBuffers(1, &ebo);
 
 	glNamedBufferData(vbo, static_cast<GLsizeiptr>(gpuVerts.size() * sizeof(TempFloatAnimVertex)), gpuVerts.data(), GL_STATIC_DRAW);
-	glNamedBufferData(ebo, static_cast<GLsizeiptr>(mesh_.indices.Size() * sizeof(uint32_t)), &mesh_.indices[0], GL_STATIC_DRAW);
+	glNamedBufferData(ebo, static_cast<GLsizeiptr>(mesh_.indices.size() * sizeof(uint32_t)), &mesh_.indices[0], GL_STATIC_DRAW);
 
 	//Position
 	glEnableVertexArrayAttrib(vao, 0);

@@ -1,7 +1,8 @@
 #ifndef GADGET_SCENE_H
 #define GADGET_SCENE_H
 
-#include "Data/Array.h"
+#include <vector>
+
 #include "Game/GameObject.h"
 #include "Game/SceneComponent.h"
 #include "Utils/GUID.h"
@@ -47,7 +48,7 @@ namespace Gadget{
 
 		//If T doesn't have a ComponentCollection, this function will be significantly slower
 		//Prefer the overload that takes a preallocated Array to reduce copying and memory allocations
-		template <class T> Array<T*> GetAllComponentsInScene() const{
+		template <class T> std::vector<T*> GetAllComponentsInScene() const{
 			static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 			if constexpr(HasComponentCollection<T>){
 				return T::GetCollection().GetAllComponents();
@@ -57,25 +58,25 @@ namespace Gadget{
 				GADGET_LOG_WARNING(SID("PERFORMANCE"), typeid(T).name() + std::string(" does not have a Component Collection. You can optimize Scene::GetAllComponentsInScene by giving it one"));
 				#endif //GADGET_DEBUG
 
-				Array<T*> comps;
+				std::vector<T*> comps;
 				for(const auto& go : gameObjects){
 					//TODO - This assumes only one of each kind of component on an object
 					T* t = go->GetComponent<T>();
 					if(t != nullptr){
-						comps.Add(t);
+						comps.push_back(t);
 					}
 				}
 
-				comps.ShrinkToFit();
+				comps.shrink_to_fit();
 				return comps;
 			}
 		}
 
 		//If T doesn't have a ComponentCollection, this function will be significantly slower
-		template <class T> void GetAllComponentsInScene(Array<T*>& inBuffer_) const{
-			GADGET_ASSERT(inBuffer_.IsEmpty(), "Non-empty std::vector passed to GetAllComponentsInScene, existing data will be lost!");
-			inBuffer_.Clear();
-			inBuffer_.Reserve(gameObjects.size());
+		template <class T> void GetAllComponentsInScene(std::vector<T*>& inBuffer_) const{
+			GADGET_ASSERT(inBuffer_.empty(), "Non-empty std::vector passed to GetAllComponentsInScene, existing data will be lost!");
+			inBuffer_.clear();
+			inBuffer_.reserve(gameObjects.size());
 
 			if constexpr(HasComponentCollection<T>){
 				T::GetCollection().GetAllComponents(inBuffer_);

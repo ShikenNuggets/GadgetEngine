@@ -2,13 +2,13 @@
 #define GADGET_COMPONENT_H
 
 #include <unordered_map>
+#include <vector>
 
 #include <GCore/Math/Matrix.hpp>
 #include <GCore/Math/Quaternion.hpp>
 #include <GCore/Math/Vector.hpp>
 
 #include "Debug.h"
-#include "Data/Array.h"
 #include "Utils/GUID.h"
 #include "Utils/NamedVar.h"
 #include "Utils/Utils.h"
@@ -88,7 +88,7 @@ namespace Gadget{
 		static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
 
 		private:
-			std::unordered_map<GUID, Array<T*>> guidMap;
+			std::unordered_map<GUID, std::vector<T*>> guidMap;
 
 		public:
 			ComponentCollection() noexcept = default;
@@ -109,7 +109,7 @@ namespace Gadget{
 					guidMap[element_->GetParent()->GetGUID()] = {};
 				}
 
-				guidMap[objectGuid].Add(element_);
+				guidMap[objectGuid].push_back(element_);
 			}
 
 			void Remove(GUID objectGuid_){
@@ -130,8 +130,8 @@ namespace Gadget{
 				GADGET_BASIC_ASSERT(guidMap.contains(element_->GetParent()->GetGUID()));
 
 				auto& arr = guidMap[element_->GetParent()->GetGUID()];
-				arr.Remove(element_);
-				if(arr.IsEmpty()){
+				std::erase(arr, element_);
+				if(arr.empty()){
 					Remove(element_->GetParent()->GetGUID());
 				}
 			}
@@ -154,7 +154,7 @@ namespace Gadget{
 				}
 
 				const auto& arr = guidMap.at(objectGuid_);
-				if(arr.IsEmpty()){
+				if(arr.empty()){
 					return nullptr;
 				}
 
@@ -162,40 +162,40 @@ namespace Gadget{
 			}
 
 			//TODO - Could we avoid this copy?
-			Array<T*> GetComponents(GUID objectGuid_) const{
+			std::vector<T*> GetComponents(GUID objectGuid_) const{
 				GADGET_BASIC_ASSERT(objectGuid_ != GUID::Invalid);
 				
 				if(!guidMap.contains(objectGuid_)){
-					return Array<T*>();
+					return std::vector<T*>();
 				}
 
 				return guidMap.at(objectGuid_);
 			}
 
-			Array<T*> GetAllComponents() const{
-				Array<T*> allComps;
-				allComps.Reserve(guidMap.size());
+			std::vector<T*> GetAllComponents() const{
+				std::vector<T*> allComps;
+				allComps.reserve(guidMap.size());
 				for(const auto& arr : guidMap){
-					allComps.Reserve(allComps.Size() + arr.second.Size());
+					allComps.reserve(allComps.size() + arr.second.size());
 					for(auto* comp : arr.second){
-						allComps.Add(comp);
+						allComps.push_back(comp);
 					}
 				}
 
 				return allComps;
 			}
 
-			void GetAllComponents(Array<T*>& inArray_) const{
-				inArray_.Reserve(guidMap.size());
+			void GetAllComponents(std::vector<T*>& inArray_) const{
+				inArray_.reserve(guidMap.size());
 				for(const auto& arr : guidMap){
-					inArray_.Reserve(inArray_.Size() + arr.second.Size());
+					inArray_.reserve(inArray_.size() + arr.second.size());
 					for(auto* comp : arr.second){
-						inArray_.Add(comp);
+						inArray_.push_back(comp);
 					}
 				}
 			}
 
-			size_t Count() const{ return guidMap.Size(); }
+			size_t Count() const{ return guidMap.size(); }
 	};
 
 	template <typename T>

@@ -19,7 +19,7 @@
 
 #include <GCore/Math/Matrix.hpp>
 
-#include "Data/Array.h"
+#include "Utils/StringID.h"
 
 namespace Gadget{
 	//Forward Declaration
@@ -36,9 +36,9 @@ namespace Gadget{
 
 	private:
 		static void ProcessNode(const aiNode* node, const aiScene* scene, std::vector<Submesh>& submeshes_);
-		static void ProcessAnimNode(const aiNode* node_, const aiScene* scene_, Array<AnimSubmesh>& inSubMeshes_, Array<Joint>& inJoints_);
+		static void ProcessAnimNode(const aiNode* node_, const aiScene* scene_, std::vector<AnimSubmesh>& inSubMeshes_, std::vector<Joint>& inJoints_);
 
-		static int32_t GetJointIndex(Array<Joint>& joints, StringID name_);
+		static int32_t GetJointIndex(std::vector<Joint>& joints, StringID name_);
 		static Matrix4 ConvertMatrix4(const aiMatrix4x4& m_);
 	};
 }

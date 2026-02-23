@@ -10,7 +10,7 @@
 namespace Gadget{
 	class Animator{
 	public:
-		Animator(StringID animMeshName_, const Array<StringID>& clipNames_);
+		Animator(StringID animMeshName_, const std::vector<StringID>& clipNames_);
 		~Animator();
 
 		void Update(float deltaTime_);
@@ -24,7 +24,7 @@ namespace Gadget{
 			return *skeleton;
 		}
 
-		inline const Array<Matrix4>& GetCurrentSkeletonInstance() const{ return skeletonInstance; }
+		inline const std::vector<Matrix4>& GetCurrentSkeletonInstance() const{ return skeletonInstance; }
 
 		Matrix4 GetJointTransform(int32_t jointID_) const;
 
@@ -32,7 +32,7 @@ namespace Gadget{
 		StringID animMeshName;
 		const Skeleton* skeleton;
 		float globalTime;
-		Array<Matrix4> skeletonInstance;
+		std::vector<Matrix4> skeletonInstance;
 
 		std::unordered_map<StringID, AnimClip*> clips;
 		AnimClip* currentClip;
@@ -41,7 +41,7 @@ namespace Gadget{
 		std::unordered_map<StringID, const QuatNode*> currentRotNodes;
 		std::unordered_map<StringID, const VectorNode*> currentScaleNodes;
 
-		Array<Matrix4> globalTransformCache;
+		std::vector<Matrix4> globalTransformCache;
 
 		virtual void UpdateSkeletonInstance(AnimClip* clip_, float time_);
 

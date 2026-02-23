@@ -3,6 +3,7 @@
 
 #include "GuiElement.h"
 #include "Graphics/Text/TextMesh.h"
+#include "Utils/StringID.h"
 
 namespace Gadget{
 	class GuiTextElement : public GuiElement{

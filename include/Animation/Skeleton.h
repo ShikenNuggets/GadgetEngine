@@ -2,9 +2,11 @@
 #define GADGET_ANIMATION_JOINT_H
 
 #include <cstdint>
+#include <vector>
 
-#include "Data/Array.h"
 #include <GCore/Math/Matrix.hpp>
+
+#include "Utils/StringID.h"
 
 namespace Gadget{
 	struct Joint{
@@ -24,7 +26,7 @@ namespace Gadget{
 		void AddJoint(const Joint& joint_);
 		void AddJoint(StringID name_, int32_t parentID_, const Matrix4& inverseBindPose_);
 		
-		int32_t GetJointCount() const{ return static_cast<int32_t>(joints.Size()); }
+		int32_t GetJointCount() const{ return static_cast<int32_t>(joints.size()); }
 		int32_t GetJointID(StringID name_) const;
 
 		const Joint& GetJoint(StringID name_) const;
@@ -36,7 +38,7 @@ namespace Gadget{
 		bool IsValidSkeleton() const;
 
 	private:
-		Array<Joint> joints;
+		std::vector<Joint> joints;
 		Matrix4 globalInverse;
 	};
 }

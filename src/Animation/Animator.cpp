@@ -4,7 +4,7 @@
 
 using namespace Gadget;
 
-Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : animMeshName(animMeshName_), skeleton(nullptr), globalTime(0.0f), currentClip(nullptr){
+Animator::Animator(StringID animMeshName_, const std::vector<StringID>& clipNames_) : animMeshName(animMeshName_), skeleton(nullptr), globalTime(0.0f), currentClip(nullptr){
 	GADGET_BASIC_ASSERT(animMeshName != StringID::None);
 	auto* animMeshPtr = App::GetResourceManager().LoadResource<AnimMesh>(animMeshName_); //Claim ownership of the mesh so we can keep the skeleton loaded
 	GADGET_BASIC_ASSERT(animMeshPtr != nullptr);
@@ -20,9 +20,9 @@ Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : 
 	GADGET_BASIC_ASSERT(skeleton->GetGlobalInverse().IsValid());
 	GADGET_BASIC_ASSERT(skeleton->IsValidSkeleton());
 	
-	skeletonInstance.Reserve(skeleton->GetJointCount());
+	skeletonInstance.reserve(skeleton->GetJointCount());
 	for(int32_t i = 0; i < skeleton->GetJointCount(); i++){
-		skeletonInstance.Add(Matrix4::Identity());
+		skeletonInstance.push_back(Matrix4::Identity());
 
 		currentPosNodes[skeleton->GetJoint(i).name] = nullptr;
 		currentRotNodes[skeleton->GetJoint(i).name] = nullptr;
@@ -35,7 +35,7 @@ Animator::Animator(StringID animMeshName_, const Array<StringID>& clipNames_) : 
 		GADGET_BASIC_ASSERT(clips[name] != nullptr);
 	}
 
-	globalTransformCache.Reserve(skeleton->GetJointCount());
+	globalTransformCache.reserve(skeleton->GetJointCount());
 }
 
 Animator::~Animator(){
@@ -94,8 +94,8 @@ void Animator::Stop(){ currentClip = nullptr; }
 
 Matrix4 Animator::GetJointTransform(int32_t jointID_) const{
 	GADGET_BASIC_ASSERT(jointID_ >= 0);
-	GADGET_BASIC_ASSERT(jointID_ < skeletonInstance.Size());
-	if(jointID_ < 0 || jointID_ >= skeletonInstance.Size()){
+	GADGET_BASIC_ASSERT(jointID_ < skeletonInstance.size());
+	if(jointID_ < 0 || jointID_ >= skeletonInstance.size()){
 		GADGET_LOG_WARNING(SID("ANIM"), "Tried to get invalid joint transform at index " + std::to_string(jointID_));
 		return Matrix4::Identity();
 	}
@@ -110,9 +110,9 @@ void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 		return;
 	}
 
-	globalTransformCache.Clear();
+	globalTransformCache.clear();
 
-	for(int32_t i = 0; i < skeletonInstance.Size(); i++){
+	for(int32_t i = 0; i < skeletonInstance.size(); i++){
 		const Joint& joint = skeleton->GetJoint(i);
 		GADGET_BASIC_ASSERT(joint.name != StringID::None);
 		GADGET_BASIC_ASSERT(joint.parentID >= -1);
@@ -125,18 +125,18 @@ void Animator::UpdateSkeletonInstance(AnimClip* clip_, float time_){
 
 		Matrix4 parentTransform = Matrix4::Identity();
 		if(joint.parentID >= 0){
-			GADGET_BASIC_ASSERT(joint.parentID < globalTransformCache.Size());
+			GADGET_BASIC_ASSERT(joint.parentID < globalTransformCache.size());
 			parentTransform = globalTransformCache[joint.parentID];
 		}
 
 		const Matrix4 transform = parentTransform * result.result;
-		globalTransformCache.Add(transform);
+		globalTransformCache.push_back(transform);
 		skeletonInstance[i] = skeleton->GetGlobalInverse() * transform * joint.inverseBindPose;
 	}
 }
 
 void Animator::ClearCurrentNodes(){
-	for(int32_t i = 0; i < skeletonInstance.Size(); i++){
+	for(int32_t i = 0; i < skeletonInstance.size(); i++){
 		const Joint& joint = skeleton->GetJoint(i);
 		currentPosNodes[joint.name] = nullptr;
 		currentRotNodes[joint.name] = nullptr;

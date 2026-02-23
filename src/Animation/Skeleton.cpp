@@ -2,6 +2,8 @@
 
 #include <utility>
 
+#include "Debug.h"
+
 using namespace Gadget;
 
 Skeleton::Skeleton(const Matrix4& globalInverse_) : globalInverse(globalInverse_){}
@@ -11,8 +13,8 @@ void Skeleton::AddJoint(const Joint& joint_){
 	GADGET_BASIC_ASSERT(joint_.parentID >= -1);
 	GADGET_BASIC_ASSERT(joint_.inverseBindPose.IsValid());
 	GADGET_BASIC_ASSERT(!HasJoint(joint_.name));
-	joints.Add(joint_);
-	GADGET_ASSERT(joints.Size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
+	joints.push_back(joint_);
+	GADGET_ASSERT(joints.size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
 }
 
 void Skeleton::AddJoint(StringID name_, int32_t parentID_, const Matrix4& inverseBindPose_){
@@ -25,17 +27,17 @@ void Skeleton::AddJoint(StringID name_, int32_t parentID_, const Matrix4& invers
 	j.name = name_;
 	j.parentID = parentID_;
 	j.inverseBindPose = inverseBindPose_;
-	joints.Add(j);
+	joints.push_back(j);
 
-	GADGET_ASSERT(joints.Size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
+	GADGET_ASSERT(joints.size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
 }
 
 int32_t Skeleton::GetJointID(StringID name_) const{
 	GADGET_BASIC_ASSERT(name_ != StringID::None);
 	GADGET_BASIC_ASSERT(HasJoint(name_));
-	GADGET_ASSERT(joints.Size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
+	GADGET_ASSERT(joints.size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
 
-	for(int32_t i = 0; i < joints.Size(); i++){
+	for(int32_t i = 0; i < joints.size(); i++){
 		if(joints[i].name == name_){
 			return i;
 		}
@@ -61,9 +63,9 @@ const Joint& Skeleton::GetJoint(StringID name_) const{
 
 const Joint& Skeleton::GetJoint(int32_t id_) const{
 	GADGET_BASIC_ASSERT(id_ >= 0);
-	GADGET_BASIC_ASSERT(id_ < joints.Size());
+	GADGET_BASIC_ASSERT(id_ < joints.size());
 
-	if(id_ < 0 || id_ >= joints.Size()){
+	if(id_ < 0 || id_ >= joints.size()){
 		//There's no safe way to handle this, so just error out
 		Debug::ThrowFatalError(SID("ANIM"), "Tried to get invalid joint at index " + std::to_string(id_) + "!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
 	}
@@ -86,15 +88,15 @@ bool Skeleton::HasJoint(StringID name_) const{
 }
 
 bool Skeleton::IsValidSkeleton() const{
-	GADGET_ASSERT(joints.Size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
+	GADGET_ASSERT(joints.size() < std::numeric_limits<int32_t>::max(), "Skeleton has more than 2^31 joints, you need to use a larger int type for IDs!");
 	
 	bool foundRootNode = false;
-	Array<std::pair<int32_t, bool>> confirmedJoints;
-	for(int32_t i = 0; i < joints.Size(); i++){
-		confirmedJoints.Add(std::pair(i, false));
+	std::vector<std::pair<int32_t, bool>> confirmedJoints;
+	for(int32_t i = 0; i < joints.size(); i++){
+		confirmedJoints.push_back(std::pair(i, false));
 	}
 
-	for(int32_t i = 0; i < joints.Size(); i++){
+	for(int32_t i = 0; i < joints.size(); i++){
 		const Joint& currentJoint = joints[i];
 
 		if(currentJoint.parentID == i){

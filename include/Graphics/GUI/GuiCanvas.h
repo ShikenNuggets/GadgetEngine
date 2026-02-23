@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "Data/Array.h"
 #include "Graphics/GUI/GuiElement.h"
 #include "Input/InputEnums.h"
 
@@ -46,9 +45,9 @@ namespace Gadget{
 		}
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
-		template <class T> Array<T*> GetElements() const{
+		template <class T> std::vector<T*> GetElements() const{
 			static_assert(std::is_base_of<GuiElement, T>::value, "T must inherit from GuiElement");
-			Array<T*> ems;
+			std::vector<T*> ems;
 
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
@@ -56,24 +55,24 @@ namespace Gadget{
 				GADGET_BASIC_ASSERT(e != nullptr);
 				T* element = dynamic_cast<T*>(e);
 				if(element != nullptr){
-					ems.Add(element);
+					ems.push_back(element);
 				}
 
 				auto se = e->GetSubElements<T>();
 				//ems.append_range(se); //Cool feature, doesn't exist yet as of C++20
 				//ems.Reserve(ems.size() + se.size());
 				//ems.Insert(ems.end(), se.begin(), se.end());
-				ems.Add(se);
+				ems.push_back(se);
 			}
 
 			return ems;
 		}
 
 		//THIS FUNCTION IS SLOW - Avoid calling it unless necessary, and cache the result when possible
-		template <class T> void GetElements(Array<T*>& inBuffer_){
-			GADGET_ASSERT(inBuffer_.IsEmpty(), "Non-empty Array passed to GetElements, existing data will be lost!");
-			inBuffer_.Clear();
-			inBuffer_.Reserve(elements.size());
+		template <class T> void GetElements(std::vector<T*>& inBuffer_){
+			GADGET_ASSERT(inBuffer_.empty(), "Non-empty std::vector passed to GetElements, existing data will be lost!");
+			inBuffer_.clear();
+			inBuffer_.reserve(elements.size());
 
 			//Performance Note: dynamic casts are pretty slow, especially when they fail which will happen a lot here
 			//This seems to be the simplest way to do this generically, but one could optimize this on a per-project basis if necessary
@@ -81,7 +80,7 @@ namespace Gadget{
 				GADGET_BASIC_ASSERT(e != nullptr);
 				T* element = dynamic_cast<T*>(e);
 				if(element != nullptr){
-					inBuffer_.Add(element);
+					inBuffer_.push_back(element);
 				}
 
 				e->GetSubElements<T>(inBuffer_);

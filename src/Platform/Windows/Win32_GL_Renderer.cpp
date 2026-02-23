@@ -166,7 +166,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		canvas->GetCanvas().GetElements<GuiTextureElement>(guiTexturesBuffer);
 	}
 
-	const size_t numLights = pointLightsBuffer.Size() + dirLightsBuffer.Size() + spotLightsBuffer.Size();
+	const size_t numLights = pointLightsBuffer.size() + dirLightsBuffer.size() + spotLightsBuffer.size();
 	GADGET_ASSERT(numLights < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(numLights) + "!");
 
 	for(const auto& cam : camerasBuffer){
@@ -203,11 +203,11 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 				mesh->GetShader(i)->BindVector3(gViewPosSID, cam->GetParent()->GetPosition());
 
-				mesh->GetShader(i)->BindInt(gNumPointLightsSID, static_cast<int>(pointLightsBuffer.Size()));
-				mesh->GetShader(i)->BindInt(gNumSpotLightsSID, static_cast<int>(spotLightsBuffer.Size()));
-				mesh->GetShader(i)->BindInt(gNumDirLightsSID, static_cast<int>(dirLightsBuffer.Size()));
+				mesh->GetShader(i)->BindInt(gNumPointLightsSID, static_cast<int>(pointLightsBuffer.size()));
+				mesh->GetShader(i)->BindInt(gNumSpotLightsSID, static_cast<int>(spotLightsBuffer.size()));
+				mesh->GetShader(i)->BindInt(gNumDirLightsSID, static_cast<int>(dirLightsBuffer.size()));
 
-				for(int64_t j = 0; j < pointLightsBuffer.Size() && j < maxLightSources; j++){
+				for(int64_t j = 0; j < pointLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = pointLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
 					mesh->GetShader(i)->BindVector3(gPointPositions.Get(j), light->GetParent()->GetPosition());
@@ -217,7 +217,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					mesh->GetShader(i)->BindFloat(gPointQuadratics.Get(j), light->GetLightSource().GetQuadratic());
 				}
 
-				for(int64_t j = 0; j < spotLightsBuffer.Size() && j < maxLightSources; j++){
+				for(int64_t j = 0; j < spotLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = spotLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
 					mesh->GetShader(i)->BindVector3(gSpotPositions.Get(j), light->GetParent()->GetPosition());
@@ -230,7 +230,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					mesh->GetShader(i)->BindFloat(gSpotQuadratics.Get(j), light->GetLightSource().GetQuadratic());
 				}
 
-				for(int64_t j = 0; j < dirLightsBuffer.Size() && j < maxLightSources; j++){
+				for(int64_t j = 0; j < dirLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = dirLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr);
 					mesh->GetShader(i)->BindVector3(gDirDirections.Get(j), light->GetLightSource().GetDirection());
@@ -246,12 +246,12 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 		//------------------------------------------------------------------------------------------------------------------------
 		//Animated meshes
 		for(const auto& aMesh : animRendersBuffer){
-			const Array<Matrix4>& skeletonInstance = aMesh->GetCurrentSkeletonInstance();
+			const std::vector<Matrix4>& skeletonInstance = aMesh->GetCurrentSkeletonInstance();
 
 			for(size_t i = 0; i < aMesh->GetNumSubmeshes(); i++){
 				aMesh->Bind(i);
 				
-				for(int32_t j = 0; j < skeletonInstance.Size(); j++){
+				for(int32_t j = 0; j < skeletonInstance.size(); j++){
 					aMesh->GetShader(i)->BindMatrix4(gBoneIDs.Get(j), skeletonInstance[j]);
 				}
 
@@ -265,11 +265,11 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 
 				aMesh->GetShader(i)->BindVector3(gViewPosSID, cam->GetParent()->GetPosition());
 
-				aMesh->GetShader(i)->BindInt(gNumPointLightsSID, static_cast<int>(pointLightsBuffer.Size()));
-				aMesh->GetShader(i)->BindInt(gNumSpotLightsSID, static_cast<int>(spotLightsBuffer.Size()));
-				aMesh->GetShader(i)->BindInt(gNumDirLightsSID, static_cast<int>(dirLightsBuffer.Size()));
+				aMesh->GetShader(i)->BindInt(gNumPointLightsSID, static_cast<int>(pointLightsBuffer.size()));
+				aMesh->GetShader(i)->BindInt(gNumSpotLightsSID, static_cast<int>(spotLightsBuffer.size()));
+				aMesh->GetShader(i)->BindInt(gNumDirLightsSID, static_cast<int>(dirLightsBuffer.size()));
 
-				for(int64_t j = 0; j < pointLightsBuffer.Size() && j < maxLightSources; j++){
+				for(int64_t j = 0; j < pointLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = pointLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
 					aMesh->GetShader(i)->BindVector3(gPointPositions.Get(j),	light->GetParent()->GetPosition());
@@ -279,7 +279,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					aMesh->GetShader(i)->BindFloat(gPointQuadratics.Get(j),		light->GetLightSource().GetQuadratic());
 				}
 
-				for(int64_t j = 0; j < spotLightsBuffer.Size() && j < maxLightSources; j++){
+				for(int64_t j = 0; j < spotLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = spotLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr && light->GetParent() != nullptr);
 					aMesh->GetShader(i)->BindVector3(gSpotPositions.Get(j),		light->GetParent()->GetPosition());
@@ -292,7 +292,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 					aMesh->GetShader(i)->BindFloat(gSpotQuadratics.Get(j),		light->GetLightSource().GetQuadratic());
 				}
 
-				for(int64_t j = 0; j < dirLightsBuffer.Size() && j < maxLightSources; j++){
+				for(int64_t j = 0; j < dirLightsBuffer.size() && j < maxLightSources; j++){
 					const auto* light = dirLightsBuffer[j];
 					GADGET_BASIC_ASSERT(light != nullptr);
 					aMesh->GetShader(i)->BindVector3(gDirDirections.Get(j), light->GetLightSource().GetDirection());
@@ -442,14 +442,14 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 	window->SwapBuffers();
 
 	//So we don't accidentally reuse these pointers later
-	camerasBuffer.Clear();
-	rendersBuffer.Clear();
-	animRendersBuffer.Clear();
-	pointLightsBuffer.Clear();
-	spotLightsBuffer.Clear();
-	dirLightsBuffer.Clear();
-	guiTextsBuffer.Clear();
-	guiTexturesBuffer.Clear();
+	camerasBuffer.clear();
+	rendersBuffer.clear();
+	animRendersBuffer.clear();
+	pointLightsBuffer.clear();
+	spotLightsBuffer.clear();
+	dirLightsBuffer.clear();
+	guiTextsBuffer.clear();
+	guiTexturesBuffer.clear();
 }
 
 void Win32_GL_Renderer::ClearScreen(){
@@ -555,7 +555,7 @@ MeshInfo* Win32_GL_Renderer::GenerateAPIDynamicMeshInfo(size_t numVertices_, siz
 
 std::vector<MeshInfo*> Win32_GL_Renderer::GenerateAPIAnimMeshInfos(const AnimMesh& animMesh_){
 	std::vector<MeshInfo*> meshInfos;
-	meshInfos.reserve(animMesh_.submeshes.Size());
+	meshInfos.reserve(animMesh_.submeshes.size());
 	for(const auto& sm : animMesh_.submeshes){
 		meshInfos.push_back(new GL_AnimMeshInfo(sm));
 	}

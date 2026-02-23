@@ -35,17 +35,17 @@ void EventHandler::DeleteInstance(){
 void EventHandler::RegisterCallback(EventType type_, void* obj_, const std::function<void(const Event&)>& callback_){
 	GADGET_BASIC_ASSERT(type_ > EventType::None && type_ < EventType::Count);
 	//obj pointer is just used for bookkeeping, so it's allowed to be nullptr
-	eventCallbacks[type_][obj_].Add(callback_);
+	eventCallbacks[type_][obj_].push_back(callback_);
 }
 
 void EventHandler::UnregisterCallback(EventType type_, void* obj_){
 	GADGET_BASIC_ASSERT(type_ > EventType::None && type_ < EventType::Count);
-	eventCallbacks[type_][obj_].Clear();
+	eventCallbacks[type_][obj_].clear();
 }
 
 void EventHandler::UnregisterCallbacks(void* obj_){
 	for(auto& [key, value] : eventCallbacks){
-		value[obj_].Clear();
+		value[obj_].clear();
 	}
 }
 

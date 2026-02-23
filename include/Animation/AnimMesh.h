@@ -2,11 +2,11 @@
 #define GADGET_ANIMATION_ANIM_MESH_H
 
 #include <cstdint>
+#include <vector>
 
 #include "Animation/AnimVertex.h"
 #include "Animation/Skeleton.h"
 #include "Core/FileSystem.h"
-#include "Data/Array.h"
 #include "Debug.h"
 #include "Graphics/Vertex.h"
 #include "Graphics/Loaders/AssimpModelLoader.h"
@@ -14,17 +14,17 @@
 
 namespace Gadget{
 	struct AnimSubmesh{
-		AnimSubmesh(const Array<AnimVertex>& verts_, const Array<uint32_t>& indices_) : vertices(verts_), indices(indices_){}
+		AnimSubmesh(const std::vector<AnimVertex>& verts_, const std::vector<uint32_t>& indices_) : vertices(verts_), indices(indices_){}
 
-		const Array<AnimVertex> vertices;
-		const Array<uint32_t> indices;
+		const std::vector<AnimVertex> vertices;
+		const std::vector<uint32_t> indices;
 
-		constexpr inline size_t SizeInBytes() const{ return vertices.SizeInBytes() + indices.SizeInBytes(); }
+		constexpr inline size_t SizeInBytes() const{ return vertices.size() * sizeof(AnimVertex) + indices.size() * sizeof(uint32_t); }
 	};
 
 	class AnimMesh : public Resource{
 	public:
-		AnimMesh(const Array<AnimSubmesh>& submeshes_, const Skeleton& skeleton_);
+		AnimMesh(const std::vector<AnimSubmesh>& submeshes_, const Skeleton& skeleton_);
 
 		static constexpr const char* typeName = "AnimMesh";
 
@@ -37,7 +37,7 @@ namespace Gadget{
 			return size;
 		}
 
-		const Array<AnimSubmesh> submeshes;
+		const std::vector<AnimSubmesh> submeshes;
 		const Skeleton skeleton;
 	};
 

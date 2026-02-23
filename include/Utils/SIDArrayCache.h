@@ -2,8 +2,8 @@
 #define GADGET_UTILS_SID_ARRAY_CACHE_H
 
 #include <string>
+#include <vector>
 
-#include "Data/Array.h"
 #include "Utils/StringID.h"
 
 namespace Gadget{
@@ -12,8 +12,8 @@ namespace Gadget{
 		SIDArrayCache(const std::string& prefix_, const std::string& postfix_) : prefix(prefix_), postfix(postfix_), sids(){}
 
 		StringID Get(int64_t index_){
-			while(index_ >= sids.Size()){
-				sids.Add(StringID::ProcessString(prefix + std::to_string(sids.Size()) + postfix));
+			while(index_ >= sids.size()){
+				sids.push_back(StringID::ProcessString(prefix + std::to_string(sids.size()) + postfix));
 			}
 
 			return sids[index_];
@@ -22,7 +22,7 @@ namespace Gadget{
 	private:
 		std::string prefix;
 		std::string postfix;
-		Array<StringID> sids;
+		std::vector<StringID> sids;
 	};
 }
 

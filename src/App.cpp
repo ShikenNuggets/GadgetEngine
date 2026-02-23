@@ -176,7 +176,7 @@ void App::Run(GameInterface& gameInterface_){
 
 	sceneManager->LoadScene(0);
 
-	Array<AnimRenderComponent*> animRenderComps;
+	std::vector<AnimRenderComponent*> animRenderComps;
 
 	time->Start();
 	while(isRunning){
@@ -210,7 +210,7 @@ void App::Run(GameInterface& gameInterface_){
 
 		//TODO - Do we need a dedicated subsystem for this?
 		Profiler::Start(SID("Animator Updates"));
-		animRenderComps.Clear();
+		animRenderComps.clear();
 		sceneManager->CurrentScene()->GetAllComponentsInScene(animRenderComps);
 		for(auto& ar : animRenderComps){
 			GADGET_BASIC_ASSERT(ar != nullptr);

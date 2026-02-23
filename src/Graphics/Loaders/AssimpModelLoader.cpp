@@ -109,9 +109,9 @@ AnimMesh* AssimpModelLoader::LoadAnimMesh(const std::string& filePath_){
 		return nullptr;
 	}
 
-	Array<AnimSubmesh> subMeshes;
-	Array<Joint> joints;
-	subMeshes.Reserve(scene->mNumMeshes);
+	std::vector<AnimSubmesh> subMeshes;
+	std::vector<Joint> joints;
+	subMeshes.reserve(scene->mNumMeshes);
 
 	ProcessAnimNode(scene->mRootNode, scene, subMeshes, joints);
 
@@ -125,29 +125,29 @@ AnimMesh* AssimpModelLoader::LoadAnimMesh(const std::string& filePath_){
 	return new AnimMesh(subMeshes, sk);
 }
 
-void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scene_, Array<AnimSubmesh>& inSubMeshes_, Array<Joint>& inJoints_){
+void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scene_, std::vector<AnimSubmesh>& inSubMeshes_, std::vector<Joint>& inJoints_){
 	GADGET_BASIC_ASSERT(node_ != nullptr);
 	GADGET_BASIC_ASSERT(scene_ != nullptr);
 
 	for(size_t i = 0; i < node_->mNumMeshes; i++){
 		aiMesh* mesh = scene_->mMeshes[node_->mMeshes[i]];
 
-		Array<AnimVertex> verts;
-		Array<unsigned int> indices;
+		std::vector<AnimVertex> verts;
+		std::vector<unsigned int> indices;
 
-		verts.Reserve(mesh->mNumVertices);
-		indices.Reserve(static_cast<int64_t>(mesh->mNumFaces) * 3);
+		verts.reserve(mesh->mNumVertices);
+		indices.reserve(static_cast<int64_t>(mesh->mNumFaces) * 3);
 
 		//Vertices
 		for(unsigned int j = 0; j < mesh->mNumVertices; j++){
 			if(mesh->mNormals == nullptr){
-				verts.Add(AnimVertex(
+				verts.push_back(AnimVertex(
 					Vector3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z),
 					Vector3::Forward(),
 					Vector2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y)
 				));
 			}else{
-				verts.Add(AnimVertex(
+				verts.push_back(AnimVertex(
 					Vector3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z),
 					Vector3(mesh->mNormals[j].x, mesh->mNormals[j].y, mesh->mNormals[j].z),
 					Vector2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y)
@@ -158,7 +158,7 @@ void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scen
 		//Indices
 		for(unsigned int j = 0; j < mesh->mNumFaces; j++){
 			for(unsigned int k = 0; k < mesh->mFaces[j].mNumIndices; k++){
-				indices.Add(mesh->mFaces[j].mIndices[k]);
+				indices.push_back(mesh->mFaces[j].mIndices[k]);
 			}
 		}
 
@@ -171,27 +171,27 @@ void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scen
 			joint.name = StringID::ProcessString(bone->mName.C_Str());
 			joint.inverseBindPose = ConvertMatrix4(bone->mOffsetMatrix);
 
-			if(!inJoints_.Contains(joint)){
+			if(std::find(inJoints_.begin(), inJoints_.end(), joint) == inJoints_.end()){
 				if(bone->mNode == nullptr || bone->mNode->mParent == nullptr){
 					joint.parentID = -1;
 				}else{
 					joint.parentID = GetJointIndex(inJoints_, StringID::ProcessString(bone->mNode->mParent->mName.C_Str()));
 				}
 
-				GADGET_BASIC_ASSERT(j == inJoints_.Size());
-				inJoints_.Add(joint);
+				GADGET_BASIC_ASSERT(j == inJoints_.size());
+				inJoints_.push_back(joint);
 			}
 
 			//Per-vertex skinning data
 			for(unsigned int k = 0; k < bone->mNumWeights; k++){
 				const aiVertexWeight& weight = bone->mWeights[k];
-				GADGET_BASIC_ASSERT(verts.Size() > weight.mVertexId);
+				GADGET_BASIC_ASSERT(verts.size() > weight.mVertexId);
 				GADGET_BASIC_ASSERT(static_cast<int64_t>(j) < std::numeric_limits<int32_t>::max());
 				verts[weight.mVertexId].AddWeight(static_cast<int32_t>(j), weight.mWeight);
 			}
 		}
 
-		inSubMeshes_.Add(AnimSubmesh(verts, indices));
+		inSubMeshes_.push_back(AnimSubmesh(verts, indices));
 	}
 
 	for(unsigned int i = 0; i < node_->mNumChildren; i++){
@@ -199,8 +199,8 @@ void AssimpModelLoader::ProcessAnimNode(const aiNode* node_, const aiScene* scen
 	}
 }
 
-int32_t AssimpModelLoader::GetJointIndex(Array<Joint>& joints, StringID name_){
-	for(int32_t i = 0; i < joints.Size(); i++){
+int32_t AssimpModelLoader::GetJointIndex(std::vector<Joint>& joints, StringID name_){
+	for(int32_t i = 0; i < joints.size(); i++){
 		if(joints[i].name == name_){
 			return i;
 		}

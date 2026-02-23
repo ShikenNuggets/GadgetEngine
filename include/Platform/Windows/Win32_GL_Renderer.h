@@ -59,15 +59,15 @@ namespace Gadget{
 		GL_ScreenQuad* screenQuad;
 
 	private:
-		Array<CameraComponent*> camerasBuffer;
-		Array<RenderComponent*> rendersBuffer;
-		Array<AnimRenderComponent*> animRendersBuffer;
-		Array<PointLightComponent*> pointLightsBuffer;
-		Array<DirectionalLightComponent*> dirLightsBuffer;
-		Array<SpotLightComponent*> spotLightsBuffer;
+		std::vector<CameraComponent*> camerasBuffer;
+		std::vector<RenderComponent*> rendersBuffer;
+		std::vector<AnimRenderComponent*> animRendersBuffer;
+		std::vector<PointLightComponent*> pointLightsBuffer;
+		std::vector<DirectionalLightComponent*> dirLightsBuffer;
+		std::vector<SpotLightComponent*> spotLightsBuffer;
 
-		Array<GuiTextElement*> guiTextsBuffer;
-		Array<GuiTextureElement*> guiTexturesBuffer;
+		std::vector<GuiTextElement*> guiTextsBuffer;
+		std::vector<GuiTextureElement*> guiTexturesBuffer;
 	};
 }
 

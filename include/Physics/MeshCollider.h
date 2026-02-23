@@ -1,6 +1,8 @@
 #ifndef GADGET_PHYSICS_MESH_COLLIDER_H
 #define GADGET_PHYSICS_MESH_COLLIDER_H
 
+#include <vector>
+
 //Hide warnings from external code that we can't/won't modify - WNF
 #pragma warning(disable : 26451)	//Possible arithmetic overflow
 #pragma warning(disable : 26495)	//Uninitialized member variable
@@ -11,7 +13,6 @@
 #pragma warning(default : 26495)
 #pragma warning(default : 4127)
 
-#include "Data/Array.h"
 #include "Physics/Collider.h"
 
 namespace Gadget{
@@ -35,7 +36,7 @@ namespace Gadget{
 	private:
 		StringID modelName;
 
-		Array<btTriangleMesh*> triMeshes;
+		std::vector<btTriangleMesh*> triMeshes;
 
 		void RecalculateCollider();
 	};

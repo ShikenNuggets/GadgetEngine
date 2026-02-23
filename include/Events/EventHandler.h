@@ -7,11 +7,10 @@
 #include <vector>
 #include <unordered_map>
 
-#include "Data/Array.h"
 #include "Events/Event.h"
 
 namespace Gadget{
-	using FuncPointerHashTable = std::unordered_map<void*, Array<std::function<void(const Event&)>>>;
+	using FuncPointerHashTable = std::unordered_map<void*, std::vector<std::function<void(const Event&)>>>;
 
 	class EventHandler{
 	public:

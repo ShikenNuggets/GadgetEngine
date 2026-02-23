@@ -4,7 +4,7 @@ using namespace Gadget;
 
 static constexpr double gWeightErrorTolerance = 0.0000001;
 
-AnimMesh::AnimMesh(const Array<AnimSubmesh>& submeshes_, const Skeleton& skeleton_) : submeshes(submeshes_), skeleton(skeleton_){
+AnimMesh::AnimMesh(const std::vector<AnimSubmesh>& submeshes_, const Skeleton& skeleton_) : submeshes(submeshes_), skeleton(skeleton_){
 #ifdef GADGET_DEBUG //Would be nice to do data validation in Release mode, but these are non-trivial
 	if(!skeleton.IsValidSkeleton()){
 		GADGET_LOG_WARNING(SID("ANIM"), "Invalid data found in skeleton!");
