@@ -3,7 +3,8 @@
 
 #include <vector>
 
-#include "Graphics/Color.h"
+#include <GCore/Graphics/Color.hpp>
+
 #include "Graphics/Materials/MaterialInfo.h"
 
 namespace Gadget{

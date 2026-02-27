@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-#include "Graphics/Color.h"
+#include <GCore/Graphics/Color.hpp>
 
 namespace Gadget{
 	//TODO - Implement custom RNG instead of using rand (Mersenne Twister? Xorshift? KISS99?)

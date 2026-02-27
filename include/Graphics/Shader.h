@@ -1,9 +1,10 @@
 #ifndef GADGET_SHADER_H
 #define GADGET_SHADER_H
 
-#include "Graphics/Color.h"
+#include <GCore/Graphics/Color.hpp>
 #include <GCore/Math/Matrix.hpp>
 #include <GCore/Math/Vector.hpp>
+
 #include "Resource/Resource.h"
 #include "Utils/StringID.h"
 

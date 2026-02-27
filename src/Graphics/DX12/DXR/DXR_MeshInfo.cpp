@@ -1,7 +1,8 @@
 #include "Graphics/DX12/DXR/DXR_MeshInfo.h"
 
+#include <GCore/Graphics/Color.hpp>
+
 #include "Random.h"
-#include "Graphics/Color.h"
 #include "Graphics/Vertex.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_Command.h"

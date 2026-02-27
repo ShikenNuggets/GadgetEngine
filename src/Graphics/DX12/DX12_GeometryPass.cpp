@@ -138,7 +138,8 @@ void DX12_GeometryPass::SetRenderTargetsForGeometryPass(ID3D12_GraphicsCommandLi
 	const D3D12_CPU_DESCRIPTOR_HANDLE rtv = mainBuffer->RTV(0);
 	const D3D12_CPU_DESCRIPTOR_HANDLE dsv = depthBuffer->DSV();
 
-	cmdList_->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
+	const auto clearColorArray = clearColor.AsArray();
+	cmdList_->ClearRenderTargetView(rtv, clearColorArray.data(), 0, nullptr);
 	cmdList_->OMSetRenderTargets(1, &rtv, 0, &dsv);
 }
 

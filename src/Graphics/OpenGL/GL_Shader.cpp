@@ -172,9 +172,11 @@ void GL_Shader::BindMatrix4(StringID uniformName_, const Matrix4& mat4_){
 void GL_Shader::BindColor(StringID uniformName_, const Color& color_){
 	GADGET_BASIC_ASSERT(uniformName_ != StringID::None);
 
+	const auto colorArray = color_.AsArray();
+
 	if(HasUniform(uniformName_)){
 		GADGET_BASIC_ASSERT(uniforms[uniformName_] >= 0);
-		glUniform4fv(uniforms[uniformName_], 1, color_);
+		glUniform4fv(uniforms[uniformName_], 1, colorArray.data());
 	}
 }
 

@@ -6,10 +6,11 @@
 
 #include <glad/glad.h>
 
-#include "Debug.h"
-#include "Graphics/Color.h"
-#include "Graphics/Shader.h"
+#include <GCore/Graphics/Color.hpp>
 #include <GCore/Math/Matrix.hpp>
+
+#include "Debug.h"
+#include "Graphics/Shader.h"
 
 namespace Gadget{
 	class GL_Shader : public Shader{

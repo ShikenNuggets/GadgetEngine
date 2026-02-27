@@ -3,9 +3,10 @@
 
 #include <d3d12.h>
 
+#include <GCore/Graphics/Color.hpp>
+
 #include "GadgetEnums.h"
 #include "ScreenCoordinate.h"
-#include "Graphics/Color.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_TextureInfo.h"
 #include "Utils/Utils.h"

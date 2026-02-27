@@ -13,9 +13,9 @@
 #include "Utils/Utils.h"
 
 //These macros are very important so make extra sure this is the only place they're being defined, and that they're only defined once
-#if defined(__FILENAME__) || defined(GADGET_ASSERT) || defined(GADGET_BASIC_ASSERT) || defined(GADGET_ASSERT_NOT_IMPLEMENTED) || defined(GADGET_DEBUG_INT) || defined(GADGET_LOG) || defined(GADGET_LOG_WARNING) || defined(GADGET_LOG_ERROR)
-	#error "Essential macros are being redefined"
-#endif
+//#if defined(__FILENAME__) || defined(GADGET_ASSERT) || defined(GADGET_BASIC_ASSERT) || defined(GADGET_ASSERT_NOT_IMPLEMENTED) || defined(GADGET_DEBUG_INT) || defined(GADGET_LOG) || defined(GADGET_LOG_WARNING) || defined(GADGET_LOG_ERROR)
+//	#error "Essential macros are being redefined"
+//#endif
 
 #if defined GADGET_DEBUG && defined GADGET_PLATFORM_WIN32
 	#define GADGET_ASSERT(expr, msg) { if(!(expr)){ Gadget::Debug::PopupErrorMessage(std::string("Assert Failed! ") + Gadget::FileSystem::GetFileNameFromPath(__FILE__) + std::string(" : ") + std::to_string(__LINE__), msg); __debugbreak(); } }

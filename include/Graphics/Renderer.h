@@ -3,9 +3,10 @@
 
 #include <memory>
 
+#include <GCore/Graphics/Color.hpp>
+
 #include "Window.h"
 #include "Animation/AnimMesh.h"
-#include "Graphics/Color.h"
 #include "Graphics/FontInfo.h"
 #include "Graphics/MeshInfo.h"
 #include "Graphics/MeshInstanceInfo.h"

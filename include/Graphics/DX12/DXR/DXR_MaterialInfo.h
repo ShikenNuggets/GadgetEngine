@@ -6,7 +6,8 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
-#include "Graphics/Color.h"
+#include <GCore/Graphics/Color.hpp>
+
 #include "Graphics/DX12/DX12_Defines.h"
 #include "Graphics/Materials/MaterialInfo.h"
 

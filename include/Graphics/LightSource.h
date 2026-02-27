@@ -1,9 +1,9 @@
 #ifndef GADGET_LIGHT_SOURCE_H
 #define GADGET_LIGHT_SOURCE_H
 
+#include <GCore/Graphics/Color.hpp>
 #include <GCore/Math/Vector.hpp>
 
-#include "Color.h"
 #include "Math/Angle.h"
 
 namespace Gadget{
