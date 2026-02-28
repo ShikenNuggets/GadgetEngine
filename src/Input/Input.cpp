@@ -328,7 +328,7 @@ bool Input::GetMultiButtonHeld(StringID multiButton_) const{
 }
 
 void Input::DefineButton(const Button& button_){
-	GADGET_ASSERT(!button_.GetButtonIDs().empty(), "Attempted to define a button [" + button_.GetName().GetString() + "] with no button IDs set!");
+	GADGET_ASSERT(!button_.GetButtonIDs().empty(), "Attempted to define a button [{}] with no button IDs set!", button_.GetName().GetString());
 	if(button_.GetButtonIDs().empty()){
 		Debug::Log("Attempted to define a button [" + button_.GetName().GetString() + "] with no button IDs set!", Debug::Warning, __FILE__, __LINE__);
 		return;
@@ -338,7 +338,7 @@ void Input::DefineButton(const Button& button_){
 }
 
 void Input::DefineAxis(const Axis& axis_){
-	GADGET_ASSERT(!axis_.GetAxisIDs().empty(), "Attempted to define an axis [" + axis_.GetName().GetString() + "] with no axis IDs set!");
+	GADGET_ASSERT(!axis_.GetAxisIDs().empty(), "Attempted to define an axis [{}] with no axis IDs set!", axis_.GetName().GetString());
 	if(axis_.GetAxisIDs().empty()){
 		Debug::Log("Attempted to define an axis [" + axis_.GetName().GetString() + "] with no axis IDs set!", Debug::Warning, __FILE__, __LINE__);
 		return;
@@ -348,7 +348,7 @@ void Input::DefineAxis(const Axis& axis_){
 }
 
 void Input::DefineMultiButton(const MultiButton& multiButton_){
-	GADGET_ASSERT(!multiButton_.GetButtonIDs().empty(), "Attempted to define a MultiButton [" + multiButton_.GetName().GetString() + "] with no button IDs set!");
+	GADGET_ASSERT(!multiButton_.GetButtonIDs().empty(), "Attempted to define a MultiButton [{}] with no button IDs set!", multiButton_.GetName().GetString());
 	if(multiButton_.GetButtonIDs().empty()){
 		Debug::Log("Attempted to define a MultiButton [" + multiButton_.GetName().GetString() + "] with no button IDs set!", Debug::Warning, __FILE__, __LINE__);
 		return;

@@ -167,7 +167,7 @@ void Win32_GL_Renderer::Render(const Scene* scene_){
 	}
 
 	const size_t numLights = pointLightsBuffer.size() + dirLightsBuffer.size() + spotLightsBuffer.size();
-	GADGET_ASSERT(numLights < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is " + std::to_string(GL_MAX_UNIFORM_LOCATIONS) + ", this scene has " + std::to_string(numLights) + "!");
+	GADGET_ASSERT(numLights < GL_MAX_UNIFORM_LOCATIONS, "Too many light sources in this scene! Max allowed is {}, this scene has {}!", std::to_string(GL_MAX_UNIFORM_LOCATIONS), std::to_string(numLights));
 
 	for(const auto& cam : camerasBuffer){
 		SetViewportRect(cam->GetCamera().GetViewportRect());

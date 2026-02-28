@@ -32,7 +32,7 @@ void Material::Serialize(NamedVarList& varList_) const{
 void Material::LoadShader(){
 	InvalidateShader();
 	shader = App::GetRenderer().GenerateAPIShader(shaderResourceName);
-	GADGET_ASSERT(shader != nullptr, "Could not load shader [" + shaderResourceName.GetString() + "]!");
+	GADGET_ASSERT(shader != nullptr, "Could not load shader [{}]!", shaderResourceName.GetString());
 }
 
 void Material::InvalidateShader(){

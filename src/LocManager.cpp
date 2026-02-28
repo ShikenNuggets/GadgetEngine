@@ -39,7 +39,7 @@ StringID LocManager::GetCurrentLanguage() const{
 void LocManager::AddLanguage(StringID language_){
 	GADGET_BASIC_ASSERT(language_ != StringID::None);
 	GADGET_ASSERT(languages.size() < std::numeric_limits<uint8_t>::max(), "LocManager cannot support more than 256 languages!");
-	GADGET_ASSERT(std::ranges::find(languages, language_) == languages.end(), language_.GetString() + " added to the language list multiple times!");
+	GADGET_ASSERT(std::ranges::find(languages, language_) == languages.end(), "{} added to the language list multiple times!", language_.GetString());
 
 	languages.push_back(language_);
 }
@@ -54,5 +54,5 @@ void LocManager::SetCurrentLanguage(StringID language_){
 		}
 	}
 
-	GADGET_ASSERT(false, "Tried to set language to invalid value [" + language_.GetString() + "]!");
+	GADGET_ASSERT(false, "Tried to set language to invalid value [{}]!", language_.GetString());
 }

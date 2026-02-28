@@ -36,7 +36,7 @@ ResourceManager::~ResourceManager(){
 
 	for(auto& c : resources){
 		if(c.second != nullptr){
-			GADGET_ASSERT(c.second->GetReferenceCount() == 0, "ResourceManager being destroyed while Resource [" + c.first.GetString() + "] is still referenced!");
+			GADGET_ASSERT(c.second->GetReferenceCount() == 0, "ResourceManager being destroyed while Resource [{}] is still referenced!", c.first.GetString());
 		}
 
 		delete c.second;

@@ -19,7 +19,7 @@ void Scene::CreateObject(GameObject* gameObject_){
 		return;
 	}
 
-	GADGET_ASSERT(!Utils::Contains(gameObjects, gameObject_), "GameObject \"" + gameObject_->GetName().GetString() + "\" is being added to the GameObject list for this scene multiple times!");
+	GADGET_ASSERT(!Utils::Contains(gameObjects, gameObject_), "GameObject \"{}\" is being added to the GameObject list for this scene multiple times!", gameObject_->GetName().GetString());
 	gameObjects.push_back(gameObject_);
 }
 

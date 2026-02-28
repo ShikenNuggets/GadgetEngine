@@ -31,7 +31,7 @@ void BasicSceneManager::AddScene(Scene* scene_){
 		return;
 	}
 
-	GADGET_ASSERT(!Utils::Contains(scenes, scene_), "Scene \"" + scene_->GetName().GetString() + "\" is being added to the scene list for this object multiple times!");
+	GADGET_ASSERT(!Utils::Contains(scenes, scene_), "Scene \"{}\" is being added to the scene list for this object multiple times!", scene_->GetName().GetString());
 	scenes.push_back(scene_);
 }
 

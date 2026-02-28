@@ -33,7 +33,7 @@ bool StackAllocator::CanAllocate(size_t bytesToAllocate_) const{
 
 void* StackAllocator::Allocate(size_t bytes_){
 	GADGET_ASSERT(bytes_ > 0, "Tried to allocate 0 bytes!");
-	GADGET_ASSERT(CanAllocate(bytes_), "Could not allocate " + std::to_string(bytes_) + " bytes!");
+	GADGET_ASSERT(CanAllocate(bytes_), "Could not allocate {} bytes!", std::to_string(bytes_));
 
 	void* ptr = GetTopPtr();
 

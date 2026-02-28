@@ -17,7 +17,7 @@ namespace Gadget{
 			GADGET_BASIC_ASSERT(shaderResource_ != StringID::None);
 
 			Texture* tex = App::GetResourceManager().LoadResource<Texture>(textureResourceName);
-			GADGET_ASSERT(tex != nullptr, "Could not load texture [" + textureResourceName.GetString() + "]!");
+			GADGET_ASSERT(tex != nullptr, "Could not load texture [{}]!", textureResourceName.GetString());
 
 			if(tex != nullptr){
 				textureInfo = App::GetRenderer().GenerateAPITextureInfo(*tex);
@@ -102,7 +102,7 @@ namespace Gadget{
 		void CreateTextureInfo(){
 			InvalidateTextureInfo();
 			Texture* tex = App::GetResourceManager().LoadResource<Texture>(textureResourceName);
-			GADGET_ASSERT(tex != nullptr, "Could not load texture [" + textureResourceName.GetString() + "]!");
+			GADGET_ASSERT(tex != nullptr, "Could not load texture [{}]!", textureResourceName.GetString());
 
 			if(tex != nullptr){
 				textureInfo = App::GetRenderer().GenerateAPITextureInfo(*tex);

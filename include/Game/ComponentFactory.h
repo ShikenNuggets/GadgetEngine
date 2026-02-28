@@ -25,7 +25,7 @@ namespace Gadget{
 
 		static Component* InstantiateComponentType(StringID type_, const ComponentProperties& props_){
 			GADGET_BASIC_ASSERT(type_ != StringID::None);
-			GADGET_ASSERT(Utils::ContainsKey(deserializers, type_), "Tried to instantiate component of unknown type [" + type_.GetString() + "]! Did you apply the macro to it?");
+			GADGET_ASSERT(Utils::ContainsKey(deserializers, type_), "Tried to instantiate component of unknown type [{}]! Did you apply the macro to it?", type_.GetString());
 			return deserializers[type_](props_);
 		}
 

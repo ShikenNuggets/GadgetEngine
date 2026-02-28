@@ -34,14 +34,14 @@ FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_) const{
 
 	FT_Face fontFace = nullptr;
 	FT_Error err = FT_New_Face(ftLib, filePath_.c_str(), 0, &fontFace);
-	GADGET_ASSERT(err == FT_Err_Ok && fontFace != nullptr, "Could not load font face! FreeType Error Code: " + std::to_string(err));
+	GADGET_ASSERT(err == FT_Err_Ok && fontFace != nullptr, "Could not load font face! FreeType Error Code: {}", std::to_string(err));
 	if(err != FT_Err_Ok || fontFace == nullptr){
 		return nullptr;
 	}
 
 	//Set size to load glyphs as
 	err = FT_Set_Pixel_Sizes(fontFace, 0, gFontPixelSize);
-	GADGET_ASSERT(err == FT_Err_Ok, "Could not set FreeType pixel sizes! FreeType Error Code: " + std::to_string(err));
+	GADGET_ASSERT(err == FT_Err_Ok, "Could not set FreeType pixel sizes! FreeType Error Code: {}", std::to_string(err));
 
 	FreetypeFont* font = new FreetypeFont();
 
@@ -50,7 +50,7 @@ FreetypeFont* FreetypeFontLoader::LoadFont(const std::string& filePath_) const{
 	for(char c = 0; c < gNumCharacters; c++) {
 		//Load character glyph 
 		err = FT_Load_Char(fontFace, static_cast<FT_ULong>(c), FT_LOAD_RENDER);
-		GADGET_ASSERT(err == FT_Err_Ok, std::string("Could not load glyph for character '") + c + std::string("'! FreeType Error Code" + std::to_string(err)));
+		GADGET_ASSERT(err == FT_Err_Ok, "Could not load glyph for character '{}'! FreeType Error Code: {}", c, std::to_string(err));
 		if(err != FT_Err_Ok){
 			continue;
 		}

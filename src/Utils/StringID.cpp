@@ -17,7 +17,7 @@ StringID StringID::InternString(StringID sid_, const char* str_){
 		stringIdTable[sid_.id] = str_;
 	}
 
-	GADGET_ASSERT(stringIdTable[sid_.id] == str_, "StringID [" + std::to_string(sid_.id) + "] has encountered a conflict: \"" + stringIdTable[sid_.id] + "\" and \"" + str_ + "\" have the same hash!");
+	GADGET_ASSERT(stringIdTable[sid_.id] == str_, "StringID [{}] has encountered a conflict: \"{}\" and \"{}\" have the same hash!", std::to_string(sid_.id), stringIdTable[sid_.id], str_);
 
 	return sid_;
 }

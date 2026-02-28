@@ -99,7 +99,7 @@ bool GameObject::HasTag(StringID tag_) const{
 
 void GameObject::AddTag(StringID tag_){
 	GADGET_BASIC_ASSERT(tag_ != StringID::None);
-	GADGET_ASSERT(!HasTag(tag_), "Tried adding tag [" + tag_.GetString() + "] to a GameObject that already has that tag!");
+	GADGET_ASSERT(!HasTag(tag_), "Tried adding tag [{}] to a GameObject that already has that tag!", tag_.GetString());
 	tags.push_back(tag_);
 }
 

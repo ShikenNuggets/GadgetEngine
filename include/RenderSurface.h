@@ -12,14 +12,14 @@ namespace Gadget{
 	public:
 		RenderSurface(Window* parent_, int w_, int h_) : parent(parent_), size(w_, h_){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
-			GADGET_ASSERT(w_ > 0, "Tried to make a RenderSurface with a width of " + std::to_string(w_) + "!");
-			GADGET_ASSERT(h_ > 0, "Tried to make a RenderSurface with a height of " + std::to_string(h_) + "!");
+			GADGET_ASSERT(w_ > 0, "Tried to make a RenderSurface with a width of {}!", std::to_string(w_));
+			GADGET_ASSERT(h_ > 0, "Tried to make a RenderSurface with a height of {}!", std::to_string(h_));
 		}
 
 		RenderSurface(Window* parent_, const ScreenCoordinate& sc_) : parent(parent_), size(sc_){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
-			GADGET_ASSERT(sc_.x > 0, "Tried to make a RenderSurface with a width of " + std::to_string(sc_.x) + "!");
-			GADGET_ASSERT(sc_.y > 0, "Tried to make a RenderSurface with a height of " + std::to_string(sc_.y) + "!");
+			GADGET_ASSERT(sc_.x > 0, "Tried to make a RenderSurface with a width of {}!", std::to_string(sc_.x));
+			GADGET_ASSERT(sc_.y > 0, "Tried to make a RenderSurface with a height of {}!", std::to_string(sc_.y));
 		}
 
 		virtual ~RenderSurface(){}

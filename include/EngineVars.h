@@ -148,7 +148,7 @@ namespace Gadget{
 				}
 			}
 
-			GADGET_ASSERT(false, "Unrecognized EngineVars section[" + section_.GetString() + "]!");
+			GADGET_ASSERT(false, "Unrecognized EngineVars section[{}]!", section_.GetString());
 			Debug::Log(SID("CONFIG"), "", Debug::Warning, __FILE__, __LINE__);
 		}
 	};

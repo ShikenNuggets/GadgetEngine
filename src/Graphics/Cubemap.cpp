@@ -15,7 +15,7 @@ Cubemap::Cubemap(StringID right_, StringID left_, StringID top_, StringID bottom
 	
 	for(size_t i = 0; i < numTextures; i++){
 		textures[i] = App::GetResourceManager().LoadResource<Texture>(textureNames[i]);
-		GADGET_ASSERT(textures[i] != nullptr, "An error occurred while trying to load texture [" + textureNames[i].GetString() + "] for cubemap!");
+		GADGET_ASSERT(textures[i] != nullptr, "An error occurred while trying to load texture [{}] for cubemap!", textureNames[i].GetString());
 	}
 }
 
@@ -62,7 +62,7 @@ bool Cubemap::IsValid() const{
 
 Texture* Cubemap::GetTexture(Orientation o_) const{
 	GADGET_BASIC_ASSERT(IsValid());
-	GADGET_ASSERT(static_cast<int>(o_) >= 0 && static_cast<size_t>(o_) < numTextures, "Invalid Cubemap texture orientation [" + std::to_string(o_) + "]!");
+	GADGET_ASSERT(static_cast<int>(o_) >= 0 && static_cast<size_t>(o_) < numTextures, "Invalid Cubemap texture orientation [{}]!", std::to_string(o_));
 	return textures[static_cast<size_t>(o_)];
 }
 

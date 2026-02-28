@@ -39,8 +39,8 @@ void Camera::CalculateViewMatrix(const Vector3& position_, const Quaternion& rot
 
 void Camera::CalculateProjectionMatrix(){
 	GADGET_ASSERT(currentProjection == Projection::Orthographic || currentProjection == Projection::Perspective, "Invalid projection mode!");
-	GADGET_ASSERT(aspect > 0.0f, "Invalid aspect ratio of " + std::to_string(aspect) + "!");
-	GADGET_ASSERT(nearPlane <= farPlane, "Near Plane [ " + std::to_string(nearPlane) + " ] should always be less than Far Plane [ " + std::to_string(farPlane) + " ]!");
+	GADGET_ASSERT(aspect > 0.0f, "Invalid aspect ratio of {}!", std::to_string(aspect));
+	GADGET_ASSERT(nearPlane <= farPlane, "Near Plane [ {} ] should always be less than Far Plane [ {} ]!", std::to_string(nearPlane), std::to_string(farPlane));
 
 	switch(currentProjection){
 		case Projection::Perspective:

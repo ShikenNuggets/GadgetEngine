@@ -11,7 +11,7 @@ using namespace Gadget;
 
 Mesh* ObjLoader::LoadMesh(const std::string& filePath_){
 	GADGET_BASIC_ASSERT(!filePath_.empty());
-	GADGET_ASSERT(FileSystem::FileExists(filePath_), "Tried to load non-existent file [" + filePath_ + "]!");
+	GADGET_ASSERT(FileSystem::FileExists(filePath_), "Tried to load non-existent file [{}]!", filePath_);
 	if(!FileSystem::FileExists(filePath_)){
 		Debug::Log(SID("OBJLOADER"), "Tried to load non-existent file [" + filePath_ + "]!", Debug::Error, __FILE__, __LINE__);
 		return nullptr;
@@ -59,7 +59,7 @@ Mesh* ObjLoader::LoadMesh(const std::string& filePath_){
 		return nullptr;
 	}
 
-	GADGET_ASSERT(tempPos.size() <= std::numeric_limits<int>::max(), "Model has " + std::to_string(tempPos.size()) + " vertices, possible loss of data!");
+	GADGET_ASSERT(tempPos.size() <= std::numeric_limits<int>::max(), "Model has {} vertices, possible loss of data!", std::to_string(tempPos.size()));
 
 	std::vector<VertIndex> uniqueVerts;
 	std::vector<Vertex> vertices;

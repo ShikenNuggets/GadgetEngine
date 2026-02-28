@@ -231,12 +231,12 @@ namespace Gadget{
 		}
 
 		inline constexpr Var operator [](size_t i_) const{
-			GADGET_ASSERT(i_ < values.size(), "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(values.size()) + "!");
+			GADGET_ASSERT(i_ < values.size(), "Invalid array access! {} must be less than {}!", std::to_string(i_), std::to_string(values.size()));
 			return values[i_];
 		}
 
 		Var& operator [](size_t i_){
-			GADGET_ASSERT(i_ < values.size(), "Invalid array access! " + std::to_string(i_) + " must be less than " + std::to_string(values.size()) + "!");
+			GADGET_ASSERT(i_ < values.size(), "Invalid array access! {} must be less than {}!", std::to_string(i_), std::to_string(values.size()));
 			return values[i_];
 		}
 

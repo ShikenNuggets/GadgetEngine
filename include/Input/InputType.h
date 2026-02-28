@@ -70,7 +70,7 @@ namespace Gadget{
 
 		void RemoveButtonID(ButtonID id_){
 			GADGET_BASIC_ASSERT(id_ != ButtonID::ButtonID_MAX);
-			GADGET_ASSERT(buttonIDs.find(id_) != buttonIDs.end(), "Tried to remove invalid button ID [" + std::to_string((int)id_) + "]!");
+			GADGET_ASSERT(buttonIDs.find(id_) != buttonIDs.end(), "Tried to remove invalid button ID [{}]!", std::to_string((int)id_));
 			buttonIDs.erase(id_);
 		}
 
@@ -113,7 +113,7 @@ namespace Gadget{
 
 		void RemoveButtonID(ButtonID id_){
 			GADGET_BASIC_ASSERT(id_ != ButtonID::ButtonID_MAX);
-			GADGET_ASSERT(std::find(buttonIDs.begin(), buttonIDs.end(), id_) != buttonIDs.end(), "Tried to remove invalid button ID [" + std::to_string((int)id_) + "]!");
+			GADGET_ASSERT(std::find(buttonIDs.begin(), buttonIDs.end(), id_) != buttonIDs.end(), "Tried to remove invalid button ID [{}]!", std::to_string((int)id_));
 			buttonIDs.erase(std::remove(buttonIDs.begin(), buttonIDs.end(), id_));
 		}
 
@@ -199,7 +199,7 @@ namespace Gadget{
 
 		void RemoveAxisID(AxisID id_){
 			GADGET_BASIC_ASSERT(id_ < AxisID::AxisID_MAX);
-			GADGET_ASSERT(axisIDs.find(id_) != axisIDs.end(), "Tried to remove invalid axis ID [" + std::to_string((int)id_) + "]!");
+			GADGET_ASSERT(axisIDs.find(id_) != axisIDs.end(), "Tried to remove invalid axis ID [{}]!", std::to_string((int)id_));
 			axisIDs.erase(id_);
 		}
 
