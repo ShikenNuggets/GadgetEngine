@@ -4,7 +4,8 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
-#include "ScreenCoordinate.h"
+#include <GCore/ScreenCoordinate.hpp>
+
 #include "Graphics/DX12/DX12_Defines.h"
 
 namespace Gadget{

@@ -1,7 +1,7 @@
 #ifndef FRAME_BUFFER_H
 #define FRAME_BUFFER_H
 
-#include "ScreenCoordinate.h"
+#include <GCore/ScreenCoordinate.hpp>
 
 namespace Gadget{
 	class FrameBuffer{

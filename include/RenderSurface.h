@@ -1,9 +1,10 @@
 #ifndef GADGET_RENDER_SURFACE_H
 #define GADGET_RENDER_SURFACE_H
 
+#include <GCore/ScreenCoordinate.hpp>
+
 #include "GadgetEnums.h"
 #include "Debug.h"
-#include "ScreenCoordinate.h"
 
 namespace Gadget{
 	class Window;

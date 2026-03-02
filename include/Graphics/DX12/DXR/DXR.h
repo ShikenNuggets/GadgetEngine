@@ -9,10 +9,10 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
+#include <GCore/ScreenCoordinate.hpp>
 #include <GCore/Math/Matrix.hpp>
 
 #include "GadgetEnums.h"
-#include "ScreenCoordinate.h"
 #include "Graphics/DX12/DX12.h"
 #include "Graphics/DX12/DX12_DescriptorHeap.h"
 #include "Graphics/DX12/DXR/DXR_MeshInfo.h"
