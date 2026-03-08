@@ -4,9 +4,10 @@
 #include <cstdint>
 #include <vector>
 
+#include <GCore/FileSystem.hpp>
+
 #include "Animation/AnimVertex.h"
 #include "Animation/Skeleton.h"
-#include "Core/FileSystem.h"
 #include "Debug.h"
 #include "Graphics/Vertex.h"
 #include "Graphics/Loaders/AssimpModelLoader.h"

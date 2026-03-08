@@ -10,7 +10,6 @@
 #endif //GADGET_PLATFORM_WIN32
 
 #include "App.h"
-#include "Core/FileSystem.h"
 #include "Platform/PlatformUtils.h"
 #include "Utils/Utils.h"
 
@@ -42,7 +41,7 @@ void Debug::Init(){
 	const std::string message = "-------------------------\n" + Utils::GetCurrentDateAndTimeString() + " GMT\n";
 	auto err = FileSystem::WriteToFile(logFilePath, message, writeType);
 	if(err != ErrorCode::OK){
-		std::cout << "ERROR: Could not write initial log message to " << FileSystem::GetFileNameFromPath(logFilePath) << "! We'll try again later...\n";
+		std::cout << "ERROR: Could not write initial log message to " << std::filesystem::path(logFilePath).filename().string() << "! We'll try again later...\n";
 
 		{
 			const std::lock_guard lock{ logQueueMutex };
@@ -84,7 +83,7 @@ void Debug::Log(const std::string& message_, LogType type_, const std::string& f
 	finalMessage += message_;
 	if(!fileName_.empty() && lineNumber_ > 0){
 		finalMessage += " (";
-		finalMessage += FileSystem::GetFileNameFromPath(fileName_);
+		finalMessage += std::filesystem::path(fileName_).filename().string();
 		finalMessage += ", ";
 		finalMessage += std::to_string(lineNumber_);
 		finalMessage += ")";
@@ -153,14 +152,14 @@ void Debug::PopupErrorMessage(const std::string& title_, const std::string& mess
 	//Extra spacing at the end to prevent text from getting cut off
 	const bool status = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title_.c_str(), (message_ + "         \n         ").c_str(), nullptr);
 	if(!status){
-		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, Gadget::FileSystem::GetFileNameFromPath(__FILE__), __LINE__);
+		Debug::Log(std::string("MessageBox couild not be shown. SDL Error: ") + SDL_GetError(), Debug::Error, std::filesystem::path(__FILE__).filename().string(), __LINE__);
 	}
 }
 
 void Debug::ThrowFatalError(StringID channel_, const std::string& message_, ErrorCode err_, const std::string& file_, int line_){
 #ifndef GADGET_RELEASE
 	//This is redundant, but it helps devs get the current callstack. You won't get if you wait for the throw to play out
-	GADGET_ASSERT(false, "A fatal error was thrown from {}!", FileSystem::GetFileNameFromPath(file_));
+	GADGET_ASSERT(false, "A fatal error was thrown from {}!", std::filesystem::path(file_).filename().string());
 #endif //!GADGET_RELEASE
 
 	GADGET_BASIC_ASSERT(channel_ != StringID::None);
@@ -168,7 +167,7 @@ void Debug::ThrowFatalError(StringID channel_, const std::string& message_, Erro
 	GADGET_BASIC_ASSERT(err_ > ErrorCode::OK && err_ < ErrorCode::ErrorCode_MAX);
 
 	const std::string messageWithErr = message_ + std::string("\nError Code: ") + GetErrorCodeString(err_);
-	const std::string finalMessage = messageWithErr + "\n\n" + FileSystem::GetFileNameFromPath(file_) + ":" + std::to_string(line_);
+	const std::string finalMessage = messageWithErr + "\n\n" + std::filesystem::path(file_).filename().string() + ":" + std::to_string(line_);
 
 	Debug::Log(channel_, messageWithErr, FatalError, file_, line_);
 	PopupErrorMessage("Fatal Error! [" + channel_.GetString() + "]", finalMessage);
@@ -191,7 +190,7 @@ void Debug::WriteQueuedLogs(){
 	while(isInitialized && !queuedLogsForFileWrite.empty()){
 		auto err = FileSystem::WriteToFile(logFilePath, queuedLogsForFileWrite.front());
 		if(err != ErrorCode::OK){
-			Debug::LogToConsoleOnly(SID("DEBUG"), "Could not write log messages to " + FileSystem::GetFileNameFromPath(logFilePath) + "! We'll try again later...", Debug::Error, __FILE__, __LINE__);
+			Debug::LogToConsoleOnly(SID("DEBUG"), "Could not write log messages to " + std::filesystem::path(logFilePath).filename().string() + "! We'll try again later...", Debug::Error, __FILE__, __LINE__);
 			break;
 		}
 

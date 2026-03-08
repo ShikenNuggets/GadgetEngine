@@ -1,8 +1,9 @@
 #include "Graphics/OpenGL/GL_Shader.h"
 
+#include <GCore/FileSystem.hpp>
+
 #include "App.h"
 #include "Debug.h"
-#include "Core/FileSystem.h"
 
 using namespace Gadget;
 
@@ -13,13 +14,13 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	GADGET_BASIC_ASSERT(FileSystem::FileExists(fragPath_));
 	GADGET_ASSERT(App::GetCurrentRenderAPI() == Renderer::API::OpenGL, "Tried to execute OpenGL commands on non-OpenGL render API!");
 
-	const std::string vertCodeStr = FileSystem::ReadFileToString(vertPath_);
+	const std::string vertCodeStr = FileSystem::ReadFileToString(vertPath_).value_or("");
 	GADGET_BASIC_ASSERT(!vertCodeStr.empty());
 	if(vertCodeStr.empty()){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not load vertex shader code from [" + vertPath_ + "]!", ErrorCode::FileIO, __FILE__, __LINE__);
 	}
 
-	const std::string fragCodeStr = FileSystem::ReadFileToString(fragPath_);
+	const std::string fragCodeStr = FileSystem::ReadFileToString(fragPath_).value_or("");
 	GADGET_BASIC_ASSERT(!fragCodeStr.empty());
 	if(fragCodeStr.empty()){
 		Debug::ThrowFatalError(SID("RENDER"), "Could not load fragment shader code from [" + fragPath_ + "]!", ErrorCode::FileIO, __FILE__, __LINE__);

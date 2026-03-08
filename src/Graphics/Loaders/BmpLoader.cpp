@@ -1,7 +1,8 @@
 #include "Graphics/Loaders/BmpLoader.h"
 
+#include <GCore/FileSystem.hpp>
+
 #include "Debug.h"
-#include "Core/FileSystem.h"
 #include "Graphics/Texture.h"
 #include "Utils/Utils.h"
 
@@ -11,8 +12,14 @@ Texture* BmpLoader::LoadImage(const std::string& filePath_){
 	GADGET_BASIC_ASSERT(!filePath_.empty());
 	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
 
-	auto data = FileSystem::ReadBinaryFile(filePath_);
-	data.shrink_to_fit();
+	auto fileResult = FileSystem::ReadFileRaw(filePath_);
+	if (!fileResult.has_value())
+	{
+		Debug::Log("Could not load BMP image file [" + filePath_ + "]!", Debug::Error, __FILE__, __LINE__);
+		return nullptr;
+	}
+
+	const auto& data = fileResult.value();
 	if(data.empty()){
 		Debug::Log("Could not load BMP image file [" + filePath_ + "]!", Debug::Error, __FILE__, __LINE__);
 		return nullptr;

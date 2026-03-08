@@ -9,9 +9,9 @@
 //Be careful including Gadget headers here - A lot of the engine depends on this file
 #include <GCore/Assert.hpp>
 #include <GCore/CoreDefines.hpp>
+#include <GCore/FileSystem.hpp>
 
 #include "GadgetEnums.h"
-#include "Core/FileSystem.h"
 #include "Utils/StringID.h"
 #include "Utils/Utils.h"
 

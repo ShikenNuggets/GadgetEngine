@@ -1,7 +1,8 @@
 #include "Graphics/Loaders/FreetypeFontLoader.h"
 
+#include <GCore/FileSystem.hpp>
+
 #include "App.h"
-#include "Core/FileSystem.h"
 #include "Graphics/Text/FreetypeFont.h"
 
 using namespace Gadget;

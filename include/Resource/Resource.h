@@ -45,9 +45,9 @@ namespace Gadget{
 				GADGET_ASSERT(resource == nullptr, "Unloaded resource is not null!");
 				resource = LoadResource();
 				if(resource != nullptr){
-					Debug::Log(SID("RESOURCE"), type + " [" + FileSystem::GetFileNameFromPath(path) + "] is using " + Utils::FormatToByteSizeString(resource->SizeInBytes()), Debug::Verbose);
+					Debug::Log(SID("RESOURCE"), type + " [" + std::filesystem::path(path).filename().string() + "] is using " + Utils::FormatToByteSizeString(resource->SizeInBytes()), Debug::Verbose);
 				}else{
-					GADGET_LOG_WARNING(SID("RESOURCE"), "Attempting to load " + type + " [" + FileSystem::GetFileNameFromPath(path) + "] returned nullptr!");
+					GADGET_LOG_WARNING(SID("RESOURCE"), "Attempting to load " + type + " [" + std::filesystem::path(path).filename().string() + "] returned nullptr!");
 				}
 
 				isLoaded = true;

@@ -1,7 +1,8 @@
 #ifndef GADGET_BINARY_BLOB_RESOURCE_H
 #define GADGET_BINARY_BLOB_RESOURCE_H
 
-#include "Core/FileSystem.h"
+#include <GCore/FileSystem.hpp>
+
 #include "Resource/Resource.h"
 
 namespace Gadget{
@@ -27,7 +28,7 @@ namespace Gadget{
 		BinaryBlobResourceContainer(const std::string& path_) : ResourceContainer(BinaryBlobResource::typeName, path_){}
 
 		virtual Resource* LoadResource() override{
-			return new BinaryBlobResource(FileSystem::ReadBinaryFile(path));
+			return new BinaryBlobResource(FileSystem::ReadFileRaw(path).value_or({})); // TODO - proper error handling
 		}
 
 		virtual const std::type_info& GetResourceTypeInfo() override{

@@ -2,10 +2,10 @@
 
 #include <sstream>
 
+#include <GCore/FileSystem.hpp>
 #include <GCore/Math/Math.hpp>
 
 #include "Graphics/Mesh.h"
-#include "Core/FileSystem.h"
 
 using namespace Gadget;
 
@@ -22,7 +22,14 @@ Mesh* ObjLoader::LoadMesh(const std::string& filePath_){
 	std::vector<Vector2> tempTex = std::vector<Vector2>();
 	std::vector<VertIndex> tempIndices = std::vector<VertIndex>();
 
-	const auto fileData = FileSystem::ReadFile(filePath_); //TODO - Reading files like this is synchronous (reads the whole file, then processes it), would be better to read and process asynchronously
+	const auto fileResult = FileSystem::ReadFileLines(filePath_); //TODO - Reading files like this is synchronous (reads the whole file, then processes it), would be better to read and process asynchronously
+	if (!fileResult.has_value())
+	{
+		Debug::Log(SID("OBJLOADER"), "Failed to load file [" + filePath_ + "]!", Debug::Error, __FILE__, __LINE__);
+		return nullptr;
+	}
+
+	const auto fileData = fileResult.value();
 
 	//Reasonable estimates for how much space we'll need
 	tempPos.reserve(fileData.size() / 4);

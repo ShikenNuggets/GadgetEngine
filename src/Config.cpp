@@ -1,9 +1,10 @@
 #include "Config.h"
 
+#include <GCore/FileSystem.hpp>
+
 #include "App.h"
 #include "ConfigParser.h"
 #include "LocManager.h"
-#include "Core/FileSystem.h"
 #include "Events/AppEvent.h"
 #include "Events/EventHandler.h"
 #include "Utils/Utils.h"

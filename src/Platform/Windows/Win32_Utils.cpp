@@ -90,7 +90,7 @@ std::string Win32_Utils::BrowseForFolder(uint64_t hwnd_, const wchar_t* dialogTi
 	}
 
 	const std::wstring wstr = path;
-	return WStringToString(wstr) + FileSystem::PathSeparator;
+	return WStringToString(wstr) + "\\";
 }
 
 ErrorCode Win32_Utils::ShowWindow(uint64_t hwnd_){

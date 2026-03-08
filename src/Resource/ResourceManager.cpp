@@ -1,7 +1,9 @@
 #include "Resource/ResourceManager.h"
 
+#include <GCore/FileSystem.hpp>
+#include <GCore/Parsers/JsonParser.hpp>
+
 #include "App.h"
-#include "Core/FileSystem.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Texture.h"
 #include "Graphics/OpenGL/GL_Shader.h"
@@ -15,7 +17,15 @@ ResourceManager::ResourceManager() : resources(), maxUnusedResourceMemory(64ULL 
 		Debug::ThrowFatalError(SID("RESOURCE"), "resources.json file does not exist!", ErrorCode::FileIO, __FILE__, __LINE__);
 	}
 
-	auto resJson = FileSystem::ReadPlainTextJSONFile(gResourcesJsonFile);
+	//auto resJson = FileSystem::ReadPlainTextJSONFile(gResourcesJsonFile);
+	auto jsonResult = Json::ParseFile(gResourcesJsonFile);
+	if (!jsonResult.has_value())
+	{
+		Debug::ThrowFatalError(SID("RESOURCE"), "Failed to load resources.json!", ErrorCode::FileIO, __FILE__, __LINE__);
+	}
+
+	auto& resJson = jsonResult.value();
+
 	//resources = resJson; //TODO - Ideally this would work, but I'm just getting template errors that are hard to diagnose
 
 	if(resJson.is_null()){

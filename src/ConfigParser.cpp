@@ -2,10 +2,10 @@
 
 #include <algorithm>
 
+#include <GCore/FileSystem.hpp>
 #include <GCore/Math/Math.hpp>
 
 #include "Debug.h"
-#include "Core/FileSystem.h"
 #include "Utils/Utils.h"
 
 using namespace Gadget;
@@ -18,7 +18,14 @@ ErrorCode ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& va
 
 	StringID currentSection = StringID::None;
 	
-	const auto& file = FileSystem::ReadFile(path_);
+	const auto fileResult = FileSystem::ReadFileLines(path_);
+	if (!fileResult.has_value())
+	{
+		GADGET_LOG_ERROR(SID("CONFIG"), "Failed to load the config file");
+		return fileResult.error();
+	}
+
+	const auto& file = fileResult.value();
 	for(const auto& line : file){
 		if(Utils::ContainsChar(line, '[')){
 			currentSection = StringID::ProcessString(Utils::ExtractString(line, '[', ']'));
