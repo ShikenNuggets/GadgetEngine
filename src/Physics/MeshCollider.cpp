@@ -49,7 +49,7 @@ void MeshCollider::RecalculateCollider(){
 	Mesh* mesh = App::GetResourceManager().LoadResource<Mesh>(modelName);
 	GADGET_BASIC_ASSERT(mesh != nullptr);
 	if(mesh == nullptr){
-		Debug::ThrowFatalError(SID("PHYSICS"), "", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("PHYSICS"), "", ErrorCode::InvalidArgs, __FILE__, __LINE__); // TODO - No error message
 	}
 
 	for(const auto& subMesh : mesh->submeshes){

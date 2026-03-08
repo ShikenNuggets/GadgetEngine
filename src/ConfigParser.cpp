@@ -13,7 +13,7 @@ using namespace Gadget;
 ErrorCode ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& vars_){
 	GADGET_BASIC_ASSERT(!path_.empty());
 	if(!FileSystem::FileExists(path_)){
-		return ErrorCode::Invalid_State;
+		return ErrorCode::InvalidState;
 	}
 
 	StringID currentSection = StringID::None;
@@ -43,7 +43,7 @@ ErrorCode ConfigParser::ParseConfigFile(const std::string& path_, EngineVars& va
 ErrorCode ConfigParser::SerializeConfigs(const std::string& path_, const EngineVars& vars_){
 	GADGET_BASIC_ASSERT(!path_.empty());
 	if(path_.empty()){
-		return ErrorCode::Invalid_State;
+		return ErrorCode::InvalidState;
 	}
 
 	std::string output;

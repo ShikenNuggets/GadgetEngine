@@ -8,6 +8,7 @@
 
 //Be careful including Gadget headers here - A lot of the engine depends on this file
 #include <GCore/Assert.hpp>
+#include <GCore/CoreDefines.hpp>
 
 #include "GadgetEnums.h"
 #include "Core/FileSystem.h"

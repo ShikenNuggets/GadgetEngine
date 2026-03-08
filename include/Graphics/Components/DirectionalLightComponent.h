@@ -13,7 +13,7 @@ namespace Gadget{
 		DirectionalLightComponent(GameObject* parent_) : Component(type, parent_), lightSource(Vector3::Forward()){
 			GADGET_BASIC_ASSERT(parent_ != nullptr);
 			if(parent_ == nullptr){
-				Debug::ThrowFatalError(SID("RENDER"), "Created DirectionalLightComponent with null parent!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+				Debug::ThrowFatalError(SID("RENDER"), "Created DirectionalLightComponent with null parent!", ErrorCode::InvalidArgs, __FILE__, __LINE__);
 			}
 
 			GADGET_BASIC_ASSERT(parent_->GetGUID() != GUID::Invalid);

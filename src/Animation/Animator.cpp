@@ -14,7 +14,7 @@ Animator::Animator(StringID animMeshName_, const std::vector<StringID>& clipName
 
 	GADGET_BASIC_ASSERT(skeleton != nullptr);
 	if(skeleton == nullptr){
-		Debug::ThrowFatalError(SID("ANIM"), "Skeleton must not be nullptr!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("ANIM"), "Skeleton must not be nullptr!", ErrorCode::InvalidArgs, __FILE__, __LINE__);
 	}
 
 	GADGET_BASIC_ASSERT(skeleton->GetGlobalInverse().IsValid());

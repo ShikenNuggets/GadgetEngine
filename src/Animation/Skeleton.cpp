@@ -58,7 +58,7 @@ const Joint& Skeleton::GetJoint(StringID name_) const{
 	}
 
 	//There's no safe way to handle this, so just error out
-	Debug::ThrowFatalError(SID("ANIM"), "Tried to get invalid joint [" + name_.GetString() + "]!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+	Debug::ThrowFatalError(SID("ANIM"), "Tried to get invalid joint [" + name_.GetString() + "]!", ErrorCode::InvalidArgs, __FILE__, __LINE__);
 }
 
 const Joint& Skeleton::GetJoint(int32_t id_) const{
@@ -67,7 +67,7 @@ const Joint& Skeleton::GetJoint(int32_t id_) const{
 
 	if(id_ < 0 || id_ >= joints.size()){
 		//There's no safe way to handle this, so just error out
-		Debug::ThrowFatalError(SID("ANIM"), "Tried to get invalid joint at index " + std::to_string(id_) + "!", ErrorCode::Invalid_Args, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("ANIM"), "Tried to get invalid joint at index " + std::to_string(id_) + "!", ErrorCode::InvalidArgs, __FILE__, __LINE__);
 	}
 
 	return joints[id_];

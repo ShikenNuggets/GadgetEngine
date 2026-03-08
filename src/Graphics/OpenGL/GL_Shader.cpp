@@ -29,13 +29,13 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	const GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
 	GADGET_BASIC_ASSERT(vertShader != 0);
 	if(vertShader == 0){
-		Debug::ThrowFatalError(SID("RENDER"), "Can't create a new vertex shader!", ErrorCode::OpenGL_Error, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Can't create a new vertex shader!", ErrorCode::ThirdParty_Error, __FILE__, __LINE__);
 	}
 
 	const GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 	GADGET_BASIC_ASSERT(fragShader != 0);
 	if(fragShader == 0){
-		Debug::ThrowFatalError(SID("RENDER"), "Can't create a new shader!", ErrorCode::OpenGL_Error, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Can't create a new shader!", ErrorCode::ThirdParty_Error, __FILE__, __LINE__);
 	}
 
 	const char* vertCode = vertCodeStr.c_str();
@@ -49,14 +49,14 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	glGetShaderiv(vertShader, GL_COMPILE_STATUS, &status);
 	GADGET_ASSERT(status != GL_FALSE, "Vertex shader compile failed! GL Error: {}", GetShaderLog(vertShader));
 	if(status == GL_FALSE){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Vertex Shader! GL Error: " + GetShaderLog(vertShader), ErrorCode::OpenGL_ShaderCompileFailed, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Vertex Shader! GL Error: " + GetShaderLog(vertShader), ErrorCode::ThirdParty_Error, __FILE__, __LINE__);
 	}
 
 	glCompileShader(fragShader);
 	glGetShaderiv(fragShader, GL_COMPILE_STATUS, &status);
 	GADGET_ASSERT(status != GL_FALSE, "Fragment shader compile failed! GL Error: {}", GetShaderLog(fragShader));
 	if(status == GL_FALSE){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Fragment Shader! GL Error: " + GetShaderLog(fragShader), ErrorCode::OpenGL_ShaderCompileFailed, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not compile Fragment Shader! GL Error: " + GetShaderLog(fragShader), ErrorCode::ThirdParty_Error, __FILE__, __LINE__);
 	}
 
 	shader = glCreateProgram();
@@ -67,7 +67,7 @@ GL_Shader::GL_Shader(const std::string& vertPath_, const std::string& fragPath_)
 	glGetProgramiv(shader, GL_LINK_STATUS, &status);
 	GADGET_ASSERT(status != GL_FALSE, "Shader linking failed! GL Error: {}", GetProgramLog(shader));
 	if(status == GL_FALSE){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not link Shader! GL Error: " + GetProgramLog(shader), ErrorCode::OpenGL_Error, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not link Shader! GL Error: " + GetProgramLog(shader), ErrorCode::ThirdParty_Error, __FILE__, __LINE__);
 	}
 
 	glDetachShader(shader, fragShader);

@@ -13,6 +13,8 @@
 #pragma warning(default : 26800)
 #pragma warning(default : 26819)
 
+#include <GCore/CoreDefines.hpp>
+
 #include "GadgetEnums.h"
 #include "Utils/Utils.h"
 

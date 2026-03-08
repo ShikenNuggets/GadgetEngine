@@ -12,7 +12,7 @@ static constexpr FT_UInt gNumCharacters = 128; //TODO - Unicode?
 FreetypeFontLoader::FreetypeFontLoader() : ftLib(nullptr){
 	const FT_Error err = FT_Init_FreeType(&ftLib);
 	if(err != FT_Err_Ok){
-		Debug::ThrowFatalError(SID("RENDER"), "Could not initialize FreeType! FreeType Error Code: " + std::to_string(err), ErrorCode::FreeType_Errror, __FILE__, __LINE__);
+		Debug::ThrowFatalError(SID("RENDER"), "Could not initialize FreeType! FreeType Error Code: " + std::to_string(err), ErrorCode::ThirdParty_Error, __FILE__, __LINE__);
 	}
 }
 

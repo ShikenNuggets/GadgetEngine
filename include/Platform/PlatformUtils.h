@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "GadgetEnums.h"
+#include <GCore/CoreDefines.hpp>
 
 namespace Gadget::PlatformUtils{
 	extern std::string GetUserDocumentsPath();

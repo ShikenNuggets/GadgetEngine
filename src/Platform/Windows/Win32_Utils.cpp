@@ -95,18 +95,18 @@ std::string Win32_Utils::BrowseForFolder(uint64_t hwnd_, const wchar_t* dialogTi
 
 ErrorCode Win32_Utils::ShowWindow(uint64_t hwnd_){
 	if(hwnd_ == 0){
-		return ErrorCode::Invalid_Args;
+		return ErrorCode::InvalidArgs;
 	}
 
 	HWND hwnd = reinterpret_cast<HWND>(hwnd_);
 	GADGET_BASIC_ASSERT(IsWindow(hwnd));
 	if(IsWindow(hwnd) == FALSE){
-		return ErrorCode::Invalid_Args;
+		return ErrorCode::InvalidArgs;
 	}
 
 	const BOOL result = ShowWindow(hwnd, SW_RESTORE);
 	if(result == FALSE){
-		return ErrorCode::Win32_Error;
+		return ErrorCode::Platform_Win32_Error;
 	}
 
 	return ErrorCode::OK;
@@ -114,18 +114,18 @@ ErrorCode Win32_Utils::ShowWindow(uint64_t hwnd_){
 
 ErrorCode Win32_Utils::BringWindowToForeground(uint64_t hwnd_){
 	if(hwnd_ == 0){
-		return ErrorCode::Invalid_Args;
+		return ErrorCode::InvalidArgs;
 	}
 
 	HWND hwnd = reinterpret_cast<HWND>(hwnd_);
 	GADGET_BASIC_ASSERT(IsWindow(hwnd));
 	if(IsWindow(hwnd) == FALSE){
-		return ErrorCode::Invalid_Args;
+		return ErrorCode::InvalidArgs;
 	}
 
 	const BOOL result = SetForegroundWindow(hwnd);
 	if(result == FALSE){
-		return ErrorCode::Win32_Error;
+		return ErrorCode::Platform_Win32_Error;
 	}
 
 	return ErrorCode::OK;
@@ -134,7 +134,7 @@ ErrorCode Win32_Utils::BringWindowToForeground(uint64_t hwnd_){
 ErrorCode Win32_Utils::OpenFileInDefaultApplication(const std::string& filePath_, const std::string& args_){
 	GADGET_BASIC_ASSERT(FileSystem::FileExists(filePath_));
 	if(!FileSystem::FileExists(filePath_)){
-		return ErrorCode::Invalid_Args;
+		return ErrorCode::InvalidArgs;
 	}
 
 	const std::wstring wFilePath = std::wstring(filePath_.begin(), filePath_.end());
@@ -150,22 +150,22 @@ ErrorCode Win32_Utils::OpenFileInDefaultApplication(const std::string& filePath_
 		case SE_ERR_DDEBUSY:		[[fallthrough]];
 		case SE_ERR_DDEFAIL:		[[fallthrough]];
 		case SE_ERR_DDETIMEOUT:
-			return ErrorCode::Win32_Error;
+			return ErrorCode::Platform_Win32_Error;
 
 		case ERROR_FILE_NOT_FOUND:	[[fallthrough]];
 		case ERROR_PATH_NOT_FOUND:	[[fallthrough]];
 		case SE_ERR_DLLNOTFOUND:
-			return ErrorCode::Invalid_Args;
+			return ErrorCode::InvalidArgs;
 
 		case ERROR_ACCESS_DENIED:	[[fallthrough]];
 		case SE_ERR_SHARE:
-			return ErrorCode::Win32_FileIO_PermissionsError;
+			return ErrorCode::Platform_Win32_FileIoPermissions;
 
 		case SE_ERR_NOASSOC:
-			return ErrorCode::Win32_NoAssociationError;
+			return ErrorCode::Platform_Win32_NoAssociation;
 
 		case SE_ERR_OOM:
-			return ErrorCode::Out_Of_Memory;
+			return ErrorCode::OutOfMemory;
 
 		default:
 			break;
