@@ -17,14 +17,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(catch2)
 
 FetchContent_Declare(
-	Json
-	GIT_REPOSITORY https://github.com/nlohmann/json.git
-	GIT_TAG v3.12.0
-	EXCLUDE_FROM_ALL
-)
-FetchContent_MakeAvailable(Json)
-
-FetchContent_Declare(
 	Bullet3
 	GIT_REPOSITORY https://github.com/bulletphysics/bullet3.git
 	GIT_TAG 3.25
