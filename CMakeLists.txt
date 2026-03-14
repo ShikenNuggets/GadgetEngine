@@ -9,14 +9,6 @@ project ("GadgetEngine" LANGUAGES CXX)
 include(FetchContent)
 
 FetchContent_Declare(
-	catch2
-	GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-	GIT_TAG v3.11.0
-	EXCLUDE_FROM_ALL
-)
-FetchContent_MakeAvailable(catch2)
-
-FetchContent_Declare(
 	Bullet3
 	GIT_REPOSITORY https://github.com/bulletphysics/bullet3.git
 	GIT_TAG 3.25
