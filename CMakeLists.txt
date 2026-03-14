@@ -12,6 +12,7 @@ FetchContent_Declare(
 	Bullet3
 	GIT_REPOSITORY https://github.com/bulletphysics/bullet3.git
 	GIT_TAG 3.25
+	SYSTEM
 	EXCLUDE_FROM_ALL
 )
 
@@ -25,6 +26,7 @@ FetchContent_Declare(
 	FreeType
 	GIT_REPOSITORY https://github.com/freetype/freetype.git
 	GIT_TAG VER-2-14-1
+	SYSTEM
 	EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(FreeType)
