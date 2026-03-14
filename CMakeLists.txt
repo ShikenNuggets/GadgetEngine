@@ -34,6 +34,10 @@ FetchContent_Declare(
 	GIT_REPOSITORY https://github.com/ShikenNuggets/GadgetCore.git
 	GIT_TAG main
 )
+
+set(GADGETCORE_BUILD_TESTS OFF)
+set(GADGETCORE_BUILD_DEMOS OFF)
+
 FetchContent_MakeAvailable(GadgetCore)
 
 # --------------------------------------- #
