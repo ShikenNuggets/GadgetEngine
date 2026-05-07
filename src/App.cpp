@@ -9,7 +9,6 @@
 #include "EngineVars.h"
 #include "GadgetEnums.h"
 #include "GameInterface.h"
-#include "Random.h"
 #include "Core/Time.h"
 #include "Game/BasicSceneManager.h"
 #include "Game/ComponentFactory.h"
@@ -87,7 +86,6 @@ void App::Initialize(const std::string& name_){
 	Debug::Init();
 	resourceMgr = std::make_unique<ResourceManager>();
 	config = std::make_unique<Config>();
-	Random::SetSeed();
 	time = std::make_unique<Time>();
 	input = std::make_unique<Input>();
 
