@@ -6,9 +6,9 @@ using namespace Gadget;
 //---------- Timer -----------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------//
 
-Timer::Timer() : startTime(0), total(0.0), numIterations(0){};
+ProfilingTimer::ProfilingTimer() : startTime(0), total(0.0), numIterations(0){};
 
-void Timer::StartProfiling(){
+void ProfilingTimer::StartProfiling(){
 	if(startTime.count() != 0){
 		Debug::Log(SID("UTILS"), "Tried to restart profiling, but it was never stopped!", Debug::Warning, __FILE__, __LINE__);
 		return;
@@ -17,7 +17,7 @@ void Timer::StartProfiling(){
 	startTime = Timing::CurrentTime();
 }
 
-double Timer::EndProfiling(){
+double ProfilingTimer::EndProfiling(){
 	if(startTime.count() == 0){
 		Debug::Log(SID("UTILS"), "Tried to end profiling, but it never started!", Debug::Warning, __FILE__, __LINE__);
 		return 0.0;
@@ -32,7 +32,7 @@ double Timer::EndProfiling(){
 	return durationSeconds;
 }
 
-double Timer::Average() const{
+double ProfilingTimer::Average() const{
 	if(numIterations == 0){
 		return 0.0;
 	}
@@ -44,11 +44,11 @@ double Timer::Average() const{
 //---------- Profiler --------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------//
 
-std::map<StringID, Timer> Profiler::profiles;
+std::map<StringID, ProfilingTimer> Profiler::profiles;
 
 void Profiler::Start(StringID name_){
 	if(!Utils::ContainsKey(profiles, name_)){
-		profiles.emplace(name_, Timer());
+		profiles.emplace(name_, ProfilingTimer());
 	}
 
 	profiles[name_].StartProfiling();

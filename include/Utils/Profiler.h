@@ -19,9 +19,9 @@ namespace Gadget{
 		}
 	}
 
-	class Timer{
+	class ProfilingTimer{
 	public:
-		Timer();
+		ProfilingTimer();
 		
 		void StartProfiling();
 		double EndProfiling();
@@ -48,7 +48,7 @@ namespace Gadget{
 		static void OutputAllAverageResults();
 
 	private:
-		static std::map<StringID, Timer> profiles;
+		static std::map<StringID, ProfilingTimer> profiles;
 	};
 }
 

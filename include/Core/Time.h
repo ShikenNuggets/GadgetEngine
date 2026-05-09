@@ -1,13 +1,15 @@
-#ifndef GADGET_TIME_H
-#define GADGET_TIME_H
+#pragma once
 
 #include <chrono>
 
-#include "Debug.h"
-#include "Utils/Utils.h"
+#include <GCore/Timer.hpp>
 
-namespace Gadget{
-	class Time{
+#include "Debug.h"
+
+namespace Gadget
+{
+	class Time
+	{
 	public:
 		Time();
 		DISABLE_COPY_AND_MOVE(Time);
@@ -16,34 +18,32 @@ namespace Gadget{
 		void Update();
 		void Delay();
 
-		float DeltaTime() const;
-		float RealDeltaTime() const;
-		float PureDeltaTime() const;
+		double DeltaTime() const;
+		double RealDeltaTime() const;
+		double PureDeltaTime() const;
 
-		float TimeSinceStartup() const;
+		double TimeSinceStartup() const;
 
-		float GetTimeScale() const{ return timeScale; }
+		double GetTimeScale() const{ return timeScale; }
 
-		void SetTimeScale(float timeScale_){
+		void SetTimeScale(float timeScale_)
+		{
 			timeScale = timeScale_;
-			if(timeScale < 0.0f){
+			if (timeScale < 0.0f)
+			{
 				GADGET_LOG_WARNING(SID("TIME"), "Negative time scale is not guaranteed to be well-supported!");
 			}
 		}
 
-		static constexpr float MsToSecondsFloat(const std::chrono::milliseconds& ms_){
+		static constexpr float MsToSecondsFloat(const std::chrono::milliseconds& ms_)
+		{
 			return static_cast<float>(ms_.count()) / 1000.0f;
 		}
 
 	private:
+		Timer timer;
 		float timeScale;
 
-		std::chrono::milliseconds startTime;
-		std::chrono::milliseconds previousTicks;
-		std::chrono::milliseconds currentTicks;
-
-		std::chrono::milliseconds GetSleepTime() const;
+		std::chrono::microseconds GetSleepTime() const;
 	};
 }
-
-#endif //!GADGET_TIME_H
